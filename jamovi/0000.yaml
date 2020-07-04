@@ -1,17 +1,86 @@
 ---
-title: What the Package Does (Title Case)
+title: Survival Module of ClinicoPath for jamovi
 name: jsurvival
-version: 0.0.0
+version: 0.0.1
 jms: '1.0'
 authors:
-  - Who wrote it
-maintainer: The package maintainer <yourself@somewhere.net>
-date: '1970-01-01'
+  - Serdar Balci
+maintainer: Serdar Balci <drserdarbalci@gmail.com>
+date: '2020-06-28'
 type: R
 description: >-
-  More about what it does (maybe more than one line) Use four spaces when
-  indenting paragraphs within the Description.
-analyses: []
+  Analysis for Clinicopathological Research Survival Module of ClinicoPath for
+  jamovi ClinicoPath help researchers to generate natural language summaries of
+  their dataset, generate cross tables with statistical tests, and survival
+  analysis with survival tables, survival plots, and natural language summaries.
+analyses:
+  - title: Survival Analysis
+    name: survival
+    ns: jsurvival
+    menuGroup: Survival
+    menuSubgroup: ClinicoPath Survival
+    menuTitle: Survival Analysis
+    description: Function for Generating Summaries for Survival Analysis.
+    menuSubtitle: 'Univariate Survival Analysis, Cox, Kaplan-Meier, 1,3,5-yr'
+  - title: Multivariate Survival Analysis
+    name: multisurvival
+    ns: jsurvival
+    menuGroup: Survival
+    menuSubgroup: ClinicoPath Survival
+    menuTitle: Multivariate Survival Analysis
+    description: Function for Multivariate Survival Analysis using Cox-regression.
+    menuSubtitle: Cox-regression
+  - title: Odds Ratio Table and Plot
+    name: oddsratio
+    ns: jsurvival
+    menuGroup: Survival
+    menuSubgroup: ClinicoPath Survival
+    menuTitle: Odds Ratio Table and Plot
+    description: Function for Odds Ratio Table and Plot.
+    menuSubtitle: Odds Ratio for Binary Outcomes
+  - title: Summary of Continuous Variables
+    name: summarydata
+    ns: jsurvival
+    menuGroup: Exploration
+    menuSubgroup: ClinicoPath Descriptives
+    menuTitle: Summary of Continuous Variables
+    description: Function for Generating Summaries for Continuous Variables.
+datasets:
+  - name: histopathology including analysis
+    path: histopathologyanalysis.omv
+    description: >-
+      Fake histopathology research data for ClinicoPath module, includes
+      analysis
+    tags:
+      - Table One
+      - Data Summary
+      - Survival
+      - Natural Language
+  - name: histopathology data only
+    path: histopathology.omv
+    description: Fake histopathology research data for ClinicoPath module
+    tags:
+      - Table One
+      - Data Summary
+      - Survival
+  - name: melanoma
+    path: melanoma.csv
+    description: 'melanoma dataset obtained from {boot}.'
+    tags:
+      - Data Summary
+      - Survival
+      - Competing risks regression
+  - name: colon
+    path: colon.csv
+    description: 'colon cancer dataset, obtained from {survival}.'
+    tags:
+      - Data Summary
+      - Survival
+  - name: BreastCancer
+    path: BreastCancer.csv
+    description: 'Wisconsin Breast Cancer Database dataset, obtained from {mlbench}.'
+    tags:
+      - Classification
 usesNative: true
 minApp: 1.0.8
 

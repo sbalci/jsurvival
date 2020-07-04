@@ -14,7 +14,7 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             adjexplanatory = NULL, ...) {
 
             super$initialize(
-                package='ClinicoPath',
+                package='jsurvival',
                 name='multisurvival',
                 requiresData=TRUE,
                 ...)
@@ -156,7 +156,7 @@ multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = 'ClinicoPath',
+                package = 'jsurvival',
                 name = 'multisurvival',
                 version = c(1,0,0),
                 options = options,
