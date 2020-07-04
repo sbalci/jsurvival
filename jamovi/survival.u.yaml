@@ -1,0 +1,47 @@
+title: Survival Analysis
+name: survival
+jus: '3.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: Explanatory Variable
+        children:
+          - type: VariablesListBox
+            name: explanatory
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Overall Time (in months)
+        children:
+          - type: VariablesListBox
+            name: overalltime
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: 'Outcome (event:1, censored:0)'
+        children:
+          - type: VariablesListBox
+            name: outcome
+            maxItemCount: 1
+            isTarget: true
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: CheckBox
+        name: sc
+      - type: CheckBox
+        name: ce
+      - type: CheckBox
+        name: ch
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: TextBox
+        name: cutp
+        format: string
+        width: large
