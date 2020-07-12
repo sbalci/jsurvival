@@ -1,0 +1,135 @@
+---
+name:  survival
+title: '`Survival Analysis - ${explanatory}`'
+jrs:   '1.1'
+
+items:
+
+    - name:  todo
+      title: To Do
+      type:  Html
+      clearWith:
+          - explanatory
+          - outcome
+          - overalltime
+
+    - name:  text2
+      title: '`Median Survival Summary and Table - ${explanatory}`'
+      type:  Preformatted
+      clearWith:
+          - explanatory
+          - outcome
+          - overalltime
+
+    - name:  text1html
+      title: '`Median Survival Table  - ${explanatory}`'
+      type:  Html
+      clearWith:
+          - explanatory
+          - outcome
+          - overalltime
+
+    # - name:  text3
+    #   title: Cox
+    #   type:  Preformatted
+
+    - name:  text5
+      title: '`Cox Regression Summary and Table - ${explanatory}`'
+      type:  Preformatted
+      clearWith:
+          - explanatory
+          - outcome
+          - overalltime
+
+    - name:  text4
+      title: '`Cox Table- ${explanatory}`'
+      type:  Html
+      clearWith:
+          - explanatory
+          - outcome
+          - overalltime
+
+    - name:  text7
+      title: '`1, 3, 5-yr Survival Summary and Table  - ${explanatory}`'
+      type:  Preformatted
+      clearWith:
+          - explanatory
+          - outcome
+          - overalltime
+
+    - name:  text6
+      title: '`1, 3, 5-yr Survival  - ${explanatory}`'
+      type:  Html
+      clearWith:
+          - explanatory
+          - outcome
+          - overalltime
+
+    - name:  text8
+      title: '`Pairwise Comparison - ${explanatory}`'
+      type:  Preformatted
+      clearWith:
+          - explanatory
+          - outcome
+          - overalltime
+
+    - name:  text9
+      title: '`Pairwise Comparison Summary - ${explanatory}`'
+      type:  Preformatted
+      clearWith:
+          - explanatory
+          - outcome
+          - overalltime
+
+    - name: plot
+      title: '`Survival Plot  - ${explanatory}`'
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .plot
+      visible: (sc)
+      requiresData: true
+      clearWith:
+          - sc
+          - explanatory
+          - outcome
+          - overalltime
+
+
+
+    - name: plot2
+      title: '`Cumulative Events  - ${explanatory}`'
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .plot2
+      visible: (ce)
+      requiresData: true
+      clearWith:
+          - ce
+          - explanatory
+          - outcome
+          - overalltime
+
+
+    - name: plot3
+      title: '`Cumulative Hazard  - ${explanatory}`'
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .plot3
+      visible: (ch)
+      requiresData: true
+      clearWith:
+          - ch
+          - explanatory
+          - outcome
+          - overalltime
+
+
+
+refs:
+    - finalfit
+    - survival
+    - survminer
+...
