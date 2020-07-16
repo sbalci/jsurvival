@@ -412,9 +412,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 # Prepare Data For Plot ----
 
                 plotData <- mydata
+
                 image <- self$results$plot
                 image$setState(plotData)
 
+                image2 <- self$results$plot2
+                image2$setState(plotData)
 
             }
 },
@@ -491,7 +494,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 ,
 .plot2 = function(image, ggtheme, theme, ...) {  # <-- the plot function ----
 
-    plotData <- image$state
+    plotData <- image2$state
 
     if (nrow(self$data) == 0)
         stop('Data contains no (complete) rows')
@@ -517,9 +520,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     #                      myoutcome = uoutcome)
     # mydata <- na.omit(mydata)
 
-    names(plotData) <- c(self$options$overalltime,
-                       self$options$explanatory,
-                       self$options$outcome)
+    # names(mydata) <- c(self$options$overalltime,
+    #                    self$options$explanatory,
+    #                    self$options$outcome)
 
 
     formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
