@@ -9,6 +9,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             explanatory = NULL,
             overalltime = NULL,
             outcome = NULL,
+            outcomeLevel = NULL,
             cutp = "12, 36, 60",
             sc = FALSE,
             ce = FALSE,
@@ -42,6 +43,10 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "numeric"))
+            private$..outcomeLevel <- jmvcore::OptionLevel$new(
+                "outcomeLevel",
+                outcomeLevel,
+                variable="(outcome)")
             private$..cutp <- jmvcore::OptionString$new(
                 "cutp",
                 cutp,
@@ -62,6 +67,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..explanatory)
             self$.addOption(private$..overalltime)
             self$.addOption(private$..outcome)
+            self$.addOption(private$..outcomeLevel)
             self$.addOption(private$..cutp)
             self$.addOption(private$..sc)
             self$.addOption(private$..ce)
@@ -71,6 +77,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         explanatory = function() private$..explanatory$value,
         overalltime = function() private$..overalltime$value,
         outcome = function() private$..outcome$value,
+        outcomeLevel = function() private$..outcomeLevel$value,
         cutp = function() private$..cutp$value,
         sc = function() private$..sc$value,
         ce = function() private$..ce$value,
@@ -79,6 +86,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..explanatory = NA,
         ..overalltime = NA,
         ..outcome = NA,
+        ..outcomeLevel = NA,
         ..cutp = NA,
         ..sc = NA,
         ..ce = NA,
@@ -89,6 +97,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         todo = function() private$.items[["todo"]],
+        textdeneme = function() private$.items[["textdeneme"]],
         text2 = function() private$.items[["text2"]],
         text1html = function() private$.items[["text1html"]],
         text5 = function() private$.items[["text5"]],
@@ -119,6 +128,10 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "overalltime")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="textdeneme",
+                title="textdeneme"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text2",
@@ -258,6 +271,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param explanatory .
 #' @param overalltime .
 #' @param outcome .
+#' @param outcomeLevel .
 #' @param cutp .
 #' @param sc .
 #' @param ce .
@@ -265,6 +279,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$textdeneme} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text1html} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr
@@ -284,6 +299,7 @@ survival <- function(
     explanatory,
     overalltime,
     outcome,
+    outcomeLevel,
     cutp = "12, 36, 60",
     sc = FALSE,
     ce = FALSE,
@@ -308,6 +324,7 @@ survival <- function(
         explanatory = explanatory,
         overalltime = overalltime,
         outcome = outcome,
+        outcomeLevel = outcomeLevel,
         cutp = cutp,
         sc = sc,
         ce = ce,

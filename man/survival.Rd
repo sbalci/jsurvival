@@ -9,6 +9,7 @@ survival(
   explanatory,
   overalltime,
   outcome,
+  outcomeLevel,
   cutp = "12, 36, 60",
   sc = FALSE,
   ce = FALSE,
@@ -24,6 +25,8 @@ survival(
 
 \item{outcome}{.}
 
+\item{outcomeLevel}{.}
+
 \item{cutp}{.}
 
 \item{sc}{.}
@@ -36,6 +39,7 @@ survival(
 A results object containing:
 \tabular{llllll}{
 \code{results$todo} \tab \tab \tab \tab \tab a html \cr
+\code{results$textdeneme} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$text1html} \tab \tab \tab \tab \tab a html \cr
 \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr

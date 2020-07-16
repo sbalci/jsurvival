@@ -82,27 +82,32 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     stop('Data contains no (complete) rows')
 
 
-                # Check if outcome variable is suitable or stop ----
-
-
-                myoutcome2 <- self$options$outcome
-
-                myoutcome2 <- self$data[[myoutcome2]]
-
-                myoutcome2 <- na.omit(myoutcome2)
-
-
-
-                # if ( !is.numeric(myoutcome2) || any(myoutcome2 != 0 & myoutcome2 != 1))
-                if (any(myoutcome2 != 0 & myoutcome2 != 1))
-                    stop('Outcome variable must only contains 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
-
-
-
-
-                # self$results$deneme$setContent(head(mydata))
+                # # Check if outcome variable is suitable or stop ----
                 #
-                # self$results$deneme2$setContent(head(mydata))
+                #
+                # myoutcome2 <- self$options$outcome
+                #
+                # myoutcome2 <- self$data[[myoutcome2]]
+                #
+                # myoutcome2 <- na.omit(myoutcome2)
+                #
+                #
+                #
+                # # if ( !is.numeric(myoutcome2) || any(myoutcome2 != 0 & myoutcome2 != 1))
+                # if (any(myoutcome2 != 0 & myoutcome2 != 1))
+                #     stop('Outcome variable must only contains 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
+                #
+                #
+                #
+                #
+                # # self$results$deneme$setContent(head(mydata))
+                # #
+                # # self$results$deneme2$setContent(head(mydata))
+                #
+                #
+                #
+                #
+
 
 
 
@@ -118,14 +123,33 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 uthefactor <- self$data[[uthefactor]]
 
-                uoutcome <- self$options$outcome
+                outcome <- self$options$outcome
 
-                uoutcome <- jmvcore::toNumeric(self$data[[uoutcome]])
+                outcomeLevel <- self$options$outcomeLevel
+
+               uoutcome <-
+                   ifelse(
+                    test = outcome == outcomeLevel,
+                    yes = 1,
+                    no = 0
+                )
+
+               self$results$textdeneme$setContent(uoutcome)
 
 
 
-                # # myoutcomelevel <- self$options$outcomeLevel
-                # myoutcome <- ifelse(self$data[[myoutcome]] == self$options$outcomeLevel, 1, 0)
+# mydata2 <- mydata2 %>%
+#     dplyr::mutate(testVariable2 = dplyr::case_when(
+#         .data[[testVariable]] == self$options$testPositive ~ "Positive",
+#         NA ~ NA_character_,
+#         TRUE ~ "Negative"))
+
+# uoutcome <- jmvcore::toNumeric(self$data[[uoutcome]])
+
+
+
+# # myoutcomelevel <- self$options$outcomeLevel
+# myoutcome <- ifelse(self$data[[myoutcome]] == self$options$outcomeLevel, 1, 0)
 
 
 
