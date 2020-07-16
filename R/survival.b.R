@@ -173,7 +173,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     dplyr::mutate(
                         description =
                             glue::glue(
-                                "When ", self$options$explanatory, "{.data[[self$options$explanatory]]}, median survival is {round(median, digits = 1)} [{x0_95lcl} - {x0_95ucl}, 95% CI] months."
+                                "When ", self$options$explanatory, "{.data[[self$options$explanatory]]}, median survival is {round(median, digits = 1)} [{round(x0_95lcl, digits = 1)} - {round(x0_95ucl, digits = 1)}, 95% CI] months."
                             )
                     ) %>%
                     dplyr::mutate(
@@ -315,7 +315,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-                     # results 8 pairwise comparison ----
+        # results 8 pairwise comparison ----
 
                 if(n_level < 3) {
 
