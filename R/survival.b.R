@@ -82,7 +82,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     stop('Data contains no (complete) rows')
 
 
-                # # Check if outcome variable is suitable or stop ----
+    # # Check if outcome variable is suitable or stop ----
                 #
                 #
                 # myoutcome2 <- self$options$outcome
@@ -166,7 +166,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                      thefactor = uthefactor,
                                      myoutcome = uoutcome)
 
-                mydata <- na.omit(mydata)
+                mydata <- jmvcore::naOmit(mydata)
 
 
                 # # Run code for analysis ----
@@ -411,9 +411,10 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 # Prepare Data For Plot ----
 
-                # plotData <- mydata
-                # image <- self$results$plot
-                # image$setState(plotData)
+                plotData <- mydata
+                image <- self$results$plot
+                image$setState(plotData)
+
 
             }
 },
@@ -434,31 +435,37 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         return()
 
 
+#
+#     uoveralltime <- self$options$overalltime
+#
+#     uoveralltime <- jmvcore::toNumeric(self$data[[uoveralltime]])
+#
+#     uthefactor <- self$options$explanatory
+#
+#     uthefactor <- self$data[[uthefactor]]
+#
+#     uoutcome <- self$options$outcome
+#
+#     uoutcome <- jmvcore::toNumeric(self$data[[uoutcome]])
+#
+#
+#
+#
+#     mydata <- data.frame(myoveralltime = uoveralltime,
+#                          thefactor = uthefactor,
+#                          myoutcome = uoutcome)
+#
+#     mydata <- na.omit(mydata)
 
-    uoveralltime <- self$options$overalltime
-
-    uoveralltime <- jmvcore::toNumeric(self$data[[uoveralltime]])
-
-    uthefactor <- self$options$explanatory
-
-    uthefactor <- self$data[[uthefactor]]
-
-    uoutcome <- self$options$outcome
-
-    uoutcome <- jmvcore::toNumeric(self$data[[uoutcome]])
 
 
 
+    # names(mydata) <- c(self$options$overalltime,
+    #                    self$options$explanatory,
+    #                    self$options$outcome)
 
-    mydata <- data.frame(myoveralltime = uoveralltime,
-                         thefactor = uthefactor,
-                         myoutcome = uoutcome)
+    plotData <- image$state
 
-    mydata <- na.omit(mydata)
-
-    names(mydata) <- c(self$options$overalltime,
-                       self$options$explanatory,
-                       self$options$outcome)
 
 
     formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
@@ -471,7 +478,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     myformula <- paste("survival::Surv(", formulaL, ",", formulaR, ")")
 
-    plot <- mydata %>%
+    plot <- plotData %>%
         finalfit::surv_plot(.data = .,
                             dependent = myformula,
                             explanatory = formula2,
