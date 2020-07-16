@@ -419,7 +419,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             }
 },
 
-.plot=function(image, ggtheme, theme, ...) {  # <-- the plot function ----
+.plot = function(image, ggtheme, theme, ...) {  # <-- the plot function ----
 
     plotData <- image$state
 
@@ -435,30 +435,16 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         return()
 
 
-#
 #     uoveralltime <- self$options$overalltime
-#
 #     uoveralltime <- jmvcore::toNumeric(self$data[[uoveralltime]])
-#
 #     uthefactor <- self$options$explanatory
-#
 #     uthefactor <- self$data[[uthefactor]]
-#
 #     uoutcome <- self$options$outcome
-#
 #     uoutcome <- jmvcore::toNumeric(self$data[[uoutcome]])
-#
-#
-#
-#
 #     mydata <- data.frame(myoveralltime = uoveralltime,
 #                          thefactor = uthefactor,
 #                          myoutcome = uoutcome)
-#
 #     mydata <- na.omit(mydata)
-
-
-
 
     # names(mydata) <- c(self$options$overalltime,
     #                    self$options$explanatory,
@@ -501,7 +487,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 # https://rpkgs.datanovia.com/survminer/survminer_cheatsheet.pdf
 ,
-.plot2=function(image, ggtheme, theme, ...) {  # <-- the plot function ----
+.plot2 = function(image, ggtheme, theme, ...) {  # <-- the plot function ----
 
     plotData <- image$state
 
@@ -579,7 +565,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 ,
-.plot3=function(image, ggtheme, theme, ...) {  # <-- the plot function ----
+.plot3 = function(image, ggtheme, theme, ...) {  # <-- the plot function ----
 
     plotData <- image$state
 
