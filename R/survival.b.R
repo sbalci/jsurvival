@@ -193,7 +193,13 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                              row.names = FALSE,
                                              align = c('l', rep('r', 9)),
                                              format = "html",
-                                             digits = 1)
+                                             digits = 1,
+                                             table.attr = 'class=\"striped\"')
+
+
+
+
+
 
                 # results 2 median survival summary ----
 
