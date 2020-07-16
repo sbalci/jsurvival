@@ -478,7 +478,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     # plot <- plot + ggtheme
 
-    print(plotData)
+    print(plot)
     TRUE
 
 
@@ -516,9 +516,10 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     #                      thefactor = uthefactor,
     #                      myoutcome = uoutcome)
     # mydata <- na.omit(mydata)
-    # names(mydata) <- c(self$options$overalltime,
-    #                    self$options$explanatory,
-    #                    self$options$outcome)
+
+    names(plotData) <- c(self$options$overalltime,
+                       self$options$explanatory,
+                       self$options$outcome)
 
 
     formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
