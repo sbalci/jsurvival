@@ -193,8 +193,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                              row.names = FALSE,
                                              align = c('l', rep('r', 9)),
                                              format = "html",
-                                             digits = 1,
-                                             table.attr = 'class=\"striped\"')
+                                             digits = 1
+                                             )
 
 
 
