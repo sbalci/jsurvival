@@ -53,8 +53,6 @@ options:
     - name: outcome
       title: 'Outcome'
       type: Variable
-      suggested: [ continuous ]
-      permitted: [ numeric ]
 
     - name: outcomeLevel
       title: Select Event Level

@@ -38,11 +38,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "numeric"))
             private$..outcome <- jmvcore::OptionVariable$new(
                 "outcome",
-                outcome,
-                suggested=list(
-                    "continuous"),
-                permitted=list(
-                    "numeric"))
+                outcome)
             private$..outcomeLevel <- jmvcore::OptionLevel$new(
                 "outcomeLevel",
                 outcomeLevel,
