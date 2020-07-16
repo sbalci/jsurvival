@@ -123,27 +123,27 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 uthefactor <- self$data[[uthefactor]]
 
-                uoutcome <- self$options$outcome
+                outcome1 <- self$options$outcome
 
 
-                uoutcome <- self$data[[uoutcome]]
+                outcome1 <- self$data[[outcome1]]
 
                 outcomeLevel <- self$options$outcomeLevel
 
-               outcome2 <-
+               uoutcome <-
                    ifelse(
-                    test = uoutcome == outcomeLevel,
+                    test = outcome1 == outcomeLevel,
                     yes = 1,
                     no = 0
                 )
 
-               self$results$textdeneme$setContent(
-                   list(
-                       uoutcome,
-                       outcomeLevel,
-                       outcome2
-                       )
-               )
+               # self$results$textdeneme$setContent(
+               #     list(
+               #         uoutcome,
+               #         outcomeLevel,
+               #         outcome2
+               #         )
+               # )
 
 
 

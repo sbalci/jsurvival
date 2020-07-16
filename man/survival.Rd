@@ -39,7 +39,6 @@ survival(
 A results object containing:
 \tabular{llllll}{
 \code{results$todo} \tab \tab \tab \tab \tab a html \cr
-\code{results$textdeneme} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$text1html} \tab \tab \tab \tab \tab a html \cr
 \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr

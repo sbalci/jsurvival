@@ -13,9 +13,9 @@ items:
           - outcome
           - overalltime
 
-    - name:  textdeneme
-      title: textdeneme
-      type:  Preformatted
+    # - name:  textdeneme
+    #   title: textdeneme
+    #   type:  Preformatted
 
 
 

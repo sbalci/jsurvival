@@ -93,7 +93,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         todo = function() private$.items[["todo"]],
-        textdeneme = function() private$.items[["textdeneme"]],
         text2 = function() private$.items[["text2"]],
         text1html = function() private$.items[["text1html"]],
         text5 = function() private$.items[["text5"]],
@@ -124,10 +123,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "overalltime")))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="textdeneme",
-                title="textdeneme"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text2",
@@ -275,7 +270,6 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$textdeneme} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text1html} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr
