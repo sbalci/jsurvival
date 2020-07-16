@@ -491,7 +491,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 ,
 .plot2 = function(image, ggtheme, theme, ...) {  # <-- the plot function ----
 
-    plotData <- image$state
+    # plotData <- image$state
 
     if (nrow(self$data) == 0)
         stop('Data contains no (complete) rows')
@@ -531,7 +531,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     myformula <- paste("survival::Surv(", formulaL, ",", formulaR, ")")
 
-    plot2 <- plotData %>%
+    plot2 <- mydata %>%
         finalfit::surv_plot(.data = .,
                             dependent = myformula,
                             explanatory = formula2,
@@ -558,7 +558,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 ,
 .plot3 = function(image, ggtheme, theme, ...) {  # <-- the plot function ----
 
-    plotData <- image$state
+    # plotData <- image$state
 
     if (nrow(self$data) == 0)
         stop('Data contains no (complete) rows')
@@ -609,7 +609,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     myformula <- paste("survival::Surv(", formulaL, ",", formulaR, ")")
 
-    plot3 <- plotData %>%
+    plot3 <- mydata %>%
         finalfit::surv_plot(.data = .,
                             dependent = myformula,
                             explanatory = formula2,
