@@ -419,6 +419,10 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 image2 <- self$results$plot2
                 image2$setState(plotData)
 
+                image3 <- self$results$plot3
+                image3$setState(plotData)
+
+
             }
 },
 
@@ -561,9 +565,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 ,
-.plot3 = function(image, ggtheme, theme, ...) {  # <-- the plot function ----
+.plot3 = function(image3, ggtheme, theme, ...) {  # <-- the plot function ----
 
-    # plotData <- image$state
+    plotData <- image3$state
 
     if (nrow(self$data) == 0)
         stop('Data contains no (complete) rows')
@@ -577,33 +581,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         return()
 
 
-
-    uoveralltime <- self$options$overalltime
-
-    uoveralltime <- jmvcore::toNumeric(self$data[[uoveralltime]])
-
-    uthefactor <- self$options$explanatory
-
-    uthefactor <- self$data[[uthefactor]]
-
-    uoutcome <- self$options$outcome
-
-    uoutcome <- jmvcore::toNumeric(self$data[[uoutcome]])
-
-
-
-
-    mydata <- data.frame(myoveralltime = uoveralltime,
-                         thefactor = uthefactor,
-                         myoutcome = uoutcome)
-
-    mydata <- na.omit(mydata)
-
-    names(mydata) <- c(self$options$overalltime,
-                       self$options$explanatory,
-                       self$options$outcome)
-
-
     formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
 
     formula2 <- jmvcore::composeTerm(formula2)
@@ -614,7 +591,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     myformula <- paste("survival::Surv(", formulaL, ",", formulaR, ")")
 
-    plot3 <- mydata %>%
+    plot3 <- plotData %>%
         finalfit::surv_plot(.data = .,
                             dependent = myformula,
                             explanatory = formula2,
