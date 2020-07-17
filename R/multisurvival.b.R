@@ -92,6 +92,30 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # outcome1 <- self$options$outcome
             # outcome1 <- mydata[[outcome1]]
 
+
+
+
+            contin <- c("integer", "numeric", "double")
+
+
+            outcome1 <- self$options$outcome
+
+            outcome1 <- self$data[[outcome1]]
+
+            if (inherits(outcome1, contin)) {
+
+                if ( !any(outcome1 != 0, na.rm = TRUE) || !any(outcome1 != 1, na.rm = TRUE) ) {
+                    stop('When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
+
+                }
+
+                mydata[["Outcome"]] <- mydata[[self$options$outcome]]
+
+            } else if (inherits(outcome1, "factor")) {
+
+
+
+
             outcomeLevel <- self$options$outcomeLevel
 
             mydata[["Outcome"]] <-
@@ -101,6 +125,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     no = 0
                 )
 
+
+
+            }
 
             # resultsdeneme <- mydata
             # self$results$text2$setContent(resultsdeneme)
@@ -217,13 +244,41 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             outcomeLevel <- self$options$outcomeLevel
 
-            mydata[["Outcome"]] <-
-                ifelse(
-                    test = mydata[[self$options$outcome]] == outcomeLevel,
-                    yes = 1,
-                    no = 0
-                )
 
+
+            contin <- c("integer", "numeric", "double")
+
+
+            outcome1 <- self$options$outcome
+
+            outcome1 <- self$data[[outcome1]]
+
+            if (inherits(outcome1, contin)) {
+
+                if ( !any(outcome1 != 0, na.rm = TRUE) || !any(outcome1 != 1, na.rm = TRUE) ) {
+                    stop('When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
+
+                }
+
+                mydata[["Outcome"]] <- mydata[[self$options$outcome]]
+
+            } else if (inherits(outcome1, "factor")) {
+
+
+
+
+                outcomeLevel <- self$options$outcomeLevel
+
+                mydata[["Outcome"]] <-
+                    ifelse(
+                        test = mydata[[self$options$outcome]] == outcomeLevel,
+                        yes = 1,
+                        no = 0
+                    )
+
+
+
+            }
 
             # prepare formula ----
 
@@ -286,12 +341,41 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             outcomeLevel <- self$options$outcomeLevel
 
-            mydata[["Outcome"]] <-
-                ifelse(
-                    test = mydata[[self$options$outcome]] == outcomeLevel,
-                    yes = 1,
-                    no = 0
-                )
+
+            contin <- c("integer", "numeric", "double")
+
+
+            outcome1 <- self$options$outcome
+
+            outcome1 <- self$data[[outcome1]]
+
+            if (inherits(outcome1, contin)) {
+
+                if ( !any(outcome1 != 0, na.rm = TRUE) || !any(outcome1 != 1, na.rm = TRUE) ) {
+                    stop('When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
+
+                }
+
+                mydata[["Outcome"]] <- mydata[[self$options$outcome]]
+
+            } else if (inherits(outcome1, "factor")) {
+
+
+
+
+                outcomeLevel <- self$options$outcomeLevel
+
+                mydata[["Outcome"]] <-
+                    ifelse(
+                        test = mydata[[self$options$outcome]] == outcomeLevel,
+                        yes = 1,
+                        no = 0
+                    )
+
+
+
+            }
+
 
 
             # prepare formula ----
@@ -361,12 +445,41 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     outcomeLevel <- self$options$outcomeLevel
 
-    mydata[["Outcome"]] <-
-        ifelse(
-            test = mydata[[self$options$outcome]] == outcomeLevel,
-            yes = 1,
-            no = 0
-        )
+
+
+    contin <- c("integer", "numeric", "double")
+
+
+    outcome1 <- self$options$outcome
+
+    outcome1 <- self$data[[outcome1]]
+
+    if (inherits(outcome1, contin)) {
+
+        if ( !any(outcome1 != 0, na.rm = TRUE) || !any(outcome1 != 1, na.rm = TRUE) ) {
+            stop('When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
+
+        }
+
+        mydata[["Outcome"]] <- mydata[[self$options$outcome]]
+
+    } else if (inherits(outcome1, "factor")) {
+
+
+
+
+        outcomeLevel <- self$options$outcomeLevel
+
+        mydata[["Outcome"]] <-
+            ifelse(
+                test = mydata[[self$options$outcome]] == outcomeLevel,
+                yes = 1,
+                no = 0
+            )
+
+
+
+    }
 
 
     # prepare formula ----
