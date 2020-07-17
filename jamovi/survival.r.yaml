@@ -71,21 +71,23 @@ items:
           - outcome
           - overalltime
 
-    - name:  text8
-      title: '`Pairwise Comparison - ${explanatory}`'
+    - name:  text9
+      title: '`Pairwise Comparison Summary and Table - ${explanatory}`'
       type:  Preformatted
       clearWith:
           - explanatory
           - outcome
           - overalltime
 
-    - name:  text9
-      title: '`Pairwise Comparison Summary - ${explanatory}`'
-      type:  Preformatted
+
+    - name:  text8
+      title: '`Pairwise Comparison - ${explanatory}`'
+      type:  Html
       clearWith:
           - explanatory
           - outcome
           - overalltime
+
 
     - name: plot
       title: '`Survival Plot  - ${explanatory}`'
