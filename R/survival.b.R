@@ -83,7 +83,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 outcome1 <- self$data[[outcome1]]
 
-                if (inherits(outome1, contin)) {
+                if (inherits(outcome1, contin)) {
                     return()
 
 
@@ -92,7 +92,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-                } else if (inherits(outome1, "factor")) {
+                } else if (inherits(outcome1, "factor")) {
                     outcomeLevel <- self$options$outcomeLevel
 
                     uoutcome <-
