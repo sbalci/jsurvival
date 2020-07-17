@@ -9,6 +9,42 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     "multisurvivalClass",
     inherit = multisurvivalBase,
     private = list(
+
+
+        formula1 = function() {
+
+            # prepare formula ----
+
+            formula2 <- as.vector(self$options$explanatory)
+
+            formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
+
+            formulaL <- jmvcore::toNumeric(formulaL)
+
+            formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
+
+            # formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
+
+            # formulaR <- jmvcore::toNumeric(formulaR)
+
+
+            myformula <- paste("Surv(", formulaL, ",", "Outcome", ")")
+
+
+
+            return(myformula)
+
+
+
+
+
+
+
+
+        },
+
+
+
         .run = function() {
 
 
@@ -106,22 +142,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$results$text2$setContent(resultsdeneme)
 
 
-            # prepare formula ----
-
-            formula2 <- as.vector(self$options$explanatory)
-
-            formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
-
-            formulaL <- jmvcore::toNumeric(formulaL)
-
-            formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
-
-            # formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
-
-            # formulaR <- jmvcore::toNumeric(formulaR)
-
-
-            myformula <- paste("Surv(", formulaL, ",", "Outcome", ")")
+            myformula <- formula1()
 
             resultsdeneme2 <- list(
                 formula2,
