@@ -417,6 +417,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     myformula <- paste("survival::Surv(", formulaL, ",", formulaR, ")")
 
+
     plot <- plotData %>%
         finalfit::surv_plot(.data = .,
                             dependent = myformula,
@@ -428,9 +429,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             xlim = c(0,60),
                             title = paste0("Survival curves for ", self$options$explanatory),
                             subtitle = "Based on Kaplan-Meier estimates"
-                            # , fun = "pct"
         )
-
 
     # plot <- plot + ggtheme
 
@@ -483,7 +482,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             xlim = c(0,60),
                             title = paste0("Cumulative Events ", self$options$explanatory)
                             # subtitle = "Based on Kaplan-Meier estimates",
-                            # , fun = "event"
+                            , fun = "event"
 
         )
 
