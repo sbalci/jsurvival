@@ -13,6 +13,12 @@ items:
           - outcome
           - overalltime
 
+
+    - name:  text2
+      title: Deneme
+      type:  Preformatted
+
+
     - name:  text
       title: Multivariate Survival
       type:  Html

@@ -102,8 +102,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 )
 
 
-            results1 <- mydata
-            self$results$text$setContent(results1)
+            resultsdeneme <- mydata
+            self$results$text2$setContent(resultsdeneme)
 
 
             # prepare formula ----
