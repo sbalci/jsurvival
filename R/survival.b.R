@@ -75,19 +75,36 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 uthefactor <- self$data[[uthefactor]]
 
-                outcome1 <- self$options$outcome
 
+                contin <- c("integer", "numeric", "double")
+
+
+                outcome1 <- self$options$outcome
 
                 outcome1 <- self$data[[outcome1]]
 
-                outcomeLevel <- self$options$outcomeLevel
+                if (inherits(outome1, contin)) {
+                    return()
 
-               uoutcome <-
-                   ifelse(
-                    test = outcome1 == outcomeLevel,
-                    yes = 1,
-                    no = 0
-                )
+
+
+
+
+
+
+                } else if (inherits(outome1, "factor")) {
+                    outcomeLevel <- self$options$outcomeLevel
+
+                    uoutcome <-
+                        ifelse(test = outcome1 == outcomeLevel,
+                               yes = 1,
+                               no = 0)
+                }
+
+
+
+
+
 
                # self$results$textdeneme$setContent(
                #     list(
