@@ -94,7 +94,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             outcomeLevel <- self$options$outcomeLevel
 
-            mydata[["uoutcome"]] <-
+            mydata[["Outcome"]] <-
                 ifelse(
                     test = mydata[[self$options$outcome]] == outcomeLevel,
                     yes = 1,
@@ -108,29 +108,29 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             # prepare formula ----
 
-            # formula2 <- as.vector(self$options$explanatory)
+            formula2 <- as.vector(self$options$explanatory)
 
-            # formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
+            formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
 
-            # formulaL <- jmvcore::toNumeric(formulaL)
+            formulaL <- jmvcore::toNumeric(formulaL)
 
-            # formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
+            formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
 
             # formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
 
             # formulaR <- jmvcore::toNumeric(formulaR)
 
 
-            # myformula <- paste("Surv(", formulaL, ",", formulaR, ")")
+            myformula <- paste("Surv(", formulaL, ",", "'Outcome'", ")")
 
-            # results1 <- list(
-            #     formula2,
-            #     formulaL,
-            #     formulaR,
-            #     myformula
-            # )
-            #
-            # self$results$text$setContent(results1)
+            resultsdeneme2 <- list(
+                formula2,
+                formulaL,
+                # formulaR,
+                myformula
+            )
+
+            self$results$text3$setContent(resultsdeneme2)
 
             # finalfit multivariate table ----
 
