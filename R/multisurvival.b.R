@@ -102,8 +102,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 )
 
 
-            resultsdeneme <- mydata
-            self$results$text2$setContent(resultsdeneme)
+            # resultsdeneme <- mydata
+            # self$results$text2$setContent(resultsdeneme)
 
 
             # prepare formula ----
@@ -240,6 +240,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             myformula <- paste("survival::Surv(", formulaL, ",", "Outcome", ")")
 
 
+            # hr_plot ----
             # https://finalfit.org/reference/hr_plot.html
 
             plot <-
@@ -256,136 +257,90 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                              ggplot2::element_text(size = 12)
                                                )))
 
+
+            # print plot ----
+
             print(plot)
             TRUE
 
         }
 
 
-            # ,
-            # .plot2 = function(image, ggtheme, theme, ...) {  # <-- the plot function ----
-            #
-            # # plotData <- image$state
-            #
-            #     if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
-            #         return()
-            #
-            # if (nrow(self$data) == 0)
-            #     stop('Data contains no (complete) rows')
-            #
-            # # Check if outcome variable is suitable or stop
-            # myoutcome2 <- self$options$outcome
-            # myoutcome2 <- self$data[[myoutcome2]]
-            # myoutcome2 <- na.omit(myoutcome2)
-            #
-            # if (class(myoutcome2) == "factor")
-            #     stop("Please use a continuous variable for outcome.")
-            #
-            # if (any(myoutcome2 != 0 & myoutcome2 != 1))
-            #     stop('Outcome variable must only contains 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
-            #
-            # # https://indrajeetpatil.github.io/ggstatsplot/articles/web_only/ggcoefstats.html#cox-proportional-hazards-regression-model-coxph
-            # # fit a stratified model
-            #
-            # mydata <- self$data
-            #
-            # formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
-            #
-            # formulaL <- jmvcore::toNumeric(formulaL)
-            #
-            # formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
-            #
-            # formulaR <- jmvcore::toNumeric(formulaR)
-            #
-            # formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
-            #
-            # formula3 <- paste("survival::Surv(", formulaL, ",", formulaR, ") ~ ", formula2)
-            #
-            # formula3 <- as.formula(formula3)
-            #
-            # mod <-
-            #     survival::coxph(
-            #         formula = formula3,
-            #         data = mydata
-            #     )
-            #
-            # # plot
-            # plot2 <- ggstatsplot::ggcoefstats(
-            #     x = mod,
-            #     exponentiate = TRUE,
-            #     title = "Cox proportional hazards regression model"
-            # )
-            #
-            # print(plot2)
-            # TRUE
-            #
-            # }
+        ,
+        .plot3 = function(image, ggtheme, theme, ...) {  # <-- the plot function ----
+
+            # plotData <- image$state
+
+            if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
+                return()
+
+            if (nrow(self$data) == 0)
+                stop('Data contains no (complete) rows')
 
 
-        #     ,
-        # .plot3 = function(image, ggtheme, theme, ...) {  # <-- the plot function ----
-        #
-        #     # plotData <- image$state
-        #
-        #     if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
-        #         return()
-        #
-        #     if (nrow(self$data) == 0)
-        #         stop('Data contains no (complete) rows')
-        #
-        #     # Check if outcome variable is suitable or stop
-        #     myoutcome2 <- self$options$outcome
-        #     myoutcome2 <- self$data[[myoutcome2]]
-        #     myoutcome2 <- na.omit(myoutcome2)
-        #
-        #     if (class(myoutcome2) == "factor")
-        #         stop("Please use a continuous variable for outcome.")
-        #
-        #     if (any(myoutcome2 != 0 & myoutcome2 != 1))
-        #         stop('Outcome variable must only contains 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
-        #
-        #
-        #
-        #     mydata <- self$data
-        #
-        #     formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
-        #
-        #     formulaL <- jmvcore::toNumeric(formulaL)
-        #
-        #     formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
-        #
-        #     formulaR <- jmvcore::toNumeric(formulaR)
-        #
-        #     formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
-        #
-        #     formula3 <- paste("survival::Surv(", formulaL, ",", formulaR, ") ~ ", formula2)
-        #
-        #     formula3 <- as.formula(formula3)
-        #
-        #     mod <-
-        #         survival::coxph(
-        #             formula = formula3,
-        #             data = mydata
-        #         )
-        #
-        #     # plot
-        #
-        # # https://rpkgs.datanovia.com/survminer/survminer_cheatsheet.pdf
-        #
-        #
-        # # The function ggforest() from the survminer package creates a forest plot for a Cox regression model fit. Hazard ratio estimates along with confiden- ce intervals and p-values are plotter for each variable.
-        #
-        # # lung$age <- ifelse(lung$age > 70, ">70","<= 70")
-        # # fit <- coxph( Surv(time, status) ~ sex + ph.ecog + age, data = lung)
-        # # ggforest(fit)
-        #
-        #     plot3 <- survminer::ggforest(model = mod,
-        #                                  data = mydata)
-        #
-        #     print(plot3)
-        #     TRUE
-        #
-        # }
+
+
+            # prepare data ----
+
+            mydata <- self$data
+
+            outcomeLevel <- self$options$outcomeLevel
+
+            mydata[["Outcome"]] <-
+                ifelse(
+                    test = mydata[[self$options$outcome]] == outcomeLevel,
+                    yes = 1,
+                    no = 0
+                )
+
+
+            # prepare formula ----
+
+            formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
+
+            # formula2 <- as.vector(self$options$explanatory)
+
+            formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
+
+            formulaL <- jmvcore::toNumeric(formulaL)
+
+            formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
+
+            formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
+
+            formula3 <- paste("survival::Surv(", formulaL, ",", "Outcome", ") ~ ", formula2)
+
+            formula3 <- as.formula(formula3)
+
+            mod <-
+                survival::coxph(
+                    formula = formula3,
+                    data = mydata
+                )
+
+            # plot
+
+        # https://rpkgs.datanovia.com/survminer/survminer_cheatsheet.pdf
+
+
+        # The function ggforest() from the survminer package creates a forest plot for a Cox regression model fit. Hazard ratio estimates along with confiden- ce intervals and p-values are plotter for each variable.
+
+        # lung$age <- ifelse(lung$age > 70, ">70","<= 70")
+        # fit <- coxph( Surv(time, status) ~ sex + ph.ecog + age, data = lung)
+        # ggforest(fit)
+
+
+            # ggforest ----
+            plot3 <- survminer::ggforest(model = mod,
+                                         data = mydata)
+
+
+            # print plot ----
+
+            print(plot3)
+            TRUE
+
+        }
 
 
 # ,
@@ -485,3 +440,65 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         )
 )
+
+
+
+
+# ,
+# .plot2 = function(image, ggtheme, theme, ...) {  # <-- the plot function
+#
+# # plotData <- image$state
+#
+#     if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
+#         return()
+#
+# if (nrow(self$data) == 0)
+#     stop('Data contains no (complete) rows')
+#
+# # Check if outcome variable is suitable or stop
+# myoutcome2 <- self$options$outcome
+# myoutcome2 <- self$data[[myoutcome2]]
+# myoutcome2 <- na.omit(myoutcome2)
+#
+# if (class(myoutcome2) == "factor")
+#     stop("Please use a continuous variable for outcome.")
+#
+# if (any(myoutcome2 != 0 & myoutcome2 != 1))
+#     stop('Outcome variable must only contains 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
+#
+# # https://indrajeetpatil.github.io/ggstatsplot/articles/web_only/ggcoefstats.html#cox-proportional-hazards-regression-model-coxph
+# # fit a stratified model
+#
+# mydata <- self$data
+#
+# formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
+#
+# formulaL <- jmvcore::toNumeric(formulaL)
+#
+# formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
+#
+# formulaR <- jmvcore::toNumeric(formulaR)
+#
+# formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
+#
+# formula3 <- paste("survival::Surv(", formulaL, ",", formulaR, ") ~ ", formula2)
+#
+# formula3 <- as.formula(formula3)
+#
+# mod <-
+#     survival::coxph(
+#         formula = formula3,
+#         data = mydata
+#     )
+#
+# # plot
+# plot2 <- ggstatsplot::ggcoefstats(
+#     x = mod,
+#     exponentiate = TRUE,
+#     title = "Cox proportional hazards regression model"
+# )
+#
+# print(plot2)
+# TRUE
+#
+# }
