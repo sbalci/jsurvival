@@ -14,13 +14,13 @@ items:
           - overalltime
 
 
-    - name:  text3
-      title: Deneme
-      type:  Preformatted
+    # - name:  text3
+    #   title: Deneme
+    #   type:  Preformatted
 
-    - name:  text2
-      title: Deneme
-      type:  Preformatted
+    # - name:  text2
+    #   title: Deneme
+    #   type:  Preformatted
 
 
     - name:  text
