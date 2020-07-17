@@ -44,8 +44,14 @@ options:
       variable: (outcome)
 
 
+    - name: hr
+      title: Show Hazards Regression Plot
+      type: Bool
+      default: false
+
+
     - name: sty
-      title: Plot Style
+      title: Select Plot Style
       type: List
       options:
         - title: finalfit
@@ -58,7 +64,7 @@ options:
 
 
     - name: ac
-      title: Adjusted Survival Curve
+      title: Show Adjusted Survival Curve
       type: Bool
       default: false
 

@@ -22,7 +22,7 @@ children:
             maxItemCount: 1
             isTarget: true
       - type: TargetLayoutBox
-        label: 'Outcome'
+        label: Outcome
         children:
           - type: VariablesListBox
             name: outcome
@@ -40,13 +40,18 @@ children:
     margin: large
     children:
       - type: CheckBox
+        name: hr
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: CheckBox
         name: ac
   - type: VariableSupplier
     persistentItems: false
     stretchFactor: 1
     children:
       - type: TargetLayoutBox
-        label: Use Variable for Adjusted Survival Curve
+        label: Variable for Adjusted Survival Curve
         children:
           - type: VariablesListBox
             name: adjexplanatory
