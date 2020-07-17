@@ -84,8 +84,14 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 outcome1 <- self$data[[outcome1]]
 
                 if (inherits(outcome1, contin)) {
-                    return()
 
+                    if (any(myoutcome2 != 0 & myoutcome2 != 1))
+                        stop('When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
+
+
+
+
+                    uoutcome <- outcome1
 
 
 
