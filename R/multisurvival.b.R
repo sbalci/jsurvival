@@ -9,42 +9,6 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     "multisurvivalClass",
     inherit = multisurvivalBase,
     private = list(
-
-
-        formula1 = function() {
-
-            # prepare formula ----
-
-            formula2 <- as.vector(self$options$explanatory)
-
-            formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
-
-            formulaL <- jmvcore::toNumeric(formulaL)
-
-            formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
-
-            # formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
-
-            # formulaR <- jmvcore::toNumeric(formulaR)
-
-
-            myformula <- paste("Surv(", formulaL, ",", "Outcome", ")")
-
-
-
-            return(myformula)
-
-
-
-
-
-
-
-
-        },
-
-
-
         .run = function() {
 
 
@@ -142,7 +106,22 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$results$text2$setContent(resultsdeneme)
 
 
-            myformula <- formula1()
+            # prepare formula ----
+
+            formula2 <- as.vector(self$options$explanatory)
+
+            formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
+
+            formulaL <- jmvcore::toNumeric(formulaL)
+
+            formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
+
+            # formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
+
+            # formulaR <- jmvcore::toNumeric(formulaR)
+
+
+            myformula <- paste("Surv(", formulaL, ",", "Outcome", ")")
 
             resultsdeneme2 <- list(
                 formula2,
@@ -155,19 +134,19 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             # finalfit multivariate table ----
 
-            # finalfit::finalfit(.data = mydata,
-            #                    dependent = myformula,
-            #                    explanatory = formula2,
-            #
-            #                    # metrics = TRUE
-            #                    ) -> tMultivariate
-            #
-            # results1 <- knitr::kable(tMultivariate,
-            #                          row.names = FALSE,
-            #                          align = c('l', 'l', 'r', 'r', 'r', 'r'),
-            #                          format = "html")
-            #
-            # self$results$text$setContent(results1)
+            finalfit::finalfit(.data = mydata,
+                               dependent = myformula,
+                               explanatory = formula2,
+
+                               # metrics = TRUE
+                               ) -> tMultivariate
+
+            results1 <- knitr::kable(tMultivariate,
+                                     row.names = FALSE,
+                                     align = c('l', 'l', 'r', 'r', 'r', 'r'),
+                                     format = "html")
+
+            self$results$text$setContent(results1)
 
 
             # Reduced model ----
