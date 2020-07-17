@@ -374,6 +374,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             }
 },
 
+
 .plot = function(image, ggtheme, theme, ...) {  # <-- the plot function ----
 
     plotData <- image$state
@@ -388,23 +389,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     if(!sc)
         return()
-
-
-#     uoveralltime <- self$options$overalltime
-#     uoveralltime <- jmvcore::toNumeric(self$data[[uoveralltime]])
-#     uthefactor <- self$options$explanatory
-#     uthefactor <- self$data[[uthefactor]]
-#     uoutcome <- self$options$outcome
-#     uoutcome <- jmvcore::toNumeric(self$data[[uoutcome]])
-#     mydata <- data.frame(myoveralltime = uoveralltime,
-#                          thefactor = uthefactor,
-#                          myoutcome = uoutcome)
-#     mydata <- na.omit(mydata)
-
-    # names(mydata) <- c(self$options$overalltime,
-    #                    self$options$explanatory,
-    #                    self$options$outcome)
-
 
 
     formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
@@ -434,27 +418,15 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         )
 
 
-    # plot <- plotData %>%
-    #     finalfit::surv_plot(.data = .,
-    #                         dependent = myformula,
-    #                         explanatory = formula2,
-    #                         xlab = 'Time (months)',
-    #                         pval = TRUE,
-    #                         legend = 'none',
-    #                         break.time.by = 12,
-    #                         xlim = c(0,60),
-    #                         title = paste0("Survival curves for ", self$options$explanatory),
-    #                         subtitle = "Based on Kaplan-Meier estimates"
-    #     )
-
-    # plot <- plot + ggtheme
-
     print(plot)
     TRUE
 
 
 
 }
+
+
+
 
 
 
