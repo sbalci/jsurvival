@@ -22,7 +22,7 @@ children:
             maxItemCount: 1
             isTarget: true
       - type: TargetLayoutBox
-        label: Outcome
+        label: 'Outcome'
         children:
           - type: VariablesListBox
             name: outcome
@@ -34,13 +34,13 @@ children:
   - type: LayoutBox
     margin: large
     children:
-      - type: ComboBox
-        name: sty
-  - type: LayoutBox
-    margin: large
-    children:
       - type: CheckBox
         name: hr
+        children:
+          - type: ComboBox
+            name: sty
+            enable: (hr)
+
   - type: LayoutBox
     margin: large
     children:
