@@ -336,6 +336,14 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                 "In the pairwise comparison of ", self$options$explanatory, ":\n",
                                 mypairwisedescription, "\n")
 
+                            mypairwisedescription <- glue::glue("
+                                <br>
+                                <h3>Pairwise Comparisons</h3>
+                                <br><hr>",
+                                mypairwisedescription
+                            )
+
+
                             results9 <- mypairwisedescription
 
 

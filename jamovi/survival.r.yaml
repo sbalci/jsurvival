@@ -71,22 +71,24 @@ items:
           - outcome
           - overalltime
 
-    - name:  text8
-      title: '`Pairwise Comparison - ${explanatory}`'
-      type:  Preformatted
-      clearWith:
-          - explanatory
-          - outcome
-          - overalltime
-      visible: '`${n_level >= 3}`'
 
     - name:  text9
       title: '`Pairwise Comparison Summary - ${explanatory}`'
-      type:  Preformatted
+      type:  Html
       clearWith:
           - explanatory
           - outcome
           - overalltime
+
+    - name:  text8
+      title: '`Pairwise Comparison - ${explanatory}`'
+      type:  Html
+      clearWith:
+          - explanatory
+          - outcome
+          - overalltime
+      # visible: '`${n_level >= 3}`'
+
 
     - name: plot
       title: '`Survival Plot  - ${explanatory}`'

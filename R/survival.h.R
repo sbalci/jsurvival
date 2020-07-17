@@ -99,8 +99,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         text4 = function() private$.items[["text4"]],
         text7 = function() private$.items[["text7"]],
         text6 = function() private$.items[["text6"]],
-        text8 = function() private$.items[["text8"]],
         text9 = function() private$.items[["text9"]],
+        text8 = function() private$.items[["text8"]],
         plot = function() private$.items[["plot"]],
         plot2 = function() private$.items[["plot2"]],
         plot3 = function() private$.items[["plot3"]]),
@@ -171,19 +171,18 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "overalltime")))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="text8",
-                title="`Pairwise Comparison - ${explanatory}`",
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "overalltime"),
-                visible="`${n_level >= 3}`"))
-            self$add(jmvcore::Preformatted$new(
+            self$add(jmvcore::Html$new(
                 options=options,
                 name="text9",
                 title="`Pairwise Comparison Summary - ${explanatory}`",
+                clearWith=list(
+                    "explanatory",
+                    "outcome",
+                    "overalltime")))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="text8",
+                title="`Pairwise Comparison - ${explanatory}`",
                 clearWith=list(
                     "explanatory",
                     "outcome",
@@ -277,8 +276,8 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$text4} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text6} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$text8} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$text9} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$text9} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$text8} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr

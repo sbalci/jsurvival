@@ -45,8 +45,8 @@ A results object containing:
 \code{results$text4} \tab \tab \tab \tab \tab a html \cr
 \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$text6} \tab \tab \tab \tab \tab a html \cr
-\code{results$text8} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$text9} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$text9} \tab \tab \tab \tab \tab a html \cr
+\code{results$text8} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
