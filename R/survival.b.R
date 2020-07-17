@@ -305,6 +305,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                     formula_p <- paste0('survival::Surv(', formulaL, ',', formulaR, ') ~ ', formula2)
                     formula_p <- as.formula(formula_p)
+
+
                     results8 <-
                         survminer::pairwise_survdiff(
                             formula = formula_p,
@@ -340,7 +342,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                 <br>
                                 <h3>Pairwise Comparisons</h3>
                                 <br><hr>",
-                                mypairwisedescription
+                                unlist(mypairwisedescription)
                             )
 
 
