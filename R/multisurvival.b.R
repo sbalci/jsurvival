@@ -121,7 +121,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # formulaR <- jmvcore::toNumeric(formulaR)
 
 
-            myformula <- paste("Surv(", formulaL, ",", "'Outcome'", ")")
+            myformula <- paste("Surv(", formulaL, ",", "Outcome", ")")
 
             resultsdeneme2 <- list(
                 formula2,
