@@ -294,12 +294,14 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         # results 8 pairwise comparison ----
 
-                if(n_level < 3) {
+                # if(n_level < 3) {
 
-                    results8 <- "No pairwise comparison when explanatory variable has < 3 levels"
-                    results9 <- ""
+                    # results8 <- "No pairwise comparison when explanatory variable has < 3 levels"
+                    # results9 <- ""
 
-                } else {
+                # } else {
+
+                if(n_level >= 3) {
 
                     formula_p <- paste0('survival::Surv(', formulaL, ',', formulaR, ') ~ ', formula2)
                     formula_p <- as.formula(formula_p)
@@ -310,10 +312,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             p.adjust.method = "BH")
 
 
-
-
-
-                mypairwise2 <- as.data.frame(results8[["p.value"]]) %>%
+                    mypairwise2 <- as.data.frame(results8[["p.value"]]) %>%
                                 tibble::rownames_to_column()
 
                             mypairwise2 %>%
@@ -321,7 +320,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                 dplyr::filter(complete.cases(.)) %>%
                                 dplyr::mutate(description =
                                                   glue::glue(
-                                                      "The comparison between ", self$options$explanatory, " {rowname} and ", self$options$explanatory," {name} has a p-value of {format.pval(value, digits = 3, eps = 0.001)}."
+                                                      "The comparison between ",
+                                                      self$options$explanatory,
+                                                      " {rowname} and ",
+                                                      self$options$explanatory,
+                                                      " {name} has a p-value of {format.pval(value, digits = 3, eps = 0.001)}."
                                                   )
                                 ) %>%
                                 dplyr::select(description) %>%
@@ -334,6 +337,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                 mypairwisedescription, "\n")
 
                             results9 <- mypairwisedescription
+
+
+                            self$results$text8$setContent(results8)
+                            self$results$text9$setContent(results9)
+
 
                 }
 
@@ -348,8 +356,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 self$results$text5$setContent(results5)
                 self$results$text6$setContent(results6)
                 self$results$text7$setContent(results7)
-                self$results$text8$setContent(results8)
-                self$results$text9$setContent(results9)
+
 
 
 
