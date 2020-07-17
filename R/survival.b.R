@@ -14,34 +14,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     private = list(
         .run = function() {
 
-
-            # # Error Message ----
-            #
-            # if (nrow(self$data) == 0) stop("Data contains no (complete) rows")
-            #
-            # if ( (is.null(self$options$vars) || is.null(self$options$facs)) && is.null(self$options$target) ) {
-            #     # ToDo Message ----
-            #     todo <- "
-            #         <br>Welcome to ClinicoPath
-            #                   <br><br>
-            #                   This tool will help you form an Alluvial Plots.
-            #                   "
-            #     html <- self$results$todo
-            #     html$setContent(todo)
-            #
-            # } else {
-            #     todo <- ""
-            #     html <- self$results$todo
-            #     html$setContent(todo)
-            #
-            #
-            #
-            # }
-
-
-
-
-
             # If no variable selected Initial Message ----
 
             if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) ) {
@@ -53,11 +25,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 <br><br>
                 Explanatory variable should be categorical (ordinal or nominal).
                 <br><br>
-                Outcome variable should be coded binary (0 or 1).
+                Select outcome level from Outcome variable.
                 <br><br>
-                If patient is dead or event (recurrence) occured it is 1.
-                <br><br>
-                If censored (patient is alive or free of disease) at the last visit it is 0.
+                Outcome Level: if patient is dead or event (recurrence) occured.
                 <br><br>
                 Survival should be numeric, continuous, and in months.
                 <br><br>
@@ -82,33 +52,15 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     stop('Data contains no (complete) rows')
 
 
-    # # Check if outcome variable is suitable or stop ----
-                #
-                #
+    # # Check if outcome variable is suitable or stop
                 # myoutcome2 <- self$options$outcome
-                #
                 # myoutcome2 <- self$data[[myoutcome2]]
-                #
                 # myoutcome2 <- na.omit(myoutcome2)
-                #
-                #
-                #
                 # # if ( !is.numeric(myoutcome2) || any(myoutcome2 != 0 & myoutcome2 != 1))
                 # if (any(myoutcome2 != 0 & myoutcome2 != 1))
                 #     stop('Outcome variable must only contains 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
-                #
-                #
-                #
-                #
                 # # self$results$deneme$setContent(head(mydata))
-                # #
                 # # self$results$deneme2$setContent(head(mydata))
-                #
-                #
-                #
-                #
-
-
 
 
                 # Read Data ----
@@ -147,21 +99,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-# mydata2 <- mydata2 %>%
-#     dplyr::mutate(testVariable2 = dplyr::case_when(
-#         .data[[testVariable]] == self$options$testPositive ~ "Positive",
-#         NA ~ NA_character_,
-#         TRUE ~ "Negative"))
-
-# uoutcome <- jmvcore::toNumeric(self$data[[uoutcome]])
-
-
-
-# # myoutcomelevel <- self$options$outcomeLevel
-# myoutcome <- ifelse(self$data[[myoutcome]] == self$options$outcomeLevel, 1, 0)
-
-
-
                 mydata <- data.frame(myoveralltime = uoveralltime,
                                      thefactor = uthefactor,
                                      myoutcome = uoutcome)
@@ -170,6 +107,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
                 # # Run code for analysis ----
+
                 # self$results$deneme3$setContent(mydata[[myoutcome]])
                 # self$results$deneme4$setContent(mydata)
 
