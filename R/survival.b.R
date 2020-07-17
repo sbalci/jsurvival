@@ -427,8 +427,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             break.time.by = 12,
                             xlim = c(0,60),
                             title = paste0("Survival curves for ", self$options$explanatory),
-                            subtitle = "Based on Kaplan-Meier estimates",
-                            fun = "pct"
+                            subtitle = "Based on Kaplan-Meier estimates"
+                            # , fun = "pct"
         )
 
 
@@ -481,9 +481,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             legend = 'none',
                             break.time.by = 12,
                             xlim = c(0,60),
-                            title = paste0("Cumulative Events ", self$options$explanatory),
+                            title = paste0("Cumulative Events ", self$options$explanatory)
                             # subtitle = "Based on Kaplan-Meier estimates",
-                            fun = "event"
+                            # , fun = "event"
 
         )
 
