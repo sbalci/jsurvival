@@ -178,7 +178,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome",
-                    "overalltime")))
+                    "overalltime"),
+                visible="`${n_level >= 3}`"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text9",

@@ -78,6 +78,7 @@ items:
           - explanatory
           - outcome
           - overalltime
+      visible: '`${n_level >= 3}`'
 
     - name:  text9
       title: '`Pairwise Comparison Summary - ${explanatory}`'
