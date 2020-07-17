@@ -360,10 +360,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 image <- self$results$plot
                 image$setState(plotData)
 
-                formula <- self$results$plot
-                formula$setState(formula)
-
-
                 image2 <- self$results$plot2
                 image2$setState(plotData)
 
