@@ -423,13 +423,29 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             dependent = myformula,
                             explanatory = formula2,
                             xlab = 'Time (months)',
-                            pval = TRUE,
+                            # pval = TRUE,
                             legend = 'none',
                             break.time.by = 12,
                             xlim = c(0,60),
-                            title = paste0("Survival curves for ", self$options$explanatory),
-                            subtitle = "Based on Kaplan-Meier estimates"
+                            title = paste0("Cumulative Events ", self$options$explanatory)
+                            # subtitle = "Based on Kaplan-Meier estimates",
+                            , fun = "event"
+
         )
+
+
+    # plot <- plotData %>%
+    #     finalfit::surv_plot(.data = .,
+    #                         dependent = myformula,
+    #                         explanatory = formula2,
+    #                         xlab = 'Time (months)',
+    #                         pval = TRUE,
+    #                         legend = 'none',
+    #                         break.time.by = 12,
+    #                         xlim = c(0,60),
+    #                         title = paste0("Survival curves for ", self$options$explanatory),
+    #                         subtitle = "Based on Kaplan-Meier estimates"
+    #     )
 
     # plot <- plot + ggtheme
 
