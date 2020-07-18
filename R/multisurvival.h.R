@@ -77,8 +77,7 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         todo = function() private$.items[["todo"]],
         text = function() private$.items[["text"]],
         plot = function() private$.items[["plot"]],
-        plot3 = function() private$.items[["plot3"]],
-        plot4 = function() private$.items[["plot4"]]),
+        plot3 = function() private$.items[["plot3"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -130,21 +129,6 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcome",
                     "overalltime"),
                 visible="(hr && sty:t3)",
-                refs="survminer"))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="plot4",
-                title="Show Adjusted Survival Curve",
-                width=800,
-                height=600,
-                renderFun=".plot4",
-                requiresData=TRUE,
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "overalltime",
-                    "adjexplanatory"),
-                visible="(ac)",
                 refs="survminer"))}))
 
 multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -188,7 +172,6 @@ multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$text} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot4} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' @export
