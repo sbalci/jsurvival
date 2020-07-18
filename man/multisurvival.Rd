@@ -13,7 +13,8 @@ multisurvival(
   hr = FALSE,
   sty = "t1",
   ac = FALSE,
-  adjexplanatory
+  adjexplanatory,
+  postHoc = NULL
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ multisurvival(
 \item{ac}{.}
 
 \item{adjexplanatory}{.}
+
+\item{postHoc}{.}
 }
 \value{
 A results object containing:

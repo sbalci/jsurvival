@@ -73,6 +73,9 @@ options:
       title: Variable for Adjusted Survival Curve
       type: Variable
 
-
+    - name: postHoc
+      title: Post Hoc Tests
+      type: Terms
+      default: null
 
 ...

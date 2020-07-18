@@ -13,7 +13,8 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             hr = FALSE,
             sty = "t1",
             ac = FALSE,
-            adjexplanatory = NULL, ...) {
+            adjexplanatory = NULL,
+            postHoc = NULL, ...) {
 
             super$initialize(
                 package='jsurvival',
@@ -56,6 +57,10 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$..adjexplanatory <- jmvcore::OptionVariable$new(
                 "adjexplanatory",
                 adjexplanatory)
+            private$..postHoc <- jmvcore::OptionTerms$new(
+                "postHoc",
+                postHoc,
+                default=NULL)
 
             self$.addOption(private$..explanatory)
             self$.addOption(private$..overalltime)
@@ -65,6 +70,7 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..sty)
             self$.addOption(private$..ac)
             self$.addOption(private$..adjexplanatory)
+            self$.addOption(private$..postHoc)
         }),
     active = list(
         explanatory = function() private$..explanatory$value,
@@ -74,7 +80,8 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         hr = function() private$..hr$value,
         sty = function() private$..sty$value,
         ac = function() private$..ac$value,
-        adjexplanatory = function() private$..adjexplanatory$value),
+        adjexplanatory = function() private$..adjexplanatory$value,
+        postHoc = function() private$..postHoc$value),
     private = list(
         ..explanatory = NA,
         ..overalltime = NA,
@@ -83,7 +90,8 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..hr = NA,
         ..sty = NA,
         ..ac = NA,
-        ..adjexplanatory = NA)
+        ..adjexplanatory = NA,
+        ..postHoc = NA)
 )
 
 multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -199,6 +207,7 @@ multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param sty .
 #' @param ac .
 #' @param adjexplanatory .
+#' @param postHoc .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
@@ -218,7 +227,8 @@ multisurvival <- function(
     hr = FALSE,
     sty = "t1",
     ac = FALSE,
-    adjexplanatory) {
+    adjexplanatory,
+    postHoc = NULL) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('multisurvival requires jmvcore to be installed (restart may be required)')
@@ -235,6 +245,7 @@ multisurvival <- function(
             `if`( ! missing(outcome), outcome, NULL),
             `if`( ! missing(adjexplanatory), adjexplanatory, NULL))
 
+    if (inherits(postHoc, 'formula')) postHoc <- jmvcore::decomposeFormula(postHoc)
 
     options <- multisurvivalOptions$new(
         explanatory = explanatory,
@@ -244,7 +255,8 @@ multisurvival <- function(
         hr = hr,
         sty = sty,
         ac = ac,
-        adjexplanatory = adjexplanatory)
+        adjexplanatory = adjexplanatory,
+        postHoc = postHoc)
 
     analysis <- multisurvivalClass$new(
         options = options,
