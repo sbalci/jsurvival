@@ -54,9 +54,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     <br><br>
                     Outcome Level: if patient is dead or event (recurrence) occured.
                     <br><br>
-                        If censored (patient is alive or free of disease) at the last visit it is 0.
-                    <br><br>
-                        Survival should be numeric, continuous, and in months.
+                        Survival time should be numeric, continuous, and in months.
                     <br><br>
                         This function uses finalfit, survival, survminer and ggstatsplot packages. Please cite jamovi and the packages as given below.
                     <br><br>

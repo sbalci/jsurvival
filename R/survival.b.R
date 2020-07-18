@@ -29,7 +29,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 <br><br>
                 Outcome Level: if patient is dead or event (recurrence) occured.
                 <br><br>
-                Survival should be numeric, continuous, and in months.
+                Survival time should be numeric, continuous, and in months.
                 <br><br>
                 This function uses survival, survminer, and finalfit packages. Please cite jamovi and the packages as given below.
                 <br><hr>"
