@@ -11,10 +11,7 @@ multisurvival(
   outcome,
   outcomeLevel,
   hr = FALSE,
-  sty = "t1",
-  ac = FALSE,
-  adjexplanatory,
-  postHoc = NULL
+  sty = "t1"
 )
 }
 \arguments{
@@ -31,12 +28,6 @@ multisurvival(
 \item{hr}{.}
 
 \item{sty}{.}
-
-\item{ac}{.}
-
-\item{adjexplanatory}{.}
-
-\item{postHoc}{.}
 }
 \value{
 A results object containing:
