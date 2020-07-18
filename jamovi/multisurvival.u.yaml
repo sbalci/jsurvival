@@ -70,3 +70,22 @@ children:
             isTarget: true
             template:
               type: TermLabel
+  - type: CollapseBox
+    label: Post Hoc Tests
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: Supplier
+        name: postHocSupplier
+        persistentItems: false
+        stretchFactor: 1
+        format: term
+        children:
+          - type: TargetLayoutBox
+            label: ''
+            children:
+              - type: ListBox
+                name: postHoc
+                isTarget: true
+                template:
+                  type: TermLabel
