@@ -92,6 +92,7 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime")))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -100,6 +101,7 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime"),
                 refs="finalfit"))
             self$add(jmvcore::Image$new(
@@ -113,6 +115,7 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime"),
                 visible="(hr && sty:t1)",
                 refs="finalfit"))
@@ -127,6 +130,7 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime"),
                 visible="(hr && sty:t3)",
                 refs="survminer"))}))
