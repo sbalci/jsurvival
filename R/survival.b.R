@@ -156,6 +156,10 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # results 1 Median Table ----
 
+
+                results1table[1,1] <- "Factor"
+
+
                 medianTable <- self$results$medianTable
 
                 data_frame <- results1table
