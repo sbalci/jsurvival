@@ -122,6 +122,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
@@ -130,6 +131,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime")))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -138,6 +140,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
@@ -146,6 +149,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime")))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -154,6 +158,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
@@ -162,6 +167,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime")))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -170,6 +176,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
@@ -178,6 +185,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime")))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -186,6 +194,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime")))
             self$add(jmvcore::Image$new(
                 options=options,
@@ -200,6 +209,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "sc",
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime")))
             self$add(jmvcore::Image$new(
                 options=options,
@@ -214,6 +224,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "ce",
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime")))
             self$add(jmvcore::Image$new(
                 options=options,
@@ -228,6 +239,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "ch",
                     "explanatory",
                     "outcome",
+                    "outcomeLevel",
                     "overalltime")))}))
 
 survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(

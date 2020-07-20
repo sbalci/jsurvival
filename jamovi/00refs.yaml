@@ -393,7 +393,7 @@ refs:
 
     epiR:
         type: 'software'
-        author: > -
+        author: >-
             Mark Stevenson with contributions from Telmo Nunes,
             Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron
             Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola
