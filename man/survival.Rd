@@ -40,7 +40,8 @@ A results object containing:
 \tabular{llllll}{
 \code{results$todo} \tab \tab \tab \tab \tab a html \cr
 \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$text1html} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$text2html} \tab \tab \tab \tab \tab a html \cr
 \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$text4} \tab \tab \tab \tab \tab a html \cr
 \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr
@@ -51,6 +52,12 @@ A results object containing:
 \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 }
+
+Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
+
+\code{results$medianTable$asDF}
+
+\code{as.data.frame(results$medianTable)}
 }
 \description{
 Function for Generating Summaries for Survival Analysis.

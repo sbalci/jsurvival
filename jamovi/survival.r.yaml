@@ -30,35 +30,43 @@ items:
           - overalltime
 
 
-    # - name:  medianTable
-    #   title: '`Median Survival Table  - ${explanatory}`'
-    #   type:  Table
-    #   clearWith:
-    #       - explanatory
-    #       - outcome
-    #       - outcomeLevel
-    #       - overalltime
-    #   rows: 0
-    #   columns: &idcols
-    #     - name: rowname
-    #       title: "Decision Statistics"
-    #       type: text
-    #     - name: est
-    #       title: "Estimate"
-    #       type: number
-    #     - name: lower
-    #       title: "Lower 95% CI"
-    #       type: number
-    #     - name: upper
-    #       title: "Upper 95% CI"
-    #       type: number
-
-
-
-
-    - name:  text1html
+    - name:  medianTable
       title: '`Median Survival Table  - ${explanatory}`'
-      type:  Preformatted
+      type:  Table
+      clearWith:
+          - explanatory
+          - outcome
+          - outcomeLevel
+          - overalltime
+      rows: 0
+      columns: &idcols
+        - name: '`${explanatory}`'
+          title: '`${explanatory}`'
+          type: text
+        - name: records
+          title: "Records"
+          type: number
+        - name: n_max
+          title: "n_max"
+          type: number
+        - name: n_start
+          title: "n_start"
+          type: number
+
+# Sex
+# records
+# n_max
+# n_start
+# events
+# rmean
+# se_rmean
+# median
+# x0_95lcl
+# x0_95ucl
+
+    - name:  text2html
+      title: '`Median Survival Table  - ${explanatory}`'
+      type:  Html
       clearWith:
           - explanatory
           - outcome
