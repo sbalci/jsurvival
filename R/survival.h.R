@@ -133,7 +133,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcome",
                     "outcomeLevel",
                     "overalltime")))
-            self$add(jmvcore::Html$new(
+            self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text1html",
                 title="`Median Survival Table  - ${explanatory}`",
@@ -283,7 +283,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$text1html} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$text1html} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text4} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr
