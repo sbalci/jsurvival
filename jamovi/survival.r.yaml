@@ -31,7 +31,7 @@ items:
 
 
     - name:  medianTable
-      title: '`Median Survival Table  - ${explanatory}`'
+      title: '`Populated Median Survival Table  - ${explanatory}`'
       type:  Table
       clearWith:
           - explanatory
@@ -40,9 +40,9 @@ items:
           - overalltime
       rows: 0
       columns: &idcols
-        - name: '`${explanatory}`'
-          title: '`${explanatory}`'
-          type: text
+        # - name: factor
+        #   title: ''
+        #   type: text
         - name: records
           title: "Records"
           type: number

@@ -137,7 +137,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="medianTable",
-                title="`Median Survival Table  - ${explanatory}`",
+                title="`Populated Median Survival Table  - ${explanatory}`",
                 clearWith=list(
                     "explanatory",
                     "outcome",
@@ -145,10 +145,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "overalltime"),
                 rows=0,
                 columns=list(
-                    list(
-                        `name`="`${explanatory}`", 
-                        `title`="`${explanatory}`", 
-                        `type`="text"),
                     list(
                         `name`="records", 
                         `title`="Records", 
