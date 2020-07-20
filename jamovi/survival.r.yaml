@@ -66,7 +66,7 @@ items:
 
 
 
-    - name:  text2html
+    - name:  text1html
       title: '`Median Survival Table  - ${explanatory}`'
       type:  Html
       clearWith:

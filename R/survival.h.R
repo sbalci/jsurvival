@@ -94,7 +94,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     active = list(
         todo = function() private$.items[["todo"]],
         text2 = function() private$.items[["text2"]],
-        text2html = function() private$.items[["text2html"]],
+        text1html = function() private$.items[["text1html"]],
         text5 = function() private$.items[["text5"]],
         text4 = function() private$.items[["text4"]],
         text7 = function() private$.items[["text7"]],
@@ -135,7 +135,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "overalltime")))
             self$add(jmvcore::Html$new(
                 options=options,
-                name="text2html",
+                name="text1html",
                 title="`Median Survival Table  - ${explanatory}`",
                 clearWith=list(
                     "explanatory",
@@ -283,7 +283,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$text2html} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$text1html} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text4} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr
