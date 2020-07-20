@@ -30,30 +30,28 @@ items:
           - overalltime
 
 
-    - name:  medianTable
-      title: '`Populated Median Survival Table  - ${explanatory}`'
-      type:  Table
-      rows: 0
-      columns: &idcols
-        # - name: factor
-        #   title: ''
-        #   type: text
-        - name: records
-          title: "Records"
-          type: number
-        - name: n_max
-          title: "n_max"
-          type: number
-        - name: n_start
-          title: "n_start"
-          type: number
-      clearWith:
-          - explanatory
-          - outcome
-          - outcomeLevel
-          - overalltime
-
-
+    # - name:  medianTable
+    #   title: '`Populated Median Survival Table  - ${explanatory}`'
+    #   type:  Table
+    #   rows: 0
+    #   columns: &idcols
+    #     # - name: factor
+    #     #   title: ''
+    #     #   type: text
+    #     - name: records
+    #       title: "Records"
+    #       type: number
+    #     - name: n_max
+    #       title: "n_max"
+    #       type: number
+    #     - name: n_start
+    #       title: "n_start"
+    #       type: number
+    #   clearWith:
+    #       - explanatory
+    #       - outcome
+    #       - outcomeLevel
+    #       - overalltime
 
 # Sex
 # records
@@ -65,6 +63,8 @@ items:
 # median
 # x0_95lcl
 # x0_95ucl
+
+
 
     - name:  text2html
       title: '`Median Survival Table  - ${explanatory}`'
