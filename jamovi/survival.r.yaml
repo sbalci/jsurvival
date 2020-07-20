@@ -35,8 +35,8 @@ items:
       type:  Table
       rows: 0
       columns: &idcols
-        - name: factor
-          title: 'Factor'
+        - name: '`${explanatory}`'
+          title: '`${explanatory}`'
           type: text
         - name: records
           title: "Records"
