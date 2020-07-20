@@ -138,6 +138,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     janitor::clean_names(dat = ., case = "snake") %>%
                     tibble::rownames_to_column(.data = ., var = self$options$explanatory)
 
+                results1table <- results1html
+
                 results1html[,1] <- gsub(pattern = "thefactor=",
                                          replacement = "",
                                          x = results1html[,1])
@@ -154,12 +156,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # results 1 Median Table ----
 
-                # medianTable <- self$results$medianTable
+                medianTable <- self$results$medianTable
 
-                # data_frame <- results1html
-                # for(i in seq_along(data_frame[,1,drop=T])) {
-                #     medianTable$addRow(rowKey = i, values = c(data_frame[i,]))
-                # }
+                data_frame <- results1html
+                for(i in seq_along(data_frame[,1,drop=T])) {
+                    medianTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                }
 
 
 

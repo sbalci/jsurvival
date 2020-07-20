@@ -35,9 +35,9 @@ items:
       type:  Table
       rows: 0
       columns: &idcols
-        # - name: factor
-        #   title: ''
-        #   type: text
+        - name: factor
+          title: 'Factor'
+          type: text
         - name: records
           title: "Records"
           type: number
