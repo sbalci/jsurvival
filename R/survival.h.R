@@ -142,7 +142,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 columns=list(
                     list(
                         `name`="factor", 
-                        `title`="`{explanatory}`", 
+                        `title`="`Factor - ${explanatory}`", 
                         `type`="text"),
                     list(
                         `name`="records", 
