@@ -158,9 +158,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 medianTable <- self$results$medianTable
 
-                data_frame <- results1html
+                data_frame <- results1table
                 for(i in seq_along(data_frame[,1,drop=T])) {
-                    medianTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                    medianTable$addRow(rowKey = i, values = c(results1table[i,]))
                 }
 
 
