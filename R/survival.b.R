@@ -144,12 +144,24 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # results 1 html, Median Survival Table Html Type ----
 
-                results1html <- knitr::kable(results1html,
+                results2html <- knitr::kable(results1html,
                                              row.names = FALSE,
                                              align = c('l', rep('r', 9)),
                                              format = "html",
                                              digits = 1
                                              )
+
+
+                results2html <- names(results1html)
+
+                # results 1 Median Table
+
+                # medianTable <- self$results$medianTable
+                #
+                # data_frame <- results1html
+                # for(i in seq_along(data_frame[,1,drop=T])) {
+                #     medianTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                # }
 
 
 
@@ -358,7 +370,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # Results ----
                 ## self$results$text1$setContent(results1)
-                self$results$text1html$setContent(results1html)
+                self$results$text1html$setContent(results2html)
                 self$results$text2$setContent(results2)
                 ## self$results$text3$setContent(results3)
                 self$results$text4$setContent(results4)
