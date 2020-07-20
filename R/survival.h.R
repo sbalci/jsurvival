@@ -94,6 +94,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     active = list(
         todo = function() private$.items[["todo"]],
         text2 = function() private$.items[["text2"]],
+        medianTable = function() private$.items[["medianTable"]],
         text1html = function() private$.items[["text1html"]],
         text5 = function() private$.items[["text5"]],
         text4 = function() private$.items[["text4"]],
@@ -128,6 +129,53 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="text2",
                 title="`Median Survival Summary and Table - ${explanatory}`",
+                clearWith=list(
+                    "explanatory",
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime")))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="medianTable",
+                title="`Populated Median Survival Table  - ${explanatory}`",
+                rows=0,
+                columns=list(
+                    list(
+                        `name`="records", 
+                        `title`="Records", 
+                        `type`="number"),
+                    list(
+                        `name`="n_max", 
+                        `title`="n_max", 
+                        `type`="number"),
+                    list(
+                        `name`="n_start", 
+                        `title`="n_start", 
+                        `type`="number"),
+                    list(
+                        `name`="events", 
+                        `title`="events", 
+                        `type`="number"),
+                    list(
+                        `name`="rmean", 
+                        `title`="rmean", 
+                        `type`="number"),
+                    list(
+                        `name`="se_rmean", 
+                        `title`="se_rmean", 
+                        `type`="number"),
+                    list(
+                        `name`="median", 
+                        `title`="median", 
+                        `type`="number"),
+                    list(
+                        `name`="x0_95lcl", 
+                        `title`="x0_95lcl", 
+                        `type`="number"),
+                    list(
+                        `name`="x0_95ucl", 
+                        `title`="x0_95ucl", 
+                        `type`="number")),
                 clearWith=list(
                     "explanatory",
                     "outcome",
@@ -283,6 +331,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$text1html} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text4} \tab \tab \tab \tab \tab a html \cr
@@ -294,6 +343,12 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 #' }
+#'
+#' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
+#'
+#' \code{results$medianTable$asDF}
+#'
+#' \code{as.data.frame(results$medianTable)}
 #'
 #' @export
 survival <- function(
