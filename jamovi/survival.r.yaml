@@ -35,7 +35,7 @@ items:
       type:  Table
       rows: 0
       columns: &idcols
-        - name: '`${explanatory}`'
+        - name: factor
           title: '`${explanatory}`'
           type: text
         - name: records
