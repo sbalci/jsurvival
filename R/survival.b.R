@@ -271,7 +271,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     )
 
                 for(i in seq_along(data_frame[,1,drop=T])) {
-                    uniTable$addRow(rowKey = i, values = c(results1table[i,]))
+                    uniTable$addRow(rowKey = i, values = c(data_frame[i,]))
                 }
 
 
