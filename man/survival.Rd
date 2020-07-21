@@ -42,7 +42,7 @@ A results object containing:
 \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$text4} \tab \tab \tab \tab \tab a html \cr
+\code{results$text4} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$uniTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$text6} \tab \tab \tab \tab \tab a html \cr

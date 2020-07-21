@@ -97,7 +97,7 @@ items:
 
     - name:  text4
       title: '`Cox Table- ${explanatory}`'
-      type:  Html
+      type:  Preformatted
       clearWith:
           - explanatory
           - outcome

@@ -186,7 +186,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcome",
                     "outcomeLevel",
                     "overalltime")))
-            self$add(jmvcore::Html$new(
+            self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text4",
                 title="`Cox Table- ${explanatory}`",
@@ -334,7 +334,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$text4} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$text4} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$uniTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text6} \tab \tab \tab \tab \tab a html \cr
