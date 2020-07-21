@@ -137,12 +137,12 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="medianTable",
-                title="`Median Survival Table  - ${explanatory}`",
+                title="`Median Survival Table Levels for ${explanatory}`",
                 rows=0,
                 columns=list(
                     list(
                         `name`="factor", 
-                        `title`="`Factor - ${explanatory}`", 
+                        `title`="Levels", 
                         `type`="text"),
                     list(
                         `name`="records", 
@@ -158,7 +158,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `type`="number"),
                     list(
                         `name`="events", 
-                        `title`="events", 
+                        `title`="Events", 
                         `type`="number"),
                     list(
                         `name`="rmean", 
@@ -170,15 +170,15 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `type`="number"),
                     list(
                         `name`="median", 
-                        `title`="median", 
+                        `title`="Median", 
                         `type`="number"),
                     list(
                         `name`="x0_95lcl", 
-                        `title`="x0_95lcl", 
+                        `title`="Lower 95% CI", 
                         `type`="number"),
                     list(
                         `name`="x0_95ucl", 
-                        `title`="x0_95ucl", 
+                        `title`="Upper 95% CI", 
                         `type`="number")),
                 clearWith=list(
                     "explanatory",

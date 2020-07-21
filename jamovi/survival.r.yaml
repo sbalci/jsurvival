@@ -31,12 +31,13 @@ items:
 
 
     - name:  medianTable
-      title: '`Median Survival Table  - ${explanatory}`'
+      title: '`Median Survival Table Levels for ${explanatory}`'
       type:  Table
       rows: 0
       columns: &idcols
         - name: factor
-          title: '`Factor - ${explanatory}`'
+          title: "Levels"
+          # title: '`Factor - ${explanatory}`'
           type: text
         - name: records
           title: "Records"
@@ -48,7 +49,7 @@ items:
           title: "n_start"
           type: number
         - name: events
-          title: "events"
+          title: "Events"
           type: number
         - name: rmean
           title: "rmean"
@@ -57,13 +58,13 @@ items:
           title: "se_rmean"
           type: number
         - name: median
-          title: "median"
+          title: "Median"
           type: number
         - name: x0_95lcl
-          title: "x0_95lcl"
+          title: "Lower 95% CI"
           type: number
         - name: x0_95ucl
-          title: "x0_95ucl"
+          title: "Upper 95% CI"
           type: number
       clearWith:
           - explanatory
