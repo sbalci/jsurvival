@@ -148,14 +148,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `title`="Records", 
                         `type`="number"),
                     list(
-                        `name`="n_max", 
-                        `title`="n_max", 
-                        `type`="number"),
-                    list(
-                        `name`="n_start", 
-                        `title`="n_start", 
-                        `type`="number"),
-                    list(
                         `name`="events", 
                         `title`="Events", 
                         `type`="number"),

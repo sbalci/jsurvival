@@ -42,12 +42,12 @@ items:
         - name: records
           title: "Records"
           type: number
-        - name: n_max
-          title: "n_max"
-          type: number
-        - name: n_start
-          title: "n_start"
-          type: number
+        # - name: n_max
+        #   title: "n_max"
+        #   type: number
+        # - name: n_start
+        #   title: "n_start"
+        #   type: number
         - name: events
           title: "Events"
           type: number
