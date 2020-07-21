@@ -326,12 +326,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         # results 8 pairwise comparison ----
 
-                if(n_level < 3) {
 
-                    results8 <- "No pairwise comparison when explanatory variable has < 3 levels"
-                    results9 <- ""
 
-                } else {
+                results8 <- "No pairwise comparison when explanatory variable has < 3 levels"
+                results9 <- ""
+
+                if(n_level > 2) {
 
                     formula_p <- paste0('survival::Surv(', formulaL, ',', formulaR, ') ~ ', formula2)
                     formula_p <- as.formula(formula_p)
@@ -340,9 +340,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             formula = formula_p,
                             data = mydata,
                             p.adjust.method = "BH")
-
-
-
 
 
                 mypairwise2 <- as.data.frame(results8[["p.value"]]) %>%
