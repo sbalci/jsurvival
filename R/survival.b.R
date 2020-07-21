@@ -237,12 +237,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-                # results 4  univariate survival html
+                # results 4  univariate survival html ----
 
-                # results4 <- knitr::kable(tUni[, 1:4],
-                #                          row.names = FALSE,
-                #                          align = c('l', 'l', 'r', 'r', 'r', 'r'),
-                #                          format = "html")
+                results4 <- knitr::kable(tUni[, 1:4],
+                                         row.names = FALSE,
+                                         align = c('l', 'l', 'r', 'r', 'r', 'r'),
+                                         format = "html")
 
 
                 tUni_df <- tibble::as_tibble(tUni, .name_repair = "minimal") %>%
