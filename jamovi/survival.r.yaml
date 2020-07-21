@@ -48,7 +48,7 @@ items:
         #   type: number
         - name: events
           title: "Events"
-          type: number
+          type: integer
         - name: rmean
           title: "rmean"
           type: number

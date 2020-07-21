@@ -151,7 +151,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     list(
                         `name`="events", 
                         `title`="Events", 
-                        `type`="number"),
+                        `type`="integer"),
                     list(
                         `name`="rmean", 
                         `title`="rmean", 
