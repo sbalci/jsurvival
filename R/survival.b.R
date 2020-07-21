@@ -239,21 +239,21 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # results 4  univariate survival html
 
-                results4 <- knitr::kable(tUni[, 1:4],
-                                         row.names = FALSE,
-                                         align = c('l', 'l', 'r', 'r', 'r', 'r'),
-                                         format = "html")
+                # results4 <- knitr::kable(tUni[, 1:4],
+                #                          row.names = FALSE,
+                #                          align = c('l', 'l', 'r', 'r', 'r', 'r'),
+                #                          format = "html")
 
 
                 tUni_df <- tibble::as_tibble(tUni, .name_repair = "minimal") %>%
                     janitor::clean_names(dat = ., case = "snake")
 
 
-                results4 <-
-                    list(
-                        tUni,
-                        tUni_df
-                    )
+                # results4 <-
+                #     list(
+                #         tUni,
+                #         tUni_df
+                #     )
 
                 # Cox-Regression Table ----
 
@@ -408,7 +408,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 # self$results$text1html$setContent(results1htmlresults)
                 self$results$text2$setContent(results2)
                 ## self$results$text3$setContent(results3)
-                self$results$text4$setContent(results4)
+                # self$results$text4$setContent(results4)
                 self$results$text5$setContent(results5)
                 self$results$text6$setContent(results6)
                 self$results$text7$setContent(results7)

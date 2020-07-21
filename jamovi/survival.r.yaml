@@ -95,14 +95,14 @@ items:
           - outcomeLevel
           - overalltime
 
-    - name:  text4
-      title: '`Cox Table- ${explanatory}`'
-      type:  Preformatted
-      clearWith:
-          - explanatory
-          - outcome
-          - outcomeLevel
-          - overalltime
+    # - name:  text4
+    #   title: '`Cox Table- ${explanatory}`'
+    #   type:  Preformatted
+    #   clearWith:
+    #       - explanatory
+    #       - outcome
+    #       - outcomeLevel
+    #       - overalltime
 
 
 

@@ -96,7 +96,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         text2 = function() private$.items[["text2"]],
         medianTable = function() private$.items[["medianTable"]],
         text5 = function() private$.items[["text5"]],
-        text4 = function() private$.items[["text4"]],
         uniTable = function() private$.items[["uniTable"]],
         text7 = function() private$.items[["text7"]],
         text6 = function() private$.items[["text6"]],
@@ -181,15 +180,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="text5",
                 title="`Cox Regression Summary and Table - ${explanatory}`",
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime")))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="text4",
-                title="`Cox Table- ${explanatory}`",
                 clearWith=list(
                     "explanatory",
                     "outcome",
@@ -342,7 +332,6 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$text4} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$uniTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text6} \tab \tab \tab \tab \tab a html \cr
