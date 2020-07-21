@@ -155,13 +155,13 @@ items:
           type: text
         - name: 'time'
           title: "time"
-          type: text
+          type: number
         - name: n.risk
           title: "Number at Risk"
-          type: text
+          type: number
         - name: n.event
           title: "Number of Events"
-          type: text
+          type: number
         - name: surv
           title: "Survival"
           type: number

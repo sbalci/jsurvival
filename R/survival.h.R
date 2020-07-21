@@ -239,15 +239,15 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     list(
                         `name`="time", 
                         `title`="time", 
-                        `type`="text"),
+                        `type`="number"),
                     list(
                         `name`="n.risk", 
                         `title`="Number at Risk", 
-                        `type`="text"),
+                        `type`="number"),
                     list(
                         `name`="n.event", 
                         `title`="Number of Events", 
-                        `type`="text"),
+                        `type`="number"),
                     list(
                         `name`="surv", 
                         `title`="Survival", 
