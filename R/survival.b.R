@@ -239,10 +239,10 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # results 4  univariate survival html
 
-                # results4 <- knitr::kable(tUni[, 1:4],
-                #                          row.names = FALSE,
-                #                          align = c('l', 'l', 'r', 'r', 'r', 'r'),
-                #                          format = "html")
+                results4 <- knitr::kable(tUni[, 1:4],
+                                         row.names = FALSE,
+                                         align = c('l', 'l', 'r', 'r', 'r', 'r'),
+                                         format = "html")
 
 
                 tUni_df <- tibble::as_tibble(tUni, .name_repair = "minimal") %>%
@@ -261,6 +261,15 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 uniTable <- self$results$uniTable
 
                 data_frame <- tUni_df
+
+                names(data_frame) <- c(
+                    "Explanatory",
+                    "Levels",
+                    "all",
+                    "HR_univariable",
+                    "HR_multivariable"
+                    )
+
                 for(i in seq_along(data_frame[,1,drop=T])) {
                     uniTable$addRow(rowKey = i, values = c(results1table[i,]))
                 }

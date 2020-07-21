@@ -202,12 +202,20 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 rows=0,
                 columns=list(
                     list(
+                        `name`="Explanatory", 
+                        `title`="Explanatory", 
+                        `type`="text"),
+                    list(
+                        `name`="Levels", 
+                        `title`="Levels", 
+                        `type`="text"),
+                    list(
                         `name`="all", 
                         `title`="all", 
                         `type`="text"),
                     list(
-                        `name`="HR (univariable)", 
-                        `title`="HR (univariable)", 
+                        `name`="HR_univariable", 
+                        `title`="HR (Univariable)", 
                         `type`="text"))))
             self$add(jmvcore::Preformatted$new(
                 options=options,

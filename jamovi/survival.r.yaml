@@ -111,13 +111,18 @@ items:
       type:  Table
       rows: 0
       columns: &idcols
-        - name: all
+        - name: Explanatory
+          title: "Explanatory"
+          type: text
+        - name: 'Levels'
+          title: "Levels"
+          type: text
+        - name: 'all'
           title: "all"
           type: text
-        - name: 'HR (univariable)'
-          title: "HR (univariable)"
+        - name: 'HR_univariable'
+          title: "HR (Univariable)"
           type: text
-
 
 
 
