@@ -104,6 +104,26 @@ items:
           - outcomeLevel
           - overalltime
 
+
+
+    - name:  uniTable
+      title: '`Cox Table- ${explanatory}`'
+      type:  Table
+      rows: 0
+      columns: &idcols
+        - name: all
+          title: "all"
+          type: text
+        - name: 'HR (univariable)'
+          title: "HR (univariable)"
+          type: text
+
+
+
+
+
+
+
     - name:  text7
       title: '`1, 3, 5-yr Survival Summary and Table  - ${explanatory}`'
       type:  Preformatted

@@ -18,6 +18,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) ) {
 
+                # TODO ----
+
                 todo <- glue::glue("
                 <br>Welcome to ClinicoPath
                 <br><br>
@@ -43,7 +45,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             } else {
 
-                # Empty message when all variables selected
+                # Empty message when all variables selected ----
 
                 todo <- ""
                 html <- self$results$todo
@@ -158,7 +160,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 #     )
 
 
-                # results 1 Median Table
+                # Median Table ----
 
 
                 names(results1table)[1] <- "factor"
@@ -231,17 +233,36 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # results3 <- tUni
 
-                # results 4  univariate survival html ----
 
-                results4 <- knitr::kable(tUni[, 1:4],
-                                         row.names = FALSE,
-                                         align = c('l', 'l', 'r', 'r', 'r', 'r'),
-                                         format = "html")
 
-                # results 5 univariate survival explanation ----
+
+
+                # results 4  univariate survival html
+
+                # results4 <- knitr::kable(tUni[, 1:4],
+                #                          row.names = FALSE,
+                #                          align = c('l', 'l', 'r', 'r', 'r', 'r'),
+                #                          format = "html")
+
 
                 tUni_df <- tibble::as_tibble(tUni, .name_repair = "minimal") %>%
                     janitor::clean_names(dat = ., case = "snake")
+
+
+
+                # Cox-Regression Table ----
+
+
+                uniTable <- self$results$uniTable
+
+                data_frame <- tUni_df
+                for(i in seq_along(data_frame[,1,drop=T])) {
+                    uniTable$addRow(rowKey = i, values = c(results1table[i,]))
+                }
+
+
+                # results 5 univariate survival explanation ----
+
 
                 n_level <- dim(tUni_df)[1]
 
