@@ -32,7 +32,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 Survival time should be numeric, continuous, and in months.
                 <br><br>
                 This function uses survival, survminer, and finalfit packages. Please cite jamovi and the packages as given below.
-                <br><hr>"
+                <br><hr>
+                <br>
+                See details for survival <a href = 'https://cran.r-project.org/web/packages/survival/vignettes/survival.pdf'>here</a>."
                 )
 
                 html <- self$results$todo
@@ -129,7 +131,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 # self$results$deneme4$setContent(mydata)
 
 
-                # results 1, Median Survival Table ----
+                # results 1 Median Survival Table ----
 
                 km_fit <- survival::survfit(survival::Surv(myoveralltime, myoutcome) ~ thefactor, data = mydata)
 
@@ -145,17 +147,18 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 results1table <- results1html
 
-                # results 1 html, Median Survival Table Html Type ----
+                # results 1 html, Median Survival Table Html Type
 
-                results1htmlresults <- knitr::kable(results1html,
-                                             row.names = FALSE,
-                                             align = c('l', rep('r', 9)),
-                                             format = "html",
-                                             digits = 1
-                                             )
+                # results1htmlresults <-
+                #     knitr::kable(results1html,
+                #     row.names = FALSE,
+                #     align = c('l', rep('r', 9)),
+                #     format = "html",
+                #     digits = 1
+                #     )
 
 
-                # results 1 Median Table ----
+                # results 1 Median Table
 
 
                 names(results1table)[1] <- "factor"
@@ -173,7 +176,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-                # results 2 median survival summary ----
+                # results 2 Median Survival Summary ----
 
                 km_fit_median_df <- summary(km_fit)
                 km_fit_median_df <- as.data.frame(km_fit_median_df$table) %>%
@@ -195,12 +198,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 results2 <- km_fit_median_definition
 
-                # results 3 univariate cox regression ----
-
-
-                # myoveralltime,
-                # thefactor
-                # myoutcome
+                # results 3 Univariate Cox Regression ----
 
 
                 names(mydata) <- c(self$options$overalltime,
@@ -375,7 +373,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # Results ----
                 ## self$results$text1$setContent(results1)
-                self$results$text1html$setContent(results1htmlresults)
+                # self$results$text1html$setContent(results1htmlresults)
                 self$results$text2$setContent(results2)
                 ## self$results$text3$setContent(results3)
                 self$results$text4$setContent(results4)

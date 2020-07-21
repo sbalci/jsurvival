@@ -95,7 +95,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         todo = function() private$.items[["todo"]],
         text2 = function() private$.items[["text2"]],
         medianTable = function() private$.items[["medianTable"]],
-        text1html = function() private$.items[["text1html"]],
         text5 = function() private$.items[["text5"]],
         text4 = function() private$.items[["text4"]],
         text7 = function() private$.items[["text7"]],
@@ -137,7 +136,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="medianTable",
-                title="`Median Survival Table Levels for ${explanatory}`",
+                title="`Median Survival Table: Levels for ${explanatory}`",
                 rows=0,
                 columns=list(
                     list(
@@ -180,15 +179,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `name`="x0_95ucl", 
                         `title`="Upper 95% CI", 
                         `type`="number")),
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime")))
-            self$add(jmvcore::Html$new(
-                options=options,
-                name="text1html",
-                title="`Median Survival Table  - ${explanatory}`",
                 clearWith=list(
                     "explanatory",
                     "outcome",
@@ -336,7 +326,6 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$text1html} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text4} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr

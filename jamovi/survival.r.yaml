@@ -31,7 +31,7 @@ items:
 
 
     - name:  medianTable
-      title: '`Median Survival Table Levels for ${explanatory}`'
+      title: '`Median Survival Table: Levels for ${explanatory}`'
       type:  Table
       rows: 0
       columns: &idcols
@@ -73,14 +73,14 @@ items:
           - overalltime
 
 
-    - name:  text1html
-      title: '`Median Survival Table  - ${explanatory}`'
-      type:  Html
-      clearWith:
-          - explanatory
-          - outcome
-          - outcomeLevel
-          - overalltime
+    # - name:  text1html
+    #   title: '`Median Survival Table  - ${explanatory}`'
+    #   type:  Html
+    #   clearWith:
+    #       - explanatory
+    #       - outcome
+    #       - outcomeLevel
+    #       - overalltime
 
     # - name:  text3
     #   title: Cox
