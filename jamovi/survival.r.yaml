@@ -18,8 +18,6 @@ items:
     #   title: textdeneme
     #   type:  Preformatted
 
-
-
     - name:  text2
       title: '`Median Survival Summary and Table - ${explanatory}`'
       type:  Preformatted
@@ -123,6 +121,11 @@ items:
         - name: 'HR_univariable'
           title: "HR (Univariable)"
           type: text
+      clearWith:
+          - explanatory
+          - outcome
+          - outcomeLevel
+          - overalltime
 
 
     - name:  text7
@@ -174,7 +177,11 @@ items:
           title: "Upper 95% CI"
           type: number
           format: pc
-
+      clearWith:
+          - explanatory
+          - outcome
+          - outcomeLevel
+          - overalltime
 
 
 

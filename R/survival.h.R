@@ -207,7 +207,12 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     list(
                         `name`="HR_univariable", 
                         `title`="HR (Univariable)", 
-                        `type`="text"))))
+                        `type`="text")),
+                clearWith=list(
+                    "explanatory",
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text7",
@@ -262,7 +267,12 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `name`="upper", 
                         `title`="Upper 95% CI", 
                         `type`="number", 
-                        `format`="pc"))))
+                        `format`="pc")),
+                clearWith=list(
+                    "explanatory",
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text9",
