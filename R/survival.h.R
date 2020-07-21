@@ -99,6 +99,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         uniTable = function() private$.items[["uniTable"]],
         text7 = function() private$.items[["text7"]],
         text6 = function() private$.items[["text6"]],
+        survTable = function() private$.items[["survTable"]],
         text9 = function() private$.items[["text9"]],
         text8 = function() private$.items[["text8"]],
         plot = function() private$.items[["plot"]],
@@ -225,6 +226,43 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcome",
                     "outcomeLevel",
                     "overalltime")))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="survTable",
+                title="`1, 3, 5 year Survival - ${explanatory}`",
+                rows=0,
+                columns=list(
+                    list(
+                        `name`="strata", 
+                        `title`="Levels", 
+                        `type`="text"),
+                    list(
+                        `name`="time", 
+                        `title`="time", 
+                        `type`="text"),
+                    list(
+                        `name`="n.risk", 
+                        `title`="Number at Risk", 
+                        `type`="text"),
+                    list(
+                        `name`="n.event", 
+                        `title`="Number of Events", 
+                        `type`="text"),
+                    list(
+                        `name`="surv", 
+                        `title`="Survival", 
+                        `type`="number", 
+                        `format`="pc"),
+                    list(
+                        `name`="lower", 
+                        `title`="Lower 95% CI", 
+                        `type`="number", 
+                        `format`="pc"),
+                    list(
+                        `name`="upper", 
+                        `title`="Upper 95% CI", 
+                        `type`="number", 
+                        `format`="pc"))))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text9",
@@ -237,7 +275,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text8",
-                title="`Pairwise Comparison - ${explanatory}`",
+                title="",
                 clearWith=list(
                     "explanatory",
                     "outcome",
@@ -335,6 +373,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$uniTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text6} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$text9} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text8} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr

@@ -342,6 +342,15 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 results6 <- km_fit_df_html
 
 
+                # 1,3,5-yr survival Table ----
+
+
+                survTable <- self$results$survTable
+
+                data_frame <- km_fit_df
+                for(i in seq_along(data_frame[,1,drop=T])) {
+                    survTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                }
 
                 # results 7 1,3,5-yr survival summary ----
 
@@ -359,7 +368,14 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-        # results 8 pairwise comparison ----
+
+
+
+
+
+
+
+        # results 8,9 pairwise comparison ----
 
 
 
