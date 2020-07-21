@@ -44,7 +44,6 @@ A results object containing:
 \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$uniTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$text6} \tab \tab \tab \tab \tab a html \cr
 \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$text9} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$text8} \tab \tab \tab \tab \tab a preformatted \cr

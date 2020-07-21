@@ -138,14 +138,14 @@ items:
           - overalltime
 
 
-    - name:  text6
-      title: '`1, 3, 5-yr Survival  - ${explanatory}`'
-      type:  Html
-      clearWith:
-          - explanatory
-          - outcome
-          - outcomeLevel
-          - overalltime
+    # - name:  text6
+    #   title: '`1, 3, 5-yr Survival  - ${explanatory}`'
+    #   type:  Html
+    #   clearWith:
+    #       - explanatory
+    #       - outcome
+    #       - outcomeLevel
+    #       - overalltime
 
 
     - name:  survTable
@@ -158,13 +158,13 @@ items:
           type: text
         - name: 'time'
           title: "time"
-          type: number
+          type: integer
         - name: n.risk
           title: "Number at Risk"
-          type: number
+          type: integer
         - name: n.event
           title: "Number of Events"
-          type: number
+          type: integer
         - name: surv
           title: "Survival"
           type: number

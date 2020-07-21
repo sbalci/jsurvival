@@ -332,14 +332,14 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                       replacement = paste0(self$options$explanatory, " "),
                                       x = km_fit_df[,1])
 
-                km_fit_df_html <- knitr::kable(km_fit_df,
-                                               row.names = FALSE,
-                                               align = c('l', rep('r', 7)),
-                                               format = "html",
-                                               digits = 2)
+                # km_fit_df_html <- knitr::kable(km_fit_df,
+                #                                row.names = FALSE,
+                #                                align = c('l', rep('r', 7)),
+                #                                format = "html",
+                #                                digits = 2)
 
 
-                results6 <- km_fit_df_html
+                # results6 <- km_fit_df_html
 
 
                 # 1,3,5-yr survival Table ----
@@ -426,7 +426,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 ## self$results$text3$setContent(results3)
                 # self$results$text4$setContent(results4)
                 self$results$text5$setContent(results5)
-                self$results$text6$setContent(results6)
+                # self$results$text6$setContent(results6)
                 self$results$text7$setContent(results7)
                 self$results$text8$setContent(results8)
                 self$results$text9$setContent(results9)

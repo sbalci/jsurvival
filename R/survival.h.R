@@ -98,7 +98,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         text5 = function() private$.items[["text5"]],
         uniTable = function() private$.items[["uniTable"]],
         text7 = function() private$.items[["text7"]],
-        text6 = function() private$.items[["text6"]],
         survTable = function() private$.items[["survTable"]],
         text9 = function() private$.items[["text9"]],
         text8 = function() private$.items[["text8"]],
@@ -222,15 +221,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcome",
                     "outcomeLevel",
                     "overalltime")))
-            self$add(jmvcore::Html$new(
-                options=options,
-                name="text6",
-                title="`1, 3, 5-yr Survival  - ${explanatory}`",
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="survTable",
@@ -244,15 +234,15 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     list(
                         `name`="time", 
                         `title`="time", 
-                        `type`="number"),
+                        `type`="integer"),
                     list(
                         `name`="n.risk", 
                         `title`="Number at Risk", 
-                        `type`="number"),
+                        `type`="integer"),
                     list(
                         `name`="n.event", 
                         `title`="Number of Events", 
-                        `type`="number"),
+                        `type`="integer"),
                     list(
                         `name`="surv", 
                         `title`="Survival", 
@@ -382,7 +372,6 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$uniTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$text6} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$text9} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text8} \tab \tab \tab \tab \tab a preformatted \cr
