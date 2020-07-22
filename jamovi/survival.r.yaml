@@ -32,7 +32,8 @@ items:
       title: '`Median Survival Table: Levels for ${explanatory}`'
       type:  Table
       rows: 0
-      columns: &idcols
+      columns:
+      # columns: &idcols
         - name: factor
           title: "Levels"
           # title: '`Factor - ${explanatory}`'
@@ -108,7 +109,8 @@ items:
       title: '`Cox Table- ${explanatory}`'
       type:  Table
       rows: 0
-      columns: &idcols
+      columns:
+      # columns: &idcols
         - name: Explanatory
           title: "Explanatory"
           type: text
@@ -152,7 +154,8 @@ items:
       title: '`1, 3, 5 year Survival - ${explanatory}`'
       type:  Table
       rows: 0
-      columns: &idcols
+      columns:
+      # columns: &idcols
         - name: strata
           title: "Levels"
           type: text
