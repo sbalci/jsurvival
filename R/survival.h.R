@@ -279,7 +279,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime"),
+                visible="(pw)"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="text8",
@@ -288,7 +289,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime"),
+                visible="(pw)"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",

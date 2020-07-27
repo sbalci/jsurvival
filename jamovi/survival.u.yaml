@@ -35,21 +35,17 @@ children:
   - type: Label
     label: Analysis of the differences
     children:
-      - type: Label
-        label: Cutpoints (months) for survival table
+
+      - type: TextBox
+        name: cutp
+        format: string
+        width: large
+
+      - type: LayoutBox
+        margin: large
         children:
-          - type: TextBox
-            name: cutp
-            format: string
-            width: large
-      - type: Label
-        label: Pairwise comparisons
-        children:
-          - type: LayoutBox
-            margin: large
-            children:
-              - type: CheckBox
-                name: pw
+          - type: CheckBox
+            name: pw
   - type: Label
     label: Plots
     margin: large
