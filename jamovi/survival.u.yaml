@@ -35,15 +35,21 @@ children:
   - type: Label
     label: Analysis
     children:
-      - type: TextBox
-        name: cutp
-        format: string
-        width: large
-      - type: LayoutBox
-        margin: large
+      - type: Label
+        label: Survival table
         children:
-          - type: CheckBox
-            name: pw
+          - type: TextBox
+            name: cutp
+            format: string
+            width: large
+      - type: Label
+        label: Pairwise comparisons
+        children:
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: CheckBox
+                name: pw
   - type: Label
     label: Plots
     margin: large
