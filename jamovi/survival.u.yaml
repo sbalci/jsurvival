@@ -36,7 +36,7 @@ children:
     label: Analysis of the differences
     children:
       - type: Label
-        label: Cut-offs for survival table
+        label: Cutpoints (months) for survival table
         children:
           - type: TextBox
             name: cutp
