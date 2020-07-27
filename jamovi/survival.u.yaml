@@ -33,14 +33,12 @@ children:
             name: outcomeLevel
             enable: (outcome)
   - type: Label
-    label: Analysis of the differences
+    label: Analysis
     children:
-
       - type: TextBox
         name: cutp
         format: string
         width: large
-
       - type: LayoutBox
         margin: large
         children:
