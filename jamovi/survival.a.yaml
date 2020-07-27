@@ -61,7 +61,7 @@ options:
 
 
     - name: cutp
-      title: Cutpoints (months) for survival table
+      title: Cutpoints (in months)
       type: String
       default: '12, 36, 60'
 

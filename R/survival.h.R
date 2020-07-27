@@ -289,7 +289,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime"),
+                    "overalltime",
+                    "pw"),
                 visible="(pw)"))
             self$add(jmvcore::Image$new(
                 options=options,

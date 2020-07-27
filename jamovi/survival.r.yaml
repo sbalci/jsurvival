@@ -211,6 +211,7 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - pw
       visible: (pw)
 
 
