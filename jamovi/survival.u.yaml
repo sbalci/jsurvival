@@ -9,14 +9,7 @@ children:
     stretchFactor: 1
     children:
       - type: TargetLayoutBox
-        label: Explanatory Variable
-        children:
-          - type: VariablesListBox
-            name: explanatory
-            maxItemCount: 1
-            isTarget: true
-      - type: TargetLayoutBox
-        label: Time (in months)
+        label: Time Elapsed (in months)
         children:
           - type: VariablesListBox
             name: overalltime
@@ -32,6 +25,13 @@ children:
           - type: LevelSelector
             name: outcomeLevel
             enable: (outcome)
+      - type: TargetLayoutBox
+        label: Explanatory Variable
+        children:
+          - type: VariablesListBox
+            name: explanatory
+            maxItemCount: 1
+            isTarget: true
   - type: Label
     label: Analysis
     children:
