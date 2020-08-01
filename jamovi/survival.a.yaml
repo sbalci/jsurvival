@@ -37,27 +37,75 @@ options:
           R: >
             The data as a data frame.
 
-
-    - name: explanatory
-      title: Explanatory Variable
-      type: Variable
-      suggested: [ ordinal, nominal ]
-      permitted: [ factor ]
-
     - name: overalltime
-      title: 'Time (in months)'
+      title: 'Time Elapsed (in months)'
       type: Variable
       suggested: [ continuous ]
       permitted: [ numeric ]
 
+
+    - name: tint
+      title: Calculation Dates
+      type: Bool
+      default: false
+
+    - name: dxdate
+      title: 'Diagnosis Date'
+      type: Variable
+
+    - name: fudate
+      title: 'Follow-up Date'
+      type: Variable
+
+    - name: explanatory
+      title: Explanatory Variable
+      type: Variables
+      suggested: [ ordinal, nominal, continuous ]
+      permitted: [ factor, numeric ]
+
+
     - name: outcome
       title: 'Outcome'
       type: Variable
+      suggested: [ ordinal, nominal, continuous ]
+      permitted: [ factor, numeric ]
 
     - name: outcomeLevel
       title: Event Level
       type: Level
       variable: (outcome)
+    - name: dod
+      title: Dead of Disease
+      type: Level
+      variable: (outcome)
+      allowNone: true
+    - name: dooc
+      title: Dead of Other
+      type: Level
+      variable: (outcome)
+      allowNone: true
+    - name: awd
+      title: Alive w Disease
+      type: Level
+      variable: (outcome)
+      allowNone: true
+    - name: awod
+      title: Alive w/o Disease
+      type: Level
+      variable: (outcome)
+      allowNone: true
+
+    - name: analysistype
+      title: 'Survival Type'
+      type: List
+      options:
+        - title: Overall
+          name: overall
+        - title: Cause Specific
+          name: cause
+        - title: Competing Risk
+          name: compete
+      default: overall
 
 
     - name: cutp
@@ -123,5 +171,13 @@ options:
       type: Bool
       default: false
 
+
+    - name: timetype
+      title: Time Type
+      type: String
+
+    - name: endplot
+      title: Plot End Time
+      type: String
 
 ...

@@ -4,23 +4,34 @@
 \alias{timeinterval}
 \title{Time Interval}
 \usage{
-timeinterval(data, time, event, expl)
+timeinterval(data, explanatory, overalltime, outcome, outcomeLevel)
 }
 \arguments{
-\item{data}{.}
+\item{data}{The data as a data frame.}
 
-\item{time}{.}
+\item{explanatory}{.}
 
-\item{event}{.}
+\item{overalltime}{.}
 
-\item{expl}{.}
+\item{outcome}{.}
+
+\item{outcomeLevel}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
 \code{results$text1} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$text1table} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$text1html} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 }
+
+Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
+
+\code{results$medianTable$asDF}
+
+\code{as.data.frame(results$medianTable)}
 }
 \description{
 Time Interval

@@ -6,27 +6,53 @@
 \usage{
 survival(
   data,
-  explanatory,
   overalltime,
+  tint = FALSE,
+  dxdate,
+  fudate,
+  explanatory,
   outcome,
   outcomeLevel,
+  dod,
+  dooc,
+  awd,
+  awod,
+  analysistype = "overall",
   cutp = "12, 36, 60",
   pw = FALSE,
   sc = FALSE,
   ce = FALSE,
-  ch = FALSE
+  ch = FALSE,
+  timetype,
+  endplot
 )
 }
 \arguments{
 \item{data}{The data as a data frame.}
 
-\item{explanatory}{.}
-
 \item{overalltime}{.}
+
+\item{tint}{.}
+
+\item{dxdate}{.}
+
+\item{fudate}{.}
+
+\item{explanatory}{.}
 
 \item{outcome}{.}
 
 \item{outcomeLevel}{.}
+
+\item{dod}{.}
+
+\item{dooc}{.}
+
+\item{awd}{.}
+
+\item{awod}{.}
+
+\item{analysistype}{.}
 
 \item{cutp}{.}
 
@@ -37,6 +63,10 @@ survival(
 \item{ce}{.}
 
 \item{ch}{.}
+
+\item{timetype}{.}
+
+\item{endplot}{.}
 }
 \value{
 A results object containing:

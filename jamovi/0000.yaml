@@ -41,8 +41,9 @@ analyses:
   - title: Time Interval
     name: timeinterval
     ns: jsurvival
-    menuGroup: Survival
+    menuGroup: ClinicoPath
     menuTitle: Time Interval
+    menuSubgroup: ClinicoPath Survival
 datasets:
   - name: histopathology including analysis
     path: histopathologySurvival.omv

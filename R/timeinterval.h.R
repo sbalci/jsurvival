@@ -6,9 +6,10 @@ timeintervalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Options,
     public = list(
         initialize = function(
-            time = NULL,
-            event = NULL,
-            expl = NULL, ...) {
+            explanatory = NULL,
+            overalltime = NULL,
+            outcome = NULL,
+            outcomeLevel = NULL, ...) {
 
             super$initialize(
                 package='jsurvival',
@@ -16,35 +17,54 @@ timeintervalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 requiresData=TRUE,
                 ...)
 
-            private$..time <- jmvcore::OptionVariable$new(
-                "time",
-                time)
-            private$..event <- jmvcore::OptionVariable$new(
-                "event",
-                event)
-            private$..expl <- jmvcore::OptionVariables$new(
-                "expl",
-                expl)
+            private$..explanatory <- jmvcore::OptionVariables$new(
+                "explanatory",
+                explanatory,
+                suggested=list(
+                    "ordinal",
+                    "nominal"),
+                permitted=list(
+                    "factor"))
+            private$..overalltime <- jmvcore::OptionVariable$new(
+                "overalltime",
+                overalltime,
+                suggested=list(
+                    "continuous"),
+                permitted=list(
+                    "numeric"))
+            private$..outcome <- jmvcore::OptionVariable$new(
+                "outcome",
+                outcome)
+            private$..outcomeLevel <- jmvcore::OptionLevel$new(
+                "outcomeLevel",
+                outcomeLevel,
+                variable="(outcome)")
 
-            self$.addOption(private$..time)
-            self$.addOption(private$..event)
-            self$.addOption(private$..expl)
+            self$.addOption(private$..explanatory)
+            self$.addOption(private$..overalltime)
+            self$.addOption(private$..outcome)
+            self$.addOption(private$..outcomeLevel)
         }),
     active = list(
-        time = function() private$..time$value,
-        event = function() private$..event$value,
-        expl = function() private$..expl$value),
+        explanatory = function() private$..explanatory$value,
+        overalltime = function() private$..overalltime$value,
+        outcome = function() private$..outcome$value,
+        outcomeLevel = function() private$..outcomeLevel$value),
     private = list(
-        ..time = NA,
-        ..event = NA,
-        ..expl = NA)
+        ..explanatory = NA,
+        ..overalltime = NA,
+        ..outcome = NA,
+        ..outcomeLevel = NA)
 )
 
 timeintervalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         text1 = function() private$.items[["text1"]],
-        text1html = function() private$.items[["text1html"]]),
+        text1table = function() private$.items[["text1table"]],
+        text1html = function() private$.items[["text1html"]],
+        text2 = function() private$.items[["text2"]],
+        medianTable = function() private$.items[["medianTable"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -58,8 +78,56 @@ timeintervalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 title="denemeler"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
+                name="text1table",
+                title="fit"))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
                 name="text1html",
-                title="fit"))}))
+                title="fit"))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="text2",
+                title="Median Survival Summary and Table"))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="medianTable",
+                title="Median Survival Table",
+                rows=0,
+                columns=list(
+                    list(
+                        `name`="factor", 
+                        `title`="Levels", 
+                        `type`="text"),
+                    list(
+                        `name`="records", 
+                        `title`="Records", 
+                        `type`="number"),
+                    list(
+                        `name`="events", 
+                        `title`="Events", 
+                        `type`="integer"),
+                    list(
+                        `name`="rmean", 
+                        `title`="rmean", 
+                        `type`="number"),
+                    list(
+                        `name`="se_rmean", 
+                        `title`="se_rmean", 
+                        `type`="number"),
+                    list(
+                        `name`="median", 
+                        `title`="Median", 
+                        `type`="number"),
+                    list(
+                        `name`="x0_95lcl", 
+                        `title`="Lower", 
+                        `superTitle`="95% Confidence Interval", 
+                        `type`="number"),
+                    list(
+                        `name`="x0_95ucl", 
+                        `title`="Upper", 
+                        `superTitle`="95% Confidence Interval", 
+                        `type`="number"))))}))
 
 timeintervalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "timeintervalBase",
@@ -84,41 +152,54 @@ timeintervalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' Time Interval
 #'
 #' 
-#' @param data .
-#' @param time .
-#' @param event .
-#' @param expl .
+#' @param data The data as a data frame.
+#' @param explanatory .
+#' @param overalltime .
+#' @param outcome .
+#' @param outcomeLevel .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$text1} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$text1table} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text1html} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 #' }
+#'
+#' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
+#'
+#' \code{results$medianTable$asDF}
+#'
+#' \code{as.data.frame(results$medianTable)}
 #'
 #' @export
 timeinterval <- function(
     data,
-    time,
-    event,
-    expl) {
+    explanatory,
+    overalltime,
+    outcome,
+    outcomeLevel) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('timeinterval requires jmvcore to be installed (restart may be required)')
 
-    if ( ! missing(time)) time <- jmvcore::resolveQuo(jmvcore::enquo(time))
-    if ( ! missing(event)) event <- jmvcore::resolveQuo(jmvcore::enquo(event))
-    if ( ! missing(expl)) expl <- jmvcore::resolveQuo(jmvcore::enquo(expl))
+    if ( ! missing(explanatory)) explanatory <- jmvcore::resolveQuo(jmvcore::enquo(explanatory))
+    if ( ! missing(overalltime)) overalltime <- jmvcore::resolveQuo(jmvcore::enquo(overalltime))
+    if ( ! missing(outcome)) outcome <- jmvcore::resolveQuo(jmvcore::enquo(outcome))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
-            `if`( ! missing(time), time, NULL),
-            `if`( ! missing(event), event, NULL),
-            `if`( ! missing(expl), expl, NULL))
+            `if`( ! missing(explanatory), explanatory, NULL),
+            `if`( ! missing(overalltime), overalltime, NULL),
+            `if`( ! missing(outcome), outcome, NULL))
 
+    for (v in explanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- timeintervalOptions$new(
-        time = time,
-        event = event,
-        expl = expl)
+        explanatory = explanatory,
+        overalltime = overalltime,
+        outcome = outcome,
+        outcomeLevel = outcomeLevel)
 
     analysis <- timeintervalClass$new(
         options = options,

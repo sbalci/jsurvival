@@ -56,32 +56,51 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     stop('Data contains no (complete) rows')
 
 
-    # # Check if outcome variable is suitable or stop
-                # myoutcome2 <- self$options$outcome
-                # myoutcome2 <- self$data[[myoutcome2]]
-                # myoutcome2 <- na.omit(myoutcome2)
-                # # if ( !is.numeric(myoutcome2) || any(myoutcome2 != 0 & myoutcome2 != 1))
-                # if (any(myoutcome2 != 0 & myoutcome2 != 1))
-                #     stop('Outcome variable must only contains 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
-                # # self$results$deneme$setContent(head(mydata))
-                # # self$results$deneme2$setContent(head(mydata))
+                contin <- c("integer", "numeric", "double")
+
+
+                # One explanatory ----
+
+                if (length(self$options$explanatory) == 1) {
+
 
 
                 # Read Data ----
 
                 # mydata <- self$data
 
+                # Calculate Time Interval ----
+
+
+                    # Time Interval ----
+
+                    # mydata$int <- lubridate::interval(
+                    #     lubridate::ymd(mydata$SurgeryDate),
+                    #     lubridate::ymd(mydata$LastFollowUpDate)
+                    # )
+                    # mydata$OverallTime <- lubridate::time_length(mydata$int, "month")
+                    # mydata$OverallTime <- round(mydata$OverallTime, digits = 1)
+
+
+
+
                 uoveralltime <- self$options$overalltime
 
                 uoveralltime <- jmvcore::toNumeric(self$data[[uoveralltime]])
+
+
+
+                # Define Explanatory Factor ----
 
                 uthefactor <- self$options$explanatory
 
                 uthefactor <- self$data[[uthefactor]]
 
 
-                contin <- c("integer", "numeric", "double")
 
+                # Define Outcome ----
+
+                # Try to embed competing survival here
 
                 outcome1 <- self$options$outcome
 
@@ -433,7 +452,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-# Prepare Data For Plot ----
+
+                # Prepare Data For Plots ----
 
                 plotData <- mydata
 
@@ -447,6 +467,169 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 image3$setState(plotData)
 
 
+                }
+
+
+                # >1 Explanatory ----
+
+                if (length(self$options$explanatory) > 1) {
+
+                    todo <- "More than one explanatory"
+                    html <- self$results$todo
+                    html$setContent(todo)
+
+
+
+                    mydata <- self$data
+
+                    overalltime <- self$options$overalltime
+                    outcome <- self$options$outcome
+                    explanatory <- self$options$explanatory
+
+                    outcome1 <- mydata[[outcome]]
+
+                    contin <- c("integer", "numeric", "double")
+
+                    if (inherits(outcome1, contin)) {
+
+
+                        if ( !(
+                            (length(unique(outcome1[!is.na(outcome1)])) == 2) && (sum(unique(outcome1[!is.na(outcome1)])) == 1)
+                        ) ) {
+                            stop('When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
+
+                        }
+
+                        mydata[[outcome]] <- jmvcore::toNumeric(mydata[[outcome]])
+
+                    } else if (inherits(outcome1, "factor")) {
+
+                        outcomeLevel <- self$options$outcomeLevel
+
+                        mydata[[outcome]] <-
+                            ifelse(test = outcome1 == outcomeLevel,
+                                   yes = 1,
+                                   no = 0)
+                    } else {
+
+                        stop('When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0. If you are using a factor as an outcome, please check the levels and content.')
+
+                    }
+
+
+                    thefactor <- jmvcore::constructFormula(terms = explanatory)
+
+                    formula <- paste('survival::Surv(', self$options$overalltime, ',', self$options$outcome, ') ~ ', thefactor)
+                    formula <- as.formula(formula)
+
+
+                    km_fit <- survival::survfit(formula, data = self$data)
+
+                    km_fit_median_df <- summary(km_fit)
+
+                    results1html <- as.data.frame(km_fit_median_df$table) %>%
+                        janitor::clean_names(dat = ., case = "snake") %>%
+                        tibble::rownames_to_column(.data = .)
+
+
+                    results1html[,1] <- gsub(pattern = "thefactor=",
+                                             replacement = "",
+                                             x = results1html[,1])
+
+                    results1table <- results1html
+
+
+
+                    # self$results$text1table$setContent(results1table)
+
+
+
+                    # >1 Explanatory Median Table ----
+
+
+                    names(results1table)[1] <- "factor"
+
+
+                    medianTable <- self$results$medianTable
+
+                    data_frame <- results1table
+                    for (i in seq_along(data_frame[,1,drop = T])) {
+                        medianTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                    }
+
+
+
+
+
+
+                    # >1 Explanatory results 2 Median Survival Summary ----
+
+                    km_fit_median_df <- summary(km_fit)
+                    km_fit_median_df <- as.data.frame(km_fit_median_df$table) %>%
+                        janitor::clean_names(dat = ., case = "snake") %>%
+                        tibble::rownames_to_column(.data = .)
+
+                    km_fit_median_df %>%
+                        dplyr::mutate(
+                            description =
+                                glue::glue(
+                                    "When {rowname}, median survival is {round(median, digits = 1)} [{round(x0_95lcl, digits = 1)} - {round(x0_95ucl, digits = 1)}, 95% CI] months."
+                                )
+                        ) %>%
+                        dplyr::select(description) %>%
+                        dplyr::pull() -> km_fit_median_definition
+
+                    results2 <- km_fit_median_definition
+
+
+                    self$results$text2$setContent(results2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+                }
+
+
+                # Continious Explanatory ----
+
+
+
+                if (length(self$options$explanatory) == 1 && inherits(self$options$explanatory, contin) ) {
+
+
+                    todo <- "Continious Explanatory"
+                    html <- self$results$todo
+                    html$setContent(todo)
+
+                # numeric optimal cut-off ----
+
+
+                }
+
+
+                if (length(self$options$explanatory) > 1 && inherits(self$options$explanatory, contin) ) {
+
+                    todo <- "Please use Multivariate Survival Analysis Cox-regression in jsurvival"
+                    html <- self$results$todo
+                    html$setContent(todo)
+
+                    stop("Please use Multivariate Survival Analysis Cox-regression in jsurvival")
+
+                }
+
+
+
+
+
             }
 },
 
@@ -454,18 +637,22 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 .plot = function(image, ggtheme, theme, ...) {  # <-- the plot function ----
 
-    plotData <- image$state
-
-    if (nrow(self$data) == 0)
-        stop('Data contains no (complete) rows')
-
-    if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
-        return()
 
     sc <- self$options$sc
 
     if(!sc)
         return()
+
+    if (nrow(self$data) == 0)
+    stop('Data contains no (complete) rows')
+
+    if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
+        return()
+
+    if (length(self$options$explanatory) > 1)
+        stop('Use one explanatory variable')
+
+    plotData <- image$state
 
 
     #     uoveralltime <- self$options$overalltime
@@ -525,7 +712,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 ,
 .plot2 = function(image2, ggtheme, theme, ...) {  # <-- the plot function ----
 
-    plotData <- image2$state
+
+    ce <- self$options$ce
+
+    if(!ce)
+        return()
 
     if (nrow(self$data) == 0)
         stop('Data contains no (complete) rows')
@@ -533,10 +724,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
         return()
 
-    ce <- self$options$ce
+    if (length(self$options$explanatory) > 1)
+        stop('Use one explanatory variable')
 
-    if(!ce)
-        return()
+    plotData <- image2$state
+
 
 
     formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
@@ -577,7 +769,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 ,
 .plot3 = function(image3, ggtheme, theme, ...) {  # <-- the plot function ----
 
-    plotData <- image3$state
+
+    ch <- self$options$ch
+
+    if(!ch)
+        return()
 
     if (nrow(self$data) == 0)
         stop('Data contains no (complete) rows')
@@ -585,10 +781,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
         return()
 
-    ch <- self$options$ch
 
-    if(!ch)
-        return()
+    if (length(self$options$explanatory) > 1)
+        stop('Use one explanatory variable')
+
+    plotData <- image3$state
+
 
 
     formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
