@@ -1,0 +1,17 @@
+---
+name:  timeinterval
+title: Time Interval
+jrs:   '1.1'
+
+items:
+
+    - name:  text1
+      title: denemeler
+      type:  Preformatted
+
+
+    - name:  text1html
+      title: fit
+      type:  Preformatted
+
+...

@@ -60,10 +60,12 @@ items:
           title: "Median"
           type: number
         - name: x0_95lcl
-          title: "Lower 95% CI"
+          title: "Lower"
+          superTitle: '95% Confidence Interval'
           type: number
         - name: x0_95ucl
-          title: "Upper 95% CI"
+          title: "Upper"
+          superTitle: '95% Confidence Interval'
           type: number
       clearWith:
           - explanatory

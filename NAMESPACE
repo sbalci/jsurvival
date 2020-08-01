@@ -3,6 +3,7 @@
 export(multisurvival)
 export(oddsratio)
 export(survival)
+export(timeinterval)
 import(jmvcore)
 import(magrittr)
 importFrom(R6,R6Class)

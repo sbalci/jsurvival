@@ -173,11 +173,13 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `type`="number"),
                     list(
                         `name`="x0_95lcl", 
-                        `title`="Lower 95% CI", 
+                        `title`="Lower", 
+                        `superTitle`="95% Confidence Interval", 
                         `type`="number"),
                     list(
                         `name`="x0_95ucl", 
-                        `title`="Upper 95% CI", 
+                        `title`="Upper", 
+                        `superTitle`="95% Confidence Interval", 
                         `type`="number")),
                 clearWith=list(
                     "explanatory",

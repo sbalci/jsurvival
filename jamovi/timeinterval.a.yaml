@@ -1,0 +1,27 @@
+---
+name:  timeinterval
+title: Time Interval
+menuGroup: Survival
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+
+
+    - name: time
+      title: Time
+      type: Variable
+
+    - name: event
+      title: Event
+      type: Variable
+
+    - name: expl
+      title: Explanatory Variables
+      type: Variables
+
+
+
+...
