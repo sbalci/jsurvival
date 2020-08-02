@@ -288,7 +288,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 tCox_df <- tCox_df[,-(dim(tCox_df)[2])]
 
-                uniTable <- self$results$uniTable
+                coxTable <- self$results$coxTable
 
                 data_frame <- tCox_df
 
@@ -301,7 +301,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     )
 
                 for(i in seq_along(data_frame[,1,drop=T])) {
-                    uniTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                    coxTable$addRow(rowKey = i, values = c(data_frame[i,]))
                 }
 
 
