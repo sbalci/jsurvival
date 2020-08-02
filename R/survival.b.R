@@ -261,36 +261,49 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-                # results 3 Univariate Cox Regression ----
+                # Cox Regression ----
 
 
-                names(mydata) <- c(self$options$overalltime,
-                                   self$options$explanatory,
-                                   self$options$outcome)
+                formula2 <- as.vector(self$options$explanatory)
 
-
-                formula2 <- jmvcore::constructFormula(terms =
-                                                          # "thefactor"
-                                                          self$options$explanatory
-                                                      )
-
-                formula2 <- jmvcore::composeTerm(formula2)
-
-                formulaL <- jmvcore::constructFormula(terms =
-                                                          # "myoveralltime"
-                                                          self$options$overalltime
-                                                          )
-
-                formulaR <- jmvcore::constructFormula(terms =
-                                                          # "myoutcome"
-                                                          self$options$outcome
-                                                      )
-
-                myformula <- paste("Surv(", formulaL, ",", formulaR, ")")
+                myformula <- paste("Surv(", "mytime", "myoutcome", ")")
 
                 finalfit::finalfit(.data = mydata,
-                                   dependent = myformula,
-                                   explanatory = formula2) -> tUni
+                dependent = myformula,
+                explanatory = formula2
+
+                # metrics = TRUE
+                ) -> tUni
+
+
+                #
+                # names(mydata) <- c(self$options$overalltime,
+                #                    self$options$explanatory,
+                #                    self$options$outcome)
+                #
+                #
+                # formula2 <- jmvcore::constructFormula(terms =
+                #                                           # "thefactor"
+                #                                           self$options$explanatory
+                #                                       )
+                #
+                # formula2 <- jmvcore::composeTerm(formula2)
+                #
+                # formulaL <- jmvcore::constructFormula(terms =
+                #                                           # "myoveralltime"
+                #                                           self$options$overalltime
+                #                                           )
+                #
+                # formulaR <- jmvcore::constructFormula(terms =
+                #                                           # "myoutcome"
+                #                                           self$options$outcome
+                #                                       )
+                #
+                # myformula <- paste("Surv(", formulaL, ",", formulaR, ")")
+                #
+                # finalfit::finalfit(.data = mydata,
+                #                    dependent = myformula,
+                #                    explanatory = formula2) -> tUni
 
                 # results3 <- tUni
 
