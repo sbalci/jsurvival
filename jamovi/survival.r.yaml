@@ -85,19 +85,6 @@ items:
           - overalltime
 
 
-    # - name:  text1html
-    #   title: '`Median Survival Table  - ${explanatory}`'
-    #   type:  Html
-    #   clearWith:
-    #       - explanatory
-    #       - outcome
-    #       - outcomeLevel
-    #       - overalltime
-
-    # - name:  text3
-    #   title: Cox
-    #   type:  Preformatted
-
     - name:  text5
       title: Cox Regression Summary and Table
       # title: '`Cox Regression Summary and Table - ${explanatory}`'
@@ -107,16 +94,6 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
-
-    # - name:  text4
-    #   title: '`Cox Table- ${explanatory}`'
-    #   type:  Preformatted
-    #   clearWith:
-    #       - explanatory
-    #       - outcome
-    #       - outcomeLevel
-    #       - overalltime
-
 
 
     - name:  coxTable

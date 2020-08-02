@@ -266,7 +266,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 formula2 <- as.vector(self$options$explanatory)
 
-                myformula <- paste("Surv(", "mytime", "myoutcome", ")")
+                myformula <- paste("survival::Surv(", "mytime", "myoutcome", ")")
 
                 finalfit::finalfit(.data = mydata,
                 dependent = myformula,
