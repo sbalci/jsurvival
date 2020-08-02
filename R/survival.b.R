@@ -273,134 +273,37 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 explanatory = formula2
 
                 # metrics = TRUE
-                ) -> tUni
+                ) -> tCox
 
-
-                #
-                # names(mydata) <- c(self$options$overalltime,
-                #                    self$options$explanatory,
-                #                    self$options$outcome)
-                #
-                #
-                # formula2 <- jmvcore::constructFormula(terms =
-                #                                           # "thefactor"
-                #                                           self$options$explanatory
-                #                                       )
-                #
-                # formula2 <- jmvcore::composeTerm(formula2)
-                #
-                # formulaL <- jmvcore::constructFormula(terms =
-                #                                           # "myoveralltime"
-                #                                           self$options$overalltime
-                #                                           )
-                #
-                # formulaR <- jmvcore::constructFormula(terms =
-                #                                           # "myoutcome"
-                #                                           self$options$outcome
-                #                                       )
-                #
-                # myformula <- paste("Surv(", formulaL, ",", formulaR, ")")
-                #
-                # finalfit::finalfit(.data = mydata,
-                #                    dependent = myformula,
-                #                    explanatory = formula2) -> tUni
-
-                # results3 <- tUni
-
-
-
-
-
-                # results 4  univariate survival html
-
-                # results4 <- knitr::kable(tUni[, 1:4],
-                #                          row.names = FALSE,
-                #                          align = c('l', 'l', 'r', 'r', 'r', 'r'),
-                #                          format = "html")
-
-
-                tUni_df <- tibble::as_tibble(tUni, .name_repair = "minimal") %>%
+                tCox_df <- tibble::as_tibble(tCox, .name_repair = "minimal") %>%
                     janitor::clean_names(dat = ., case = "snake")
 
 
-                # results4 <-
-                #     list(
-                #         tUni,
-                #         tUni_df
-                #     )
 
 
 
-        #                     # >1 Explanatory results 3 Cox Regression ----
-                #
-                #                     formula2 <- as.vector(self$options$explanatory)
-                #
-                #                     formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
-                #
-                #                     formulaL <- jmvcore::toNumeric(formulaL)
-                #
-                #                     formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
-                #
-                #                     myformula <- paste("Surv(", formulaL, ",", "Outcome", ")")
-                #
-                #                     finalfit::finalfit(.data = mydata,
-                #                                        dependent = myformula,
-                #                                        explanatory = formula2
-                #
-                #                                        # metrics = TRUE
-                #                     ) -> tUni
-                #
-                #                     tUni_df <- tibble::as_tibble(tUni, .name_repair = "minimal") %>%
-                #                         janitor::clean_names(dat = ., case = "snake")
-                #
-                #
 
 
+                # Cox-Regression Table ----
 
-        #         # Cox-Regression Table ----
-        #
-        #         tUni_df <- tUni_df[,-(dim(tUni_df)[2])]
-        #
-        #         uniTable <- self$results$uniTable
-        #
-        #         data_frame <- tUni_df
-        #
-        #         names(data_frame) <- c(
-        #             "Explanatory",
-        #             "Levels",
-        #             "all",
-        #             "HR_univariable",
-        #             "HR_multivariable"
-        #             )
-        #
-        #         for(i in seq_along(data_frame[,1,drop=T])) {
-        #             uniTable$addRow(rowKey = i, values = c(data_frame[i,]))
-        #         }
-        #
-        #
+                tCox_df <- tCox_df[,-(dim(tCox_df)[2])]
 
+                uniTable <- self$results$uniTable
 
-        #                     # >1 Explanatory Cox-Regression Table ----
-                #
-                #
-                #                     uniTable <- self$results$uniTable
-                #
-                #                     data_frame <- tUni_df
-                #
-                #
-                #                     names(data_frame) <- c(
-                #                         "Explanatory",
-                #                         "Levels",
-                #                         "all",
-                #                         "HR_univariable",
-                #                         "HR_multivariable"
-                #                     )
-                #
-                #                     for (i in seq_along(data_frame[,1,drop = T])) {
-                #                         uniTable$addRow(rowKey = i, values = c(data_frame[i,]))
-                #                     }
-                #
-                #
+                data_frame <- tCox_df
+
+                names(data_frame) <- c(
+                    "Explanatory",
+                    "Levels",
+                    "all",
+                    "HR_univariable",
+                    "HR_multivariable"
+                    )
+
+                for(i in seq_along(data_frame[,1,drop=T])) {
+                    uniTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                }
+
 
 
 
