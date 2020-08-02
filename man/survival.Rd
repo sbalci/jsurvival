@@ -6,7 +6,7 @@
 \usage{
 survival(
   data,
-  overalltime,
+  elapsedtime,
   tint = FALSE,
   dxdate,
   fudate,
@@ -19,18 +19,21 @@ survival(
   awod,
   analysistype = "overall",
   cutp = "12, 36, 60",
+  timetypedata = "months",
+  timetypeoutput = "months",
   pw = FALSE,
   sc = FALSE,
   ce = FALSE,
   ch = FALSE,
-  timetype,
-  endplot
+  endplot,
+  findcut = FALSE,
+  multievent = FALSE
 )
 }
 \arguments{
 \item{data}{The data as a data frame.}
 
-\item{overalltime}{.}
+\item{elapsedtime}{.}
 
 \item{tint}{.}
 
@@ -56,6 +59,10 @@ survival(
 
 \item{cutp}{.}
 
+\item{timetypedata}{select the time type in data}
+
+\item{timetypeoutput}{select the time type in output}
+
 \item{pw}{.}
 
 \item{sc}{.}
@@ -64,22 +71,25 @@ survival(
 
 \item{ch}{.}
 
-\item{timetype}{.}
-
 \item{endplot}{.}
+
+\item{findcut}{.}
+
+\item{multievent}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
 \code{results$todo} \tab \tab \tab \tab \tab a html \cr
-\code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$medianSummary} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$uniTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$coxTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$text9} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$text8} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$pairwiseTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr

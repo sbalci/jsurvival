@@ -1,8 +1,4 @@
 #' @title Survival Analysis
-#'
-#'
-#'
-#'
 #' @importFrom R6 R6Class
 #' @import jmvcore
 #' @import magrittr
@@ -14,11 +10,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     private = list(
         .run = function() {
 
-            # If no variable selected Initial Message ----
+            # Initial Message ----
 
-            if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) ) {
-
-                # TODO ----
+            if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) ) {
 
                 todo <- glue::glue("
                 <br>Welcome to ClinicoPath
@@ -31,7 +25,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 <br><br>
                 Outcome Level: if patient is dead or event (recurrence) occured.
                 <br><br>
-                Survival time should be numeric, continuous, and in months.
+                Survival time should be numeric and continuous.
                 <br><br>
                 This function uses survival, survminer, and finalfit packages. Please cite jamovi and the packages as given below.
                 <br><hr>
@@ -43,64 +37,61 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 html$setContent(todo)
                 return()
 
-            } else {
+            }
 
-                # Empty message when all variables selected ----
 
-                todo <- ""
+            if (length(self$options$explanatory) > 1) {
+
+
+                todo <- glue::glue("
+                                   <br>More than one explanatory variable
+                                   <br>
+                                   <hr>")
                 html <- self$results$todo
                 html$setContent(todo)
 
+            }
+
+
+
+
+
+                # Common Errors, Warnings ----
 
                 if (nrow(self$data) == 0)
                     stop('Data contains no (complete) rows')
 
 
+                # Common Definitions ----
+
                 contin <- c("integer", "numeric", "double")
-
-
-                # One explanatory ----
-
-                if (length(self$options$explanatory) == 1) {
 
 
 
                 # Read Data ----
 
-                # mydata <- self$data
-
-                # Calculate Time Interval ----
-
-
-                    # Time Interval ----
-
-                    # mydata$int <- lubridate::interval(
-                    #     lubridate::ymd(mydata$SurgeryDate),
-                    #     lubridate::ymd(mydata$LastFollowUpDate)
-                    # )
-                    # mydata$OverallTime <- lubridate::time_length(mydata$int, "month")
-                    # mydata$OverallTime <- round(mydata$OverallTime, digits = 1)
+                mydata <- self$data
 
 
 
 
-                uoveralltime <- self$options$overalltime
+                # Read Arguments ----
 
-                uoveralltime <- jmvcore::toNumeric(self$data[[uoveralltime]])
+                elapsedtime <- self$options$elapsedtime
+                outcome <- self$options$outcome
+                explanatory <- self$options$explanatory
+
+                outcomeLevel <- self$options$outcomeLevel
+
+                tint <- self$options$tint
 
 
 
-                # Define Explanatory Factor ----
-
-                uthefactor <- self$options$explanatory
-
-                uthefactor <- self$data[[uthefactor]]
 
 
 
                 # Define Outcome ----
 
-                # Try to embed competing survival here
 
                 outcome1 <- self$options$outcome
 
@@ -108,116 +99,167 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 if (inherits(outcome1, contin)) {
 
-                    if ( !any(outcome1 != 0, na.rm = TRUE) || !any(outcome1 != 1, na.rm = TRUE) ) {
+                    if (
+                !( (length(unique(outcome1[!is.na(outcome1)])) == 2) && (sum(unique(outcome1[!is.na(outcome1)])) == 1) )
+                         ) {
                         stop('When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
 
                     }
 
-                    uoutcome <- outcome1
+                    mydata[["myoutcome"]] <- mydata[[self$options$outcome]]
+
 
                 } else if (inherits(outcome1, "factor")) {
-                    outcomeLevel <- self$options$outcomeLevel
 
-                    uoutcome <-
+
+                    mydata[[self$options$outcome]] <-
                         ifelse(test = outcome1 == outcomeLevel,
                                yes = 1,
                                no = 0)
+
+
+
+                    mydata[["myoutcome"]] <-
+                        ifelse(test = outcome1 == outcomeLevel,
+                               yes = 1,
+                               no = 0)
+                } else {
+
+                    stop('When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0. If you are using a factor as an outcome, please check the levels and content.')
+
+                }
+
+
+
+                # Define Survival ----
+
+
+                if (!tint) {
+
+                mydata[[self$options$elapsedtime]] <- jmvcore::toNumeric(mydata[[self$options$elapsedtime]])
+
+                mydata[["mytime"]] <- jmvcore::toNumeric(mydata[[self$options$elapsedtime]])
+
+
+                } else if (tint) {
+
+                # Time Interval ----
+
+                # mydata$int <- lubridate::interval(
+                #     lubridate::ymd(mydata$SurgeryDate),
+                #     lubridate::ymd(mydata$LastFollowUpDate)
+                # )
+                # mydata$OverallTime <- lubridate::time_length(mydata$int, "month")
+                # mydata$OverallTime <- round(mydata$OverallTime, digits = 1)
+
+
+                }
+
+
+                # Define Explanatory Factor ----
+
+
+
+                if ( length(self$options$explanatory) == 1 ) {
+
+                expl <- self$options$explanatory
+
+                mydata[["myfactor"]] <- mydata[[expl]]
+
                 }
 
 
 
 
 
+                # Define Data For Analysis
 
-               # self$results$textdeneme$setContent(
-               #     list(
-               #         uoutcome,
-               #         outcomeLevel,
-               #         outcome2
-               #         )
-               # )
-
-
-
-                mydata <- data.frame(myoveralltime = uoveralltime,
-                                     thefactor = uthefactor,
-                                     myoutcome = uoutcome)
 
                 mydata <- jmvcore::naOmit(mydata)
 
 
-                # # Run code for analysis ----
-
-                # self$results$deneme3$setContent(mydata[[myoutcome]])
-                # self$results$deneme4$setContent(mydata)
 
 
-                # results 1 Median Survival Table ----
-
-                km_fit <- survival::survfit(survival::Surv(myoveralltime, myoutcome) ~ thefactor, data = mydata)
-
-                km_fit_median_df <- summary(km_fit)
-                results1html <- as.data.frame(km_fit_median_df$table) %>%
-                    janitor::clean_names(dat = ., case = "snake") %>%
-                    tibble::rownames_to_column(.data = ., var = self$options$explanatory)
 
 
-                results1html[,1] <- gsub(pattern = "thefactor=",
-                                         replacement = "",
-                                         x = results1html[,1])
+                # One explanatory ----
 
-                results1table <- results1html
-
-                # results 1 html, Median Survival Table Html Type
-
-                # results1htmlresults <-
-                #     knitr::kable(results1html,
-                #     row.names = FALSE,
-                #     align = c('l', rep('r', 9)),
-                #     format = "html",
-                #     digits = 1
-                #     )
+                if (
+                    length(self$options$explanatory) == 1 && !is.null(self$options$outcome) && !is.null(self$options$elapsedtime)
+                    ) {
 
 
-                # Median Table ----
+                # One explanatory message ----
 
 
-                names(results1table)[1] <- "factor"
+                todo <- glue::glue("
+                                   <br>Analysis with one variable
+                                   <br>
+                                   <hr>")
+                html <- self$results$todo
+                html$setContent(todo)
 
 
-                medianTable <- self$results$medianTable
-
-                data_frame <- results1table
-                for(i in seq_along(data_frame[,1,drop=T])) {
-                    medianTable$addRow(rowKey = i, values = c(data_frame[i,]))
                 }
 
 
 
+                # Median Survival Table ----
 
 
 
-                # results 2 Median Survival Summary ----
+                thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
+
+
+                formula <- paste('survival::Surv(mytime, myoutcome) ~ ', thefactor)
+                formula <- as.formula(formula)
+
+                km_fit <- survival::survfit(formula, data = mydata)
 
                 km_fit_median_df <- summary(km_fit)
-                km_fit_median_df <- as.data.frame(km_fit_median_df$table) %>%
+                results1html <- as.data.frame(km_fit_median_df$table) %>%
                     janitor::clean_names(dat = ., case = "snake") %>%
-                    tibble::rownames_to_column(.data = ., var = self$options$explanatory)
+                    tibble::rownames_to_column(.data = .)
 
-                km_fit_median_df %>%
+
+                results1html[,1] <- gsub(pattern = ", ",
+                                         replacement = " and ",
+                                         x = results1html[,1])
+
+                results1table <- results1html
+
+                names(results1table)[1] <- "factor"
+
+                medianTable <- self$results$medianTable
+                data_frame <- results1table
+                for (i in seq_along(data_frame[,1,drop = T])) {
+                    medianTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                }
+
+
+                # Median Survival Summary ----
+
+                results1table %>%
                     dplyr::mutate(
                         description =
                             glue::glue(
-                                "When ", self$options$explanatory, "{.data[[self$options$explanatory]]}, median survival is {round(median, digits = 1)} [{round(x0_95lcl, digits = 1)} - {round(x0_95ucl, digits = 1)}, 95% CI] months."
+                                "When {factor}, median survival is {round(median, digits = 1)} [{round(x0_95lcl, digits = 1)} - {round(x0_95ucl, digits = 1)}, 95% CI] ", self$options$timetypeoutput, "."
                             )
                     ) %>%
                     dplyr::mutate(
-                        description = gsub(pattern = "thefactor=", replacement = " is ", x = description)
+                        description = gsub(pattern = "=", replacement = " is ", x = description)
                     ) %>%
                     dplyr::select(description) %>%
-                    dplyr::pull() -> km_fit_median_definition
+                    dplyr::pull(.) -> km_fit_median_definition
 
-                results2 <- km_fit_median_definition
+                medianSummary <- km_fit_median_definition
+
+
+                self$results$medianSummary$setContent(medianSummary)
+
+
+
+
 
                 # results 3 Univariate Cox Regression ----
 
@@ -274,367 +316,531 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 #         tUni_df
                 #     )
 
-                # Cox-Regression Table ----
 
 
-                uniTable <- self$results$uniTable
+        #                     # >1 Explanatory results 3 Cox Regression ----
+                #
+                #                     formula2 <- as.vector(self$options$explanatory)
+                #
+                #                     formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
+                #
+                #                     formulaL <- jmvcore::toNumeric(formulaL)
+                #
+                #                     formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
+                #
+                #                     myformula <- paste("Surv(", formulaL, ",", "Outcome", ")")
+                #
+                #                     finalfit::finalfit(.data = mydata,
+                #                                        dependent = myformula,
+                #                                        explanatory = formula2
+                #
+                #                                        # metrics = TRUE
+                #                     ) -> tUni
+                #
+                #                     tUni_df <- tibble::as_tibble(tUni, .name_repair = "minimal") %>%
+                #                         janitor::clean_names(dat = ., case = "snake")
+                #
+                #
+
+
+
+        #         # Cox-Regression Table ----
+        #
+        #         tUni_df <- tUni_df[,-(dim(tUni_df)[2])]
+        #
+        #         uniTable <- self$results$uniTable
+        #
+        #         data_frame <- tUni_df
+        #
+        #         names(data_frame) <- c(
+        #             "Explanatory",
+        #             "Levels",
+        #             "all",
+        #             "HR_univariable",
+        #             "HR_multivariable"
+        #             )
+        #
+        #         for(i in seq_along(data_frame[,1,drop=T])) {
+        #             uniTable$addRow(rowKey = i, values = c(data_frame[i,]))
+        #         }
+        #
+        #
+
+
+        #                     # >1 Explanatory Cox-Regression Table ----
+                #
+                #
+                #                     uniTable <- self$results$uniTable
+                #
+                #                     data_frame <- tUni_df
+                #
+                #
+                #                     names(data_frame) <- c(
+                #                         "Explanatory",
+                #                         "Levels",
+                #                         "all",
+                #                         "HR_univariable",
+                #                         "HR_multivariable"
+                #                     )
+                #
+                #                     for (i in seq_along(data_frame[,1,drop = T])) {
+                #                         uniTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                #                     }
+                #
+                #
+
+
+
+        #         # results 5 univariate survival explanation ----
+        #
+        #
+        #         n_level <- dim(tUni_df)[1]
+        #
+        #         tUni_df_descr <- function(n) {
+        #             paste0(
+        #                 "When ",
+        #                 self$options$explanatory,
+        #                 # tUni_df$dependent_surv_overall_time_outcome[1],
+        #                 " is ",
+        #                 tUni_df$x[n + 1],
+        #                 ", there is ",
+        #                 tUni_df$hr_univariable[n + 1],
+        #                 " times risk than ",
+        #                 "when ",
+        #                 self$options$explanatory,
+        #                 # tUni_df$dependent_surv_overall_time_outcome[1],
+        #                 " is ",
+        #                 tUni_df$x[1],
+        #                 "."
+        #             )
+        #         }
+        #
+        #         results5 <- purrr::map(.x = c(2:n_level-1), .f = tUni_df_descr)
+        #
+        #         results5 <- unlist(results5)
+        #
+        #
 
-                data_frame <- tUni_df
+        #                     # >1 Explanatory results 5 univariate survival explanation ----
+                #
+                #
+                #                     # n_level <- dim(data_frame)[1]
+                #                     #
+                #                     #
+                #                     #
+                #                     #
+                #                     # results5 <- data_frame %>%
+                #                     #     split(.$Explanatory) %>%
+                #                     #     dim()
+                #                     #     # purrr::map(.x = c(1:n_level-1),
+                #                     #     #            .f = paste0(
+                #                     #     #                "When ",
+                #                     #     #                .$Explanatory[1],
+                #                     #     #                " is ",
+                #                     #     #                .$Levels[n + 1],
+                #                     #     #                ", there is ",
+                #                     #     #                .$HR_univariable[n + 1],
+                #                     #     #                " times risk than ",
+                #                     #     #                "when ",
+                #                     #     #                " is ",
+                #                     #     #                .$Levels[1],
+                #                     #     #                "."
+                #                     #     #            )
+                #                     #     #                )
+                #                     #
+                #                     #
+                #                     # results5 <- unlist(results5)
+                #                     #
+                #                     # self$results$text5$setContent(results5)
+                #
+                #
+                #
+                #
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #         # results 6 1,3,5-yr survival ----
+        #
+        #         utimes <- self$options$cutp
+        #
+        #         utimes <- strsplit(utimes, ",")
+        #         utimes <- purrr::reduce(utimes, as.vector)
+        #         utimes <- as.numeric(utimes)
+        #
+        #         # as.numeric(strsplit(utimes, ',')[[1]])
+        #
+        #         if (length(utimes) == 0) {
+        #         utimes <- c(12,36,60)
+        #         }
+        #
+        #         # self$results$deneme$setContent(utimes)
+        #
+        #         # utimes <- c(12,36,60)
+        #         km_fit_summary <- summary(km_fit, times = utimes
+        #                                       # c(12,36,60)
+        #                                   )
+        #
+        #         km_fit_df <- as.data.frame(km_fit_summary[c("strata", "time", "n.risk", "n.event", "surv", "std.err", "lower", "upper")])
+        #
+        #
+        #         km_fit_df[,1] <- gsub(pattern = "thefactor=",
+        #                               replacement = paste0(self$options$explanatory, " "),
+        #                               x = km_fit_df[,1])
+        #
+        #         # km_fit_df_html <- knitr::kable(km_fit_df,
+        #         #                                row.names = FALSE,
+        #         #                                align = c('l', rep('r', 7)),
+        #         #                                format = "html",
+        #         #                                digits = 2)
+        #
+        #
+        #         # results6 <- km_fit_df_html
+        #
+        #
+        #         # 1,3,5-yr survival Table ----
+        #
+        #
+        #         survTable <- self$results$survTable
+        #
+        #         data_frame <- km_fit_df
+        #         for(i in seq_along(data_frame[,1,drop=T])) {
+        #             survTable$addRow(rowKey = i, values = c(data_frame[i,]))
+        #         }
+        #
+        #         # results 7 1,3,5-yr survival summary ----
+        #
+        #         km_fit_df %>%
+        #             dplyr::mutate(
+        #                 description =
+        #                     glue::glue(
+        #                         "When {strata}, {time} month survival is {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]."
+        #                     )
+        #             ) %>%
+        #             dplyr::select(description) %>%
+        #             dplyr::pull() -> km_fit_definition
+        #
+        #         results7 <- km_fit_definition
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        # # results 8,9 pairwise comparison ----
+        #
+        #
+        #
+        #         results8 <- "No pairwise comparison when explanatory variable has < 3 levels"
+        #         results9 <- ""
+        #
+        #         if(n_level > 2) {
+        #
+        #             formula_p <- paste0('survival::Surv(', formulaL, ',', formulaR, ') ~ ', formula2)
+        #             formula_p <- as.formula(formula_p)
+        #             results_pairwise <-
+        #                 survminer::pairwise_survdiff(
+        #                     formula = formula_p,
+        #                     data = mydata,
+        #                     p.adjust.method = "BH")
+        #
+        #
+        #         mypairwise2 <- as.data.frame(results_pairwise[["p.value"]]) %>%
+        #                         tibble::rownames_to_column() %>%
+        #                         tidyr::pivot_longer(cols = -rowname) %>%
+        #                         dplyr::filter(complete.cases(.))
+        #
+        #         # results8 <- mypairwise2
+        #
+        #         # Pairwise Table
+        #
+        #         pairwiseTable <- self$results$pairwiseTable
+        #
+        #         data_frame <- mypairwise2
+        #         for (i in seq_along(data_frame[,1,drop = T])) {
+        #             pairwiseTable$addRow(rowKey = i, values = c(data_frame[i,]))
+        #         }
+        #
+        #         pairwiseTable$setTitle(paste0('Pairwise Comparisons', self$options$explanatory))
+        #
+        #
+        #         mypairwise2 %>%
+        #             dplyr::mutate(description =
+        #                               glue::glue(
+        #                                   "The comparison between ",
+        #                                   self$options$explanatory,
+        #                                   " {rowname} and ",
+        #                                   self$options$explanatory,
+        #                                   " {name} has a p-value of {format.pval(value, digits = 3, eps = 0.001)}."
+        #                                   )
+        #                           ) %>%
+        #             dplyr::select(description) %>%
+        #             dplyr::pull() -> mypairwisedescription
+        #
+        #             mypairwisedescription <- unlist(mypairwisedescription)
+        #
+        #             mypairwisedescription <- paste0(
+        #                 "In the pairwise comparison of ",
+        #                 self$options$explanatory,
+        #                 ":\n",
+        #                 mypairwisedescription,
+        #                 "\n"
+        #                 )
+        #
+        #             results9 <- mypairwisedescription
+        #
+        #         }
+        #
+        #
+        #
+        #         # Results ----
+        #         ## self$results$text1$setContent(results1)
+        #         # self$results$text1html$setContent(results1htmlresults)
+        #         self$results$text2$setContent(results2)
+        #         ## self$results$text3$setContent(results3)
+        #         # self$results$text4$setContent(results4)
+        #         self$results$text5$setContent(results5)
+        #         # self$results$text6$setContent(results6)
+        #         self$results$text7$setContent(results7)
+        #         # self$results$text8$setContent(results8)
+        #         self$results$text9$setContent(results9)
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+
+
+
+
+
+#                     # >1 Explanatory results 6 1,3,5-yr survival ----
+#
+#                     utimes <- self$options$cutp
+#
+#                     utimes <- strsplit(utimes, ",")
+#                     utimes <- purrr::reduce(utimes, as.vector)
+#                     utimes <- as.numeric(utimes)
+#
+#                     # as.numeric(strsplit(utimes, ',')[[1]])
+#
+#                     if (length(utimes) == 0) {
+#                         utimes <- c(12,36,60)
+#                     }
+#
+#                     # self$results$deneme$setContent(utimes)
+#
+#                     # utimes <- c(12,36,60)
+#
+#                     km_fit_summary <- summary(km_fit, times = utimes
+#                                               # c(12,36,60)
+#                     )
+#
+#                     km_fit_df <- as.data.frame(km_fit_summary[c("strata", "time", "n.risk", "n.event", "surv", "std.err", "lower", "upper")])
+#
+#
+#                     km_fit_df[,1] <- gsub(pattern = "thefactor=",
+#                                           replacement = paste0(self$options$explanatory, " "),
+#                                           x = km_fit_df[,1])
+#
+#                     # >1 Explanatory 1,3,5-yr survival Table ----
+#
+#
+#                     survTable <- self$results$survTable
+#
+#                     data_frame <- km_fit_df
+#                     for(i in seq_along(data_frame[,1,drop=T])) {
+#                         survTable$addRow(rowKey = i, values = c(data_frame[i,]))
+#                     }
+#
+#                     # >1 Explanatory results 7 1,3,5-yr survival summary ----
+#
+#                     km_fit_df %>%
+#                         dplyr::mutate(
+#                             description =
+#                                 glue::glue(
+#                                     "When {strata}, {time} month survival is {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]."
+#                                 )
+#                         ) %>%
+#                         dplyr::select(description) %>%
+#                         dplyr::pull() -> km_fit_definition
+#
+#                     results7 <- km_fit_definition
+#
+#                     self$results$text7$setContent(results7)
+#
+#
+#
+#
+#
+#
+#                     # > 1 Explanatory Pairwise ----
+#
+#                     formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
+#
+#                     formula_p <- paste0('survival::Surv(', formulaL, ',', 'Outcome', ') ~ ', formula2)
+#                     formula_p <- as.formula(formula_p)
+#
+#                     results_pairwise <-
+#                         survminer::pairwise_survdiff(
+#                             formula = formula_p,
+#                             data = mydata,
+#                             p.adjust.method = "BH")
+#
+#
+#                     mypairwise2 <- as.data.frame(results_pairwise[["p.value"]]) %>%
+#                         tibble::rownames_to_column() %>%
+#                         tidyr::pivot_longer(cols = -rowname) %>%
+#                         dplyr::filter(complete.cases(.))
+#
+#                     # Pairwise Table
+#
+#                     pairwiseTable <- self$results$pairwiseTable
+#
+#                     data_frame <- mypairwise2
+#                     for (i in seq_along(data_frame[,1,drop = T])) {
+#                         pairwiseTable$addRow(rowKey = i, values = c(data_frame[i,]))
+#                     }
+#
+#
+#
+#                     # mypairwise2 <- as.data.frame(results8[["p.value"]]) %>%
+#                     #     tibble::rownames_to_column()
+#                     # mypairwise2 %>%
+#                     #     tidyr::pivot_longer(cols = -rowname) %>%
+#                     #     dplyr::filter(complete.cases(.)) %>%
+#                     #     dplyr::mutate(description =
+#                     #                       glue::glue(
+#                     #                           "The comparison between ", self$options$explanatory, " {rowname} and ", self$options$explanatory," {name} has a p-value of {format.pval(value, digits = 3, eps = 0.001)}."
+#                     #                       )
+#                     #     ) %>%
+#                     #     dplyr::select(description) %>%
+#                     #     dplyr::pull() -> mypairwisedescription
+#                     #
+#                     # mypairwisedescription <- unlist(mypairwisedescription)
+#                     #
+#                     # mypairwisedescription <- paste0(
+#                     #     "In the pairwise comparison of ", self$options$explanatory, ":\n",
+#                     #     mypairwisedescription, "\n")
+#                     #
+#                     # results9 <- mypairwisedescription
+#                     # self$results$text9$setContent(results9)
+#
+#
+#
+#                     # >1 explanatory Prepare Data For Plots ----
+#
+#
+#                     mydata <- jmvcore::select(mydata, c(self$options$overalltime, Outcome, self$options$explanatory))
+#
+#                     plotData2 <- mydata
+#
+#                     image1b <- self$results$plot1b
+#                     image1b$setState(plotData2)
+#
+#
+#
+#
+#                 # Continious Explanatory ----
+#
+#
+#
+#                 if (length(self$options$explanatory) == 1 && inherits(self$options$explanatory, contin) ) {
+#
+#
+#                     todo <- glue::glue("
+#                                        <br>
+#                                        Continious Explanatory
+#                                        <br>
+#                                        <hr>")
+#                     html <- self$results$todo
+#                     html$setContent(todo)
+#
+#                 # numeric optimal cut-off ----
+#
+#
+#                 }
+#
+#
+#                 if (length(self$options$explanatory) > 1 && inherits(self$options$explanatory, contin) ) {
+#
+#                     todo <- glue::glue("
+#                         <br>Please use Multivariate Survival Analysis Cox-regression in jsurvival.
+#                         <br>
+#                         <hr>")
+#                     html <- self$results$todo
+#                     html$setContent(todo)
+#
+#                     stop("Please use Multivariate Survival Analysis Cox-regression in jsurvival")
+#
+#                 }
+#
+#
+#
+#
+
+
+
+
+                # View mydata ----
+
+                self$results$mydataview$setContent(head(mydata, 20))
+
+
+
+                        # Prepare Data For Plots ----
+
+                        plotData <- mydata
+
+                        image <- self$results$plot
+                        image$setState(plotData)
+
+                        image2 <- self$results$plot2
+                        image2$setState(plotData)
+
+                        image3 <- self$results$plot3
+                        image3$setState(plotData)
 
-                names(data_frame) <- c(
-                    "Explanatory",
-                    "Levels",
-                    "all",
-                    "HR_univariable",
-                    "HR_multivariable"
-                    )
 
-                for(i in seq_along(data_frame[,1,drop=T])) {
-                    uniTable$addRow(rowKey = i, values = c(data_frame[i,]))
-                }
-
-
-                # results 5 univariate survival explanation ----
-
-
-                n_level <- dim(tUni_df)[1]
-
-                tUni_df_descr <- function(n) {
-                    paste0(
-                        "When ",
-                        self$options$explanatory,
-                        # tUni_df$dependent_surv_overall_time_outcome[1],
-                        " is ",
-                        tUni_df$x[n + 1],
-                        ", there is ",
-                        tUni_df$hr_univariable[n + 1],
-                        " times risk than ",
-                        "when ",
-                        self$options$explanatory,
-                        # tUni_df$dependent_surv_overall_time_outcome[1],
-                        " is ",
-                        tUni_df$x[1],
-                        "."
-                    )
-                }
-
-                results5 <- purrr::map(.x = c(2:n_level-1), .f = tUni_df_descr)
-
-                results5 <- unlist(results5)
-
-
-                # results 6 1,3,5-yr survival ----
-
-                utimes <- self$options$cutp
-
-                utimes <- strsplit(utimes, ",")
-                utimes <- purrr::reduce(utimes, as.vector)
-                utimes <- as.numeric(utimes)
-
-                # as.numeric(strsplit(utimes, ',')[[1]])
-
-                if (length(utimes) == 0) {
-                utimes <- c(12,36,60)
-                }
-
-                # self$results$deneme$setContent(utimes)
-
-                # utimes <- c(12,36,60)
-                km_fit_summary <- summary(km_fit, times = utimes
-                                              # c(12,36,60)
-                                          )
-
-                km_fit_df <- as.data.frame(km_fit_summary[c("strata", "time", "n.risk", "n.event", "surv", "std.err", "lower", "upper")])
-
-
-                km_fit_df[,1] <- gsub(pattern = "thefactor=",
-                                      replacement = paste0(self$options$explanatory, " "),
-                                      x = km_fit_df[,1])
-
-                # km_fit_df_html <- knitr::kable(km_fit_df,
-                #                                row.names = FALSE,
-                #                                align = c('l', rep('r', 7)),
-                #                                format = "html",
-                #                                digits = 2)
-
-
-                # results6 <- km_fit_df_html
-
-
-                # 1,3,5-yr survival Table ----
-
-
-                survTable <- self$results$survTable
-
-                data_frame <- km_fit_df
-                for(i in seq_along(data_frame[,1,drop=T])) {
-                    survTable$addRow(rowKey = i, values = c(data_frame[i,]))
-                }
-
-                # results 7 1,3,5-yr survival summary ----
-
-                km_fit_df %>%
-                    dplyr::mutate(
-                        description =
-                            glue::glue(
-                                "When {strata}, {time} month survival is {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]."
-                            )
-                    ) %>%
-                    dplyr::select(description) %>%
-                    dplyr::pull() -> km_fit_definition
-
-                results7 <- km_fit_definition
-
-
-
-
-
-
-
-
-
-
-        # results 8,9 pairwise comparison ----
-
-
-
-                results8 <- "No pairwise comparison when explanatory variable has < 3 levels"
-                results9 <- ""
-
-                if(n_level > 2) {
-
-                    formula_p <- paste0('survival::Surv(', formulaL, ',', formulaR, ') ~ ', formula2)
-                    formula_p <- as.formula(formula_p)
-                    results8 <-
-                        survminer::pairwise_survdiff(
-                            formula = formula_p,
-                            data = mydata,
-                            p.adjust.method = "BH")
-
-
-                mypairwise2 <- as.data.frame(results8[["p.value"]]) %>%
-                                tibble::rownames_to_column()
-
-                            mypairwise2 %>%
-                                tidyr::pivot_longer(cols = -rowname) %>%
-                                dplyr::filter(complete.cases(.)) %>%
-                                dplyr::mutate(description =
-                                                  glue::glue(
-                                                      "The comparison between ", self$options$explanatory, " {rowname} and ", self$options$explanatory," {name} has a p-value of {format.pval(value, digits = 3, eps = 0.001)}."
-                                                  )
-                                ) %>%
-                                dplyr::select(description) %>%
-                                dplyr::pull() -> mypairwisedescription
-
-                            mypairwisedescription <- unlist(mypairwisedescription)
-
-                            mypairwisedescription <- paste0(
-                                "In the pairwise comparison of ", self$options$explanatory, ":\n",
-                                mypairwisedescription, "\n")
-
-                            results9 <- mypairwisedescription
-
-                }
-
-
-
-                # Results ----
-                ## self$results$text1$setContent(results1)
-                # self$results$text1html$setContent(results1htmlresults)
-                self$results$text2$setContent(results2)
-                ## self$results$text3$setContent(results3)
-                # self$results$text4$setContent(results4)
-                self$results$text5$setContent(results5)
-                # self$results$text6$setContent(results6)
-                self$results$text7$setContent(results7)
-                self$results$text8$setContent(results8)
-                self$results$text9$setContent(results9)
-
-
-
-
-                # Prepare Data For Plots ----
-
-                plotData <- mydata
-
-                image <- self$results$plot
-                image$setState(plotData)
-
-                image2 <- self$results$plot2
-                image2$setState(plotData)
-
-                image3 <- self$results$plot3
-                image3$setState(plotData)
-
-
-                }
-
-
-                # >1 Explanatory ----
-
-                if (length(self$options$explanatory) > 1) {
-
-                    todo <- "More than one explanatory"
-                    html <- self$results$todo
-                    html$setContent(todo)
-
-
-
-                    mydata <- self$data
-
-                    overalltime <- self$options$overalltime
-                    outcome <- self$options$outcome
-                    explanatory <- self$options$explanatory
-
-                    outcome1 <- mydata[[outcome]]
-
-                    contin <- c("integer", "numeric", "double")
-
-                    if (inherits(outcome1, contin)) {
-
-
-                        if ( !(
-                            (length(unique(outcome1[!is.na(outcome1)])) == 2) && (sum(unique(outcome1[!is.na(outcome1)])) == 1)
-                        ) ) {
-                            stop('When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
-
-                        }
-
-                        mydata[[outcome]] <- jmvcore::toNumeric(mydata[[outcome]])
-
-                    } else if (inherits(outcome1, "factor")) {
-
-                        outcomeLevel <- self$options$outcomeLevel
-
-                        mydata[[outcome]] <-
-                            ifelse(test = outcome1 == outcomeLevel,
-                                   yes = 1,
-                                   no = 0)
-                    } else {
-
-                        stop('When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0. If you are using a factor as an outcome, please check the levels and content.')
 
                     }
 
 
-                    thefactor <- jmvcore::constructFormula(terms = explanatory)
-
-                    formula <- paste('survival::Surv(', self$options$overalltime, ',', self$options$outcome, ') ~ ', thefactor)
-                    formula <- as.formula(formula)
-
-
-                    km_fit <- survival::survfit(formula, data = self$data)
-
-                    km_fit_median_df <- summary(km_fit)
-
-                    results1html <- as.data.frame(km_fit_median_df$table) %>%
-                        janitor::clean_names(dat = ., case = "snake") %>%
-                        tibble::rownames_to_column(.data = .)
-
-
-                    results1html[,1] <- gsub(pattern = "thefactor=",
-                                             replacement = "",
-                                             x = results1html[,1])
-
-                    results1table <- results1html
-
-
-
-                    # self$results$text1table$setContent(results1table)
-
-
-
-                    # >1 Explanatory Median Table ----
-
-
-                    names(results1table)[1] <- "factor"
-
-
-                    medianTable <- self$results$medianTable
-
-                    data_frame <- results1table
-                    for (i in seq_along(data_frame[,1,drop = T])) {
-                        medianTable$addRow(rowKey = i, values = c(data_frame[i,]))
-                    }
-
-
-
-
-
-
-                    # >1 Explanatory results 2 Median Survival Summary ----
-
-                    km_fit_median_df <- summary(km_fit)
-                    km_fit_median_df <- as.data.frame(km_fit_median_df$table) %>%
-                        janitor::clean_names(dat = ., case = "snake") %>%
-                        tibble::rownames_to_column(.data = .)
-
-                    km_fit_median_df %>%
-                        dplyr::mutate(
-                            description =
-                                glue::glue(
-                                    "When {rowname}, median survival is {round(median, digits = 1)} [{round(x0_95lcl, digits = 1)} - {round(x0_95ucl, digits = 1)}, 95% CI] months."
-                                )
-                        ) %>%
-                        dplyr::select(description) %>%
-                        dplyr::pull() -> km_fit_median_definition
-
-                    results2 <- km_fit_median_definition
-
-
-                    self$results$text2$setContent(results2)
-
-
-
-
-
-
-
-
-
-
-
-
-
-                }
-
-
-                # Continious Explanatory ----
-
-
-
-                if (length(self$options$explanatory) == 1 && inherits(self$options$explanatory, contin) ) {
-
-
-                    todo <- "Continious Explanatory"
-                    html <- self$results$todo
-                    html$setContent(todo)
-
-                # numeric optimal cut-off ----
-
-
-                }
-
-
-                if (length(self$options$explanatory) > 1 && inherits(self$options$explanatory, contin) ) {
-
-                    todo <- "Please use Multivariate Survival Analysis Cox-regression in jsurvival"
-                    html <- self$results$todo
-                    html$setContent(todo)
-
-                    stop("Please use Multivariate Survival Analysis Cox-regression in jsurvival")
-
-                }
-
-
-
-
-
-            }
-},
-
-
-
+,
 .plot = function(image, ggtheme, theme, ...) {  # <-- the plot function ----
 
 
@@ -646,53 +852,27 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     if (nrow(self$data) == 0)
     stop('Data contains no (complete) rows')
 
-    if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
+    if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
         return()
-
-    if (length(self$options$explanatory) > 1)
-        stop('Use one explanatory variable')
 
     plotData <- image$state
 
 
-    #     uoveralltime <- self$options$overalltime
-    #     uoveralltime <- jmvcore::toNumeric(self$data[[uoveralltime]])
-    #     uthefactor <- self$options$explanatory
-    #     uthefactor <- self$data[[uthefactor]]
-    #     uoutcome <- self$options$outcome
-    #     uoutcome <- jmvcore::toNumeric(self$data[[uoutcome]])
-    #     mydata <- data.frame(myoveralltime = uoveralltime,
-    #                          thefactor = uthefactor,
-    #                          myoutcome = uoutcome)
-    #     mydata <- na.omit(mydata)
+    thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
 
-    # names(mydata) <- c(self$options$overalltime,
-    #                    self$options$explanatory,
-    #                    self$options$outcome)
-
-
-
-    formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
-
-    formula2 <- jmvcore::composeTerm(formula2)
-
-    formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
-
-    formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
-
-    myformula <- paste("survival::Surv(", formulaL, ",", formulaR, ")")
+    title2 <- as.character(thefactor)
 
 
     plot <- plotData %>%
         finalfit::surv_plot(.data = .,
-                            dependent = myformula,
-                            explanatory = formula2,
-                            xlab = 'Time (months)',
+                            dependent = 'survival::Surv(mytime, myoutcome)',
+                            explanatory = as.vector(self$options$explanatory),
+                            xlab = paste0('Time (', self$options$timetypeoutput, ')'),
                             pval = TRUE,
                             legend = 'none',
                             break.time.by = 12,
                             xlim = c(0,60),
-                            title = paste0("Survival curves for ", self$options$explanatory),
+                            title = paste0("Survival curves for ", title2),
                             subtitle = "Based on Kaplan-Meier estimates"
         )
 
@@ -707,120 +887,119 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-
-# https://rpkgs.datanovia.com/survminer/survminer_cheatsheet.pdf
-,
-.plot2 = function(image2, ggtheme, theme, ...) {  # <-- the plot function ----
-
-
-    ce <- self$options$ce
-
-    if(!ce)
-        return()
-
-    if (nrow(self$data) == 0)
-        stop('Data contains no (complete) rows')
-
-    if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
-        return()
-
-    if (length(self$options$explanatory) > 1)
-        stop('Use one explanatory variable')
-
-    plotData <- image2$state
-
-
-
-    formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
-
-    formula2 <- jmvcore::composeTerm(formula2)
-
-    formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
-
-    formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
-
-    myformula <- paste("survival::Surv(", formulaL, ",", formulaR, ")")
-
-
-    plot2 <- plotData %>%
-        finalfit::surv_plot(.data = .,
-                            dependent = myformula,
-                            explanatory = formula2,
-                            xlab = 'Time (months)',
-                            # pval = TRUE,
-                            legend = 'none',
-                            break.time.by = 12,
-                            xlim = c(0,60),
-                            title = paste0("Cumulative Events ", self$options$explanatory)
-                            # subtitle = "Based on Kaplan-Meier estimates",
-                            , fun = "event"
-
-        )
-
-
-    print(plot2)
-    TRUE
-
-
-
-}
-
-
-,
-.plot3 = function(image3, ggtheme, theme, ...) {  # <-- the plot function ----
-
-
-    ch <- self$options$ch
-
-    if(!ch)
-        return()
-
-    if (nrow(self$data) == 0)
-        stop('Data contains no (complete) rows')
-
-    if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
-        return()
-
-
-    if (length(self$options$explanatory) > 1)
-        stop('Use one explanatory variable')
-
-    plotData <- image3$state
+# # https://rpkgs.datanovia.com/survminer/survminer_cheatsheet.pdf
+# ,
+# .plot2 = function(image2, ggtheme, theme, ...) {  # <-- the plot function ----
+#
+#
+#     ce <- self$options$ce
+#
+#     if(!ce)
+#         return()
+#
+#     if (nrow(self$data) == 0)
+#         stop('Data contains no (complete) rows')
+#
+#     if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
+#         return()
+#
+#     if (length(self$options$explanatory) > 1)
+#         stop('Use one explanatory variable')
+#
+#     plotData <- image2$state
+#
+#
+#
+#     formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
+#
+#     formula2 <- jmvcore::composeTerm(formula2)
+#
+#     formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
+#
+#     formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
+#
+#     myformula <- paste("survival::Surv(", formulaL, ",", formulaR, ")")
+#
+#
+#     plot2 <- plotData %>%
+#         finalfit::surv_plot(.data = .,
+#                             dependent = myformula,
+#                             explanatory = formula2,
+#                             xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+#                             # pval = TRUE,
+#                             legend = 'none',
+#                             break.time.by = 12,
+#                             xlim = c(0,60),
+#                             title = paste0("Cumulative Events ", self$options$explanatory)
+#                             # subtitle = "Based on Kaplan-Meier estimates",
+#                             , fun = "event"
+#
+#         )
+#
+#
+#     print(plot2)
+#     TRUE
+#
+#
+#
+# }
 
 
 
-    formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
-
-    formula2 <- jmvcore::composeTerm(formula2)
-
-    formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
-
-    formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
-
-    myformula <- paste("survival::Surv(", formulaL, ",", formulaR, ")")
-
-    plot3 <- plotData %>%
-        finalfit::surv_plot(.data = .,
-                            dependent = myformula,
-                            explanatory = formula2,
-                            xlab = 'Time (months)',
-                            # pval = TRUE,
-                            legend = 'none',
-                            break.time.by = 12,
-                            xlim = c(0,60),
-                            title = paste0("Cumulative Hazard ", self$options$explanatory),
-                            # subtitle = "Based on Kaplan-Meier estimates"
-                            fun = "cumhaz"
-        )
-
-
-    print(plot3)
-    TRUE
-
-
-
-}
-
+# ,
+# .plot3 = function(image3, ggtheme, theme, ...) {  # <-- the plot function ----
+#
+#
+#     ch <- self$options$ch
+#
+#     if(!ch)
+#         return()
+#
+#     if (nrow(self$data) == 0)
+#         stop('Data contains no (complete) rows')
+#
+#     if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
+#         return()
+#
+#
+#     if (length(self$options$explanatory) > 1)
+#         stop('Use one explanatory variable')
+#
+#     plotData <- image3$state
+#
+#
+#
+#     formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
+#
+#     formula2 <- jmvcore::composeTerm(formula2)
+#
+#     formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
+#
+#     formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
+#
+#     myformula <- paste("survival::Surv(", formulaL, ",", formulaR, ")")
+#
+#
+#
+#     plot3 <- plotData %>%
+#         finalfit::surv_plot(.data = .,
+#                             dependent = myformula,
+#                             explanatory = formula2,
+#                             xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+#                             # pval = TRUE,
+#                             legend = 'none',
+#                             break.time.by = 12,
+#                             xlim = c(0,60),
+#                             title = paste0("Cumulative Hazard ", self$options$explanatory),
+#                             # subtitle = "Based on Kaplan-Meier estimates"
+#                             fun = "cumhaz"
+#         )
+#
+#
+#     print(plot3)
+#     TRUE
+# }
+#
 
 
         )

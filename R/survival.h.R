@@ -6,7 +6,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Options,
     public = list(
         initialize = function(
-            overalltime = NULL,
+            elapsedtime = NULL,
             tint = FALSE,
             dxdate = NULL,
             fudate = NULL,
@@ -19,12 +19,15 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             awod = NULL,
             analysistype = "overall",
             cutp = "12, 36, 60",
+            timetypedata = "months",
+            timetypeoutput = "months",
             pw = FALSE,
             sc = FALSE,
             ce = FALSE,
             ch = FALSE,
-            timetype = NULL,
-            endplot = NULL, ...) {
+            endplot = NULL,
+            findcut = FALSE,
+            multievent = FALSE, ...) {
 
             super$initialize(
                 package='jsurvival',
@@ -32,9 +35,9 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 requiresData=TRUE,
                 ...)
 
-            private$..overalltime <- jmvcore::OptionVariable$new(
-                "overalltime",
-                overalltime,
+            private$..elapsedtime <- jmvcore::OptionVariable$new(
+                "elapsedtime",
+                elapsedtime,
                 suggested=list(
                     "continuous"),
                 permitted=list(
@@ -105,6 +108,24 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "cutp",
                 cutp,
                 default="12, 36, 60")
+            private$..timetypedata <- jmvcore::OptionList$new(
+                "timetypedata",
+                timetypedata,
+                options=list(
+                    "days",
+                    "weeks",
+                    "months",
+                    "years"),
+                default="months")
+            private$..timetypeoutput <- jmvcore::OptionList$new(
+                "timetypeoutput",
+                timetypeoutput,
+                options=list(
+                    "days",
+                    "weeks",
+                    "months",
+                    "years"),
+                default="months")
             private$..pw <- jmvcore::OptionBool$new(
                 "pw",
                 pw,
@@ -121,14 +142,19 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "ch",
                 ch,
                 default=FALSE)
-            private$..timetype <- jmvcore::OptionString$new(
-                "timetype",
-                timetype)
             private$..endplot <- jmvcore::OptionString$new(
                 "endplot",
                 endplot)
+            private$..findcut <- jmvcore::OptionBool$new(
+                "findcut",
+                findcut,
+                default=FALSE)
+            private$..multievent <- jmvcore::OptionBool$new(
+                "multievent",
+                multievent,
+                default=FALSE)
 
-            self$.addOption(private$..overalltime)
+            self$.addOption(private$..elapsedtime)
             self$.addOption(private$..tint)
             self$.addOption(private$..dxdate)
             self$.addOption(private$..fudate)
@@ -141,15 +167,18 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..awod)
             self$.addOption(private$..analysistype)
             self$.addOption(private$..cutp)
+            self$.addOption(private$..timetypedata)
+            self$.addOption(private$..timetypeoutput)
             self$.addOption(private$..pw)
             self$.addOption(private$..sc)
             self$.addOption(private$..ce)
             self$.addOption(private$..ch)
-            self$.addOption(private$..timetype)
             self$.addOption(private$..endplot)
+            self$.addOption(private$..findcut)
+            self$.addOption(private$..multievent)
         }),
     active = list(
-        overalltime = function() private$..overalltime$value,
+        elapsedtime = function() private$..elapsedtime$value,
         tint = function() private$..tint$value,
         dxdate = function() private$..dxdate$value,
         fudate = function() private$..fudate$value,
@@ -162,14 +191,17 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         awod = function() private$..awod$value,
         analysistype = function() private$..analysistype$value,
         cutp = function() private$..cutp$value,
+        timetypedata = function() private$..timetypedata$value,
+        timetypeoutput = function() private$..timetypeoutput$value,
         pw = function() private$..pw$value,
         sc = function() private$..sc$value,
         ce = function() private$..ce$value,
         ch = function() private$..ch$value,
-        timetype = function() private$..timetype$value,
-        endplot = function() private$..endplot$value),
+        endplot = function() private$..endplot$value,
+        findcut = function() private$..findcut$value,
+        multievent = function() private$..multievent$value),
     private = list(
-        ..overalltime = NA,
+        ..elapsedtime = NA,
         ..tint = NA,
         ..dxdate = NA,
         ..fudate = NA,
@@ -182,26 +214,30 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..awod = NA,
         ..analysistype = NA,
         ..cutp = NA,
+        ..timetypedata = NA,
+        ..timetypeoutput = NA,
         ..pw = NA,
         ..sc = NA,
         ..ce = NA,
         ..ch = NA,
-        ..timetype = NA,
-        ..endplot = NA)
+        ..endplot = NA,
+        ..findcut = NA,
+        ..multievent = NA)
 )
 
 survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         todo = function() private$.items[["todo"]],
-        text2 = function() private$.items[["text2"]],
+        mydataview = function() private$.items[["mydataview"]],
+        medianSummary = function() private$.items[["medianSummary"]],
         medianTable = function() private$.items[["medianTable"]],
         text5 = function() private$.items[["text5"]],
-        uniTable = function() private$.items[["uniTable"]],
+        coxTable = function() private$.items[["coxTable"]],
         text7 = function() private$.items[["text7"]],
         survTable = function() private$.items[["survTable"]],
         text9 = function() private$.items[["text9"]],
-        text8 = function() private$.items[["text8"]],
+        pairwiseTable = function() private$.items[["pairwiseTable"]],
         plot = function() private$.items[["plot"]],
         plot2 = function() private$.items[["plot2"]],
         plot3 = function() private$.items[["plot3"]]),
@@ -227,7 +263,16 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "overalltime")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
-                name="text2",
+                name="mydataview",
+                title="mydataview",
+                clearWith=list(
+                    "explanatory",
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="medianSummary",
                 title="Median Survival Summary and Table",
                 clearWith=list(
                     "explanatory",
@@ -290,7 +335,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "overalltime")))
             self$add(jmvcore::Table$new(
                 options=options,
-                name="uniTable",
+                name="coxTable",
                 title="Cox Table",
                 rows=0,
                 columns=list(
@@ -309,6 +354,10 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     list(
                         `name`="HR_univariable", 
                         `title`="HR (Univariable)", 
+                        `type`="text"),
+                    list(
+                        `name`="HR_multivariable", 
+                        `title`="HR (Multivariable)", 
                         `type`="text")),
                 clearWith=list(
                     "explanatory",
@@ -353,12 +402,14 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `format`="pc"),
                     list(
                         `name`="lower", 
-                        `title`="Lower 95% CI", 
+                        `title`="Lower", 
+                        `superTitle`="95% Confidence Interval", 
                         `type`="number", 
                         `format`="pc"),
                     list(
                         `name`="upper", 
-                        `title`="Upper 95% CI", 
+                        `title`="Upper", 
+                        `superTitle`="95% Confidence Interval", 
                         `type`="number", 
                         `format`="pc")),
                 clearWith=list(
@@ -376,17 +427,32 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcomeLevel",
                     "overalltime"),
                 visible="(pw)"))
-            self$add(jmvcore::Preformatted$new(
+            self$add(jmvcore::Table$new(
                 options=options,
-                name="text8",
-                title="",
+                name="pairwiseTable",
+                title="Pairwise Comparison Table",
+                rows=0,
+                columns=list(
+                    list(
+                        `name`="rowname", 
+                        `title`="Levels", 
+                        `type`="text"),
+                    list(
+                        `name`="name", 
+                        `title`="Levels", 
+                        `type`="text"),
+                    list(
+                        `name`="value", 
+                        `title`="p-value", 
+                        `type`="number", 
+                        `format`="zto,pvalue")),
+                visible="(pw)",
                 clearWith=list(
+                    "pw",
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
-                    "pw"),
-                visible="(pw)"))
+                    "overalltime")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -462,7 +528,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' # example will be added
 #'}
 #' @param data The data as a data frame.
-#' @param overalltime .
+#' @param elapsedtime .
 #' @param tint .
 #' @param dxdate .
 #' @param fudate .
@@ -475,23 +541,27 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param awod .
 #' @param analysistype .
 #' @param cutp .
+#' @param timetypedata select the time type in data
+#' @param timetypeoutput select the time type in output
 #' @param pw .
 #' @param sc .
 #' @param ce .
 #' @param ch .
-#' @param timetype .
 #' @param endplot .
+#' @param findcut .
+#' @param multievent .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$medianSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$uniTable} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$coxTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$text9} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$text8} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$pairwiseTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
@@ -506,7 +576,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @export
 survival <- function(
     data,
-    overalltime,
+    elapsedtime,
     tint = FALSE,
     dxdate,
     fudate,
@@ -519,17 +589,20 @@ survival <- function(
     awod,
     analysistype = "overall",
     cutp = "12, 36, 60",
+    timetypedata = "months",
+    timetypeoutput = "months",
     pw = FALSE,
     sc = FALSE,
     ce = FALSE,
     ch = FALSE,
-    timetype,
-    endplot) {
+    endplot,
+    findcut = FALSE,
+    multievent = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('survival requires jmvcore to be installed (restart may be required)')
 
-    if ( ! missing(overalltime)) overalltime <- jmvcore::resolveQuo(jmvcore::enquo(overalltime))
+    if ( ! missing(elapsedtime)) elapsedtime <- jmvcore::resolveQuo(jmvcore::enquo(elapsedtime))
     if ( ! missing(dxdate)) dxdate <- jmvcore::resolveQuo(jmvcore::enquo(dxdate))
     if ( ! missing(fudate)) fudate <- jmvcore::resolveQuo(jmvcore::enquo(fudate))
     if ( ! missing(explanatory)) explanatory <- jmvcore::resolveQuo(jmvcore::enquo(explanatory))
@@ -537,7 +610,7 @@ survival <- function(
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
-            `if`( ! missing(overalltime), overalltime, NULL),
+            `if`( ! missing(elapsedtime), elapsedtime, NULL),
             `if`( ! missing(dxdate), dxdate, NULL),
             `if`( ! missing(fudate), fudate, NULL),
             `if`( ! missing(explanatory), explanatory, NULL),
@@ -545,7 +618,7 @@ survival <- function(
 
 
     options <- survivalOptions$new(
-        overalltime = overalltime,
+        elapsedtime = elapsedtime,
         tint = tint,
         dxdate = dxdate,
         fudate = fudate,
@@ -558,12 +631,15 @@ survival <- function(
         awod = awod,
         analysistype = analysistype,
         cutp = cutp,
+        timetypedata = timetypedata,
+        timetypeoutput = timetypeoutput,
         pw = pw,
         sc = sc,
         ce = ce,
         ch = ch,
-        timetype = timetype,
-        endplot = endplot)
+        endplot = endplot,
+        findcut = findcut,
+        multievent = multievent)
 
     analysis <- survivalClass$new(
         options = options,

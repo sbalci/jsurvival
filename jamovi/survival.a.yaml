@@ -37,15 +37,15 @@ options:
           R: >
             The data as a data frame.
 
-    - name: overalltime
-      title: 'Time Elapsed (in months)'
+    - name: elapsedtime
+      title: 'Time Elapsed'
       type: Variable
       suggested: [ continuous ]
       permitted: [ numeric ]
 
 
     - name: tint
-      title: Calculation Dates
+      title: Using Dates to Calculate Survival Time
       type: Bool
       default: false
 
@@ -109,43 +109,43 @@ options:
 
 
     - name: cutp
-      title: Cutpoints (in months)
+      title: Cutpoints
       type: String
       default: '12, 36, 60'
 
 
-    # - name: timetypedata
-    #   title: Time in Data
-    #   type: List
-    #   options:
-    #     - title: Days
-    #       name: Days
-    #     - title: Weeks
-    #       name: Weeks
-    #     - title: Months
-    #       name: Months
-    #     - title: Years
-    #       name: Years
-    #   default: Months
-    #   description:
-    #       R: select the time type in data
+    - name: timetypedata
+      title: Time Type in Data
+      type: List
+      options:
+        - title: days
+          name: days
+        - title: weeks
+          name: weeks
+        - title: months
+          name: months
+        - title: years
+          name: years
+      default: months
+      description:
+          R: select the time type in data
 
 
-    # - name: timetypeoutput
-    #   title: Time in Output
-    #   type: List
-    #   options:
-    #     - title: Days
-    #       name: Days
-    #     - title: Weeks
-    #       name: Weeks
-    #     - title: Months
-    #       name: Months
-    #     - title: Years
-    #       name: Years
-    #   default: Months
-    #   description:
-    #       R: select the time type in output
+    - name: timetypeoutput
+      title: Time Type in Output
+      type: List
+      options:
+        - title: days
+          name: days
+        - title: weeks
+          name: weeks
+        - title: months
+          name: months
+        - title: years
+          name: years
+      default: months
+      description:
+          R: select the time type in output
 
 
     - name: pw
@@ -172,12 +172,22 @@ options:
       default: false
 
 
-    - name: timetype
-      title: Time Type
-      type: String
 
     - name: endplot
       title: Plot End Time
       type: String
+
+    - name: findcut
+      title: Cut-off for Continious Explanatory
+      type: Bool
+      default: false
+
+
+    - name: multievent
+      title: Multiple Event Levels
+      type: Bool
+      default: false
+
+
 
 ...

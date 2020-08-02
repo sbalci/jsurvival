@@ -16,7 +16,18 @@ items:
           - overalltime
 
 
-    - name:  text2
+    - name:  mydataview
+      title: mydataview
+      type:  Preformatted
+      clearWith:
+          - explanatory
+          - outcome
+          - outcomeLevel
+          - overalltime
+
+
+
+    - name:  medianSummary
       title: Median Survival Summary and Table
       # title: '`Median Survival Summary and Table - ${explanatory}`'
       type:  Preformatted
@@ -108,7 +119,7 @@ items:
 
 
 
-    - name:  uniTable
+    - name:  coxTable
       title: Cox Table
       # title: '`Cox Table- ${explanatory}`'
       type:  Table
@@ -126,6 +137,9 @@ items:
           type: text
         - name: 'HR_univariable'
           title: "HR (Univariable)"
+          type: text
+        - name: 'HR_multivariable'
+          title: "HR (Multivariable)"
           type: text
       clearWith:
           - explanatory
@@ -179,11 +193,13 @@ items:
           type: number
           format: pc
         - name: lower
-          title: "Lower 95% CI"
+          title: "Lower"
+          superTitle: '95% Confidence Interval'
           type: number
           format: pc
         - name: upper
-          title: "Upper 95% CI"
+          title: "Upper"
+          superTitle: '95% Confidence Interval'
           type: number
           format: pc
       clearWith:
@@ -209,17 +225,44 @@ items:
       visible: (pw)
 
 
-    - name:  text8
-      # title: '`Pairwise Comparison - ${explanatory}`'
-      title: ''
-      type:  Preformatted
+    # - name:  text8
+    #   # title: '`Pairwise Comparison - ${explanatory}`'
+    #   title: ''
+    #   type:  Preformatted
+    #   clearWith:
+    #       - explanatory
+    #       - outcome
+    #       - outcomeLevel
+    #       - overalltime
+    #       - pw
+    #   visible: (pw)
+
+
+
+    - name:  pairwiseTable
+      title: Pairwise Comparison Table
+      type:  Table
+      rows: 0
+      columns:
+        - name: rowname
+          title: "Levels"
+          type: text
+        - name: name
+          title: "Levels"
+          type: text
+        - name: value
+          title: p-value
+          type: number
+          format: zto,pvalue
+      visible: (pw)
       clearWith:
+          - pw
           - explanatory
           - outcome
           - outcomeLevel
           - overalltime
-          - pw
-      visible: (pw)
+
+
 
 
     - name: plot
@@ -237,7 +280,6 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
-
 
 
     - name: plot2
