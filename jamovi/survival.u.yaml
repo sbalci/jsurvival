@@ -150,14 +150,10 @@ children:
   - type: CollapseBox
     label: Plots
     collapsed: true
-    fitToGrid: true
     children:
       - type: Label
         label: Plots
-        margin: large
-        cell:
-          row: 1
-          column: 1
+        fitToGrid: true
         children:
           - type: LayoutBox
             fitToGrid: true
