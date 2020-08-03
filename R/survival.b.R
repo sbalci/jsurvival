@@ -71,6 +71,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
+            # Common Definitions ----
+
+
+            contin <- c("integer", "numeric", "double")
+
+
                 # Read Data ----
 
                 mydata <- self$data
@@ -136,7 +142,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-                # Define Survival ----
+                # Define Survival Time ----
 
 
                 if (!tint) {
@@ -161,7 +167,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 }
 
 
-                # Define Explanatory Factor ----
+                # Define =1 Explanatory Factor ----
 
 
 
@@ -172,8 +178,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 mydata[["myfactor"]] <- mydata[[expl]]
 
                 }
-
-
 
 
 
