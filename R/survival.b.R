@@ -273,7 +273,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                         dplyr::mutate(firstlevel = first(Levels)) %>%
                                         dplyr::mutate(
                                             coxdescription = glue::glue(
-                                                "When {Explanatory} is {Levels}, there is {HR_multivariable} times risk than when {Explanatory} is {firstlevel}."
+                                                "When {Explanatory} increases 1 unit, the hazard increases {HR_multivariable} times."
                                             )
                                         ) %>%
                                         dplyr::filter(HR_univariable != '-') %>%
