@@ -604,7 +604,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 self$results$pairwiseSummary$setContent(pairwiseSummary)
 
 
-                if ( length(self$options$explanatory) == 1 && n_level < 3 ) {
+                if ( length(self$options$explanatory) == 1 && dim(mypairwise2)[1] == 1 ) {
 
                 self$results$pairwiseTable$setVisible(FALSE)
 
