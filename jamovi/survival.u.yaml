@@ -34,7 +34,7 @@ children:
             maxItemCount: 2
             isTarget: true
       - type: TargetLayoutBox
-        label: continuous Explanatory Variable
+        label: Continuous Explanatory Variable
         children:
           - type: VariablesListBox
             name: contexpl
