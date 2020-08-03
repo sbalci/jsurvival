@@ -159,7 +159,7 @@ children:
           column: 1
         children:
           - type: LayoutBox
-            margin: small
+            margin: large
             children:
               - type: CheckBox
                 name: sc
@@ -167,9 +167,12 @@ children:
                 name: ce
               - type: CheckBox
                 name: ch
-      - type: LayoutBox
-        margin: large
+      - type: Label
+        label: Plot End Time
         children:
-          - type: TextBox
-            name: endplot
-            format: number
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: TextBox
+                name: endplot
+                format: number
