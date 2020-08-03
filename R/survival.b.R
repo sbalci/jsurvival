@@ -356,6 +356,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
+                        n_level <- dim(tCox_df)[1]
+
 
         #         # results 5 univariate survival explanation ----
         #
@@ -578,6 +580,15 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 title2 <- as.character(thefactor)
 
                 pairwiseTable$setTitle(paste0('Pairwise Comparisons ', thefactor))
+
+
+                if ( length(self$options$explanatory) == 1 && n_level < 3 ) {
+
+                self$results$pairwiseTable$setVisible(FALSE)
+
+                }
+
+
 
 
                 # mypairwise2 %>%
