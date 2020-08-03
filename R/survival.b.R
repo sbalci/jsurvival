@@ -181,6 +181,56 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
+                # Continious Explanatory ----
+                #
+                #
+                #
+                #                 if (length(self$options$explanatory) == 1 && inherits(self$options$explanatory, contin) ) {
+                #
+                #
+                #                     todo <- glue::glue("
+                #                                        <br>
+                #                                        Continious Explanatory
+                #                                        <br>
+                #                                        <hr>")
+                #                     html <- self$results$todo
+                #                     html$setContent(todo)
+                #
+                #                 # numeric optimal cut-off ----
+                #
+                #
+                #                 }
+                #
+                #
+                #                 if (length(self$options$explanatory) > 1 && inherits(self$options$explanatory, contin) ) {
+                #
+                #                     todo <- glue::glue("
+                #                         <br>Please use Multivariate Survival Analysis Cox-regression in jsurvival.
+                #                         <br>
+                #                         <hr>")
+                #                     html <- self$results$todo
+                #                     html$setContent(todo)
+                #
+                #                     stop("Please use Multivariate Survival Analysis Cox-regression in jsurvival")
+                #
+                #                 }
+                #
+                #
+                #
+                #
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 # One explanatory ----
 
@@ -402,55 +452,41 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-        #         # results 6 1,3,5-yr survival ----
-        #
-        #         utimes <- self$options$cutp
-        #
-        #         utimes <- strsplit(utimes, ",")
-        #         utimes <- purrr::reduce(utimes, as.vector)
-        #         utimes <- as.numeric(utimes)
-        #
-        #         # as.numeric(strsplit(utimes, ',')[[1]])
-        #
-        #         if (length(utimes) == 0) {
-        #         utimes <- c(12,36,60)
-        #         }
-        #
-        #         # self$results$deneme$setContent(utimes)
-        #
-        #         # utimes <- c(12,36,60)
-        #         km_fit_summary <- summary(km_fit, times = utimes
-        #                                       # c(12,36,60)
-        #                                   )
-        #
-        #         km_fit_df <- as.data.frame(km_fit_summary[c("strata", "time", "n.risk", "n.event", "surv", "std.err", "lower", "upper")])
-        #
-        #
-        #         km_fit_df[,1] <- gsub(pattern = "thefactor=",
-        #                               replacement = paste0(self$options$explanatory, " "),
-        #                               x = km_fit_df[,1])
-        #
-        #         # km_fit_df_html <- knitr::kable(km_fit_df,
-        #         #                                row.names = FALSE,
-        #         #                                align = c('l', rep('r', 7)),
-        #         #                                format = "html",
-        #         #                                digits = 2)
-        #
-        #
-        #         # results6 <- km_fit_df_html
-        #
-        #
-        #         # 1,3,5-yr survival Table ----
-        #
-        #
-        #         survTable <- self$results$survTable
-        #
-        #         data_frame <- km_fit_df
-        #         for(i in seq_along(data_frame[,1,drop=T])) {
-        #             survTable$addRow(rowKey = i, values = c(data_frame[i,]))
-        #         }
-        #
-        #         # results 7 1,3,5-yr survival summary ----
+
+
+
+                # survival table 1,3,5-yr survival ----
+
+                utimes <- self$options$cutp
+
+                utimes <- strsplit(utimes, ",")
+                utimes <- purrr::reduce(utimes, as.vector)
+                utimes <- as.numeric(utimes)
+
+                if (length(utimes) == 0) {
+                utimes <- c(12,36,60)
+                }
+
+                km_fit_summary <- summary(km_fit, times = utimes)
+
+                km_fit_df <- as.data.frame(km_fit_summary[c("strata", "time", "n.risk", "n.event", "surv", "std.err", "lower", "upper")])
+
+                km_fit_df[,1] <- gsub(pattern = "thefactor=",
+                                      replacement = paste0(self$options$explanatory, " "),
+                                      x = km_fit_df[,1])
+
+
+                survTable <- self$results$survTable
+
+                data_frame <- km_fit_df
+                for(i in seq_along(data_frame[,1,drop=T])) {
+                    survTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                }
+
+
+
+
+#         # results 7 1,3,5-yr survival summary ----
         #
         #         km_fit_df %>%
         #             dplyr::mutate(
@@ -473,6 +509,31 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         #
         #
         #
+
+#                     # >1 Explanatory results 7 1,3,5-yr survival summary ----
+#
+#                     km_fit_df %>%
+#                         dplyr::mutate(
+#                             description =
+#                                 glue::glue(
+#                                     "When {strata}, {time} month survival is {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]."
+#                                 )
+#                         ) %>%
+#                         dplyr::select(description) %>%
+#                         dplyr::pull() -> km_fit_definition
+#
+#                     results7 <- km_fit_definition
+#
+#                     self$results$text7$setContent(results7)
+#
+#
+#
+#
+#
+#
+
+
+
         # # results 8,9 pairwise comparison ----
         #
         #
@@ -539,91 +600,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         #
         #
         #
-        #         # Results ----
-        #         ## self$results$text1$setContent(results1)
-        #         # self$results$text1html$setContent(results1htmlresults)
-        #         self$results$text2$setContent(results2)
-        #         ## self$results$text3$setContent(results3)
-        #         # self$results$text4$setContent(results4)
-        #         self$results$text5$setContent(results5)
-        #         # self$results$text6$setContent(results6)
-        #         self$results$text7$setContent(results7)
-        #         # self$results$text8$setContent(results8)
-        #         self$results$text9$setContent(results9)
-        #
-        #
-        #
-        #
-        #
-        #
-        #
-        #
-        #
 
-
-
-
-
-#                     # >1 Explanatory results 6 1,3,5-yr survival ----
-#
-#                     utimes <- self$options$cutp
-#
-#                     utimes <- strsplit(utimes, ",")
-#                     utimes <- purrr::reduce(utimes, as.vector)
-#                     utimes <- as.numeric(utimes)
-#
-#                     # as.numeric(strsplit(utimes, ',')[[1]])
-#
-#                     if (length(utimes) == 0) {
-#                         utimes <- c(12,36,60)
-#                     }
-#
-#                     # self$results$deneme$setContent(utimes)
-#
-#                     # utimes <- c(12,36,60)
-#
-#                     km_fit_summary <- summary(km_fit, times = utimes
-#                                               # c(12,36,60)
-#                     )
-#
-#                     km_fit_df <- as.data.frame(km_fit_summary[c("strata", "time", "n.risk", "n.event", "surv", "std.err", "lower", "upper")])
-#
-#
-#                     km_fit_df[,1] <- gsub(pattern = "thefactor=",
-#                                           replacement = paste0(self$options$explanatory, " "),
-#                                           x = km_fit_df[,1])
-#
-#                     # >1 Explanatory 1,3,5-yr survival Table ----
-#
-#
-#                     survTable <- self$results$survTable
-#
-#                     data_frame <- km_fit_df
-#                     for(i in seq_along(data_frame[,1,drop=T])) {
-#                         survTable$addRow(rowKey = i, values = c(data_frame[i,]))
-#                     }
-#
-#                     # >1 Explanatory results 7 1,3,5-yr survival summary ----
-#
-#                     km_fit_df %>%
-#                         dplyr::mutate(
-#                             description =
-#                                 glue::glue(
-#                                     "When {strata}, {time} month survival is {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]."
-#                                 )
-#                         ) %>%
-#                         dplyr::select(description) %>%
-#                         dplyr::pull() -> km_fit_definition
-#
-#                     results7 <- km_fit_definition
-#
-#                     self$results$text7$setContent(results7)
-#
-#
-#
-#
-#
-#
 #                     # > 1 Explanatory Pairwise ----
 #
 #                     formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
@@ -678,56 +655,13 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 #
 #
 #
-#                     # >1 explanatory Prepare Data For Plots ----
-#
-#
-#                     mydata <- jmvcore::select(mydata, c(self$options$overalltime, Outcome, self$options$explanatory))
-#
-#                     plotData2 <- mydata
-#
-#                     image1b <- self$results$plot1b
-#                     image1b$setState(plotData2)
-#
-#
-#
-#
-#                 # Continious Explanatory ----
-#
-#
-#
-#                 if (length(self$options$explanatory) == 1 && inherits(self$options$explanatory, contin) ) {
-#
-#
-#                     todo <- glue::glue("
-#                                        <br>
-#                                        Continious Explanatory
-#                                        <br>
-#                                        <hr>")
-#                     html <- self$results$todo
-#                     html$setContent(todo)
-#
-#                 # numeric optimal cut-off ----
-#
-#
-#                 }
-#
-#
-#                 if (length(self$options$explanatory) > 1 && inherits(self$options$explanatory, contin) ) {
-#
-#                     todo <- glue::glue("
-#                         <br>Please use Multivariate Survival Analysis Cox-regression in jsurvival.
-#                         <br>
-#                         <hr>")
-#                     html <- self$results$todo
-#                     html$setContent(todo)
-#
-#                     stop("Please use Multivariate Survival Analysis Cox-regression in jsurvival")
-#
-#                 }
-#
-#
-#
-#
+
+
+
+
+
+
+
 
 
 
