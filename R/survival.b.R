@@ -402,7 +402,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 results5 <- data_frame %>%
                     split(.$Explanatory) %>%
-                    purrr::map(.x = c(1:(n_level - 1)), .f = tCox_descr2)
+                    purrr::map(.f = summary)
 
 
 
