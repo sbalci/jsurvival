@@ -685,7 +685,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     plotData <- image$state
 
-
     thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
 
     title2 <- as.character(thefactor)
@@ -715,62 +714,51 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-# # https://rpkgs.datanovia.com/survminer/survminer_cheatsheet.pdf
-# ,
-# .plot2 = function(image2, ggtheme, theme, ...) {  # <-- the plot function ----
-#
-#
-#     ce <- self$options$ce
-#
-#     if(!ce)
-#         return()
-#
-#     if (nrow(self$data) == 0)
-#         stop('Data contains no (complete) rows')
-#
-#     if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
-#         return()
-#
-#     if (length(self$options$explanatory) > 1)
-#         stop('Use one explanatory variable')
-#
-#     plotData <- image2$state
-#
-#
-#
-#     formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
-#
-#     formula2 <- jmvcore::composeTerm(formula2)
-#
-#     formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
-#
-#     formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
-#
-#     myformula <- paste("survival::Surv(", formulaL, ",", formulaR, ")")
-#
-#
-#     plot2 <- plotData %>%
-#         finalfit::surv_plot(.data = .,
-#                             dependent = myformula,
-#                             explanatory = formula2,
-#                             xlab = paste0('Time (', self$options$timetypeoutput, ')'),
-#                             # pval = TRUE,
-#                             legend = 'none',
-#                             break.time.by = 12,
-#                             xlim = c(0,60),
-#                             title = paste0("Cumulative Events ", self$options$explanatory)
-#                             # subtitle = "Based on Kaplan-Meier estimates",
-#                             , fun = "event"
-#
-#         )
-#
-#
-#     print(plot2)
-#     TRUE
-#
-#
-#
-# }
+# https://rpkgs.datanovia.com/survminer/survminer_cheatsheet.pdf
+,
+.plot2 = function(image2, ggtheme, theme, ...) {  # <-- the plot function ----
+
+
+    ce <- self$options$ce
+
+    if(!ce)
+        return()
+
+    if (nrow(self$data) == 0)
+        stop('Data contains no (complete) rows')
+
+    if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
+        return()
+
+    plotData <- image2$state
+
+
+    thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
+
+    title2 <- as.character(thefactor)
+
+
+    plot2 <- plotData %>%
+        finalfit::surv_plot(.data = .,
+                            dependent = 'survival::Surv(mytime, myoutcome)',
+                            explanatory = as.vector(self$options$explanatory),
+                            xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+                            # pval = TRUE,
+                            legend = 'none',
+                            break.time.by = 12,
+                            xlim = c(0,60),
+                            title = paste0("Cumulative Events ", title2)
+                            # subtitle = "Based on Kaplan-Meier estimates",
+                            , fun = "event"
+        )
+
+
+    print(plot2)
+    TRUE
+
+
+
+}
 
 
 
