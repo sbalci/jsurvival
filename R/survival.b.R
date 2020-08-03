@@ -406,7 +406,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-
+                coxSummary <- unlist(results5)
+                self$results$coxSummary$setContent(coxSummary)
 
 
 
