@@ -503,81 +503,30 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 pairwiseTable$setTitle(paste0('Pairwise Comparisons ', title2))
 
 
+                mypairwise2 %>%
+                    dplyr::mutate(description =
+                                      glue::glue(
+                                          "The difference between ",
+                                          " {rowname} and {name}",
+                                          " has a p-value of {format.pval(value, digits = 3, eps = 0.001)}."
+                                          )
+                                  ) %>%
+                    dplyr::pull(description) -> pairwiseSummary
+
+                pairwiseSummary <- unlist(pairwiseSummary)
+
+
+                self$results$pairwiseSummary$setContent(pairwiseSummary)
+
+
                 if ( length(self$options$explanatory) == 1 && n_level < 3 ) {
 
                 self$results$pairwiseTable$setVisible(FALSE)
 
-
                 pairwiseSummary <- "No pairwise comparison when explanatory variable has < 3 levels."
                 self$results$pairwiseSummary$setContent(pairwiseSummary)
 
-
                 }
-
-
-
-
-                # mypairwise2 %>%
-                #     dplyr::mutate(description =
-                #                       glue::glue(
-                #                           "The comparison between ",
-                #                           self$options$explanatory,
-                #                           " {rowname} and ",
-                #                           self$options$explanatory,
-                #                           " {name} has a p-value of {format.pval(value, digits = 3, eps = 0.001)}."
-                #                           )
-                #                   ) %>%
-                #     dplyr::select(description) %>%
-                #     dplyr::pull() -> mypairwisedescription
-                #
-                #     mypairwisedescription <- unlist(mypairwisedescription)
-                #
-                #     mypairwisedescription <- paste0(
-                #         "In the pairwise comparison of ",
-                #         self$options$explanatory,
-                #         ":\n",
-                #         mypairwisedescription,
-                #         "\n"
-                #         )
-                #
-                #     results9 <- mypairwisedescription
-                #
-                # }
-
-
-
-                    # mypairwise2 <- as.data.frame(results8[["p.value"]]) %>%
-                    #     tibble::rownames_to_column()
-                    # mypairwise2 %>%
-                    #     tidyr::pivot_longer(cols = -rowname) %>%
-                    #     dplyr::filter(complete.cases(.)) %>%
-                    #     dplyr::mutate(description =
-                    #                       glue::glue(
-                    #                           "The comparison between ", self$options$explanatory, " {rowname} and ", self$options$explanatory," {name} has a p-value of {format.pval(value, digits = 3, eps = 0.001)}."
-                    #                       )
-                    #     ) %>%
-                    #     dplyr::select(description) %>%
-                    #     dplyr::pull() -> mypairwisedescription
-                    #
-                    # mypairwisedescription <- unlist(mypairwisedescription)
-                    #
-                    # mypairwisedescription <- paste0(
-                    #     "In the pairwise comparison of ", self$options$explanatory, ":\n",
-                    #     mypairwisedescription, "\n")
-                    #
-                    # results9 <- mypairwisedescription
-                    # self$results$text9$setContent(results9)
-
-
-
-
-
-
-
-
-
-
-
 
 
 
