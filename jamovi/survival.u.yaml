@@ -167,9 +167,9 @@ children:
                 name: ce
               - type: CheckBox
                 name: ch
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: TextBox
-        name: endplot
-        format: number
+          - type: LayoutBox
+            margin: small
+            children:
+              - type: TextBox
+                name: endplot
+                format: number
