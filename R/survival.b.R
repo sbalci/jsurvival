@@ -367,7 +367,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                         "when ",
                         as.vector(self$options$explanatory)[1],
                         " is ",
-                        data_frame$Levels[n],
+                        data_frame$Levels[1],
                         "."
                     )
                 }
