@@ -181,6 +181,17 @@ children:
     collapsed: true
     children:
       - type: Label
+        label: Continuous Explanatory Variable
+        fitToGrid: true
+        children:
+          - type: TargetLayoutBox
+            label: Continuous Explanatory Variable
+            children:
+              - type: VariablesListBox
+                name: contexpl
+                maxItemCount: 1
+                isTarget: true
+      - type: Label
         label: Cut-off
         fitToGrid: true
         children:
@@ -190,10 +201,3 @@ children:
               - type: CheckBox
                 name: findcut
                 enable: (contexpl)
-      - type: TargetLayoutBox
-        label: Continuous Explanatory Variable
-        children:
-          - type: VariablesListBox
-            name: contexpl
-            maxItemCount: 1
-            isTarget: true
