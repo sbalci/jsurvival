@@ -349,64 +349,44 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     coxTable$addRow(rowKey = i, values = c(data_frame[i,]))
                 }
 
-                n_level <- dim(tCox_df)[1]
-
 
                 # coxTable explanation ----
 
 
-                tCox_descr <- function(n) {
-                    paste0(
-                        "When ",
-                        as.vector(self$options$explanatory)[1],
-                        " is ",
-                        data_frame$Levels[n + 1],
-                        ", there is ",
-                        data_frame$HR_multivariable[n + 1],
-                        " times risk than ",
-                        "when ",
-                        as.vector(self$options$explanatory)[1],
-                        " is ",
-                        data_frame$Levels[1],
-                        "."
-                    )
+                tCox_df <- tibble::as_tibble(tCox, .name_repair = "minimal") %>%
+                    janitor::clean_names(dat = ., case = "snake")
+
+                names(tCox_df) <- names(data_frame) <- c(
+                    "Explanatory",
+                    "Levels",
+                    "all",
+                    "HR_univariable",
+                    "HR_multivariable"
+                )
+
+
+                # https://stackoverflow.com/questions/38470355/r-fill-empty-cell-with-value-of-last-non-empty-cell
+
+                while(length(ind <- which(tCox_df$Explanatory == "")) > 0){
+                    tCox_df$Explanatory[ind] <- tCox_df$Explanatory[ind - 1]
                 }
 
-                if ( length(self$options$explanatory) == 1 && n_level < 3 ) {
+                # https://stackoverflow.com/questions/51180290/mutate-by-group-in-r
 
-                results5 <- purrr::map(.x = c(1:(n_level - 1)), .f = tCox_descr)
-                coxSummary <- unlist(results5)
-                self$results$coxSummary$setContent(coxSummary)
-
-                }
-
-
-                tCox_descr2 <- function(n) {
-                    paste0(
-                        "When ",
-                        as.vector(self$options$explanatory)[1],
-                        " is ",
-                        .$Levels[n + 1],
-                        ", there is ",
-                        .$HR_multivariable[n + 1],
-                        " times risk than ",
-                        "when ",
-                        as.vector(self$options$explanatory)[1],
-                        " is ",
-                        .$Levels[1],
-                        "."
-                    )
-                }
+                tCox_df %>%
+                    dplyr::group_by(Explanatory) %>%
+                    dplyr::mutate(firstlevel = first(Levels)) %>%
+                    dplyr::mutate(
+                        coxdescription = glue::glue(
+                            "When {Explanatory} is {Levels}, there is {HR_multivariable} times risk than when {Explanatory} is {firstlevel}."
+                        )
+                    ) %>%
+                    dplyr::filter(HR_univariable != '-') %>%
+                    dplyr::pull(coxdescription) -> coxSummary
 
 
 
-                results5 <- data_frame %>%
-                    split(.$Explanatory) %>%
-                    purrr::map(.f = dim)
-
-
-
-                coxSummary <- unlist(results5)
+                coxSummary <- unlist(coxSummary)
                 self$results$coxSummary$setContent(coxSummary)
 
 
