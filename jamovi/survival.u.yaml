@@ -150,6 +150,7 @@ children:
   - type: CollapseBox
     label: Plots
     collapsed: true
+    fitToGrid: true
     children:
       - type: Label
         label: Plots
@@ -159,7 +160,7 @@ children:
           column: 1
         children:
           - type: LayoutBox
-            margin: large
+            fitToGrid: true
             children:
               - type: CheckBox
                 name: sc
@@ -171,7 +172,7 @@ children:
         label: Plot End Time
         children:
           - type: LayoutBox
-            margin: large
+            fitToGrid: true
             children:
               - type: TextBox
                 name: endplot
