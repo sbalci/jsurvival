@@ -314,21 +314,21 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                                     stop("Please use Multivariate Survival Analysis Cox-regression in jsurvival")
 
-                                    todo <- glue::glue("
-                                        <br>Please use Multivariate Survival Analysis Cox-regression in jsurvival.
-                                        <br>
-                                        <hr>")
-                                    html <- self$results$todo
-                                    html$setContent(todo)
-
-
-                                    # Disable other tables
-                                    self$results$medianSummary$setVisible(FALSE)
-                                    self$results$medianTable$setVisible(FALSE)
-                                    self$results$survTableSummary$setVisible(FALSE)
-                                    self$results$survTable$setVisible(FALSE)
-                                    self$results$pairwiseSummary$setVisible(FALSE)
-                                    self$results$pairwiseTable$setVisible(FALSE)
+                                    # todo <- glue::glue("
+                                    #     <br>Please use Multivariate Survival Analysis Cox-regression in jsurvival.
+                                    #     <br>
+                                    #     <hr>")
+                                    # html <- self$results$todo
+                                    # html$setContent(todo)
+                                    #
+                                    #
+                                    # # Disable other tables
+                                    # self$results$medianSummary$setVisible(FALSE)
+                                    # self$results$medianTable$setVisible(FALSE)
+                                    # self$results$survTableSummary$setVisible(FALSE)
+                                    # self$results$survTable$setVisible(FALSE)
+                                    # self$results$pairwiseSummary$setVisible(FALSE)
+                                    # self$results$pairwiseTable$setVisible(FALSE)
 
                                     }
                                 }
