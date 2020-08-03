@@ -336,7 +336,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # Cox-Regression Table ----
 
-                tCox_df <- tCox_df[,-(dim(tCox_df)[2])]
+                # tCox_df <- tCox_df[,-(dim(tCox_df)[2])]
 
                 coxTable <- self$results$coxTable
 
