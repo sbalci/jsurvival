@@ -175,7 +175,7 @@ options:
 
     - name: endplot
       title: Plot End Time
-      type: String
+      type: Integer
       default: 60
 
     - name: findcut

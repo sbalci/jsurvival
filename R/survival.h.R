@@ -25,7 +25,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             sc = FALSE,
             ce = FALSE,
             ch = FALSE,
-            endplot = NULL,
+            endplot = 60,
             findcut = FALSE,
             multievent = FALSE, ...) {
 
@@ -142,9 +142,10 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "ch",
                 ch,
                 default=FALSE)
-            private$..endplot <- jmvcore::OptionString$new(
+            private$..endplot <- jmvcore::OptionInteger$new(
                 "endplot",
-                endplot)
+                endplot,
+                default=60)
             private$..findcut <- jmvcore::OptionBool$new(
                 "findcut",
                 findcut,
@@ -595,7 +596,7 @@ survival <- function(
     sc = FALSE,
     ce = FALSE,
     ch = FALSE,
-    endplot,
+    endplot = 60,
     findcut = FALSE,
     multievent = FALSE) {
 

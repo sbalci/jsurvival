@@ -25,7 +25,7 @@ survival(
   sc = FALSE,
   ce = FALSE,
   ch = FALSE,
-  endplot,
+  endplot = 60,
   findcut = FALSE,
   multievent = FALSE
 )
