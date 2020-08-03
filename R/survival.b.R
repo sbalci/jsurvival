@@ -300,7 +300,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # error for >1 continious explanatory
 
-                                if (length(self$options$explanatory) > 1 && inherits(mydata[["myfactor"]], contin) ) {
+                                if (length(self$options$explanatory) > 1 && inherits(mydata[[self$options$explanatory]], contin) ) {
 
                                     stop("Please use Multivariate Survival Analysis Cox-regression in jsurvival")
 
