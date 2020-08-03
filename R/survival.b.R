@@ -330,7 +330,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                     self$results$pairwiseSummary$setVisible(FALSE)
                                     self$results$pairwiseTable$setVisible(FALSE)
 
-                                    return()
                                     }
                                 }
 
