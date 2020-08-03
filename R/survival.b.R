@@ -762,60 +762,47 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-# ,
-# .plot3 = function(image3, ggtheme, theme, ...) {  # <-- the plot function ----
-#
-#
-#     ch <- self$options$ch
-#
-#     if(!ch)
-#         return()
-#
-#     if (nrow(self$data) == 0)
-#         stop('Data contains no (complete) rows')
-#
-#     if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
-#         return()
-#
-#
-#     if (length(self$options$explanatory) > 1)
-#         stop('Use one explanatory variable')
-#
-#     plotData <- image3$state
-#
-#
-#
-#     formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
-#
-#     formula2 <- jmvcore::composeTerm(formula2)
-#
-#     formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
-#
-#     formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
-#
-#     myformula <- paste("survival::Surv(", formulaL, ",", formulaR, ")")
-#
-#
-#
-#     plot3 <- plotData %>%
-#         finalfit::surv_plot(.data = .,
-#                             dependent = myformula,
-#                             explanatory = formula2,
-#                             xlab = paste0('Time (', self$options$timetypeoutput, ')'),
-#                             # pval = TRUE,
-#                             legend = 'none',
-#                             break.time.by = 12,
-#                             xlim = c(0,60),
-#                             title = paste0("Cumulative Hazard ", self$options$explanatory),
-#                             # subtitle = "Based on Kaplan-Meier estimates"
-#                             fun = "cumhaz"
-#         )
-#
-#
-#     print(plot3)
-#     TRUE
-# }
-#
+,
+.plot3 = function(image3, ggtheme, theme, ...) {  # <-- the plot function ----
+
+
+    ch <- self$options$ch
+
+    if(!ch)
+        return()
+
+    if (nrow(self$data) == 0)
+        stop('Data contains no (complete) rows')
+
+    if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
+        return()
+
+    plotData <- image3$state
+
+    thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
+
+    title2 <- as.character(thefactor)
+
+
+
+    plot3 <- plotData %>%
+        finalfit::surv_plot(.data = .,
+                            dependent = 'survival::Surv(mytime, myoutcome)',
+                            explanatory = as.vector(self$options$explanatory),
+                            xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+                            # pval = TRUE,
+                            legend = 'none',
+                            break.time.by = 12,
+                            xlim = c(0,60),
+                            title = paste0("Cumulative Hazard ", title2),
+                            fun = "cumhaz"
+        )
+
+
+    print(plot3)
+    TRUE
+}
+
 
 
         )
