@@ -61,7 +61,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "nominal"),
                 permitted=list(
                     "factor"))
-            private$..contexpl <- jmvcore::OptionVariables$new(
+            private$..contexpl <- jmvcore::OptionVariable$new(
                 "contexpl",
                 contexpl,
                 suggested=list(

@@ -64,8 +64,8 @@ options:
       permitted: [ factor ]
 
     - name: contexpl
-      title: continuous Explanatory Variable
-      type: Variables
+      title: Continuous Explanatory Variable
+      type: Variable
       suggested: [ continuous ]
       permitted: [ numeric ]
 
