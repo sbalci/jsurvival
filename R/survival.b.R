@@ -774,7 +774,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     if (nrow(self$data) == 0)
         stop('Data contains no (complete) rows')
 
-    if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
+    if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
         return()
 
     plotData <- image3$state
