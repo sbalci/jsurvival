@@ -380,9 +380,29 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 }
 
+
+                tCox_descr2 <- function(n) {
+                    paste0(
+                        "When ",
+                        as.vector(self$options$explanatory)[1],
+                        " is ",
+                        .$Levels[n + 1],
+                        ", there is ",
+                        .$HR_multivariable[n + 1],
+                        " times risk than ",
+                        "when ",
+                        as.vector(self$options$explanatory)[1],
+                        " is ",
+                        .$Levels[1],
+                        "."
+                    )
+                }
+
+
+
                 results5 <- data_frame %>%
                     split(.$Explanatory) %>%
-                    purrr::map(.x = c(1:(n_level - 1)), .f = tCox_descr)
+                    purrr::map(.x = c(1:(n_level - 1)), .f = tCox_descr2)
 
 
 
