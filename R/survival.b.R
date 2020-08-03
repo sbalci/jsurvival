@@ -374,7 +374,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 #                     #     split(.$Explanatory) %>%
 
-                results5 <- purrr::map(.x = c(2:n_level), .f = tCox_descr)
+                results5 <- purrr::map(.x = c(1:(n_level-1)), .f = tCox_descr)
 
                 coxSummary <- unlist(results5)
 
