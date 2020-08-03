@@ -125,7 +125,7 @@ items:
           - overalltime
 
 
-    - name:  text7
+    - name:  survTableSummary
       title: '1, 3, 5-yr Survival Summary and Table'
       # title: '`1, 3, 5-yr Survival Summary and Table  - ${explanatory}`'
       type:  Preformatted

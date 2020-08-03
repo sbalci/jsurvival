@@ -235,7 +235,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         medianTable = function() private$.items[["medianTable"]],
         coxSummary = function() private$.items[["coxSummary"]],
         coxTable = function() private$.items[["coxTable"]],
-        text7 = function() private$.items[["text7"]],
+        survTableSummary = function() private$.items[["survTableSummary"]],
         survTable = function() private$.items[["survTable"]],
         pairwiseSummary = function() private$.items[["pairwiseSummary"]],
         pairwiseTable = function() private$.items[["pairwiseTable"]],
@@ -367,7 +367,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "overalltime")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
-                name="text7",
+                name="survTableSummary",
                 title="1, 3, 5-yr Survival Summary and Table",
                 clearWith=list(
                     "explanatory",
@@ -559,7 +559,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$coxSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$coxTable} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$survTableSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$pairwiseSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$pairwiseTable} \tab \tab \tab \tab \tab a table \cr

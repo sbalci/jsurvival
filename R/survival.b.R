@@ -443,51 +443,21 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-#         # results 7 1,3,5-yr survival summary ----
-        #
-        #         km_fit_df %>%
-        #             dplyr::mutate(
-        #                 description =
-        #                     glue::glue(
-        #                         "When {strata}, {time} month survival is {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]."
-        #                     )
-        #             ) %>%
-        #             dplyr::select(description) %>%
-        #             dplyr::pull() -> km_fit_definition
-        #
-        #         results7 <- km_fit_definition
-        #
-        #
-        #
-        #
-        #
-        #
-        #
-        #
-        #
-        #
+        # survTableSummary 1,3,5-yr survival summary ----
 
-#                     # >1 Explanatory results 7 1,3,5-yr survival summary ----
-#
-#                     km_fit_df %>%
-#                         dplyr::mutate(
-#                             description =
-#                                 glue::glue(
-#                                     "When {strata}, {time} month survival is {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]."
-#                                 )
-#                         ) %>%
-#                         dplyr::select(description) %>%
-#                         dplyr::pull() -> km_fit_definition
-#
-#                     results7 <- km_fit_definition
-#
-#                     self$results$text7$setContent(results7)
-#
-#
-#
-#
-#
-#
+        km_fit_df %>%
+            dplyr::mutate(
+                description =
+                    glue::glue(
+                        "When {strata}, {time} month survival is {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]."
+                    )
+            ) %>%
+            dplyr::select(description) %>%
+            dplyr::pull() -> survTableSummary
+
+
+
+            self$results$survTableSummary$setContent(survTableSummary)
 
 
 
@@ -613,7 +583,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # View mydata ----
 
-                self$results$mydataview$setContent(head(mydata, 20))
+                # self$results$mydataview$setContent(head(mydata, 20))
 
 
 
