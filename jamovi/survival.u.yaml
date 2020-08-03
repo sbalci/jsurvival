@@ -120,6 +120,7 @@ children:
             children:
               - type: CheckBox
                 name: findcut
+                enable: (contexpl)
   - type: CollapseBox
     label: Analysis Type
     collapsed: true
@@ -132,6 +133,7 @@ children:
             children:
               - type: ComboBox
                 name: analysistype
+                enable: (!contexpl)
   - type: CollapseBox
     label: Survival Tables
     collapsed: true
@@ -143,6 +145,7 @@ children:
             name: cutp
             format: string
             width: large
+            enable: (!contexpl)
   - type: CollapseBox
     label: Pairwise Comparisons
     collapsed: true
@@ -155,6 +158,7 @@ children:
             children:
               - type: CheckBox
                 name: pw
+                enable: (!contexpl)
   - type: CollapseBox
     label: Plots
     collapsed: true
@@ -168,10 +172,13 @@ children:
             children:
               - type: CheckBox
                 name: sc
+                enable: (!contexpl)
               - type: CheckBox
                 name: ce
+                enable: (!contexpl)
               - type: CheckBox
                 name: ch
+                enable: (!contexpl)
       - type: Label
         label: Plot End Time
         children:

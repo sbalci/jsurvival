@@ -12,7 +12,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             # Initial Message ----
 
-            if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) ) {
+            if (is.null(self$options$outcome) || is.null(self$options$elapsedtime) ) {
 
                 todo <- glue::glue("
                 <br>Welcome to ClinicoPath
@@ -40,6 +40,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             }
 
 
+
+
             if (length(self$options$explanatory) > 1) {
 
 
@@ -61,10 +63,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 if (nrow(self$data) == 0)
                     stop('Data contains no (complete) rows')
 
+            if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
 
-                # Common Definitions ----
+                stop("Please use Multivariate Survival Analysis in jsurvival.")
 
-                contin <- c("integer", "numeric", "double")
+            }
 
 
 
@@ -80,6 +83,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 elapsedtime <- self$options$elapsedtime
                 outcome <- self$options$outcome
                 explanatory <- self$options$explanatory
+                contexpl <- self$options$contexpl
+
 
                 outcomeLevel <- self$options$outcomeLevel
 
@@ -184,7 +189,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 # Continious Explanatory ----
 
 
-                if (length(self$options$explanatory) == 1 && inherits(mydata[["myfactor"]], contin) ) {
+                if ( !is.null(self$options$contexpl) ) {
 
 
                                     todo <- glue::glue("
@@ -211,7 +216,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                     # Continious Cox Regression ----
 
 
-                                    formula2 <- as.vector(self$options$explanatory)
+                                    formula2 <- as.vector(self$options$contexpl)
 
                                     myformula <- paste("Surv(", "mytime", "," , "myoutcome", ")")
 
@@ -651,6 +656,13 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     if (nrow(self$data) == 0)
     stop('Data contains no (complete) rows')
 
+    if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
+
+        stop("Please use Multivariate Survival Analysis in jsurvival.")
+
+    }
+
+
     if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
         return()
 
@@ -696,6 +708,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     if (nrow(self$data) == 0)
         stop('Data contains no (complete) rows')
+
+    if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
+
+        stop("Please use Multivariate Survival Analysis in jsurvival.")
+
+    }
 
     if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
         return()
@@ -743,6 +761,13 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     if (nrow(self$data) == 0)
         stop('Data contains no (complete) rows')
+
+    if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
+
+        stop("Please use Multivariate Survival Analysis in jsurvival.")
+
+    }
+
 
     if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
         return()
