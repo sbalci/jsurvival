@@ -577,7 +577,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 title2 <- as.character(thefactor)
 
-                pairwiseTable$setTitle(paste0('Pairwise Comparisons', thefactor))
+                pairwiseTable$setTitle(paste0('Pairwise Comparisons ', thefactor))
 
 
                 # mypairwise2 %>%
@@ -689,7 +689,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     title2 <- as.character(thefactor)
 
-
     plot <- plotData %>%
         finalfit::surv_plot(.data = .,
                             dependent = 'survival::Surv(mytime, myoutcome)',
@@ -698,7 +697,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             pval = TRUE,
                             legend = 'none',
                             break.time.by = 12,
-                            xlim = c(0,60),
+                            xlim = c(0,self$options$endplot),
                             title = paste0("Survival curves for ", title2),
                             subtitle = "Based on Kaplan-Meier estimates"
         )

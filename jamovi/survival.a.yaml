@@ -176,6 +176,7 @@ options:
     - name: endplot
       title: Plot End Time
       type: String
+      default: 60
 
     - name: findcut
       title: Cut-off for Continious Explanatory
