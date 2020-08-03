@@ -25,7 +25,7 @@ children:
             fitToGrid: true
           - type: LevelSelector
             name: outcomeLevel
-            enable: (outcome)
+            enable: (outcome && !multievent)
       - type: TargetLayoutBox
         label: Explanatory Variable(s)
         children:
