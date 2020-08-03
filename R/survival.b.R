@@ -204,6 +204,88 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                     self$results$pairwiseSummary$setVisible(FALSE)
                                     self$results$pairwiseTable$setVisible(FALSE)
 
+
+
+
+
+                                    # Continious Cox Regression ----
+
+
+                                    formula2 <- as.vector(self$options$explanatory)
+
+                                    myformula <- paste("Surv(", "mytime", "," , "myoutcome", ")")
+
+                                    finalfit::finalfit(.data = mydata,
+                                                       dependent = myformula,
+                                                       explanatory = formula2
+
+                                                       # metrics = TRUE
+                                    ) -> tCox
+
+                                    tCox_df <- tibble::as_tibble(tCox, .name_repair = "minimal") %>%
+                                        janitor::clean_names(dat = ., case = "snake")
+
+
+                                    # Continious Cox-Regression Table ----
+
+                                    coxTable <- self$results$coxTable
+
+                                    data_frame <- tCox_df
+
+                                    names(data_frame) <- c(
+                                        "Explanatory",
+                                        "Levels",
+                                        "all",
+                                        "HR_univariable",
+                                        "HR_multivariable"
+                                    )
+
+                                    for(i in seq_along(data_frame[,1,drop=T])) {
+                                        coxTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                                    }
+
+
+                                    # Continious coxTable explanation ----
+
+
+                                    tCox_df <- tibble::as_tibble(tCox, .name_repair = "minimal") %>%
+                                        janitor::clean_names(dat = ., case = "snake")
+
+                                    names(tCox_df) <- names(data_frame) <- c(
+                                        "Explanatory",
+                                        "Levels",
+                                        "all",
+                                        "HR_univariable",
+                                        "HR_multivariable"
+                                    )
+
+
+                                    # https://stackoverflow.com/questions/38470355/r-fill-empty-cell-with-value-of-last-non-empty-cell
+
+                                    while(length(ind <- which(tCox_df$Explanatory == "")) > 0){
+                                        tCox_df$Explanatory[ind] <- tCox_df$Explanatory[ind - 1]
+                                    }
+
+                                    # https://stackoverflow.com/questions/51180290/mutate-by-group-in-r
+
+                                    tCox_df %>%
+                                        dplyr::group_by(Explanatory) %>%
+                                        dplyr::mutate(firstlevel = first(Levels)) %>%
+                                        dplyr::mutate(
+                                            coxdescription = glue::glue(
+                                                "When {Explanatory} is {Levels}, there is {HR_multivariable} times risk than when {Explanatory} is {firstlevel}."
+                                            )
+                                        ) %>%
+                                        dplyr::filter(HR_univariable != '-') %>%
+                                        dplyr::pull(coxdescription) -> coxSummary
+
+
+
+                                    coxSummary <- unlist(coxSummary)
+                                    self$results$coxSummary$setContent(coxSummary)
+
+
+
                                     return()
 
 
