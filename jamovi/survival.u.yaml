@@ -170,6 +170,6 @@ children:
   - type: LayoutBox
     margin: large
     children:
-      - type: Integer
+      - type: TextBox
         name: endplot
-        default: 60
+        format: number
