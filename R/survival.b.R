@@ -184,7 +184,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 # Continious Explanatory ----
 
 
-                if (length(self$options$explanatory) == 1 && inherits(self$options$explanatory, contin) ) {
+                if (length(self$options$explanatory) == 1 && inherits(mydata[["myfactor"]], contin) ) {
 
 
                                     todo <- glue::glue("
