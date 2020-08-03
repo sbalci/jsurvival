@@ -11,6 +11,7 @@ survival(
   dxdate,
   fudate,
   explanatory,
+  contexpl,
   outcome,
   outcomeLevel,
   dod,
@@ -42,6 +43,8 @@ survival(
 \item{fudate}{.}
 
 \item{explanatory}{.}
+
+\item{contexpl}{.}
 
 \item{outcome}{.}
 

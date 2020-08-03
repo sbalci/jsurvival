@@ -60,9 +60,14 @@ options:
     - name: explanatory
       title: Explanatory Variable
       type: Variables
-      suggested: [ ordinal, nominal, continuous ]
-      permitted: [ factor, numeric ]
+      suggested: [ ordinal, nominal ]
+      permitted: [ factor ]
 
+    - name: contexpl
+      title: continuous Explanatory Variable
+      type: Variables
+      suggested: [ continuous ]
+      permitted: [ numeric ]
 
     - name: outcome
       title: 'Outcome'

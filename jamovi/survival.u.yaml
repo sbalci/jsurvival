@@ -75,6 +75,16 @@ children:
             children:
               - type: ComboBox
                 name: timetypeoutput
+  - type: VariableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: continuous Explanatory Variable
+        children:
+          - type: VariablesListBox
+            name: contexpl
+            isTarget: true
   - type: CollapseBox
     label: Outcome Options
     collapsed: true

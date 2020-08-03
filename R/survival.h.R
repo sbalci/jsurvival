@@ -11,6 +11,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             dxdate = NULL,
             fudate = NULL,
             explanatory = NULL,
+            contexpl = NULL,
             outcome = NULL,
             outcomeLevel = NULL,
             dod = NULL,
@@ -57,10 +58,15 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 explanatory,
                 suggested=list(
                     "ordinal",
-                    "nominal",
+                    "nominal"),
+                permitted=list(
+                    "factor"))
+            private$..contexpl <- jmvcore::OptionVariables$new(
+                "contexpl",
+                contexpl,
+                suggested=list(
                     "continuous"),
                 permitted=list(
-                    "factor",
                     "numeric"))
             private$..outcome <- jmvcore::OptionVariable$new(
                 "outcome",
@@ -160,6 +166,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..dxdate)
             self$.addOption(private$..fudate)
             self$.addOption(private$..explanatory)
+            self$.addOption(private$..contexpl)
             self$.addOption(private$..outcome)
             self$.addOption(private$..outcomeLevel)
             self$.addOption(private$..dod)
@@ -184,6 +191,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         dxdate = function() private$..dxdate$value,
         fudate = function() private$..fudate$value,
         explanatory = function() private$..explanatory$value,
+        contexpl = function() private$..contexpl$value,
         outcome = function() private$..outcome$value,
         outcomeLevel = function() private$..outcomeLevel$value,
         dod = function() private$..dod$value,
@@ -207,6 +215,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..dxdate = NA,
         ..fudate = NA,
         ..explanatory = NA,
+        ..contexpl = NA,
         ..outcome = NA,
         ..outcomeLevel = NA,
         ..dod = NA,
@@ -524,6 +533,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param dxdate .
 #' @param fudate .
 #' @param explanatory .
+#' @param contexpl .
 #' @param outcome .
 #' @param outcomeLevel .
 #' @param dod .
@@ -571,6 +581,7 @@ survival <- function(
     dxdate,
     fudate,
     explanatory,
+    contexpl,
     outcome,
     outcomeLevel,
     dod,
@@ -596,6 +607,7 @@ survival <- function(
     if ( ! missing(dxdate)) dxdate <- jmvcore::resolveQuo(jmvcore::enquo(dxdate))
     if ( ! missing(fudate)) fudate <- jmvcore::resolveQuo(jmvcore::enquo(fudate))
     if ( ! missing(explanatory)) explanatory <- jmvcore::resolveQuo(jmvcore::enquo(explanatory))
+    if ( ! missing(contexpl)) contexpl <- jmvcore::resolveQuo(jmvcore::enquo(contexpl))
     if ( ! missing(outcome)) outcome <- jmvcore::resolveQuo(jmvcore::enquo(outcome))
     if (missing(data))
         data <- jmvcore::marshalData(
@@ -604,8 +616,10 @@ survival <- function(
             `if`( ! missing(dxdate), dxdate, NULL),
             `if`( ! missing(fudate), fudate, NULL),
             `if`( ! missing(explanatory), explanatory, NULL),
+            `if`( ! missing(contexpl), contexpl, NULL),
             `if`( ! missing(outcome), outcome, NULL))
 
+    for (v in explanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- survivalOptions$new(
         elapsedtime = elapsedtime,
@@ -613,6 +627,7 @@ survival <- function(
         dxdate = dxdate,
         fudate = fudate,
         explanatory = explanatory,
+        contexpl = contexpl,
         outcome = outcome,
         outcomeLevel = outcomeLevel,
         dod = dod,
