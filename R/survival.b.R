@@ -298,43 +298,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-                # error for >1 continious explanatory ----
 
-                                if (length(self$options$explanatory) > 1) {
-
-                                    expl <- as.vector(self$options$explanatory)
-
-                                    mydata[["myfactor1"]] <- mydata[[expl]][1]
-
-                                    mydata[["myfactor2"]] <- mydata[[expl]][2]
-
-                                }
-
-                                    if (length(self$options$explanatory) > 1 &&
-                                        (
-                                            inherits(mydata[["myfactor1"]], contin) || inherits(mydata[["myfactor2"]], contin)
-                                            )) {
-
-
-                                    stop("Please use Multivariate Survival Analysis Cox-regression in jsurvival")
-
-                                    # todo <- glue::glue("
-                                    #     <br>Please use Multivariate Survival Analysis Cox-regression in jsurvival.
-                                    #     <br>
-                                    #     <hr>")
-                                    # html <- self$results$todo
-                                    # html$setContent(todo)
-                                    #
-                                    #
-                                    # # Disable other tables
-                                    # self$results$medianSummary$setVisible(FALSE)
-                                    # self$results$medianTable$setVisible(FALSE)
-                                    # self$results$survTableSummary$setVisible(FALSE)
-                                    # self$results$survTable$setVisible(FALSE)
-                                    # self$results$pairwiseSummary$setVisible(FALSE)
-                                    # self$results$pairwiseTable$setVisible(FALSE)
-
-                                }
 
 
 
