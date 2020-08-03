@@ -557,8 +557,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
                 mypairwise2 <- as.data.frame(results_pairwise[["p.value"]]) %>%
-                                tibble::rownames_to_column() %>%
-                                tidyr::pivot_longer(cols = -rowname) %>%
+                                tibble::rownames_to_column(.data = .) %>%
+                                tidyr::pivot_longer(data = ., cols = -rowname) %>%
                                 dplyr::filter(complete.cases(.))
 
 
@@ -573,7 +573,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     pairwiseTable$addRow(rowKey = i, values = c(data_frame[i,]))
                 }
 
-                pairwiseTable$setTitle(paste0('Pairwise Comparisons', self$options$explanatory))
+                thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
+
+                title2 <- as.character(thefactor)
+
+                pairwiseTable$setTitle(paste0('Pairwise Comparisons', thefactor))
 
 
                 # mypairwise2 %>%
