@@ -16,14 +16,14 @@ items:
           - overalltime
 
 
-    - name:  mydataview
-      title: mydataview
-      type:  Preformatted
-      clearWith:
-          - explanatory
-          - outcome
-          - outcomeLevel
-          - overalltime
+    # - name:  mydataview
+    #   title: mydataview
+    #   type:  Preformatted
+    #   clearWith:
+    #       - explanatory
+    #       - outcome
+    #       - outcomeLevel
+    #       - overalltime
 
 
 
