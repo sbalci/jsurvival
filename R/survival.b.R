@@ -329,11 +329,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     janitor::clean_names(dat = ., case = "snake")
 
 
-
-
-
-
-
                 # Cox-Regression Table ----
 
                 # tCox_df <- tCox_df[,-(dim(tCox_df)[2])]
@@ -354,79 +349,36 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     coxTable$addRow(rowKey = i, values = c(data_frame[i,]))
                 }
 
+                n_level <- dim(tCox_df)[1]
 
 
-                        n_level <- dim(tCox_df)[1]
+                # coxTable explanation ----
 
 
-        #         # results 5 univariate survival explanation ----
-        #
-        #
-        #         n_level <- dim(tUni_df)[1]
-        #
-        #         tUni_df_descr <- function(n) {
-        #             paste0(
-        #                 "When ",
-        #                 self$options$explanatory,
-        #                 # tUni_df$dependent_surv_overall_time_outcome[1],
-        #                 " is ",
-        #                 tUni_df$x[n + 1],
-        #                 ", there is ",
-        #                 tUni_df$hr_univariable[n + 1],
-        #                 " times risk than ",
-        #                 "when ",
-        #                 self$options$explanatory,
-        #                 # tUni_df$dependent_surv_overall_time_outcome[1],
-        #                 " is ",
-        #                 tUni_df$x[1],
-        #                 "."
-        #             )
-        #         }
-        #
-        #         results5 <- purrr::map(.x = c(2:n_level-1), .f = tUni_df_descr)
-        #
-        #         results5 <- unlist(results5)
-        #
-        #
+                tCox_descr <- function(n) {
+                    paste0(
+                        "When ",
+                        as.vector(self$options$explanatory)[1],
+                        " is ",
+                        data_frame$Levels[n + 1],
+                        ", there is ",
+                        data_frame$HR_multivariable[n + 1],
+                        " times risk than ",
+                        "when ",
+                        as.vector(self$options$explanatory)[1],
+                        " is ",
+                        data_frame$Levels[n],
+                        "."
+                    )
+                }
 
-        #                     # >1 Explanatory results 5 univariate survival explanation ----
-                #
-                #
-                #                     # n_level <- dim(data_frame)[1]
-                #                     #
-                #                     #
-                #                     #
-                #                     #
-                #                     # results5 <- data_frame %>%
                 #                     #     split(.$Explanatory) %>%
-                #                     #     dim()
-                #                     #     # purrr::map(.x = c(1:n_level-1),
-                #                     #     #            .f = paste0(
-                #                     #     #                "When ",
-                #                     #     #                .$Explanatory[1],
-                #                     #     #                " is ",
-                #                     #     #                .$Levels[n + 1],
-                #                     #     #                ", there is ",
-                #                     #     #                .$HR_univariable[n + 1],
-                #                     #     #                " times risk than ",
-                #                     #     #                "when ",
-                #                     #     #                " is ",
-                #                     #     #                .$Levels[1],
-                #                     #     #                "."
-                #                     #     #            )
-                #                     #     #                )
-                #                     #
-                #                     #
-                #                     # results5 <- unlist(results5)
-                #                     #
-                #                     # self$results$text5$setContent(results5)
-                #
-                #
-                #
-                #
 
+                results5 <- purrr::map(.x = c(1:n_level), .f = tCox_descr)
 
+                coxSummary <- unlist(results5)
 
+                self$results$coxSummary$setContent(coxSummary)
 
 
 
@@ -540,10 +492,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 #  pairwise comparison ----
 
-                # results8 <- "No pairwise comparison when explanatory variable has < 3 levels"
-                # results9 <- ""
-
-
 
                 formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
 
@@ -579,12 +527,17 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 title2 <- as.character(thefactor)
 
-                pairwiseTable$setTitle(paste0('Pairwise Comparisons ', thefactor))
+                pairwiseTable$setTitle(paste0('Pairwise Comparisons ', title2))
 
 
                 if ( length(self$options$explanatory) == 1 && n_level < 3 ) {
 
                 self$results$pairwiseTable$setVisible(FALSE)
+
+
+                pairwiseSummary <- "No pairwise comparison when explanatory variable has < 3 levels."
+                self$results$pairwiseSummary$setContent(pairwiseSummary)
+
 
                 }
 

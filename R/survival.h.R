@@ -233,11 +233,11 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         mydataview = function() private$.items[["mydataview"]],
         medianSummary = function() private$.items[["medianSummary"]],
         medianTable = function() private$.items[["medianTable"]],
-        text5 = function() private$.items[["text5"]],
+        coxSummary = function() private$.items[["coxSummary"]],
         coxTable = function() private$.items[["coxTable"]],
         text7 = function() private$.items[["text7"]],
         survTable = function() private$.items[["survTable"]],
-        text9 = function() private$.items[["text9"]],
+        pairwiseSummary = function() private$.items[["pairwiseSummary"]],
         pairwiseTable = function() private$.items[["pairwiseTable"]],
         plot = function() private$.items[["plot"]],
         plot2 = function() private$.items[["plot2"]],
@@ -327,7 +327,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "overalltime")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
-                name="text5",
+                name="coxSummary",
                 title="Cox Regression Summary and Table",
                 clearWith=list(
                     "explanatory",
@@ -420,7 +420,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "overalltime")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
-                name="text9",
+                name="pairwiseSummary",
                 title="Pairwise Comparison Summary and Table",
                 clearWith=list(
                     "explanatory",
@@ -557,11 +557,11 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$medianSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$text5} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$coxSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$coxTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$text7} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$text9} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$pairwiseSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$pairwiseTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr

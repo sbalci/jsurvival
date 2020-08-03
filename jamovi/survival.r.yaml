@@ -85,7 +85,7 @@ items:
           - overalltime
 
 
-    - name:  text5
+    - name:  coxSummary
       title: Cox Regression Summary and Table
       # title: '`Cox Regression Summary and Table - ${explanatory}`'
       type:  Preformatted
@@ -176,7 +176,7 @@ items:
           - overalltime
 
 
-    - name:  text9
+    - name:  pairwiseSummary
       title: Pairwise Comparison Summary and Table
       # title: '`Pairwise Comparison Summary and Table - ${explanatory}`'
       type:  Preformatted
