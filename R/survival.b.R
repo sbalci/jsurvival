@@ -915,10 +915,10 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     res.cat <- plotData
 
-    thefactor <- jmvcore::constructFormula(terms = self$options$contexpl)
 
+    contfactor <- jmvcore::constructFormula(terms = self$options$contexpl)
 
-    myformula <- paste0("survival::Surv(mytime, myoutcome) ~ ", thefactor)
+    myformula <- paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
 
     myformula <- as.formula(myformula)
 
@@ -926,9 +926,10 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                              data = res.cat)
 
     plot5 <- survminer::ggsurvplot(fit,
-                                     data = res.cat,
-                                     risk.table = TRUE,
-                                     conf.int = TRUE)
+                                   data = res.cat,
+                                   risk.table = TRUE,
+                                   conf.int = TRUE)
+
 
     print(plot5)
     TRUE
