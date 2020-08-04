@@ -787,8 +787,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     if (!sc)
         return()
 
-    if (nrow(self$data) == 0)
-    stop('Data contains no (complete) rows')
+    # if (nrow(self$data) == 0)
+    # stop('Data contains no (complete) rows')
 
     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
 
@@ -797,8 +797,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     }
 
 
-    if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-        return()
+    # if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
+    #     return()
 
     plotData <- image$state
 
@@ -842,8 +842,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     if (!ce)
         return()
 
-    if (nrow(self$data) == 0)
-        stop('Data contains no (complete) rows')
+    # if (nrow(self$data) == 0)
+    #     stop('Data contains no (complete) rows')
 
     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
 
@@ -851,8 +851,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     }
 
-    if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-        return()
+    # if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
+    #     return()
 
     plotData <- image2$state
 
@@ -896,8 +896,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     if (!ch)
         return()
 
-    if (nrow(self$data) == 0)
-        stop('Data contains no (complete) rows')
+    # if (nrow(self$data) == 0)
+    #     stop('Data contains no (complete) rows')
 
     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
 
@@ -906,8 +906,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     }
 
 
-    if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-        return()
+    # if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
+    #     return()
 
     plotData <- image3$state
 
@@ -947,8 +947,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     if (!findcut)
         return()
 
-    if (nrow(self$data) == 0)
-        stop('Data contains no (complete) rows')
+    # if (nrow(self$data) == 0)
+    #     stop('Data contains no (complete) rows')
 
     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
 
@@ -981,8 +981,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     if (!findcut)
         return()
 
-    if (nrow(self$data) == 0)
-        stop('Data contains no (complete) rows')
+    # if (nrow(self$data) == 0)
+    #     stop('Data contains no (complete) rows')
 
     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
 
