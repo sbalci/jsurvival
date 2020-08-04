@@ -920,11 +920,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     # contfactor <- as.formula(contfactor)
 
-    # myformula <- paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
+    myformula <- paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
 
-    # myformula <- as.formula(myformula)
+    myformula <- as.formula(myformula)
 
-    fit <- survminer::surv_fit(formula = survival::Surv(mytime, myoutcome) ~ contfactor,
+    fit <- survminer::surv_fit(formula = myformula,
                                data = res.cat
                                )
 
