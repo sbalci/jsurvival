@@ -301,6 +301,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                                 # https://rpkgs.datanovia.com/survminer/reference/surv_cutpoint.html
 
+                                    findcut <- self$options$findcut
+
                                     if (findcut) {
 
                                     res.cut <- survminer::surv_cutpoint(
