@@ -917,7 +917,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-    print(plot5)
+    # print(plot5)
     TRUE
 }
 
