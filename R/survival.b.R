@@ -201,17 +201,15 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 dxdate <- self$options$dxdate
                 fudate <- self$options$fudate
 
-                mydata[["dxdate"]] <- as.Date(mydata[[dxdate]])
+                mydata[["dxdate22"]] <- lubridate::ymd(mydata[[dxdate]])
 
-
+                # mydata[["dxdate"]] <- as.Date(mydata[[dxdate]])
                 self$results$mydataview$setContent(
                     list(
                         # lubridate::is.Date(x = mydata[["dxdate"]]),
                         head(mydata)
                         )
                 )
-
-                return()
 
                 # Continious Explanatory ----
 
