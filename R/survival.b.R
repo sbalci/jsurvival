@@ -918,7 +918,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     contfactor <- jmvcore::constructFormula(terms = self$options$contexpl)
 
-    contfactor <- as.formula(contfactor)
+    # contfactor <- as.formula(contfactor)
 
     # myformula <- paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
 
