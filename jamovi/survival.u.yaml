@@ -184,6 +184,9 @@ children:
     label: Continuous Explanatory Variable
     collapsed: true
     children:
+      - type: Label
+        label: Time Interval
+        fitToGrid: true
       - type: VariableSupplier
         persistentItems: false
         stretchFactor: 1
