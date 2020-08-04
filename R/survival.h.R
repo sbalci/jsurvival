@@ -249,7 +249,9 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         pairwiseTable = function() private$.items[["pairwiseTable"]],
         plot = function() private$.items[["plot"]],
         plot2 = function() private$.items[["plot2"]],
-        plot3 = function() private$.items[["plot3"]]),
+        plot3 = function() private$.items[["plot3"]],
+        plot4 = function() private$.items[["plot4"]],
+        plot5 = function() private$.items[["plot5"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -497,6 +499,36 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
+                    "overalltime")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot4",
+                title="Cutpoint Plot",
+                width=600,
+                height=450,
+                renderFun=".plot4",
+                visible="(findcut)",
+                requiresData=TRUE,
+                clearWith=list(
+                    "findcut",
+                    "contexpl",
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot5",
+                title="Survival Plot with new Cut-off",
+                width=600,
+                height=450,
+                renderFun=".plot5",
+                visible="(findcut)",
+                requiresData=TRUE,
+                clearWith=list(
+                    "findcut",
+                    "contexpl",
+                    "outcome",
+                    "outcomeLevel",
                     "overalltime")))}))
 
 survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -565,6 +597,8 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plot4} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plot5} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

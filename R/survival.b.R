@@ -19,7 +19,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 <br><br>
                 This tool will help you calculate median survivals and 1,3,5-yr survivals for a given fisk factor.
                 <br><br>
-                Explanatory variable should be categorical (ordinal or nominal).
+                Explanatory variable can be categorical (ordinal or nominal), or continuous
+                (options under continuous variable collapsebox).
                 <br><br>
                 Select outcome level from Outcome variable.
                 <br><br>
@@ -300,9 +301,50 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-                                # numeric optimal cut-off ----
+                                # Continuous optimal cut-off ----
 
                                     # https://rpkgs.datanovia.com/survminer/reference/surv_cutpoint.html
+
+
+                                    res.cut <- survminer::surv_cutpoint(
+                                        mydata,
+                                        time = "mytime",
+                                        event = "myoutcome",
+                                        self$options$contexpl,
+                                        minprop = 0.1,
+                                        progressbar = TRUE
+                                    )
+
+                                    # res.cut$Age
+                                    # res.cut$data
+                                    # res.cut$minprop
+                                    # res.cut$cutpoint
+                                    # summary(res.cut)
+
+
+                                    # Prepare Data For Continuous Explanatory Plots ----
+
+                                    plotData4 <- mydata
+
+                                    image4 <- self$results$plot4
+                                    image4$setState(plotData4)
+
+
+                                    res.cat <- surv_categorize(res.cut)
+
+                                    plotData5 <- res.cat
+
+
+                                    image5 <- self$results$plot5
+                                    image5$setState(plotData5)
+
+
+                                    # fit <- survfit(Surv(OverallTime, Outcome) ~ Age, data = res.cat)
+                                    # ggsurvplot(fit, data = res.cat, risk.table = TRUE, conf.int = TRUE)
+
+
+
+
 
                                 }
 
@@ -800,6 +842,40 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
     print(plot3)
+    TRUE
+}
+
+
+,
+.plot4 = function(image4, ggtheme, theme, ...) {  # <-- the plot function ----
+
+
+    findcut <- self$options$findcut
+
+    if (!findcut)
+        return()
+
+    if (nrow(self$data) == 0)
+        stop('Data contains no (complete) rows')
+
+    if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
+
+        stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
+
+    }
+
+
+    if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
+        return()
+
+    plotData <- image4$state
+
+    res.cut <- plotData
+
+    plot4 <- plot(res.cut, self$options$contexpl, palette = "npg")
+
+
+    print(plot4)
     TRUE
 }
 

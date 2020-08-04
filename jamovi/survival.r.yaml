@@ -266,9 +266,41 @@ items:
           - overalltime
 
 
+    - name: plot4
+      title: 'Cutpoint Plot'
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .plot4
+      visible: (findcut)
+      requiresData: true
+      clearWith:
+          - findcut
+          - contexpl
+          - outcome
+          - outcomeLevel
+          - overalltime
+
+
+    - name: plot5
+      title: 'Survival Plot with new Cut-off'
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .plot5
+      visible: (findcut)
+      requiresData: true
+      clearWith:
+          - findcut
+          - contexpl
+          - outcome
+          - outcomeLevel
+          - overalltime
+
 
 refs:
     - finalfit
     - survival
     - survminer
+
 ...
