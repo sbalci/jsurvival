@@ -653,31 +653,31 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-                # #  pairwise comparison ----
-                #
-                #
-                # formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
-                #
-                #
-                # formula_p <- paste0('survival::Surv(', "mytime", ',', "myoutcome", ') ~ ', formula2)
-                # formula_p <- as.formula(formula_p)
-                #
-                # results_pairwise <-
-                #         survminer::pairwise_survdiff(
-                #             formula = formula_p,
-                #             data = mydata,
-                #             p.adjust.method = "BH")
-                #
-                #
+                #  pairwise comparison ----
+
+
+                formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
+
+
+                formula_p <- paste0('survival::Surv(', "mytime", ',', "myoutcome", ') ~ ', formula2)
+                formula_p <- as.formula(formula_p)
+
+                results_pairwise <-
+                        survminer::pairwise_survdiff(
+                            formula = formula_p,
+                            data = mydata,
+                            p.adjust.method = "BH")
+
+
                 # mypairwise2 <- as.data.frame(results_pairwise[["p.value"]]) %>%
                 #                 tibble::rownames_to_column(.data = .) %>%
                 #                 tidyr::pivot_longer(data = ., cols = -rowname) %>%
                 #                 dplyr::filter(complete.cases(.))
-                #
-                #
-                #
-                #
-                # # Pairwise Table ----
+
+
+
+
+                # Pairwise Table ----
                 #
                 # pairwiseTable <- self$results$pairwiseTable
                 #
