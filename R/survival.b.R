@@ -732,7 +732,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 # https://rpkgs.datanovia.com/survminer/survminer_cheatsheet.pdf
 ,
-.plot2 = function(image2, ggtheme, theme, ...) {  # <-- the plot function ----
+.plot2 = function(image2, ggtheme, theme, ...) {  # <-- the plot2 function ----
 
 
     ce <- self$options$ce
@@ -785,7 +785,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 ,
-.plot3 = function(image3, ggtheme, theme, ...) {  # <-- the plot function ----
+.plot3 = function(image3, ggtheme, theme, ...) {  # <-- the plot3 function ----
 
 
     ch <- self$options$ch
@@ -834,7 +834,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 ,
-.plot4 = function(image4, ggtheme, theme, ...) {  # <-- the plot function ----
+.plot4 = function(image4, ggtheme, theme, ...) {  # <-- the plot4 function ----
 
 
     findcut <- self$options$findcut
@@ -867,66 +867,66 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         progressbar = TRUE
     )
 
-    plot4 <- plot(res.cut, self$options$contexpl, palette = "npg")
+    # plot4 <- plot(res.cut, self$options$contexpl, palette = "npg")
 
 
-    print(plot4)
+    print(res.cut)
     TRUE
 }
 
-
-,
-.plot5 = function(image5, ggtheme, theme, ...) {  # <-- the plot function ----
-
-
-    findcut <- self$options$findcut
-
-    if (!findcut)
-        return()
-
-    if (nrow(self$data) == 0)
-        stop('Data contains no (complete) rows')
-
-    if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-
-        stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-
-    }
-
-
-    if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-        return()
-
-    plotData <- image5$state
-
-    mydata <- plotData
-
-
-    res.cut <- survminer::surv_cutpoint(
-        data = mydata,
-        time = "mytime",
-        event = "myoutcome",
-        self$options$contexpl,
-        minprop = 0.1,
-        progressbar = TRUE
-    )
-
-    res.cat <- survminer::surv_categorize(res.cut)
-
-
-
-
-    fit <- survival::survfit(survival::Surv(self$options$elapsedtime, self$options$outcome) ~ self$options$contexpl, data = res.cat)
-
-    plot5 <- ggsurvminer::ggsurvplot(fit,
-                                     data = res.cat,
-                                     risk.table = TRUE,
-                                     conf.int = TRUE)
-
-    print(plot5)
-    TRUE
-}
-
+#
+# ,
+# .plot5 = function(image5, ggtheme, theme, ...) {  # <-- the plot function ----
+#
+#
+#     findcut <- self$options$findcut
+#
+#     if (!findcut)
+#         return()
+#
+#     if (nrow(self$data) == 0)
+#         stop('Data contains no (complete) rows')
+#
+#     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
+#
+#         stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
+#
+#     }
+#
+#
+#     if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
+#         return()
+#
+#     plotData <- image5$state
+#
+#     mydata <- plotData
+#
+#
+#     res.cut <- survminer::surv_cutpoint(
+#         data = mydata,
+#         time = "mytime",
+#         event = "myoutcome",
+#         variables = self$options$contexpl,
+#         minprop = 0.1,
+#         progressbar = TRUE
+#     )
+#
+#     res.cat <- survminer::surv_categorize(res.cut)
+#
+#
+#
+#
+#     fit <- survival::survfit(survival::Surv(self$options$elapsedtime, self$options$outcome) ~ self$options$contexpl, data = res.cat)
+#
+#     plot5 <- ggsurvminer::ggsurvplot(fit,
+#                                      data = res.cat,
+#                                      risk.table = TRUE,
+#                                      conf.int = TRUE)
+#
+#     print(plot5)
+#     TRUE
+# }
+#
 
 
 
