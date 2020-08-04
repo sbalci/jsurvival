@@ -139,10 +139,6 @@ children:
             children:
               - type: ComboBox
                 name: timetypedata
-          - type: LayoutBox
-            margin: large
-            fitToGrid: true
-            children:
               - type: ComboBox
                 name: timetypeoutput
 
