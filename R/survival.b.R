@@ -160,16 +160,29 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 # Time Interval ----
 
                 dxdate <- self$options$dxdate
+
+                mydata[["start"]] <- lubridate::ymd_hms(mydata[[dxdate]])
+
                 fudate <- self$options$fudate
+
+                mydata[["end"]] <- lubridate::ymd_hms(mydata[[fudate]])
 
                 timetypeoutput <- jmvcore::constructFormula(terms = self$options$timetypeoutput)
 
-                mydata[["interval"]] <- lubridate::interval(
-                    start = lubridate::ymd_hms(mydata[[dxdate]]),
-                    end = lubridate::ymd_hms(mydata[[fudate]])
-                )
+                mydata <- mydata %>%
+                    dplyr::mutate(
+                        interval = lubridate::interval(start, end)
+                    ) %>%
+                    dplyr::mutate(
+                        mytime = lubridate::time_length(interval, timetypeoutput)
+                    )
 
-                mydata[["mytime"]] <- lubridate::time_length(mydata[["interval"]], timetypeoutput)
+                # mydata[["interval"]] <- lubridate::interval(
+                #     start = lubridate::ymd_hms(mydata[[dxdate]]),
+                #     end = lubridate::ymd_hms(mydata[[fudate]])
+                # )
+
+                # mydata[["mytime"]] <- lubridate::time_length(mydata[["interval"]], timetypeoutput)
 
                 }
 
