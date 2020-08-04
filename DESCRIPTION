@@ -1,8 +1,8 @@
 Type: Package
 Package: jsurvival
 Title: Survival Module of ClinicoPath for jamovi
-Version: 0.0.2.0028
-Date: 2020-08-01
+Version: 0.0.2.0030
+Date: 2020-08-04
 Authors@R: 
     person(given = "Serdar",
            family = "Balci",
@@ -31,7 +31,8 @@ Imports:
     survival,
     survminer,
     finalfit,
-    janitor
+    janitor,
+    lubridate
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

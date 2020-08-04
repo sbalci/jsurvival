@@ -197,6 +197,16 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # View mydata ----
 
+
+                dxdate <- self$options$dxdate
+                fudate <- self$options$fudate
+
+                mydata[["dxdate"]] <- mydata[[dxdate]]
+
+
+
+
+
                 self$results$mydataview$setContent(head(mydata, 20))
 
 
