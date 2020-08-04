@@ -858,6 +858,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     plotData <- image4$state
 
 
+    plotData <- as.data.frame(plotData)
+
     res.cut <- survminer::surv_cutpoint(
         plotData,
         time = "mytime",
