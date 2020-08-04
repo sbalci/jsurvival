@@ -836,50 +836,50 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 }
 
 
-,
-.plot4 = function(image4, ggtheme, theme, ...) {  # <-- the plot4 function ----
-
-
-    findcut <- self$options$findcut
-
-    if (!findcut)
-        return()
-
-    if (nrow(self$data) == 0)
-        stop('Data contains no (complete) rows')
-
-    if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-
-        stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-
-    }
-
-
-    if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-        return()
-
-    plotData <- image4$state
-
-
-    plotData <- as.data.frame(plotData)
-
-    res.cut <- survminer::surv_cutpoint(
-        plotData,
-        time = "mytime",
-        event = "myoutcome",
-        self$options$contexpl,
-        minprop = 0.1,
-        progressbar = TRUE
-    )
-
-    # plot4 <- plot(res.cut, self$options$contexpl, palette = "npg")
-
-
-    print(res.cut)
-    TRUE
-}
-
+# ,
+# .plot4 = function(image4, ggtheme, theme, ...) {  # <-- the plot4 function ----
 #
+#
+#     findcut <- self$options$findcut
+#
+#     if (!findcut)
+#         return()
+#
+#     if (nrow(self$data) == 0)
+#         stop('Data contains no (complete) rows')
+#
+#     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
+#
+#         stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
+#
+#     }
+#
+#
+#     if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
+#         return()
+#
+#     plotData <- image4$state
+#
+#
+#     plotData <- as.data.frame(plotData)
+#
+#     res.cut <- survminer::surv_cutpoint(
+#         plotData,
+#         time = "mytime",
+#         event = "myoutcome",
+#         self$options$contexpl,
+#         minprop = 0.1,
+#         progressbar = TRUE
+#     )
+#
+#     # plot4 <- plot(res.cut, self$options$contexpl, palette = "npg")
+#
+#
+#     print(res.cut)
+#     TRUE
+# }
+
+
 # ,
 # .plot5 = function(image5, ggtheme, theme, ...) {  # <-- the plot function ----
 #
