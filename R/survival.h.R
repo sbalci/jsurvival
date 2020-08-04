@@ -406,7 +406,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "contexpl",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime"),
+                visible="(findcut)"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="survTableSummary",

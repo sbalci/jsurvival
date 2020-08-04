@@ -141,6 +141,7 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+      visible: (findcut)
 
 
 

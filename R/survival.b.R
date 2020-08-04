@@ -211,6 +211,10 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                         )
                 )
 
+
+                return()
+
+
                 # Continious Explanatory ----
 
 
