@@ -643,7 +643,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     )
             ) %>%
             dplyr::select(description) %>%
-            dplyr::pull() -> survTableSummary
+            dplyr::pull(.) -> survTableSummary
 
 
 
@@ -653,70 +653,75 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-                #  pairwise comparison ----
+                # #  pairwise comparison ----
+                #
+                #
+                # formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
+                #
+                #
+                # formula_p <- paste0('survival::Surv(', "mytime", ',', "myoutcome", ') ~ ', formula2)
+                # formula_p <- as.formula(formula_p)
+                #
+                # results_pairwise <-
+                #         survminer::pairwise_survdiff(
+                #             formula = formula_p,
+                #             data = mydata,
+                #             p.adjust.method = "BH")
+                #
+                #
+                # mypairwise2 <- as.data.frame(results_pairwise[["p.value"]]) %>%
+                #                 tibble::rownames_to_column(.data = .) %>%
+                #                 tidyr::pivot_longer(data = ., cols = -rowname) %>%
+                #                 dplyr::filter(complete.cases(.))
+                #
+                #
+                #
+                #
+                # # Pairwise Table ----
+                #
+                # pairwiseTable <- self$results$pairwiseTable
+                #
+                # data_frame <- mypairwise2
+                # for (i in seq_along(data_frame[,1,drop = T])) {
+                #     pairwiseTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                # }
+                #
+                # thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
+                #
+                # title2 <- as.character(thefactor)
+                #
+                # pairwiseTable$setTitle(paste0('Pairwise Comparisons ', title2))
+                #
+                #
+                # mypairwise2 %>%
+                #     dplyr::mutate(description =
+                #                       glue::glue(
+                #                           "The difference between ",
+                #                           " {rowname} and {name}",
+                #                           " has a p-value of {format.pval(value, digits = 3, eps = 0.001)}."
+                #                           )
+                #                   ) %>%
+                #     dplyr::pull(description) -> pairwiseSummary
+                #
+                # pairwiseSummary <- unlist(pairwiseSummary)
+                #
+                #
+                # self$results$pairwiseSummary$setContent(pairwiseSummary)
+                #
+                #
+                # if ( length(self$options$explanatory) == 1 && dim(mypairwise2)[1] == 1 ) {
+                #
+                # self$results$pairwiseTable$setVisible(FALSE)
+                #
+                # pairwiseSummary <- "No pairwise comparison when explanatory variable has < 3 levels."
+                # self$results$pairwiseSummary$setContent(pairwiseSummary)
+                #
+                # }
+                #
+                #
+                #
 
 
-                formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
-
-
-                formula_p <- paste0('survival::Surv(', "mytime", ',', "myoutcome", ') ~ ', formula2)
-                formula_p <- as.formula(formula_p)
-
-                results_pairwise <-
-                        survminer::pairwise_survdiff(
-                            formula = formula_p,
-                            data = mydata,
-                            p.adjust.method = "BH")
-
-
-                mypairwise2 <- as.data.frame(results_pairwise[["p.value"]]) %>%
-                                tibble::rownames_to_column(.data = .) %>%
-                                tidyr::pivot_longer(data = ., cols = -rowname) %>%
-                                dplyr::filter(complete.cases(.))
-
-
-
-
-                # Pairwise Table ----
-
-                pairwiseTable <- self$results$pairwiseTable
-
-                data_frame <- mypairwise2
-                for (i in seq_along(data_frame[,1,drop = T])) {
-                    pairwiseTable$addRow(rowKey = i, values = c(data_frame[i,]))
-                }
-
-                thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
-
-                title2 <- as.character(thefactor)
-
-                pairwiseTable$setTitle(paste0('Pairwise Comparisons ', title2))
-
-
-                mypairwise2 %>%
-                    dplyr::mutate(description =
-                                      glue::glue(
-                                          "The difference between ",
-                                          " {rowname} and {name}",
-                                          " has a p-value of {format.pval(value, digits = 3, eps = 0.001)}."
-                                          )
-                                  ) %>%
-                    dplyr::pull(description) -> pairwiseSummary
-
-                pairwiseSummary <- unlist(pairwiseSummary)
-
-
-                self$results$pairwiseSummary$setContent(pairwiseSummary)
-
-
-                if ( length(self$options$explanatory) == 1 && dim(mypairwise2)[1] == 1 ) {
-
-                self$results$pairwiseTable$setVisible(FALSE)
-
-                pairwiseSummary <- "No pairwise comparison when explanatory variable has < 3 levels."
-                self$results$pairwiseSummary$setContent(pairwiseSummary)
-
-                }
 
 
 
