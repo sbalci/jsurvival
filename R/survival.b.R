@@ -903,7 +903,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
     res.cut <- survminer::surv_cutpoint(
-        mydata,
+        data = mydata,
         time = "mytime",
         event = "myoutcome",
         self$options$contexpl,
