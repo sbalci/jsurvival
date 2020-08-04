@@ -326,7 +326,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                                     # Prepare Data For Continuous Explanatory Plots ----
 
-                                    plotData4 <- res.cut$data
+                                    plotData4 <- res.cut
 
                                     image4 <- self$results$plot4
                                     image4$setState(plotData4)
