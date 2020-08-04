@@ -324,19 +324,14 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                                     # Prepare Data For Continuous Explanatory Plots ----
 
-                                    plotData4 <- mydata
+                                    plotData <- mydata
 
                                     image4 <- self$results$plot4
-                                    image4$setState(plotData4)
-
-
-                                    res.cat <- survminer::surv_categorize(res.cut)
-
-                                    plotData5 <- res.cat
-
+                                    image4$setState(plotData)
 
                                     image5 <- self$results$plot5
-                                    image5$setState(plotData5)
+                                    image5$setState(plotData)
+
 
                                 }
 
@@ -904,20 +899,31 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     plotData <- image5$state
 
-    res.cat <- plotData
+    mydata <- plotData
+
+
+    res.cut <- survminer::surv_cutpoint(
+        mydata,
+        time = "mytime",
+        event = "myoutcome",
+        self$options$contexpl,
+        minprop = 0.1,
+        progressbar = TRUE
+    )
+
+    res.cat <- survminer::surv_categorize(res.cut)
 
 
 
 
-#
-#     fit <- survival::survfit(survival::Surv(self$options$elapsedtime, self$options$outcome) ~ self$options$contexpl, data = res.cat)
-#
-#     plot5 <- ggsurvminer::ggsurvplot(fit, data = res.cat, risk.table = TRUE, conf.int = TRUE)
+    fit <- survival::survfit(survival::Surv(self$options$elapsedtime, self$options$outcome) ~ self$options$contexpl, data = res.cat)
 
+    plot5 <- ggsurvminer::ggsurvplot(fit,
+                                     data = res.cat,
+                                     risk.table = TRUE,
+                                     conf.int = TRUE)
 
-
-
-    # print(plot5)
+    print(plot5)
     TRUE
 }
 
