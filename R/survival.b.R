@@ -157,13 +157,19 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # Time Interval ----
 
-                # mydata$int <- lubridate::interval(
-                #     lubridate::ymd(mydata$SurgeryDate),
-                #     lubridate::ymd(mydata$LastFollowUpDate)
-                # )
-                # mydata$OverallTime <- lubridate::time_length(mydata$int, "month")
-                # mydata$OverallTime <- round(mydata$OverallTime, digits = 1)
+                dxdate <- self$options$dxdate
+                fudate <- self$options$fudate
 
+                timetypeoutput <- jmvcore::constructFormula(terms = self$options$timetypeoutput)
+
+                mydata[["int"]] <- lubridate::interval(
+                    lubridate::ymd(mydata[[dxdate]]),
+                    lubridate::ymd(mydata[[fudate]])
+                )
+
+                mydata[["mytime"]] <- lubridate::time_length(mydata[["int"]], timetypeoutput)
+
+                mydata[["mytime"]] <- round(mydata[["mytime"]], digits = 1)
 
                 }
 
@@ -189,6 +195,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
+                # View mydata ----
+
+                self$results$mydataview$setContent(head(mydata, 20))
 
 
                 # Continious Explanatory ----
