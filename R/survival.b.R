@@ -164,14 +164,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 timetypeoutput <- jmvcore::constructFormula(terms = self$options$timetypeoutput)
 
-                mydata[["int2"]] <- lubridate::interval(
+                mydata[["interval"]] <- lubridate::interval(
                     start = lubridate::ymd_hms(mydata[[dxdate]]),
                     end = lubridate::ymd_hms(mydata[[fudate]])
                 )
 
-                mydata[["mytime2"]] <- lubridate::time_length(mydata[["int2"]], timetypeoutput)
-
-                mydata[["mytime2"]] <- round(mydata[["mytime2"]], digits = 1)
+                mydata[["mytime"]] <- lubridate::time_length(mydata[["interval"]], timetypeoutput)
 
                 }
 
@@ -193,28 +191,21 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 # Define Data For Analysis
 
 
-                # mydata <- jmvcore::naOmit(mydata)
+                mydata <- jmvcore::naOmit(mydata)
 
 
 
                 # View mydata ----
 
-
-                dxdate <- self$options$dxdate
-                fudate <- self$options$fudate
-
-                # mydata[["dxdate22"]] <- lubridate::ymd_hms(mydata[[dxdate]])
-
-                # mydata[["dxdate"]] <- as.Date(mydata[[dxdate]])
-                self$results$mydataview$setContent(
-                    list(
-                        # lubridate::is.Date(x = mydata[["dxdate"]]),
-                        head(mydata, n = 30)
-                        )
-                )
+                # self$results$mydataview$setContent(
+                #     list(
+                #         # lubridate::is.Date(x = mydata[["dxdate"]]),
+                #         head(mydata, n = 30)
+                #         )
+                # )
 
 
-                return()
+                # return()
 
 
                 # Continious Explanatory ----
