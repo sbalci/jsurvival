@@ -301,7 +301,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-                                # Continuous optimal cut-off ----
+                                # Continuous Optimal Cut-off ----
 
                                     # https://rpkgs.datanovia.com/survminer/reference/surv_cutpoint.html
 
@@ -324,7 +324,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                                     # Prepare Data For Continuous Explanatory Plots ----
 
-                                    plotData4 <- res.cut$data
+                                    plotData4 <- mydata
 
                                     image4 <- self$results$plot4
                                     image4$setState(plotData4)
@@ -337,14 +337,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                                     image5 <- self$results$plot5
                                     image5$setState(plotData5)
-
-
-                                    # fit <- survfit(Surv(OverallTime, Outcome) ~ Age, data = res.cat)
-                                    # ggsurvplot(fit, data = res.cat, risk.table = TRUE, conf.int = TRUE)
-
-
-
-
 
                                 }
 
@@ -886,6 +878,52 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     print(plot4)
     TRUE
 }
+
+
+,
+.plot5 = function(image5, ggtheme, theme, ...) {  # <-- the plot function ----
+
+
+    findcut <- self$options$findcut
+
+    if (!findcut)
+        return()
+
+    if (nrow(self$data) == 0)
+        stop('Data contains no (complete) rows')
+
+    if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
+
+        stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
+
+    }
+
+
+    if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
+        return()
+
+    plotData <- image5$state
+
+    res.cat <- plotData
+
+
+
+
+
+    fit <- survival::survfit(survival::Surv(mytime, myoutcome) ~ self$options$contexpl, data = res.cat)
+
+    plot5 <- ggsurvminer::ggsurvplot(fit, data = res.cat, risk.table = TRUE, conf.int = TRUE)
+
+
+
+
+    print(plot5)
+    TRUE
+}
+
+
+
+
 
 
 
