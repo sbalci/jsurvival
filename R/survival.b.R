@@ -204,10 +204,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 mydata[["dxdate"]] <- mydata[[dxdate]]
 
 
-
-
-
-                self$results$mydataview$setContent(head(mydata, 20))
+                self$results$mydataview$setContent(
+                    list(
+                        lubridate::is.Date(x = mydata[["dxdate"]]),
+                        head(mydata)
+                        )
+                )
 
 
                 # Continious Explanatory ----
