@@ -12,7 +12,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             # Initial Message ----
 
-            if ((is.null(self$options$outcome) || is.null(self$options$elapsedtime)) && (is.null(self$options$explanatory) || is.null(self$options$contexpl)) ) {
+            if ((is.null(self$options$outcome) || is.null(self$options$elapsedtime)) || xor(is.null(self$options$explanatory), is.null(self$options$contexpl)) ) {
 
                 todo <- glue::glue("
                 <br>Welcome to ClinicoPath
@@ -65,7 +65,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
 
-                stop("Please use Multivariate Survival Analysis in jsurvival.")
+                stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
 
             }
 
@@ -655,7 +655,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     sc <- self$options$sc
 
-    if(!sc)
+    if (!sc)
         return()
 
     if (nrow(self$data) == 0)
@@ -663,7 +663,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
 
-        stop("Please use Multivariate Survival Analysis in jsurvival.")
+        stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
 
     }
 
@@ -708,7 +708,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     ce <- self$options$ce
 
-    if(!ce)
+    if (!ce)
         return()
 
     if (nrow(self$data) == 0)
@@ -716,7 +716,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
 
-        stop("Please use Multivariate Survival Analysis in jsurvival.")
+        stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
 
     }
 
@@ -761,7 +761,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     ch <- self$options$ch
 
-    if(!ch)
+    if (!ch)
         return()
 
     if (nrow(self$data) == 0)
@@ -769,7 +769,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
 
-        stop("Please use Multivariate Survival Analysis in jsurvival.")
+        stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
 
     }
 
