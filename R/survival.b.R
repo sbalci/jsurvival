@@ -12,7 +12,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             # Initial Message ----
 
-            if ((is.null(self$options$outcome) || is.null(self$options$elapsedtime)) || xor(is.null(self$options$explanatory), is.null(self$options$contexpl)) ) {
+            if ((is.null(self$options$outcome) || is.null(self$options$elapsedtime)) || (is.null(self$options$explanatory) && is.null(self$options$contexpl)) ) {
 
                 todo <- glue::glue("
                 <br>Welcome to ClinicoPath
