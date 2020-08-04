@@ -320,18 +320,22 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                     # res.cut$cutpoint
 
 
+                                    # Cut-off Table ----
 
                                     rescut_summary <- summary(res.cut)
 
-                                    self$results$rescutTable$setContent(rescut_summary)
+                                    # self$results$rescutTable$setContent(rescut_summary)
 
 
-                                    # rescutTable <- self$results$rescutTable
+                                    rescutTable <- self$results$rescutTable
 
-                                    # data_frame <- rescut_summary
-                                    # for (i in seq_along(data_frame[,1,drop = T])) {
-                                    #     rescutTable$addRow(rowKey = i, values = c(data_frame[i,]))
-                                    # }
+                                    rescutTable$setTitle(paste0(self$options$contexpl))
+
+
+                                    data_frame <- rescut_summary
+                                    for (i in seq_along(data_frame[,1,drop = T])) {
+                                        rescutTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                                    }
 
 
                                     # categorisation ----

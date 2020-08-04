@@ -16,14 +16,14 @@ items:
           - overalltime
 
 
-    - name:  mydataview
-      title: mydataview
-      type:  Preformatted
-      clearWith:
-          - explanatory
-          - outcome
-          - outcomeLevel
-          - overalltime
+    # - name:  mydataview
+    #   title: mydataview
+    #   type:  Preformatted
+    #   clearWith:
+    #       - explanatory
+    #       - outcome
+    #       - outcomeLevel
+    #       - overalltime
 
 
 
@@ -125,10 +125,26 @@ items:
           - overalltime
 
 
-    - name:  rescutTable
-      title: 'rescutTable'
-      type:  Preformatted
+    # - name:  rescutTable
+    #   title: 'rescutTable'
+    #   type:  Preformatted
 
+    - name:  rescutTable
+      title: Cut Point
+      type:  Table
+      rows: 0
+      columns:
+        - name: cutpoint
+          title: 'Cut Point'
+          type: number
+        - name: statistic
+          title: 'Statistic'
+          type: number
+      clearWith:
+          - contexpl
+          - outcome
+          - outcomeLevel
+          - overalltime
 
 
 

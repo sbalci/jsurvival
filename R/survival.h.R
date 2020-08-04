@@ -255,7 +255,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         todo = function() private$.items[["todo"]],
-        mydataview = function() private$.items[["mydataview"]],
         medianSummary = function() private$.items[["medianSummary"]],
         medianTable = function() private$.items[["medianTable"]],
         coxSummary = function() private$.items[["coxSummary"]],
@@ -285,15 +284,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="todo",
                 title="To Do",
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime")))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="mydataview",
-                title="mydataview",
                 clearWith=list(
                     "explanatory",
                     "outcome",
@@ -393,10 +383,25 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcome",
                     "outcomeLevel",
                     "overalltime")))
-            self$add(jmvcore::Preformatted$new(
+            self$add(jmvcore::Table$new(
                 options=options,
                 name="rescutTable",
-                title="rescutTable"))
+                title="Cut Point",
+                rows=0,
+                columns=list(
+                    list(
+                        `name`="cutpoint", 
+                        `title`="Cut Point", 
+                        `type`="number"),
+                    list(
+                        `name`="statistic", 
+                        `title`="Statistic", 
+                        `type`="number")),
+                clearWith=list(
+                    "contexpl",
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="survTableSummary",
@@ -619,12 +624,11 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$medianSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$coxSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$coxTable} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$rescutTable} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$rescutTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$survTableSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$pairwiseSummary} \tab \tab \tab \tab \tab a preformatted \cr
