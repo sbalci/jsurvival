@@ -12,7 +12,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             # Initial Message ----
 
-            if (is.null(self$options$outcome) || is.null(self$options$elapsedtime) ) {
+            if ((is.null(self$options$outcome) || is.null(self$options$elapsedtime)) && (is.null(self$options$explanatory) || is.null(self$options$contexpl)) ) {
 
                 todo <- glue::glue("
                 <br>Welcome to ClinicoPath
@@ -302,6 +302,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                                 # numeric optimal cut-off ----
 
+                                    # https://rpkgs.datanovia.com/survminer/reference/surv_cutpoint.html
 
                                 }
 
