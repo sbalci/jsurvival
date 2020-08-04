@@ -165,8 +165,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 timetypeoutput <- jmvcore::constructFormula(terms = self$options$timetypeoutput)
 
                 mydata[["int2"]] <- lubridate::interval(
-                    lubridate::ymd_hms(mydata[[dxdate]]),
-                    lubridate::ymd_hms(mydata[[fudate]])
+                    start = lubridate::ymd_hms(mydata[[dxdate]]),
+                    end = lubridate::ymd_hms(mydata[[fudate]])
                 )
 
                 mydata[["mytime2"]] <- lubridate::time_length(mydata[["int2"]], timetypeoutput)
@@ -209,7 +209,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 self$results$mydataview$setContent(
                     list(
                         # lubridate::is.Date(x = mydata[["dxdate"]]),
-                        head(mydata)
+                        head(mydata, n = 30)
                         )
                 )
 
