@@ -20,7 +20,7 @@ survival(
   awod,
   analysistype = "overall",
   cutp = "12, 36, 60",
-  timetypedata = "months",
+  timetypedata = "ymdhms",
   timetypeoutput = "months",
   pw = FALSE,
   sc = FALSE,

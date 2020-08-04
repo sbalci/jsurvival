@@ -160,12 +160,17 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 # Time Interval ----
 
                 dxdate <- self$options$dxdate
-
-                mydata[["start"]] <- lubridate::ymd_hms(mydata[[dxdate]])
-
                 fudate <- self$options$fudate
+                timetypedata <- self$options$timetypedata
 
+                if (timetypedata == "ymdhms") {
                 mydata[["end"]] <- lubridate::ymd_hms(mydata[[fudate]])
+                mydata[["start"]] <- lubridate::ymd_hms(mydata[[dxdate]])
+                }
+                if (timetypedata == "ymd") {
+                    mydata[["end"]] <- lubridate::ymd(mydata[[fudate]])
+                    mydata[["start"]] <- lubridate::ymd(mydata[[dxdate]])
+                }
 
                 timetypeoutput <- jmvcore::constructFormula(terms = self$options$timetypeoutput)
 
