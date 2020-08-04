@@ -107,24 +107,28 @@ children:
               - type: CheckBox
                 name: tint
                 fitToGrid: true
-      - type: VariableSupplier
-        persistentItems: false
-        stretchFactor: 1
+      - type: Label
+        label: Continuous Explanatory Variable
+        fitToGrid: true
         children:
-          - type: TargetLayoutBox
+          - type: VariableSupplier
+            persistentItems: false
+            stretchFactor: 1
             children:
-              - type: VariablesListBox
-                name: dxdate
-                maxItemCount: 1
-                isTarget: true
-                fitToGrid: true
-          - type: TargetLayoutBox
-            children:
-              - type: VariablesListBox
-                name: fudate
-                maxItemCount: 1
-                isTarget: true
-                fitToGrid: true
+              - type: TargetLayoutBox
+                children:
+                  - type: VariablesListBox
+                    name: dxdate
+                    maxItemCount: 1
+                    isTarget: true
+                    fitToGrid: true
+              - type: TargetLayoutBox
+                children:
+                  - type: VariablesListBox
+                    name: fudate
+                    maxItemCount: 1
+                    isTarget: true
+                    fitToGrid: true
       - type: Label
         label: Time Type
         fitToGrid: true
