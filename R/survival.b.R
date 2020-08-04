@@ -318,20 +318,30 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                     # res.cut$data
                                     # res.cut$minprop
                                     # res.cut$cutpoint
-                                    # summary(res.cut)
 
+
+
+                                    rescut_summary <- summary(res.cut)
+
+                                    self$results$rescutTable$setContent(rescut_summary)
+
+
+                                    # rescutTable <- self$results$rescutTable
+
+                                    # data_frame <- rescut_summary
+                                    # for (i in seq_along(data_frame[,1,drop = T])) {
+                                    #     rescutTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                                    # }
+
+
+                                    # categorisation ----
 
                                     res.cat <- survminer::surv_categorize(res.cut)
 
 
-
-
-
-
-
                                     # View mydata ----
 
-                                    self$results$mydataview$setContent(head(res.cat, 20))
+                                    # self$results$mydataview$setContent(head(res.cat, 20))
 
                                     # Prepare Data For Continuous Explanatory Plots ----
 

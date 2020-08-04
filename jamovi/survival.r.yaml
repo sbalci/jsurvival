@@ -125,6 +125,15 @@ items:
           - overalltime
 
 
+    - name:  rescutTable
+      title: 'rescutTable'
+      type:  Preformatted
+
+
+
+
+
+
     - name:  survTableSummary
       title: '1, 3, 5-yr Survival Summary and Table'
       # title: '`1, 3, 5-yr Survival Summary and Table  - ${explanatory}`'
