@@ -137,9 +137,9 @@ children:
             children:
               - type: ComboBox
                 name: timetypedata
+                enable: (tint)
               - type: ComboBox
                 name: timetypeoutput
-                enable: (tint)
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
     collapsed: true
