@@ -296,15 +296,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-                                    return()
-
-
-
 
                                 # Continuous Optimal Cut-off ----
 
-                                    # https://rpkgs.datanovia.com/survminer/reference/surv_cutpoint.html
+                                # https://rpkgs.datanovia.com/survminer/reference/surv_cutpoint.html
 
+                                    if (findcut) {
 
                                     res.cut <- survminer::surv_cutpoint(
                                         mydata,
@@ -334,6 +331,15 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                                     image5 <- self$results$plot5
                                     image5$setState(plotData)
+
+
+                                    }
+
+
+
+
+                                    return()
+
 
 
                                 }
