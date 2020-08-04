@@ -28,7 +28,9 @@ survival(
   ch = FALSE,
   endplot = 60,
   findcut = FALSE,
-  multievent = FALSE
+  multievent = FALSE,
+  ci95 = FALSE,
+  risktable = FALSE
 )
 }
 \arguments{
@@ -79,6 +81,10 @@ survival(
 \item{findcut}{.}
 
 \item{multievent}{.}
+
+\item{ci95}{.}
+
+\item{risktable}{.}
 }
 \value{
 A results object containing:

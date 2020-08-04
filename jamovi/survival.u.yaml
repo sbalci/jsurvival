@@ -33,7 +33,6 @@ children:
             name: explanatory
             maxItemCount: 2
             isTarget: true
-
   - type: CollapseBox
     label: Pairwise Comparisons
     collapsed: false
@@ -47,7 +46,6 @@ children:
               - type: CheckBox
                 name: pw
                 enable: (!contexpl)
-
   - type: CollapseBox
     label: Plots
     collapsed: false
@@ -69,7 +67,7 @@ children:
                 name: ch
                 enable: (!contexpl)
       - type: Label
-        label: Plot End Time
+        label: Plot Arguments
         children:
           - type: LayoutBox
             fitToGrid: true
@@ -77,7 +75,10 @@ children:
               - type: TextBox
                 name: endplot
                 format: number
-
+              - type: CheckBox
+                name: ci95
+              - type: CheckBox
+                name: risktable
   - type: CollapseBox
     label: Survival Tables
     collapsed: true
@@ -90,9 +91,6 @@ children:
             format: string
             width: large
             enable: (!contexpl)
-
-
-
   - type: CollapseBox
     label: Advanced Elapsed Time Options
     collapsed: true
@@ -141,11 +139,16 @@ children:
                 name: timetypedata
               - type: ComboBox
                 name: timetypeoutput
-
   - type: CollapseBox
-    label: Advanced Outcome Options
+    label: Analysis with Multiple Outcomes
     collapsed: true
     children:
+      - type: Label
+        label: Analysis Type
+        children:
+          - type: ComboBox
+            name: analysistype
+            enable: (!contexpl)
       - type: Label
         label: Multiple Event Levels
         fitToGrid: true
@@ -167,21 +170,6 @@ children:
               - type: LevelSelector
                 name: awod
                 enable: (outcome && multievent)
-
-  - type: CollapseBox
-    label: Advanced Analysis Type
-    collapsed: true
-    children:
-      - type: Label
-        label: Analysis
-        children:
-          - type: Label
-            label: Analysis Type
-            children:
-              - type: ComboBox
-                name: analysistype
-                enable: (!contexpl)
-
   - type: CollapseBox
     label: Continuous Explanatory Variable
     collapsed: true

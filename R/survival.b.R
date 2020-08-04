@@ -748,7 +748,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             break.time.by = 12,
                             xlim = c(0,self$options$endplot),
                             title = paste0("Survival curves for ", title2),
-                            subtitle = "Based on Kaplan-Meier estimates"
+                            subtitle = "Based on Kaplan-Meier estimates",
+                            risk.table = self$options$risktable,
+                            conf.int = self$options$ci95
         )
 
     # plot <- plot + ggtheme
@@ -800,10 +802,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             # pval = TRUE,
                             legend = 'none',
                             break.time.by = 12,
-                            xlim = c(0,60),
-                            title = paste0("Cumulative Events ", title2)
-                            # subtitle = "Based on Kaplan-Meier estimates",
-                            , fun = "event"
+                            xlim = c(0,self$options$endplot),
+                            title = paste0("Cumulative Events ", title2),
+                            fun = "event",
+                            risk.table = self$options$risktable,
+                            conf.int = self$options$ci95
         )
 
 
@@ -854,9 +857,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             # pval = TRUE,
                             legend = 'none',
                             break.time.by = 12,
-                            xlim = c(0,60),
+                            xlim = c(0,self$options$endplot),
                             title = paste0("Cumulative Hazard ", title2),
-                            fun = "cumhaz"
+                            fun = "cumhaz",
+                            risk.table = self$options$risktable,
+                            conf.int = self$options$ci95
         )
 
 
@@ -940,8 +945,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     plot5 <- survminer::ggsurvplot(fit,
                                    data = res.cat,
-                                   risk.table = TRUE,
-                                   conf.int = TRUE)
+                                   risk.table = self$options$risktable,
+                                   conf.int = self$options$ci95)
 
 
     print(plot5)

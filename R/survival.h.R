@@ -28,7 +28,9 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             ch = FALSE,
             endplot = 60,
             findcut = FALSE,
-            multievent = FALSE, ...) {
+            multievent = FALSE,
+            ci95 = FALSE,
+            risktable = FALSE, ...) {
 
             super$initialize(
                 package='jsurvival',
@@ -160,6 +162,14 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "multievent",
                 multievent,
                 default=FALSE)
+            private$..ci95 <- jmvcore::OptionBool$new(
+                "ci95",
+                ci95,
+                default=FALSE)
+            private$..risktable <- jmvcore::OptionBool$new(
+                "risktable",
+                risktable,
+                default=FALSE)
 
             self$.addOption(private$..elapsedtime)
             self$.addOption(private$..tint)
@@ -184,6 +194,8 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..endplot)
             self$.addOption(private$..findcut)
             self$.addOption(private$..multievent)
+            self$.addOption(private$..ci95)
+            self$.addOption(private$..risktable)
         }),
     active = list(
         elapsedtime = function() private$..elapsedtime$value,
@@ -208,7 +220,9 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ch = function() private$..ch$value,
         endplot = function() private$..endplot$value,
         findcut = function() private$..findcut$value,
-        multievent = function() private$..multievent$value),
+        multievent = function() private$..multievent$value,
+        ci95 = function() private$..ci95$value,
+        risktable = function() private$..risktable$value),
     private = list(
         ..elapsedtime = NA,
         ..tint = NA,
@@ -232,7 +246,9 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..ch = NA,
         ..endplot = NA,
         ..findcut = NA,
-        ..multievent = NA)
+        ..multievent = NA,
+        ..ci95 = NA,
+        ..risktable = NA)
 )
 
 survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -598,6 +614,8 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param endplot .
 #' @param findcut .
 #' @param multievent .
+#' @param ci95 .
+#' @param risktable .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
@@ -649,7 +667,9 @@ survival <- function(
     ch = FALSE,
     endplot = 60,
     findcut = FALSE,
-    multievent = FALSE) {
+    multievent = FALSE,
+    ci95 = FALSE,
+    risktable = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('survival requires jmvcore to be installed (restart may be required)')
@@ -695,7 +715,9 @@ survival <- function(
         ch = ch,
         endplot = endplot,
         findcut = findcut,
-        multievent = multievent)
+        multievent = multievent,
+        ci95 = ci95,
+        risktable = risktable)
 
     analysis <- survivalClass$new(
         options = options,

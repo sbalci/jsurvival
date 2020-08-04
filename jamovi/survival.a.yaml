@@ -194,6 +194,14 @@ options:
       type: Bool
       default: false
 
+    - name: ci95
+      title: '95% CI'
+      type: Bool
+      default: false
 
+    - name: risktable
+      title: risktable
+      type: Bool
+      default: false
 
 ...
