@@ -108,7 +108,7 @@ children:
                 name: tint
                 fitToGrid: true
       - type: Label
-        label: Continuous Explanatory Variable
+        label: Date Variables
         fitToGrid: true
         children:
           - type: VariableSupplier
