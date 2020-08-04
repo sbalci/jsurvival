@@ -653,7 +653,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-            if (pw) {
+            if (self$options$pw) {
 
                 #  pairwise comparison ----
 
