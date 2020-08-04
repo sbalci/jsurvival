@@ -169,13 +169,13 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
                 stopifnot(lubridate::is.Date(
-                    lubridate::as_datetime(
+                    lubridate::as_date(
                         mydata[[fudate]]
                         )
                     )
                 )
 
-                stopifnot(lubridate::is.Date(lubridate::as_datetime((mydata[[dxdate]]))))
+                stopifnot(lubridate::is.Date(lubridate::as_date((mydata[[dxdate]]))))
 
                 if (timetypedata == "ymdhms") {
                 mydata[["end"]] <- lubridate::ymd_hms(mydata[[fudate]])
