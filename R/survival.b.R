@@ -204,7 +204,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 # Define Data For Analysis
 
 
-                mydata <- jmvcore::naOmit(mydata)
+                # naOmit ----
+
+                # mydata <- jmvcore::naOmit(mydata)
 
 
 
