@@ -924,8 +924,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     # myformula <- as.formula(myformula)
 
-    fit <- survival::survfit(survival::Surv(mytime, myoutcome) ~ contfactor,
-                             data = res.cat)
+    fit <- survminer::surv_fit(formula = survival::Surv(mytime, myoutcome) ~ contfactor,
+                               data = res.cat
+                               )
 
     plot5 <- survminer::ggsurvplot(fit,
                                    data = res.cat,
