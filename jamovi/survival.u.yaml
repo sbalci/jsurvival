@@ -107,6 +107,10 @@ children:
               - type: CheckBox
                 name: tint
                 fitToGrid: true
+      - type: VariableSupplier
+        persistentItems: false
+        stretchFactor: 1
+        children:
           - type: TargetLayoutBox
             children:
               - type: VariablesListBox
