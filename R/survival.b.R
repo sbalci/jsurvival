@@ -870,7 +870,15 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     plotData <- image4$state
 
-    res.cut <- plotData
+
+    res.cut <- survminer::surv_cutpoint(
+        plotData,
+        time = "mytime",
+        event = "myoutcome",
+        self$options$contexpl,
+        minprop = 0.1,
+        progressbar = TRUE
+    )
 
     plot4 <- plot(res.cut, self$options$contexpl, palette = "npg")
 
