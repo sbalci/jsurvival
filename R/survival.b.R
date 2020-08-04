@@ -321,6 +321,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                     # res.cut$cutpoint
                                     # summary(res.cut)
 
+                                    # View mydata ----
+
+                                    self$results$mydataview$setContent(head(mydata, 20))
 
                                     # Prepare Data For Continuous Explanatory Plots ----
 
