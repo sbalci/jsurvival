@@ -331,8 +331,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                     image4 <- self$results$plot4
                                     image4$setState(plotData4)
 
-                                    image5 <- self$results$plot5
-                                    image5$setState(plotData)
+                                    # image5 <- self$results$plot5
+                                    # image5$setState(plotData)
 
 
                                     }
