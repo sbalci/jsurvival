@@ -186,7 +186,6 @@ children:
         children:
           - type: Label
             label: Continuous Explanatory Variable
-            fitToGrid: true
             children:
               - type: TargetLayoutBox
                 label: Continuous Explanatory Variable
