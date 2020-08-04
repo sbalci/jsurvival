@@ -324,13 +324,13 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                                     # Prepare Data For Continuous Explanatory Plots ----
 
-                                    plotData4 <- mydata
+                                    plotData4 <- res.cut$data
 
                                     image4 <- self$results$plot4
                                     image4$setState(plotData4)
 
 
-                                    res.cat <- surv_categorize(res.cut)
+                                    res.cat <- survminer::surv_categorize(res.cut)
 
                                     plotData5 <- res.cat
 
