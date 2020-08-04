@@ -957,8 +957,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     }
 
 
-    if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-        return()
+    # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
+    #     return()
 
     plotData <- image4$state
 
@@ -991,8 +991,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     }
 
 
-    if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-        return()
+    # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
+    #     return()
 
     plotData <- image5$state
 
