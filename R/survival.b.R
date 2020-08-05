@@ -110,16 +110,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # Define Outcome ----
 
+
+
+                multievent <- self$options$multievent
+
                 outcome1 <- self$options$outcome
                 outcome1 <- self$data[[outcome1]]
-
-                analysistype <- self$options$analysistype
-                multievent <- self$options$multievent
-                dod <- self$options$dod
-                dooc <- self$options$dooc
-                awd <- self$options$awd
-                awod <- self$options$awod
-
 
 
                 if (!multievent) {
@@ -159,6 +155,16 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 } else if (multievent) {
 
+
+                    analysistype <- self$options$analysistype
+
+                    dod <- self$options$dod
+                    dooc <- self$options$dooc
+                    awd <- self$options$awd
+                    awod <- self$options$awod
+
+
+
                     if (analysistype == 'overall') {
 
                         # (Alive) <=> (Dead of Disease & Dead of Other Causes)
@@ -168,7 +174,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                         # mydata[["myoutcome"]][outcome1 == awd] <- 0
                         # mydata[["myoutcome"]][mydata[[outcome1]] == "awod"] <- 0
-                        mydata[["myoutcome"]][mydata[[outcome1]] == "dod"] <- 1
+                        mydata[["myoutcome"]][outcome1 == dod] <- 1
                         # mydata[["myoutcome"]][mydata[[outcome1]] == "dooc"] <- 1
 
 
