@@ -310,6 +310,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 self$results$mydataview$setContent(
                     list(
+                    "outcome1" = outcome1,
                     dod,
                     dooc,
                     awd,
