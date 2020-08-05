@@ -179,42 +179,32 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
+                    } else if (analysistype == 'cause') {
+
+                    # (Alive & Dead of Other Causes) <=> (Dead of Disease)
+
+
+                        mydata[["myoutcome"]] <- NA_integer_
+
+                        mydata[["myoutcome"]][outcome1 == awd] <- 0
+                        mydata[["myoutcome"]][outcome1 == awod] <- 0
+                        mydata[["myoutcome"]][outcome1 == dod] <- 1
+                        mydata[["myoutcome"]][outcome1 == dooc] <- 0
+
+                    } else if (analysistype == 'compete') {
+
+                    # Alive <=> Dead of Disease accounting for Dead of Other Causes
+
+
+
+                        mydata[["myoutcome"]] <- NA_integer_
+
+                        mydata[["myoutcome"]][outcome1 == awd] <- 0
+                        mydata[["myoutcome"]][outcome1 == awod] <- 0
+                        mydata[["myoutcome"]][outcome1 == dod] <- 1
+                        mydata[["myoutcome"]][outcome1 == dooc] <- 2
+
                     }
-
-                    # if (analysistype == 'cause') {
-                    #
-                    # # (Alive & Dead of Other Causes) <=> (Dead of Disease)
-                    #
-                    # mydata <-
-                    #     mydata %>%
-                    #     dplyr::mutate(
-                    #         myoutcome = dplyr::case_when(
-                    #
-                    #             outcome1 == awd ~ 0,
-                    #             outcome1 == awod ~ 0,
-                    #             outcome1 == dod ~ 1,
-                    #             outcome1 == dooc ~ 0,
-                    #             TRUE ~ NA_integer_
-                    #         )
-                    #     )
-                    # }
-
-                    # if (analysistype == 'compete') {
-                    #
-                    # # Alive <=> Dead of Disease accounting for Dead of Other Causes
-                    #
-                    # mydata <-
-                    #     mydata %>%
-                    #     dplyr::mutate(
-                    #         myoutcome = dplyr::case_when(
-                    #             outcome1 == awd ~ 0,
-                    #             outcome1 == awod ~ 0,
-                    #             outcome1 == dod ~ 1,
-                    #             outcome1 == dooc ~ 2,
-                    #             TRUE ~ NA_integer_
-                    #         )
-                    #     )
-                    # }
 
                     }
 
@@ -266,6 +256,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 timetypeoutput <- jmvcore::constructFormula(terms = self$options$timetypeoutput)
 
+
                 mydata <- mydata %>%
                     dplyr::mutate(
                         interval = lubridate::interval(start, end)
@@ -303,7 +294,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # naOmit ----
 
-                # mydata <- jmvcore::naOmit(mydata)
+                mydata <- jmvcore::naOmit(mydata)
 
 
 
