@@ -313,8 +313,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     dod,
                     dooc,
                     awd,
-                    awod
-                    # head(mydata, n = 30))
+                    awod,
+                    head(mydata, n = 30)
                     )
                     )
 
