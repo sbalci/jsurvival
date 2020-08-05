@@ -159,12 +159,16 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 }
 
-                if (multievent && analysistype == 'overall') {
+                if (multievent) {
+
+                    if (analysistype == 'overall') {
 
                         # (Alive) <=> (Dead of Disease & Dead of Other Causes)
 
 
-                        mydata[["myoutcome"]][outcome1 == "awd"] <- 0
+                        mydata[["outcome"]] <- "nedir"
+
+                        # mydata[["myoutcome"]][outcome1 == "awd"] <- 0
                         # mydata[["myoutcome"]][mydata[[outcome1]] == "awod"] <- 0
                         # mydata[["myoutcome"]][mydata[[outcome1]] == "dod"] <- 1
                         # mydata[["myoutcome"]][mydata[[outcome1]] == "dooc"] <- 1
@@ -208,6 +212,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     #     )
                     # }
 
+                    }
 
 
                 # Define Survival Time ----
