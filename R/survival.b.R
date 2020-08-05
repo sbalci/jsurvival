@@ -110,10 +110,20 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # Define Outcome ----
 
-
                 outcome1 <- self$options$outcome
-
                 outcome1 <- self$data[[outcome1]]
+
+                analysistype <- self$options$analysistype
+                multievent <- self$options$multievent
+                dod <- self$options$dod
+                dooc <- self$options$dooc
+                awd <- self$options$awd
+                awod <- self$options$awod
+
+
+
+                if (!multievent) {
+
 
                 if (inherits(outcome1, contin)) {
 
@@ -147,6 +157,48 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 }
 
+                }
+
+                if (multievent) {
+
+
+                    if (analysistype == 'overall') {}
+
+                        # (Alive) <=> (Dead of Disease & Dead of Other Causes)
+
+                    mydata[["myoutcome"]] <-
+                        ifelse(test = (outcome1 == dod || outcome1 == dooc),
+                               yes = 1,
+                               no = 0)
+
+                    if (analysistype == 'cause') {}
+
+                    # (Alive & Dead of Other Causes) <=> (Dead of Disease)
+
+
+                    mydata[["myoutcome"]] <-
+                        ifelse(test = (outcome1 == dod),
+                               yes = 1,
+                               no = 0)
+
+                    if (analysistype == 'compete') {}
+
+                    # Alive <=> Dead of Disease accounting for Dead of Other Causes
+
+
+                    mydata <-
+                        mydata %>%
+                        dplyr::mutate(
+                            myoutcome = dplyr::case_when(
+
+                                outcome1 == awd ~ 0,
+                                outcome1 == awod ~ 0,
+                                outcome1 == dod ~ 1,
+                                outcome1 == dooc ~ 2
+                            )
+                        )
+
+                }
 
 
                 # Define Survival Time ----
@@ -177,13 +229,21 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 #
                 # stopifnot(lubridate::is.Date(lubridate::ymd_hms((mydata[[dxdate]]))))
 
+                stopifnot(
+                    inherits(mydata[[dxdate]], c("POSIXct","POSIXt"))
+                )
+
+                stopifnot(
+                    inherits(mydata[[fudate]], c("POSIXct","POSIXt"))
+                )
+
                 if (timetypedata == "ymdhms") {
-                mydata[["end"]] <- lubridate::ymd_hms(mydata[[fudate]])
                 mydata[["start"]] <- lubridate::ymd_hms(mydata[[dxdate]])
+                mydata[["end"]] <- lubridate::ymd_hms(mydata[[fudate]])
                 }
                 if (timetypedata == "ymd") {
-                    mydata[["end"]] <- lubridate::ymd(mydata[[fudate]])
                     mydata[["start"]] <- lubridate::ymd(mydata[[dxdate]])
+                    mydata[["end"]] <- lubridate::ymd(mydata[[fudate]])
                 }
 
                 timetypeoutput <- jmvcore::constructFormula(terms = self$options$timetypeoutput)
@@ -231,15 +291,10 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # View mydata ----
 
-                # self$results$mydataview$setContent(
-                #     list(
-                #         # lubridate::is.Date(x = mydata[["dxdate"]]),
-                #         head(mydata, n = 30)
-                #         )
-                # )
+                self$results$mydataview$setContent(head(mydata, n = 30))
 
 
-                # return()
+                return()
 
 
                 # Continious Explanatory ----
@@ -556,7 +611,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "HR_multivariable"
                     )
 
-                for(i in seq_along(data_frame[,1,drop=T])) {
+                for (i in seq_along(data_frame[,1,drop = T])) {
                     coxTable$addRow(rowKey = i, values = c(data_frame[i,]))
                 }
 

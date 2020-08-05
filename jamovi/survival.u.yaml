@@ -81,7 +81,7 @@ children:
                 name: risktable
   - type: CollapseBox
     label: Survival Tables
-    collapsed: true
+    collapsed: false
     children:
       - type: Label
         label: Survival table
@@ -93,7 +93,7 @@ children:
             enable: (!contexpl)
   - type: CollapseBox
     label: Advanced Elapsed Time Options
-    collapsed: true
+    collapsed: false
     children:
       - type: Label
         label: Time Interval
@@ -142,7 +142,7 @@ children:
                 name: timetypeoutput
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
-    collapsed: true
+    collapsed: false
     children:
       - type: Label
         label: Analysis Type
@@ -173,7 +173,7 @@ children:
                 enable: (outcome && multievent)
   - type: CollapseBox
     label: Continuous Explanatory Variable
-    collapsed: true
+    collapsed: false
     children:
       - type: Label
         label: Continuous Explanatory Variable
