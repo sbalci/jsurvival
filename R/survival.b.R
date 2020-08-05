@@ -180,40 +180,40 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                         )
                     }
 
-                    if (analysistype == 'cause') {
+                    # if (analysistype == 'cause') {
+                    #
+                    # # (Alive & Dead of Other Causes) <=> (Dead of Disease)
+                    #
+                    # mydata <-
+                    #     mydata %>%
+                    #     dplyr::mutate(
+                    #         myoutcome = dplyr::case_when(
+                    #
+                    #             outcome1 == awd ~ 0,
+                    #             outcome1 == awod ~ 0,
+                    #             outcome1 == dod ~ 1,
+                    #             outcome1 == dooc ~ 0,
+                    #             TRUE ~ NA_integer_
+                    #         )
+                    #     )
+                    # }
 
-                    # (Alive & Dead of Other Causes) <=> (Dead of Disease)
-
-                    mydata <-
-                        mydata %>%
-                        dplyr::mutate(
-                            myoutcome = dplyr::case_when(
-
-                                outcome1 == awd ~ 0,
-                                outcome1 == awod ~ 0,
-                                outcome1 == dod ~ 1,
-                                outcome1 == dooc ~ 0,
-                                TRUE ~ NA_integer_
-                            )
-                        )
-                    }
-
-                    if (analysistype == 'compete') {
-
-                    # Alive <=> Dead of Disease accounting for Dead of Other Causes
-
-                    mydata <-
-                        mydata %>%
-                        dplyr::mutate(
-                            myoutcome = dplyr::case_when(
-                                outcome1 == awd ~ 0,
-                                outcome1 == awod ~ 0,
-                                outcome1 == dod ~ 1,
-                                outcome1 == dooc ~ 2,
-                                TRUE ~ NA_integer_
-                            )
-                        )
-                    }
+                    # if (analysistype == 'compete') {
+                    #
+                    # # Alive <=> Dead of Disease accounting for Dead of Other Causes
+                    #
+                    # mydata <-
+                    #     mydata %>%
+                    #     dplyr::mutate(
+                    #         myoutcome = dplyr::case_when(
+                    #             outcome1 == awd ~ 0,
+                    #             outcome1 == awod ~ 0,
+                    #             outcome1 == dod ~ 1,
+                    #             outcome1 == dooc ~ 2,
+                    #             TRUE ~ NA_integer_
+                    #         )
+                    #     )
+                    # }
 
                 }
 
