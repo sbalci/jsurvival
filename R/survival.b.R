@@ -166,9 +166,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                         mydata[["myoutcome"]] <- "nedir"
 
-                        mydata[["myoutcome"]][outcome1 == "awd"] <- 0
+                        # mydata[["myoutcome"]][outcome1 == awd] <- 0
                         # mydata[["myoutcome"]][mydata[[outcome1]] == "awod"] <- 0
-                        # mydata[["myoutcome"]][mydata[[outcome1]] == "dod"] <- 1
+                        mydata[["myoutcome"]][mydata[[outcome1]] == "dod"] <- 1
                         # mydata[["myoutcome"]][mydata[[outcome1]] == "dooc"] <- 1
 
 
