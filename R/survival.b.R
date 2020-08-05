@@ -170,12 +170,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                         # (Alive) <=> (Dead of Disease & Dead of Other Causes)
 
 
-                        mydata[["myoutcome"]] <- "nedir"
+                        mydata[["myoutcome"]] <- NA_integer_
 
-                        # mydata[["myoutcome"]][outcome1 == awd] <- 0
-                        # mydata[["myoutcome"]][mydata[[outcome1]] == "awod"] <- 0
+                        mydata[["myoutcome"]][outcome1 == awd] <- 0
+                        mydata[["myoutcome"]][outcome1 == awod] <- 0
                         mydata[["myoutcome"]][outcome1 == dod] <- 1
-                        # mydata[["myoutcome"]][mydata[[outcome1]] == "dooc"] <- 1
+                        mydata[["myoutcome"]][outcome1 == dooc] <- 1
 
 
 
