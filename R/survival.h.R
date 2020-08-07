@@ -20,7 +20,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             awod = NULL,
             analysistype = "overall",
             cutp = "12, 36, 60",
-            timetypedata = "ymdhms",
+            timetypedata = "ymd",
             timetypeoutput = "months",
             pw = FALSE,
             sc = FALSE,
@@ -121,8 +121,13 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 timetypedata,
                 options=list(
                     "ymdhms",
-                    "ymd"),
-                default="ymdhms")
+                    "ymd",
+                    "ydm",
+                    "mdy",
+                    "myd",
+                    "dmy",
+                    "dym"),
+                default="ymd")
             private$..timetypeoutput <- jmvcore::OptionList$new(
                 "timetypeoutput",
                 timetypeoutput,
@@ -668,7 +673,7 @@ survival <- function(
     awod,
     analysistype = "overall",
     cutp = "12, 36, 60",
-    timetypedata = "ymdhms",
+    timetypedata = "ymd",
     timetypeoutput = "months",
     pw = FALSE,
     sc = FALSE,

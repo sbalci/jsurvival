@@ -120,14 +120,24 @@ options:
 
 
     - name: timetypedata
-      title: Time Type in Data
+      title: 'Time Type in Data (default: YYYY-MM-DD)'
       type: List
       options:
         - title: ymdhms
           name: ymdhms
         - title: ymd
           name: ymd
-      default: ymdhms
+        - title: ydm
+          name: ydm
+        - title: mdy
+          name: mdy
+        - title: myd
+          name: myd
+        - title: dmy
+          name: dmy
+        - title: dym
+          name: dym
+      default: ymd
       description:
           R: select the time type in data
 

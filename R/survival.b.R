@@ -238,12 +238,13 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 # stopifnot(lubridate::is.Date(lubridate::ymd_hms((mydata[[dxdate]]))))
 
                 stopifnot(
-                    inherits(mydata[[dxdate]], c("POSIXct","POSIXt"))
+                    inherits(mydata[[dxdate]], c("POSIXct","POSIXt", "POSIXlt"))
                 )
 
                 stopifnot(
-                    inherits(mydata[[fudate]], c("POSIXct","POSIXt"))
+                    inherits(mydata[[fudate]], c("POSIXct","POSIXt", "POSIXlt"))
                 )
+
 
                 if (timetypedata == "ymdhms") {
                 mydata[["start"]] <- lubridate::ymd_hms(mydata[[dxdate]])
@@ -253,6 +254,31 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     mydata[["start"]] <- lubridate::ymd(mydata[[dxdate]])
                     mydata[["end"]] <- lubridate::ymd(mydata[[fudate]])
                 }
+                if (timetypedata == "ydm") {
+                    mydata[["start"]] <- lubridate::ydm(mydata[[dxdate]])
+                    mydata[["end"]] <- lubridate::ydm(mydata[[fudate]])
+                }
+                if (timetypedata == "mdy") {
+                    mydata[["start"]] <- lubridate::mdy(mydata[[dxdate]])
+                    mydata[["end"]] <- lubridate::mdy(mydata[[fudate]])
+                }
+                if (timetypedata == "myd") {
+                    mydata[["start"]] <- lubridate::myd(mydata[[dxdate]])
+                    mydata[["end"]] <- lubridate::myd(mydata[[fudate]])
+                }
+                if (timetypedata == "dmy") {
+                    mydata[["start"]] <- lubridate::dmy(mydata[[dxdate]])
+                    mydata[["end"]] <- lubridate::dmy(mydata[[fudate]])
+                }
+                if (timetypedata == "dym") {
+                    mydata[["start"]] <- lubridate::dym(mydata[[dxdate]])
+                    mydata[["end"]] <- lubridate::dym(mydata[[fudate]])
+                }
+
+
+
+
+
 
                 timetypeoutput <- jmvcore::constructFormula(terms = self$options$timetypeoutput)
 
@@ -260,7 +286,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 mydata <- mydata %>%
                     dplyr::mutate(
                         interval = lubridate::interval(start, end)
-                    ) %>%
+                    )
+
+                stopifnot(lubridate::is.interval(mydata[["interval"]]))
+
+                mydata <- mydata %>%
                     dplyr::mutate(
                         mytime = lubridate::time_length(interval, timetypeoutput)
                     )
@@ -311,7 +341,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     )
                     )
 
-                return()
+                # return()
 
 
                 # Continious Explanatory ----
