@@ -601,9 +601,9 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' Function for Generating Summaries for Survival Analysis.
 #'
 #' @examples
-#' \dontrun{
 #' # example will be added
-#'}
+#' flow::flow_view(x = ClinicoPath::survival)
+#'
 #' @param data The data as a data frame.
 #' @param elapsedtime .
 #' @param tint .

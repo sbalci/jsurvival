@@ -10,9 +10,12 @@ jas: '1.2'
 description:
     main: Function for Generating Summaries for Survival Analysis.
     R:
-        dontrun: true
+        dontrun: false
         usage: |
             # example will be added
+            flow::flow_view(x = ClinicoPath::survival)
+
+
 
 
 options:

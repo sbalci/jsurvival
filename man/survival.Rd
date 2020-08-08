@@ -117,7 +117,7 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 Function for Generating Summaries for Survival Analysis.
 }
 \examples{
-\dontrun{
 # example will be added
-}
+flow::flow_view(x = ClinicoPath::survival)
+
 }
