@@ -336,10 +336,10 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 self$results$mydataview$setContent(
                     list(
                     "outcome1" = outcome1,
-                    dod,
-                    dooc,
-                    awd,
-                    awod,
+                    # dod,
+                    # dooc,
+                    # awd,
+                    # awod,
                     head(mydata, n = 30)
                     )
                     )
@@ -378,6 +378,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
                                     formula2 <- as.vector(self$options$contexpl)
+
+                                    sas <- self$options$sas
+
+                                    if (sas) {
+                                        formula2 <- 1
+                                    }
 
                                     myformula <- paste("Surv(", "mytime", "," , "myoutcome", ")")
 
@@ -576,6 +582,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
 
+                sas <- self$options$sas
+
+                if (sas) {
+                    thefactor <- 1
+                 }
 
                 formula <- paste('survival::Surv(mytime, myoutcome) ~ ', thefactor)
                 formula <- as.formula(formula)
@@ -632,6 +643,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
                 formula2 <- as.vector(self$options$explanatory)
+
+                sas <- self$options$sas
+
+                if (sas) {
+                    formula2 <- 1
+                    }
 
                 myformula <- paste("Surv(", "mytime", "," , "myoutcome", ")")
 
@@ -818,6 +835,14 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 title2 <- as.character(thefactor)
 
+
+                sas <- self$options$sas
+
+                if (sas) {
+                    thefactor <- 1
+                    title2 <- "Overall"
+                }
+
                 pairwiseTable$setTitle(paste0('Pairwise Comparisons ', title2))
 
 
@@ -914,6 +939,14 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     title2 <- as.character(thefactor)
 
+    sas <- self$options$sas
+
+    if (sas) {
+        thefactor <- 1
+        title2 <- "Overall"
+    }
+
+
     plot <- plotData %>%
         finalfit::surv_plot(.data = .,
                             dependent = 'survival::Surv(mytime, myoutcome)',
@@ -969,6 +1002,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     title2 <- as.character(thefactor)
 
+    sas <- self$options$sas
+
+    if (sas) {
+        thefactor <- 1
+        title2 <- "Overall"
+    }
 
     plot2 <- plotData %>%
         finalfit::surv_plot(.data = .,
@@ -1023,6 +1062,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     title2 <- as.character(thefactor)
 
+    sas <- self$options$sas
+
+    if (sas) {
+        thefactor <- 1
+        title2 <- "Overall"
+    }
 
 
     plot3 <- plotData %>%
@@ -1108,6 +1153,15 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
     contfactor <- jmvcore::constructFormula(terms = self$options$contexpl)
+
+
+    sas <- self$options$sas
+
+    if (sas) {
+        contfactor <- 1
+    }
+
+
 
     # contfactor <- as.formula(contfactor)
 
