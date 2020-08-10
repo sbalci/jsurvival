@@ -918,7 +918,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             xlab = paste0('Time (', self$options$timetypeoutput, ')'),
                             pval = TRUE,
                             legend = 'none',
-                            break.time.by = 12,
+                            break.time.by = self$options$byplot,
                             xlim = c(0,self$options$endplot),
                             title = paste0("Survival curves for ", title2),
                             subtitle = "Based on Kaplan-Meier estimates",
@@ -974,7 +974,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             xlab = paste0('Time (', self$options$timetypeoutput, ')'),
                             # pval = TRUE,
                             legend = 'none',
-                            break.time.by = 12,
+                            break.time.by = self$options$byplot,
                             xlim = c(0,self$options$endplot),
                             title = paste0("Cumulative Events ", title2),
                             fun = "event",
@@ -1029,7 +1029,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             xlab = paste0('Time (', self$options$timetypeoutput, ')'),
                             # pval = TRUE,
                             legend = 'none',
-                            break.time.by = 12,
+                            break.time.by = self$options$byplot,
                             xlim = c(0,self$options$endplot),
                             title = paste0("Cumulative Hazard ", title2),
                             fun = "cumhaz",
@@ -1173,21 +1173,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         KMunicate::KMunicate(fit = km_fit,
                              time_scale = time_scale
                              )
-
-    # plotData %>%
-    #     finalfit::surv_plot(.data = .,
-    #                         dependent = 'survival::Surv(mytime, myoutcome)',
-    #                         explanatory = as.vector(self$options$explanatory),
-    #                         xlab = paste0('Time (', self$options$timetypeoutput, ')'),
-    #                         pval = TRUE,
-    #                         legend = 'none',
-    #                         break.time.by = 12,
-    #                         xlim = c(0,self$options$endplot),
-    #                         title = paste0("Survival curves for ", title2),
-    #                         subtitle = "Based on Kaplan-Meier estimates",
-    #                         risk.table = self$options$risktable,
-    #                         conf.int = self$options$ci95
-    #     )
 
 
     print(plot6)

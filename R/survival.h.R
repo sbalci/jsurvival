@@ -531,7 +531,9 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime",
+                    "endplot",
+                    "byplot")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
@@ -546,7 +548,9 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime",
+                    "endplot",
+                    "byplot")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
@@ -561,7 +565,9 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime",
+                    "endplot",
+                    "byplot")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot4",
@@ -576,7 +582,9 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "contexpl",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime",
+                    "endplot",
+                    "byplot")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot5",
@@ -591,7 +599,9 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "contexpl",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime",
+                    "endplot",
+                    "byplot")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot6",
@@ -606,7 +616,9 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime"),
+                    "overalltime",
+                    "endplot",
+                    "byplot"),
                 refs=list(
                     "KMunicate",
                     "KMunicate2")))}))

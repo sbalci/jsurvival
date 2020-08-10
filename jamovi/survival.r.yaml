@@ -252,6 +252,8 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - endplot
+          - byplot
 
 
     - name: plot2
@@ -269,6 +271,8 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - endplot
+          - byplot
 
 
     - name: plot3
@@ -286,6 +290,8 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - endplot
+          - byplot
 
 
     - name: plot4
@@ -302,6 +308,8 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - endplot
+          - byplot
 
 
     - name: plot5
@@ -318,6 +326,8 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - endplot
+          - byplot
 
 
 
@@ -337,6 +347,8 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - endplot
+          - byplot
       refs:
           - KMunicate
           - KMunicate2
