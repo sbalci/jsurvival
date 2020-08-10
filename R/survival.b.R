@@ -580,11 +580,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 km_fit <- survival::survfit(formula, data = mydata)
 
 
-                image6 <- self$results$plot6
-                image6$setState(km_fit)
-
-
-
                 km_fit_median_df <- summary(km_fit)
                 results1html <- as.data.frame(km_fit_median_df$table) %>%
                     janitor::clean_names(dat = ., case = "snake") %>%
@@ -1134,7 +1129,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 ,
-.plot6 = function(image6, ggtheme, theme, ...) {  # <-- the plot5 function ----
+.plot6 = function(image6, ggtheme, theme, ...) {  # <-- the plot6 function ----
 
 
     kmunicate <- self$options$kmunicate
@@ -1154,18 +1149,25 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
     #     return()
 
-    # plotData <- image6$state
+    plotData <- image6$state
 
-    KM <- image6$state
+    # KM <- image6$state
 
 
     # thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
 
     # title2 <- as.character(thefactor)
 
+    thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
+
+
+    formula <- paste('survival::Surv(mytime, myoutcome) ~ ', thefactor)
+    formula <- as.formula(formula)
+
+    km_fit <- survival::survfit(formula, data = mydata)
 
     plot6 <-
-        KMunicate::KMunicate(fit = KM,
+        KMunicate::KMunicate(fit = km_fit,
                              time_scale = self$options$timetypeoutput
                              )
 
