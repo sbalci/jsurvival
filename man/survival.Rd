@@ -28,6 +28,7 @@ survival(
   ce = FALSE,
   ch = FALSE,
   endplot = 60,
+  byplot = 12,
   findcut = FALSE,
   multievent = FALSE,
   ci95 = FALSE,
@@ -80,6 +81,8 @@ survival(
 \item{ch}{.}
 
 \item{endplot}{.}
+
+\item{byplot}{.}
 
 \item{findcut}{.}
 

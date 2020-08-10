@@ -28,6 +28,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             ce = FALSE,
             ch = FALSE,
             endplot = 60,
+            byplot = 12,
             findcut = FALSE,
             multievent = FALSE,
             ci95 = FALSE,
@@ -162,6 +163,10 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "endplot",
                 endplot,
                 default=60)
+            private$..byplot <- jmvcore::OptionInteger$new(
+                "byplot",
+                byplot,
+                default=12)
             private$..findcut <- jmvcore::OptionBool$new(
                 "findcut",
                 findcut,
@@ -201,6 +206,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..ce)
             self$.addOption(private$..ch)
             self$.addOption(private$..endplot)
+            self$.addOption(private$..byplot)
             self$.addOption(private$..findcut)
             self$.addOption(private$..multievent)
             self$.addOption(private$..ci95)
@@ -229,6 +235,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ce = function() private$..ce$value,
         ch = function() private$..ch$value,
         endplot = function() private$..endplot$value,
+        byplot = function() private$..byplot$value,
         findcut = function() private$..findcut$value,
         multievent = function() private$..multievent$value,
         ci95 = function() private$..ci95$value,
@@ -256,6 +263,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..ce = NA,
         ..ch = NA,
         ..endplot = NA,
+        ..byplot = NA,
         ..findcut = NA,
         ..multievent = NA,
         ..ci95 = NA,
@@ -654,6 +662,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param ce .
 #' @param ch .
 #' @param endplot .
+#' @param byplot .
 #' @param findcut .
 #' @param multievent .
 #' @param ci95 .
@@ -710,6 +719,7 @@ survival <- function(
     ce = FALSE,
     ch = FALSE,
     endplot = 60,
+    byplot = 12,
     findcut = FALSE,
     multievent = FALSE,
     ci95 = FALSE,
@@ -759,6 +769,7 @@ survival <- function(
         ce = ce,
         ch = ch,
         endplot = endplot,
+        byplot = byplot,
         findcut = findcut,
         multievent = multievent,
         ci95 = ci95,

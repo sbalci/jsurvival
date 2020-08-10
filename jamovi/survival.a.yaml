@@ -191,11 +191,18 @@ options:
       default: false
 
 
-
     - name: endplot
       title: Plot End Time
       type: Integer
       default: 60
+
+
+    - name: byplot
+      title: Time Interval
+      type: Integer
+      default: 12
+
+
 
     - name: findcut
       title: Cut-off for Continious Explanatory
