@@ -1168,7 +1168,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
     plot6 <-
         KMunicate::KMunicate(fit = km_fit,
-                             time_scale = self$options$timetypeoutput
+                             time_scale = time_scale
                              )
 
     # plotData %>%
