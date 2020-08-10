@@ -579,6 +579,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 km_fit <- survival::survfit(formula, data = mydata)
 
+
+                image6 <- self$results$plot6
+                image6$setState(km_fit)
+
+
+
                 km_fit_median_df <- summary(km_fit)
                 results1html <- as.data.frame(km_fit_median_df$table) %>%
                     janitor::clean_names(dat = ., case = "snake") %>%
@@ -875,6 +881,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                         image3 <- self$results$plot3
                         image3$setState(plotData)
 
+                        image6 <- self$results$plot6
+                        image6$setState(plotData)
 
 
                     }
@@ -1123,6 +1131,64 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     TRUE
 }
 
+
+
+,
+.plot6 = function(image6, ggtheme, theme, ...) {  # <-- the plot5 function ----
+
+
+    kmunicate <- self$options$kmunicate
+
+    if (!kmunicate)
+        return()
+
+    # if (nrow(self$data) == 0)
+    #     stop('Data contains no (complete) rows')
+
+    if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
+
+        stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
+
+    }
+
+    # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
+    #     return()
+
+    # plotData <- image6$state
+
+    KM <- image6$state
+
+
+    # thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
+
+    # title2 <- as.character(thefactor)
+
+
+    plot6 <-
+        KMunicate::KMunicate(fit = KM,
+                             time_scale = self$options$timetypeoutput
+                             )
+
+    # plotData %>%
+    #     finalfit::surv_plot(.data = .,
+    #                         dependent = 'survival::Surv(mytime, myoutcome)',
+    #                         explanatory = as.vector(self$options$explanatory),
+    #                         xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+    #                         pval = TRUE,
+    #                         legend = 'none',
+    #                         break.time.by = 12,
+    #                         xlim = c(0,self$options$endplot),
+    #                         title = paste0("Survival curves for ", title2),
+    #                         subtitle = "Based on Kaplan-Meier estimates",
+    #                         risk.table = self$options$risktable,
+    #                         conf.int = self$options$ci95
+    #     )
+
+
+    print(plot6)
+    TRUE
+
+    }
 
 
 

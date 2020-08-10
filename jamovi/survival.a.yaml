@@ -173,6 +173,11 @@ options:
       type: Bool
       default: false
 
+    - name: kmunicate
+      title: KMunicate-Style Plot
+      type: Bool
+      default: false
+
 
     - name: ce
       title: Cumulative Events

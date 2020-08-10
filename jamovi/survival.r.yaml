@@ -320,6 +320,29 @@ items:
           - overalltime
 
 
+
+
+
+    - name: plot6
+      title: KMunicate-Style Plot
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .plot6
+      visible: (kmunicate)
+      requiresData: true
+      clearWith:
+          - kmunicate
+          - explanatory
+          - outcome
+          - outcomeLevel
+          - overalltime
+      refs:
+          - KMunicate
+          - KMunicate2
+
+
+
 refs:
     - finalfit
     - survival

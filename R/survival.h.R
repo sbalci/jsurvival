@@ -24,6 +24,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             timetypeoutput = "months",
             pw = FALSE,
             sc = FALSE,
+            kmunicate = FALSE,
             ce = FALSE,
             ch = FALSE,
             endplot = 60,
@@ -145,6 +146,10 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "sc",
                 sc,
                 default=FALSE)
+            private$..kmunicate <- jmvcore::OptionBool$new(
+                "kmunicate",
+                kmunicate,
+                default=FALSE)
             private$..ce <- jmvcore::OptionBool$new(
                 "ce",
                 ce,
@@ -192,6 +197,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..timetypeoutput)
             self$.addOption(private$..pw)
             self$.addOption(private$..sc)
+            self$.addOption(private$..kmunicate)
             self$.addOption(private$..ce)
             self$.addOption(private$..ch)
             self$.addOption(private$..endplot)
@@ -219,6 +225,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         timetypeoutput = function() private$..timetypeoutput$value,
         pw = function() private$..pw$value,
         sc = function() private$..sc$value,
+        kmunicate = function() private$..kmunicate$value,
         ce = function() private$..ce$value,
         ch = function() private$..ch$value,
         endplot = function() private$..endplot$value,
@@ -245,6 +252,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..timetypeoutput = NA,
         ..pw = NA,
         ..sc = NA,
+        ..kmunicate = NA,
         ..ce = NA,
         ..ch = NA,
         ..endplot = NA,
@@ -272,7 +280,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         plot2 = function() private$.items[["plot2"]],
         plot3 = function() private$.items[["plot3"]],
         plot4 = function() private$.items[["plot4"]],
-        plot5 = function() private$.items[["plot5"]]),
+        plot5 = function() private$.items[["plot5"]],
+        plot6 = function() private$.items[["plot6"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -574,7 +583,25 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "contexpl",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))}))
+                    "overalltime")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot6",
+                title="KMunicate-Style Plot",
+                width=600,
+                height=450,
+                renderFun=".plot6",
+                visible="(kmunicate)",
+                requiresData=TRUE,
+                clearWith=list(
+                    "kmunicate",
+                    "explanatory",
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime"),
+                refs=list(
+                    "KMunicate",
+                    "KMunicate2")))}))
 
 survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "survivalBase",
@@ -623,6 +650,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param timetypeoutput select the time type in output
 #' @param pw .
 #' @param sc .
+#' @param kmunicate .
 #' @param ce .
 #' @param ch .
 #' @param endplot .
@@ -648,6 +676,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot4} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot5} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plot6} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -677,6 +706,7 @@ survival <- function(
     timetypeoutput = "months",
     pw = FALSE,
     sc = FALSE,
+    kmunicate = FALSE,
     ce = FALSE,
     ch = FALSE,
     endplot = 60,
@@ -725,6 +755,7 @@ survival <- function(
         timetypeoutput = timetypeoutput,
         pw = pw,
         sc = sc,
+        kmunicate = kmunicate,
         ce = ce,
         ch = ch,
         endplot = endplot,

@@ -61,6 +61,9 @@ children:
                 name: sc
                 enable: (!contexpl)
               - type: CheckBox
+                name: kmunicate
+                enable: (!contexpl)
+              - type: CheckBox
                 name: ce
                 enable: (!contexpl)
               - type: CheckBox
