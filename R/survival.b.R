@@ -1161,7 +1161,14 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
 
 
+    sas <- self$options$sas
+
+    if (sas) {
+        thefactor <- 1
+    }
+
     formula <- paste('survival::Surv(mytime, myoutcome) ~ ', thefactor)
+
     formula <- as.formula(formula)
 
     km_fit <- survival::survfit(formula, data = plotData)

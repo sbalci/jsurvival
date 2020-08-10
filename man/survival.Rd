@@ -32,7 +32,8 @@ survival(
   findcut = FALSE,
   multievent = FALSE,
   ci95 = FALSE,
-  risktable = FALSE
+  risktable = FALSE,
+  sas = FALSE
 )
 }
 \arguments{
@@ -91,6 +92,8 @@ survival(
 \item{ci95}{.}
 
 \item{risktable}{.}
+
+\item{sas}{.}
 }
 \value{
 A results object containing:
