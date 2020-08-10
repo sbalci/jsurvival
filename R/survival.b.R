@@ -147,7 +147,10 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                         ifelse(test = outcome1 == outcomeLevel,
                                yes = 1,
                                no = 0)
-                } else {
+
+
+
+                    } else {
 
                     stop('When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0. If you are using a factor as an outcome, please check the levels and content.')
 

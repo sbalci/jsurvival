@@ -349,6 +349,7 @@ items:
           - overalltime
           - endplot
           - byplot
+          - sas
       refs:
           - KMunicate
           - KMunicate2

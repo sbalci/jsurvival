@@ -626,7 +626,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcomeLevel",
                     "overalltime",
                     "endplot",
-                    "byplot"),
+                    "byplot",
+                    "sas"),
                 refs=list(
                     "KMunicate",
                     "KMunicate2")))}))
