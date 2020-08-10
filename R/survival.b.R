@@ -1164,7 +1164,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     formula <- paste('survival::Surv(mytime, myoutcome) ~ ', thefactor)
     formula <- as.formula(formula)
 
-    km_fit <- survival::survfit(formula, data = mydata)
+    km_fit <- survival::survfit(formula, data = plotData)
 
     plot6 <-
         KMunicate::KMunicate(fit = km_fit,
