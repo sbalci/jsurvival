@@ -38,12 +38,6 @@ analyses:
     menuTitle: Odds Ratio Table and Plot
     description: Function for Odds Ratio Table and Plot.
     menuSubtitle: Odds Ratio for Binary Outcomes
-  - title: Time Interval
-    name: timeinterval
-    ns: jsurvival
-    menuGroup: ClinicoPath
-    menuTitle: Time Interval
-    menuSubgroup: ClinicoPath Survival
 datasets:
   - name: histopathology including analysis
     path: histopathologySurvival.omv
