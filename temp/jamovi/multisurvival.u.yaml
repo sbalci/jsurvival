@@ -1,11 +1,11 @@
-title: Time Interval
-name: timeinterval
+title: Multivariate Survival Analysis
+name: multisurvival
 jus: '3.0'
 stage: 0
 compilerMode: tame
 children:
   - type: VariableSupplier
-    persistentItems: false
+    persistentItems: true
     stretchFactor: 1
     children:
       - type: TargetLayoutBox
@@ -16,7 +16,7 @@ children:
             maxItemCount: 1
             isTarget: true
       - type: TargetLayoutBox
-        label: 'Outcome'
+        label: Outcome
         children:
           - type: VariablesListBox
             name: outcome
@@ -26,9 +26,24 @@ children:
             name: outcomeLevel
             enable: (outcome)
       - type: TargetLayoutBox
-        label: Explanatory Variable
+        label: Explanatory Variables
         children:
           - type: VariablesListBox
             name: explanatory
             isTarget: true
-
+  - type: Label
+    label: Plots
+    margin: large
+    cell:
+      row: 1
+      column: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: CheckBox
+            name: hr
+            children:
+              - type: ComboBox
+                name: sty
+                enable: (hr)
