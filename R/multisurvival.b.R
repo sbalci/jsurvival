@@ -167,7 +167,17 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                # FIX ----
                                ) -> tMultivariate
 
-            self$results$text2$setContent(tMultivariate[[2]])
+
+            text2 <- glue::glue("
+                                <br>
+                                ",
+                                tMultivariate[[2]],
+                                "
+                                <br>
+                                ")
+
+
+            self$results$text2$setContent(text2)
 
 
 
