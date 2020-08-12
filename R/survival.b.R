@@ -696,6 +696,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     janitor::clean_names(dat = ., case = "snake")
 
 
+                return()
+
                 # Cox-Regression Table ----
 
                 # tCox_df <- tCox_df[,-(dim(tCox_df)[2])]
