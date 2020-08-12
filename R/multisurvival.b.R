@@ -167,6 +167,10 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                # FIX ----
                                ) -> tMultivariate
 
+            self$results$text2$setContent(tMultivariate)
+
+
+
             results1 <- knitr::kable(tMultivariate,
                                      row.names = FALSE,
                                      align = c('l', 'l', 'r', 'r', 'r', 'r'),

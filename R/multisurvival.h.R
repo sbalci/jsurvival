@@ -75,6 +75,7 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         todo = function() private$.items[["todo"]],
+        text2 = function() private$.items[["text2"]],
         text = function() private$.items[["text"]],
         plot = function() private$.items[["plot"]],
         plot3 = function() private$.items[["plot3"]]),
@@ -94,6 +95,10 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcome",
                     "outcomeLevel",
                     "overalltime")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="text2",
+                title="Deneme"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="text",
@@ -173,6 +178,7 @@ multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$text2} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
