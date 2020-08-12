@@ -163,7 +163,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                dependent = myformula,
                                explanatory = formula2,
 
-                               # metrics = TRUE
+                               metrics = TRUE
                                # FIX ----
                                ) -> tMultivariate
 
