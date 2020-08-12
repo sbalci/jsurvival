@@ -389,9 +389,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                                     finalfit::finalfit(.data = mydata,
                                                        dependent = myformula,
-                                                       explanatory = formula2
+                                                       explanatory = formula2,
 
-                                                       # metrics = TRUE
+                                                       metrics = TRUE
                                     ) -> tCox
 
                                     tCox_df <- tibble::as_tibble(tCox, .name_repair = "minimal") %>%
@@ -654,9 +654,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 finalfit::finalfit(.data = mydata,
                 dependent = myformula,
-                explanatory = formula2
+                explanatory = formula2,
 
-                # metrics = TRUE
+                metrics = TRUE
                 ) -> tCox
 
                 tCox_df <- tibble::as_tibble(tCox, .name_repair = "minimal") %>%

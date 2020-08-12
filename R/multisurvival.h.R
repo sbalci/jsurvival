@@ -108,7 +108,8 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Html$new(
                 options=options,
                 name="text2",
-                title=""))
+                title="",
+                refs="finalfit"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",

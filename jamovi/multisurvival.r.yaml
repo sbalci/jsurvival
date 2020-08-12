@@ -28,6 +28,9 @@ items:
     - name:  text2
       title: ''
       type:  Html
+      refs: finalfit
+
+
 
     - name: plot
       title: Hazards Regression Plot
