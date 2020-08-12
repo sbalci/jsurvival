@@ -692,9 +692,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 tCox_df <- tCox[[1]]
 
-                self$results$tCoxtext3$setContent(tCox_df)
+                # self$results$tCoxtext3$setContent(tCox_df)
 
-                return()
+                # return()
 
                 tCox_df <- tibble::as_tibble(tCox_df, .name_repair = "minimal") %>%
                     janitor::clean_names(dat = ., case = "snake")
