@@ -121,6 +121,12 @@ items:
           - overalltime
 
 
+    - name:  tCoxtext2
+      title: ''
+      type:  Html
+      refs: finalfit
+
+
     # - name:  rescutTable
     #   title: 'rescutTable'
     #   type:  Preformatted

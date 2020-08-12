@@ -394,7 +394,25 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                                                        metrics = TRUE
                                     ) -> tCox
 
-                                    tCox_df <- tibble::as_tibble(tCox, .name_repair = "minimal") %>%
+
+                                    tCoxtext2 <- glue::glue("
+                                <br>
+                                <b>Model Metrics:</b>
+                                  ",
+                                unlist(
+                                    tCox[[2]]
+                                ),
+                                "
+                                <br>
+                                ")
+
+
+                                    self$results$tCoxtext2$setContent(tCoxtext2)
+
+
+
+
+                                    tCox_df <- tibble::as_tibble(tCox[[1]], .name_repair = "minimal") %>%
                                         janitor::clean_names(dat = ., case = "snake")
 
 
@@ -659,7 +677,26 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 metrics = TRUE
                 ) -> tCox
 
-                tCox_df <- tibble::as_tibble(tCox, .name_repair = "minimal") %>%
+
+
+                tCoxtext2 <- glue::glue("
+                                <br>
+                                <b>Model Metrics:</b>
+                                  ",
+                                unlist(
+                                    tCox[[2]]
+                                ),
+                                "
+                                <br>
+                                ")
+
+
+                self$results$tCoxtext2$setContent(tCoxtext2)
+
+
+
+
+                tCox_df <- tibble::as_tibble(tCox[[1]], .name_repair = "minimal") %>%
                     janitor::clean_names(dat = ., case = "snake")
 
 

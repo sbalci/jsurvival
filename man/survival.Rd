@@ -104,6 +104,7 @@ A results object containing:
 \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$coxSummary} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$coxTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$tCoxtext2} \tab \tab \tab \tab \tab a html \cr
 \code{results$rescutTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$survTableSummary} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
