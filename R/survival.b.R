@@ -677,21 +677,19 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-                # tCoxtext2 <- glue::glue("
-                #                 <br>
-                #                 <b>Model Metrics:</b>
-                #                   ",
-                #                 unlist(
-                #                     tCox[[2]]
-                #                 ),
-                #                 "
-                #                 <br>
-                #                 ")
+                tCoxtext2 <- glue::glue("
+                                <br>
+                                <b>Model Metrics:</b>
+                                  ",
+                                unlist(
+                                    tCox[[2]]
+                                ),
+                                "
+                                <br>
+                                ")
 
-                self$results$tCoxtext2$setContent(tCox)
-                self$results$tCoxtext3$setContent(tCox)
-
-                # tCox[[1]]
+                self$results$tCoxtext2$setContent(tCoxtext2)
+                self$results$tCoxtext3$setContent(tCox[[1]])
 
                 return()
 
