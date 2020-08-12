@@ -389,30 +389,28 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                                     finalfit::finalfit(.data = mydata,
                                                        dependent = myformula,
-                                                       explanatory = formula2,
+                                                       explanatory = formula2
 
-                                                       metrics = TRUE
+                                                       # , metrics = TRUE
                                     ) -> tCox
 
 
-                                    tCoxtext2 <- glue::glue("
-                                <br>
-                                <b>Model Metrics:</b>
-                                  ",
-                                unlist(
-                                    tCox[[2]]
-                                ),
-                                "
-                                <br>
-                                ")
-
-
-                                    self$results$tCoxtext2$setContent(tCoxtext2)
-
+                                #     tCoxtext2 <- glue::glue("
+                                # <br>
+                                # <b>Model Metrics:</b>
+                                #   ",
+                                # unlist(
+                                #     tCox[[2]]
+                                # ),
+                                # "
+                                # <br>
+                                # ")
+                                #     self$results$tCoxtext2$setContent(tCoxtext2)
+                                #     tCox[[1]]
 
 
 
-                                    tCox_df <- tibble::as_tibble(tCox[[1]], .name_repair = "minimal") %>%
+                                    tCox_df <- tibble::as_tibble(tCox, .name_repair = "minimal") %>%
                                         janitor::clean_names(dat = ., case = "snake")
 
 
@@ -672,31 +670,29 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 finalfit::finalfit(.data = mydata,
                 dependent = myformula,
-                explanatory = formula2,
+                explanatory = formula2
 
-                metrics = TRUE
+                # , metrics = TRUE
                 ) -> tCox
 
 
 
-                tCoxtext2 <- glue::glue("
-                                <br>
-                                <b>Model Metrics:</b>
-                                  ",
-                                unlist(
-                                    tCox[[2]]
-                                ),
-                                "
-                                <br>
-                                ")
-
-
-                self$results$tCoxtext2$setContent(tCoxtext2)
-
+                # tCoxtext2 <- glue::glue("
+                #                 <br>
+                #                 <b>Model Metrics:</b>
+                #                   ",
+                #                 unlist(
+                #                     tCox[[2]]
+                #                 ),
+                #                 "
+                #                 <br>
+                #                 ")
+                # self$results$tCoxtext2$setContent(tCoxtext2)
+                # tCox[[1]]
 
 
 
-                tCox_df <- tibble::as_tibble(tCox[[1]], .name_repair = "minimal") %>%
+                tCox_df <- tibble::as_tibble(tCox, .name_repair = "minimal") %>%
                     janitor::clean_names(dat = ., case = "snake")
 
 
