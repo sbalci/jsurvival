@@ -127,6 +127,11 @@ items:
       refs: finalfit
 
 
+    - name:  tCoxtext3
+      title: ''
+      type:  Preformatted
+      refs: finalfit
+
     # - name:  rescutTable
     #   title: 'rescutTable'
     #   type:  Preformatted
