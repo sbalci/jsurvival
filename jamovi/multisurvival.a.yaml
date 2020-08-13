@@ -74,23 +74,4 @@ options:
     #   type: Variable
 
 
-    - name: modelTerms
-      title: Model Terms
-      type: Terms
-      default: null
-
-
-formula:
-    dep:
-        from: lhs
-        subset: 1
-        required: true
-    factors:
-        from: rhs
-        type: vars
-    modelTerms:
-        from: rhs
-        type: terms
-
-
 ...
