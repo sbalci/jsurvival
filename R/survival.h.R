@@ -315,17 +315,12 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcome",
                     "outcomeLevel",
                     "overalltime",
-                    "contexpl"))
+                    "contexpl",
+                    "sas"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="todo",
-                title="To Do",
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "contexpl")))
+                title="To Do"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="mydataview",
@@ -333,13 +328,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="medianSummary",
-                title="Median Survival Summary and Table",
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "contexpl")))
+                title="Median Survival Summary and Table"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="medianTable",
@@ -379,23 +368,11 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `name`="x0_95ucl", 
                         `title`="Upper", 
                         `superTitle`="95% Confidence Interval", 
-                        `type`="number")),
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "contexpl")))
+                        `type`="number"))))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="coxSummary",
-                title="Cox Regression Summary and Table",
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "contexpl")))
+                title="Cox Regression Summary and Table"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="coxTable",
@@ -421,13 +398,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     list(
                         `name`="HR_multivariable", 
                         `title`="HR (Multivariable)", 
-                        `type`="text")),
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "contexpl")))
+                        `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="tCoxtext2",
@@ -453,23 +424,11 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `name`="statistic", 
                         `title`="Statistic", 
                         `type`="number")),
-                clearWith=list(
-                    "contexpl",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "contexpl"),
                 visible="(findcut)"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="survTableSummary",
-                title="1, 3, 5-yr Survival Summary and Table",
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "contexpl")))
+                title="1, 3, 5-yr Survival Summary and Table"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="survTable",
@@ -508,23 +467,13 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `title`="Upper", 
                         `superTitle`="95% Confidence Interval", 
                         `type`="number", 
-                        `format`="pc")),
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "contexpl")))
+                        `format`="pc"))))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="pairwiseSummary",
                 title="Pairwise Comparison Summary and Table",
                 clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "contexpl"),
+                    "pw"),
                 visible="(pw)"))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -547,12 +496,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `format`="zto,pvalue")),
                 visible="(pw)",
                 clearWith=list(
-                    "pw",
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "contexpl")))
+                    "pw")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -564,13 +508,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 requiresData=TRUE,
                 clearWith=list(
                     "sc",
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
                     "endplot",
-                    "byplot",
-                    "contexpl")))
+                    "byplot")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
@@ -582,13 +521,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 requiresData=TRUE,
                 clearWith=list(
                     "ce",
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
                     "endplot",
-                    "byplot",
-                    "contexpl")))
+                    "byplot")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
@@ -600,13 +534,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 requiresData=TRUE,
                 clearWith=list(
                     "ch",
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
                     "endplot",
-                    "byplot",
-                    "contexpl")))
+                    "byplot")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot4",
@@ -618,12 +547,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 requiresData=TRUE,
                 clearWith=list(
                     "findcut",
-                    "contexpl",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "endplot",
-                    "byplot",
                     "contexpl")))
             self$add(jmvcore::Image$new(
                 options=options,
@@ -637,12 +560,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "findcut",
                     "contexpl",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
                     "endplot",
-                    "byplot",
-                    "contexpl")))
+                    "byplot")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot6",
@@ -654,14 +573,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 requiresData=TRUE,
                 clearWith=list(
                     "kmunicate",
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
                     "endplot",
-                    "byplot",
-                    "sas",
-                    "contexpl"),
+                    "byplot"),
                 refs=list(
                     "KMunicate",
                     "KMunicate2")))}))

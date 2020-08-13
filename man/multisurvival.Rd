@@ -11,7 +11,8 @@ multisurvival(
   outcome,
   outcomeLevel,
   hr = FALSE,
-  sty = "t1"
+  sty = "t1",
+  adjSurvTerms = NULL
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ multisurvival(
 \item{hr}{.}
 
 \item{sty}{.}
+
+\item{adjSurvTerms}{.}
 }
 \value{
 A results object containing:

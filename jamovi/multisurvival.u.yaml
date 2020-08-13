@@ -47,3 +47,16 @@ children:
               - type: ComboBox
                 name: sty
                 enable: (hr)
+  - type: Supplier
+    persistentItems: false
+    stretchFactor: 1
+    format: term
+    children:
+      - type: TargetLayoutBox
+        label: Adjusted Survival Curve Terms
+        children:
+          - type: ListBox
+            name: adjSurvTerms
+            isTarget: true
+            template:
+              type: TermLabel

@@ -74,4 +74,13 @@ options:
     #   type: Variable
 
 
+
+    - name: adjSurvTerms
+      title: Adjusted Survival Curve Terms
+      type: Terms
+      default: null
+
+
+
+
 ...

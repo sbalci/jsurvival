@@ -11,7 +11,8 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             outcome = NULL,
             outcomeLevel = NULL,
             hr = FALSE,
-            sty = "t1", ...) {
+            sty = "t1",
+            adjSurvTerms = NULL, ...) {
 
             super$initialize(
                 package='jsurvival',
@@ -47,6 +48,10 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "t1",
                     "t3"),
                 default="t1")
+            private$..adjSurvTerms <- jmvcore::OptionTerms$new(
+                "adjSurvTerms",
+                adjSurvTerms,
+                default=NULL)
 
             self$.addOption(private$..explanatory)
             self$.addOption(private$..overalltime)
@@ -54,6 +59,7 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..outcomeLevel)
             self$.addOption(private$..hr)
             self$.addOption(private$..sty)
+            self$.addOption(private$..adjSurvTerms)
         }),
     active = list(
         explanatory = function() private$..explanatory$value,
@@ -61,14 +67,16 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         outcome = function() private$..outcome$value,
         outcomeLevel = function() private$..outcomeLevel$value,
         hr = function() private$..hr$value,
-        sty = function() private$..sty$value),
+        sty = function() private$..sty$value,
+        adjSurvTerms = function() private$..adjSurvTerms$value),
     private = list(
         ..explanatory = NA,
         ..overalltime = NA,
         ..outcome = NA,
         ..outcomeLevel = NA,
         ..hr = NA,
-        ..sty = NA)
+        ..sty = NA,
+        ..adjSurvTerms = NA)
 )
 
 multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -176,6 +184,7 @@ multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param outcomeLevel .
 #' @param hr .
 #' @param sty .
+#' @param adjSurvTerms .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
@@ -193,7 +202,8 @@ multisurvival <- function(
     outcome,
     outcomeLevel,
     hr = FALSE,
-    sty = "t1") {
+    sty = "t1",
+    adjSurvTerms = NULL) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('multisurvival requires jmvcore to be installed (restart may be required)')
@@ -208,6 +218,7 @@ multisurvival <- function(
             `if`( ! missing(overalltime), overalltime, NULL),
             `if`( ! missing(outcome), outcome, NULL))
 
+    if (inherits(adjSurvTerms, 'formula')) adjSurvTerms <- jmvcore::decomposeFormula(adjSurvTerms)
 
     options <- multisurvivalOptions$new(
         explanatory = explanatory,
@@ -215,7 +226,8 @@ multisurvival <- function(
         outcome = outcome,
         outcomeLevel = outcomeLevel,
         hr = hr,
-        sty = sty)
+        sty = sty,
+        adjSurvTerms = adjSurvTerms)
 
     analysis <- multisurvivalClass$new(
         options = options,
