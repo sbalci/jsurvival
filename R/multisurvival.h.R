@@ -11,7 +11,8 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             outcome = NULL,
             outcomeLevel = NULL,
             hr = FALSE,
-            sty = "t1", ...) {
+            sty = "t1",
+            modelTerms = NULL, ...) {
 
             super$initialize(
                 package='jsurvival',
@@ -47,6 +48,10 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "t1",
                     "t3"),
                 default="t1")
+            private$..modelTerms <- jmvcore::OptionTerms$new(
+                "modelTerms",
+                modelTerms,
+                default=NULL)
 
             self$.addOption(private$..explanatory)
             self$.addOption(private$..overalltime)
@@ -54,6 +59,7 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..outcomeLevel)
             self$.addOption(private$..hr)
             self$.addOption(private$..sty)
+            self$.addOption(private$..modelTerms)
         }),
     active = list(
         explanatory = function() private$..explanatory$value,
@@ -61,14 +67,16 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         outcome = function() private$..outcome$value,
         outcomeLevel = function() private$..outcomeLevel$value,
         hr = function() private$..hr$value,
-        sty = function() private$..sty$value),
+        sty = function() private$..sty$value,
+        modelTerms = function() private$..modelTerms$value),
     private = list(
         ..explanatory = NA,
         ..overalltime = NA,
         ..outcome = NA,
         ..outcomeLevel = NA,
         ..hr = NA,
-        ..sty = NA)
+        ..sty = NA,
+        ..modelTerms = NA)
 )
 
 multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -78,8 +86,10 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         text = function() private$.items[["text"]],
         text2 = function() private$.items[["text2"]],
         plot = function() private$.items[["plot"]],
-        plot3 = function() private$.items[["plot3"]]),
-    private = list(),
+        plot3 = function() private$.items[["plot3"]],
+        model = function() private$..model),
+    private = list(
+        ..model = NA),
     public=list(
         initialize=function(options) {
             super$initialize(
@@ -139,7 +149,9 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcomeLevel",
                     "overalltime"),
                 visible="(hr && sty:t3)",
-                refs="survminer"))}))
+                refs="survminer"))
+            private$..model <- NULL},
+        .setModel=function(x) private$..model <- x))
 
 multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "multisurvivalBase",
@@ -176,6 +188,7 @@ multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param outcomeLevel .
 #' @param hr .
 #' @param sty .
+#' @param modelTerms .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
@@ -183,6 +196,7 @@ multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$text2} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$model} \tab \tab \tab \tab \tab a property \cr
 #' }
 #'
 #' @export
@@ -193,7 +207,8 @@ multisurvival <- function(
     outcome,
     outcomeLevel,
     hr = FALSE,
-    sty = "t1") {
+    sty = "t1",
+    modelTerms = NULL) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('multisurvival requires jmvcore to be installed (restart may be required)')
@@ -208,6 +223,7 @@ multisurvival <- function(
             `if`( ! missing(overalltime), overalltime, NULL),
             `if`( ! missing(outcome), outcome, NULL))
 
+    if (inherits(modelTerms, 'formula')) modelTerms <- jmvcore::decomposeFormula(modelTerms)
 
     options <- multisurvivalOptions$new(
         explanatory = explanatory,
@@ -215,7 +231,8 @@ multisurvival <- function(
         outcome = outcome,
         outcomeLevel = outcomeLevel,
         hr = hr,
-        sty = sty)
+        sty = sty,
+        modelTerms = modelTerms)
 
     analysis <- multisurvivalClass$new(
         options = options,

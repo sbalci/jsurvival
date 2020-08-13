@@ -93,6 +93,7 @@ items:
     #   visible: (ac)
     #   refs: survminer
 
-
+    - name: model
+      type: Property
 
 ...
