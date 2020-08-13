@@ -436,6 +436,7 @@ refs:
 
     Fagan2:
         type: 'article'
+        author:
         title: 'StATS: What is a Fagan nomogram?'
         publisher: 'website'
         year: 2020

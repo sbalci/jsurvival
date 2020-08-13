@@ -365,6 +365,7 @@
         `url`="https://github.com/achekroud/nomogrammer"), 
     `Fagan2`=list(
         `type`="article", 
+        `author`=NULL, 
         `title`="StATS: What is a Fagan nomogram?", 
         `publisher`="website", 
         `year`=2020, 

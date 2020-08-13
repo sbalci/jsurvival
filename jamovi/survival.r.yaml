@@ -14,6 +14,7 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - contexpl
 
 
     - name:  mydataview
@@ -32,6 +33,7 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - contexpl
 
 
     - name:  medianTable
@@ -79,6 +81,7 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - contexpl
 
 
     - name:  coxSummary
@@ -90,6 +93,7 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - contexpl
 
 
     - name:  coxTable
@@ -119,18 +123,25 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - contexpl
+
 
 
     - name:  tCoxtext2
       title: ''
       type:  Html
       refs: finalfit
+      clearWith:
+          - explanatory
+          - outcome
+          - outcomeLevel
+          - overalltime
+          - contexpl
 
-
-    - name:  tCoxtext3
-      title: ''
-      type:  Preformatted
-      refs: finalfit
+    # - name:  tCoxtext3
+    #   title: ''
+    #   type:  Preformatted
+    #   refs: finalfit
 
     # - name:  rescutTable
     #   title: 'rescutTable'
@@ -152,6 +163,7 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - contexpl
       visible: (findcut)
 
 
@@ -167,6 +179,8 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - contexpl
+
 
 
     - name:  survTable
@@ -207,6 +221,8 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - contexpl
+
 
 
     - name:  pairwiseSummary
@@ -218,6 +234,7 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - contexpl
       visible: (pw)
 
 
@@ -244,6 +261,8 @@ items:
           - outcome
           - outcomeLevel
           - overalltime
+          - contexpl
+
 
 
 
@@ -265,6 +284,8 @@ items:
           - overalltime
           - endplot
           - byplot
+          - contexpl
+
 
 
     - name: plot2
@@ -284,6 +305,8 @@ items:
           - overalltime
           - endplot
           - byplot
+          - contexpl
+
 
 
     - name: plot3
@@ -303,6 +326,8 @@ items:
           - overalltime
           - endplot
           - byplot
+          - contexpl
+
 
 
     - name: plot4
@@ -321,6 +346,8 @@ items:
           - overalltime
           - endplot
           - byplot
+          - contexpl
+
 
 
     - name: plot5
@@ -339,6 +366,8 @@ items:
           - overalltime
           - endplot
           - byplot
+          - contexpl
+
 
 
 
@@ -361,6 +390,7 @@ items:
           - endplot
           - byplot
           - sas
+          - contexpl
       refs:
           - KMunicate
           - KMunicate2

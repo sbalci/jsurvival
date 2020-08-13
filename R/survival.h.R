@@ -288,7 +288,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         coxSummary = function() private$.items[["coxSummary"]],
         coxTable = function() private$.items[["coxTable"]],
         tCoxtext2 = function() private$.items[["tCoxtext2"]],
-        tCoxtext3 = function() private$.items[["tCoxtext3"]],
         rescutTable = function() private$.items[["rescutTable"]],
         survTableSummary = function() private$.items[["survTableSummary"]],
         survTable = function() private$.items[["survTable"]],
@@ -319,7 +318,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime",
+                    "contexpl")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="mydataview",
@@ -332,7 +332,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime",
+                    "contexpl")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="medianTable",
@@ -377,7 +378,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime",
+                    "contexpl")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="coxSummary",
@@ -386,7 +388,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime",
+                    "contexpl")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="coxTable",
@@ -417,17 +420,19 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime",
+                    "contexpl")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="tCoxtext2",
                 title="",
-                refs="finalfit"))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="tCoxtext3",
-                title="",
-                refs="finalfit"))
+                refs="finalfit",
+                clearWith=list(
+                    "explanatory",
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime",
+                    "contexpl")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="rescutTable",
@@ -446,7 +451,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "contexpl",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime"),
+                    "overalltime",
+                    "contexpl"),
                 visible="(findcut)"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
@@ -456,7 +462,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime",
+                    "contexpl")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="survTable",
@@ -500,7 +507,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime",
+                    "contexpl")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="pairwiseSummary",
@@ -509,7 +517,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime"),
+                    "overalltime",
+                    "contexpl"),
                 visible="(pw)"))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -536,7 +545,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime")))
+                    "overalltime",
+                    "contexpl")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -553,7 +563,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcomeLevel",
                     "overalltime",
                     "endplot",
-                    "byplot")))
+                    "byplot",
+                    "contexpl")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
@@ -570,7 +581,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcomeLevel",
                     "overalltime",
                     "endplot",
-                    "byplot")))
+                    "byplot",
+                    "contexpl")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
@@ -587,7 +599,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcomeLevel",
                     "overalltime",
                     "endplot",
-                    "byplot")))
+                    "byplot",
+                    "contexpl")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot4",
@@ -604,7 +617,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcomeLevel",
                     "overalltime",
                     "endplot",
-                    "byplot")))
+                    "byplot",
+                    "contexpl")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot5",
@@ -621,7 +635,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcomeLevel",
                     "overalltime",
                     "endplot",
-                    "byplot")))
+                    "byplot",
+                    "contexpl")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot6",
@@ -639,7 +654,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "overalltime",
                     "endplot",
                     "byplot",
-                    "sas"),
+                    "sas",
+                    "contexpl"),
                 refs=list(
                     "KMunicate",
                     "KMunicate2")))}))
@@ -710,7 +726,6 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$coxSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$coxTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tCoxtext2} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$tCoxtext3} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$rescutTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$survTableSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
