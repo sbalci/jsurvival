@@ -94,5 +94,7 @@ items:
     #   refs: survminer
 
 
+    - name: model
+      type: Property
 
 ...

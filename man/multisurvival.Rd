@@ -12,7 +12,8 @@ multisurvival(
   outcomeLevel,
   hr = FALSE,
   sty = "t1",
-  adjSurvTerms = NULL
+  modelTerms = NULL,
+  formula
 )
 }
 \arguments{
@@ -30,7 +31,9 @@ multisurvival(
 
 \item{sty}{.}
 
-\item{adjSurvTerms}{.}
+\item{modelTerms}{.}
+
+\item{formula}{(optional) the formula to use, see the examples}
 }
 \value{
 A results object containing:
@@ -40,6 +43,7 @@ A results object containing:
 \code{results$text2} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
+\code{results$model} \tab \tab \tab \tab \tab a property \cr
 }
 }
 \description{
