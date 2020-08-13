@@ -309,7 +309,13 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 refs=list(
                     "finalfit",
                     "survival",
-                    "survminer"))
+                    "survminer"),
+                clearWith=list(
+                    "explanatory",
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime",
+                    "contexpl"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="todo",
