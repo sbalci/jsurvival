@@ -60,7 +60,6 @@ children:
         format: term
         children:
           - type: TargetLayoutBox
-            transferAction: interactions
             children:
               - type: ListBox
                 name: modelTerms
