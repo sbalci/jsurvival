@@ -272,7 +272,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             mydata <- jmvcore::naOmit(mydata)
 
 
-            # Send mydata ----
+            # Send cleaned mydata to other functions ----
 
 
             return(
@@ -286,16 +286,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # # Continious Explanatory ----
             #
             #
-            # if ( !is.null(self$options$contexpl) ) {
-            #
-            #
-            #     todo <- glue::glue("
-            #                                            <br>
-            #                                            Continious Explanatory
-            #                                            <br>
-            #                                            <hr>")
-            #     html <- self$results$todo
-            #     html$setContent(todo)
             #
             #
             #     # Disable other tables
@@ -507,8 +497,8 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         ,
         .run = function() {
 
-            private$.todo()
-            private$.erors()
+            # private$.todo()
+            # private$.erors()
 
             cleandata <- private$.cleandata()
 
@@ -532,12 +522,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         #
         #     # if (nrow(self$data) == 0)
         #     #     stop('Data contains no (complete) rows')
-        #
-        #     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-        #
-        #         stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-        #
-        #     }
         #
         #
         #     # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
@@ -566,13 +550,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         #
         #     # if (nrow(self$data) == 0)
         #     #     stop('Data contains no (complete) rows')
-        #
-        #     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-        #
-        #         stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-        #
-        #     }
-        #
         #
         #     # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
         #     #     return()
