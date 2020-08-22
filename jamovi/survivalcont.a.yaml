@@ -131,10 +131,10 @@ options:
           R: select the time type in output
 
 
-    - name: pw
-      title: Pairwise comparisons
-      type: Bool
-      default: false
+    # - name: pw
+    #   title: Pairwise comparisons
+    #   type: Bool
+    #   default: false
 
 
     - name: sc

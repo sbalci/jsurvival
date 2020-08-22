@@ -33,19 +33,19 @@ children:
             name: contexpl
             maxItemCount: 1
             isTarget: true
-  - type: CollapseBox
-    label: Pairwise Comparisons
-    collapsed: false
-    children:
-      - type: Label
-        label: Pairwise comparisons
-        children:
-          - type: LayoutBox
-            margin: large
-            children:
-              - type: CheckBox
-                name: pw
-                enable: (!contexpl)
+  # - type: CollapseBox
+  #   label: Pairwise Comparisons
+  #   collapsed: false
+  #   children:
+  #     - type: Label
+  #       label: Pairwise comparisons
+  #       children:
+  #         - type: LayoutBox
+  #           margin: large
+  #           children:
+  #             - type: CheckBox
+  #               name: pw
+  #               enable: (!contexpl)
   - type: CollapseBox
     label: Plots
     collapsed: false

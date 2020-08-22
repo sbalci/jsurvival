@@ -21,7 +21,6 @@ survivalcont(
   cutp = "12, 36, 60",
   timetypedata = "ymd",
   timetypeoutput = "months",
-  pw = FALSE,
   sc = FALSE,
   kmunicate = FALSE,
   ce = FALSE,
@@ -67,8 +66,6 @@ survivalcont(
 \item{timetypedata}{select the time type in data}
 
 \item{timetypeoutput}{select the time type in output}
-
-\item{pw}{.}
 
 \item{sc}{.}
 
