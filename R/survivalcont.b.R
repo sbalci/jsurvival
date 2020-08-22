@@ -6,6 +6,37 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = survivalcontBase,
     private = list(
 
+
+        .init = function() {
+
+            if ( is.null(self$options$outcome) ||
+
+                 (is.null(self$options$elapsedtime) && !(self$options$tint))
+
+                 || is.null(self$options$contexpl)
+
+            ) {
+                private$.todo()
+                return()
+            }
+
+            if (nrow(self$data) == 0)
+                stop('Data contains no (complete) rows')
+
+            if (!findcut) {
+                # Disable other tables
+                self$results$medianSummary$setVisible(FALSE)
+                self$results$medianTable$setVisible(FALSE)
+                self$results$survTableSummary$setVisible(FALSE)
+                self$results$survTable$setVisible(FALSE)
+                self$results$pairwiseSummary$setVisible(FALSE)
+                self$results$pairwiseTable$setVisible(FALSE)
+            }
+
+        }
+
+
+        ,
         .todo = function() {
 
             # Initial Message ----
@@ -373,20 +404,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         ,
         .run = function() {
-
-            if ( is.null(self$options$outcome) ||
-
-                 (is.null(self$options$elapsedtime) && !(self$options$tint))
-
-                 || is.null(self$options$contexpl)
-
-            ) {
-                private$.todo()
-                return()
-            }
-
-            if (nrow(self$data) == 0)
-                stop('Data contains no (complete) rows')
 
             # View mydata ----
             cleaneddata <- private$.cleandata()
