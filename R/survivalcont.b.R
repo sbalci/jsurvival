@@ -439,6 +439,12 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 image5$setState(plotData5)
 
 
+                cutoffdata <- self$results$mediancutoff
+                mediancutoff$setState(res.cat)
+
+
+
+
         }
 
         ,
@@ -487,19 +493,8 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # Cut off calculation and further analysis ----
             if (self$options$findcut) {
                 private$.cutoff(mydata)
-                private$.cutofffurther(image5)
+
             }
-
-
-        }
-
-
-        ,
-        .cutofffurther = function(image5) {
-
-            cutoffdata <- image5$state
-            private$.mediancutoff(cutoffdata)
-            private$.lifetablecutoff(cutoffdata)
 
 
         }
