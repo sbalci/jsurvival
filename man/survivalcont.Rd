@@ -30,8 +30,7 @@ survivalcont(
   findcut = FALSE,
   multievent = FALSE,
   ci95 = FALSE,
-  risktable = FALSE,
-  sas = FALSE
+  risktable = FALSE
 )
 }
 \arguments{
@@ -86,8 +85,6 @@ survivalcont(
 \item{ci95}{.}
 
 \item{risktable}{.}
-
-\item{sas}{.}
 }
 \value{
 A results object containing:

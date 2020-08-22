@@ -267,10 +267,10 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         }
 
         ,
-        .cox = function() {
+        .cox = function(results) {
 
-            cleaneddata <- private$.cleandata()
-            mydata <- cleaneddata$mydata
+            # cleaneddata <- private$.cleandata()
+            mydata <- results$mydata
 
 
             # Continious Cox Regression ----
@@ -278,11 +278,11 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             formula2 <- as.vector(self$options$contexpl)
 
-            sas <- self$options$sas
-
-            if (sas) {
-                formula2 <- 1
-            }
+            # sas <- self$options$sas
+            #
+            # if (sas) {
+            #     formula2 <- 1
+            # }
 
             myformula <- paste("Surv(", "mytime", "," , "myoutcome", ")")
 
@@ -395,6 +395,10 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             cleaneddata <- private$.cleandata()
             mydata <- cleaneddata$mydata
             self$results$mydataview$setContent(head(mydata, n = 30))
+
+            # Cox
+            private$.cox()
+
 
         }
 

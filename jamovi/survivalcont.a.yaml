@@ -195,9 +195,9 @@ options:
       default: false
 
 
-    - name: sas
-      title: Single Arm Survival
-      type: Bool
-      default: false
+    # - name: sas
+    #   title: Single Arm Survival
+    #   type: Bool
+    #   default: false
 
 ...

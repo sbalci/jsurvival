@@ -30,8 +30,7 @@ survivalcontOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             findcut = FALSE,
             multievent = FALSE,
             ci95 = FALSE,
-            risktable = FALSE,
-            sas = FALSE, ...) {
+            risktable = FALSE, ...) {
 
             super$initialize(
                 package='jsurvival',
@@ -170,10 +169,6 @@ survivalcontOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "risktable",
                 risktable,
                 default=FALSE)
-            private$..sas <- jmvcore::OptionBool$new(
-                "sas",
-                sas,
-                default=FALSE)
 
             self$.addOption(private$..elapsedtime)
             self$.addOption(private$..tint)
@@ -200,7 +195,6 @@ survivalcontOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..multievent)
             self$.addOption(private$..ci95)
             self$.addOption(private$..risktable)
-            self$.addOption(private$..sas)
         }),
     active = list(
         elapsedtime = function() private$..elapsedtime$value,
@@ -227,8 +221,7 @@ survivalcontOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         findcut = function() private$..findcut$value,
         multievent = function() private$..multievent$value,
         ci95 = function() private$..ci95$value,
-        risktable = function() private$..risktable$value,
-        sas = function() private$..sas$value),
+        risktable = function() private$..risktable$value),
     private = list(
         ..elapsedtime = NA,
         ..tint = NA,
@@ -254,8 +247,7 @@ survivalcontOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..findcut = NA,
         ..multievent = NA,
         ..ci95 = NA,
-        ..risktable = NA,
-        ..sas = NA)
+        ..risktable = NA)
 )
 
 survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -577,7 +569,6 @@ survivalcontBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param multievent .
 #' @param ci95 .
 #' @param risktable .
-#' @param sas .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
@@ -631,8 +622,7 @@ survivalcont <- function(
     findcut = FALSE,
     multievent = FALSE,
     ci95 = FALSE,
-    risktable = FALSE,
-    sas = FALSE) {
+    risktable = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('survivalcont requires jmvcore to be installed (restart may be required)')
@@ -677,8 +667,7 @@ survivalcont <- function(
         findcut = findcut,
         multievent = multievent,
         ci95 = ci95,
-        risktable = risktable,
-        sas = sas)
+        risktable = risktable)
 
     analysis <- survivalcontClass$new(
         options = options,

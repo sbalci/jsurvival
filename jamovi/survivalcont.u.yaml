@@ -191,13 +191,13 @@ children:
               - type: CheckBox
                 name: findcut
                 enable: (contexpl)
-  - type: CollapseBox
-    label: Single Arm Survival
-    collapsed: false
-    children:
-      - type: Label
-        label: Single Arm Survival
-        fitToGrid: true
-        children:
-          - type: CheckBox
-            name: sas
+  # - type: CollapseBox
+  #   label: Single Arm Survival
+  #   collapsed: false
+  #   children:
+  #     - type: Label
+  #       label: Single Arm Survival
+  #       fitToGrid: true
+  #       children:
+  #         - type: CheckBox
+  #           name: sas
