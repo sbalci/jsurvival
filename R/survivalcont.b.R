@@ -440,7 +440,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
                 cutoffdata <- self$results$mediancutoff
-                mediancutoff$setState(res.cat)
+                cutoffdata$setState(res.cat)
 
 
 
