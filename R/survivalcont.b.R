@@ -526,7 +526,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$.todo()
             private$.erors()
             private$.cleandata()
-            private$.mydata()
+            # private$.mydata()
 
 
 
