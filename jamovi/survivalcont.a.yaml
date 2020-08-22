@@ -35,12 +35,6 @@ options:
       title: 'Follow-up Date'
       type: Variable
 
-    - name: explanatory
-      title: Explanatory Variable
-      type: Variables
-      suggested: [ ordinal, nominal ]
-      permitted: [ factor ]
-
     - name: contexpl
       title: Continuous Explanatory Variable
       type: Variable

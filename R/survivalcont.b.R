@@ -68,7 +68,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         .run = function() {
 
 
-            # private$.todo()
+            private$.todo()
 
 
 

@@ -10,7 +10,6 @@ survivalcont(
   tint = FALSE,
   dxdate,
   fudate,
-  explanatory,
   contexpl,
   outcome,
   outcomeLevel,
@@ -46,8 +45,6 @@ survivalcont(
 \item{dxdate}{.}
 
 \item{fudate}{.}
-
-\item{explanatory}{.}
 
 \item{contexpl}{.}
 
