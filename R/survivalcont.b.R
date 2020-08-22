@@ -291,7 +291,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 return()
             }
 
-                # private$.erors()
+            private$.erors()
 
             # View mydata ----
             cleaneddata <- private$.cleandata()
