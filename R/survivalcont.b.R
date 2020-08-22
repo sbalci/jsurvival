@@ -282,8 +282,8 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         ,
         .run = function() {
 
-            private$.todo()
-            private$.erors()
+            # private$.todo()
+            # private$.erors()
 
 
             if ( is.null(self$options$outcome) ||
