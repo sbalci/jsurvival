@@ -1,8 +1,8 @@
 Type: Package
 Package: jsurvival
 Title: Survival Module of ClinicoPath for jamovi
-Version: 0.0.2.0033
-Date: 2020-08-10
+Version: 0.0.2.0037
+Date: 2020-08-22
 Authors@R: 
     person(given = "Serdar",
            family = "Balci",

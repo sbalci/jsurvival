@@ -3,7 +3,7 @@ name:  survivalcont
 title: Survival Analysis for Continuous Explanatory
 menuGroup: Survival
 menuSubgroup: ClinicoPath Survival
-menuSubtitle: 'Cox, Cut-off, Kaplan-Meier & 1,3,5-yr with Cut-off'
+menuSubtitle: 'Find Cut-off for Continuous Variable & Do Univariate Analysis'
 version: '1.0.0'
 jas: '1.2'
 

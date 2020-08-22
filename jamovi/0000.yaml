@@ -1,12 +1,12 @@
 ---
 title: Survival Module of ClinicoPath for jamovi
 name: jsurvival
-version: 0.0.2.0033
+version: 0.0.2.0037
 jms: '1.0'
 authors:
   - Serdar Balci
 maintainer: Serdar Balci <drserdarbalci@gmail.com>
-date: '2020-08-10'
+date: '2020-08-22'
 type: R
 description: >-
   Analysis for Clinicopathological Research Survival Module of ClinicoPath for
@@ -28,7 +28,7 @@ analyses:
     menuGroup: Survival
     menuSubgroup: ClinicoPath Survival
     menuTitle: Survival Analysis for Continuous Explanatory
-    menuSubtitle: 'Cox, Cut-off, Kaplan-Meier & 1,3,5-yr with Cut-off'
+    menuSubtitle: Find Cut-off for Continuous Variable & Do Univariate Analysis
   - title: Multivariate Survival Analysis
     name: multisurvival
     ns: jsurvival
