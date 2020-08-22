@@ -42,20 +42,9 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 html$setContent(todo)
             }
 
-
-
-
         }
+
         ,
-
-        .errors = function() {
-        # Common Errors, Warnings ----
-
-        if (nrow(self$data) == 0)
-            stop('Data contains no (complete) rows')
-
-        },
-
         .cleandata = function() {
 
 
@@ -291,7 +280,8 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 return()
             }
 
-            private$.erors()
+            if (nrow(self$data) == 0)
+                stop('Data contains no (complete) rows')
 
             # View mydata ----
             cleaneddata <- private$.cleandata()
