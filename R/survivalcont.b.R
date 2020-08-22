@@ -302,9 +302,9 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # private$.erors()
             # private$.mydata()
 
-            results <- private$.cleandata()
+            cleaneddata <- private$.cleandata()
 
-            mydata <- results$mydata
+            mydata <- cleaneddata$mydata
 
             self$results$mydataview$setContent(
 
