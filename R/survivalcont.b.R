@@ -487,7 +487,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # Cut off calculation and further analysis ----
             if (self$options$findcut) {
                 private$.cutoff(mydata)
-                private$.cutofffurther()
+                private$.cutofffurther(image5)
             }
 
 
