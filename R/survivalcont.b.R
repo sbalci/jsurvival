@@ -16,8 +16,8 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 self$results$medianTable$setVisible(FALSE)
                 self$results$survTableSummary$setVisible(FALSE)
                 self$results$survTable$setVisible(FALSE)
-                self$results$pairwiseSummary$setVisible(FALSE)
-                self$results$pairwiseTable$setVisible(FALSE)
+                # self$results$pairwiseSummary$setVisible(FALSE)
+                # self$results$pairwiseTable$setVisible(FALSE)
             }
 
         }
