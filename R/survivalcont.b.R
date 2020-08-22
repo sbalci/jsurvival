@@ -425,7 +425,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 res.cat <- survminer::surv_categorize(res.cut)
 
 
-
                 # Prepare Data For Continuous Explanatory Plots ----
 
                 plotData4 <- res.cut
@@ -438,12 +437,23 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 image5 <- self$results$plot5
                 image5$setState(plotData5)
 
+        }
 
-                cutoffdata <- self$results$mediancutoff
-                cutoffdata$setState(res.cat)
+        ,
+        .cutoff2 = function(mydata) {
 
+            res.cut <- survminer::surv_cutpoint(
+                mydata,
+                time = "mytime",
+                event = "myoutcome",
+                self$options$contexpl,
+                minprop = 0.1,
+                progressbar = TRUE
+            )
 
+            res.cat <- survminer::surv_categorize(res.cut)
 
+            return(res.cat)
 
         }
 
@@ -451,11 +461,204 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         .mediancutoff = function(cutoffdata) {
 
 
+            # Median Survival Table ----
+
+            thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
+
+
+            formula <- paste('survival::Surv(mytime, myoutcome) ~ ', thefactor)
+            formula <- as.formula(formula)
+
+            km_fit <- survival::survfit(formula, data = mydata)
+
+
+            km_fit_median_df <- summary(km_fit)
+            results1html <- as.data.frame(km_fit_median_df$table) %>%
+                janitor::clean_names(dat = ., case = "snake") %>%
+                tibble::rownames_to_column(.data = .)
+
+
+            results1html[,1] <- gsub(pattern = ", ",
+                                     replacement = " and ",
+                                     x = results1html[,1])
+
+            results1table <- results1html
+
+            names(results1table)[1] <- "factor"
+
+            medianTable <- self$results$medianTable
+            data_frame <- results1table
+            for (i in seq_along(data_frame[,1,drop = T])) {
+                medianTable$addRow(rowKey = i, values = c(data_frame[i,]))
+            }
+
+
+            # Median Survival Summary ----
+
+            results1table %>%
+                dplyr::mutate(
+                    description =
+                        glue::glue(
+                            "When {factor}, median survival is {round(median, digits = 1)} [{round(x0_95lcl, digits = 1)} - {round(x0_95ucl, digits = 1)}, 95% CI] ", self$options$timetypeoutput, "."
+                        )
+                ) %>%
+                dplyr::mutate(
+                    description = gsub(pattern = "=", replacement = " is ", x = description)
+                ) %>%
+                dplyr::select(description) %>%
+                dplyr::pull(.) -> km_fit_median_definition
+
+            medianSummary <- km_fit_median_definition
+
+
+            self$results$medianSummary$setContent(medianSummary)
+
+
         }
 
 
         ,
         .lifetablecutoff = function(cutoffdata) {
+
+
+            # survival table 1,3,5-yr survival ----
+
+            utimes <- self$options$cutp
+
+            utimes <- strsplit(utimes, ",")
+            utimes <- purrr::reduce(utimes, as.vector)
+            utimes <- as.numeric(utimes)
+
+            if (length(utimes) == 0) {
+                utimes <- c(12,36,60)
+            }
+
+            km_fit_summary <- summary(km_fit, times = utimes)
+
+            km_fit_df <- as.data.frame(km_fit_summary[c("strata", "time", "n.risk", "n.event", "surv", "std.err", "lower", "upper")])
+
+            km_fit_df[,1] <- gsub(pattern = "thefactor=",
+                                  replacement = paste0(self$options$explanatory, " "),
+                                  x = km_fit_df[,1])
+
+
+            survTable <- self$results$survTable
+
+            data_frame <- km_fit_df
+            for(i in seq_along(data_frame[,1,drop=T])) {
+                survTable$addRow(rowKey = i, values = c(data_frame[i,]))
+            }
+
+
+
+
+            # survTableSummary 1,3,5-yr survival summary ----
+
+            km_fit_df %>%
+                dplyr::mutate(
+                    description =
+                        glue::glue(
+                            "When {strata}, {time} month survival is {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]."
+                        )
+                ) %>%
+                dplyr::select(description) %>%
+                dplyr::pull(.) -> survTableSummary
+
+
+
+            self$results$survTableSummary$setContent(survTableSummary)
+
+
+
+
+
+            if (self$options$pw) {
+
+                #  pairwise comparison ----
+
+
+                formula2 <- jmvcore::constructFormula(terms = self$options$explanatory)
+
+
+                formula_p <- paste0('survival::Surv(', "mytime", ',', "myoutcome", ') ~ ', formula2)
+                formula_p <- as.formula(formula_p)
+
+                results_pairwise <-
+                    survminer::pairwise_survdiff(
+                        formula = formula_p,
+                        data = mydata,
+                        p.adjust.method = "BH")
+
+
+                mypairwise2 <- as.data.frame(results_pairwise[["p.value"]]) %>%
+                    tibble::rownames_to_column(.data = .) %>%
+                    tidyr::pivot_longer(data = ., cols = -rowname) %>%
+                    dplyr::filter(complete.cases(.))
+
+
+
+                # Pairwise Table ----
+
+                pairwiseTable <- self$results$pairwiseTable
+
+                data_frame <- mypairwise2
+                for (i in seq_along(data_frame[,1,drop = T])) {
+                    pairwiseTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                }
+
+                thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
+
+                title2 <- as.character(thefactor)
+
+
+                sas <- self$options$sas
+
+                if (sas) {
+                    thefactor <- 1
+                    title2 <- "Overall"
+                }
+
+                pairwiseTable$setTitle(paste0('Pairwise Comparisons ', title2))
+
+
+                mypairwise2 %>%
+                    dplyr::mutate(description =
+                                      glue::glue(
+                                          "The difference between ",
+                                          " {rowname} and {name}",
+                                          " has a p-value of {format.pval(value, digits = 3, eps = 0.001)}."
+                                      )
+                    ) %>%
+                    dplyr::pull(description) -> pairwiseSummary
+
+                pairwiseSummary <- unlist(pairwiseSummary)
+
+
+                self$results$pairwiseSummary$setContent(pairwiseSummary)
+
+
+                if ( length(self$options$explanatory) == 1 && dim(mypairwise2)[1] == 1 ) {
+
+                    self$results$pairwiseTable$setVisible(FALSE)
+
+                    pairwiseSummary <- "No pairwise comparison when explanatory variable has < 3 levels."
+                    self$results$pairwiseSummary$setContent(pairwiseSummary)
+
+                }
+
+
+
+
+
+            }
+
+
+
+
+
+
+
+
 
 
         }
@@ -493,6 +696,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # Cut off calculation and further analysis ----
             if (self$options$findcut) {
                 private$.cutoff(mydata)
+                private$.mediancutoff(cutoffdata)
 
             }
 
