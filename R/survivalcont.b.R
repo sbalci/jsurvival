@@ -267,6 +267,114 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         }
 
         ,
+        .cox = function() {
+
+            cleaneddata <- private$.cleandata()
+            mydata <- cleaneddata$mydata
+
+
+            # Continious Cox Regression ----
+
+
+            formula2 <- as.vector(self$options$contexpl)
+
+            sas <- self$options$sas
+
+            if (sas) {
+                formula2 <- 1
+            }
+
+            myformula <- paste("Surv(", "mytime", "," , "myoutcome", ")")
+
+            finalfit::finalfit(.data = mydata,
+                               dependent = myformula,
+                               explanatory = formula2,
+
+                               metrics = TRUE
+            ) -> tCox
+
+
+            tCoxtext2 <- glue::glue("
+                                <br>
+                                <b>Model Metrics:</b>
+                                  ",
+                                unlist(
+                                    tCox[[2]]
+                                ),
+                                "
+                                <br>
+                                ")
+
+
+            self$results$tCoxtext2$setContent(tCoxtext2)
+
+
+            tCox_df <- tibble::as_tibble(tCox[[1]], .name_repair = "minimal") %>%
+                janitor::clean_names(dat = ., case = "snake")
+
+
+            # Continious Cox-Regression Table ----
+
+            coxTable <- self$results$coxTable
+
+            data_frame <- tCox_df
+
+            names(data_frame) <- c(
+                "Explanatory",
+                "Levels",
+                "all",
+                "HR_univariable",
+                "HR_multivariable"
+            )
+
+            for(i in seq_along(data_frame[,1,drop=T])) {
+                coxTable$addRow(rowKey = i, values = c(data_frame[i,]))
+            }
+
+
+            # Continious coxTable explanation ----
+
+
+            tCox_df <- tibble::as_tibble(tCox[[1]], .name_repair = "minimal") %>%
+                janitor::clean_names(dat = ., case = "snake")
+
+            names(tCox_df) <- names(data_frame) <- c(
+                "Explanatory",
+                "Levels",
+                "all",
+                "HR_univariable",
+                "HR_multivariable"
+            )
+
+
+            # https://stackoverflow.com/questions/38470355/r-fill-empty-cell-with-value-of-last-non-empty-cell
+
+            while(length(ind <- which(tCox_df$Explanatory == "")) > 0){
+                tCox_df$Explanatory[ind] <- tCox_df$Explanatory[ind - 1]
+            }
+
+            # https://stackoverflow.com/questions/51180290/mutate-by-group-in-r
+
+            tCox_df %>%
+                dplyr::group_by(Explanatory) %>%
+                dplyr::mutate(firstlevel = first(Levels)) %>%
+                dplyr::mutate(
+                    coxdescription = glue::glue(
+                        "When {Explanatory} increases 1 unit, the hazard increases {HR_multivariable} times."
+                    )
+                ) %>%
+                dplyr::filter(HR_univariable != '-') %>%
+                dplyr::pull(coxdescription) -> coxSummary
+
+
+
+            coxSummary <- unlist(coxSummary)
+            self$results$coxSummary$setContent(coxSummary)
+
+
+        }
+
+        ,
         .run = function() {
 
             if ( is.null(self$options$outcome) ||
