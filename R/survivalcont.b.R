@@ -282,10 +282,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         ,
         .run = function() {
 
-            # private$.todo()
-            # private$.erors()
-
-
             if ( is.null(self$options$outcome) ||
 
                  (is.null(self$options$elapsedtime) && !(self$options$tint))
@@ -293,9 +289,10 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                  || is.null(self$options$contexpl)
 
             ) {
-                return()
+                private$.todo()
             }
 
+                # private$.erors()
 
             # View mydata ----
             cleaneddata <- private$.cleandata()
