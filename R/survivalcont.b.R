@@ -510,22 +510,23 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         }
 
         ,
-        .run = function() {
-
-            private$.todo()
-            private$.erors()
-            private$.cleandata()
+        .mydata = function(results) {
 
             mydata <- results$mydata
 
             self$results$mydataview$setContent(
 
-                    head(mydata, n = 30)
-
-            )
+                head(mydata, n = 30))
 
 
+        }
+        ,
+        .run = function() {
 
+            private$.todo()
+            private$.erors()
+            private$.cleandata()
+            private$.mydata()
 
 
 
