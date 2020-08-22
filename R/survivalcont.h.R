@@ -271,8 +271,6 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         rescutTable = function() private$.items[["rescutTable"]],
         survTableSummary = function() private$.items[["survTableSummary"]],
         survTable = function() private$.items[["survTable"]],
-        pairwiseSummary = function() private$.items[["pairwiseSummary"]],
-        pairwiseTable = function() private$.items[["pairwiseTable"]],
         plot = function() private$.items[["plot"]],
         plot2 = function() private$.items[["plot2"]],
         plot3 = function() private$.items[["plot3"]],
@@ -448,35 +446,6 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `superTitle`="95% Confidence Interval", 
                         `type`="number", 
                         `format`="pc"))))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="pairwiseSummary",
-                title="Pairwise Comparison Summary and Table",
-                clearWith=list(
-                    "pw"),
-                visible="(pw)"))
-            self$add(jmvcore::Table$new(
-                options=options,
-                name="pairwiseTable",
-                title="Pairwise Comparison Table",
-                rows=0,
-                columns=list(
-                    list(
-                        `name`="rowname", 
-                        `title`="Levels", 
-                        `type`="text"),
-                    list(
-                        `name`="name", 
-                        `title`="Levels", 
-                        `type`="text"),
-                    list(
-                        `name`="value", 
-                        `title`="p-value", 
-                        `type`="number", 
-                        `format`="zto,pvalue")),
-                visible="(pw)",
-                clearWith=list(
-                    "pw")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -621,8 +590,6 @@ survivalcontBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$rescutTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$survTableSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$pairwiseSummary} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$pairwiseTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr

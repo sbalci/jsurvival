@@ -183,34 +183,34 @@ items:
 
 
 
-    - name:  pairwiseSummary
-      title: Pairwise Comparison Summary and Table
-      # title: '`Pairwise Comparison Summary and Table - ${explanatory}`'
-      type:  Preformatted
-      clearWith:
-          - pw
-      visible: (pw)
+    # - name:  pairwiseSummary
+    #   title: Pairwise Comparison Summary and Table
+    #   # title: '`Pairwise Comparison Summary and Table - ${explanatory}`'
+    #   type:  Preformatted
+    #   clearWith:
+    #       - pw
+    #   visible: (pw)
 
 
 
-    - name:  pairwiseTable
-      title: Pairwise Comparison Table
-      type:  Table
-      rows: 0
-      columns:
-        - name: rowname
-          title: "Levels"
-          type: text
-        - name: name
-          title: "Levels"
-          type: text
-        - name: value
-          title: p-value
-          type: number
-          format: zto,pvalue
-      visible: (pw)
-      clearWith:
-          - pw
+    # - name:  pairwiseTable
+    #   title: Pairwise Comparison Table
+    #   type:  Table
+    #   rows: 0
+    #   columns:
+    #     - name: rowname
+    #       title: "Levels"
+    #       type: text
+    #     - name: name
+    #       title: "Levels"
+    #       type: text
+    #     - name: value
+    #       title: p-value
+    #       type: number
+    #       format: zto,pvalue
+    #   visible: (pw)
+    #   clearWith:
+    #       - pw
 
 
 
