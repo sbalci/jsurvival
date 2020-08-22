@@ -22,7 +22,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         }
 
-
         ,
         .todo = function() {
 
@@ -461,6 +460,8 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         .mediancutoff = function(cutoffdata) {
 
 
+            mydata <- cutoffdata
+
             # Median Survival Table ----
 
             thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
@@ -519,6 +520,9 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         ,
         .lifetablecutoff = function(cutoffdata) {
+
+
+            mydata <- cutoffdata
 
 
             # survival table 1,3,5-yr survival ----
@@ -683,7 +687,9 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 stop('Data contains no (complete) rows')
 
             # Calculate mydata ----
+
             cleaneddata <- private$.cleandata()
+
             mydata <- cleaneddata$mydata
 
 
@@ -695,8 +701,14 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             # Cut off calculation and further analysis ----
             if (self$options$findcut) {
+
                 private$.cutoff(mydata)
+
+                cutoffdata <- private$.cutoff2(mydata)
+
                 private$.mediancutoff(cutoffdata)
+
+                private$.lifetablecutoff(cutoffdata)
 
             }
 
