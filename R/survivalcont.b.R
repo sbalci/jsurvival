@@ -274,10 +274,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # Define Explanatory Factor ----
 
 
-                mydata[["myfactor"]] <- mydata[[contexpl]]
-
-
-
+            mydata[["myfactor"]] <- mydata[[contexpl]]
 
             # Define Data For Analysis
 
@@ -512,6 +509,9 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         ,
         .mydata = function(results) {
 
+
+            results <- private$.cleandata()
+
             mydata <- results$mydata
 
             self$results$mydataview$setContent(
@@ -521,6 +521,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         }
         ,
+
         .run = function() {
 
             private$.todo()
@@ -624,12 +625,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             print(plot5)
             TRUE
         }
-
-
-
-
-
-
 
 
         )
