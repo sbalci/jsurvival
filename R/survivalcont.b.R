@@ -510,13 +510,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         .mydata = function(results) {
 
 
-            results <- private$.cleandata()
-
-            mydata <- results$mydata
-
-            self$results$mydataview$setContent(
-
-                head(mydata, n = 30))
 
 
         }
@@ -529,6 +522,13 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$.cleandata()
             # private$.mydata()
 
+            results <- private$.cleandata()
+
+            mydata <- results$mydata
+
+            self$results$mydataview$setContent(
+
+                head(mydata, n = 30))
 
 
         }
