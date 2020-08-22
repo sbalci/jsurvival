@@ -14,7 +14,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                  (is.null(self$options$elapsedtime) && !(self$options$tint))
 
-                 || (is.null(self$options$explanatory) && is.null(self$options$contexpl))
+                 || is.null(self$options$contexpl)
 
             ) {
 
@@ -41,21 +41,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 html <- self$results$todo
                 html$setContent(todo)
                 return()
-
-            }
-
-
-
-
-            if (length(self$options$explanatory) > 1) {
-
-
-                todo <- glue::glue("
-                                   <br>More than one explanatory variable.
-                                   <br>
-                                   <hr>")
-                html <- self$results$todo
-                html$setContent(todo)
 
             }
 
@@ -298,114 +283,15 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         ,
         .run = function() {
 
-            # private$.todo()
+            private$.todo()
             # private$.erors()
-            # private$.mydata()
 
+            # View mydata ----
             cleaneddata <- private$.cleandata()
-
             mydata <- cleaneddata$mydata
-
-            self$results$mydataview$setContent(
-
-                head(mydata, n = 30))
-
+            self$results$mydataview$setContent(head(mydata, n = 30))
 
         }
-
-
-        ,
-        .plot4 = function(image4, ggtheme, theme, ...) {  # <-- the plot4 function ----
-
-
-            findcut <- self$options$findcut
-
-            if (!findcut)
-                return()
-
-            # if (nrow(self$data) == 0)
-            #     stop('Data contains no (complete) rows')
-
-            if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-
-                stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-
-            }
-
-
-            # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-            #     return()
-
-            plotData <- image4$state
-
-            res.cut <- plotData
-
-            plot4 <- plot(res.cut, self$options$contexpl, palette = "npg")
-
-
-            print(plot4)
-            TRUE
-        }
-
-
-        ,
-        .plot5 = function(image5, ggtheme, theme, ...) {  # <-- the plot5 function ----
-
-
-            findcut <- self$options$findcut
-
-            if (!findcut)
-                return()
-
-            # if (nrow(self$data) == 0)
-            #     stop('Data contains no (complete) rows')
-
-            if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-
-                stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-
-            }
-
-
-            # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-            #     return()
-
-            plotData <- image5$state
-
-            res.cat <- plotData
-
-
-            contfactor <- jmvcore::constructFormula(terms = self$options$contexpl)
-
-
-            sas <- self$options$sas
-
-            if (sas) {
-                contfactor <- 1
-            }
-
-
-
-            # contfactor <- as.formula(contfactor)
-
-            myformula <- paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
-
-            myformula <- as.formula(myformula)
-
-            fit <- survminer::surv_fit(formula = myformula,
-                                       data = res.cat
-            )
-
-            plot5 <- survminer::ggsurvplot(fit,
-                                           data = res.cat,
-                                           risk.table = self$options$risktable,
-                                           conf.int = self$options$ci95)
-
-
-            print(plot5)
-            TRUE
-        }
-
 
         )
 )
