@@ -537,6 +537,17 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 utimes <- c(12,36,60)
             }
 
+
+            thefactor <- jmvcore::constructFormula(terms = self$options$contexpl)
+
+
+            formula <- paste('survival::Surv(mytime, myoutcome) ~ ', thefactor)
+            formula <- as.formula(formula)
+
+            km_fit <- survival::survfit(formula, data = mydata)
+
+
+
             km_fit_summary <- summary(km_fit, times = utimes)
 
             km_fit_df <- as.data.frame(km_fit_summary[c("strata", "time", "n.risk", "n.event", "surv", "std.err", "lower", "upper")])
