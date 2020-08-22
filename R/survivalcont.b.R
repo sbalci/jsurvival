@@ -388,6 +388,61 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         }
 
         ,
+        .cutoff = function(mydata) {
+
+            # Continuous Optimal Cut-off ----
+
+            # https://rpkgs.datanovia.com/survminer/reference/surv_cutpoint.html
+
+                res.cut <- survminer::surv_cutpoint(
+                    mydata,
+                    time = "mytime",
+                    event = "myoutcome",
+                    self$options$contexpl,
+                    minprop = 0.1,
+                    progressbar = TRUE
+                )
+
+                # Cut-off Table ----
+
+                rescut_summary <- summary(res.cut)
+
+                # self$results$rescutTable$setContent(rescut_summary)
+
+                rescutTable <- self$results$rescutTable
+
+                rescutTable$setTitle(paste0(self$options$contexpl))
+
+
+                data_frame <- rescut_summary
+                for (i in seq_along(data_frame[,1,drop = T])) {
+                    rescutTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                }
+
+
+                # categorisation ----
+
+                res.cat <- survminer::surv_categorize(res.cut)
+
+
+
+                # Prepare Data For Continuous Explanatory Plots ----
+
+                plotData4 <- res.cut
+
+                image4 <- self$results$plot4
+                image4$setState(plotData4)
+
+                plotData5 <- res.cat
+
+                image5 <- self$results$plot5
+                image5$setState(plotData5)
+
+
+        }
+
+
+        ,
         .run = function() {
 
             # Errors ----
@@ -413,11 +468,64 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # View mydata ----
             self$results$mydataview$setContent(head(mydata, n = 30))
 
-            # Cox
+            # Cox ----
             private$.cox(mydata)
+
+            # Cut off calculation and further analysis ----
+            if (self$options$findcut) {
+                private$.cutoff(mydata)
+            }
 
 
         }
+
+
+
+        ,
+        .plot4 = function(image4, ggtheme, theme, ...) {  # <-- the plot4 function ----
+
+            plotData <- image4$state
+
+            res.cut <- plotData
+
+            plot4 <- plot(res.cut, self$options$contexpl, palette = "npg")
+
+            print(plot4)
+            TRUE
+        }
+
+
+        ,
+        .plot5 = function(image5, ggtheme, theme, ...) {  # <-- the plot5 function ----
+
+            plotData <- image5$state
+
+            res.cat <- plotData
+
+            contfactor <- jmvcore::constructFormula(terms = self$options$contexpl)
+
+
+            # contfactor <- as.formula(contfactor)
+
+            myformula <- paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
+
+            myformula <- as.formula(myformula)
+
+            fit <- survminer::surv_fit(formula = myformula,
+                                       data = res.cat
+            )
+
+            plot5 <- survminer::ggsurvplot(fit,
+                                           data = res.cat,
+                                           risk.table = self$options$risktable,
+                                           conf.int = self$options$ci95)
+            print(plot5)
+            TRUE
+        }
+
+
+
+
 
         )
 )

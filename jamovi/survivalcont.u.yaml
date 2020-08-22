@@ -33,6 +33,21 @@ children:
             name: contexpl
             maxItemCount: 1
             isTarget: true
+
+  - type: CollapseBox
+    label: Finding Cut-off
+    collapsed: false
+    children:
+      - type: Label
+        label: Cut-off
+        fitToGrid: true
+        children:
+          - type: Label
+            label: Cut-off
+            children:
+              - type: CheckBox
+                name: findcut
+
   # - type: CollapseBox
   #   label: Pairwise Comparisons
   #   collapsed: false
@@ -45,61 +60,10 @@ children:
   #           children:
   #             - type: CheckBox
   #               name: pw
-  #               enable: (!contexpl)
-  - type: CollapseBox
-    label: Plots
-    collapsed: false
-    children:
-      - type: Label
-        label: Plots
-        fitToGrid: true
-        children:
-          - type: LayoutBox
-            fitToGrid: true
-            children:
-              - type: CheckBox
-                name: sc
-                enable: (!contexpl)
-              - type: CheckBox
-                name: kmunicate
-                enable: (!contexpl)
-              - type: CheckBox
-                name: ce
-                enable: (!contexpl)
-              - type: CheckBox
-                name: ch
-                enable: (!contexpl)
-      - type: Label
-        label: Plot Arguments
-        children:
-          - type: LayoutBox
-            fitToGrid: true
-            children:
-              - type: TextBox
-                name: endplot
-                format: number
-              - type: TextBox
-                name: byplot
-                format: number
-              - type: CheckBox
-                name: ci95
-              - type: CheckBox
-                name: risktable
-  - type: CollapseBox
-    label: Survival Tables
-    collapsed: false
-    children:
-      - type: Label
-        label: Survival table
-        children:
-          - type: TextBox
-            name: cutp
-            format: string
-            width: large
-            enable: (!contexpl)
+
   - type: CollapseBox
     label: Advanced Elapsed Time Options
-    collapsed: false
+    collapsed: true
     children:
       - type: Label
         label: Time Interval
@@ -148,7 +112,7 @@ children:
                 name: timetypeoutput
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
-    collapsed: false
+    collapsed: true
     children:
       - type: Label
         label: Analysis Type
@@ -177,20 +141,57 @@ children:
               - type: LevelSelector
                 name: awod
                 enable: (outcome && multievent)
+
+
+
   - type: CollapseBox
-    label: Continuous Explanatory Variable
-    collapsed: false
+    label: Plots
+    collapsed: true
     children:
       - type: Label
-        label: Cut-off
+        label: Plots
         fitToGrid: true
         children:
-          - type: Label
-            label: Cut-off
+          - type: LayoutBox
+            fitToGrid: true
             children:
               - type: CheckBox
-                name: findcut
-                enable: (contexpl)
+                name: sc
+              - type: CheckBox
+                name: kmunicate
+              - type: CheckBox
+                name: ce
+              - type: CheckBox
+                name: ch
+      - type: Label
+        label: Plot Arguments
+        children:
+          - type: LayoutBox
+            fitToGrid: true
+            children:
+              - type: TextBox
+                name: endplot
+                format: number
+              - type: TextBox
+                name: byplot
+                format: number
+              - type: CheckBox
+                name: ci95
+              - type: CheckBox
+                name: risktable
+  - type: CollapseBox
+    label: Survival Tables
+    collapsed: true
+    children:
+      - type: Label
+        label: Survival table
+        children:
+          - type: TextBox
+            name: cutp
+            format: string
+            width: large
+
+
   # - type: CollapseBox
   #   label: Single Arm Survival
   #   collapsed: false
