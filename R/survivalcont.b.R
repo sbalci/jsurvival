@@ -40,8 +40,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 html <- self$results$todo
                 html$setContent(todo)
-                return()
-
             }
 
 
@@ -290,6 +288,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             ) {
                 private$.todo()
+                return()
             }
 
                 # private$.erors()
