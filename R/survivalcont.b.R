@@ -267,10 +267,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         }
 
         ,
-        .cox = function(results) {
-
-            # cleaneddata <- private$.cleandata()
-            mydata <- results$mydata
+        .cox = function(mydata) {
 
 
             # Continious Cox Regression ----
@@ -397,7 +394,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$results$mydataview$setContent(head(mydata, n = 30))
 
             # Cox
-            private$.cox()
+            private$.cox(mydata)
 
 
         }
