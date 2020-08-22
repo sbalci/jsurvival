@@ -56,7 +56,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         if (nrow(self$data) == 0)
             stop('Data contains no (complete) rows')
 
-
         },
 
         .cleandata = function() {
@@ -284,7 +283,19 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         .run = function() {
 
             private$.todo()
-            # private$.erors()
+            private$.erors()
+
+
+            if ( is.null(self$options$outcome) ||
+
+                 (is.null(self$options$elapsedtime) && !(self$options$tint))
+
+                 || is.null(self$options$contexpl)
+
+            ) {
+                return()
+            }
+
 
             # View mydata ----
             cleaneddata <- private$.cleandata()
