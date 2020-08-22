@@ -6,7 +6,6 @@ jrs:   '1.1'
 
 
 clearWith:
-    - explanatory
     - outcome
     - outcomeLevel
     - overalltime
@@ -22,6 +21,98 @@ items:
     - name:  mydataview
       title: mydataview
       type:  Preformatted
+
+    - name:  coxSummary
+      title: Cox Regression Summary and Table
+      # title: '`Cox Regression Summary and Table - ${explanatory}`'
+      type:  Preformatted
+
+
+    - name:  coxTable
+      title: Cox Table
+      # title: '`Cox Table- ${explanatory}`'
+      type:  Table
+      rows: 0
+      columns:
+      # columns: &idcols
+        - name: Explanatory
+          title: "Explanatory"
+          type: text
+        - name: 'Levels'
+          title: "Levels"
+          type: text
+        - name: 'all'
+          title: "all"
+          type: text
+        - name: 'HR_univariable'
+          title: "HR (Univariable)"
+          type: text
+        - name: 'HR_multivariable'
+          title: "HR (Multivariable)"
+          type: text
+
+    - name:  tCoxtext2
+      title: ''
+      type:  Html
+      refs: finalfit
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - overalltime
+          - contexpl
+
+    # - name:  tCoxtext3
+    #   title: ''
+    #   type:  Preformatted
+    #   refs: finalfit
+
+    # - name:  rescutTable
+    #   title: 'rescutTable'
+    #   type:  Preformatted
+
+    - name:  rescutTable
+      title: Cut Point
+      type:  Table
+      rows: 0
+      columns:
+        - name: cutpoint
+          title: 'Cut Point'
+          type: number
+        - name: statistic
+          title: 'Statistic'
+          type: number
+      visible: (findcut)
+
+
+    - name: plot4
+      title: 'Cutpoint Plot'
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .plot4
+      visible: (findcut)
+      requiresData: true
+      clearWith:
+          - findcut
+          - contexpl
+
+
+    - name: plot5
+      title: 'Survival Plot with new Cut-off'
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .plot5
+      visible: (findcut)
+      requiresData: true
+      clearWith:
+          - findcut
+          - contexpl
+          - endplot
+          - byplot
+
+
+
 
 
     - name:  medianSummary
@@ -72,72 +163,6 @@ items:
           type: number
 
 
-    - name:  coxSummary
-      title: Cox Regression Summary and Table
-      # title: '`Cox Regression Summary and Table - ${explanatory}`'
-      type:  Preformatted
-
-
-    - name:  coxTable
-      title: Cox Table
-      # title: '`Cox Table- ${explanatory}`'
-      type:  Table
-      rows: 0
-      columns:
-      # columns: &idcols
-        - name: Explanatory
-          title: "Explanatory"
-          type: text
-        - name: 'Levels'
-          title: "Levels"
-          type: text
-        - name: 'all'
-          title: "all"
-          type: text
-        - name: 'HR_univariable'
-          title: "HR (Univariable)"
-          type: text
-        - name: 'HR_multivariable'
-          title: "HR (Multivariable)"
-          type: text
-
-
-
-    - name:  tCoxtext2
-      title: ''
-      type:  Html
-      refs: finalfit
-      clearWith:
-          - explanatory
-          - outcome
-          - outcomeLevel
-          - overalltime
-          - contexpl
-
-    # - name:  tCoxtext3
-    #   title: ''
-    #   type:  Preformatted
-    #   refs: finalfit
-
-    # - name:  rescutTable
-    #   title: 'rescutTable'
-    #   type:  Preformatted
-
-    - name:  rescutTable
-      title: Cut Point
-      type:  Table
-      rows: 0
-      columns:
-        - name: cutpoint
-          title: 'Cut Point'
-          type: number
-        - name: statistic
-          title: 'Statistic'
-          type: number
-      visible: (findcut)
-
-
-
 
 
     - name:  survTableSummary
@@ -182,7 +207,6 @@ items:
           format: pc
 
 
-
     # - name:  pairwiseSummary
     #   title: Pairwise Comparison Summary and Table
     #   # title: '`Pairwise Comparison Summary and Table - ${explanatory}`'
@@ -211,9 +235,6 @@ items:
     #   visible: (pw)
     #   clearWith:
     #       - pw
-
-
-
 
 
     - name: plot
@@ -263,34 +284,6 @@ items:
           - byplot
 
 
-
-    - name: plot4
-      title: 'Cutpoint Plot'
-      type: Image
-      width:  600
-      height: 450
-      renderFun: .plot4
-      visible: (findcut)
-      requiresData: true
-      clearWith:
-          - findcut
-          - contexpl
-
-
-
-    - name: plot5
-      title: 'Survival Plot with new Cut-off'
-      type: Image
-      width:  600
-      height: 450
-      renderFun: .plot5
-      visible: (findcut)
-      requiresData: true
-      clearWith:
-          - findcut
-          - contexpl
-          - endplot
-          - byplot
 
 
 

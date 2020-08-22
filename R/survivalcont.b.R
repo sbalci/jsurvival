@@ -441,6 +441,19 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         }
 
+        ,
+        .mediancutoff = function(cutoffdata) {
+
+
+        }
+
+
+        ,
+        .lifetablecutoff = function(cutoffdata) {
+
+
+        }
+
 
         ,
         .run = function() {
@@ -474,12 +487,22 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # Cut off calculation and further analysis ----
             if (self$options$findcut) {
                 private$.cutoff(mydata)
+                private$.cutofffurther()
             }
 
 
         }
 
 
+        ,
+        .cutofffurther = function(image5) {
+
+            cutoffdata <- image5$state
+            private$.mediancutoff(cutoffdata)
+            private$.lifetablecutoff(cutoffdata)
+
+
+        }
 
         ,
         .plot4 = function(image4, ggtheme, theme, ...) {  # <-- the plot4 function ----

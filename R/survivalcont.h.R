@@ -255,19 +255,19 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     active = list(
         todo = function() private$.items[["todo"]],
         mydataview = function() private$.items[["mydataview"]],
-        medianSummary = function() private$.items[["medianSummary"]],
-        medianTable = function() private$.items[["medianTable"]],
         coxSummary = function() private$.items[["coxSummary"]],
         coxTable = function() private$.items[["coxTable"]],
         tCoxtext2 = function() private$.items[["tCoxtext2"]],
         rescutTable = function() private$.items[["rescutTable"]],
+        plot4 = function() private$.items[["plot4"]],
+        plot5 = function() private$.items[["plot5"]],
+        medianSummary = function() private$.items[["medianSummary"]],
+        medianTable = function() private$.items[["medianTable"]],
         survTableSummary = function() private$.items[["survTableSummary"]],
         survTable = function() private$.items[["survTable"]],
         plot = function() private$.items[["plot"]],
         plot2 = function() private$.items[["plot2"]],
         plot3 = function() private$.items[["plot3"]],
-        plot4 = function() private$.items[["plot4"]],
-        plot5 = function() private$.items[["plot5"]],
         plot6 = function() private$.items[["plot6"]]),
     private = list(),
     public=list(
@@ -281,7 +281,6 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "survival",
                     "survminer"),
                 clearWith=list(
-                    "explanatory",
                     "outcome",
                     "outcomeLevel",
                     "overalltime",
@@ -295,6 +294,87 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="mydataview",
                 title="mydataview"))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="coxSummary",
+                title="Cox Regression Summary and Table"))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="coxTable",
+                title="Cox Table",
+                rows=0,
+                columns=list(
+                    list(
+                        `name`="Explanatory", 
+                        `title`="Explanatory", 
+                        `type`="text"),
+                    list(
+                        `name`="Levels", 
+                        `title`="Levels", 
+                        `type`="text"),
+                    list(
+                        `name`="all", 
+                        `title`="all", 
+                        `type`="text"),
+                    list(
+                        `name`="HR_univariable", 
+                        `title`="HR (Univariable)", 
+                        `type`="text"),
+                    list(
+                        `name`="HR_multivariable", 
+                        `title`="HR (Multivariable)", 
+                        `type`="text"))))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="tCoxtext2",
+                title="",
+                refs="finalfit",
+                clearWith=list(
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime",
+                    "contexpl")))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="rescutTable",
+                title="Cut Point",
+                rows=0,
+                columns=list(
+                    list(
+                        `name`="cutpoint", 
+                        `title`="Cut Point", 
+                        `type`="number"),
+                    list(
+                        `name`="statistic", 
+                        `title`="Statistic", 
+                        `type`="number")),
+                visible="(findcut)"))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot4",
+                title="Cutpoint Plot",
+                width=600,
+                height=450,
+                renderFun=".plot4",
+                visible="(findcut)",
+                requiresData=TRUE,
+                clearWith=list(
+                    "findcut",
+                    "contexpl")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot5",
+                title="Survival Plot with new Cut-off",
+                width=600,
+                height=450,
+                renderFun=".plot5",
+                visible="(findcut)",
+                requiresData=TRUE,
+                clearWith=list(
+                    "findcut",
+                    "contexpl",
+                    "endplot",
+                    "byplot")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="medianSummary",
@@ -339,62 +419,6 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `title`="Upper", 
                         `superTitle`="95% Confidence Interval", 
                         `type`="number"))))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="coxSummary",
-                title="Cox Regression Summary and Table"))
-            self$add(jmvcore::Table$new(
-                options=options,
-                name="coxTable",
-                title="Cox Table",
-                rows=0,
-                columns=list(
-                    list(
-                        `name`="Explanatory", 
-                        `title`="Explanatory", 
-                        `type`="text"),
-                    list(
-                        `name`="Levels", 
-                        `title`="Levels", 
-                        `type`="text"),
-                    list(
-                        `name`="all", 
-                        `title`="all", 
-                        `type`="text"),
-                    list(
-                        `name`="HR_univariable", 
-                        `title`="HR (Univariable)", 
-                        `type`="text"),
-                    list(
-                        `name`="HR_multivariable", 
-                        `title`="HR (Multivariable)", 
-                        `type`="text"))))
-            self$add(jmvcore::Html$new(
-                options=options,
-                name="tCoxtext2",
-                title="",
-                refs="finalfit",
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "contexpl")))
-            self$add(jmvcore::Table$new(
-                options=options,
-                name="rescutTable",
-                title="Cut Point",
-                rows=0,
-                columns=list(
-                    list(
-                        `name`="cutpoint", 
-                        `title`="Cut Point", 
-                        `type`="number"),
-                    list(
-                        `name`="statistic", 
-                        `title`="Statistic", 
-                        `type`="number")),
-                visible="(findcut)"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="survTableSummary",
@@ -479,32 +503,6 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "byplot")))
             self$add(jmvcore::Image$new(
                 options=options,
-                name="plot4",
-                title="Cutpoint Plot",
-                width=600,
-                height=450,
-                renderFun=".plot4",
-                visible="(findcut)",
-                requiresData=TRUE,
-                clearWith=list(
-                    "findcut",
-                    "contexpl")))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="plot5",
-                title="Survival Plot with new Cut-off",
-                width=600,
-                height=450,
-                renderFun=".plot5",
-                visible="(findcut)",
-                requiresData=TRUE,
-                clearWith=list(
-                    "findcut",
-                    "contexpl",
-                    "endplot",
-                    "byplot")))
-            self$add(jmvcore::Image$new(
-                options=options,
                 name="plot6",
                 title="KMunicate-Style Plot",
                 width=600,
@@ -573,27 +571,27 @@ survivalcontBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$medianSummary} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$coxSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$coxTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tCoxtext2} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$rescutTable} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$plot4} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plot5} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$medianSummary} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$survTableSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot4} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot5} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot6} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 #'
-#' \code{results$medianTable$asDF}
+#' \code{results$coxTable$asDF}
 #'
-#' \code{as.data.frame(results$medianTable)}
+#' \code{as.data.frame(results$coxTable)}
 #'
 #' @export
 survivalcont <- function(

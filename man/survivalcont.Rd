@@ -91,27 +91,27 @@ A results object containing:
 \tabular{llllll}{
 \code{results$todo} \tab \tab \tab \tab \tab a html \cr
 \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$medianSummary} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$coxSummary} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$coxTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$tCoxtext2} \tab \tab \tab \tab \tab a html \cr
 \code{results$rescutTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$plot4} \tab \tab \tab \tab \tab an image \cr
+\code{results$plot5} \tab \tab \tab \tab \tab an image \cr
+\code{results$medianSummary} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$survTableSummary} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
-\code{results$plot4} \tab \tab \tab \tab \tab an image \cr
-\code{results$plot5} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot6} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 
-\code{results$medianTable$asDF}
+\code{results$coxTable$asDF}
 
-\code{as.data.frame(results$medianTable)}
+\code{as.data.frame(results$coxTable)}
 }
 \description{
 Survival Analysis for Continuous Explanatory
