@@ -10,6 +10,9 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             # Initial Message ----
 
+            todo <- glue::glue("")
+
+
             if ( is.null(self$options$outcome) ||
 
                  (is.null(self$options$elapsedtime) && !(self$options$tint))
@@ -38,27 +41,12 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 See details for survival <a href = 'https://cran.r-project.org/web/packages/survival/vignettes/survival.pdf'>here</a>."
                 )
 
+
+            }
+
                 html <- self$results$todo
                 html$setContent(todo)
                 return()
-
-            }
-
-
-
-
-            if (length(self$options$explanatory) > 1) {
-
-
-                todo <- glue::glue("
-                                   <br>More than one explanatory variable.
-                                   <br>
-                                   <hr>")
-                html <- self$results$todo
-                html$setContent(todo)
-
-            }
-
 
 
 
