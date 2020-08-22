@@ -22,6 +22,13 @@ analyses:
     menuTitle: Survival Analysis
     description: Function for Generating Summaries for Survival Analysis.
     menuSubtitle: 'Univariate Survival Analysis, Cox, Kaplan-Meier, 1,3,5-yr'
+  - title: Survival Analysis for Continuous Explanatory
+    name: survivalcont
+    ns: jsurvival
+    menuGroup: Survival
+    menuSubgroup: ClinicoPath Survival
+    menuTitle: Survival Analysis for Continuous Explanatory
+    menuSubtitle: 'Cox, Cut-off, Kaplan-Meier & 1,3,5-yr with Cut-off'
   - title: Multivariate Survival Analysis
     name: multisurvival
     ns: jsurvival
@@ -38,13 +45,6 @@ analyses:
     menuTitle: Odds Ratio Table and Plot
     description: Function for Odds Ratio Table and Plot.
     menuSubtitle: Odds Ratio for Binary Outcomes
-  - title: Survival Analysis for Continuous Explanatory
-    name: survivalcont
-    ns: jsurvival
-    menuGroup: Survival
-    menuSubgroup: ClinicoPath Survival
-    menuTitle: Survival Analysis for Continuous Explanatory
-    menuSubtitle: 'Cox, Cut-off, Kaplan-Meier & 1,3,5-yr with Cut-off'
 datasets:
   - name: histopathology including analysis
     path: histopathologySurvival.omv
