@@ -9,21 +9,8 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         .init = function() {
 
-            if ( is.null(self$options$outcome) ||
 
-                 (is.null(self$options$elapsedtime) && !(self$options$tint))
-
-                 || is.null(self$options$contexpl)
-
-            ) {
-                private$.todo()
-                return()
-            }
-
-            if (nrow(self$data) == 0)
-                stop('Data contains no (complete) rows')
-
-            if (!findcut) {
+            if (!self$options$findcut) {
                 # Disable other tables
                 self$results$medianSummary$setVisible(FALSE)
                 self$results$medianTable$setVisible(FALSE)
@@ -38,8 +25,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         ,
         .todo = function() {
-
-            # Initial Message ----
 
             if ( is.null(self$options$outcome) ||
 
@@ -405,9 +390,27 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         ,
         .run = function() {
 
-            # View mydata ----
+            # Errors ----
+            if ( is.null(self$options$outcome) ||
+
+                 (is.null(self$options$elapsedtime) && !(self$options$tint))
+
+                 || is.null(self$options$contexpl)
+
+            ) {
+                private$.todo()
+                return()
+            }
+
+            if (nrow(self$data) == 0)
+                stop('Data contains no (complete) rows')
+
+            # Calculate mydata ----
             cleaneddata <- private$.cleandata()
             mydata <- cleaneddata$mydata
+
+
+            # View mydata ----
             self$results$mydataview$setContent(head(mydata, n = 30))
 
             # Cox
