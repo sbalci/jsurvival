@@ -267,7 +267,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         coxSummary = function() private$.items[["coxSummary"]],
         coxTable = function() private$.items[["coxTable"]],
         tCoxtext2 = function() private$.items[["tCoxtext2"]],
-        rescutTable = function() private$.items[["rescutTable"]],
         survTableSummary = function() private$.items[["survTableSummary"]],
         survTable = function() private$.items[["survTable"]],
         pairwiseSummary = function() private$.items[["pairwiseSummary"]],
@@ -383,21 +382,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcomeLevel",
                     "overalltime",
                     "contexpl")))
-            self$add(jmvcore::Table$new(
-                options=options,
-                name="rescutTable",
-                title="Cut Point",
-                rows=0,
-                columns=list(
-                    list(
-                        `name`="cutpoint", 
-                        `title`="Cut Point", 
-                        `type`="number"),
-                    list(
-                        `name`="statistic", 
-                        `title`="Statistic", 
-                        `type`="number")),
-                visible="(findcut)"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="survTableSummary",
@@ -589,7 +573,6 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$coxSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$coxTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tCoxtext2} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$rescutTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$survTableSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$pairwiseSummary} \tab \tab \tab \tab \tab a preformatted \cr

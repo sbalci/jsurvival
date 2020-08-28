@@ -124,18 +124,18 @@ items:
     #   title: 'rescutTable'
     #   type:  Preformatted
 
-    - name:  rescutTable
-      title: Cut Point
-      type:  Table
-      rows: 0
-      columns:
-        - name: cutpoint
-          title: 'Cut Point'
-          type: number
-        - name: statistic
-          title: 'Statistic'
-          type: number
-      visible: (findcut)
+    # - name:  rescutTable
+    #   title: Cut Point
+    #   type:  Table
+    #   rows: 0
+    #   columns:
+    #     - name: cutpoint
+    #       title: 'Cut Point'
+    #       type: number
+    #     - name: statistic
+    #       title: 'Statistic'
+    #       type: number
+    #   visible: (findcut)
 
 
 

@@ -27,8 +27,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 <br><br>
                 This tool will help you calculate median survivals and 1,3,5-yr survivals for a given fisk factor.
                 <br><br>
-                Explanatory variable can be categorical (ordinal or nominal), or continuous
-                (options under continuous variable collapsebox).
+                Explanatory variable should be categorical (ordinal or nominal).
                 <br><br>
                 Select outcome level from Outcome variable.
                 <br><br>

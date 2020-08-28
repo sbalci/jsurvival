@@ -36,10 +36,11 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 todo <- glue::glue("
                 <br>Welcome to ClinicoPath
                 <br><br>
-                This tool will help you calculate median survivals and 1,3,5-yr survivals for a given fisk factor.
+                This tool will help you calculate a cut-off for a continuous variable based on survival outcome.
+                <br>
+                After the cut-off is determined median survivals and 1,3,5-yr survivals are calculated.
                 <br><br>
-                Explanatory variable can be categorical (ordinal or nominal), or continuous
-                (options under continuous variable collapsebox).
+                Explanatory variable is continuous.
                 <br><br>
                 Select outcome level from Outcome variable.
                 <br><br>
