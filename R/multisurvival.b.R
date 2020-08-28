@@ -15,7 +15,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 if (is.null(self$options$explanatory) ||
                     is.null(self$options$outcome) ||
-                    is.null(self$options$overalltime))
+                    is.null(self$options$elapsedtime))
                 {
                     # TODO ----
 
@@ -313,12 +313,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 formula2 <- as.vector(self$options$explanatory)
 
                 formulaL <-
-                    jmvcore::constructFormula(terms = self$options$overalltime)
+                    jmvcore::constructFormula(terms = self$options$elapsedtime)
 
                 formulaL <- jmvcore::toNumeric(formulaL)
 
                 formulaL <-
-                    jmvcore::constructFormula(terms = self$options$overalltime)
+                    jmvcore::constructFormula(terms = self$options$elapsedtime)
 
                 # formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
 
@@ -427,7 +427,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 # plotData <- image$state
 
                 if (is.null(self$options$explanatory) ||
-                    (length(self$options$outcome) + length(self$options$overalltime) < 2))
+                    (length(self$options$outcome) + length(self$options$elapsedtime) < 2))
                     return()
 
                 if (nrow(self$data) == 0)
@@ -482,12 +482,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 # formula2 <- as.vector(self$options$explanatory)
 
                 formulaL <-
-                    jmvcore::constructFormula(terms = self$options$overalltime)
+                    jmvcore::constructFormula(terms = self$options$elapsedtime)
 
                 formulaL <- jmvcore::toNumeric(formulaL)
 
                 formulaL <-
-                    jmvcore::constructFormula(terms = self$options$overalltime)
+                    jmvcore::constructFormula(terms = self$options$elapsedtime)
 
                 myformula <-
                     paste("survival::Surv(", formulaL, ",", "Outcome", ")")
@@ -528,7 +528,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             #
             # # plotData <- image$state
             #
-            #     if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$overalltime) )
+            #     if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
             #         return()
             #
             # if (nrow(self$data) == 0)
@@ -550,7 +550,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             #
             # mydata <- self$data
             #
-            # formulaL <- jmvcore::constructFormula(terms = self$options$overalltime)
+            # formulaL <- jmvcore::constructFormula(terms = self$options$elapsedtime)
             #
             # formulaL <- jmvcore::toNumeric(formulaL)
             #
@@ -593,7 +593,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 if (is.null(self$options$explanatory) ||
                     is.null(self$options$outcome) ||
-                    is.null(self$options$overalltime))
+                    is.null(self$options$elapsedtime))
                     return()
 
                 if (nrow(self$data) == 0)
@@ -650,12 +650,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 # formula2 <- as.vector(self$options$explanatory)
 
                 formulaL <-
-                    jmvcore::constructFormula(terms = self$options$overalltime)
+                    jmvcore::constructFormula(terms = self$options$elapsedtime)
 
                 formulaL <- jmvcore::toNumeric(formulaL)
 
                 formulaL <-
-                    jmvcore::constructFormula(terms = self$options$overalltime)
+                    jmvcore::constructFormula(terms = self$options$elapsedtime)
 
                 formula2 <-
                     jmvcore::constructFormula(terms = self$options$explanatory)
@@ -702,7 +702,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 if (is.null(self$options$explanatory) ||
                     is.null(self$options$outcome) ||
-                    is.null(self$options$overalltime) ||
+                    is.null(self$options$elapsedtime) ||
                     is.null(self$options$adjexplanatory))
                     return()
 
@@ -757,12 +757,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 # formula2 <- as.vector(self$options$explanatory)
 
                 formulaL <-
-                    jmvcore::constructFormula(terms = self$options$overalltime)
+                    jmvcore::constructFormula(terms = self$options$elapsedtime)
 
                 formulaL <- jmvcore::toNumeric(formulaL)
 
                 formulaL <-
-                    jmvcore::constructFormula(terms = self$options$overalltime)
+                    jmvcore::constructFormula(terms = self$options$elapsedtime)
 
                 formula2 <-
                     jmvcore::constructFormula(terms = self$options$explanatory)
