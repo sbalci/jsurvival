@@ -254,7 +254,6 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         todo = function() private$.items[["todo"]],
-        mydataview = function() private$.items[["mydataview"]],
         coxSummary = function() private$.items[["coxSummary"]],
         coxTable = function() private$.items[["coxTable"]],
         tCoxtext2 = function() private$.items[["tCoxtext2"]],
@@ -292,16 +291,12 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 title="To Do"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
-                name="mydataview",
-                title="mydataview"))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
                 name="coxSummary",
-                title="Cox Regression Summary and Table"))
+                title="`Cox Regression Summary and Table - ${contexpl}`"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="coxTable",
-                title="Cox Table",
+                title="`Cox Table- ${contexpl}`",
                 rows=0,
                 columns=list(
                     list(
@@ -378,11 +373,11 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="medianSummary",
-                title="Median Survival Summary and Table"))
+                title="`Median Survival Summary and Table - ${contexpl}`"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="medianTable",
-                title="Median Survival Table",
+                title="`Median Survival Table: Levels for ${contexpl}`",
                 rows=0,
                 columns=list(
                     list(
@@ -422,11 +417,11 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="survTableSummary",
-                title="1, 3, 5-yr Survival Summary and Table"))
+                title="`1, 3, 5-yr Survival Summary and Table  - ${contexpl}`"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="survTable",
-                title="1, 3, 5 year Survival",
+                title="`1, 3, 5 year Survival - ${contexpl}`",
                 rows=0,
                 columns=list(
                     list(
@@ -465,7 +460,7 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
-                title="Survival Plot",
+                title="`Survival Plot  - ${contexpl}`",
                 width=600,
                 height=450,
                 renderFun=".plot",
@@ -478,7 +473,7 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
-                title="Cumulative Events",
+                title="`Cumulative Events  - ${contexpl}`",
                 width=600,
                 height=450,
                 renderFun=".plot2",
@@ -491,7 +486,7 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
-                title="Cumulative Hazard",
+                title="`Cumulative Hazard  - ${contexpl}`",
                 width=600,
                 height=450,
                 renderFun=".plot3",
@@ -504,7 +499,7 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot6",
-                title="KMunicate-Style Plot",
+                title="`KMunicate-Style Plot  - ${contexpl}`",
                 width=600,
                 height=450,
                 renderFun=".plot6",
@@ -570,7 +565,6 @@ survivalcontBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$coxSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$coxTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tCoxtext2} \tab \tab \tab \tab \tab a html \cr
