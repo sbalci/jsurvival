@@ -44,9 +44,9 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 <br><br>
                 Select outcome level from Outcome variable.
                 <br><br>
-                Outcome Level: if patient is dead or event (recurrence) occured.
+                Outcome Level: if patient is dead or event (recurrence) occured. You may also use advanced outcome options depending on your analysis type.
                 <br><br>
-                Survival time should be numeric and continuous.
+                Survival time should be numeric and continuous. You may also use dates to calculate survival time in advanced elapsed time options.
                 <br><br>
                 This function uses survival, survminer, and finalfit packages. Please cite jamovi and the packages as given below.
                 <br><hr>
@@ -614,8 +614,8 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             mydata <- cleaneddata$mydata
 
 
-            # View mydata ----
-            self$results$mydataview$setContent(head(mydata, n = 30))
+            # # View mydata ----
+            # self$results$mydataview$setContent(head(mydata, n = 30))
 
             # Cox ----
             private$.cox(mydata)
