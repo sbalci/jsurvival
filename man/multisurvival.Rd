@@ -6,10 +6,20 @@
 \usage{
 multisurvival(
   data,
+  elapsedtime,
+  tint = FALSE,
+  dxdate,
+  fudate,
   explanatory,
-  overalltime,
   outcome,
   outcomeLevel,
+  dod,
+  dooc,
+  awd,
+  awod,
+  analysistype = "overall",
+  timetypedata = "ymd",
+  timetypeoutput = "months",
   hr = FALSE,
   sty = "t1",
   ac = FALSE,
@@ -19,13 +29,33 @@ multisurvival(
 \arguments{
 \item{data}{The data as a data frame.}
 
-\item{explanatory}{.}
+\item{elapsedtime}{.}
 
-\item{overalltime}{.}
+\item{tint}{.}
+
+\item{dxdate}{.}
+
+\item{fudate}{.}
+
+\item{explanatory}{.}
 
 \item{outcome}{.}
 
 \item{outcomeLevel}{.}
+
+\item{dod}{.}
+
+\item{dooc}{.}
+
+\item{awd}{.}
+
+\item{awod}{.}
+
+\item{analysistype}{.}
+
+\item{timetypedata}{select the time type in data}
+
+\item{timetypeoutput}{select the time type in output}
 
 \item{hr}{.}
 

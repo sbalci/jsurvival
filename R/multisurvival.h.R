@@ -6,10 +6,20 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Options,
     public = list(
         initialize = function(
+            elapsedtime = NULL,
+            tint = FALSE,
+            dxdate = NULL,
+            fudate = NULL,
             explanatory = NULL,
-            overalltime = NULL,
             outcome = NULL,
             outcomeLevel = NULL,
+            dod = NULL,
+            dooc = NULL,
+            awd = NULL,
+            awod = NULL,
+            analysistype = "overall",
+            timetypedata = "ymd",
+            timetypeoutput = "months",
             hr = FALSE,
             sty = "t1",
             ac = FALSE,
@@ -21,23 +31,95 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 requiresData=TRUE,
                 ...)
 
-            private$..explanatory <- jmvcore::OptionVariables$new(
-                "explanatory",
-                explanatory)
-            private$..overalltime <- jmvcore::OptionVariable$new(
-                "overalltime",
-                overalltime,
+            private$..elapsedtime <- jmvcore::OptionVariable$new(
+                "elapsedtime",
+                elapsedtime,
                 suggested=list(
                     "continuous"),
                 permitted=list(
                     "numeric"))
+            private$..tint <- jmvcore::OptionBool$new(
+                "tint",
+                tint,
+                default=FALSE)
+            private$..dxdate <- jmvcore::OptionVariable$new(
+                "dxdate",
+                dxdate)
+            private$..fudate <- jmvcore::OptionVariable$new(
+                "fudate",
+                fudate)
+            private$..explanatory <- jmvcore::OptionVariables$new(
+                "explanatory",
+                explanatory,
+                suggested=list(
+                    "ordinal",
+                    "nominal",
+                    "continuous"),
+                permitted=list(
+                    "factor",
+                    "numeric"))
             private$..outcome <- jmvcore::OptionVariable$new(
                 "outcome",
-                outcome)
+                outcome,
+                suggested=list(
+                    "ordinal",
+                    "nominal",
+                    "continuous"),
+                permitted=list(
+                    "factor",
+                    "numeric"))
             private$..outcomeLevel <- jmvcore::OptionLevel$new(
                 "outcomeLevel",
                 outcomeLevel,
                 variable="(outcome)")
+            private$..dod <- jmvcore::OptionLevel$new(
+                "dod",
+                dod,
+                variable="(outcome)",
+                allowNone=TRUE)
+            private$..dooc <- jmvcore::OptionLevel$new(
+                "dooc",
+                dooc,
+                variable="(outcome)",
+                allowNone=TRUE)
+            private$..awd <- jmvcore::OptionLevel$new(
+                "awd",
+                awd,
+                variable="(outcome)",
+                allowNone=TRUE)
+            private$..awod <- jmvcore::OptionLevel$new(
+                "awod",
+                awod,
+                variable="(outcome)",
+                allowNone=TRUE)
+            private$..analysistype <- jmvcore::OptionList$new(
+                "analysistype",
+                analysistype,
+                options=list(
+                    "overall",
+                    "cause"),
+                default="overall")
+            private$..timetypedata <- jmvcore::OptionList$new(
+                "timetypedata",
+                timetypedata,
+                options=list(
+                    "ymdhms",
+                    "ymd",
+                    "ydm",
+                    "mdy",
+                    "myd",
+                    "dmy",
+                    "dym"),
+                default="ymd")
+            private$..timetypeoutput <- jmvcore::OptionList$new(
+                "timetypeoutput",
+                timetypeoutput,
+                options=list(
+                    "days",
+                    "weeks",
+                    "months",
+                    "years"),
+                default="months")
             private$..hr <- jmvcore::OptionBool$new(
                 "hr",
                 hr,
@@ -57,29 +139,59 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "adjexplanatory",
                 adjexplanatory)
 
+            self$.addOption(private$..elapsedtime)
+            self$.addOption(private$..tint)
+            self$.addOption(private$..dxdate)
+            self$.addOption(private$..fudate)
             self$.addOption(private$..explanatory)
-            self$.addOption(private$..overalltime)
             self$.addOption(private$..outcome)
             self$.addOption(private$..outcomeLevel)
+            self$.addOption(private$..dod)
+            self$.addOption(private$..dooc)
+            self$.addOption(private$..awd)
+            self$.addOption(private$..awod)
+            self$.addOption(private$..analysistype)
+            self$.addOption(private$..timetypedata)
+            self$.addOption(private$..timetypeoutput)
             self$.addOption(private$..hr)
             self$.addOption(private$..sty)
             self$.addOption(private$..ac)
             self$.addOption(private$..adjexplanatory)
         }),
     active = list(
+        elapsedtime = function() private$..elapsedtime$value,
+        tint = function() private$..tint$value,
+        dxdate = function() private$..dxdate$value,
+        fudate = function() private$..fudate$value,
         explanatory = function() private$..explanatory$value,
-        overalltime = function() private$..overalltime$value,
         outcome = function() private$..outcome$value,
         outcomeLevel = function() private$..outcomeLevel$value,
+        dod = function() private$..dod$value,
+        dooc = function() private$..dooc$value,
+        awd = function() private$..awd$value,
+        awod = function() private$..awod$value,
+        analysistype = function() private$..analysistype$value,
+        timetypedata = function() private$..timetypedata$value,
+        timetypeoutput = function() private$..timetypeoutput$value,
         hr = function() private$..hr$value,
         sty = function() private$..sty$value,
         ac = function() private$..ac$value,
         adjexplanatory = function() private$..adjexplanatory$value),
     private = list(
+        ..elapsedtime = NA,
+        ..tint = NA,
+        ..dxdate = NA,
+        ..fudate = NA,
         ..explanatory = NA,
-        ..overalltime = NA,
         ..outcome = NA,
         ..outcomeLevel = NA,
+        ..dod = NA,
+        ..dooc = NA,
+        ..awd = NA,
+        ..awod = NA,
+        ..analysistype = NA,
+        ..timetypedata = NA,
+        ..timetypeoutput = NA,
         ..hr = NA,
         ..sty = NA,
         ..ac = NA,
@@ -201,10 +313,20 @@ multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' # example will be added
 #'}
 #' @param data The data as a data frame.
+#' @param elapsedtime .
+#' @param tint .
+#' @param dxdate .
+#' @param fudate .
 #' @param explanatory .
-#' @param overalltime .
 #' @param outcome .
 #' @param outcomeLevel .
+#' @param dod .
+#' @param dooc .
+#' @param awd .
+#' @param awod .
+#' @param analysistype .
+#' @param timetypedata select the time type in data
+#' @param timetypeoutput select the time type in output
 #' @param hr .
 #' @param sty .
 #' @param ac .
@@ -222,10 +344,20 @@ multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @export
 multisurvival <- function(
     data,
+    elapsedtime,
+    tint = FALSE,
+    dxdate,
+    fudate,
     explanatory,
-    overalltime,
     outcome,
     outcomeLevel,
+    dod,
+    dooc,
+    awd,
+    awod,
+    analysistype = "overall",
+    timetypedata = "ymd",
+    timetypeoutput = "months",
     hr = FALSE,
     sty = "t1",
     ac = FALSE,
@@ -234,24 +366,38 @@ multisurvival <- function(
     if ( ! requireNamespace('jmvcore'))
         stop('multisurvival requires jmvcore to be installed (restart may be required)')
 
+    if ( ! missing(elapsedtime)) elapsedtime <- jmvcore::resolveQuo(jmvcore::enquo(elapsedtime))
+    if ( ! missing(dxdate)) dxdate <- jmvcore::resolveQuo(jmvcore::enquo(dxdate))
+    if ( ! missing(fudate)) fudate <- jmvcore::resolveQuo(jmvcore::enquo(fudate))
     if ( ! missing(explanatory)) explanatory <- jmvcore::resolveQuo(jmvcore::enquo(explanatory))
-    if ( ! missing(overalltime)) overalltime <- jmvcore::resolveQuo(jmvcore::enquo(overalltime))
     if ( ! missing(outcome)) outcome <- jmvcore::resolveQuo(jmvcore::enquo(outcome))
     if ( ! missing(adjexplanatory)) adjexplanatory <- jmvcore::resolveQuo(jmvcore::enquo(adjexplanatory))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
+            `if`( ! missing(elapsedtime), elapsedtime, NULL),
+            `if`( ! missing(dxdate), dxdate, NULL),
+            `if`( ! missing(fudate), fudate, NULL),
             `if`( ! missing(explanatory), explanatory, NULL),
-            `if`( ! missing(overalltime), overalltime, NULL),
             `if`( ! missing(outcome), outcome, NULL),
             `if`( ! missing(adjexplanatory), adjexplanatory, NULL))
 
 
     options <- multisurvivalOptions$new(
+        elapsedtime = elapsedtime,
+        tint = tint,
+        dxdate = dxdate,
+        fudate = fudate,
         explanatory = explanatory,
-        overalltime = overalltime,
         outcome = outcome,
         outcomeLevel = outcomeLevel,
+        dod = dod,
+        dooc = dooc,
+        awd = awd,
+        awod = awod,
+        analysistype = analysistype,
+        timetypedata = timetypedata,
+        timetypeoutput = timetypeoutput,
         hr = hr,
         sty = sty,
         ac = ac,
