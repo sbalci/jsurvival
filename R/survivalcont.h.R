@@ -101,8 +101,7 @@ survivalcontOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 analysistype,
                 options=list(
                     "overall",
-                    "cause",
-                    "compete"),
+                    "cause"),
                 default="overall")
             private$..cutp <- jmvcore::OptionString$new(
                 "cutp",
@@ -274,7 +273,7 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Survival Analysis for Continuous Explanatory",
+                title="Survival Analysis for Continuous Explanatory Variable",
                 refs=list(
                     "finalfit",
                     "survival",
@@ -533,7 +532,7 @@ survivalcontBase <- if (requireNamespace('jmvcore')) R6::R6Class(
                 requiresMissings = FALSE)
         }))
 
-#' Survival Analysis for Continuous Explanatory
+#' Survival Analysis for Continuous Variable
 #'
 #' 
 #' @param data The data as a data frame.

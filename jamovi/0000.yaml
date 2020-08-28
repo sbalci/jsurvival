@@ -22,13 +22,13 @@ analyses:
     menuTitle: Survival Analysis
     description: Function for Generating Summaries for Survival Analysis.
     menuSubtitle: 'Univariate Survival Analysis, Cox, Kaplan-Meier, 1,3,5-yr'
-  - title: Survival Analysis for Continuous Explanatory
+  - title: Survival Analysis for Continuous Variable
     name: survivalcont
     ns: jsurvival
     menuGroup: Survival
     menuSubgroup: ClinicoPath Survival
-    menuTitle: Survival Analysis for Continuous Explanatory
-    menuSubtitle: Cut-off & Univariate Survival Analysis for Continuous Variable
+    menuTitle: Survival Analysis for Continuous Variable
+    menuSubtitle: Cut-off & Univariate Survival Analysis
   - title: Multivariate Survival Analysis
     name: multisurvival
     ns: jsurvival

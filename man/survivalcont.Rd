@@ -2,7 +2,7 @@
 % Please edit documentation in R/survivalcont.h.R
 \name{survivalcont}
 \alias{survivalcont}
-\title{Survival Analysis for Continuous Explanatory}
+\title{Survival Analysis for Continuous Variable}
 \usage{
 survivalcont(
   data,
@@ -113,5 +113,5 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 \code{as.data.frame(results$coxTable)}
 }
 \description{
-Survival Analysis for Continuous Explanatory
+Survival Analysis for Continuous Variable
 }
