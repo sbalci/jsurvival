@@ -326,7 +326,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
                 myformula <-
-                    paste("Surv(", formulaL, ",", "Outcome", ")")
+                    paste("Surv(mytime, myoutcome)")
 
                 # resultsdeneme2 <- list(
                 #     formula2,
