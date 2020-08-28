@@ -246,11 +246,14 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 }
 
 
-                # Define Explanatory Factor ----
 
-                mydata[["myfactor"]] <- mydata[[explanatory]]
 
                 # Define Data For Analysis
+
+                myfactors <- as.vector(self$options$explanatory)
+
+                mydata <- jmvcore::select(df = mydata, columnNames = c("mytime", "myoutcome", myfactors))
+
 
                 # naOmit ----
 

@@ -17,6 +17,7 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             dooc = NULL,
             awd = NULL,
             awod = NULL,
+            multievent = FALSE,
             analysistype = "overall",
             timetypedata = "ymd",
             timetypeoutput = "months",
@@ -92,6 +93,10 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 awod,
                 variable="(outcome)",
                 allowNone=TRUE)
+            private$..multievent <- jmvcore::OptionBool$new(
+                "multievent",
+                multievent,
+                default=FALSE)
             private$..analysistype <- jmvcore::OptionList$new(
                 "analysistype",
                 analysistype,
@@ -150,6 +155,7 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..dooc)
             self$.addOption(private$..awd)
             self$.addOption(private$..awod)
+            self$.addOption(private$..multievent)
             self$.addOption(private$..analysistype)
             self$.addOption(private$..timetypedata)
             self$.addOption(private$..timetypeoutput)
@@ -170,6 +176,7 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         dooc = function() private$..dooc$value,
         awd = function() private$..awd$value,
         awod = function() private$..awod$value,
+        multievent = function() private$..multievent$value,
         analysistype = function() private$..analysistype$value,
         timetypedata = function() private$..timetypedata$value,
         timetypeoutput = function() private$..timetypeoutput$value,
@@ -189,6 +196,7 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..dooc = NA,
         ..awd = NA,
         ..awod = NA,
+        ..multievent = NA,
         ..analysistype = NA,
         ..timetypedata = NA,
         ..timetypeoutput = NA,
@@ -324,6 +332,7 @@ multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param dooc .
 #' @param awd .
 #' @param awod .
+#' @param multievent .
 #' @param analysistype .
 #' @param timetypedata select the time type in data
 #' @param timetypeoutput select the time type in output
@@ -355,6 +364,7 @@ multisurvival <- function(
     dooc,
     awd,
     awod,
+    multievent = FALSE,
     analysistype = "overall",
     timetypedata = "ymd",
     timetypeoutput = "months",
@@ -395,6 +405,7 @@ multisurvival <- function(
         dooc = dooc,
         awd = awd,
         awod = awod,
+        multievent = multievent,
         analysistype = analysistype,
         timetypedata = timetypedata,
         timetypeoutput = timetypeoutput,

@@ -82,6 +82,11 @@ options:
       variable: (outcome)
       allowNone: true
 
+    - name: multievent
+      title: Multiple Event Levels
+      type: Bool
+      default: false
+
     - name: analysistype
       title: 'Survival Type'
       type: List

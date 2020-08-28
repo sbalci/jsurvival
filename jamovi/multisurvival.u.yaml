@@ -126,8 +126,6 @@ children:
               - type: LevelSelector
                 name: awod
                 enable: (outcome && multievent)
-
-
   - type: CollapseBox
     label: Adjusted Survival Curve
     collapsed: false
@@ -157,4 +155,8 @@ children:
                     name: adjexplanatory
                     maxItemCount: 1
                     isTarget: true
-
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: CheckBox
+        name: multievent

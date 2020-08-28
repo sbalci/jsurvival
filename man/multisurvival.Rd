@@ -17,6 +17,7 @@ multisurvival(
   dooc,
   awd,
   awod,
+  multievent = FALSE,
   analysistype = "overall",
   timetypedata = "ymd",
   timetypeoutput = "months",
@@ -50,6 +51,8 @@ multisurvival(
 \item{awd}{.}
 
 \item{awod}{.}
+
+\item{multievent}{.}
 
 \item{analysistype}{.}
 
