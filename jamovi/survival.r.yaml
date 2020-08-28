@@ -20,9 +20,9 @@ items:
       type:  Html
 
 
-    - name:  mydataview
-      title: mydataview
-      type:  Preformatted
+    # - name:  mydataview
+    #   title: mydataview
+    #   type:  Preformatted
 
 
     - name:  medianSummary
@@ -265,33 +265,33 @@ items:
 
 
 
-    - name: plot4
-      title: 'Cutpoint Plot'
-      type: Image
-      width:  600
-      height: 450
-      renderFun: .plot4
-      visible: (findcut)
-      requiresData: true
-      clearWith:
-          - findcut
-          - contexpl
+    # - name: plot4
+    #   title: 'Cutpoint Plot'
+    #   type: Image
+    #   width:  600
+    #   height: 450
+    #   renderFun: .plot4
+    #   visible: (findcut)
+    #   requiresData: true
+    #   clearWith:
+    #       - findcut
+    #       - contexpl
 
 
 
-    - name: plot5
-      title: 'Survival Plot with new Cut-off'
-      type: Image
-      width:  600
-      height: 450
-      renderFun: .plot5
-      visible: (findcut)
-      requiresData: true
-      clearWith:
-          - findcut
-          - contexpl
-          - endplot
-          - byplot
+    # - name: plot5
+    #   title: 'Survival Plot with new Cut-off'
+    #   type: Image
+    #   width:  600
+    #   height: 450
+    #   renderFun: .plot5
+    #   visible: (findcut)
+    #   requiresData: true
+    #   clearWith:
+    #       - findcut
+    #       - contexpl
+    #       - endplot
+    #       - byplot
 
 
 

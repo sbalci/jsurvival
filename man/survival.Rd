@@ -11,7 +11,6 @@ survival(
   dxdate,
   fudate,
   explanatory,
-  contexpl,
   outcome,
   outcomeLevel,
   dod,
@@ -29,7 +28,6 @@ survival(
   ch = FALSE,
   endplot = 60,
   byplot = 12,
-  findcut = FALSE,
   multievent = FALSE,
   ci95 = FALSE,
   risktable = FALSE,
@@ -48,8 +46,6 @@ survival(
 \item{fudate}{.}
 
 \item{explanatory}{.}
-
-\item{contexpl}{.}
 
 \item{outcome}{.}
 
@@ -85,8 +81,6 @@ survival(
 
 \item{byplot}{.}
 
-\item{findcut}{.}
-
 \item{multievent}{.}
 
 \item{ci95}{.}
@@ -99,7 +93,6 @@ survival(
 A results object containing:
 \tabular{llllll}{
 \code{results$todo} \tab \tab \tab \tab \tab a html \cr
-\code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$medianSummary} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$coxSummary} \tab \tab \tab \tab \tab a preformatted \cr
@@ -113,8 +106,6 @@ A results object containing:
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
-\code{results$plot4} \tab \tab \tab \tab \tab an image \cr
-\code{results$plot5} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot6} \tab \tab \tab \tab \tab an image \cr
 }
 

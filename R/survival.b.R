@@ -16,7 +16,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                  (is.null(self$options$elapsedtime) && !(self$options$tint))
 
-                  || (is.null(self$options$explanatory) && is.null(self$options$contexpl))
+                  || (is.null(self$options$explanatory)
+                      # && is.null(self$options$contexpl)
+                      )
 
                  ) {
 
@@ -70,7 +72,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 if (nrow(self$data) == 0)
                     stop('Data contains no (complete) rows')
 
-            if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
+            if ( !is.null(self$options$explanatory)
+                 # && !is.null(self$options$contexpl)
+                 ) {
 
                 stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
 
@@ -96,7 +100,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 elapsedtime <- self$options$elapsedtime
                 outcome <- self$options$outcome
                 explanatory <- self$options$explanatory
-                contexpl <- self$options$contexpl
+                # contexpl <- self$options$contexpl
 
 
                 outcomeLevel <- self$options$outcomeLevel
@@ -347,230 +351,230 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 # return()
 
 
-                # Continious Explanatory ----
-
-
-                if ( !is.null(self$options$contexpl) ) {
-
-
-                                    todo <- glue::glue("
-                                                       <br>
-                                                       Continious Explanatory
-                                                       <br>
-                                                       <hr>")
-                                    html <- self$results$todo
-                                    html$setContent(todo)
-
-
-                                    # Disable other tables
-                                    self$results$medianSummary$setVisible(FALSE)
-                                    self$results$medianTable$setVisible(FALSE)
-                                    self$results$survTableSummary$setVisible(FALSE)
-                                    self$results$survTable$setVisible(FALSE)
-                                    self$results$pairwiseSummary$setVisible(FALSE)
-                                    self$results$pairwiseTable$setVisible(FALSE)
-
-
-
-
-
-                                    # Continious Cox Regression ----
-
-
-                                    formula2 <- as.vector(self$options$contexpl)
-
-                                    sas <- self$options$sas
-
-                                    if (sas) {
-                                        formula2 <- 1
-                                    }
-
-                                    myformula <- paste("Surv(", "mytime", "," , "myoutcome", ")")
-
-                                    finalfit::finalfit(.data = mydata,
-                                                       dependent = myformula,
-                                                       explanatory = formula2,
-
-                                                       metrics = TRUE
-                                    ) -> tCox
-
-
-                                    tCoxtext2 <- glue::glue("
-                                <br>
-                                <b>Model Metrics:</b>
-                                  ",
-                                unlist(
-                                    tCox[[2]]
-                                ),
-                                "
-                                <br>
-                                ")
-
-
-                                    self$results$tCoxtext2$setContent(tCoxtext2)
-
-
-
-
-                                    tCox_df <- tibble::as_tibble(tCox[[1]], .name_repair = "minimal") %>%
-                                        janitor::clean_names(dat = ., case = "snake")
-
-
-                                    # Continious Cox-Regression Table ----
-
-                                    coxTable <- self$results$coxTable
-
-                                    data_frame <- tCox_df
-
-                                    names(data_frame) <- c(
-                                        "Explanatory",
-                                        "Levels",
-                                        "all",
-                                        "HR_univariable",
-                                        "HR_multivariable"
-                                    )
-
-                                    for(i in seq_along(data_frame[,1,drop=T])) {
-                                        coxTable$addRow(rowKey = i, values = c(data_frame[i,]))
-                                    }
-
-
-                                    # Continious coxTable explanation ----
-
-
-                                    tCox_df <- tibble::as_tibble(tCox[[1]], .name_repair = "minimal") %>%
-                                        janitor::clean_names(dat = ., case = "snake")
-
-                                    names(tCox_df) <- names(data_frame) <- c(
-                                        "Explanatory",
-                                        "Levels",
-                                        "all",
-                                        "HR_univariable",
-                                        "HR_multivariable"
-                                    )
-
-
-                                    # https://stackoverflow.com/questions/38470355/r-fill-empty-cell-with-value-of-last-non-empty-cell
-
-                                    while(length(ind <- which(tCox_df$Explanatory == "")) > 0){
-                                        tCox_df$Explanatory[ind] <- tCox_df$Explanatory[ind - 1]
-                                    }
-
-                                    # https://stackoverflow.com/questions/51180290/mutate-by-group-in-r
-
-                                    tCox_df %>%
-                                        dplyr::group_by(Explanatory) %>%
-                                        dplyr::mutate(firstlevel = first(Levels)) %>%
-                                        dplyr::mutate(
-                                            coxdescription = glue::glue(
-                                                "When {Explanatory} increases 1 unit, the hazard increases {HR_multivariable} times."
-                                            )
-                                        ) %>%
-                                        dplyr::filter(HR_univariable != '-') %>%
-                                        dplyr::pull(coxdescription) -> coxSummary
-
-
-
-                                    coxSummary <- unlist(coxSummary)
-                                    self$results$coxSummary$setContent(coxSummary)
-
-
-
-
-                                # Continuous Optimal Cut-off ----
-
-                                # https://rpkgs.datanovia.com/survminer/reference/surv_cutpoint.html
-
-                                    findcut <- self$options$findcut
-
-                                    if (findcut) {
-
-                                    res.cut <- survminer::surv_cutpoint(
-                                        mydata,
-                                        time = "mytime",
-                                        event = "myoutcome",
-                                        self$options$contexpl,
-                                        minprop = 0.1,
-                                        progressbar = TRUE
-                                    )
-
-                                    # res.cut$Age
-                                    # res.cut$data
-                                    # res.cut$minprop
-                                    # res.cut$cutpoint
-
-
-                                    # Cut-off Table ----
-
-                                    rescut_summary <- summary(res.cut)
-
-                                    # self$results$rescutTable$setContent(rescut_summary)
-
-
-                                    rescutTable <- self$results$rescutTable
-
-                                    rescutTable$setTitle(paste0(self$options$contexpl))
-
-
-                                    data_frame <- rescut_summary
-                                    for (i in seq_along(data_frame[,1,drop = T])) {
-                                        rescutTable$addRow(rowKey = i, values = c(data_frame[i,]))
-                                    }
-
-
-                                    # categorisation ----
-
-                                    res.cat <- survminer::surv_categorize(res.cut)
-
-
-                                    # View mydata ----
-
-                                    # self$results$mydataview$setContent(head(res.cat, 20))
-
-                                    # Prepare Data For Continuous Explanatory Plots ----
-
-                                    plotData4 <- res.cut
-
-                                    image4 <- self$results$plot4
-                                    image4$setState(plotData4)
-
-                                    plotData5 <- res.cat
-
-                                    image5 <- self$results$plot5
-                                    image5$setState(plotData5)
-
-
-                                    }
-
-
-
-
-                                    return()
-
-
-
-                                }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                # # Continious Explanatory ----
+                #
+                #
+                # if ( !is.null(self$options$contexpl) ) {
+                #
+                #
+                #                     todo <- glue::glue("
+                #                                        <br>
+                #                                        Continious Explanatory
+                #                                        <br>
+                #                                        <hr>")
+                #                     html <- self$results$todo
+                #                     html$setContent(todo)
+                #
+                #
+                #                     # Disable other tables
+                #                     self$results$medianSummary$setVisible(FALSE)
+                #                     self$results$medianTable$setVisible(FALSE)
+                #                     self$results$survTableSummary$setVisible(FALSE)
+                #                     self$results$survTable$setVisible(FALSE)
+                #                     self$results$pairwiseSummary$setVisible(FALSE)
+                #                     self$results$pairwiseTable$setVisible(FALSE)
+                #
+                #
+                #
+                #
+                #
+                #                     # Continious Cox Regression ----
+                #
+                #
+                #                     formula2 <- as.vector(self$options$contexpl)
+                #
+                #                     sas <- self$options$sas
+                #
+                #                     if (sas) {
+                #                         formula2 <- 1
+                #                     }
+                #
+                #                     myformula <- paste("Surv(", "mytime", "," , "myoutcome", ")")
+                #
+                #                     finalfit::finalfit(.data = mydata,
+                #                                        dependent = myformula,
+                #                                        explanatory = formula2,
+                #
+                #                                        metrics = TRUE
+                #                     ) -> tCox
+                #
+                #
+                #                     tCoxtext2 <- glue::glue("
+                #                 <br>
+                #                 <b>Model Metrics:</b>
+                #                   ",
+                #                 unlist(
+                #                     tCox[[2]]
+                #                 ),
+                #                 "
+                #                 <br>
+                #                 ")
+                #
+                #
+                #                     self$results$tCoxtext2$setContent(tCoxtext2)
+                #
+                #
+                #
+                #
+                #                     tCox_df <- tibble::as_tibble(tCox[[1]], .name_repair = "minimal") %>%
+                #                         janitor::clean_names(dat = ., case = "snake")
+                #
+                #
+                #                     # Continious Cox-Regression Table ----
+                #
+                #                     coxTable <- self$results$coxTable
+                #
+                #                     data_frame <- tCox_df
+                #
+                #                     names(data_frame) <- c(
+                #                         "Explanatory",
+                #                         "Levels",
+                #                         "all",
+                #                         "HR_univariable",
+                #                         "HR_multivariable"
+                #                     )
+                #
+                #                     for(i in seq_along(data_frame[,1,drop=T])) {
+                #                         coxTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                #                     }
+                #
+                #
+                #                     # Continious coxTable explanation ----
+                #
+                #
+                #                     tCox_df <- tibble::as_tibble(tCox[[1]], .name_repair = "minimal") %>%
+                #                         janitor::clean_names(dat = ., case = "snake")
+                #
+                #                     names(tCox_df) <- names(data_frame) <- c(
+                #                         "Explanatory",
+                #                         "Levels",
+                #                         "all",
+                #                         "HR_univariable",
+                #                         "HR_multivariable"
+                #                     )
+                #
+                #
+                #                     # https://stackoverflow.com/questions/38470355/r-fill-empty-cell-with-value-of-last-non-empty-cell
+                #
+                #                     while(length(ind <- which(tCox_df$Explanatory == "")) > 0){
+                #                         tCox_df$Explanatory[ind] <- tCox_df$Explanatory[ind - 1]
+                #                     }
+                #
+                #                     # https://stackoverflow.com/questions/51180290/mutate-by-group-in-r
+                #
+                #                     tCox_df %>%
+                #                         dplyr::group_by(Explanatory) %>%
+                #                         dplyr::mutate(firstlevel = first(Levels)) %>%
+                #                         dplyr::mutate(
+                #                             coxdescription = glue::glue(
+                #                                 "When {Explanatory} increases 1 unit, the hazard increases {HR_multivariable} times."
+                #                             )
+                #                         ) %>%
+                #                         dplyr::filter(HR_univariable != '-') %>%
+                #                         dplyr::pull(coxdescription) -> coxSummary
+                #
+                #
+                #
+                #                     coxSummary <- unlist(coxSummary)
+                #                     self$results$coxSummary$setContent(coxSummary)
+                #
+                #
+                #
+                #
+                #                 # Continuous Optimal Cut-off ----
+                #
+                #                 # https://rpkgs.datanovia.com/survminer/reference/surv_cutpoint.html
+                #
+                #                     findcut <- self$options$findcut
+                #
+                #                     if (findcut) {
+                #
+                #                     res.cut <- survminer::surv_cutpoint(
+                #                         mydata,
+                #                         time = "mytime",
+                #                         event = "myoutcome",
+                #                         self$options$contexpl,
+                #                         minprop = 0.1,
+                #                         progressbar = TRUE
+                #                     )
+                #
+                #                     # res.cut$Age
+                #                     # res.cut$data
+                #                     # res.cut$minprop
+                #                     # res.cut$cutpoint
+                #
+                #
+                #                     # Cut-off Table ----
+                #
+                #                     rescut_summary <- summary(res.cut)
+                #
+                #                     # self$results$rescutTable$setContent(rescut_summary)
+                #
+                #
+                #                     rescutTable <- self$results$rescutTable
+                #
+                #                     rescutTable$setTitle(paste0(self$options$contexpl))
+                #
+                #
+                #                     data_frame <- rescut_summary
+                #                     for (i in seq_along(data_frame[,1,drop = T])) {
+                #                         rescutTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                #                     }
+                #
+                #
+                #                     # categorisation ----
+                #
+                #                     res.cat <- survminer::surv_categorize(res.cut)
+                #
+                #
+                #                     # View mydata ----
+                #
+                #                     # self$results$mydataview$setContent(head(res.cat, 20))
+                #
+                #                     # Prepare Data For Continuous Explanatory Plots ----
+                #
+                #                     plotData4 <- res.cut
+                #
+                #                     image4 <- self$results$plot4
+                #                     image4$setState(plotData4)
+                #
+                #                     plotData5 <- res.cat
+                #
+                #                     image5 <- self$results$plot5
+                #                     image5$setState(plotData5)
+                #
+                #
+                #                     }
+                #
+                #
+                #
+                #
+                #                     return()
+                #
+                #
+                #
+                #                 }
+                #
+                #
+                #
+                #
+                #
+                #
+                #
+                #
+                #
+                #
+                #
+                #
+                #
+                #
+                #
+                #
+                #
+                #
+                #
+                #
+                #
 
                 # One explanatory ----
 
@@ -960,11 +964,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     # if (nrow(self$data) == 0)
     # stop('Data contains no (complete) rows')
 
-    if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-
-        stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-
-    }
+    # if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
+    #
+    #     stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
+    #
+    # }
 
 
     # if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
@@ -1023,11 +1027,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     # if (nrow(self$data) == 0)
     #     stop('Data contains no (complete) rows')
 
-    if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-
-        stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-
-    }
+    # if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
+    #
+    #     stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
+    #
+    # }
 
     # if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
     #     return()
@@ -1083,11 +1087,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     # if (nrow(self$data) == 0)
     #     stop('Data contains no (complete) rows')
 
-    if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-
-        stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-
-    }
+    # if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
+    #
+    #     stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
+    #
+    # }
 
 
     # if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
@@ -1128,97 +1132,97 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 }
 
 
-,
-.plot4 = function(image4, ggtheme, theme, ...) {  # <-- the plot4 function ----
+# ,
+# .plot4 = function(image4, ggtheme, theme, ...) {  # <-- the plot4 function ----
+#
+#
+#     findcut <- self$options$findcut
+#
+#     if (!findcut)
+#         return()
+#
+#     # if (nrow(self$data) == 0)
+#     #     stop('Data contains no (complete) rows')
+#
+#     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
+#
+#         stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
+#
+#     }
+#
+#
+#     # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
+#     #     return()
+#
+#     plotData <- image4$state
+#
+#     res.cut <- plotData
+#
+#     plot4 <- plot(res.cut, self$options$contexpl, palette = "npg")
+#
+#
+#     print(plot4)
+#     TRUE
+# }
 
 
-    findcut <- self$options$findcut
-
-    if (!findcut)
-        return()
-
-    # if (nrow(self$data) == 0)
-    #     stop('Data contains no (complete) rows')
-
-    if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-
-        stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-
-    }
-
-
-    # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-    #     return()
-
-    plotData <- image4$state
-
-    res.cut <- plotData
-
-    plot4 <- plot(res.cut, self$options$contexpl, palette = "npg")
-
-
-    print(plot4)
-    TRUE
-}
-
-
-,
-.plot5 = function(image5, ggtheme, theme, ...) {  # <-- the plot5 function ----
-
-
-    findcut <- self$options$findcut
-
-    if (!findcut)
-        return()
-
-    # if (nrow(self$data) == 0)
-    #     stop('Data contains no (complete) rows')
-
-    if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-
-        stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-
-    }
-
-
-    # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-    #     return()
-
-    plotData <- image5$state
-
-    res.cat <- plotData
-
-
-    contfactor <- jmvcore::constructFormula(terms = self$options$contexpl)
-
-
-    sas <- self$options$sas
-
-    if (sas) {
-        contfactor <- 1
-    }
-
-
-
-    # contfactor <- as.formula(contfactor)
-
-    myformula <- paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
-
-    myformula <- as.formula(myformula)
-
-    fit <- survminer::surv_fit(formula = myformula,
-                               data = res.cat
-                               )
-
-    plot5 <- survminer::ggsurvplot(fit,
-                                   data = res.cat,
-                                   risk.table = self$options$risktable,
-                                   conf.int = self$options$ci95)
-
-
-    print(plot5)
-    TRUE
-}
+# ,
+# .plot5 = function(image5, ggtheme, theme, ...) {  # <-- the plot5 function ----
+#
+#
+#     findcut <- self$options$findcut
+#
+#     if (!findcut)
+#         return()
+#
+#     # if (nrow(self$data) == 0)
+#     #     stop('Data contains no (complete) rows')
+#
+#     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
+#
+#         stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
+#
+#     }
+#
+#
+#     # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
+#     #     return()
+#
+#     plotData <- image5$state
+#
+#     res.cat <- plotData
+#
+#
+#     contfactor <- jmvcore::constructFormula(terms = self$options$contexpl)
+#
+#
+#     sas <- self$options$sas
+#
+#     if (sas) {
+#         contfactor <- 1
+#     }
+#
+#
+#
+#     # contfactor <- as.formula(contfactor)
+#
+#     myformula <- paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
+#
+#     myformula <- as.formula(myformula)
+#
+#     fit <- survminer::surv_fit(formula = myformula,
+#                                data = res.cat
+#                                )
+#
+#     plot5 <- survminer::ggsurvplot(fit,
+#                                    data = res.cat,
+#                                    risk.table = self$options$risktable,
+#                                    conf.int = self$options$ci95)
+#
+#
+#     print(plot5)
+#     TRUE
+# }
 
 
 
@@ -1234,11 +1238,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     # if (nrow(self$data) == 0)
     #     stop('Data contains no (complete) rows')
 
-    if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-
-        stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-
-    }
+    # if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
+    #
+    #     stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
+    #
+    # }
 
     # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
     #     return()

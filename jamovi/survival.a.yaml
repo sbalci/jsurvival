@@ -64,11 +64,11 @@ options:
       suggested: [ ordinal, nominal ]
       permitted: [ factor ]
 
-    - name: contexpl
-      title: Continuous Explanatory Variable
-      type: Variable
-      suggested: [ continuous ]
-      permitted: [ numeric ]
+    # - name: contexpl
+    #   title: Continuous Explanatory Variable
+    #   type: Variable
+    #   suggested: [ continuous ]
+    #   permitted: [ numeric ]
 
     - name: outcome
       title: 'Outcome'
@@ -109,8 +109,8 @@ options:
           name: overall
         - title: Cause Specific
           name: cause
-        - title: Competing Risk
-          name: compete
+        # - title: Competing Risk
+        #   name: compete
       default: overall
 
 
@@ -202,10 +202,10 @@ options:
 
 
 
-    - name: findcut
-      title: Cut-off for Continious Explanatory
-      type: Bool
-      default: false
+    # - name: findcut
+    #   title: Cut-off for Continious Explanatory
+    #   type: Bool
+    #   default: false
 
 
     - name: multievent

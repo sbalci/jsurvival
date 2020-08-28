@@ -11,7 +11,6 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             dxdate = NULL,
             fudate = NULL,
             explanatory = NULL,
-            contexpl = NULL,
             outcome = NULL,
             outcomeLevel = NULL,
             dod = NULL,
@@ -29,7 +28,6 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             ch = FALSE,
             endplot = 60,
             byplot = 12,
-            findcut = FALSE,
             multievent = FALSE,
             ci95 = FALSE,
             risktable = FALSE,
@@ -66,13 +64,6 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "nominal"),
                 permitted=list(
                     "factor"))
-            private$..contexpl <- jmvcore::OptionVariable$new(
-                "contexpl",
-                contexpl,
-                suggested=list(
-                    "continuous"),
-                permitted=list(
-                    "numeric"))
             private$..outcome <- jmvcore::OptionVariable$new(
                 "outcome",
                 outcome,
@@ -112,8 +103,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 analysistype,
                 options=list(
                     "overall",
-                    "cause",
-                    "compete"),
+                    "cause"),
                 default="overall")
             private$..cutp <- jmvcore::OptionString$new(
                 "cutp",
@@ -168,10 +158,6 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "byplot",
                 byplot,
                 default=12)
-            private$..findcut <- jmvcore::OptionBool$new(
-                "findcut",
-                findcut,
-                default=FALSE)
             private$..multievent <- jmvcore::OptionBool$new(
                 "multievent",
                 multievent,
@@ -194,7 +180,6 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..dxdate)
             self$.addOption(private$..fudate)
             self$.addOption(private$..explanatory)
-            self$.addOption(private$..contexpl)
             self$.addOption(private$..outcome)
             self$.addOption(private$..outcomeLevel)
             self$.addOption(private$..dod)
@@ -212,7 +197,6 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..ch)
             self$.addOption(private$..endplot)
             self$.addOption(private$..byplot)
-            self$.addOption(private$..findcut)
             self$.addOption(private$..multievent)
             self$.addOption(private$..ci95)
             self$.addOption(private$..risktable)
@@ -224,7 +208,6 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         dxdate = function() private$..dxdate$value,
         fudate = function() private$..fudate$value,
         explanatory = function() private$..explanatory$value,
-        contexpl = function() private$..contexpl$value,
         outcome = function() private$..outcome$value,
         outcomeLevel = function() private$..outcomeLevel$value,
         dod = function() private$..dod$value,
@@ -242,7 +225,6 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ch = function() private$..ch$value,
         endplot = function() private$..endplot$value,
         byplot = function() private$..byplot$value,
-        findcut = function() private$..findcut$value,
         multievent = function() private$..multievent$value,
         ci95 = function() private$..ci95$value,
         risktable = function() private$..risktable$value,
@@ -253,7 +235,6 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..dxdate = NA,
         ..fudate = NA,
         ..explanatory = NA,
-        ..contexpl = NA,
         ..outcome = NA,
         ..outcomeLevel = NA,
         ..dod = NA,
@@ -271,7 +252,6 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..ch = NA,
         ..endplot = NA,
         ..byplot = NA,
-        ..findcut = NA,
         ..multievent = NA,
         ..ci95 = NA,
         ..risktable = NA,
@@ -282,7 +262,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         todo = function() private$.items[["todo"]],
-        mydataview = function() private$.items[["mydataview"]],
         medianSummary = function() private$.items[["medianSummary"]],
         medianTable = function() private$.items[["medianTable"]],
         coxSummary = function() private$.items[["coxSummary"]],
@@ -296,8 +275,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         plot = function() private$.items[["plot"]],
         plot2 = function() private$.items[["plot2"]],
         plot3 = function() private$.items[["plot3"]],
-        plot4 = function() private$.items[["plot4"]],
-        plot5 = function() private$.items[["plot5"]],
         plot6 = function() private$.items[["plot6"]]),
     private = list(),
     public=list(
@@ -321,10 +298,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="todo",
                 title="To Do"))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="mydataview",
-                title="mydataview"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="medianSummary",
@@ -538,32 +511,6 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "byplot")))
             self$add(jmvcore::Image$new(
                 options=options,
-                name="plot4",
-                title="Cutpoint Plot",
-                width=600,
-                height=450,
-                renderFun=".plot4",
-                visible="(findcut)",
-                requiresData=TRUE,
-                clearWith=list(
-                    "findcut",
-                    "contexpl")))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="plot5",
-                title="Survival Plot with new Cut-off",
-                width=600,
-                height=450,
-                renderFun=".plot5",
-                visible="(findcut)",
-                requiresData=TRUE,
-                clearWith=list(
-                    "findcut",
-                    "contexpl",
-                    "endplot",
-                    "byplot")))
-            self$add(jmvcore::Image$new(
-                options=options,
                 name="plot6",
                 title="KMunicate-Style Plot",
                 width=600,
@@ -613,7 +560,6 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param dxdate .
 #' @param fudate .
 #' @param explanatory .
-#' @param contexpl .
 #' @param outcome .
 #' @param outcomeLevel .
 #' @param dod .
@@ -631,7 +577,6 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param ch .
 #' @param endplot .
 #' @param byplot .
-#' @param findcut .
 #' @param multievent .
 #' @param ci95 .
 #' @param risktable .
@@ -639,7 +584,6 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$medianSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$coxSummary} \tab \tab \tab \tab \tab a preformatted \cr
@@ -653,8 +597,6 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot4} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot5} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot6} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
@@ -672,7 +614,6 @@ survival <- function(
     dxdate,
     fudate,
     explanatory,
-    contexpl,
     outcome,
     outcomeLevel,
     dod,
@@ -690,7 +631,6 @@ survival <- function(
     ch = FALSE,
     endplot = 60,
     byplot = 12,
-    findcut = FALSE,
     multievent = FALSE,
     ci95 = FALSE,
     risktable = FALSE,
@@ -703,7 +643,6 @@ survival <- function(
     if ( ! missing(dxdate)) dxdate <- jmvcore::resolveQuo(jmvcore::enquo(dxdate))
     if ( ! missing(fudate)) fudate <- jmvcore::resolveQuo(jmvcore::enquo(fudate))
     if ( ! missing(explanatory)) explanatory <- jmvcore::resolveQuo(jmvcore::enquo(explanatory))
-    if ( ! missing(contexpl)) contexpl <- jmvcore::resolveQuo(jmvcore::enquo(contexpl))
     if ( ! missing(outcome)) outcome <- jmvcore::resolveQuo(jmvcore::enquo(outcome))
     if (missing(data))
         data <- jmvcore::marshalData(
@@ -712,7 +651,6 @@ survival <- function(
             `if`( ! missing(dxdate), dxdate, NULL),
             `if`( ! missing(fudate), fudate, NULL),
             `if`( ! missing(explanatory), explanatory, NULL),
-            `if`( ! missing(contexpl), contexpl, NULL),
             `if`( ! missing(outcome), outcome, NULL))
 
     for (v in explanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
@@ -723,7 +661,6 @@ survival <- function(
         dxdate = dxdate,
         fudate = fudate,
         explanatory = explanatory,
-        contexpl = contexpl,
         outcome = outcome,
         outcomeLevel = outcomeLevel,
         dod = dod,
@@ -741,7 +678,6 @@ survival <- function(
         ch = ch,
         endplot = endplot,
         byplot = byplot,
-        findcut = findcut,
         multievent = multievent,
         ci95 = ci95,
         risktable = risktable,
