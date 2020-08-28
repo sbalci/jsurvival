@@ -9,6 +9,13 @@ children:
     stretchFactor: 1
     children:
       - type: TargetLayoutBox
+        label: Time Elapsed
+        children:
+          - type: VariablesListBox
+            name: elapsedtime
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
         label: Outcome
         children:
           - type: VariablesListBox
@@ -24,25 +31,26 @@ children:
           - type: VariablesListBox
             name: explanatory
             isTarget: true
-  - type: Label
+  - type: CollapseBox
     label: Plots
-    margin: large
-    cell:
-      row: 1
-      column: 1
+    collapsed: false
     children:
-      - type: LayoutBox
-        margin: large
+      - type: Label
+        label: Plots
+        fitToGrid: true
         children:
-          - type: CheckBox
-            name: hr
+          - type: LayoutBox
+            fitToGrid: true
             children:
-              - type: ComboBox
-                name: sty
-                enable: (hr)
+              - type: CheckBox
+                name: hr
+                children:
+                  - type: ComboBox
+                    name: sty
+                    enable: (hr)
   - type: CollapseBox
     label: Advanced Elapsed Time Options
-    collapsed: false
+    collapsed: true
     children:
       - type: Label
         label: Time Interval
@@ -91,7 +99,7 @@ children:
                 name: timetypeoutput
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
-    collapsed: false
+    collapsed: true
     children:
       - type: Label
         label: Analysis Type
@@ -135,14 +143,4 @@ children:
                 name: adjexplanatory
                 maxItemCount: 1
                 isTarget: true
-  - type: VariableSupplier
-    persistentItems: false
-    stretchFactor: 1
-    children:
-      - type: TargetLayoutBox
-        label: Time Elapsed
-        children:
-          - type: VariablesListBox
-            name: elapsedtime
-            maxItemCount: 1
-            isTarget: true
+
