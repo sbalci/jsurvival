@@ -66,7 +66,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 elapsedtime <- self$options$elapsedtime
                 outcome <- self$options$outcome
-                contexpl <- self$options$contexpl
+                explanatory <- self$options$explanatory
                 outcomeLevel <- self$options$outcomeLevel
                 tint <- self$options$tint
 
@@ -248,7 +248,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 # Define Explanatory Factor ----
 
-                mydata[["myfactor"]] <- mydata[[contexpl]]
+                mydata[["myfactor"]] <- mydata[[explanatory]]
 
                 # Define Data For Analysis
 
@@ -276,7 +276,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                      (is.null(self$options$elapsedtime) && !(self$options$tint))
 
-                     || is.null(self$options$contexpl)
+                     || is.null(self$options$explanatory)
 
                 ) {
                     private$.todo()
