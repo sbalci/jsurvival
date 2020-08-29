@@ -13,8 +13,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         .init = function() {
 
-            private$.todo()
-
             # Read Arguments ----
             elapsedtime <- self$options$elapsedtime
             outcome <- self$options$outcome
@@ -58,9 +56,20 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 html <- self$results$todo
                 html$setContent(todo)
+            }
+
+
+            if ( is.null(self$options$outcome) ||
+
+                 (is.null(self$options$elapsedtime) && !(self$options$tint))
+
+                 || is.null(self$options$explanatory)
+
+            )
                 return()
 
-            }
+
+
 
             if (length(self$options$explanatory) > 1 && !(
                     is.null(self$options$outcome) ||
@@ -123,7 +132,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             mydata <- self$data
 
-
             tint <- self$options$tint
 
 
@@ -131,8 +139,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 # Precalculated Time ----
 
-
-                mydata[[self$options$elapsedtime]] <- jmvcore::toNumeric(mydata[[self$options$elapsedtime]])
+                # mydata[[self$options$elapsedtime]] <- jmvcore::toNumeric(mydata[[self$options$elapsedtime]])
 
                 mydata[["mytime"]] <- jmvcore::toNumeric(mydata[[self$options$elapsedtime]])
 
