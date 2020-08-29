@@ -250,7 +250,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             }
 
 
-            if ( length(self$options$explanatory) > 1 || sas ) {
+            if ( length(self$options$explanatory) > 1 || self$options$sas ) {
                 factor <- private$.definemyfactor()
                 factor <- jmvcore::select(df = self$data, columnNames = factor)
 
