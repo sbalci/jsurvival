@@ -63,14 +63,14 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         }
 
 
-        ,
-        .definemytime = function() {}
+        # ,
+        # .definemytime = function() {}
 
-        ,
-        .definemyoutcome = function() {}
+        # ,
+        # .definemyoutcome = function() {}
 
-        ,
-        .definemyfactor = function() {}
+        # ,
+        # .definemyfactor = function() {}
 
         ,
         .cleandata = function() {
