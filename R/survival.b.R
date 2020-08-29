@@ -13,22 +13,19 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         .init = function() {
 
+            private$.todo()
+
             # Common Definitions ----
             contin <- c("integer", "numeric", "double")
 
             # Read Data ----
-
             mydata <- self$data
 
 
-
-
             # Read Arguments ----
-
             elapsedtime <- self$options$elapsedtime
             outcome <- self$options$outcome
             explanatory <- self$options$explanatory
-
 
             outcomeLevel <- self$options$outcomeLevel
 
@@ -71,6 +68,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 html <- self$results$todo
                 html$setContent(todo)
                 return()
+
             }
 
             if (length(self$options$explanatory) > 1) {
