@@ -99,16 +99,13 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             mydata <- self$data
 
-
             contin <- c("integer", "numeric", "double")
 
             multievent <- self$options$multievent
             outcome1 <- self$options$outcome
             outcome1 <- self$data[[outcome1]]
 
-
             if (!multievent) {
-
 
                 if (inherits(outcome1, contin)) {
 
@@ -121,23 +118,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                     mydata[["myoutcome"]] <- mydata[[self$options$outcome]]
 
-
                 } else if (inherits(outcome1, "factor")) {
-
-
-                    # mydata[[self$options$outcome]] <-
-                    #     ifelse(test = outcome1 == outcomeLevel,
-                    #            yes = 1,
-                    #            no = 0)
-
-
 
                     mydata[["myoutcome"]] <-
                         ifelse(test = outcome1 == outcomeLevel,
                                yes = 1,
                                no = 0)
-
-
 
                 } else {
 
@@ -154,8 +140,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 dooc <- self$options$dooc
                 awd <- self$options$awd
                 awod <- self$options$awod
-
-
 
                 if (analysistype == 'overall') {
 
@@ -201,6 +185,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             }
 
 
+            return(mydata[["myoutcome"]])
 
         }
 
@@ -210,10 +195,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             mydata <- self$data
 
-
-            # Define =1 Explanatory Factor ----
-
-
+            # 1 Explanatory Factor ----
 
             if ( length(self$options$explanatory) == 1 ) {
 
@@ -221,17 +203,28 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 mydata[["myfactor"]] <- mydata[[expl]]
 
+                return(mydata[["myfactor"]])
+
             }
 
+            # > 1 Explanatory Factor ----
+
+            if ( length(self$options$explanatory) > 1 ) {
 
             thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
+
+            return(thefactor)
+
+            }
+
+            # single arm ----
 
             sas <- self$options$sas
 
             if (sas) {
                 thefactor <- 1
+                return(thefactor)
             }
-
 
 
         }
@@ -243,15 +236,33 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
             time <- private$.definemytime()
-            # outcome <- private$.definemyoutcome()
-            # factor <- private$.definemyfactor()
+            outcome <- private$.definemyoutcome()
 
-            cleanData <- data.frame(
-                "time" <- time
-                # ,
-                # "outcome" <- outcome,
-                # "factor" <- factor
+
+            if ( length(self$options$explanatory) == 1 ) {
+                factor <- private$.definemyfactor()
+
+                cleanData <- data.frame(
+                    "mytime" = time,
+                    "myoutcome" = outcome,
+                    "factor" = factor
                 )
+            }
+
+
+            if ( length(self$options$explanatory) > 1 || sas ) {
+                factor <- private$.definemyfactor()
+                factor <- jmvcore::select(df = self$data, columnNames = factor)
+
+                cleanData <- data.frame(
+                    "mytime" = time,
+                    "myoutcome" = outcome,
+                    "factor" = factor
+                )
+
+            }
+
+
 
             # naOmit ----
 
@@ -262,6 +273,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             self$results$mydataview$setContent(
                 list(time,
+                     outcome,
                     head(cleanData, n = 30)
                 )
             )
