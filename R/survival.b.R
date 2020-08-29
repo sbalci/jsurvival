@@ -331,7 +331,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 # Run Analysis ----
 
-                private$.medianSurv()
+                private$.medianSurv(results)
 
                 return() # RETURN ----
 
