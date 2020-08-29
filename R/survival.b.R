@@ -450,7 +450,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
 
                 myformula <-
-                    paste('Surv(',
+                    paste('survival::Surv(',
                           mytime,
                           ',',
                           myoutcome,
