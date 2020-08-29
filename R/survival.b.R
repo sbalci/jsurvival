@@ -290,6 +290,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
             }
 
 
+            # Run Analysis ----
             ,
             .run = function() {
                 # Common Errors, Warnings ----
@@ -339,7 +340,6 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 # Run Analysis ----
 
                 private$.medianSurv(results)
-
 
                 private$.cox(results)
 
@@ -440,8 +440,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 mytime <- results$name1time
                 myoutcome <- results$name2outcome
                 myfactor <- results$name3explanatory
-                myfactor <- jmvcore::constructFormula(terms = myfactor)
-                myfactor <- jmvcore::decomposeFormula(formula = myfactor)
+                # myfactor <- jmvcore::constructFormula(terms = myfactor)
+                # myfactor <- jmvcore::decomposeFormula(formula = myfactor)
 
                 mydata <- results$cleanData
 
