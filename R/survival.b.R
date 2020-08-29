@@ -366,7 +366,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 # Median Survival Table ----
 
                 formula <-
-                    paste0('survival::Surv(',
+                    paste('survival::Surv(',
                            mytime,
                            ',',
                            myoutcome,
