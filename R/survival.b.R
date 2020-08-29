@@ -225,7 +225,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 # Names cleanData ----
 
                 if (self$options$tint) {
-                    name1time <- "Calculated Time"
+                    name1time <- "CalculatedTime"
                 }
 
                 if (!self$options$tint &&
@@ -443,11 +443,9 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 myfactor <- jmvcore::constructFormula(terms = myfactor)
                 myfactor <- jmvcore::decomposeFormula(formula = myfactor)
 
-
-
                 mydata <- results$cleanData
 
-                mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
+                # mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
 
                 myformula <-
                     paste('survival::Surv(',
