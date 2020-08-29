@@ -480,6 +480,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 self$results$tCoxtext2$setContent(tCoxtext2)
 
 
+                return() # RETURN ----
 
 
                 tCox_df <-
