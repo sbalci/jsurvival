@@ -353,11 +353,11 @@ survivalClass <- if (requireNamespace('jmvcore'))
             .medianSurv = function(results) {
 
                 mytime <- results$name1time
-                mytime <- jmvcore::constructFormula(terms = mytime)
+                # mytime <- jmvcore::constructFormula(terms = mytime)
                 myoutcome <- results$name2outcome
-                myoutcome <- jmvcore::constructFormula(terms = myoutcome)
+                # myoutcome <- jmvcore::constructFormula(terms = myoutcome)
                 myfactor <- results$name3explanatory
-                myfactor <- jmvcore::constructFormula(terms = myfactor)
+                # myfactor <- jmvcore::constructFormula(terms = myfactor)
 
                 mydata <- results$cleanData
 
