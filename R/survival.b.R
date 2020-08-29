@@ -438,10 +438,10 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
 
                 mytime <- results$name1time
-                mytime <- jmvcore::constructFormula(terms = mytime)
+                # mytime <- jmvcore::constructFormula(terms = mytime)
 
                 myoutcome <- results$name2outcome
-                myoutcome <- jmvcore::constructFormula(terms = myoutcome)
+                # myoutcome <- jmvcore::constructFormula(terms = myoutcome)
 
 
                 myfactor <- results$name3explanatory
