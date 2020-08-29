@@ -438,6 +438,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
 
                 mytime <- results$name1time
+                mytime <- jmvcore::constructFormula(terms = mytime)
                 myoutcome <- results$name2outcome
                 myfactor <- results$name3explanatory
                 # myfactor <- jmvcore::constructFormula(terms = myfactor)
@@ -455,13 +456,12 @@ survivalClass <- if (requireNamespace('jmvcore'))
                           ')'
                     )
 
-                # myformula <- as.formula(myformula)
+                myformula <- as.formula(myformula)
 
                 finalfit::finalfit(
                     .data = mydata,
-                    dependent = eval(parse(text = myformula)),
+                    dependent = myformula,
                     explanatory = myfactor,
-
                     metrics = TRUE
                 ) -> tCox
 
@@ -479,72 +479,69 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 self$results$tCoxtext2$setContent(tCoxtext2)
 
-
-                return() # RETURN ----
-
-
-                tCox_df <-
-                    tibble::as_tibble(tCox[[1]], .name_repair = "minimal") %>%
-                    janitor::clean_names(dat = ., case = "snake")
-
-
-                # Cox-Regression Table ----
-
-                # tCox_df <- tCox_df[,-(dim(tCox_df)[2])]
-
-                coxTable <- self$results$coxTable
-
-                data_frame <- tCox_df
-
-                names(data_frame) <- c("Explanatory",
-                                       "Levels",
-                                       "all",
-                                       "HR_univariable",
-                                       "HR_multivariable")
-
-                for (i in seq_along(data_frame[, 1, drop = T])) {
-                    coxTable$addRow(rowKey = i, values = c(data_frame[i, ]))
-                }
-
-
-                # Cox-Table Explanation ----
-
-
-                tCox_df <-
-                    tibble::as_tibble(tCox[[1]], .name_repair = "minimal") %>%
-                    janitor::clean_names(dat = ., case = "snake")
-
-                names(tCox_df) <- names(data_frame) <- c("Explanatory",
-                                                         "Levels",
-                                                         "all",
-                                                         "HR_univariable",
-                                                         "HR_multivariable")
-
-
-                # https://stackoverflow.com/questions/38470355/r-fill-empty-cell-with-value-of-last-non-empty-cell
-
-                while (length(ind <-
-                              which(tCox_df$Explanatory == "")) > 0) {
-                    tCox_df$Explanatory[ind] <- tCox_df$Explanatory[ind - 1]
-                }
-
-                # https://stackoverflow.com/questions/51180290/mutate-by-group-in-r
-
-                tCox_df %>%
-                    dplyr::group_by(Explanatory) %>%
-                    dplyr::mutate(firstlevel = first(Levels)) %>%
-                    dplyr::mutate(
-                        coxdescription = glue::glue(
-                            "When {Explanatory} is {Levels}, there is {HR_univariable} times risk than when {Explanatory} is {firstlevel}."
-                        )
-                    ) %>%
-                    dplyr::filter(HR_univariable != '-') %>%
-                    dplyr::pull(coxdescription) -> coxSummary
-
-
-
-                coxSummary <- unlist(coxSummary)
-                self$results$coxSummary$setContent(coxSummary)
+#
+#                 tCox_df <-
+#                     tibble::as_tibble(tCox[[1]], .name_repair = "minimal") %>%
+#                     janitor::clean_names(dat = ., case = "snake")
+#
+#
+#                 # Cox-Regression Table ----
+#
+#                 # tCox_df <- tCox_df[,-(dim(tCox_df)[2])]
+#
+#                 coxTable <- self$results$coxTable
+#
+#                 data_frame <- tCox_df
+#
+#                 names(data_frame) <- c("Explanatory",
+#                                        "Levels",
+#                                        "all",
+#                                        "HR_univariable",
+#                                        "HR_multivariable")
+#
+#                 for (i in seq_along(data_frame[, 1, drop = T])) {
+#                     coxTable$addRow(rowKey = i, values = c(data_frame[i, ]))
+#                 }
+#
+#
+#                 # Cox-Table Explanation ----
+#
+#
+#                 tCox_df <-
+#                     tibble::as_tibble(tCox[[1]], .name_repair = "minimal") %>%
+#                     janitor::clean_names(dat = ., case = "snake")
+#
+#                 names(tCox_df) <- names(data_frame) <- c("Explanatory",
+#                                                          "Levels",
+#                                                          "all",
+#                                                          "HR_univariable",
+#                                                          "HR_multivariable")
+#
+#
+#                 # https://stackoverflow.com/questions/38470355/r-fill-empty-cell-with-value-of-last-non-empty-cell
+#
+#                 while (length(ind <-
+#                               which(tCox_df$Explanatory == "")) > 0) {
+#                     tCox_df$Explanatory[ind] <- tCox_df$Explanatory[ind - 1]
+#                 }
+#
+#                 # https://stackoverflow.com/questions/51180290/mutate-by-group-in-r
+#
+#                 tCox_df %>%
+#                     dplyr::group_by(Explanatory) %>%
+#                     dplyr::mutate(firstlevel = first(Levels)) %>%
+#                     dplyr::mutate(
+#                         coxdescription = glue::glue(
+#                             "When {Explanatory} is {Levels}, there is {HR_univariable} times risk than when {Explanatory} is {firstlevel}."
+#                         )
+#                     ) %>%
+#                     dplyr::filter(HR_univariable != '-') %>%
+#                     dplyr::pull(coxdescription) -> coxSummary
+#
+#
+#
+#                 coxSummary <- unlist(coxSummary)
+#                 self$results$coxSummary$setContent(coxSummary)
 
 
 
