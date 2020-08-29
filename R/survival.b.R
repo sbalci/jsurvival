@@ -459,7 +459,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                           ")'"
                     )
 
-                myformula <- as.formula(myformula)
+                # myformula <- as.formula(myformula)
 
                 finalfit::finalfit(
                     .data = mydata,
