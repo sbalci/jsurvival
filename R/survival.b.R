@@ -340,14 +340,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 private$.medianSurv(results)
 
+
+                private$.cox(results)
                 return() # RETURN ----
 
-                private$.cox()
-
-                private$.survTable()
+                private$.survTable(results)
 
                 if (self$options$pw) {
-                    private$.pairwise()
+                    private$.pairwise(results)
                 }
 
             }
@@ -357,11 +357,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
             .medianSurv = function(results) {
 
                 mytime <- results$name1time
-                # mytime <- jmvcore::constructFormula(terms = mytime)
                 myoutcome <- results$name2outcome
-                # myoutcome <- jmvcore::constructFormula(terms = myoutcome)
                 myfactor <- results$name3explanatory
-                # myfactor <- jmvcore::constructFormula(terms = myfactor)
 
                 mydata <- results$cleanData
 
