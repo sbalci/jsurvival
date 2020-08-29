@@ -369,10 +369,11 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     paste0('survival::Surv(',
                            mytime,
                            ',',
-                           'myoutcome',
+                           myoutcome,
                            ') ~ ',
                            myfactor
                            )
+
                 formula <- as.formula(formula)
 
                 km_fit <- survival::survfit(formula, data = mydata)
