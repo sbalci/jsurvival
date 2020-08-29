@@ -15,13 +15,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             private$.todo()
 
-            # Common Definitions ----
-            contin <- c("integer", "numeric", "double")
-
-            # Read Data ----
-            mydata <- self$data
-
-
             # Read Arguments ----
             elapsedtime <- self$options$elapsedtime
             outcome <- self$options$outcome
@@ -35,8 +28,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         # Messages ----
         ,
         .todo = function() {
-
-
 
             if ( is.null(self$options$outcome) ||
 
@@ -71,7 +62,13 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             }
 
-            if (length(self$options$explanatory) > 1) {
+            if (length(self$options$explanatory) > 1 && !(
+                    is.null(self$options$outcome) ||
+                    (is.null(self$options$elapsedtime) && !(self$options$tint))
+                )
+
+
+                ) {
 
 
                 todo <- glue::glue("
@@ -86,7 +83,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # One explanatory ----
 
             if (
-                length(self$options$explanatory) == 1 && !is.null(self$options$outcome) && !is.null(self$options$elapsedtime)
+                length(self$options$explanatory) == 1 && !(
+                    is.null(self$options$outcome) ||
+                    (is.null(self$options$elapsedtime) && !(self$options$tint))
+                )
+
             ) {
 
                 todo <- glue::glue("
@@ -119,6 +120,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # Define Survival Time ----
         ,
         .definemytime = function() {
+
+            mydata <- self$data
 
 
             tint <- self$options$tint
@@ -197,15 +200,16 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         }
 
+            # Define Outcome ----
         ,
         .definemyoutcome = function() {
 
-            # Define Outcome ----
+            mydata <- self$data
 
 
+            contin <- c("integer", "numeric", "double")
 
             multievent <- self$options$multievent
-
             outcome1 <- self$options$outcome
             outcome1 <- self$data[[outcome1]]
 
