@@ -95,22 +95,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 html <- self$results$todo
                 html$setContent(todo)
 
-
             }
 
-
-            # Common Errors, Warnings ----
-
-            if (nrow(self$data) == 0)
-                stop('Data contains no (complete) rows')
-
-            # if ( !is.null(self$options$explanatory)
-            #      # && !is.null(self$options$contexpl)
-            #      ) {
-            #
-            #     stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-            #
-            # }
 
         }
 
@@ -398,6 +384,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             private$.todo()
 
+            # Common Errors, Warnings ----
+
             if ( is.null(self$options$outcome) ||
 
                  (is.null(self$options$elapsedtime) && !(self$options$tint))
@@ -406,6 +394,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             )
                 return()
+
+            if (nrow(self$data) == 0)
+                stop('Data contains no (complete) rows')
+
+            # Prepare Clean Data ----
 
             private$.definemytime()
             private$.definemyoutcome()
