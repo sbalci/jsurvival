@@ -243,13 +243,14 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
             time <- private$.definemytime()
-            outcome <- private$.definemyoutcome()
-            factor <- private$.definemyfactor()
+            # outcome <- private$.definemyoutcome()
+            # factor <- private$.definemyfactor()
 
             cleanData <- data.frame(
-                "time" <- time,
-                "outcome" <- outcome,
-                "factor" <- factor
+                "time" <- time
+                # ,
+                # "outcome" <- outcome,
+                # "factor" <- factor
                 )
 
             # naOmit ----
