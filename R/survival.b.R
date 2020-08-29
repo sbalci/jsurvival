@@ -343,22 +343,19 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     private$.pairwise()
                 }
 
-
-
-
             }
-
-
-
-
 
             # Median Survival ----
             ,
             .medianSurv = function(results) {
 
                 mytime <- results$name1time
+                mytime <- jmvcore::constructFormula(mytime)
                 myoutcome <- results$name2outcome
+                myoutcome <- jmvcore::constructFormula(myoutcome)
                 myfactor <- results$name3explanatory
+                myfactor <- jmvcore::constructFormula(myfactor)
+
                 mydata <- results$cleanData
 
                 mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
