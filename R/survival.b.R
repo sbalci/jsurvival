@@ -88,6 +88,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             }
 
 
+            return(mydata[["mytime"]])
 
 
         }
@@ -207,6 +208,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         ,
         .definemyfactor = function() {
 
+            mydata <- self$data
+
+
             # Define =1 Explanatory Factor ----
 
 
@@ -238,31 +242,30 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         .cleandata = function() {
 
 
+            time <- private$.definemytime()
+            outcome <- private$.definemyoutcome()
+            factor <- private$.definemyfactor()
+
+            cleanData <- data.frame(
+                "time" <- time,
+                "outcome" <- outcome,
+                "factor" <- factor
+                )
 
             # naOmit ----
 
-            mydata <- jmvcore::naOmit(mydata)
-
+            cleanData <- jmvcore::naOmit(cleanData)
 
 
             # View mydata ----
 
             self$results$mydataview$setContent(
                 list(
-                    "outcome1" = outcome1,
-                    # dod,
-                    # dooc,
-                    # awd,
-                    # awod,
-                    head(mydata, n = 30)
+                    head(cleanData, n = 30)
                 )
             )
 
-            # return()
-
-            # View mydata ----
-
-            # self$results$mydataview$setContent(head(mydata, 20))
+            return()
 
 
 
@@ -375,9 +378,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             # Prepare Clean Data ----
 
-            private$.definemytime()
-            private$.definemyoutcome()
-            private$.definemyfactor()
             private$.cleandata()
 
 
