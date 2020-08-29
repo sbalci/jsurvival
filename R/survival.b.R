@@ -432,25 +432,33 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
             # Cox Regression ----
             ,
-            .cox = function() {
+            .cox = function(results) {
                 # Cox Regression ----
 
 
-                formula2 <- as.vector(self$options$explanatory)
+                mytime <- results$name1time
+                myoutcome <- results$name2outcome
+                myfactor <- results$name3explanatory
 
-                sas <- self$options$sas
+                mydata <- results$cleanData
 
-                if (sas) {
-                    formula2 <- 1
-                }
+                mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
 
                 myformula <-
-                    paste("Surv(", "mytime", "," , "myoutcome", ")")
+                    paste('survival::Surv(',
+                          mytime,
+                          ',',
+                          myoutcome,
+                          ')'
+                    )
+
+                myformula <- as.formula(myformula)
+
 
                 finalfit::finalfit(
                     .data = mydata,
                     dependent = myformula,
-                    explanatory = formula2,
+                    explanatory = myfactor,
 
                     metrics = TRUE
                 ) -> tCox
@@ -524,7 +532,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     dplyr::mutate(firstlevel = first(Levels)) %>%
                     dplyr::mutate(
                         coxdescription = glue::glue(
-                            "When {Explanatory} is {Levels}, there is {HR_multivariable} times risk than when {Explanatory} is {firstlevel}."
+                            "When {Explanatory} is {Levels}, there is {HR_univariable} times risk than when {Explanatory} is {firstlevel}."
                         )
                     ) %>%
                     dplyr::filter(HR_univariable != '-') %>%
@@ -544,8 +552,30 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
             # Survival Table ----
             ,
-            .survTable = function() {
-                # survival table 1,3,5-yr survival ----
+            .survTable = function(results) {
+
+                mytime <- results$name1time
+                myoutcome <- results$name2outcome
+                myfactor <- results$name3explanatory
+
+                mydata <- results$cleanData
+
+                mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
+
+                # Median Survival Table ----
+
+                formula <-
+                    paste('survival::Surv(',
+                          mytime,
+                          ',',
+                          myoutcome,
+                          ') ~ ',
+                          myfactor
+                    )
+
+                formula <- as.formula(formula)
+
+                km_fit <- survival::survfit(formula, data = mydata)
 
                 utimes <- self$options$cutp
 
@@ -608,22 +638,30 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
             # Pairwise ----
             ,
-            .pairwise = function() {
+            .pairwise = function(results) {
                 #  pairwise comparison ----
 
 
-                formula2 <-
-                    jmvcore::constructFormula(terms = self$options$explanatory)
+                mytime <- results$name1time
+                myoutcome <- results$name2outcome
+                myfactor <- results$name3explanatory
 
+                mydata <- results$cleanData
 
-                formula_p <-
-                    paste0('survival::Surv(',
-                           "mytime",
-                           ',',
-                           "myoutcome",
-                           ') ~ ',
-                           formula2)
-                formula_p <- as.formula(formula_p)
+                mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
+
+                # Median Survival Table ----
+
+                formula <-
+                    paste('survival::Surv(',
+                          mytime,
+                          ',',
+                          myoutcome,
+                          ') ~ ',
+                          myfactor
+                    )
+
+                formula_p <- as.formula(formula)
 
                 results_pairwise <-
                     survminer::pairwise_survdiff(formula = formula_p,
@@ -654,14 +692,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 title2 <- as.character(thefactor)
 
 
-                sas <- self$options$sas
 
-                if (sas) {
-                    thefactor <- 1
-                    title2 <- "Overall"
-                }
-
-                pairwiseTable$setTitle(paste0('Pairwise Comparisons ', title2))
+                pairwiseTable$setTitle(paste0('Pairwise Comparisons ', myfactor))
 
 
                 mypairwise2 %>%
@@ -681,8 +713,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 self$results$pairwiseSummary$setContent(pairwiseSummary)
 
 
-                if (length(self$options$explanatory) == 1 &&
-                    dim(mypairwise2)[1] == 1) {
+                if (dim(mypairwise2)[1] == 1) {
                     self$results$pairwiseTable$setVisible(FALSE)
 
                     pairwiseSummary <-
