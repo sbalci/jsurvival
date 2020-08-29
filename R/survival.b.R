@@ -327,7 +327,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 # Prepare Clean Data ----
 
-                private$.cleandata()
+                results <- private$.cleandata()
 
                 # Run Analysis ----
 
@@ -355,6 +355,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
             # Median Survival ----
             ,
             .medianSurv = function(results) {
+
                 mytime <- results$name1time
                 myoutcome <- results$name2outcome
                 myfactor <- results$name3explanatory
