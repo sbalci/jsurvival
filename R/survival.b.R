@@ -262,10 +262,6 @@ survivalClass <- if (requireNamespace('jmvcore'))
                                                         name3explanatory,
                                                         head(cleanData, n = 30)))
 
-                return(list(name1time,
-                            name2outcome,
-                            name3explanatory,
-                            cleanData))
 
                 # Prepare Data For Plots ----
 
@@ -282,6 +278,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 image6 <- self$results$plot6
                 image6$setState(plotData)
+
+                # Return Data ----
+
+                return(list(
+                    "name1time" = name1time,
+                    "name2outcome" = name2outcome,
+                    "name3explanatory" = name3explanatory,
+                    "cleanData" = cleanData))
 
             }
 
