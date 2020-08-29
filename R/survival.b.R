@@ -13,8 +13,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         .init = function() {
 
-            private$.todo()
-
             # Read Arguments ----
             elapsedtime <- self$options$elapsedtime
             outcome <- self$options$outcome
