@@ -32,8 +32,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             outcomeLevel <- self$options$outcomeLevel
 
-            tint <- self$options$tint
-
         }
 
 
@@ -120,13 +118,18 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         }
 
 
+            # Define Survival Time ----
         ,
         .definemytime = function() {
 
-            # Define Survival Time ----
+
+            tint <- self$options$tint
 
 
             if (!tint) {
+
+                # Precalculated Time ----
+
 
                 mydata[[self$options$elapsedtime]] <- jmvcore::toNumeric(mydata[[self$options$elapsedtime]])
 
@@ -140,23 +143,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 dxdate <- self$options$dxdate
                 fudate <- self$options$fudate
                 timetypedata <- self$options$timetypedata
-
-
-                # stopifnot(lubridate::is.Date(
-                #     lubridate::ymd_hms(
-                #         mydata[[fudate]]
-                #         )
-                #     )
-                # )
-                #
-                # stopifnot(lubridate::is.Date(lubridate::ymd_hms((mydata[[dxdate]]))))
-
-                # stopifnot(
-                #     inherits(mydata[[dxdate]], c("POSIXct","POSIXt", "POSIXlt"))
-                # )
-                # stopifnot(
-                #     inherits(mydata[[fudate]], c("POSIXct","POSIXt", "POSIXlt"))
-                # )
 
 
                 if (timetypedata == "ymdhms") {
@@ -190,9 +176,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
-
-
-
                 timetypeoutput <- jmvcore::constructFormula(terms = self$options$timetypeoutput)
 
 
@@ -208,12 +191,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                         mytime = lubridate::time_length(interval, timetypeoutput)
                     )
 
-                # mydata[["interval"]] <- lubridate::interval(
-                #     start = lubridate::ymd_hms(mydata[[dxdate]]),
-                #     end = lubridate::ymd_hms(mydata[[fudate]])
-                # )
-
-                # mydata[["mytime"]] <- lubridate::time_length(mydata[["interval"]], timetypeoutput)
 
             }
 
