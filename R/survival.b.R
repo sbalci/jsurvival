@@ -305,13 +305,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 #
                 # stopifnot(lubridate::is.Date(lubridate::ymd_hms((mydata[[dxdate]]))))
 
-                stopifnot(
-                    inherits(mydata[[dxdate]], c("POSIXct","POSIXt", "POSIXlt"))
-                )
-
-                stopifnot(
-                    inherits(mydata[[fudate]], c("POSIXct","POSIXt", "POSIXlt"))
-                )
+                # stopifnot(
+                #     inherits(mydata[[dxdate]], c("POSIXct","POSIXt", "POSIXlt"))
+                # )
+                # stopifnot(
+                #     inherits(mydata[[fudate]], c("POSIXct","POSIXt", "POSIXlt"))
+                # )
 
 
                 if (timetypedata == "ymdhms") {

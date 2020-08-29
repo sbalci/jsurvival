@@ -312,13 +312,13 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 formula2 <- as.vector(self$options$explanatory)
 
-                formulaL <-
-                    jmvcore::constructFormula(terms = self$options$elapsedtime)
-
-                formulaL <- jmvcore::toNumeric(formulaL)
-
-                formulaL <-
-                    jmvcore::constructFormula(terms = self$options$elapsedtime)
+                # formulaL <-
+                #     jmvcore::constructFormula(terms = self$options$elapsedtime)
+                #
+                # formulaL <- jmvcore::toNumeric(formulaL)
+                #
+                # formulaL <-
+                #     jmvcore::constructFormula(terms = self$options$elapsedtime)
 
                 # formulaR <- jmvcore::constructFormula(terms = self$options$outcome)
 
