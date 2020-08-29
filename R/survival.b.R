@@ -361,6 +361,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 myfactor <- results$name3explanatory
                 mydata <- results$cleanData
 
+                mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
+
                 # Median Survival Table ----
 
                 formula <-
