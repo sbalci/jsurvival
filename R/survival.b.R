@@ -9,100 +9,10 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = survivalBase,
     private = list(
 
-        # Initiate ----
-
-        .init = function() {
-
-            private$.todo()
-
-            # Read Arguments ----
-            elapsedtime <- self$options$elapsedtime
-            outcome <- self$options$outcome
-            explanatory <- self$options$explanatory
-
-            outcomeLevel <- self$options$outcomeLevel
-
-        }
-
-
-        # Messages ----
-        ,
-        .todo = function() {
-
-            if ( is.null(self$options$outcome) ||
-
-                 (is.null(self$options$elapsedtime) && !(self$options$tint))
-
-                 || is.null(self$options$explanatory)
-
-            ) {
-
-                todo <- glue::glue("
-                <br>Welcome to ClinicoPath
-                <br><br>
-                This tool will help you calculate median survivals and 1,3,5-yr survivals for a given fisk factor.
-                <br><br>
-                Explanatory variable should be categorical (ordinal or nominal).
-                <br><br>
-                Select outcome level from Outcome variable.
-                <br><br>
-                Outcome Level: if patient is dead or event (recurrence) occured. You may also use advanced outcome options depending on your analysis type.
-                <br><br>
-                Survival time should be numeric and continuous. You may also use dates to calculate survival time in advanced elapsed time options.
-                <br><br>
-                This function uses survival, survminer, and finalfit packages. Please cite jamovi and the packages as given below.
-                <br><hr>
-                <br>
-                See details for survival <a href = 'https://cran.r-project.org/web/packages/survival/vignettes/survival.pdf'>here</a>."
-                )
-
-                html <- self$results$todo
-                html$setContent(todo)
-            }
-
-
-            if (length(self$options$explanatory) > 1 && !(
-                    is.null(self$options$outcome) ||
-                    (is.null(self$options$elapsedtime) && !(self$options$tint))
-                )
-
-                ) {
-
-
-                todo <- glue::glue("
-                                   <br>More than one explanatory variable.
-                                   <br>
-                                   <hr>")
-                html <- self$results$todo
-                html$setContent(todo)
-
-            }
-
-            # One explanatory ----
-
-            if (
-                length(self$options$explanatory) == 1 && !(
-                    is.null(self$options$outcome) ||
-                    (is.null(self$options$elapsedtime) && !(self$options$tint))
-                )
-
-            ) {
-
-                todo <- glue::glue("
-                                   <br>Analysis with one variable
-                                   <br>
-                                   <hr>")
-                html <- self$results$todo
-                html$setContent(todo)
-
-            }
-
-
-        }
 
 
             # Define Survival Time ----
-        ,
+
         .definemytime = function() {
 
             mydata <- self$data
@@ -293,6 +203,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         }
 
+        # Define Factor ----
         ,
         .definemyfactor = function() {
 
@@ -321,10 +232,11 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         }
 
+
+        # Clean Data For Analysis ----
         ,
         .cleandata = function() {
 
-            # Define Data For Analysis
 
 
             # naOmit ----
@@ -382,18 +294,80 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         ,
         .run = function() {
 
-            private$.todo()
 
             # Common Errors, Warnings ----
 
+            # No variable ----
             if ( is.null(self$options$outcome) ||
 
                  (is.null(self$options$elapsedtime) && !(self$options$tint))
 
                  || is.null(self$options$explanatory)
 
+            ) {
+
+                todo <- glue::glue("
+                <br>Welcome to ClinicoPath
+                <br><br>
+                This tool will help you calculate median survivals and 1,3,5-yr survivals for a given fisk factor.
+                <br><br>
+                Explanatory variable should be categorical (ordinal or nominal).
+                <br><br>
+                Select outcome level from Outcome variable.
+                <br><br>
+                Outcome Level: if patient is dead or event (recurrence) occured. You may also use advanced outcome options depending on your analysis type.
+                <br><br>
+                Survival time should be numeric and continuous. You may also use dates to calculate survival time in advanced elapsed time options.
+                <br><br>
+                This function uses survival, survminer, and finalfit packages. Please cite jamovi and the packages as given below.
+                <br><hr>
+                <br>
+                See details for survival <a href = 'https://cran.r-project.org/web/packages/survival/vignettes/survival.pdf'>here</a>."
+                )
+
+                html <- self$results$todo
+                html$setContent(todo)
+            }
+
+            # More than one explanatory ----
+            if (length(self$options$explanatory) > 1 && !(
+                is.null(self$options$outcome) ||
+                (is.null(self$options$elapsedtime) && !(self$options$tint))
             )
-                return()
+
+            ) {
+
+
+                todo <- glue::glue("
+                                   <br>More than one explanatory variable.
+                                   <br>
+                                   <hr>")
+                html <- self$results$todo
+                html$setContent(todo)
+
+            }
+
+            # One explanatory ----
+
+            if (
+                length(self$options$explanatory) == 1 && !(
+                    is.null(self$options$outcome) ||
+                    (is.null(self$options$elapsedtime) && !(self$options$tint))
+                )
+
+            ) {
+
+                todo <- glue::glue("
+                                   <br>Analysis with one variable
+                                   <br>
+                                   <hr>")
+                html <- self$results$todo
+                html$setContent(todo)
+
+            }
+
+
+            # Empty data ----
 
             if (nrow(self$data) == 0)
                 stop('Data contains no (complete) rows')
@@ -404,6 +378,18 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$.definemyoutcome()
             private$.definemyfactor()
             private$.cleandata()
+
+
+            return()
+
+
+
+            # Read Arguments ----
+            elapsedtime <- self$options$elapsedtime
+            outcome <- self$options$outcome
+            explanatory <- self$options$explanatory
+
+            outcomeLevel <- self$options$outcomeLevel
 
 
 
