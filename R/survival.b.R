@@ -327,6 +327,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 html <- self$results$todo
                 html$setContent(todo)
+                return()
             }
 
             # More than one explanatory ----
