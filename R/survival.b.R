@@ -439,14 +439,17 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 mytime <- results$name1time
                 mytime <- jmvcore::constructFormula(terms = mytime)
+
                 myoutcome <- results$name2outcome
+                myoutcome <- jmvcore::constructFormula(terms = myoutcome)
+
+
                 myfactor <- results$name3explanatory
-                # myfactor <- jmvcore::constructFormula(terms = myfactor)
-                # myfactor <- jmvcore::decomposeFormula(formula = myfactor)
+                myfactor <- jmvcore::constructFormula(terms = myfactor)
 
                 mydata <- results$cleanData
 
-                mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
+                # mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
 
                 myformula <-
                     paste('survival::Surv(',
@@ -456,7 +459,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                           ')'
                     )
 
-                myformula <- as.formula(myformula)
+                # myformula <- as.formula(myformula)
 
                 finalfit::finalfit(
                     .data = mydata,
