@@ -363,7 +363,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 # Median Survival Table ----
 
                 formula <-
-                    paste('survival::Surv(mytime, myoutcome) ~ myfactor')
+                    paste('Surv(mytime, myoutcome) ~ myfactor')
                 formula <- as.formula(formula)
 
                 km_fit <- survival::survfit(formula, data = mydata)
