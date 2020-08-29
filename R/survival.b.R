@@ -8,6 +8,68 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     "survivalClass",
     inherit = survivalBase,
     private = list(
+
+
+        .todo = function() {
+
+            if ( is.null(self$options$outcome) ||
+
+                 (is.null(self$options$elapsedtime) && !(self$options$tint))
+
+                 || is.null(self$options$contexpl)
+
+            ) {
+
+                todo <- glue::glue("
+                <br>Welcome to ClinicoPath
+                <br><br>
+                This tool will help you calculate a cut-off for a continuous variable based on survival outcome.
+                <br>
+                After the cut-off is determined median survivals and 1,3,5-yr survivals are calculated.
+                <br><br>
+                Explanatory variable is continuous.
+                <br><br>
+                Select outcome level from Outcome variable.
+                <br><br>
+                Outcome Level: if patient is dead or event (recurrence) occured. You may also use advanced outcome options depending on your analysis type.
+                <br><br>
+                Survival time should be numeric and continuous. You may also use dates to calculate survival time in advanced elapsed time options.
+                <br><br>
+                This function uses survival, survminer, and finalfit packages. Please cite jamovi and the packages as given below.
+                <br><hr>
+                <br>
+                See details for survival <a href = 'https://cran.r-project.org/web/packages/survival/vignettes/survival.pdf'>here</a>."
+                )
+
+                html <- self$results$todo
+                html$setContent(todo)
+            }
+
+        }
+
+
+        ,
+        .definemytime = function() {}
+
+        ,
+        .definemyoutcome = function() {}
+
+        ,
+        .definemyfactor = function() {}
+
+        ,
+        .cleandata = function() {
+
+
+
+
+
+        }
+
+
+
+
+,
         .run = function() {
 
             # Initial Message ----
