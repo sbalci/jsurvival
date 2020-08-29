@@ -26,77 +26,6 @@ children:
           - type: LevelSelector
             name: outcomeLevel
             enable: (outcome && !multievent)
-      - type: TargetLayoutBox
-        label: Explanatory Variable(s)
-        children:
-          - type: VariablesListBox
-            name: explanatory
-            maxItemCount: 2
-            isTarget: true
-  - type: CollapseBox
-    label: Pairwise Comparisons
-    collapsed: false
-    children:
-      - type: Label
-        label: Pairwise comparisons
-        children:
-          - type: LayoutBox
-            margin: large
-            children:
-              - type: CheckBox
-                name: pw
-                enable: (!contexpl)
-  - type: CollapseBox
-    label: Plots
-    collapsed: false
-    children:
-      - type: Label
-        label: Plots
-        fitToGrid: true
-        children:
-          - type: LayoutBox
-            fitToGrid: true
-            children:
-              - type: CheckBox
-                name: sc
-                enable: (!contexpl)
-              - type: CheckBox
-                name: kmunicate
-                enable: (!contexpl)
-              - type: CheckBox
-                name: ce
-                enable: (!contexpl)
-              - type: CheckBox
-                name: ch
-                enable: (!contexpl)
-      - type: Label
-        label: Plot Arguments
-        children:
-          - type: LayoutBox
-            fitToGrid: true
-            children:
-              - type: TextBox
-                name: endplot
-                format: number
-              - type: TextBox
-                name: byplot
-                format: number
-              - type: CheckBox
-                name: ci95
-              - type: CheckBox
-                name: risktable
-  - type: CollapseBox
-    label: Survival Tables
-    collapsed: false
-    children:
-      - type: Label
-        label: Survival table
-        children:
-          - type: TextBox
-            name: cutp
-            format: string
-            width: large
-            enable: (!contexpl)
   - type: CollapseBox
     label: Advanced Elapsed Time Options
     collapsed: false
@@ -177,6 +106,17 @@ children:
               - type: LevelSelector
                 name: awod
                 enable: (outcome && multievent)
+  - type: VariableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: Explanatory Variable
+        children:
+          - type: VariablesListBox
+            name: explanatory
+            maxItemCount: 1
+            isTarget: true
   - type: CollapseBox
     label: Single Arm Survival
     collapsed: false
@@ -187,3 +127,67 @@ children:
         children:
           - type: CheckBox
             name: sas
+  - type: CollapseBox
+    label: Pairwise Comparisons
+    collapsed: false
+    children:
+      - type: Label
+        label: Pairwise comparisons
+        children:
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: CheckBox
+                name: pw
+                enable: (!contexpl)
+  - type: CollapseBox
+    label: Plots
+    collapsed: false
+    children:
+      - type: Label
+        label: Plots
+        fitToGrid: true
+        children:
+          - type: LayoutBox
+            fitToGrid: true
+            children:
+              - type: CheckBox
+                name: sc
+                enable: (!contexpl)
+              - type: CheckBox
+                name: kmunicate
+                enable: (!contexpl)
+              - type: CheckBox
+                name: ce
+                enable: (!contexpl)
+              - type: CheckBox
+                name: ch
+                enable: (!contexpl)
+      - type: Label
+        label: Plot Arguments
+        children:
+          - type: LayoutBox
+            fitToGrid: true
+            children:
+              - type: TextBox
+                name: endplot
+                format: number
+              - type: TextBox
+                name: byplot
+                format: number
+              - type: CheckBox
+                name: ci95
+              - type: CheckBox
+                name: risktable
+  - type: CollapseBox
+    label: Survival Tables
+    collapsed: false
+    children:
+      - type: Label
+        label: Survival table
+        children:
+          - type: TextBox
+            name: cutp
+            format: string
+            width: large
+            enable: (!contexpl)

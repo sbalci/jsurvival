@@ -56,7 +56,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$..fudate <- jmvcore::OptionVariable$new(
                 "fudate",
                 fudate)
-            private$..explanatory <- jmvcore::OptionVariables$new(
+            private$..explanatory <- jmvcore::OptionVariable$new(
                 "explanatory",
                 explanatory,
                 suggested=list(
@@ -282,7 +282,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Survival Analysis",
+                title="`Survival Analysis - ${explanatory}`",
                 refs=list(
                     "finalfit",
                     "survival",
@@ -305,11 +305,11 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="medianSummary",
-                title="Median Survival Summary and Table"))
+                title="`Median Survival Summary and Table - ${explanatory}`"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="medianTable",
-                title="Median Survival Table",
+                title="`Median Survival Table: Levels for ${explanatory}`",
                 rows=0,
                 columns=list(
                     list(
@@ -349,11 +349,11 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="coxSummary",
-                title="Cox Regression Summary and Table"))
+                title="`Cox Regression Summary and Table - ${explanatory}`"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="coxTable",
-                title="Cox Table",
+                title="`Cox Table- ${explanatory}`",
                 rows=0,
                 columns=list(
                     list(
@@ -390,11 +390,11 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="survTableSummary",
-                title="1, 3, 5-yr Survival Summary and Table"))
+                title="`1, 3, 5-yr Survival Summary and Table  - ${explanatory}`"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="survTable",
-                title="1, 3, 5 year Survival",
+                title="`1, 3, 5 year Survival - ${explanatory}`",
                 rows=0,
                 columns=list(
                     list(
@@ -433,14 +433,14 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="pairwiseSummary",
-                title="Pairwise Comparison Summary and Table",
+                title="`Pairwise Comparison Summary and Table - ${explanatory}`",
                 clearWith=list(
                     "pw"),
                 visible="(pw)"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="pairwiseTable",
-                title="Pairwise Comparison Table",
+                title="`Pairwise Comparison Table - ${explanatory}`",
                 rows=0,
                 columns=list(
                     list(
@@ -462,7 +462,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
-                title="Survival Plot",
+                title="`Survival Plot - ${explanatory}`",
                 width=600,
                 height=450,
                 renderFun=".plot",
@@ -475,7 +475,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
-                title="Cumulative Events",
+                title="`Cumulative Events - ${explanatory}`",
                 width=600,
                 height=450,
                 renderFun=".plot2",
@@ -488,7 +488,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
-                title="Cumulative Hazard",
+                title="`Cumulative Hazard - ${explanatory}`",
                 width=600,
                 height=450,
                 renderFun=".plot3",
@@ -501,7 +501,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot6",
-                title="KMunicate-Style Plot",
+                title="`KMunicate-Style Plot - ${explanatory}`",
                 width=600,
                 height=450,
                 renderFun=".plot6",

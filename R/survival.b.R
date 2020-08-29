@@ -195,37 +195,19 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             mydata <- self$data
 
-            # 1 Explanatory Factor ----
+            expl <- self$options$explanatory
 
-            if ( length(self$options$explanatory) == 1 ) {
-
-                expl <- self$options$explanatory
-
-                mydata[["myfactor"]] <- mydata[[expl]]
-
-                return(mydata[["myfactor"]])
-
-            }
-
-            # > 1 Explanatory Factor ----
-
-            if ( length(self$options$explanatory) > 1 ) {
-
-            thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
-
-            return(thefactor)
-
-            }
+            mydata[["myfactor"]] <- mydata[[expl]]
 
             # single arm ----
 
             sas <- self$options$sas
 
             if (sas) {
-                thefactor <- 1
-                return(thefactor)
+                mydata[["myfactor"]] <- 1
             }
 
+            return(mydata[["myfactor"]])
 
         }
 
@@ -237,37 +219,36 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             time <- private$.definemytime()
             outcome <- private$.definemyoutcome()
+            factor <- private$.definemyfactor()
 
-
-            if ( length(self$options$explanatory) == 1 ) {
-                factor <- private$.definemyfactor()
-
-                cleanData <- data.frame(
-                    "mytime" = time,
-                    "myoutcome" = outcome,
-                    "factor" = factor
-                )
-            }
-
-
-            if ( length(self$options$explanatory) > 1 || self$options$sas ) {
-                factor <- private$.definemyfactor()
-                factor <- jmvcore::select(df = self$data, columnNames = factor)
-
-                cleanData <- data.frame(
-                    "mytime" = time,
-                    "myoutcome" = outcome,
-                    "factor" = factor
+            cleanData <- data.frame(
+                "mytime" = time,
+                "myoutcome" = outcome,
+                "factor" = factor
                 )
 
+
+            # Names cleanData ----
+
+            if (self$options$tint) {name1 <- "Calculated Time"}
+
+            if (!self$options$tint && self$options$elapsedtime) {
+                name1 <- jmvcore::composeTerm(self$options$elapsedtime)
             }
 
+            name2 <- jmvcore::composeTerm(self$options$outcome)
 
+            if (self$options$sas) {name3 <- "Single Arm Survival"}
+
+            if (!self$options$sas && self$options$explanatory) {
+                name3 <- jmvcore::composeTerm(self$options$explanatory)
+            }
+
+            names(cleanData) <- c(name1, name2, name3)
 
             # naOmit ----
 
             cleanData <- jmvcore::naOmit(cleanData)
-
 
             # View mydata ----
 
@@ -279,13 +260,9 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 )
             )
 
-            return()
-
-
-
             # Prepare Data For Plots ----
 
-            plotData <- mydata
+            plotData <- cleanData
 
             image <- self$results$plot
             image$setState(plotData)
@@ -299,13 +276,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             image6 <- self$results$plot6
             image6$setState(plotData)
 
-
-
-
         }
-
-
-
 
 
         ,
@@ -347,43 +318,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 return()
             }
 
-            # More than one explanatory ----
-            if (length(self$options$explanatory) > 1 && !(
-                is.null(self$options$outcome) ||
-                (is.null(self$options$elapsedtime) && !(self$options$tint))
-            )
-
-            ) {
-
-
-                todo <- glue::glue("
-                                   <br>More than one explanatory variable.
-                                   <br>
-                                   <hr>")
-                html <- self$results$todo
-                html$setContent(todo)
-
-            }
-
-            # One explanatory ----
-
-            if (
-                length(self$options$explanatory) == 1 && !(
-                    is.null(self$options$outcome) ||
-                    (is.null(self$options$elapsedtime) && !(self$options$tint))
-                )
-
-            ) {
-
-                todo <- glue::glue("
-                                   <br>Analysis with one variable
-                                   <br>
-                                   <hr>")
-                html <- self$results$todo
-                html$setContent(todo)
-
-            }
-
 
             # Empty data ----
 
@@ -395,25 +329,36 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$.cleandata()
 
 
-            return()
+            return() # RETURN ----
+
+            # Run Analysis ----
+
+            private$.medianSurv()
+            private$.cox()
+            private$.survTable()
+
+            if (self$options$pw) {
+                private$.pairwise()
+            }
 
 
 
-            # Read Arguments ----
-            elapsedtime <- self$options$elapsedtime
-            outcome <- self$options$outcome
-            explanatory <- self$options$explanatory
 
-            outcomeLevel <- self$options$outcomeLevel
+        }
 
 
 
 
-                # Median Survival Table ----
+
+        # Median Survival ----
+        ,
+        .medianSurv = function() {
+
+        # Median Survival Table ----
 
 
 
-                thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
+        thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
 
                 sas <- self$options$sas
 
@@ -469,10 +414,14 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 self$results$medianSummary$setContent(medianSummary)
 
 
+        }
+
+        # Cox Regression ----
+        ,
+        .cox = function() {
 
 
-
-                # Cox Regression ----
+        # Cox Regression ----
 
 
                 formula2 <- as.vector(self$options$explanatory)
@@ -577,26 +526,14 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
 
+        }
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        # Survival Table ----
+        ,
+        .survTable = function() {
 
                 # survival table 1,3,5-yr survival ----
 
@@ -646,10 +583,12 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$results$survTableSummary$setContent(survTableSummary)
 
 
+        }
 
 
-
-            if (self$options$pw) {
+        # Pairwise ----
+        ,
+        .pairwise = function() {
 
                 #  pairwise comparison ----
 
@@ -724,23 +663,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 }
 
 
-
-
-
             }
-
-
-
-
-
-
-
-
-
-
-
-
-                    }
 
 
 ,
@@ -752,18 +675,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     if (!sc)
         return()
 
-    # if (nrow(self$data) == 0)
-    # stop('Data contains no (complete) rows')
-
-    # if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-    #
-    #     stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-    #
-    # }
-
-
-    # if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-    #     return()
 
     plotData <- image$state
 
@@ -815,17 +726,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     if (!ce)
         return()
 
-    # if (nrow(self$data) == 0)
-    #     stop('Data contains no (complete) rows')
-
-    # if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-    #
-    #     stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-    #
-    # }
-
-    # if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-    #     return()
 
     plotData <- image2$state
 
@@ -875,19 +775,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     if (!ch)
         return()
 
-    # if (nrow(self$data) == 0)
-    #     stop('Data contains no (complete) rows')
-
-    # if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-    #
-    #     stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-    #
-    # }
-
-
-    # if (is.null(self$options$explanatory) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-    #     return()
-
     plotData <- image3$state
 
     thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
@@ -923,100 +810,6 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 }
 
 
-# ,
-# .plot4 = function(image4, ggtheme, theme, ...) {  # <-- the plot4 function ----
-#
-#
-#     findcut <- self$options$findcut
-#
-#     if (!findcut)
-#         return()
-#
-#     # if (nrow(self$data) == 0)
-#     #     stop('Data contains no (complete) rows')
-#
-#     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-#
-#         stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-#
-#     }
-#
-#
-#     # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-#     #     return()
-#
-#     plotData <- image4$state
-#
-#     res.cut <- plotData
-#
-#     plot4 <- plot(res.cut, self$options$contexpl, palette = "npg")
-#
-#
-#     print(plot4)
-#     TRUE
-# }
-
-
-# ,
-# .plot5 = function(image5, ggtheme, theme, ...) {  # <-- the plot5 function ----
-#
-#
-#     findcut <- self$options$findcut
-#
-#     if (!findcut)
-#         return()
-#
-#     # if (nrow(self$data) == 0)
-#     #     stop('Data contains no (complete) rows')
-#
-#     if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-#
-#         stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-#
-#     }
-#
-#
-#     # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-#     #     return()
-#
-#     plotData <- image5$state
-#
-#     res.cat <- plotData
-#
-#
-#     contfactor <- jmvcore::constructFormula(terms = self$options$contexpl)
-#
-#
-#     sas <- self$options$sas
-#
-#     if (sas) {
-#         contfactor <- 1
-#     }
-#
-#
-#
-#     # contfactor <- as.formula(contfactor)
-#
-#     myformula <- paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
-#
-#     myformula <- as.formula(myformula)
-#
-#     fit <- survminer::surv_fit(formula = myformula,
-#                                data = res.cat
-#                                )
-#
-#     plot5 <- survminer::ggsurvplot(fit,
-#                                    data = res.cat,
-#                                    risk.table = self$options$risktable,
-#                                    conf.int = self$options$ci95)
-#
-#
-#     print(plot5)
-#     TRUE
-# }
-
-
-
 ,
 .plot6 = function(image6, ggtheme, theme, ...) {  # <-- the plot6 function ----
 
@@ -1026,26 +819,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     if (!kmunicate)
         return()
 
-    # if (nrow(self$data) == 0)
-    #     stop('Data contains no (complete) rows')
-
-    # if ( !is.null(self$options$explanatory) && !is.null(self$options$contexpl)) {
-    #
-    #     stop("If you want to use continuous and categorical variables together as explanatory variables, please use Multivariate Survival Analysis function in jsurvival module.")
-    #
-    # }
-
-    # if (is.null(self$options$contexpl) || is.null(self$options$outcome) || is.null(self$options$elapsedtime) )
-    #     return()
-
     plotData <- image6$state
-
-    # KM <- image6$state
-
-
-    # thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
-
-    # title2 <- as.character(thefactor)
 
     thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
 
@@ -1078,9 +852,5 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     }
 
 
-
-
-
-
-        )
+)
 )
