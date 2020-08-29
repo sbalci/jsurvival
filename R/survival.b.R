@@ -232,7 +232,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             if (self$options$tint) {name1 <- "Calculated Time"}
 
-            if (!self$options$tint && self$options$elapsedtime) {
+            if (!self$options$tint && !is.null(self$options$elapsedtime)) {
                 name1 <- jmvcore::composeTerm(self$options$elapsedtime)
             }
 
@@ -240,7 +240,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             if (self$options$sas) {name3 <- "Single Arm Survival"}
 
-            if (!self$options$sas && self$options$explanatory) {
+            if (!self$options$sas && !is.null(self$options$explanatory)) {
                 name3 <- jmvcore::composeTerm(self$options$explanatory)
             }
 
