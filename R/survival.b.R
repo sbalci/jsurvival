@@ -261,7 +261,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # View mydata ----
 
             self$results$mydataview$setContent(
-                list(
+                list(time,
                     head(cleanData, n = 30)
                 )
             )
