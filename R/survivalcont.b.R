@@ -1,5 +1,7 @@
-
-# This file is a generated template, your changes will not be overwritten
+#' @title Survival Analysis for Continuous Explanatory Variable
+#' @importFrom R6 R6Class
+#' @import jmvcore
+#' @import magrittr
 
 survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
     "survivalcontClass",

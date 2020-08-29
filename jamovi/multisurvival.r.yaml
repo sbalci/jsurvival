@@ -14,6 +14,12 @@ items:
           - outcomeLevel
           - overalltime
 
+    - name:  mydataview
+      title: mydataview
+      type:  Preformatted
+
+
+
     - name:  text
       title: Multivariate Survival
       type:  Html

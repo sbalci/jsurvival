@@ -3,7 +3,7 @@ name:  multisurvival
 title: Multivariate Survival Analysis
 menuGroup: Survival
 menuSubgroup: ClinicoPath Survival
-menuSubtitle: 'Cox-regression'
+menuSubtitle: 'Multivariate Cox-regression, Adjusted Survival'
 version: '1.0.0'
 jas: '1.2'
 

@@ -36,7 +36,7 @@ analyses:
     menuSubgroup: ClinicoPath Survival
     menuTitle: Multivariate Survival Analysis
     description: Function for Multivariate Survival Analysis using Cox-regression.
-    menuSubtitle: Cox-regression
+    menuSubtitle: 'Multivariate Cox-regression, Adjusted Survival'
   - title: Odds Ratio Table and Plot
     name: oddsratio
     ns: jsurvival
