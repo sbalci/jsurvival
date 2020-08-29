@@ -342,6 +342,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
 
                 private$.cox(results)
+
                 return() # RETURN ----
 
                 private$.survTable(results)
@@ -439,6 +440,10 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 mytime <- results$name1time
                 myoutcome <- results$name2outcome
                 myfactor <- results$name3explanatory
+                myfactor <- jmvcore::constructFormula(terms = myfactor)
+                myfactor <- jmvcore::decomposeFormula(formula = myfactor)
+
+
 
                 mydata <- results$cleanData
 
@@ -452,8 +457,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                           ')'
                     )
 
-                # myformula <- as.formula(myformula)
-
+                myformula <- as.formula(myformula)
 
                 finalfit::finalfit(
                     .data = mydata,
@@ -504,7 +508,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 }
 
 
-                # coxTable explanation ----
+                # Cox-Table Explanation ----
 
 
                 tCox_df <-
