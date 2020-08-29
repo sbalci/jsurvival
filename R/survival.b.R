@@ -257,6 +257,9 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 self$results$mydataview$setContent(list(time,
                                                         outcome,
                                                         factor,
+                                                        name1time,
+                                                        name2outcome,
+                                                        name3explanatory,
                                                         head(cleanData, n = 30)))
 
                 return(list(name1time,
@@ -363,7 +366,13 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 # Median Survival Table ----
 
                 formula <-
-                    paste0('survival::Surv(', mytime, ',', 'myoutcome', ') ~ ', myfactor, ')')
+                    paste0('survival::Surv(',
+                           mytime,
+                           ',',
+                           'myoutcome',
+                           ') ~ ',
+                           myfactor
+                           )
                 formula <- as.formula(formula)
 
                 km_fit <- survival::survfit(formula, data = mydata)
