@@ -13,6 +13,8 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         .init = function() {
 
+            private$.todo()
+
             # Read Arguments ----
             elapsedtime <- self$options$elapsedtime
             outcome <- self$options$outcome
@@ -56,6 +58,7 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 html <- self$results$todo
                 html$setContent(todo)
+                return()
             }
 
 
@@ -395,15 +398,15 @@ survivalClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         ,
         .run = function() {
 
-            if ( is.null(self$options$outcome) ||
-
-                 (is.null(self$options$elapsedtime) && !(self$options$tint))
-
-                 || is.null(self$options$explanatory)
-
-            )
-                private$.todo()
-                return()
+            # if ( is.null(self$options$outcome) ||
+            #
+            #      (is.null(self$options$elapsedtime) && !(self$options$tint))
+            #
+            #      || is.null(self$options$explanatory)
+            #
+            # )
+            #     private$.todo()
+            #     return()
 
 
             private$.todo()
