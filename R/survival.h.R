@@ -305,7 +305,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="medianSummary",
-                title="`Median Survival Summary and Table - ${explanatory}`"))
+                title="`Median Survival Summary and Table - ${explanatory}`",
+                visible="(!sas)"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="medianTable",
@@ -345,11 +346,13 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `name`="x0_95ucl", 
                         `title`="Upper", 
                         `superTitle`="95% Confidence Interval", 
-                        `type`="number"))))
+                        `type`="number", 
+                        `visible`="(!sas)"))))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="coxSummary",
-                title="`Cox Regression Summary and Table - ${explanatory}`"))
+                title="`Cox Regression Summary and Table - ${explanatory}`",
+                visible="(!sas)"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="coxTable",
@@ -371,11 +374,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     list(
                         `name`="HR_univariable", 
                         `title`="HR (Univariable)", 
-                        `type`="text"),
-                    list(
-                        `name`="HR_multivariable", 
-                        `title`="HR (Multivariable)", 
-                        `type`="text"))))
+                        `type`="text", 
+                        `visible`="(!sas)"))))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="tCoxtext2",
@@ -386,11 +386,13 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcome",
                     "outcomeLevel",
                     "overalltime",
-                    "contexpl")))
+                    "contexpl"),
+                visible="(!sas)"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="survTableSummary",
-                title="`1, 3, 5-yr Survival Summary and Table  - ${explanatory}`"))
+                title="`1, 3, 5-yr Survival Summary and Table  - ${explanatory}`",
+                visible="(!sas)"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="survTable",
@@ -429,14 +431,15 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `title`="Upper", 
                         `superTitle`="95% Confidence Interval", 
                         `type`="number", 
-                        `format`="pc"))))
+                        `format`="pc")),
+                visible="(!sas)"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="pairwiseSummary",
                 title="`Pairwise Comparison Summary and Table - ${explanatory}`",
                 clearWith=list(
                     "pw"),
-                visible="(pw)"))
+                visible="(pw && !sas)"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="pairwiseTable",
@@ -456,7 +459,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `title`="p-value", 
                         `type`="number", 
                         `format`="zto,pvalue")),
-                visible="(pw)",
+                visible="(pw && !sas)",
                 clearWith=list(
                     "pw")))
             self$add(jmvcore::Image$new(

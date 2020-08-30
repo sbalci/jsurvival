@@ -9,6 +9,28 @@ survivalClass <- if (requireNamespace('jmvcore'))
         "survivalClass",
         inherit = survivalBase,
         private = list(
+
+
+            .init = function() {
+
+
+                if (self$options$sas) {
+                    # Disable tables
+                    self$results$medianSummary$setVisible(FALSE)
+                    self$results$medianTable$setVisible(FALSE)
+                    self$results$survTableSummary$setVisible(FALSE)
+                    self$results$survTable$setVisible(FALSE)
+                    self$results$pairwiseSummary$setVisible(FALSE)
+                    self$results$pairwiseTable$setVisible(FALSE)
+                }
+
+            }
+
+            ,
+
+
+
+
             # Define Survival Time ----
 
             .definemytime = function() {
@@ -342,7 +364,6 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 results <- private$.cleandata()
 
                 # Run Analysis ----
-                private$.survTable(results)
 
                 if (!self$options$sas) {
 
@@ -350,9 +371,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                     private$.cox(results)
 
-
-
-
+                    private$.survTable(results)
 
                 }
 

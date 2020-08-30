@@ -29,6 +29,8 @@ items:
       # title: Median Survival Summary and Table
       title: '`Median Survival Summary and Table - ${explanatory}`'
       type:  Preformatted
+      visible: (!sas)
+
 
 
     - name:  medianTable
@@ -70,12 +72,15 @@ items:
           title: "Upper"
           superTitle: '95% Confidence Interval'
           type: number
+          visible: (!sas)
+
 
 
     - name:  coxSummary
       # title: Cox Regression Summary and Table
       title: '`Cox Regression Summary and Table - ${explanatory}`'
       type:  Preformatted
+      visible: (!sas)
 
 
     - name:  coxTable
@@ -96,9 +101,10 @@ items:
         - name: 'HR_univariable'
           title: "HR (Univariable)"
           type: text
-        - name: 'HR_multivariable'
-          title: "HR (Multivariable)"
-          type: text
+          visible: (!sas)
+        # - name: 'HR_multivariable'
+        #   title: "HR (Multivariable)"
+        #   type: text
 
 
     - name:  tCoxtext2
@@ -111,12 +117,15 @@ items:
           - outcomeLevel
           - overalltime
           - contexpl
+      visible: (!sas)
+
 
 
     - name:  survTableSummary
       # title: '1, 3, 5-yr Survival Summary and Table'
       title: '`1, 3, 5-yr Survival Summary and Table  - ${explanatory}`'
       type:  Preformatted
+      visible: (!sas)
 
 
 
@@ -152,6 +161,7 @@ items:
           superTitle: '95% Confidence Interval'
           type: number
           format: pc
+      visible: (!sas)
 
 
 
@@ -161,7 +171,7 @@ items:
       type:  Preformatted
       clearWith:
           - pw
-      visible: (pw)
+      visible: (pw && !sas)
 
 
     - name:  pairwiseTable
@@ -179,7 +189,7 @@ items:
           title: p-value
           type: number
           format: zto,pvalue
-      visible: (pw)
+      visible: (pw && !sas)
       clearWith:
           - pw
 
