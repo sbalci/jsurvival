@@ -282,6 +282,7 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcome",
                     "outcomeLevel",
                     "overalltime",
+                    "findcut",
                     "contexpl",
                     "fudate",
                     "dxdate",
@@ -334,12 +335,7 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="tCoxtext2",
                 title="",
-                refs="finalfit",
-                clearWith=list(
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "contexpl")))
+                refs="finalfit"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="rescutTable",
@@ -363,10 +359,7 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=450,
                 renderFun=".plot4",
                 visible="(findcut)",
-                requiresData=TRUE,
-                clearWith=list(
-                    "findcut",
-                    "contexpl")))
+                requiresData=TRUE))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot5",
@@ -375,12 +368,7 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=450,
                 renderFun=".plot5",
                 visible="(findcut && sc)",
-                requiresData=TRUE,
-                clearWith=list(
-                    "findcut",
-                    "contexpl",
-                    "endplot",
-                    "byplot")))
+                requiresData=TRUE))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="medianSummary",
@@ -480,11 +468,7 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=450,
                 renderFun=".plot2",
                 visible="(findcut && ce)",
-                requiresData=TRUE,
-                clearWith=list(
-                    "ce",
-                    "endplot",
-                    "byplot")))
+                requiresData=TRUE))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
@@ -493,11 +477,7 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=450,
                 renderFun=".plot3",
                 visible="(findcut && ch)",
-                requiresData=TRUE,
-                clearWith=list(
-                    "ch",
-                    "endplot",
-                    "byplot")))
+                requiresData=TRUE))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot6",
@@ -507,10 +487,6 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 renderFun=".plot6",
                 visible="(findcut && kmunicate)",
                 requiresData=TRUE,
-                clearWith=list(
-                    "kmunicate",
-                    "endplot",
-                    "byplot"),
                 refs=list(
                     "KMunicate",
                     "KMunicate2")))}))

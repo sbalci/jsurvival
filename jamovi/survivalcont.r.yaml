@@ -9,6 +9,7 @@ clearWith:
     - outcome
     - outcomeLevel
     - overalltime
+    - findcut
     - contexpl
     - fudate
     - dxdate
@@ -65,20 +66,7 @@ items:
       title: ''
       type:  Html
       refs: finalfit
-      clearWith:
-          - outcome
-          - outcomeLevel
-          - overalltime
-          - contexpl
 
-    # - name:  tCoxtext3
-    #   title: ''
-    #   type:  Preformatted
-    #   refs: finalfit
-
-    # - name:  rescutTable
-    #   title: 'rescutTable'
-    #   type:  Preformatted
 
     - name:  rescutTable
       title: Cut Point
@@ -102,9 +90,6 @@ items:
       renderFun: .plot4
       visible: (findcut)
       requiresData: true
-      clearWith:
-          - findcut
-          - contexpl
 
 
     - name: plot5
@@ -115,11 +100,6 @@ items:
       renderFun: .plot5
       visible: (findcut && sc)
       requiresData: true
-      clearWith:
-          - findcut
-          - contexpl
-          - endplot
-          - byplot
 
 
 
@@ -229,10 +209,6 @@ items:
       renderFun: .plot2
       visible: (findcut && ce)
       requiresData: true
-      clearWith:
-          - ce
-          - endplot
-          - byplot
 
 
 
@@ -245,13 +221,6 @@ items:
       renderFun: .plot3
       visible: (findcut && ch)
       requiresData: true
-      clearWith:
-          - ch
-          - endplot
-          - byplot
-
-
-
 
 
     - name: plot6
@@ -262,10 +231,6 @@ items:
       renderFun: .plot6
       visible: (findcut && kmunicate)
       requiresData: true
-      clearWith:
-          - kmunicate
-          - endplot
-          - byplot
       refs:
           - KMunicate
           - KMunicate2
