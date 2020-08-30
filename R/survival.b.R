@@ -327,7 +327,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 if (is.null(self$options$outcome) ||
 
                     (is.null(self$options$elapsedtime) &&
-                     (!(self$options$tint) || is.null(self$options$dxdate) || is.null(self$options$fudate))
+                     (!(self$options$tint) && (is.null(self$options$dxdate) || is.null(self$options$fudate)))
                      )
 
                     || is.null(self$options$explanatory) ) {
