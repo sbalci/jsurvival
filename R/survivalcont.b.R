@@ -643,9 +643,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             contfactor <- jmvcore::constructFormula(terms = self$options$contexpl)
 
-
-            # contfactor <- as.formula(contfactor)
-
             myformula <- paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
 
             myformula <- as.formula(myformula)
@@ -686,7 +683,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             plot2 <- plotData %>%
                 finalfit::surv_plot(
                     .data = .,
-                    dependent = myformula,
+                    dependent = "survival::Surv(mytime, myoutcome)",
                     explanatory = contfactor,
                     xlab = paste0('Time (', self$options$timetypeoutput, ')'),
                     # pval = TRUE,
