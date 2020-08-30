@@ -406,37 +406,9 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 }
 
 
+                return() # RETURN ----
+
                 # Median Survival Summary ----
-
-
-                if (self$options$sas) {
-
-
-
-                    results1table %>%
-                        dplyr::mutate(
-                            description =
-                                glue::glue(
-                                    "Overall, median survival is {round(median, digits = 1)} [{round(x0_95lcl, digits = 1)} - {round(x0_95ucl, digits = 1)}, 95% CI] ",
-                                    self$options$timetypeoutput,
-                                    "."
-                                )
-                        ) %>%
-                        dplyr::mutate(description = gsub(
-                            pattern = "=",
-                            replacement = " is ",
-                            x = description
-                        )) %>%
-                        dplyr::select(description) %>%
-                        dplyr::pull(.) -> km_fit_median_definition
-
-
-
-
-
-                }
-
-
 
                 results1table %>%
                     dplyr::mutate(
