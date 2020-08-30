@@ -825,7 +825,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 sas <- self$options$sas
 
                 if (sas) {
-                    thefactor <- 1
+                    myfactor <- 1
                     title2 <- "Overall"
                 }
 
@@ -888,7 +888,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 sas <- self$options$sas
 
                 if (sas) {
-                    thefactor <- 1
+                    myfactor <- 1
                     title2 <- "Overall"
                 }
 
@@ -946,7 +946,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 sas <- self$options$sas
 
                 if (sas) {
-                    thefactor <- 1
+                    myfactor <- 1
                     title2 <- "Overall"
                 }
 
@@ -956,7 +956,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 myformula <- as.formula(myformula)
 
-                km_fit <- survival::survfit(formula, data = plotData)
+                km_fit <- survival::survfit( survival::Surv(mytime, myoutcome) ~ myfactor,
+                    data = plotData)
 
                 time_scale <-
                     seq(0, self$options$endplot, by = self$options$byplot)
