@@ -107,7 +107,6 @@ children:
         children:
           - type: ComboBox
             name: analysistype
-            enable: (!contexpl)
       - type: Label
         label: Multiple Event Levels
         fitToGrid: true
@@ -145,12 +144,16 @@ children:
             children:
               - type: CheckBox
                 name: sc
+                enable: (findcut)
               - type: CheckBox
                 name: kmunicate
+                enable: (findcut)
               - type: CheckBox
                 name: ce
+                enable: (findcut)
               - type: CheckBox
                 name: ch
+                enable: (findcut)
       - type: Label
         label: Plot Arguments
         children:
@@ -160,13 +163,17 @@ children:
               - type: TextBox
                 name: endplot
                 format: number
+                enable: (findcut)
               - type: TextBox
                 name: byplot
+                enable: (findcut)
                 format: number
               - type: CheckBox
                 name: ci95
+                enable: (findcut)
               - type: CheckBox
                 name: risktable
+                enable: (findcut)
   - type: CollapseBox
     label: Survival Tables
     collapsed: true
@@ -176,17 +183,8 @@ children:
         children:
           - type: TextBox
             name: cutp
+            enable: (findcut)
             format: string
             width: large
+            enable: (findcut)
 
-
-  # - type: CollapseBox
-  #   label: Single Arm Survival
-  #   collapsed: false
-  #   children:
-  #     - type: Label
-  #       label: Single Arm Survival
-  #       fitToGrid: true
-  #       children:
-  #         - type: CheckBox
-  #           name: sas
