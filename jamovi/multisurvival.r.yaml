@@ -85,12 +85,12 @@ items:
       refs: survminer
 
 
-    - name: plot4
+    - name: plot7
       title: '`Adjusted Survival Curve - ${adjexplanatory}`'
       type: Image
       width:  800
       height: 600
-      renderFun: .plot4
+      renderFun: .plot7
       requiresData: true
       clearWith:
           - explanatory

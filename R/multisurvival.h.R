@@ -223,7 +223,7 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         text2 = function() private$.items[["text2"]],
         plot = function() private$.items[["plot"]],
         plot3 = function() private$.items[["plot3"]],
-        plot4 = function() private$.items[["plot4"]]),
+        plot7 = function() private$.items[["plot7"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -291,11 +291,11 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 refs="survminer"))
             self$add(jmvcore::Image$new(
                 options=options,
-                name="plot4",
+                name="plot7",
                 title="`Adjusted Survival Curve - ${adjexplanatory}`",
                 width=800,
                 height=600,
-                renderFun=".plot4",
+                renderFun=".plot7",
                 requiresData=TRUE,
                 clearWith=list(
                     "explanatory",
@@ -362,7 +362,7 @@ multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$text2} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot4} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plot7} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' @export

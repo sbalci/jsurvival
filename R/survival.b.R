@@ -237,7 +237,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     jmvcore::composeTerm(self$options$outcome)
 
                 if (self$options$sas) {
-                    name3explanatory <- "Single Arm Survival"
+                    name3explanatory <- "SingleArm"
                 }
 
                 if (!self$options$sas &&
@@ -689,15 +689,16 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
 
 
-                pairwiseTable$setTitle(paste0('Pairwise Comparisons ', myfactor))
+                pairwiseTable$setTitle(paste0('Pairwise Comparisons ', title2))
 
 
                 mypairwise2 %>%
                     dplyr::mutate(
                         description =
                             glue::glue(
-                                "The difference between ",
-                                " {rowname} and {name}",
+                                "The difference",
+                                title2,
+                                "between {rowname} and {name}",
                                 " has a p-value of {format.pval(value, digits = 3, eps = 0.001)}."
                             )
                     ) %>%

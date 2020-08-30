@@ -421,9 +421,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 
+            # hr_plot ----
             ,
             .plot = function(image, ggtheme, theme, ...) {
-                # <-- the plot function ----
 
                 # plotData <- image$state
 
@@ -586,9 +586,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 
+                # Forest plot ----
             ,
             .plot3 = function(image, ggtheme, theme, ...) {
-                # <-- the plot function ----
 
                 # plotData <- image$state
 
@@ -694,10 +694,61 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
             }
 
+            # Kaplan-Meier ----
 
             ,
-            .plot4 = function(image, ggtheme, theme, ...) {
-                # <-- the plot function ----
+                    .plotKM = function(image, ggtheme, theme, ...) {
+
+
+                        sc <- self$options$sc
+
+                        if (!sc)
+                            return()
+
+
+                        plotData <- image$state
+
+                        thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
+
+                        title2 <- as.character(thefactor)
+
+                        sas <- self$options$sas
+
+                        if (sas) {
+                            thefactor <- 1
+                            title2 <- "Overall"
+                        }
+
+
+                        plotKM <- plotData %>%
+                            finalfit::surv_plot(.data = .,
+                                                dependent = 'survival::Surv(mytime, myoutcome)',
+                                                explanatory = as.vector(self$options$explanatory),
+                                                xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+                                                pval = TRUE,
+                                                legend = 'none',
+                                                break.time.by = self$options$byplot,
+                                                xlim = c(0,self$options$endplot),
+                                                title = paste0("Survival curves for ", title2),
+                                                subtitle = "Based on Kaplan-Meier estimates",
+                                                risk.table = self$options$risktable,
+                                                conf.int = self$options$ci95
+                            )
+
+                        # plot <- plot + ggtheme
+
+                        print(plotKM)
+                        TRUE
+
+
+
+                    }
+
+
+
+            # Adjusted Survival ----
+            ,
+            .plot7 = function(image, ggtheme, theme, ...) {
 
                 # plotData <- image$state
 
@@ -815,7 +866,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 # ggadjustedcurves ----
 
-                plot4 <- survminer::ggadjustedcurves(fit = mod,
+                plot7 <- survminer::ggadjustedcurves(fit = mod,
                                                      data = mydata,
                                                      variable = adjexplanatory
                                                      # method = ,
@@ -826,7 +877,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                                                      # print plot -----
 
-                                                     print(plot4)
+                                                     print(plot7)
                                                      TRUE
 
                                                      }
@@ -841,15 +892,6 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 
-# # Survival1 Analysis ----
-#
-# survival1Class <- if (requireNamespace('jmvcore')) R6::R6Class(
-#     "survival1Class",
-#     inherit = survival1Base,
-#     private = list(
-#
-#
-#
 #         # Define Survival Time ----
 #
 #         .definemytime = function() {
