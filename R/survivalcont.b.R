@@ -603,19 +603,19 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
 
 
 
-                # plotData1 <- res.cut
-                # image4 <- self$results$plot4
-                # image4$setState(plotData)
+                plotData1 <- res.cut
+                image4 <- self$results$plot4
+                image4$setState(plotData1)
 
-                # plotData2 <- cutoffdata
-                # image5 <- self$results$plot5
-                # image5$setState(plotData2)
-                # image2 <- self$results$plot2
-                # image2$setState(plotData2)
-                # image3 <- self$results$plot3
-                # image3$setState(plotData2)
-                # image6 <- self$results$plot6
-                # image6$setState(plotData2)
+                plotData2 <- cutoffdata
+                image5 <- self$results$plot5
+                image5$setState(plotData2)
+                image2 <- self$results$plot2
+                image2$setState(plotData2)
+                image3 <- self$results$plot3
+                image3$setState(plotData2)
+                image6 <- self$results$plot6
+                image6$setState(plotData2)
 
 
 
