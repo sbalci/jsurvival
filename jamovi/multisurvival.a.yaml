@@ -164,6 +164,11 @@ options:
           name: t3
       default: t1
 
+    - name: km
+      title: Kaplan-Meier
+      type: Bool
+      default: false
+
 
     - name: ac
       title: Adjusted Survival Curve

@@ -23,6 +23,7 @@ multisurvival(
   timetypeoutput = "months",
   hr = FALSE,
   sty = "t1",
+  km = FALSE,
   ac = FALSE,
   adjexplanatory
 )
@@ -63,6 +64,8 @@ multisurvival(
 \item{hr}{.}
 
 \item{sty}{.}
+
+\item{km}{.}
 
 \item{ac}{.}
 

@@ -48,6 +48,8 @@ children:
                   - type: ComboBox
                     name: sty
                     enable: (hr)
+              - type: CheckBox
+                name: km
   - type: CollapseBox
     label: Advanced Elapsed Time Options
     collapsed: true

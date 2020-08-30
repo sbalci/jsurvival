@@ -23,6 +23,7 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             timetypeoutput = "months",
             hr = FALSE,
             sty = "t1",
+            km = FALSE,
             ac = FALSE,
             adjexplanatory = NULL, ...) {
 
@@ -136,6 +137,10 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "t1",
                     "t3"),
                 default="t1")
+            private$..km <- jmvcore::OptionBool$new(
+                "km",
+                km,
+                default=FALSE)
             private$..ac <- jmvcore::OptionBool$new(
                 "ac",
                 ac,
@@ -161,6 +166,7 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..timetypeoutput)
             self$.addOption(private$..hr)
             self$.addOption(private$..sty)
+            self$.addOption(private$..km)
             self$.addOption(private$..ac)
             self$.addOption(private$..adjexplanatory)
         }),
@@ -182,6 +188,7 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         timetypeoutput = function() private$..timetypeoutput$value,
         hr = function() private$..hr$value,
         sty = function() private$..sty$value,
+        km = function() private$..km$value,
         ac = function() private$..ac$value,
         adjexplanatory = function() private$..adjexplanatory$value),
     private = list(
@@ -202,6 +209,7 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..timetypeoutput = NA,
         ..hr = NA,
         ..sty = NA,
+        ..km = NA,
         ..ac = NA,
         ..adjexplanatory = NA)
 )
@@ -343,6 +351,7 @@ multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param timetypeoutput select the time type in output
 #' @param hr .
 #' @param sty .
+#' @param km .
 #' @param ac .
 #' @param adjexplanatory .
 #' @return A results object containing:
@@ -376,6 +385,7 @@ multisurvival <- function(
     timetypeoutput = "months",
     hr = FALSE,
     sty = "t1",
+    km = FALSE,
     ac = FALSE,
     adjexplanatory) {
 
@@ -417,6 +427,7 @@ multisurvival <- function(
         timetypeoutput = timetypeoutput,
         hr = hr,
         sty = sty,
+        km = km,
         ac = ac,
         adjexplanatory = adjexplanatory)
 
