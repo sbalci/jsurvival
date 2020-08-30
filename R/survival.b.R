@@ -355,7 +355,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     html <- self$results$todo
                     html$setContent(todo)
                     return()
-                }
+                } else {
 
 
                 # Empty data ----
@@ -382,6 +382,11 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 if (self$options$pw && !self$options$sas) {
                     private$.pairwise(results)
                 }
+
+
+                }
+
+
 
             }
 
