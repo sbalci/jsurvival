@@ -767,8 +767,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             myformula <- as.formula(myformula)
 
-            title2 <- as.character(contfactor)
-
             km_fit <- survival::survfit(myformula, data = plotData)
 
             time_scale <-

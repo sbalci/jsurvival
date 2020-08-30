@@ -101,6 +101,7 @@ children:
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
     collapsed: true
+    children:
       - type: Label
         label: Multiple Event Levels
         fitToGrid: true
