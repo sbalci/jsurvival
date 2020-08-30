@@ -614,18 +614,18 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
             }
 
             # Cut-off Plot ----
-            # ,
-            # .plot4 = function(image4, ggtheme, theme, ...) {
-            #     plotData <- image4$state
-            #
-            #     res.cut <- plotData
-            #
-            #     plot4 <-
-            #         plot(res.cut, self$options$contexpl, palette = "npg")
-            #
-            #     print(plot4)
-            #     TRUE
-            # }
+            ,
+            .plot4 = function(image4, ggtheme, theme, ...) {
+                plotData <- image4$state
+
+                res.cut <- plotData
+
+                plot4 <-
+                    plot(res.cut, self$options$contexpl, palette = "npg")
+
+                print(plot4)
+                TRUE
+            }
 
 
             # Survival Curve with new cut-off ----
