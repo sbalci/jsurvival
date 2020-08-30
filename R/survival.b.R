@@ -343,11 +343,15 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 # Run Analysis ----
 
+                if (!self$options$sas) {
+
                 private$.medianSurv(results)
 
                 private$.cox(results)
 
                 private$.survTable(results)
+
+                }
 
                 if (self$options$pw) {
                     private$.pairwise(results)
@@ -405,8 +409,6 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     medianTable$addRow(rowKey = i, values = c(data_frame[i, ]))
                 }
 
-
-                return() # RETURN ----
 
                 # Median Survival Summary ----
 
@@ -827,7 +829,6 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 sas <- self$options$sas
 
                 if (sas) {
-                    myfactor <- 1
                     title2 <- "Overall"
                 }
 
@@ -890,7 +891,6 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 sas <- self$options$sas
 
                 if (sas) {
-                    myfactor <- 1
                     title2 <- "Overall"
                 }
 
@@ -948,7 +948,6 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 sas <- self$options$sas
 
                 if (sas) {
-                    myfactor <- 1
                     title2 <- "Overall"
                 }
 
