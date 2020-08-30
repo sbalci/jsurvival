@@ -20,6 +20,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     self$results$medianTable$setVisible(FALSE)
                     self$results$coxSummary$setVisible(FALSE)
                     self$results$coxTable$setVisible(FALSE)
+                    self$results$tCoxtext2$setVisible(FALSE)
                     self$results$survTableSummary$setVisible(FALSE)
                     self$results$survTable$setVisible(FALSE)
                     self$results$pairwiseSummary$setVisible(FALSE)
@@ -327,7 +328,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 if (is.null(self$options$outcome) ||
 
                     (is.null(self$options$elapsedtime) &&
-                     (!(self$options$tint) && (is.null(self$options$dxdate) || is.null(self$options$fudate)))
+                     (!(self$options$tint) && !(is.null(self$options$dxdate) || is.null(self$options$fudate)))
                      )
 
                     || is.null(self$options$explanatory) ) {
