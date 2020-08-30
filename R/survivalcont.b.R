@@ -580,9 +580,9 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
 
                 cutoffdata <- private$.cutoff2(res.cut)
 
-                # private$.mediancutoff(cutoffdata)
+                private$.mediancutoff(cutoffdata)
 
-                # private$.lifetablecutoff(cutoffdata)
+                private$.lifetablecutoff(cutoffdata)
 
                 # Prepare Data For Plots ----
 
@@ -601,13 +601,13 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
 
                 plotData2 <- cutoffdata
                 image5 <- self$results$plot5
-                # image5$setState(plotData2)
-                # image2 <- self$results$plot2
-                # image2$setState(plotData2)
-                # image3 <- self$results$plot3
-                # image3$setState(plotData2)
-                # image6 <- self$results$plot6
-                # image6$setState(plotData2)
+                image5$setState(plotData2)
+                image2 <- self$results$plot2
+                image2$setState(plotData2)
+                image3 <- self$results$plot3
+                image3$setState(plotData2)
+                image6 <- self$results$plot6
+                image6$setState(plotData2)
 
 
 
@@ -629,77 +629,77 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
 
 
             # Survival Curve with new cut-off ----
-            # ,
-            # .plot5 = function(image5, ggtheme, theme, ...) {
-            #     plotData <- image5$state
-            #
-            #     res.cat <- plotData
-            #
-            #     contfactor <-
-            #         jmvcore::constructFormula(terms = self$options$contexpl)
-            #
-            #     myformula <-
-            #         paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
-            #
-            #     myformula <- as.formula(myformula)
-            #
-            #     fit <- survminer::surv_fit(formula = myformula,
-            #                                data = res.cat)
-            #
-            #     plot5 <- survminer::ggsurvplot(
-            #         fit,
-            #         data = res.cat,
-            #         risk.table = self$options$risktable,
-            #         conf.int = self$options$ci95
-            #     )
-            #     print(plot5)
-            #     TRUE
-            # }
+            ,
+            .plot5 = function(image5, ggtheme, theme, ...) {
+                plotData <- image5$state
+
+                res.cat <- plotData
+
+                contfactor <-
+                    jmvcore::constructFormula(terms = self$options$contexpl)
+
+                myformula <-
+                    paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
+
+                myformula <- as.formula(myformula)
+
+                fit <- survminer::surv_fit(formula = myformula,
+                                           data = res.cat)
+
+                plot5 <- survminer::ggsurvplot(
+                    fit,
+                    data = res.cat,
+                    risk.table = self$options$risktable,
+                    conf.int = self$options$ci95
+                )
+                print(plot5)
+                TRUE
+            }
 
 
             # Cumulative Events with new cut-off ----
             # https://rpkgs.datanovia.com/survminer/survminer_cheatsheet.pdf
-            # ,
-            # .plot2 = function(image2, ggtheme, theme, ...) {
-            #     ce <- self$options$ce
-            #
-            #     if (!ce)
-            #         return()
-            #
-            #     plotData <- image2$state
-            #
-            #     contfactor <-
-            #         jmvcore::constructFormula(terms = self$options$contexpl)
-            #
-            #     myformula <- paste0("survival::Surv(mytime, myoutcome)")
-            #
-            #     myformula <- as.formula(myformula)
-            #
-            #     title2 <- as.character(contfactor)
-            #
-            #     plot2 <- plotData %>%
-            #         finalfit::surv_plot(
-            #             .data = .,
-            #             dependent = "survival::Surv(mytime, myoutcome)",
-            #             explanatory = contfactor,
-            #             xlab = paste0('Time (', self$options$timetypeoutput, ')'),
-            #             # pval = TRUE,
-            #             legend = 'none',
-            #             break.time.by = self$options$byplot,
-            #             xlim = c(0, self$options$endplot),
-            #             title = paste0("Cumulative Events ", title2),
-            #             fun = "event",
-            #             risk.table = self$options$risktable,
-            #             conf.int = self$options$ci95
-            #         )
-            #
-            #
-            #     print(plot2)
-            #     TRUE
-            #
-            #
-            #
-            # }
+            ,
+            .plot2 = function(image2, ggtheme, theme, ...) {
+                ce <- self$options$ce
+
+                if (!ce)
+                    return()
+
+                plotData <- image2$state
+
+                contfactor <-
+                    jmvcore::constructFormula(terms = self$options$contexpl)
+
+                myformula <- paste0("survival::Surv(mytime, myoutcome)")
+
+                myformula <- as.formula(myformula)
+
+                title2 <- as.character(contfactor)
+
+                plot2 <- plotData %>%
+                    finalfit::surv_plot(
+                        .data = .,
+                        dependent = "survival::Surv(mytime, myoutcome)",
+                        explanatory = contfactor,
+                        xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+                        # pval = TRUE,
+                        legend = 'none',
+                        break.time.by = self$options$byplot,
+                        xlim = c(0, self$options$endplot),
+                        title = paste0("Cumulative Events ", title2),
+                        fun = "event",
+                        risk.table = self$options$risktable,
+                        conf.int = self$options$ci95
+                    )
+
+
+                print(plot2)
+                TRUE
+
+
+
+            }
 
 
 
@@ -746,41 +746,41 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
 
 
             # KMunicate Style with new cut-off ----
-            # ,
-            # .plot6 = function(image6, ggtheme, theme, ...) {
-            #     kmunicate <- self$options$kmunicate
-            #
-            #     if (!kmunicate)
-            #         return()
-            #
-            #     plotData <- image6$state
-            #
-            #     contfactor <-
-            #         jmvcore::constructFormula(terms = self$options$contexpl)
-            #
-            #     myformula <-
-            #         paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
-            #
-            #     myformula <- as.formula(myformula)
-            #
-            #     km_fit <- survival::survfit(myformula, data = plotData)
-            #
-            #     time_scale <-
-            #         seq(0, self$options$endplot, by = self$options$byplot)
-            #
-            #
-            #     plot6 <-
-            #         KMunicate::KMunicate(
-            #             fit = km_fit,
-            #             time_scale = time_scale,
-            #             .xlab = paste0('Time in ', self$options$timetypeoutput)
-            #         )
-            #
-            #
-            #     print(plot6)
-            #     TRUE
-            #
-            # }
+            ,
+            .plot6 = function(image6, ggtheme, theme, ...) {
+                kmunicate <- self$options$kmunicate
+
+                if (!kmunicate)
+                    return()
+
+                plotData <- image6$state
+
+                contfactor <-
+                    jmvcore::constructFormula(terms = self$options$contexpl)
+
+                myformula <-
+                    paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
+
+                myformula <- as.formula(myformula)
+
+                km_fit <- survival::survfit(myformula, data = plotData)
+
+                time_scale <-
+                    seq(0, self$options$endplot, by = self$options$byplot)
+
+
+                plot6 <-
+                    KMunicate::KMunicate(
+                        fit = km_fit,
+                        time_scale = time_scale,
+                        .xlab = paste0('Time in ', self$options$timetypeoutput)
+                    )
+
+
+                print(plot6)
+                TRUE
+
+            }
 
 
         )
