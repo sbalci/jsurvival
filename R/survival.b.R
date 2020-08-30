@@ -353,7 +353,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 }
 
-                if (self$options$pw) {
+                if (self$options$pw && !self$options$sas) {
                     private$.pairwise(results)
                 }
 
