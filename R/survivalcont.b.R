@@ -597,7 +597,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
 
             # # View mydata ----
-            # self$results$mydataview$setContent(head(mydata, n = 30))
+            self$results$mydataview$setContent(head(mydata, n = 30))
 
             # Cox ----
             private$.cox(mydata)
