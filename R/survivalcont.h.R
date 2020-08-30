@@ -253,7 +253,6 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         todo = function() private$.items[["todo"]],
-        mydataview = function() private$.items[["mydataview"]],
         coxSummary = function() private$.items[["coxSummary"]],
         coxTable = function() private$.items[["coxTable"]],
         tCoxtext2 = function() private$.items[["tCoxtext2"]],
@@ -285,22 +284,11 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "findcut",
                     "contexpl",
                     "fudate",
-                    "dxdate",
-                    "pw",
-                    "sc",
-                    "ce",
-                    "ch",
-                    "kmunicate",
-                    "endplot",
-                    "byplot"))
+                    "dxdate"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="todo",
                 title="To Do"))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="mydataview",
-                title="mydataview"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="coxSummary",
@@ -368,7 +356,13 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=450,
                 renderFun=".plot5",
                 visible="(findcut && sc)",
-                requiresData=TRUE))
+                requiresData=TRUE,
+                clearWith=list(
+                    "sc",
+                    "endplot",
+                    "byplot",
+                    "ci95",
+                    "risktable")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="medianSummary",
@@ -468,7 +462,13 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=450,
                 renderFun=".plot2",
                 visible="(findcut && ce)",
-                requiresData=TRUE))
+                requiresData=TRUE,
+                clearWith=list(
+                    "ce",
+                    "endplot",
+                    "byplot",
+                    "ci95",
+                    "risktable")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
@@ -477,7 +477,13 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=450,
                 renderFun=".plot3",
                 visible="(findcut && ch)",
-                requiresData=TRUE))
+                requiresData=TRUE,
+                clearWith=list(
+                    "ch",
+                    "endplot",
+                    "byplot",
+                    "ci95",
+                    "risktable")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot6",
@@ -487,6 +493,10 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 renderFun=".plot6",
                 visible="(findcut && kmunicate)",
                 requiresData=TRUE,
+                clearWith=list(
+                    "kmunicate",
+                    "endplot",
+                    "byplot"),
                 refs=list(
                     "KMunicate",
                     "KMunicate2")))}))
@@ -543,7 +553,6 @@ survivalcontBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$coxSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$coxTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tCoxtext2} \tab \tab \tab \tab \tab a html \cr

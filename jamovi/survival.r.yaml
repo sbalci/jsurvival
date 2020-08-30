@@ -12,14 +12,7 @@ clearWith:
     - overalltime
     - fudate
     - dxdate
-    - sas
-    - pw
-    - sc
-    - ce
-    - ch
-    - kmunicate
-    - endplot
-    - byplot
+
 
 items:
 
@@ -177,8 +170,8 @@ items:
       # title: Pairwise Comparison Summary and Table
       title: '`Pairwise Comparison Summary and Table - ${explanatory}`'
       type:  Preformatted
-      # clearWith:
-      #     - pw
+      clearWith:
+          - pw
       visible: (pw && !sas)
 
 
@@ -198,8 +191,8 @@ items:
           type: number
           format: zto,pvalue
       visible: (pw && !sas)
-      # clearWith:
-      #     - pw
+      clearWith:
+          - pw
 
 
     - name: plot
@@ -211,11 +204,13 @@ items:
       renderFun: .plot
       visible: (sc)
       requiresData: true
-      # clearWith:
-      #     - sc
-      #     - endplot
-      #     - byplot
-
+      clearWith:
+          - sc
+          - endplot
+          - byplot
+          - sas
+          - ci95
+          - risktable
 
 
     - name: plot2
@@ -227,12 +222,13 @@ items:
       renderFun: .plot2
       visible: (ce)
       requiresData: true
-      # clearWith:
-      #     - ce
-      #     - endplot
-      #     - byplot
-
-
+      clearWith:
+          - ce
+          - endplot
+          - byplot
+          - sas
+          - ci95
+          - risktable
 
     - name: plot3
       # title: Cumulative Hazard
@@ -243,12 +239,13 @@ items:
       renderFun: .plot3
       visible: (ch)
       requiresData: true
-      # clearWith:
-      #     - ch
-      #     - endplot
-      #     - byplot
-
-
+      clearWith:
+          - ch
+          - endplot
+          - byplot
+          - sas
+          - ci95
+          - risktable
 
     - name: plot6
       title: '`KMunicate-Style Plot - ${explanatory}`'
@@ -258,10 +255,11 @@ items:
       renderFun: .plot6
       visible: (kmunicate)
       requiresData: true
-      # clearWith:
-      #     - kmunicate
-      #     - endplot
-      #     - byplot
+      clearWith:
+          - kmunicate
+          - endplot
+          - byplot
+          - sas
       refs:
           - KMunicate
           - KMunicate2

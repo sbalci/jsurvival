@@ -13,13 +13,6 @@ clearWith:
     - contexpl
     - fudate
     - dxdate
-    - pw
-    - sc
-    - ce
-    - ch
-    - kmunicate
-    - endplot
-    - byplot
 
 
 
@@ -29,9 +22,9 @@ items:
       title: To Do
       type:  Html
 
-    - name:  mydataview
-      title: mydataview
-      type:  Preformatted
+    # - name:  mydataview
+    #   title: mydataview
+    #   type:  Preformatted
 
     - name:  coxSummary
       # title: Cox Regression Summary and Table
@@ -100,7 +93,12 @@ items:
       renderFun: .plot5
       visible: (findcut && sc)
       requiresData: true
-
+      clearWith:
+          - sc
+          - endplot
+          - byplot
+          - ci95
+          - risktable
 
 
     - name:  medianSummary
@@ -209,7 +207,12 @@ items:
       renderFun: .plot2
       visible: (findcut && ce)
       requiresData: true
-
+      clearWith:
+          - ce
+          - endplot
+          - byplot
+          - ci95
+          - risktable
 
 
     - name: plot3
@@ -221,6 +224,12 @@ items:
       renderFun: .plot3
       visible: (findcut && ch)
       requiresData: true
+      clearWith:
+          - ch
+          - endplot
+          - byplot
+          - ci95
+          - risktable
 
 
     - name: plot6
@@ -231,6 +240,10 @@ items:
       renderFun: .plot6
       visible: (findcut && kmunicate)
       requiresData: true
+      clearWith:
+          - kmunicate
+          - endplot
+          - byplot
       refs:
           - KMunicate
           - KMunicate2

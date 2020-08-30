@@ -292,15 +292,7 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcomeLevel",
                     "overalltime",
                     "fudate",
-                    "dxdate",
-                    "sas",
-                    "pw",
-                    "sc",
-                    "ce",
-                    "ch",
-                    "kmunicate",
-                    "endplot",
-                    "byplot"))
+                    "dxdate"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="todo",
@@ -440,6 +432,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="pairwiseSummary",
                 title="`Pairwise Comparison Summary and Table - ${explanatory}`",
+                clearWith=list(
+                    "pw"),
                 visible="(pw && !sas)"))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -460,7 +454,9 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `title`="p-value", 
                         `type`="number", 
                         `format`="zto,pvalue")),
-                visible="(pw && !sas)"))
+                visible="(pw && !sas)",
+                clearWith=list(
+                    "pw")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -469,7 +465,14 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=450,
                 renderFun=".plot",
                 visible="(sc)",
-                requiresData=TRUE))
+                requiresData=TRUE,
+                clearWith=list(
+                    "sc",
+                    "endplot",
+                    "byplot",
+                    "sas",
+                    "ci95",
+                    "risktable")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
@@ -478,7 +481,14 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=450,
                 renderFun=".plot2",
                 visible="(ce)",
-                requiresData=TRUE))
+                requiresData=TRUE,
+                clearWith=list(
+                    "ce",
+                    "endplot",
+                    "byplot",
+                    "sas",
+                    "ci95",
+                    "risktable")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
@@ -487,7 +497,14 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=450,
                 renderFun=".plot3",
                 visible="(ch)",
-                requiresData=TRUE))
+                requiresData=TRUE,
+                clearWith=list(
+                    "ch",
+                    "endplot",
+                    "byplot",
+                    "sas",
+                    "ci95",
+                    "risktable")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot6",
@@ -497,6 +514,11 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 renderFun=".plot6",
                 visible="(kmunicate)",
                 requiresData=TRUE,
+                clearWith=list(
+                    "kmunicate",
+                    "endplot",
+                    "byplot",
+                    "sas"),
                 refs=list(
                     "KMunicate",
                     "KMunicate2")))}))

@@ -31,25 +31,7 @@ children:
           - type: VariablesListBox
             name: explanatory
             isTarget: true
-  - type: CollapseBox
-    label: Plots
-    collapsed: false
-    children:
-      - type: Label
-        label: Plots
-        fitToGrid: true
-        children:
-          - type: LayoutBox
-            fitToGrid: true
-            children:
-              - type: CheckBox
-                name: hr
-                children:
-                  - type: ComboBox
-                    name: sty
-                    enable: (hr)
-              - type: CheckBox
-                name: km
+
   - type: CollapseBox
     label: Advanced Elapsed Time Options
     collapsed: true
@@ -131,33 +113,49 @@ children:
                 name: awod
                 enable: (outcome && multievent)
 
+
   - type: CollapseBox
-    label: Adjusted Survival Curve
+    label: Plots
     collapsed: false
     children:
       - type: Label
-        label: Adjusted Survival Curve
+        label: Plots
         fitToGrid: true
         children:
           - type: LayoutBox
-            margin: large
+            fitToGrid: true
             children:
               - type: CheckBox
-                name: ac
-                fitToGrid: true
-      - type: Label
-        label: Variable for Adjusted Survival Curve
-        fitToGrid: true
-        children:
-          - type: VariableSupplier
-            persistentItems: false
-            stretchFactor: 1
-            children:
-              - type: TargetLayoutBox
-                label: Variable for Adjusted Survival Curve
+                name: hr
                 children:
-                  - type: VariablesListBox
-                    name: adjexplanatory
-                    maxItemCount: 1
-                    isTarget: true
+                  - type: ComboBox
+                    name: sty
+                    enable: (hr)
+              - type: CheckBox
+                name: km
+          - type: Label
+            label: Adjusted Survival Curve
+            fitToGrid: true
+            children:
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: CheckBox
+                    name: ac
+                    fitToGrid: true
+              - type: Label
+                label: Variable for Adjusted Survival Curve
+                fitToGrid: true
+                children:
+                  - type: VariableSupplier
+                    persistentItems: false
+                    stretchFactor: 1
+                    children:
+                      - type: TargetLayoutBox
+                        label: Variable for Adjusted Survival Curve
+                        children:
+                          - type: VariablesListBox
+                            name: adjexplanatory
+                            maxItemCount: 1
+                            isTarget: true
 

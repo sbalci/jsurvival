@@ -586,14 +586,14 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
 
                 # Prepare Data For Plots ----
 
-                # View mydata ----
-                self$results$mydataview$setContent(
-                    list(
-                        head(mydata, n = 30),
-                        res.cut,
-                        head(cutoffdata)
-                    )
-                    )
+                # # View mydata ----
+                # self$results$mydataview$setContent(
+                #     list(
+                #         head(mydata, n = 30),
+                #         res.cut,
+                #         head(cutoffdata)
+                #     )
+                #     )
 
                 plotData1 <- res.cut
                 image4 <- self$results$plot4

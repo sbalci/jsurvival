@@ -312,15 +312,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 cleanData <- jmvcore::naOmit(cleanData)
 
-                # View mydata ----
-
-                self$results$mydataview$setContent(list(time,
-                                                        outcome,
-                                                        factor,
-                                                        name1time,
-                                                        name2outcome,
-                                                        name3explanatory,
-                                                        head(cleanData, n = 30)))
+                # # View mydata ----
+                # self$results$mydataview$setContent(list(time,
+                #                                         outcome,
+                #                                         factor,
+                #                                         name1time,
+                #                                         name2outcome,
+                #                                         name3explanatory,
+                #                                         head(cleanData, n = 30)))
 
 
                 # Prepare Data For Plots ----
