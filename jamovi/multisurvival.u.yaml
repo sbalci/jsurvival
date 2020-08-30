@@ -99,20 +99,22 @@ children:
                 enable: (tint)
               - type: ComboBox
                 name: timetypeoutput
+
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
-    collapsed: true
+    collapsed: false
     children:
       - type: Label
         label: Analysis Type
         children:
           - type: ComboBox
             name: analysistype
-            enable: (!contexpl)
       - type: Label
         label: Multiple Event Levels
         fitToGrid: true
         children:
+          - type: CheckBox
+            name: multievent
           - type: LayoutBox
             fitToGrid: true
             children:
@@ -128,6 +130,7 @@ children:
               - type: LevelSelector
                 name: awod
                 enable: (outcome && multievent)
+
   - type: CollapseBox
     label: Adjusted Survival Curve
     collapsed: false
@@ -157,8 +160,4 @@ children:
                     name: adjexplanatory
                     maxItemCount: 1
                     isTarget: true
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: CheckBox
-        name: multievent
+

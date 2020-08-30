@@ -10,6 +10,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         "multisurvivalClass",
         inherit = multisurvivalBase,
         private = list(
+
             .todo = function() {
                 # If no variable selected Initial Message ----
 
