@@ -125,6 +125,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 contin <- c("integer", "numeric", "double")
 
+                outcomeLevel <- self$options$outcomeLevel
                 multievent <- self$options$multievent
                 outcome1 <- self$options$outcome
                 outcome1 <- self$data[[outcome1]]
