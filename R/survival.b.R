@@ -753,13 +753,13 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
 
                 myformula <-
-                    paste("Surv(", mytime, ",", myoutcome,")")
+                    paste("survival::Surv(", mytime, ",", myoutcome,")")
 
 
                 # thefactor <-
                 #     jmvcore::constructFormula(terms = self$options$explanatory)
                 #
-                # title2 <- as.character(thefactor)
+                title2 <- as.character(myfactor)
 
                 sas <- self$options$sas
 
@@ -771,8 +771,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 plot <- plotData %>%
                     finalfit::surv_plot(
                         .data = .,
-                        dependent = 'survival::Surv(mytime, myoutcome)',
-                        explanatory = as.vector(self$options$explanatory),
+                        dependent = myformula,
+                        explanatory = myfactor,
                         xlab = paste0('Time (', self$options$timetypeoutput, ')'),
                         pval = TRUE,
                         legend = 'none',
