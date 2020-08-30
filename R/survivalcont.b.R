@@ -631,6 +631,7 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
             # Survival Curve with new cut-off ----
             ,
             .plot5 = function(image5, ggtheme, theme, ...) {
+
                 plotData <- image5$state
 
                 res.cat <- plotData
@@ -661,10 +662,6 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
             # https://rpkgs.datanovia.com/survminer/survminer_cheatsheet.pdf
             ,
             .plot2 = function(image2, ggtheme, theme, ...) {
-                ce <- self$options$ce
-
-                if (!ce)
-                    return()
 
                 plotData <- image2$state
 
@@ -680,7 +677,7 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
                 plot2 <- plotData %>%
                     finalfit::surv_plot(
                         .data = .,
-                        dependent = "survival::Surv(mytime, myoutcome)",
+                        dependent = myformula,
                         explanatory = contfactor,
                         xlab = paste0('Time (', self$options$timetypeoutput, ')'),
                         # pval = TRUE,
