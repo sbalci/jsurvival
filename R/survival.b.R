@@ -202,7 +202,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 sas <- self$options$sas
 
                 if (sas) {
-                    mydata[["myfactor"]] <- 1
+                    mydata[["myfactor"]] <- "1"
                 }
 
                 return(mydata[["myfactor"]])
@@ -343,17 +343,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 # Run Analysis ----
 
-                if (!self$options$sas) {
-
                 private$.medianSurv(results)
 
                 private$.cox(results)
 
                 private$.survTable(results)
 
-                }
 
-                if (self$options$pw && !self$options$sas) {
+                if (self$options$pw) {
                     private$.pairwise(results)
                 }
 
