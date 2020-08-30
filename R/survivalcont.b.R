@@ -580,7 +580,7 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
 
                 res.cut <- private$.cutoff(mydata)
 
-                # private$.cutoffTable(rec.cut)
+                private$.cutoffTable(rec.cut)
 
                 cutoffdata <- private$.cutoff2(res.cut)
 
