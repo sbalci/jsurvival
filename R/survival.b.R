@@ -768,7 +768,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 }
 
 
-                plot <- plotData %>%
+                plot <- mydata %>%
                     finalfit::surv_plot(
                         .data = .,
                         dependent = myformula,
