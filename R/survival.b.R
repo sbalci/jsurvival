@@ -952,11 +952,11 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
 
                 myformula <-
-                    paste("survival::Surv(", mytime, ",", myoutcome,") ~ ", myfactor)
+                    paste("Surv(", mytime, ",", myoutcome,")")
 
                 myformula <- as.formula(myformula)
 
-                km_fit <- survival::survfit( survival::Surv(mytime, myoutcome) ~ myfactor,
+                km_fit <- survival::survfit( myformula ~ myfactor,
                     data = plotData)
 
                 time_scale <-
