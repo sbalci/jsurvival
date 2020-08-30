@@ -584,8 +584,6 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
 
                 # private$.lifetablecutoff(cutoffdata)
 
-
-
                 # Prepare Data For Plots ----
 
                 # View mydata ----
@@ -593,18 +591,16 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
                     list(
                         head(mydata, n = 30),
                         res.cut,
-                        cutoffdata
+                        head(cutoffdata)
                     )
                     )
-
-
 
                 plotData1 <- res.cut
                 image4 <- self$results$plot4
                 image4$setState(plotData1)
 
-                # plotData2 <- cutoffdata
-                # image5 <- self$results$plot5
+                plotData2 <- cutoffdata
+                image5 <- self$results$plot5
                 # image5$setState(plotData2)
                 # image2 <- self$results$plot2
                 # image2$setState(plotData2)
