@@ -25,11 +25,13 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         ,
         .todo = function() {
 
-            if ( is.null(self$options$outcome) ||
+            if (is.null(self$options$outcome) ||
 
-                 (is.null(self$options$elapsedtime) && !(self$options$tint))
+                (is.null(self$options$elapsedtime) && !(self$options$tint)) ||
 
-                 || is.null(self$options$contexpl)
+                (self$options$tint && (is.null(self$options$dxdate) || is.null(self$options$fudate))) ||
+
+                 is.null(self$options$contexpl)
 
             ) {
 
@@ -366,79 +368,43 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     time = "mytime",
                     event = "myoutcome",
                     self$options$contexpl,
-                    minprop = 0.1,
-                    progressbar = TRUE
+                    minprop = 0.1
+                    # ,
+                    # progressbar = TRUE
                 )
 
-                # Cut-off Table ----
-
-                rescut_summary <- summary(res.cut)
-
-                # self$results$rescutTable$setContent(rescut_summary)
-
-                rescutTable <- self$results$rescutTable
-
-                rescutTable$setTitle(paste0(self$options$contexpl))
-
-
-                data_frame <- rescut_summary
-                for (i in seq_along(data_frame[,1,drop = T])) {
-                    rescutTable$addRow(rowKey = i, values = c(data_frame[i,]))
-                }
-
-
-                # categorisation ----
-
-                res.cat <- survminer::surv_categorize(res.cut)
-
-
-                # Prepare Data For Continuous Explanatory Plots ----
-
-                plotData4 <- res.cut
-
-                image4 <- self$results$plot4
-                image4$setState(plotData4)
-
-                plotData5 <- res.cat
-
-                image5 <- self$results$plot5
-                image5$setState(plotData5)
-
-                plotData2 <- res.cat
-
-                image2 <- self$results$plot2
-                image2$setState(plotData2)
-
-                plotData3 <- res.cat
-
-                image3 <- self$results$plot3
-                image3$setState(plotData3)
-
-                plotData6 <- res.cat
-
-                image6 <- self$results$plot6
-                image6$setState(plotData6)
+                return(res.cut)
 
         }
 
+        # Cut-off Table ----
         ,
-        .cutoff2 = function(mydata) {
+        .cutoffTable = function(res.cut) {
 
-            res.cut <- survminer::surv_cutpoint(
-                mydata,
-                time = "mytime",
-                event = "myoutcome",
-                self$options$contexpl,
-                minprop = 0.1,
-                progressbar = TRUE
-            )
+            rescut_summary <- summary(res.cut)
 
+            rescutTable <- self$results$rescutTable
+
+            rescutTable$setTitle(paste0(self$options$contexpl))
+
+
+            data_frame <- rescut_summary
+            for (i in seq_along(data_frame[,1,drop = T])) {
+                rescutTable$addRow(rowKey = i, values = c(data_frame[i,]))
+            }
+
+        }
+
+        # Categorise Data ----
+        ,
+        .cutoff2 = function(res.cut) {
             res.cat <- survminer::surv_categorize(res.cut)
-
             return(res.cat)
 
         }
 
+
+        # Median ----
         ,
         .mediancutoff = function(cutoffdata) {
 
@@ -501,6 +467,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         }
 
 
+        # Life Table ----
         ,
         .lifetablecutoff = function(cutoffdata) {
 
@@ -603,17 +570,44 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$.cox(mydata)
 
             # Cut off calculation and further analysis ----
-            if (self$options$findcut) {
+            if (!self$options$findcut)
+                return()
 
-                private$.cutoff(mydata)
 
-                cutoffdata <- private$.cutoff2(mydata)
+                res.cut <- private$.cutoff(mydata)
+
+                private$.cutoffTable(rec.cut)
+
+                cutoffdata <- private$.cutoff2(res.cut)
 
                 private$.mediancutoff(cutoffdata)
 
                 private$.lifetablecutoff(cutoffdata)
 
-            }
+
+
+            # Prepare Data For Plots ----
+
+
+                plotData1 <- res.cut
+
+            image4 <- self$results$plot4
+            image4$setState(plotData)
+
+            plotData2 <- cutoffdata
+
+            image5 <- self$results$plot5
+            image5$setState(plotData2)
+
+            image2 <- self$results$plot2
+            image2$setState(plotData2)
+
+            image3 <- self$results$plot3
+            image3$setState(plotData2)
+
+            image6 <- self$results$plot6
+            image6$setState(plotData2)
+
 
 
         }

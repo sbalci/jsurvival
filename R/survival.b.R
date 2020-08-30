@@ -28,14 +28,48 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 }
 
             }
-
             ,
+            .todo = function() {
 
+                if (is.null(self$options$outcome) ||
+
+                    (is.null(self$options$elapsedtime) && !(self$options$tint)) ||
+
+                    (self$options$tint && (is.null(self$options$dxdate) || is.null(self$options$fudate))) ||
+
+                    is.null(self$options$explanatory) ) {
+
+                todo <- glue::glue(
+                    "
+                <br>Welcome to ClinicoPath
+                <br><br>
+                This tool will help you calculate median survivals and 1,3,5-yr survivals for a given fisk factor.
+                <br><br>
+                Explanatory variable should be categorical (ordinal or nominal).
+                <br><br>
+                Select outcome level from Outcome variable.
+                <br><br>
+                Outcome Level: if patient is dead or event (recurrence) occured. You may also use advanced outcome options depending on your analysis type.
+                <br><br>
+                Survival time should be numeric and continuous. You may also use dates to calculate survival time in advanced elapsed time options.
+                <br><br>
+                This function uses survival, survminer, and finalfit packages. Please cite jamovi and the packages as given below.
+                <br><hr>
+                <br>
+                See details for survival <a href = 'https://cran.r-project.org/web/packages/survival/vignettes/survival.pdf'>here</a>."
+                )
+
+                html <- self$results$todo
+                html$setContent(todo)
+
+                }
+
+            }
 
 
 
             # Define Survival Time ----
-
+            ,
             .definemytime = function() {
                 mydata <- self$data
 
@@ -334,28 +368,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                     is.null(self$options$explanatory) ) {
 
-                        todo <- glue::glue(
-                        "
-                <br>Welcome to ClinicoPath
-                <br><br>
-                This tool will help you calculate median survivals and 1,3,5-yr survivals for a given fisk factor.
-                <br><br>
-                Explanatory variable should be categorical (ordinal or nominal).
-                <br><br>
-                Select outcome level from Outcome variable.
-                <br><br>
-                Outcome Level: if patient is dead or event (recurrence) occured. You may also use advanced outcome options depending on your analysis type.
-                <br><br>
-                Survival time should be numeric and continuous. You may also use dates to calculate survival time in advanced elapsed time options.
-                <br><br>
-                This function uses survival, survminer, and finalfit packages. Please cite jamovi and the packages as given below.
-                <br><hr>
-                <br>
-                See details for survival <a href = 'https://cran.r-project.org/web/packages/survival/vignettes/survival.pdf'>here</a>."
-                    )
+                    private$.todo()
 
-                    html <- self$results$todo
-                    html$setContent(todo)
                     return()
                 }
 
