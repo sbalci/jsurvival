@@ -343,8 +343,6 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 private$.cox(results)
 
-                return() # RETURN ----
-
                 private$.survTable(results)
 
                 if (self$options$pw) {
