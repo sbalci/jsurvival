@@ -28,9 +28,9 @@ items:
       type:  Html
 
 
-    - name:  mydataview
-      title: mydataview
-      type:  Preformatted
+    # - name:  mydataview
+    #   title: mydataview
+    #   type:  Preformatted
 
 
     - name:  medianSummary

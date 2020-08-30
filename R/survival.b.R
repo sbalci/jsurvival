@@ -325,14 +325,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
             .run = function() {
                 # Common Errors, Warnings ----
 
-                # No variable ----
+                # No variable TODO ----
                 if (is.null(self$options$outcome) ||
 
                     (is.null(self$options$elapsedtime) && !(self$options$tint)) ||
 
-                    (self$options$tint && (is.null(self$options$dxdate) || is.null(self$options$fudate)))
+                    (self$options$tint && (is.null(self$options$dxdate) || is.null(self$options$fudate))) ||
 
-                    || is.null(self$options$explanatory) ) {
+                    is.null(self$options$explanatory) ) {
 
                         todo <- glue::glue(
                         "
@@ -360,26 +360,23 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 }
 
                 # Empty data ----
-
                 if (nrow(self$data) == 0)
                     stop('Data contains no (complete) rows')
 
-                # Prepare Clean Data ----
-
+                # Get Clean Data ----
                 results <- private$.cleandata()
 
                 # Run Analysis ----
-
                 if (!self$options$sas) {
-
+                    # Median Survival ----
                     private$.medianSurv(results)
-
+                    # Cox ----
                     private$.cox(results)
-
+                    # Survival Table ----
                     private$.survTable(results)
-
                 }
 
+                # Pairwise ----
                 if (self$options$pw && !self$options$sas) {
                     private$.pairwise(results)
                 }
@@ -388,7 +385,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
             }
 
-            # Median Survival ----
+            # Median Survival Function ----
             ,
             .medianSurv = function(results) {
 
@@ -466,7 +463,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
             }
 
-            # Cox Regression ----
+            # Cox Regression Function ----
             ,
             .cox = function(results) {
                 # Cox Regression ----
@@ -583,7 +580,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
 
 
-            # Survival Table ----
+            # Survival Table Function ----
             ,
             .survTable = function(results) {
 
@@ -669,7 +666,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
             }
 
 
-            # Pairwise ----
+            # Pairwise Function ----
             ,
             .pairwise = function(results) {
                 #  pairwise comparison ----
