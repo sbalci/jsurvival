@@ -265,7 +265,11 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 # Prepare Data For Plots ----
 
-                plotData <- cleanData
+                plotData <- list(
+                    "name1time" = name1time,
+                    "name2outcome" = name2outcome,
+                    "name3explanatory" = name3explanatory,
+                    "cleanData" = cleanData)
 
                 image <- self$results$plot
                 image$setState(plotData)
@@ -723,28 +727,43 @@ survivalClass <- if (requireNamespace('jmvcore'))
             }
 
 
+            # <-- Survival Curve ----
             ,
             .plot = function(image, ggtheme, theme, ...) {
-                # <-- the plot function ----
-
 
                 sc <- self$options$sc
 
                 if (!sc)
                     return()
 
+                results <- image$state
 
-                plotData <- image$state
+                mytime <- results$name1time
+                mytime <- jmvcore::constructFormula(terms = mytime)
 
-                thefactor <-
-                    jmvcore::constructFormula(terms = self$options$explanatory)
+                myoutcome <- results$name2outcome
+                myoutcome <- jmvcore::constructFormula(terms = myoutcome)
 
-                title2 <- as.character(thefactor)
+
+                myfactor <- results$name3explanatory
+                myfactor <- jmvcore::constructFormula(terms = myfactor)
+
+                mydata <- results$cleanData
+
+                mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
+
+                myformula <-
+                    paste("Surv(", mytime, ",", myoutcome,")")
+
+
+                # thefactor <-
+                #     jmvcore::constructFormula(terms = self$options$explanatory)
+                #
+                # title2 <- as.character(thefactor)
 
                 sas <- self$options$sas
 
                 if (sas) {
-                    thefactor <- 1
                     title2 <- "Overall"
                 }
 
