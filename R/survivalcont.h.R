@@ -283,7 +283,15 @@ survivalcontResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcomeLevel",
                     "overalltime",
                     "contexpl",
-                    "sas"))
+                    "fudate",
+                    "dxdate",
+                    "pw",
+                    "sc",
+                    "ce",
+                    "ch",
+                    "kmunicate",
+                    "endplot",
+                    "byplot"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="todo",

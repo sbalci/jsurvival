@@ -10,7 +10,17 @@ clearWith:
     - outcomeLevel
     - overalltime
     - contexpl
-    - sas
+    - fudate
+    - dxdate
+    - pw
+    - sc
+    - ce
+    - ch
+    - kmunicate
+    - endplot
+    - byplot
+
+
 
 items:
 
