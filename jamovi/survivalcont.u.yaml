@@ -186,5 +186,4 @@ children:
             enable: (findcut)
             format: string
             width: large
-            enable: (findcut)
 
