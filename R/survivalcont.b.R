@@ -673,38 +673,27 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             if (!ce)
                 return()
 
-            results <- image2$state
+            plotData <- image2$state
 
-            mytime <- results$name1time
-            mytime <- jmvcore::constructFormula(terms = mytime)
+            contfactor <- jmvcore::constructFormula(terms = self$options$contexpl)
 
-            myoutcome <- results$name2outcome
-            myoutcome <- jmvcore::constructFormula(terms = myoutcome)
+            myformula <- paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
 
+            myformula <- as.formula(myformula)
 
-            myfactor <- results$name3explanatory
-            myfactor <- jmvcore::constructFormula(terms = myfactor)
-
-            plotData <- results$cleanData
-
-            plotData[[mytime]] <- jmvcore::toNumeric(plotData[[mytime]])
-
-            myformula <-
-                paste("survival::Surv(", mytime, ",", myoutcome,")")
-
-            title2 <- as.character(myfactor)
+            title2 <- as.character(contfactor)
 
             plot2 <- plotData %>%
                 finalfit::surv_plot(
                     .data = .,
                     dependent = myformula,
-                    explanatory = myfactor,
+                    explanatory = contfactor,
                     xlab = paste0('Time (', self$options$timetypeoutput, ')'),
                     # pval = TRUE,
                     legend = 'none',
                     break.time.by = self$options$byplot,
                     xlim = c(0, self$options$endplot),
-                    title = paste0("Cumulative Events ", title2),
+                    title = paste0("Cumulative Events ", contfactor),
                     fun = "event",
                     risk.table = self$options$risktable,
                     conf.int = self$options$ci95
@@ -729,33 +718,21 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             if (!ch)
                 return()
 
-            results <- image3$state
+            plotData <- image3$state
 
-            mytime <- results$name1time
-            mytime <- jmvcore::constructFormula(terms = mytime)
+            contfactor <- jmvcore::constructFormula(terms = self$options$contexpl)
 
-            myoutcome <- results$name2outcome
-            myoutcome <- jmvcore::constructFormula(terms = myoutcome)
+            myformula <- paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
 
+            myformula <- as.formula(myformula)
 
-            myfactor <- results$name3explanatory
-            myfactor <- jmvcore::constructFormula(terms = myfactor)
-
-            plotData <- results$cleanData
-
-            plotData[[mytime]] <- jmvcore::toNumeric(plotData[[mytime]])
-
-            myformula <-
-                paste("survival::Surv(", mytime, ",", myoutcome,")")
-
-            title2 <- as.character(myfactor)
-
+            title2 <- as.character(contfactor)
 
             plot3 <- plotData %>%
                 finalfit::surv_plot(
                     .data = .,
                     dependent = myformula,
-                    explanatory = myfactor,
+                    explanatory = contfactor,
                     xlab = paste0('Time (', self$options$timetypeoutput, ')'),
                     # pval = TRUE,
                     legend = 'none',
@@ -782,36 +759,15 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             if (!kmunicate)
                 return()
 
-            results <- image6$state
+            plotData <- image6$state
 
-            mytime <- results$name1time
-            mytime <- jmvcore::constructFormula(terms = mytime)
+            contfactor <- jmvcore::constructFormula(terms = self$options$contexpl)
 
-            myoutcome <- results$name2outcome
-            myoutcome <- jmvcore::constructFormula(terms = myoutcome)
-
-
-            myfactor <- results$name3explanatory
-            myfactor <- jmvcore::constructFormula(terms = myfactor)
-
-            plotData <- results$cleanData
-
-            plotData[[mytime]] <- jmvcore::toNumeric(plotData[[mytime]])
-
-
-            title2 <- as.character(myfactor)
-
-
-            myformula <-
-                paste('survival::Surv(',
-                      mytime,
-                      ',',
-                      myoutcome,
-                      ') ~ ',
-                      myfactor
-                )
+            myformula <- paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
 
             myformula <- as.formula(myformula)
+
+            title2 <- as.character(contfactor)
 
             km_fit <- survival::survfit(myformula, data = plotData)
 

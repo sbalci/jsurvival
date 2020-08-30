@@ -101,12 +101,6 @@ children:
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
     collapsed: true
-    children:
-      - type: Label
-        label: Analysis Type
-        children:
-          - type: ComboBox
-            name: analysistype
       - type: Label
         label: Multiple Event Levels
         fitToGrid: true
@@ -128,7 +122,12 @@ children:
               - type: LevelSelector
                 name: awod
                 enable: (outcome && multievent)
-
+      - type: Label
+        label: Analysis Type
+        children:
+          - type: ComboBox
+            name: analysistype
+            enable: (outcome && multievent)
 
 
   - type: CollapseBox
