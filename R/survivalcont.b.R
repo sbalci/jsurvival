@@ -668,29 +668,37 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
                 contfactor <-
                     jmvcore::constructFormula(terms = self$options$contexpl)
 
-                myformula <- paste0("survival::Surv(mytime, myoutcome)")
+                # myformula <- paste0("survival::Surv(mytime, myoutcome)")
 
-                myformula <- as.formula(myformula)
+                # myformula <- as.formula(myformula)
 
                 title2 <- as.character(contfactor)
 
-                plot2 <- plot(plotData)
+                myformula <-
+                    paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
 
-                # plot2 <- plotData %>%
-                #     finalfit::surv_plot(
-                #         .data = .,
-                #         dependent = myformula,
-                #         explanatory = contfactor,
-                #         xlab = paste0('Time (', self$options$timetypeoutput, ')'),
-                #         # pval = TRUE,
-                #         legend = 'none',
-                #         break.time.by = self$options$byplot,
-                #         xlim = c(0, self$options$endplot),
-                #         title = paste0("Cumulative Events ", title2),
-                #         fun = "event",
-                #         risk.table = self$options$risktable,
-                #         conf.int = self$options$ci95
-                #     )
+                myformula <- as.formula(myformula)
+
+                fit <- survminer::surv_fit(formula = myformula,
+                                           data = plotData)
+
+                    # plotData %>%
+                plot2 <-
+                    finalfit::surv_plot(
+                        # .data = .,
+                        fit,
+                        # dependent = myformula,
+                        # explanatory = contfactor,
+                        xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+                        # pval = TRUE,
+                        legend = 'none',
+                        break.time.by = self$options$byplot,
+                        xlim = c(0, self$options$endplot),
+                        title = paste0("Cumulative Events ", title2),
+                        fun = "event",
+                        risk.table = self$options$risktable,
+                        conf.int = self$options$ci95
+                    )
 
 
                 print(plot2)
