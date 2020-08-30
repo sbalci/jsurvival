@@ -343,14 +343,18 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 # Run Analysis ----
 
+                private$.cox(results)
+
+                if (!self$options$sas) {
+
                 private$.medianSurv(results)
 
-                private$.cox(results)
 
                 private$.survTable(results)
 
+                }
 
-                if (self$options$pw) {
+                if (self$options$pw && !self$options$sas) {
                     private$.pairwise(results)
                 }
 
