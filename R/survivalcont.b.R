@@ -668,27 +668,17 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
                 contfactor <-
                     jmvcore::constructFormula(terms = self$options$contexpl)
 
-                # myformula <- paste0("survival::Surv(mytime, myoutcome)")
+                myformula <- paste0("survival::Surv(mytime, myoutcome)")
 
                 # myformula <- as.formula(myformula)
 
                 title2 <- as.character(contfactor)
 
-                myformula <-
-                    paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
-
-                myformula <- as.formula(myformula)
-
-                fit <- survminer::surv_fit(formula = myformula,
-                                           data = plotData)
-
-                    # plotData %>%
-                plot2 <-
+                plot2 <- plotData %>%
                     finalfit::surv_plot(
-                        # .data = .,
-                        fit,
-                        # dependent = myformula,
-                        # explanatory = contfactor,
+                        .data = .,
+                        dependent = myformula,
+                        explanatory = contfactor,
                         xlab = paste0('Time (', self$options$timetypeoutput, ')'),
                         # pval = TRUE,
                         legend = 'none',
