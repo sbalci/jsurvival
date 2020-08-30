@@ -18,6 +18,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     # Disable tables
                     self$results$medianSummary$setVisible(FALSE)
                     self$results$medianTable$setVisible(FALSE)
+                    self$results$coxSummary$setVisible(FALSE)
+                    self$results$coxTable$setVisible(FALSE)
                     self$results$survTableSummary$setVisible(FALSE)
                     self$results$survTable$setVisible(FALSE)
                     self$results$pairwiseSummary$setVisible(FALSE)
