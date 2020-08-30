@@ -677,7 +677,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             contfactor <- jmvcore::constructFormula(terms = self$options$contexpl)
 
-            myformula <- paste0("survival::Surv(mytime, myoutcome) ~ ", contfactor)
+            myformula <- paste0("survival::Surv(mytime, myoutcome)")
 
             myformula <- as.formula(myformula)
 
@@ -693,7 +693,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     legend = 'none',
                     break.time.by = self$options$byplot,
                     xlim = c(0, self$options$endplot),
-                    title = paste0("Cumulative Events ", contfactor),
+                    title = paste0("Cumulative Events ", title2),
                     fun = "event",
                     risk.table = self$options$risktable,
                     conf.int = self$options$ci95
