@@ -342,15 +342,17 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 results <- private$.cleandata()
 
                 # Run Analysis ----
-
-                private$.cox(results)
+                private$.survTable(results)
 
                 if (!self$options$sas) {
 
-                private$.medianSurv(results)
+                    private$.medianSurv(results)
+
+                    private$.cox(results)
 
 
-                private$.survTable(results)
+
+
 
                 }
 
