@@ -110,8 +110,7 @@ items:
           - contexpl
           - endplot
           - byplot
-
-
+      visible: (sc)
 
 
 
@@ -205,52 +204,6 @@ items:
           superTitle: '95% Confidence Interval'
           type: number
           format: pc
-
-
-    # - name:  pairwiseSummary
-    #   title: Pairwise Comparison Summary and Table
-    #   # title: '`Pairwise Comparison Summary and Table - ${explanatory}`'
-    #   type:  Preformatted
-    #   clearWith:
-    #       - pw
-    #   visible: (pw)
-
-
-
-    # - name:  pairwiseTable
-    #   title: Pairwise Comparison Table
-    #   type:  Table
-    #   rows: 0
-    #   columns:
-    #     - name: rowname
-    #       title: "Levels"
-    #       type: text
-    #     - name: name
-    #       title: "Levels"
-    #       type: text
-    #     - name: value
-    #       title: p-value
-    #       type: number
-    #       format: zto,pvalue
-    #   visible: (pw)
-    #   clearWith:
-    #       - pw
-
-
-    - name: plot
-      # title: Survival Plot
-      title: '`Survival Plot  - ${contexpl}`'
-      type: Image
-      width:  600
-      height: 450
-      renderFun: .plot
-      visible: (sc)
-      requiresData: true
-      clearWith:
-          - sc
-          - endplot
-          - byplot
-
 
 
     - name: plot2

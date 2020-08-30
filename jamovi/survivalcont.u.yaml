@@ -48,18 +48,6 @@ children:
               - type: CheckBox
                 name: findcut
 
-  # - type: CollapseBox
-  #   label: Pairwise Comparisons
-  #   collapsed: false
-  #   children:
-  #     - type: Label
-  #       label: Pairwise comparisons
-  #       children:
-  #         - type: LayoutBox
-  #           margin: large
-  #           children:
-  #             - type: CheckBox
-  #               name: pw
 
   - type: CollapseBox
     label: Advanced Elapsed Time Options

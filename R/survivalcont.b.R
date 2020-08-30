@@ -18,8 +18,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 self$results$medianTable$setVisible(FALSE)
                 self$results$survTableSummary$setVisible(FALSE)
                 self$results$survTable$setVisible(FALSE)
-                # self$results$pairwiseSummary$setVisible(FALSE)
-                # self$results$pairwiseTable$setVisible(FALSE)
             }
 
         }
@@ -62,16 +60,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         }
 
-
-        # ,
-        # .definemytime = function() {}
-
-        # ,
-        # .definemyoutcome = function() {}
-
-        # ,
-        # .definemyfactor = function() {}
-
         ,
         .cleandata = function() {
 
@@ -82,35 +70,27 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             contin <- c("integer", "numeric", "double")
 
             # Read Data ----
-
             mydata <- self$data
 
             # Read Arguments ----
-
             elapsedtime <- self$options$elapsedtime
             outcome <- self$options$outcome
             contexpl <- self$options$contexpl
-            outcomeLevel <- self$options$outcomeLevel
             tint <- self$options$tint
 
             # Define Outcome ----
-
             multievent <- self$options$multievent
-
+            outcomeLevel <- self$options$outcomeLevel
             outcome1 <- self$options$outcome
             outcome1 <- self$data[[outcome1]]
 
 
             if (!multievent) {
-
-
                 if (inherits(outcome1, contin)) {
-
                     if (
                         !((length(unique(outcome1[!is.na(outcome1)])) == 2) && (sum(unique(outcome1[!is.na(outcome1)])) == 1) )
                     ) {
                         stop('When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.')
-
                     }
 
                     mydata[["myoutcome"]] <- mydata[[self$options$outcome]]
@@ -118,20 +98,10 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 } else if (inherits(outcome1, "factor")) {
 
-
-                    # mydata[[self$options$outcome]] <-
-                    #     ifelse(test = outcome1 == outcomeLevel,
-                    #            yes = 1,
-                    #            no = 0)
-
-
-
                     mydata[["myoutcome"]] <-
                         ifelse(test = outcome1 == outcomeLevel,
                                yes = 1,
                                no = 0)
-
-
 
                 } else {
 
@@ -215,14 +185,6 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 fudate <- self$options$fudate
                 timetypedata <- self$options$timetypedata
 
-                # stopifnot(
-                #     inherits(mydata[[dxdate]], c("POSIXct","POSIXt", "POSIXlt"))
-                # )
-
-                # stopifnot(
-                #     inherits(mydata[[fudate]], c("POSIXct","POSIXt", "POSIXlt"))
-                # )
-
 
                 if (timetypedata == "ymdhms") {
                     mydata[["start"]] <- lubridate::ymd_hms(mydata[[dxdate]])
@@ -275,7 +237,7 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
             mydata[["myfactor"]] <- mydata[[contexpl]]
 
-            # Define Data For Analysis
+            # Define Data For Analysis ----
 
             # naOmit ----
 
@@ -294,20 +256,13 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         }
 
+        # Continious Cox Regression ----
         ,
         .cox = function(mydata) {
 
 
-            # Continious Cox Regression ----
-
-
             formula2 <- as.vector(self$options$contexpl)
 
-            # sas <- self$options$sas
-            #
-            # if (sas) {
-            #     formula2 <- 1
-            # }
 
             myformula <- paste("Surv(", "mytime", "," , "myoutcome", ")")
 
@@ -448,6 +403,21 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 image5 <- self$results$plot5
                 image5$setState(plotData5)
+
+                plotData2 <- res.cat
+
+                image2 <- self$results$plot2
+                image2$setState(plotData2)
+
+                plotData3 <- res.cat
+
+                image3 <- self$results$plot3
+                image3$setState(plotData3)
+
+                plotData6 <- res.cat
+
+                image6 <- self$results$plot6
+                image6$setState(plotData6)
 
         }
 
@@ -648,8 +618,9 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         }
 
+        # Cut-off Plot ----
         ,
-        .plot4 = function(image4, ggtheme, theme, ...) {  # <-- the plot4 function ----
+        .plot4 = function(image4, ggtheme, theme, ...) {
 
             plotData <- image4$state
 
@@ -662,8 +633,9 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         }
 
 
+        # Survival Curve with new cut-off ----
         ,
-        .plot5 = function(image5, ggtheme, theme, ...) {  # <-- the plot5 function ----
+        .plot5 = function(image5, ggtheme, theme, ...) {
 
             plotData <- image5$state
 
@@ -691,8 +663,175 @@ survivalcontClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         }
 
 
+        # Cumulative Events with new cut-off ----
+        # https://rpkgs.datanovia.com/survminer/survminer_cheatsheet.pdf
+        ,
+        .plot2 = function(image2, ggtheme, theme, ...) {
+
+            ce <- self$options$ce
+
+            if (!ce)
+                return()
+
+            results <- image2$state
+
+            mytime <- results$name1time
+            mytime <- jmvcore::constructFormula(terms = mytime)
+
+            myoutcome <- results$name2outcome
+            myoutcome <- jmvcore::constructFormula(terms = myoutcome)
+
+
+            myfactor <- results$name3explanatory
+            myfactor <- jmvcore::constructFormula(terms = myfactor)
+
+            plotData <- results$cleanData
+
+            plotData[[mytime]] <- jmvcore::toNumeric(plotData[[mytime]])
+
+            myformula <-
+                paste("survival::Surv(", mytime, ",", myoutcome,")")
+
+            title2 <- as.character(myfactor)
+
+            plot2 <- plotData %>%
+                finalfit::surv_plot(
+                    .data = .,
+                    dependent = myformula,
+                    explanatory = myfactor,
+                    xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+                    # pval = TRUE,
+                    legend = 'none',
+                    break.time.by = self$options$byplot,
+                    xlim = c(0, self$options$endplot),
+                    title = paste0("Cumulative Events ", title2),
+                    fun = "event",
+                    risk.table = self$options$risktable,
+                    conf.int = self$options$ci95
+                )
+
+
+            print(plot2)
+            TRUE
 
 
 
-        )
+        }
+
+
+
+        # Cumulative Hazard with new cut-off ----
+        ,
+        .plot3 = function(image3, ggtheme, theme, ...) {
+
+            ch <- self$options$ch
+
+            if (!ch)
+                return()
+
+            results <- image3$state
+
+            mytime <- results$name1time
+            mytime <- jmvcore::constructFormula(terms = mytime)
+
+            myoutcome <- results$name2outcome
+            myoutcome <- jmvcore::constructFormula(terms = myoutcome)
+
+
+            myfactor <- results$name3explanatory
+            myfactor <- jmvcore::constructFormula(terms = myfactor)
+
+            plotData <- results$cleanData
+
+            plotData[[mytime]] <- jmvcore::toNumeric(plotData[[mytime]])
+
+            myformula <-
+                paste("survival::Surv(", mytime, ",", myoutcome,")")
+
+            title2 <- as.character(myfactor)
+
+
+            plot3 <- plotData %>%
+                finalfit::surv_plot(
+                    .data = .,
+                    dependent = myformula,
+                    explanatory = myfactor,
+                    xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+                    # pval = TRUE,
+                    legend = 'none',
+                    break.time.by = self$options$byplot,
+                    xlim = c(0, self$options$endplot),
+                    title = paste0("Cumulative Hazard ", title2),
+                    fun = "cumhaz",
+                    risk.table = self$options$risktable,
+                    conf.int = self$options$ci95
+                )
+
+
+            print(plot3)
+            TRUE
+        }
+
+
+        # KMunicate Style with new cut-off ----
+        ,
+        .plot6 = function(image6, ggtheme, theme, ...) {
+
+            kmunicate <- self$options$kmunicate
+
+            if (!kmunicate)
+                return()
+
+            results <- image6$state
+
+            mytime <- results$name1time
+            mytime <- jmvcore::constructFormula(terms = mytime)
+
+            myoutcome <- results$name2outcome
+            myoutcome <- jmvcore::constructFormula(terms = myoutcome)
+
+
+            myfactor <- results$name3explanatory
+            myfactor <- jmvcore::constructFormula(terms = myfactor)
+
+            plotData <- results$cleanData
+
+            plotData[[mytime]] <- jmvcore::toNumeric(plotData[[mytime]])
+
+
+            title2 <- as.character(myfactor)
+
+
+            myformula <-
+                paste('survival::Surv(',
+                      mytime,
+                      ',',
+                      myoutcome,
+                      ') ~ ',
+                      myfactor
+                )
+
+            myformula <- as.formula(myformula)
+
+            km_fit <- survival::survfit(myformula, data = plotData)
+
+            time_scale <-
+                seq(0, self$options$endplot, by = self$options$byplot)
+
+
+            plot6 <-
+                KMunicate::KMunicate(
+                    fit = km_fit,
+                    time_scale = time_scale,
+                    .xlab = paste0('Time in ', self$options$timetypeoutput)
+                )
+
+
+            print(plot6)
+            TRUE
+
+        }
+
+
+    )
 )
