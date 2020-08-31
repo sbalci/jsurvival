@@ -459,55 +459,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             ,
             .plot = function(image, ggtheme, theme, ...) {
 
-                # plotData <- image$state
 
-                if (is.null(self$options$explanatory) ||
-                    (length(self$options$outcome) + length(self$options$elapsedtime) < 2))
-                    return()
-
-                if (nrow(self$data) == 0)
-                    stop('Data contains no (complete) rows')
-
-
-
-                # prepare data ----
-
-                mydata <- self$data
-
-                outcomeLevel <- self$options$outcomeLevel
-
-
-
-                contin <- c("integer", "numeric", "double")
-
-
-                outcome1 <- self$options$outcome
-
-                outcome1 <- self$data[[outcome1]]
-
-                if (inherits(outcome1, contin)) {
-                    if (!any(outcome1 != 0, na.rm = TRUE) ||
-                        !any(outcome1 != 1, na.rm = TRUE)) {
-                        stop(
-                            'When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.'
-                        )
-
-                    }
-
-                    mydata[["Outcome"]] <-
-                        mydata[[self$options$outcome]]
-
-                } else if (inherits(outcome1, "factor")) {
-                    outcomeLevel <- self$options$outcomeLevel
-
-                    mydata[["Outcome"]] <-
-                        ifelse(test = mydata[[self$options$outcome]] == outcomeLevel,
-                               yes = 1,
-                               no = 0)
-
-
-
-                }
+                plotData <- image$state
 
                 # prepare formula ----
 
@@ -516,16 +469,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 # formula2 <- as.vector(self$options$explanatory)
 
-                formulaL <-
-                    jmvcore::constructFormula(terms = self$options$elapsedtime)
-
-                formulaL <- jmvcore::toNumeric(formulaL)
-
-                formulaL <-
-                    jmvcore::constructFormula(terms = self$options$elapsedtime)
 
                 myformula <-
-                    paste("survival::Surv(", formulaL, ",", "Outcome", ")")
+                    paste("survival::Surv(mytime, myoutcome)")
 
 
                 # hr_plot ----
@@ -533,7 +479,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 plot <-
                     finalfit::hr_plot(
-                        .data = mydata,
+                        .data = plotData,
                         dependent = myformula,
                         explanatory = formula2,
                         dependent_label = "Survival",
