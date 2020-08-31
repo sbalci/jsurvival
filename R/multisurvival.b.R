@@ -195,9 +195,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                     fudate <- self$options$fudate
                     timetypedata <- self$options$timetypedata
 
-                    stopifnot(inherits(mydata[[dxdate]], c("POSIXct", "POSIXt", "POSIXlt")))
+                    # stopifnot(inherits(mydata[[dxdate]], c("POSIXct", "POSIXt", "POSIXlt")))
 
-                    stopifnot(inherits(mydata[[fudate]], c("POSIXct", "POSIXt", "POSIXlt")))
+                    # stopifnot(inherits(mydata[[fudate]], c("POSIXct", "POSIXt", "POSIXlt")))
 
 
                     if (timetypedata == "ymdhms") {
