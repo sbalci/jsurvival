@@ -84,7 +84,7 @@ children:
 
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
-    collapsed: false
+    collapsed: true
     children:
       - type: Label
         label: Analysis Type

@@ -23,15 +23,14 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
 
             ,
             .todo = function() {
-                if (is.null(self$options$outcome) ||
 
-                    (is.null(self$options$elapsedtime) &&
-                     !(self$options$tint)) ||
+                if (
 
-                    (self$options$tint &&
-                     (
-                         is.null(self$options$dxdate) || is.null(self$options$fudate)
-                     )) ||
+                    (is.null(self$options$outcome) && !(self$options$multievent)) ||
+
+                    (self$options$multievent && (is.null(self$options$dod) && is.null(self$options$dooc) && is.null(self$options$awd) && is.null(self$options$awod))) ||
+
+                    (self$options$tint && (is.null(self$options$dxdate) || is.null(self$options$fudate))) ||
 
                     is.null(self$options$contexpl)) {
                     todo <- glue::glue(
@@ -547,12 +546,14 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
             ,
             .run = function() {
                 # Errors ----
-                if (is.null(self$options$outcome) ||
+                if (
+                    (is.null(self$options$outcome) && !(self$options$multievent)) ||
 
-                    (is.null(self$options$elapsedtime) &&
-                     !(self$options$tint))
+                    (self$options$multievent && (is.null(self$options$dod) && is.null(self$options$dooc) && is.null(self$options$awd) && is.null(self$options$awod))) ||
 
-                    || is.null(self$options$contexpl)) {
+                    (self$options$tint && (is.null(self$options$dxdate) || is.null(self$options$fudate))) ||
+
+                    is.null(self$options$contexpl)) {
                     private$.todo()
                     return()
                 }

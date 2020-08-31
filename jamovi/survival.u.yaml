@@ -35,7 +35,7 @@ children:
             isTarget: true
   - type: CollapseBox
     label: Advanced Elapsed Time Options
-    collapsed: false
+    collapsed: true
     children:
       - type: Label
         label: Time Interval
@@ -84,7 +84,7 @@ children:
                 name: timetypeoutput
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
-    collapsed: false
+    collapsed: true
     children:
       - type: Label
         label: Multiple Event Levels
@@ -115,7 +115,7 @@ children:
             enable: (outcome && multievent)
   - type: CollapseBox
     label: Single Arm Survival
-    collapsed: false
+    collapsed: true
     children:
       - type: Label
         label: Single Arm Survival
@@ -125,7 +125,7 @@ children:
             name: sas
   - type: CollapseBox
     label: Pairwise Comparisons
-    collapsed: false
+    collapsed: true
     children:
       - type: Label
         label: Pairwise comparisons
@@ -137,7 +137,7 @@ children:
                 name: pw
   - type: CollapseBox
     label: Plots
-    collapsed: false
+    collapsed: true
     children:
       - type: Label
         label: Plots
@@ -172,7 +172,7 @@ children:
                 name: risktable
   - type: CollapseBox
     label: Survival Tables
-    collapsed: false
+    collapsed: true
     children:
       - type: Label
         label: Survival table

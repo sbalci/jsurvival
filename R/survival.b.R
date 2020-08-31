@@ -31,9 +31,10 @@ survivalClass <- if (requireNamespace('jmvcore'))
             ,
             .todo = function() {
 
-                if (is.null(self$options$outcome) ||
+                if (
+                    (is.null(self$options$outcome) && !(self$options$multievent)) ||
 
-                    (is.null(self$options$elapsedtime) && !(self$options$tint)) ||
+                    (self$options$multievent && (is.null(self$options$dod) && is.null(self$options$dooc) && is.null(self$options$awd) && is.null(self$options$awod))) ||
 
                     (self$options$tint && (is.null(self$options$dxdate) || is.null(self$options$fudate))) ||
 
@@ -359,9 +360,10 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 # Common Errors, Warnings ----
 
                 # No variable TODO ----
-                if (is.null(self$options$outcome) ||
+                if (
+                    (is.null(self$options$outcome) && !(self$options$multievent)) ||
 
-                    (is.null(self$options$elapsedtime) && !(self$options$tint)) ||
+                    (self$options$multievent && (is.null(self$options$dod) && is.null(self$options$dooc) && is.null(self$options$awd) && is.null(self$options$awod))) ||
 
                     (self$options$tint && (is.null(self$options$dxdate) || is.null(self$options$fudate))) ||
 
