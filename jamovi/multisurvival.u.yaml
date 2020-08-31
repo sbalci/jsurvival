@@ -177,9 +177,6 @@ children:
                 name: endplot
                 format: number
                 enable: (km || ac)
-          - type: LayoutBox
-            margin: large
-            children:
               - type: TextBox
                 name: byplot
                 format: number
@@ -190,9 +187,6 @@ children:
               - type: CheckBox
                 name: ci95
                 enable: (km || ac)
-          - type: LayoutBox
-            margin: large
-            children:
               - type: CheckBox
                 name: risktable
                 enable: (km || ac)
