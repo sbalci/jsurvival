@@ -278,8 +278,11 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcomeLevel",
                     "overalltime",
                     "explanatory",
+                    "contexpl",
                     "fudate",
-                    "dxdate"))
+                    "dxdate",
+                    "tint",
+                    "multievent"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="todo",
@@ -307,7 +310,10 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 renderFun=".plot",
                 requiresData=TRUE,
                 visible="(hr && sty:t1)",
-                refs="finalfit"))
+                refs="finalfit",
+                clearWith=list(
+                    "hr",
+                    "sty")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
@@ -317,7 +323,10 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 renderFun=".plot3",
                 requiresData=TRUE,
                 visible="(hr && sty:t3)",
-                refs="survminer"))
+                refs="survminer",
+                clearWith=list(
+                    "hr",
+                    "sty")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plotKM",
@@ -327,7 +336,13 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 renderFun=".plotKM",
                 requiresData=TRUE,
                 visible="(km)",
-                refs="finalfit"))
+                refs="finalfit",
+                clearWith=list(
+                    "km",
+                    "endplot",
+                    "byplot",
+                    "ci95",
+                    "risktable")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot7",
@@ -337,7 +352,13 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 renderFun=".plot7",
                 requiresData=TRUE,
                 visible="(ac)",
-                refs="survminer"))}))
+                refs="survminer",
+                clearWith=list(
+                    "ac",
+                    "endplot",
+                    "byplot",
+                    "ci95",
+                    "risktable")))}))
 
 multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "multisurvivalBase",

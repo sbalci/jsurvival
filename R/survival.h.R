@@ -292,7 +292,9 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "outcomeLevel",
                     "overalltime",
                     "fudate",
-                    "dxdate"))
+                    "dxdate",
+                    "tint",
+                    "multievent"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="todo",

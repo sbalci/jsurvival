@@ -12,6 +12,8 @@ clearWith:
     - overalltime
     - fudate
     - dxdate
+    - tint
+    - multievent
 
 
 items:
