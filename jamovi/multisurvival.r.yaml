@@ -81,7 +81,7 @@ items:
       type: Image
       width:  600
       height: 450
-      renderFun: .plot
+      renderFun: .plotKM
       requiresData: true
       visible: (km)
       refs: finalfit

@@ -283,7 +283,7 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 title="Kaplan-Meier",
                 width=600,
                 height=450,
-                renderFun=".plot",
+                renderFun=".plotKM",
                 requiresData=TRUE,
                 visible="(km)",
                 refs="finalfit"))
