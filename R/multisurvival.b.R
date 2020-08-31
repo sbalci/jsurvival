@@ -14,7 +14,11 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             .todo = function() {
                 # If no variable selected Initial Message ----
 
-                if (is.null(self$options$outcome) ||
+                if (
+
+                    (is.null(self$options$outcome) && !(self$options$multievent)) ||
+
+                    (self$options$multievent && (is.null(self$options$dod) && is.null(self$options$dooc) && is.null(self$options$awd) && is.null(self$options$awod))) ||
 
                     (is.null(self$options$elapsedtime) && !(self$options$tint)) ||
 
