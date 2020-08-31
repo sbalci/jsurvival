@@ -726,18 +726,20 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                     jmvcore::composeTerm(components = adjexplanatory)
 
 
+
                 # ggadjustedcurves ----
 
                 plot7 <- survminer::ggadjustedcurves(fit = mod,
-                                                     data = plotData
-                                                     # ,
-                                                     # variable = adjexplanatory
+                                                     data = plotData,
+                                                     variable = adjexplanatory
                                                      # method = ,
                                                      # fun =
-
                                                      )
 
 
+                # https://rpkgs.datanovia.com/survminer/reference/ggadjustedcurves.html
+
+                # https://stackoverflow.com/questions/55404550/computing-se-or-ci-for-ggadjustedcurves
 
                 # print plot -----
 
