@@ -302,6 +302,15 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 private$.cox(mydata)
 
 
+
+                # View mydata ----
+                self$results$mydataview$setContent(
+                    list(head(cleanData, n = 30))
+                    )
+
+
+
+
             },
 
 
