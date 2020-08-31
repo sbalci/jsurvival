@@ -618,19 +618,17 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                         thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
 
-                        title2 <- as.character(thefactor)
-
                         contin <- c("integer", "numeric", "double")
 
+                        factors <- plotData[[thefactor]]
 
-                        # if (inherits(outcome1, contin)) {
-                        #     if (!any(outcome1 != 0, na.rm = TRUE) ||
-                        #         !any(outcome1 != 1, na.rm = TRUE)) {
-                        #         stop(
-                        #             'When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.'
-                        #         )}
+                        if (length(self$options$explanatory) > 2)
+                            stop("Kaplan-Meier function allows maximum of 2 explanatory variables")
 
+                        if (inherits(factors, contin))
+                                stop("Please do not use continuous explanatory variables for Kaplan-Meier function.")
 
+                        title2 <- as.character(thefactor)
 
                         plotKM <- plotData %>%
                             finalfit::surv_plot(.data = .,
