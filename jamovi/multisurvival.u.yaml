@@ -119,7 +119,7 @@ children:
     collapsed: false
     children:
       - type: Label
-        label: Plots
+        label: Hazard Regression Plots
         fitToGrid: true
         children:
           - type: LayoutBox
@@ -131,31 +131,34 @@ children:
                   - type: ComboBox
                     name: sty
                     enable: (hr)
-              - type: CheckBox
-                name: km
-          - type: Label
-            label: Adjusted Survival Curve
+      - type: Label
+        label: Kaplan-Meier Plots
+        fitToGrid: true
+        children:
+          - type: LayoutBox
             fitToGrid: true
             children:
-              - type: LayoutBox
-                margin: large
-                children:
-                  - type: CheckBox
-                    name: ac
-                    fitToGrid: true
-              - type: Label
-                label: Variable for Adjusted Survival Curve
+              - type: CheckBox
+                name: km
+      - type: Label
+        label: Adjusted Survival Curve
+        fitToGrid: true
+        children:
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: CheckBox
+                name: ac
                 fitToGrid: true
+              - type: VariableSupplier
+                persistentItems: false
+                stretchFactor: 1
                 children:
-                  - type: VariableSupplier
-                    persistentItems: false
-                    stretchFactor: 1
+                  - type: TargetLayoutBox
+                    label: Variable for Adjusted Survival Curve
                     children:
-                      - type: TargetLayoutBox
-                        label: Variable for Adjusted Survival Curve
-                        children:
-                          - type: VariablesListBox
-                            name: adjexplanatory
-                            maxItemCount: 1
-                            isTarget: true
+                      - type: VariablesListBox
+                        name: adjexplanatory
+                        maxItemCount: 1
+                        isTarget: true
 
