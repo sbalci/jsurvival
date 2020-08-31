@@ -583,7 +583,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 mod <-
                     survival::coxph(formula = formula3,
-                                    data = mydata)
+                                    data = plotData)
 
                 # plot
 
