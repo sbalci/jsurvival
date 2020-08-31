@@ -720,12 +720,17 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 # select adjexplanatory ----
 
+
+                adjexplanatory <- NULL
+
+                if (!is.null(self$options$adjexplanatory)) {
+
                 adjexplanatory <- self$options$adjexplanatory
 
                 adjexplanatory <-
                     jmvcore::composeTerm(components = adjexplanatory)
 
-
+                }
 
                 # ggadjustedcurves ----
 
