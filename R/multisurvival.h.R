@@ -223,6 +223,7 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         text2 = function() private$.items[["text2"]],
         plot = function() private$.items[["plot"]],
         plot3 = function() private$.items[["plot3"]],
+        plotKM = function() private$.items[["plotKM"]],
         plot7 = function() private$.items[["plot7"]]),
     private = list(),
     public=list(
@@ -230,16 +231,18 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Multivariate Survival Analysis")
+                title="Multivariate Survival Analysis",
+                clearWith=list(
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime",
+                    "explanatory",
+                    "fudate",
+                    "dxdate"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="todo",
-                title="To Do",
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime")))
+                title="To Do"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="mydataview",
@@ -248,11 +251,6 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="text",
                 title="Multivariate Survival",
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime"),
                 refs="finalfit"))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -267,11 +265,6 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=450,
                 renderFun=".plot",
                 requiresData=TRUE,
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime"),
                 visible="(hr && sty:t1)",
                 refs="finalfit"))
             self$add(jmvcore::Image$new(
@@ -282,13 +275,18 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=600,
                 renderFun=".plot3",
                 requiresData=TRUE,
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime"),
                 visible="(hr && sty:t3)",
                 refs="survminer"))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotKM",
+                title="Kaplan-Meier",
+                width=600,
+                height=450,
+                renderFun=".plot",
+                requiresData=TRUE,
+                visible="(km)",
+                refs="finalfit"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot7",
@@ -297,11 +295,6 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=600,
                 renderFun=".plot7",
                 requiresData=TRUE,
-                clearWith=list(
-                    "explanatory",
-                    "outcome",
-                    "overalltime",
-                    "adjexplanatory"),
                 visible="(ac)",
                 refs="survminer"))}))
 
@@ -362,6 +355,7 @@ multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$text2} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot7} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'

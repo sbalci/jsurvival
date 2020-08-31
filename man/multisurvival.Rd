@@ -80,6 +80,7 @@ A results object containing:
 \code{results$text2} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
+\code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot7} \tab \tab \tab \tab \tab an image \cr
 }
 }
