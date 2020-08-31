@@ -551,7 +551,6 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'
 #' @examples
 #' # example will be added
-#' flow::flow_view(x = ClinicoPath::survival)
 #'
 #' @param data The data as a data frame.
 #' @param elapsedtime .

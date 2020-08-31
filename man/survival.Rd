@@ -119,6 +119,5 @@ Function for Generating Summaries for Survival Analysis.
 }
 \examples{
 # example will be added
-flow::flow_view(x = ClinicoPath::survival)
 
 }

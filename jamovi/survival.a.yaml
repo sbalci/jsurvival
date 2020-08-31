@@ -13,7 +13,6 @@ description:
         dontrun: false
         usage: |
             # example will be added
-            flow::flow_view(x = ClinicoPath::survival)
 
 
 options:
