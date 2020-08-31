@@ -726,7 +726,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 # ggadjustedcurves ----
 
                 plot7 <- survminer::ggadjustedcurves(fit = mod,
-                                                     data = mydata,
+                                                     data = plotData,
                                                      variable = adjexplanatory
                                                      # method = ,
                                                      # fun =
