@@ -43,14 +43,6 @@ options:
       title: 'Follow-up Date'
       type: Variable
 
-
-    - name: explanatory
-      title: Explanatory Variables
-      type: Variables
-      suggested: [ ordinal, nominal, continuous ]
-      permitted: [ factor, numeric ]
-
-
     - name: outcome
       title: 'Outcome'
       type: Variable
@@ -81,6 +73,23 @@ options:
       type: Level
       variable: (outcome)
       allowNone: true
+
+
+    - name: explanatory
+      title: Explanatory Variables
+      type: Variables
+      suggested: [ ordinal, nominal ]
+      permitted: [ factor ]
+
+    - name: contexpl
+      title: Continuous Explanatory Variable
+      type: Variables
+      suggested: [ continuous ]
+      permitted: [ numeric ]
+
+
+
+
 
     - name: multievent
       title: Multiple Event Levels

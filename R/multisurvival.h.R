@@ -10,13 +10,14 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             tint = FALSE,
             dxdate = NULL,
             fudate = NULL,
-            explanatory = NULL,
             outcome = NULL,
             outcomeLevel = NULL,
             dod = NULL,
             dooc = NULL,
             awd = NULL,
             awod = NULL,
+            explanatory = NULL,
+            contexpl = NULL,
             multievent = FALSE,
             analysistype = "overall",
             timetypedata = "ymd",
@@ -54,16 +55,6 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$..fudate <- jmvcore::OptionVariable$new(
                 "fudate",
                 fudate)
-            private$..explanatory <- jmvcore::OptionVariables$new(
-                "explanatory",
-                explanatory,
-                suggested=list(
-                    "ordinal",
-                    "nominal",
-                    "continuous"),
-                permitted=list(
-                    "factor",
-                    "numeric"))
             private$..outcome <- jmvcore::OptionVariable$new(
                 "outcome",
                 outcome,
@@ -98,6 +89,21 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 awod,
                 variable="(outcome)",
                 allowNone=TRUE)
+            private$..explanatory <- jmvcore::OptionVariables$new(
+                "explanatory",
+                explanatory,
+                suggested=list(
+                    "ordinal",
+                    "nominal"),
+                permitted=list(
+                    "factor"))
+            private$..contexpl <- jmvcore::OptionVariables$new(
+                "contexpl",
+                contexpl,
+                suggested=list(
+                    "continuous"),
+                permitted=list(
+                    "numeric"))
             private$..multievent <- jmvcore::OptionBool$new(
                 "multievent",
                 multievent,
@@ -173,13 +179,14 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..tint)
             self$.addOption(private$..dxdate)
             self$.addOption(private$..fudate)
-            self$.addOption(private$..explanatory)
             self$.addOption(private$..outcome)
             self$.addOption(private$..outcomeLevel)
             self$.addOption(private$..dod)
             self$.addOption(private$..dooc)
             self$.addOption(private$..awd)
             self$.addOption(private$..awod)
+            self$.addOption(private$..explanatory)
+            self$.addOption(private$..contexpl)
             self$.addOption(private$..multievent)
             self$.addOption(private$..analysistype)
             self$.addOption(private$..timetypedata)
@@ -199,13 +206,14 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         tint = function() private$..tint$value,
         dxdate = function() private$..dxdate$value,
         fudate = function() private$..fudate$value,
-        explanatory = function() private$..explanatory$value,
         outcome = function() private$..outcome$value,
         outcomeLevel = function() private$..outcomeLevel$value,
         dod = function() private$..dod$value,
         dooc = function() private$..dooc$value,
         awd = function() private$..awd$value,
         awod = function() private$..awod$value,
+        explanatory = function() private$..explanatory$value,
+        contexpl = function() private$..contexpl$value,
         multievent = function() private$..multievent$value,
         analysistype = function() private$..analysistype$value,
         timetypedata = function() private$..timetypedata$value,
@@ -224,13 +232,14 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..tint = NA,
         ..dxdate = NA,
         ..fudate = NA,
-        ..explanatory = NA,
         ..outcome = NA,
         ..outcomeLevel = NA,
         ..dod = NA,
         ..dooc = NA,
         ..awd = NA,
         ..awod = NA,
+        ..explanatory = NA,
+        ..contexpl = NA,
         ..multievent = NA,
         ..analysistype = NA,
         ..timetypedata = NA,
@@ -363,13 +372,14 @@ multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param tint .
 #' @param dxdate .
 #' @param fudate .
-#' @param explanatory .
 #' @param outcome .
 #' @param outcomeLevel .
 #' @param dod .
 #' @param dooc .
 #' @param awd .
 #' @param awod .
+#' @param explanatory .
+#' @param contexpl .
 #' @param multievent .
 #' @param analysistype .
 #' @param timetypedata select the time type in data
@@ -402,13 +412,14 @@ multisurvival <- function(
     tint = FALSE,
     dxdate,
     fudate,
-    explanatory,
     outcome,
     outcomeLevel,
     dod,
     dooc,
     awd,
     awod,
+    explanatory,
+    contexpl,
     multievent = FALSE,
     analysistype = "overall",
     timetypedata = "ymd",
@@ -429,8 +440,9 @@ multisurvival <- function(
     if ( ! missing(elapsedtime)) elapsedtime <- jmvcore::resolveQuo(jmvcore::enquo(elapsedtime))
     if ( ! missing(dxdate)) dxdate <- jmvcore::resolveQuo(jmvcore::enquo(dxdate))
     if ( ! missing(fudate)) fudate <- jmvcore::resolveQuo(jmvcore::enquo(fudate))
-    if ( ! missing(explanatory)) explanatory <- jmvcore::resolveQuo(jmvcore::enquo(explanatory))
     if ( ! missing(outcome)) outcome <- jmvcore::resolveQuo(jmvcore::enquo(outcome))
+    if ( ! missing(explanatory)) explanatory <- jmvcore::resolveQuo(jmvcore::enquo(explanatory))
+    if ( ! missing(contexpl)) contexpl <- jmvcore::resolveQuo(jmvcore::enquo(contexpl))
     if ( ! missing(adjexplanatory)) adjexplanatory <- jmvcore::resolveQuo(jmvcore::enquo(adjexplanatory))
     if (missing(data))
         data <- jmvcore::marshalData(
@@ -438,23 +450,26 @@ multisurvival <- function(
             `if`( ! missing(elapsedtime), elapsedtime, NULL),
             `if`( ! missing(dxdate), dxdate, NULL),
             `if`( ! missing(fudate), fudate, NULL),
-            `if`( ! missing(explanatory), explanatory, NULL),
             `if`( ! missing(outcome), outcome, NULL),
+            `if`( ! missing(explanatory), explanatory, NULL),
+            `if`( ! missing(contexpl), contexpl, NULL),
             `if`( ! missing(adjexplanatory), adjexplanatory, NULL))
 
+    for (v in explanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- multisurvivalOptions$new(
         elapsedtime = elapsedtime,
         tint = tint,
         dxdate = dxdate,
         fudate = fudate,
-        explanatory = explanatory,
         outcome = outcome,
         outcomeLevel = outcomeLevel,
         dod = dod,
         dooc = dooc,
         awd = awd,
         awod = awod,
+        explanatory = explanatory,
+        contexpl = contexpl,
         multievent = multievent,
         analysistype = analysistype,
         timetypedata = timetypedata,

@@ -10,13 +10,14 @@ multisurvival(
   tint = FALSE,
   dxdate,
   fudate,
-  explanatory,
   outcome,
   outcomeLevel,
   dod,
   dooc,
   awd,
   awod,
+  explanatory,
+  contexpl,
   multievent = FALSE,
   analysistype = "overall",
   timetypedata = "ymd",
@@ -43,8 +44,6 @@ multisurvival(
 
 \item{fudate}{.}
 
-\item{explanatory}{.}
-
 \item{outcome}{.}
 
 \item{outcomeLevel}{.}
@@ -56,6 +55,10 @@ multisurvival(
 \item{awd}{.}
 
 \item{awod}{.}
+
+\item{explanatory}{.}
+
+\item{contexpl}{.}
 
 \item{multievent}{.}
 

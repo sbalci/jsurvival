@@ -80,6 +80,16 @@ children:
                 enable: (tint)
               - type: ComboBox
                 name: timetypeoutput
+  - type: VariableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: Continuous Explanatory Variable
+        children:
+          - type: VariablesListBox
+            name: contexpl
+            isTarget: true
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
     collapsed: true

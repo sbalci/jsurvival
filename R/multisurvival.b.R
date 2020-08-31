@@ -24,7 +24,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                     (self$options$tint && (is.null(self$options$dxdate) || is.null(self$options$fudate))) ||
 
-                    is.null(self$options$explanatory) )
+                    is.null(self$options$explanatory) ||
+
+                    (!is.null(self$options$explanatory) && is.null(self$options$contexpl))
+
+
+                    )
                 {
                     # TODO ----
 
@@ -257,9 +262,15 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 
-                # Define Data For Analysis
+                # Define Explanatory ----
 
-                myfactors <- as.vector(self$options$explanatory)
+                myexplanatory <- as.vector(self$options$explanatory)
+
+                mycontexpl <- as.vector(self$options$mycontexpl)
+
+                myfactors <- c(myexplanatory, mycontexpl)
+
+                # Define Data For Analysis ----
 
                 mydata <- jmvcore::select(df = mydata, columnNames = c("mytime", "myoutcome", myfactors))
 
@@ -292,7 +303,11 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                     (self$options$tint && (is.null(self$options$dxdate) || is.null(self$options$fudate))) ||
 
-                    is.null(self$options$explanatory) ) {
+                    is.null(self$options$explanatory) ||
+
+                    (!is.null(self$options$explanatory) && is.null(self$options$contexpl))
+
+                    ) {
                     private$.todo()
                     return()
                 }
@@ -345,7 +360,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 # prepare formula ----
 
-                formula2 <- as.vector(self$options$explanatory)
+                formula2 <-c(as.vector(self$options$explanatory),
+                             as.vector(self$options$contexpl)
+                )
 
                 # formulaL <-
                 #     jmvcore::constructFormula(terms = self$options$elapsedtime)
@@ -465,7 +482,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 # prepare formula ----
 
                 formula2 <-
-                    jmvcore::constructFormula(terms = self$options$explanatory)
+                    jmvcore::constructFormula(terms = c(self$options$explanatory, self$options$contexpl))
 
                 # formula2 <- as.vector(self$options$explanatory)
 
@@ -574,7 +591,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
                 formula2 <-
-                    jmvcore::constructFormula(terms = self$options$explanatory)
+                    jmvcore::constructFormula(terms = c(self$options$explanatory, self$options$contexpl))
 
                 formula3 <-
                     paste("survival::Surv(mytime, myoutcome) ~ ", formula2)
@@ -618,15 +635,11 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                         thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
 
-                        contin <- c("integer", "numeric", "double")
-
-                        factors <- plotData[[thefactor]]
-
                         if (length(self$options$explanatory) > 2)
                             stop("Kaplan-Meier function allows maximum of 2 explanatory variables")
 
-                        if (inherits(factors, contin))
-                                stop("Please do not use continuous explanatory variables for Kaplan-Meier function.")
+                        if (!is.null(self$options$contexpl))
+                            warning("Kaplan-Meier function does not use continuous explanatory variables.")
 
                         title2 <- as.character(thefactor)
 
