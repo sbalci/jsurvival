@@ -332,9 +332,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
                 # View mydata ----
-                self$results$mydataview$setContent(
-                    list(head(mydata, n = 30))
-                    )
+                # self$results$mydataview$setContent(
+                #     list(head(mydata, n = 30))
+                #     )
 
 
                 #             # Prepare Data For Plots ----
