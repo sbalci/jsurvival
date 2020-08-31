@@ -599,7 +599,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 # ggforest ----
                 plot3 <- survminer::ggforest(model = mod,
-                                             data = mydata)
+                                             data = plotData)
 
 
                 # print plot ----
