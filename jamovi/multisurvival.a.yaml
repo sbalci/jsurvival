@@ -182,6 +182,30 @@ options:
 
 
 
+    - name: endplot
+      title: Plot End Time
+      type: Integer
+      default: 60
+
+
+    - name: byplot
+      title: Time Interval
+      type: Integer
+      default: 12
+
+    - name: ci95
+      title: '95% CI'
+      type: Bool
+      default: false
+
+    - name: risktable
+      title: risktable
+      type: Bool
+      default: false
+
+
+
+
     # - name: modelTerms
     #   title: Model Terms
     #   type: Terms

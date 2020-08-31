@@ -25,7 +25,11 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             sty = "t1",
             km = FALSE,
             ac = FALSE,
-            adjexplanatory = NULL, ...) {
+            adjexplanatory = NULL,
+            endplot = 60,
+            byplot = 12,
+            ci95 = FALSE,
+            risktable = FALSE, ...) {
 
             super$initialize(
                 package='jsurvival',
@@ -148,6 +152,22 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$..adjexplanatory <- jmvcore::OptionVariable$new(
                 "adjexplanatory",
                 adjexplanatory)
+            private$..endplot <- jmvcore::OptionInteger$new(
+                "endplot",
+                endplot,
+                default=60)
+            private$..byplot <- jmvcore::OptionInteger$new(
+                "byplot",
+                byplot,
+                default=12)
+            private$..ci95 <- jmvcore::OptionBool$new(
+                "ci95",
+                ci95,
+                default=FALSE)
+            private$..risktable <- jmvcore::OptionBool$new(
+                "risktable",
+                risktable,
+                default=FALSE)
 
             self$.addOption(private$..elapsedtime)
             self$.addOption(private$..tint)
@@ -169,6 +189,10 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..km)
             self$.addOption(private$..ac)
             self$.addOption(private$..adjexplanatory)
+            self$.addOption(private$..endplot)
+            self$.addOption(private$..byplot)
+            self$.addOption(private$..ci95)
+            self$.addOption(private$..risktable)
         }),
     active = list(
         elapsedtime = function() private$..elapsedtime$value,
@@ -190,7 +214,11 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         sty = function() private$..sty$value,
         km = function() private$..km$value,
         ac = function() private$..ac$value,
-        adjexplanatory = function() private$..adjexplanatory$value),
+        adjexplanatory = function() private$..adjexplanatory$value,
+        endplot = function() private$..endplot$value,
+        byplot = function() private$..byplot$value,
+        ci95 = function() private$..ci95$value,
+        risktable = function() private$..risktable$value),
     private = list(
         ..elapsedtime = NA,
         ..tint = NA,
@@ -211,7 +239,11 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..sty = NA,
         ..km = NA,
         ..ac = NA,
-        ..adjexplanatory = NA)
+        ..adjexplanatory = NA,
+        ..endplot = NA,
+        ..byplot = NA,
+        ..ci95 = NA,
+        ..risktable = NA)
 )
 
 multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -347,6 +379,10 @@ multisurvivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param km .
 #' @param ac .
 #' @param adjexplanatory .
+#' @param endplot .
+#' @param byplot .
+#' @param ci95 .
+#' @param risktable .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
@@ -381,7 +417,11 @@ multisurvival <- function(
     sty = "t1",
     km = FALSE,
     ac = FALSE,
-    adjexplanatory) {
+    adjexplanatory,
+    endplot = 60,
+    byplot = 12,
+    ci95 = FALSE,
+    risktable = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('multisurvival requires jmvcore to be installed (restart may be required)')
@@ -423,7 +463,11 @@ multisurvival <- function(
         sty = sty,
         km = km,
         ac = ac,
-        adjexplanatory = adjexplanatory)
+        adjexplanatory = adjexplanatory,
+        endplot = endplot,
+        byplot = byplot,
+        ci95 = ci95,
+        risktable = risktable)
 
     analysis <- multisurvivalClass$new(
         options = options,

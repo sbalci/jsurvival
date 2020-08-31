@@ -25,7 +25,11 @@ multisurvival(
   sty = "t1",
   km = FALSE,
   ac = FALSE,
-  adjexplanatory
+  adjexplanatory,
+  endplot = 60,
+  byplot = 12,
+  ci95 = FALSE,
+  risktable = FALSE
 )
 }
 \arguments{
@@ -70,6 +74,14 @@ multisurvival(
 \item{ac}{.}
 
 \item{adjexplanatory}{.}
+
+\item{endplot}{.}
+
+\item{byplot}{.}
+
+\item{ci95}{.}
+
+\item{risktable}{.}
 }
 \value{
 A results object containing:
