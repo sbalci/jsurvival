@@ -305,7 +305,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 # View mydata ----
                 self$results$mydataview$setContent(
-                    list(head(cleanData, n = 30))
+                    list(head(mydata, n = 30))
                     )
 
 
