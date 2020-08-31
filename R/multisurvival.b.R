@@ -319,6 +319,21 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                     )
 
 
+                #             # Prepare Data For Plots ----
+
+
+                            image <- self$results$plot
+                            image$setState(mydata)
+
+                            image3 <- self$results$plot3
+                            image3$setState(mydata)
+
+                            imageKM <- self$results$plotKM
+                            imageKM$setState(mydata)
+
+                            image7 <- self$results$plot7
+                            image7$setState(mydata)
+
 
 
             },
