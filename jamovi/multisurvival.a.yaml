@@ -188,7 +188,8 @@ options:
     - name: adjexplanatory
       title: Variable for Adjusted Survival Curve
       type: Variable
-
+      suggested: [ ordinal, nominal ]
+      permitted: [ factor ]
 
 
     - name: endplot

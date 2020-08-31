@@ -157,7 +157,12 @@ multisurvivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 default=FALSE)
             private$..adjexplanatory <- jmvcore::OptionVariable$new(
                 "adjexplanatory",
-                adjexplanatory)
+                adjexplanatory,
+                suggested=list(
+                    "ordinal",
+                    "nominal"),
+                permitted=list(
+                    "factor"))
             private$..endplot <- jmvcore::OptionInteger$new(
                 "endplot",
                 endplot,
@@ -282,7 +287,8 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "fudate",
                     "dxdate",
                     "tint",
-                    "multievent"))
+                    "multievent",
+                    "adjexplanatory"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="todo",
@@ -355,6 +361,7 @@ multisurvivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 refs="survminer",
                 clearWith=list(
                     "ac",
+                    "adjexplanatory",
                     "endplot",
                     "byplot",
                     "ci95",
@@ -477,6 +484,7 @@ multisurvival <- function(
             `if`( ! missing(adjexplanatory), adjexplanatory, NULL))
 
     for (v in explanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
+    for (v in adjexplanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- multisurvivalOptions$new(
         elapsedtime = elapsedtime,
