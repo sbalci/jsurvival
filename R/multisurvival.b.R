@@ -678,6 +678,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 plotData <- image7$state
 
+
+                if (!(self$options$adjexplanatory %in% c(self$options$explanatory, self$options$contexpl)))
+                    stop("Please use the explanatory variable used to build the multivariate survival model.")
+
+
+
                 formula2 <-
                     jmvcore::constructFormula(terms = c(self$options$explanatory, self$options$contexpl))
 
