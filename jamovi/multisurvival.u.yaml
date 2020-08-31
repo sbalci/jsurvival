@@ -31,6 +31,13 @@ children:
           - type: VariablesListBox
             name: explanatory
             isTarget: true
+      - type: TargetLayoutBox
+        label: Continuous Explanatory Variable
+        children:
+          - type: VariablesListBox
+            name: contexpl
+            isTarget: true
+
   - type: CollapseBox
     label: Advanced Elapsed Time Options
     collapsed: true
@@ -80,16 +87,8 @@ children:
                 enable: (tint)
               - type: ComboBox
                 name: timetypeoutput
-  - type: VariableSupplier
-    persistentItems: false
-    stretchFactor: 1
-    children:
-      - type: TargetLayoutBox
-        label: Continuous Explanatory Variable
-        children:
-          - type: VariablesListBox
-            name: contexpl
-            isTarget: true
+
+
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
     collapsed: true
@@ -167,22 +166,30 @@ children:
                         name: adjexplanatory
                         maxItemCount: 1
                         isTarget: true
-  - type: LayoutBox
-    margin: large
+
+  - type: CollapseBox
+    label: Plot Options
+    collapsed: false
     children:
-      - type: TextBox
-        name: endplot
-        format: number
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: TextBox
-        name: byplot
-        format: number
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: CheckBox
-        name: ci95
-      - type: CheckBox
-        name: risktable
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: TextBox
+            name: endplot
+            format: number
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: TextBox
+            name: byplot
+            format: number
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: CheckBox
+            name: ci95
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: CheckBox
+            name: risktable
