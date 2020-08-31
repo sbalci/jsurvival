@@ -266,7 +266,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 myexplanatory <- as.vector(self$options$explanatory)
 
-                mycontexpl <- as.vector(self$options$mycontexpl)
+                mycontexpl <- as.vector(self$options$contexpl)
 
                 myfactors <- c(myexplanatory, mycontexpl)
 
