@@ -639,7 +639,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                             stop("Kaplan-Meier function allows maximum of 2 explanatory variables")
 
                         if (!is.null(self$options$contexpl))
-                            warning("Kaplan-Meier function does not use continuous explanatory variables.")
+                            stop("Kaplan-Meier function does not use continuous explanatory variables.")
 
                         title2 <- as.character(thefactor)
 
@@ -675,13 +675,11 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 plotData <- image7$state
 
-
-
                 formula2 <-
-                    jmvcore::constructFormula(terms = self$options$explanatory)
+                    jmvcore::constructFormula(terms = c(self$options$explanatory, self$options$contexpl))
 
                 formula3 <-
-                    paste("survival::Surv(", formulaL, ",", "Outcome", ") ~ ", formula2)
+                    paste("survival::Surv(mytime, myoutcome) ~ ", formula2)
 
                 formula3 <- as.formula(formula3)
 
@@ -689,7 +687,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 mod <-
                     survival::coxph(formula = formula3,
-                                    data = mydata)
+                                    data = plotData)
 
 
                 # plot

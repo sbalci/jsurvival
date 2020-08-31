@@ -166,30 +166,33 @@ children:
                         name: adjexplanatory
                         maxItemCount: 1
                         isTarget: true
-
-  - type: CollapseBox
-    label: Plot Options
-    collapsed: false
-    children:
-      - type: LayoutBox
-        margin: large
+      - type: Label
+        label: Plot Options
+        fitToGrid: true
         children:
-          - type: TextBox
-            name: endplot
-            format: number
-      - type: LayoutBox
-        margin: large
-        children:
-          - type: TextBox
-            name: byplot
-            format: number
-      - type: LayoutBox
-        margin: large
-        children:
-          - type: CheckBox
-            name: ci95
-      - type: LayoutBox
-        margin: large
-        children:
-          - type: CheckBox
-            name: risktable
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: TextBox
+                name: endplot
+                format: number
+            enable: (km || ac)
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: TextBox
+                name: byplot
+                format: number
+            enable: (km || ac)
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: CheckBox
+                name: ci95
+            enable: (km || ac)
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: CheckBox
+                name: risktable
+            enable: (km || ac)
