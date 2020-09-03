@@ -574,7 +574,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 tCox_df %>%
                     dplyr::group_by(Explanatory) %>%
-                    dplyr::mutate(firstlevel = first(Levels)) %>%
+                    dplyr::mutate(firstlevel = dplyr::first(Levels)) %>%
                     dplyr::mutate(
                         coxdescription = glue::glue(
                             "When {Explanatory} is {Levels}, there is {HR_univariable} times risk than when {Explanatory} is {firstlevel}."
