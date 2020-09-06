@@ -816,6 +816,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         explanatory = myfactor,
                         xlab = paste0('Time (', self$options$timetypeoutput, ')'),
                         pval = TRUE,
+                        pval.method	= TRUE,
                         legend = 'none',
                         break.time.by = self$options$byplot,
                         xlim = c(0, self$options$endplot),
@@ -823,7 +824,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         subtitle = "Based on Kaplan-Meier estimates",
                         risk.table = self$options$risktable,
                         conf.int = self$options$ci95,
-                        censored = self$options$censored
+                        censor = self$options$censored
                     )
 
                 # plot <- plot + ggtheme

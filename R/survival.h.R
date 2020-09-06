@@ -482,7 +482,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "byplot",
                     "sas",
                     "ci95",
-                    "risktable")))
+                    "risktable",
+                    "censored")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
@@ -498,7 +499,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "byplot",
                     "sas",
                     "ci95",
-                    "risktable")))
+                    "risktable",
+                    "censored")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot3",
@@ -514,7 +516,8 @@ survivalResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "byplot",
                     "sas",
                     "ci95",
-                    "risktable")))
+                    "risktable",
+                    "censored")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot6",
