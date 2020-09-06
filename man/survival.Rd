@@ -31,6 +31,7 @@ survival(
   multievent = FALSE,
   ci95 = FALSE,
   risktable = FALSE,
+  censored = FALSE,
   sas = FALSE
 )
 }
@@ -86,6 +87,8 @@ survival(
 \item{ci95}{.}
 
 \item{risktable}{.}
+
+\item{censored}{.}
 
 \item{sas}{.}
 }

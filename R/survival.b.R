@@ -822,7 +822,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         title = paste0("Survival curves for ", title2),
                         subtitle = "Based on Kaplan-Meier estimates",
                         risk.table = self$options$risktable,
-                        conf.int = self$options$ci95
+                        conf.int = self$options$ci95,
+                        censored = self$options$censored
                     )
 
                 # plot <- plot + ggtheme

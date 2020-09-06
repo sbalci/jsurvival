@@ -31,6 +31,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             multievent = FALSE,
             ci95 = FALSE,
             risktable = FALSE,
+            censored = FALSE,
             sas = FALSE, ...) {
 
             super$initialize(
@@ -170,6 +171,10 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "risktable",
                 risktable,
                 default=FALSE)
+            private$..censored <- jmvcore::OptionBool$new(
+                "censored",
+                censored,
+                default=FALSE)
             private$..sas <- jmvcore::OptionBool$new(
                 "sas",
                 sas,
@@ -200,6 +205,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..multievent)
             self$.addOption(private$..ci95)
             self$.addOption(private$..risktable)
+            self$.addOption(private$..censored)
             self$.addOption(private$..sas)
         }),
     active = list(
@@ -228,6 +234,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         multievent = function() private$..multievent$value,
         ci95 = function() private$..ci95$value,
         risktable = function() private$..risktable$value,
+        censored = function() private$..censored$value,
         sas = function() private$..sas$value),
     private = list(
         ..elapsedtime = NA,
@@ -255,6 +262,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..multievent = NA,
         ..ci95 = NA,
         ..risktable = NA,
+        ..censored = NA,
         ..sas = NA)
 )
 
@@ -578,6 +586,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param multievent .
 #' @param ci95 .
 #' @param risktable .
+#' @param censored .
 #' @param sas .
 #' @return A results object containing:
 #' \tabular{llllll}{
@@ -631,6 +640,7 @@ survival <- function(
     multievent = FALSE,
     ci95 = FALSE,
     risktable = FALSE,
+    censored = FALSE,
     sas = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
@@ -678,6 +688,7 @@ survival <- function(
         multievent = multievent,
         ci95 = ci95,
         risktable = risktable,
+        censored = censored,
         sas = sas)
 
     analysis <- survivalClass$new(

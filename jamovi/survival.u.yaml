@@ -170,6 +170,8 @@ children:
                 name: ci95
               - type: CheckBox
                 name: risktable
+              - type: CheckBox
+                name: censored
   - type: CollapseBox
     label: Survival Tables
     collapsed: true
