@@ -21,6 +21,8 @@ survival(
   cutp = "12, 36, 60",
   timetypedata = "ymd",
   timetypeoutput = "months",
+  uselandmark = FALSE,
+  landmark = 30,
   pw = FALSE,
   sc = FALSE,
   kmunicate = FALSE,
@@ -67,6 +69,10 @@ survival(
 \item{timetypedata}{select the time type in data}
 
 \item{timetypeoutput}{select the time type in output}
+
+\item{uselandmark}{.}
+
+\item{landmark}{.}
 
 \item{pw}{.}
 

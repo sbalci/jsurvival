@@ -282,6 +282,12 @@ survivalClass <- if (requireNamespace('jmvcore'))
                                         "myoutcome" = outcome,
                                         "factor" = factor)
 
+                # Landmark ----
+                if (self$options$uselandmark) {
+                    cleanData <- cleanData %>%
+                        dplyr::filter(mytime >= self$options$landmark) %>%
+                        dplyr::mutate(mytime = mytime - self$options$landmark)
+                }
 
                 # Names cleanData ----
 
@@ -312,6 +318,11 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 # naOmit ----
 
                 cleanData <- jmvcore::naOmit(cleanData)
+
+
+
+
+
 
                 # # View mydata ----
                 # self$results$mydataview$setContent(list(time,
