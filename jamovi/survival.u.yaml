@@ -96,6 +96,7 @@ children:
                 - type: TextBox
                   name: landmark
                   format: number
+                  enable: (uselandmark)
 
 
   - type: CollapseBox
