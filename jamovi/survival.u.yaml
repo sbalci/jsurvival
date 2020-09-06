@@ -116,6 +116,11 @@ children:
   - type: LayoutBox
     margin: large
     children:
+      - type: CheckBox
+        name: uselandmark
+  - type: LayoutBox
+    margin: large
+    children:
       - type: TextBox
         name: landmark
         format: number

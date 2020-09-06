@@ -154,10 +154,10 @@ options:
           R: select the time type in output
 
 
-#     - name: uselandmark
-#       title: Use Landmark Time
-#       type: Bool
-#       default: false
+    - name: uselandmark
+      title: Use Landmark Time
+      type: Bool
+      default: false
 
     - name: landmark
       title: Landmark Time

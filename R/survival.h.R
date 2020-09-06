@@ -21,6 +21,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             cutp = "12, 36, 60",
             timetypedata = "ymd",
             timetypeoutput = "months",
+            uselandmark = FALSE,
             landmark = 30,
             pw = FALSE,
             sc = FALSE,
@@ -132,6 +133,10 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "months",
                     "years"),
                 default="months")
+            private$..uselandmark <- jmvcore::OptionBool$new(
+                "uselandmark",
+                uselandmark,
+                default=FALSE)
             private$..landmark <- jmvcore::OptionInteger$new(
                 "landmark",
                 landmark,
@@ -200,6 +205,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..cutp)
             self$.addOption(private$..timetypedata)
             self$.addOption(private$..timetypeoutput)
+            self$.addOption(private$..uselandmark)
             self$.addOption(private$..landmark)
             self$.addOption(private$..pw)
             self$.addOption(private$..sc)
@@ -230,6 +236,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         cutp = function() private$..cutp$value,
         timetypedata = function() private$..timetypedata$value,
         timetypeoutput = function() private$..timetypeoutput$value,
+        uselandmark = function() private$..uselandmark$value,
         landmark = function() private$..landmark$value,
         pw = function() private$..pw$value,
         sc = function() private$..sc$value,
@@ -259,6 +266,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..cutp = NA,
         ..timetypedata = NA,
         ..timetypeoutput = NA,
+        ..uselandmark = NA,
         ..landmark = NA,
         ..pw = NA,
         ..sc = NA,
@@ -587,6 +595,7 @@ survivalBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param cutp .
 #' @param timetypedata select the time type in data
 #' @param timetypeoutput select the time type in output
+#' @param uselandmark .
 #' @param landmark .
 #' @param pw .
 #' @param sc .
@@ -642,6 +651,7 @@ survival <- function(
     cutp = "12, 36, 60",
     timetypedata = "ymd",
     timetypeoutput = "months",
+    uselandmark = FALSE,
     landmark = 30,
     pw = FALSE,
     sc = FALSE,
@@ -691,6 +701,7 @@ survival <- function(
         cutp = cutp,
         timetypedata = timetypedata,
         timetypeoutput = timetypeoutput,
+        uselandmark = uselandmark,
         landmark = landmark,
         pw = pw,
         sc = sc,
