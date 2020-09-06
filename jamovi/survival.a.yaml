@@ -164,8 +164,6 @@ options:
       type: Integer
       default: 30
 
-
-
     - name: pw
       title: Pairwise comparisons
       type: Bool
