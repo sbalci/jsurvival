@@ -887,7 +887,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         title = paste0("Cumulative Events ", title2),
                         fun = "event",
                         risk.table = self$options$risktable,
-                        conf.int = self$options$ci95
+                        conf.int = self$options$ci95,
+                        censored = self$options$censored
                     )
 
 
@@ -950,7 +951,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         title = paste0("Cumulative Hazard ", title2),
                         fun = "cumhaz",
                         risk.table = self$options$risktable,
-                        conf.int = self$options$ci95
+                        conf.int = self$options$ci95,
+                        censored = self$options$censored
                     )
 
 
