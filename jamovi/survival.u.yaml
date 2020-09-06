@@ -82,23 +82,6 @@ children:
                 enable: (tint)
               - type: ComboBox
                 name: timetypeoutput
-
-      - type: Label
-        label: Landmark Type
-        fitToGrid: true
-        children:
-          - type: LayoutBox
-            margin: large
-            fitToGrid: true
-            children:
-              - type: CheckBox
-                name: uselandmark
-                children:
-                  - type: Textbox
-                    name: landmark
-                    format: number
-                    enable: (uselandmark)
-
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
     collapsed: true
@@ -130,6 +113,12 @@ children:
           - type: ComboBox
             name: analysistype
             enable: (outcome && multievent)
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: TextBox
+        name: landmark
+        format: number
   - type: CollapseBox
     label: Single Arm Survival
     collapsed: true
