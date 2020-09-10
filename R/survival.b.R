@@ -205,6 +205,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     awod <- self$options$awod
 
                     if (analysistype == 'overall') {
+                        # Overall ----
                         # (Alive) <=> (Dead of Disease & Dead of Other Causes)
 
 
@@ -218,6 +219,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
 
                     } else if (analysistype == 'cause') {
+                        # Cause Specific ----
                         # (Alive & Dead of Other Causes) <=> (Dead of Disease)
 
 
@@ -229,8 +231,10 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         mydata[["myoutcome"]][outcome1 == dooc] <- 0
 
                     } else if (analysistype == 'compete') {
+                        # Competing Risks ----
                         # Alive <=> Dead of Disease accounting for Dead of Other Causes
 
+                        # https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html#part_3:_competing_risks
 
 
                         mydata[["myoutcome"]] <- NA_integer_
@@ -283,11 +287,18 @@ survivalClass <- if (requireNamespace('jmvcore'))
                                         "factor" = factor)
 
                 # Landmark ----
+                # https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html#landmark_method
                 if (self$options$uselandmark) {
                     cleanData <- cleanData %>%
                         dplyr::filter(mytime >= self$options$landmark) %>%
                         dplyr::mutate(mytime = mytime - self$options$landmark)
                 }
+
+                # Time Dependent Covariate ----
+                # https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html#time-dependent_covariate
+
+
+
 
                 # Names cleanData ----
 

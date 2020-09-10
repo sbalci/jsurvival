@@ -22,7 +22,7 @@ survival(
   timetypedata = "ymd",
   timetypeoutput = "months",
   uselandmark = FALSE,
-  landmark = 30,
+  landmark = 3,
   pw = FALSE,
   sc = FALSE,
   kmunicate = FALSE,

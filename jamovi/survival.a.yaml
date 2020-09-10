@@ -162,7 +162,7 @@ options:
     - name: landmark
       title: Landmark Time
       type: Integer
-      default: 30
+      default: 3
 
     - name: pw
       title: Pairwise comparisons

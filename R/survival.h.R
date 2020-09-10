@@ -22,7 +22,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             timetypedata = "ymd",
             timetypeoutput = "months",
             uselandmark = FALSE,
-            landmark = 30,
+            landmark = 3,
             pw = FALSE,
             sc = FALSE,
             kmunicate = FALSE,
@@ -140,7 +140,7 @@ survivalOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$..landmark <- jmvcore::OptionInteger$new(
                 "landmark",
                 landmark,
-                default=30)
+                default=3)
             private$..pw <- jmvcore::OptionBool$new(
                 "pw",
                 pw,
@@ -652,7 +652,7 @@ survival <- function(
     timetypedata = "ymd",
     timetypeoutput = "months",
     uselandmark = FALSE,
-    landmark = 30,
+    landmark = 3,
     pw = FALSE,
     sc = FALSE,
     kmunicate = FALSE,
