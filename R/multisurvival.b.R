@@ -319,9 +319,11 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                     (self$options$tint && (is.null(self$options$dxdate) || is.null(self$options$fudate))) ||
 
-                    is.null(self$options$explanatory) ||
+                    is.null(self$options$explanatory)
 
-                    (!is.null(self$options$explanatory) && is.null(self$options$contexpl))
+                    # ||
+                    #
+                    # (!is.null(self$options$explanatory) && is.null(self$options$contexpl))
 
                     ) {
                     private$.todo()
