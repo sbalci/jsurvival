@@ -264,9 +264,23 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 # Define Explanatory ----
 
+                myexplanatory <- NULL
+
+                if(!is.null(self$options$explanatory)) {
+
                 myexplanatory <- as.vector(self$options$explanatory)
 
+                }
+
+
+                mycontexpl <- NULL
+
+                if(!is.null(self$options$contexpl)) {
+
                 mycontexpl <- as.vector(self$options$contexpl)
+
+                }
+
 
                 myfactors <- c(myexplanatory, mycontexpl)
 
