@@ -376,9 +376,31 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 # prepare formula ----
 
-                formula2 <-c(as.vector(self$options$explanatory),
-                             as.vector(self$options$contexpl)
-                )
+
+                myexplanatory <- NULL
+
+                if(!is.null(self$options$explanatory)) {
+
+                    myexplanatory <- as.vector(self$options$explanatory)
+
+                }
+
+
+                mycontexpl <- NULL
+
+                if(!is.null(self$options$contexpl)) {
+
+                    mycontexpl <- as.vector(self$options$contexpl)
+
+                }
+
+
+                formula2 <- c(myexplanatory, mycontexpl)
+
+
+                # formula2 <-c(as.vector(self$options$explanatory),
+                #              as.vector(self$options$contexpl)
+                # )
 
                 # formulaL <-
                 #     jmvcore::constructFormula(terms = self$options$elapsedtime)
