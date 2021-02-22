@@ -70,6 +70,7 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
                 # Read Data ----
                 mydata <- self$data
 
+
                 # Read Arguments ----
                 elapsedtime <- self$options$elapsedtime
                 outcome <- self$options$outcome
@@ -240,6 +241,27 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
                 # Define Explanatory Factor ----
 
                 mydata[["myfactor"]] <- mydata[[contexpl]]
+
+
+                # Add Redefined Outcome to Data ----
+
+                if (self$options$multievent) {
+
+                if (self$options$outcomeredifened &&
+                    self$results$outcomeredifened$isNotFilled()) {
+                    self$results$outcomeredifened$setValues(mydata[["myoutcome"]])
+                }
+                }
+
+                # Add Calculated Time to Data ----
+
+                if (self$options$tint) {
+
+                if (self$options$calculatedtime &&
+                    self$results$calculatedtime$isNotFilled()) {
+                    self$results$calculatedtime$setValues(mydata[["mytime"]])
+                }
+                }
 
                 # Define Data For Analysis ----
 
@@ -581,20 +603,63 @@ survivalcontClass <- if (requireNamespace('jmvcore'))
 
                 cutoffdata <- private$.cutoff2(res.cut)
 
+                if (self$options$findcut && self$results$calculatedcutoff$isNotFilled()) {
+
+                # Set rownames ----
+
+                rowNums <- rownames(mydata)
+                self$results$calculatedcutoff$setRowNums(rowNums)
+
+
+                # Add calculatedcutoff to Data ----
+
+                cutoffgr <- cutoffdata[[self$options$contexpl]]
+
+                    if (self$options$calculatedcutoff &&
+                        self$results$calculatedcutoff$isNotFilled()) {
+                        self$results$calculatedcutoff$setValues(cutoffgr)
+                    }
+                }
+
+
+
+
+                # View mydata ----
+
+                mydata2 <- mydata
+                res.cut2 <- res.cut
+                cutoffdata2 <- cutoffdata
+
+
+                selfdata2 <- self$data
+                mydata2$row_names <- row.names(mydata2)
+                res.cut2$row_names <- row.names(res.cut2)
+                cutoffdata2$row_names <- row.names(cutoffdata2)
+
+                self$results$mydataview$setContent(
+                    list(
+                        "self$data" = selfdata2,
+                        "mydata" = mydata2,
+                        "res.cut" = res.cut2,
+                        "cutoffdata" = cutoffdata2
+                    )
+                    )
+
+
+
+                # Run median cutoff ----
+
                 private$.mediancutoff(cutoffdata)
+
+                # Run life table cutoff ----
 
                 private$.lifetablecutoff(cutoffdata)
 
+
+
+
                 # Prepare Data For Plots ----
 
-                # # View mydata ----
-                # self$results$mydataview$setContent(
-                #     list(
-                #         head(mydata, n = 30),
-                #         res.cut,
-                #         head(cutoffdata)
-                #     )
-                #     )
 
                 plotData1 <- res.cut
                 image4 <- self$results$plot4

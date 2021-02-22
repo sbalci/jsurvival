@@ -36,6 +36,7 @@ children:
   - type: CollapseBox
     label: Advanced Elapsed Time Options
     collapsed: true
+    stretchFactor: 1
     children:
       - type: Label
         label: Time Interval
@@ -62,6 +63,7 @@ children:
                             maxItemCount: 1
                             isTarget: true
                             fitToGrid: true
+                            stretchFactor: 1
                       - type: TargetLayoutBox
                         children:
                           - type: VariablesListBox
@@ -69,6 +71,7 @@ children:
                             maxItemCount: 1
                             isTarget: true
                             fitToGrid: true
+                            stretchFactor: 1
       - type: Label
         label: Time Type
         fitToGrid: true
@@ -82,23 +85,20 @@ children:
                 enable: (tint)
               - type: ComboBox
                 name: timetypeoutput
-
       - type: Label
         label: Landmark Time
         fitToGrid: true
         children:
-        - type: LayoutBox
-          margin: large
-          children:
-            - type: CheckBox
-              name: uselandmark
-              children:
-                - type: TextBox
-                  name: landmark
-                  format: number
-                  enable: (uselandmark)
-
-
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: CheckBox
+                name: uselandmark
+                children:
+                  - type: TextBox
+                    name: landmark
+                    format: number
+                    enable: (uselandmark)
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
     collapsed: true
@@ -130,7 +130,6 @@ children:
           - type: ComboBox
             name: analysistype
             enable: (outcome && multievent)
-
   - type: CollapseBox
     label: Single Arm Survival
     collapsed: true
@@ -153,6 +152,9 @@ children:
             children:
               - type: CheckBox
                 name: pw
+              - type: ComboBox
+                name: padjustmethod
+                enable: (pw)
   - type: CollapseBox
     label: Plots
     collapsed: true
@@ -201,3 +203,23 @@ children:
             name: cutp
             format: string
             width: large
+  - type: CollapseBox
+    label: Save Converted Variables to Data
+    collapsed: true
+    children:
+      - type: Label
+        label: Add Calculated Time to Your Data
+        fitToGrid: true
+        children:
+          - type: Output
+            name: calculatedtime
+            enable: (tint)
+            fitToGrid: true
+      - type: Label
+        label: Add Redefined Outcome to Data
+        fitToGrid: true
+        children:
+          - type: Output
+            name: outcomeredifened
+            enable: (multievent)
+            fitToGrid: true

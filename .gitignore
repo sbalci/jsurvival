@@ -32,3 +32,4 @@ build
 *.jmo
 .Rprofile
 .Rproj.user
+.DS_Store

@@ -23,9 +23,9 @@ items:
       title: To Do
       type:  Html
 
-    # - name:  mydataview
-    #   title: mydataview
-    #   type:  Preformatted
+    - name:  mydataview
+      title: mydataview
+      type:  Preformatted
 
     - name:  coxSummary
       # title: Cox Regression Summary and Table
@@ -248,6 +248,43 @@ items:
       refs:
           - KMunicate
           - KMunicate2
+
+
+    - name: calculatedtime
+      title: Add Calculated Time to Data
+      type: Output
+      varTitle: '`Calculated Time in Continious Survival Function - from ${ dxdate } to { fudate }`'
+      varDescription: Calculated Time from given Dates
+      clearWith:
+          - tint
+          - dxdate
+          - fudate
+
+
+    - name: outcomeredifened
+      title: Add Redefined Outcome to Data
+      type: Output
+      varTitle: '`Redefined Outcome in Continious Survival Function - from ${ outcome } for analysis { analysistype }`'
+      varDescription: Redefined Outcome from Outcome based on Analysis Type
+      clearWith:
+          - outcome
+          - analysistype
+          - multievent
+
+
+    - name: calculatedcutoff
+      title: Add Calculated Cut-off Group to Data
+      type: Output
+      varTitle: '`Calculated Cut-off Group - from ${ contexpl }`'
+      varDescription: Redefined Outcome from Outcome based on Analysis Type
+      clearWith:
+          - outcome
+          - analysistype
+          - multievent
+          - contexpl
+          - findcut
+
+
 
 
 

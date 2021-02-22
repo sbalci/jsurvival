@@ -9,11 +9,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
         "survivalClass",
         inherit = survivalBase,
         private = list(
-
-
             .init = function() {
-
-
                 if (self$options$sas) {
                     # Disable tables
                     self$results$medianSummary$setVisible(FALSE)
@@ -30,18 +26,23 @@ survivalClass <- if (requireNamespace('jmvcore'))
             }
             ,
             .todo = function() {
+                if ((is.null(self$options$outcome) && !(self$options$multievent)) ||
 
-                if (
-                    (is.null(self$options$outcome) && !(self$options$multievent)) ||
+                    (self$options$multievent &&
+                     (
+                         is.null(self$options$dod) &&
+                         is.null(self$options$dooc) &&
+                         is.null(self$options$awd) && is.null(self$options$awod)
+                     )) ||
 
-                    (self$options$multievent && (is.null(self$options$dod) && is.null(self$options$dooc) && is.null(self$options$awd) && is.null(self$options$awod))) ||
+                    (self$options$tint &&
+                     (
+                         is.null(self$options$dxdate) || is.null(self$options$fudate)
+                     )) ||
 
-                    (self$options$tint && (is.null(self$options$dxdate) || is.null(self$options$fudate))) ||
-
-                    is.null(self$options$explanatory) ) {
-
-                todo <- glue::glue(
-                    "
+                    is.null(self$options$explanatory)) {
+                    todo <- glue::glue(
+                        "
                 <br>Welcome to ClinicoPath
                 <br><br>
                 This tool will help you calculate median survivals and 1,3,5-yr survivals for a given fisk factor.
@@ -58,10 +59,10 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 <br><hr>
                 <br>
                 See details for survival <a href = 'https://cran.r-project.org/web/packages/survival/vignettes/survival.pdf'>here</a>."
-                )
+                    )
 
-                html <- self$results$todo
-                html$setContent(todo)
+                    html <- self$results$todo
+                    html$setContent(todo)
 
                 }
 
@@ -150,6 +151,18 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 return(mydata[["mytime"]])
 
+
+            }
+
+            # Add Calculated Time to Data ----
+            ,
+            .mytimetodata = function() {
+                mycalculatedtime <- private$.definemytime()
+
+                if (self$options$calculatedtime &&
+                    self$results$calculatedtime$isNotFilled()) {
+                    self$results$calculatedtime$setValues(mycalculatedtime)
+                }
 
             }
 
@@ -253,6 +266,23 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
             }
 
+
+            # Add Redefined Outcome to Data ----
+            ,
+            .myoutcometodata = function() {
+                mydefinedoutcome <- private$.definemyoutcome()
+
+                if (self$options$outcomeredifened &&
+                    self$results$outcomeredifened$isNotFilled()) {
+                    self$results$outcomeredifened$setValues(mydefinedoutcome)
+                }
+
+            }
+
+
+
+
+
             # Define Factor ----
             ,
             .definemyfactor = function() {
@@ -351,7 +381,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     "name1time" = name1time,
                     "name2outcome" = name2outcome,
                     "name3explanatory" = name3explanatory,
-                    "cleanData" = cleanData)
+                    "cleanData" = cleanData
+                )
 
                 image <- self$results$plot
                 image$setState(plotData)
@@ -367,11 +398,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 # Return Data ----
 
-                return(list(
-                    "name1time" = name1time,
-                    "name2outcome" = name2outcome,
-                    "name3explanatory" = name3explanatory,
-                    "cleanData" = cleanData))
+                return(
+                    list(
+                        "name1time" = name1time,
+                        "name2outcome" = name2outcome,
+                        "name3explanatory" = name3explanatory,
+                        "cleanData" = cleanData
+                    )
+                )
 
             }
 
@@ -382,15 +416,22 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 # Common Errors, Warnings ----
 
                 # No variable TODO ----
-                if (
-                    (is.null(self$options$outcome) && !(self$options$multievent)) ||
+                if ((is.null(self$options$outcome) &&
+                     !(self$options$multievent)) ||
 
-                    (self$options$multievent && (is.null(self$options$dod) && is.null(self$options$dooc) && is.null(self$options$awd) && is.null(self$options$awod))) ||
+                    (self$options$multievent &&
+                     (
+                         is.null(self$options$dod) &&
+                         is.null(self$options$dooc) &&
+                         is.null(self$options$awd) && is.null(self$options$awod)
+                     )) ||
 
-                    (self$options$tint && (is.null(self$options$dxdate) || is.null(self$options$fudate))) ||
+                    (self$options$tint &&
+                     (
+                         is.null(self$options$dxdate) || is.null(self$options$fudate)
+                     )) ||
 
-                    is.null(self$options$explanatory) ) {
-
+                    is.null(self$options$explanatory)) {
                     private$.todo()
 
                     return()
@@ -400,8 +441,28 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 if (nrow(self$data) == 0)
                     stop('Data contains no (complete) rows')
 
+                # Add Calculated Time to Data ----
+
+                if (self$options$tint) {
+                    private$.mytimetodata()
+                }
+
+                # mycalculatedtime <- private$.definemytime()
+                #
+                # if (self$options$calculatedtime && self$results$calculatedtime$isNotFilled()) {
+                #     self$results$calculatedtime$setValues(mycalculatedtime)
+                # }
+
+                # Add Redefined Outcome to Data ----
+
+                if (self$options$multievent) {
+                    private$.myoutcometodata()
+                }
+
+
                 # Get Clean Data ----
                 results <- private$.cleandata()
+
 
                 # Run Analysis ----
                 if (!self$options$sas) {
@@ -425,25 +486,24 @@ survivalClass <- if (requireNamespace('jmvcore'))
             # Median Survival Function ----
             ,
             .medianSurv = function(results) {
-
                 mytime <- results$name1time
                 myoutcome <- results$name2outcome
                 myfactor <- results$name3explanatory
 
                 mydata <- results$cleanData
 
-                mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
+                mydata[[mytime]] <-
+                    jmvcore::toNumeric(mydata[[mytime]])
 
                 # Median Survival Table ----
 
                 formula <-
                     paste('survival::Surv(',
-                           mytime,
-                           ',',
-                           myoutcome,
-                           ') ~ ',
-                           myfactor
-                           )
+                          mytime,
+                          ',',
+                          myoutcome,
+                          ') ~ ',
+                          myfactor)
 
                 formula <- as.formula(formula)
 
@@ -469,7 +529,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 medianTable <- self$results$medianTable
                 data_frame <- results1table
                 for (i in seq_along(data_frame[, 1, drop = T])) {
-                    medianTable$addRow(rowKey = i, values = c(data_frame[i, ]))
+                    medianTable$addRow(rowKey = i, values = c(data_frame[i,]))
                 }
 
 
@@ -510,18 +570,21 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 mytime <- jmvcore::constructFormula(terms = mytime)
 
                 myoutcome <- results$name2outcome
-                myoutcome <- jmvcore::constructFormula(terms = myoutcome)
+                myoutcome <-
+                    jmvcore::constructFormula(terms = myoutcome)
 
 
                 myfactor <- results$name3explanatory
-                myfactor <- jmvcore::constructFormula(terms = myfactor)
+                myfactor <-
+                    jmvcore::constructFormula(terms = myfactor)
 
                 mydata <- results$cleanData
 
-                mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
+                mydata[[mytime]] <-
+                    jmvcore::toNumeric(mydata[[mytime]])
 
                 myformula <-
-                    paste("Surv(", mytime, ",", myoutcome,")")
+                    paste("Surv(", mytime, ",", myoutcome, ")")
 
                 # myformula <- as.formula(myformula)
 
@@ -538,8 +601,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
                                 <br>
                                 <b>Model Metrics:</b>
                                   ",
-                                unlist(tCox[[2]]),
-                                "
+                                        unlist(tCox[[2]]),
+                                        "
                                 <br>
                                 ")
 
@@ -567,7 +630,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                                        "HR_multivariable")
 
                 for (i in seq_along(data_frame[, 1, drop = T])) {
-                    coxTable$addRow(rowKey = i, values = c(data_frame[i, ]))
+                    coxTable$addRow(rowKey = i, values = c(data_frame[i,]))
                 }
 
 
@@ -578,11 +641,12 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     tibble::as_tibble(tCox[[1]], .name_repair = "minimal") %>%
                     janitor::clean_names(dat = ., case = "snake")
 
-                names(tCox_df) <- names(data_frame) <- c("Explanatory",
-                                                         "Levels",
-                                                         "all",
-                                                         "HR_univariable",
-                                                         "HR_multivariable")
+                names(tCox_df) <-
+                    names(data_frame) <- c("Explanatory",
+                                           "Levels",
+                                           "all",
+                                           "HR_univariable",
+                                           "HR_multivariable")
 
 
                 # https://stackoverflow.com/questions/38470355/r-fill-empty-cell-with-value-of-last-non-empty-cell
@@ -620,14 +684,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
             # Survival Table Function ----
             ,
             .survTable = function(results) {
-
                 mytime <- results$name1time
                 myoutcome <- results$name2outcome
                 myfactor <- results$name3explanatory
 
                 mydata <- results$cleanData
 
-                mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
+                mydata[[mytime]] <-
+                    jmvcore::toNumeric(mydata[[mytime]])
 
                 # Median Survival Table ----
 
@@ -637,8 +701,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                           ',',
                           myoutcome,
                           ') ~ ',
-                          myfactor
-                    )
+                          myfactor)
 
                 formula <- as.formula(formula)
 
@@ -677,7 +740,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 data_frame <- km_fit_df
                 for (i in seq_along(data_frame[, 1, drop = T])) {
-                    survTable$addRow(rowKey = i, values = c(data_frame[i, ]))
+                    survTable$addRow(rowKey = i, values = c(data_frame[i,]))
                 }
 
 
@@ -715,7 +778,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 mydata <- results$cleanData
 
-                mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
+                mydata[[mytime]] <-
+                    jmvcore::toNumeric(mydata[[mytime]])
 
                 # Median Survival Table ----
 
@@ -725,15 +789,18 @@ survivalClass <- if (requireNamespace('jmvcore'))
                           ',',
                           myoutcome,
                           ') ~ ',
-                          myfactor
-                    )
+                          myfactor)
 
                 formula_p <- as.formula(formula)
+
+                padjustmethod <-
+                    jmvcore::constructFormula(terms = self$options$padjustmethod)
+
 
                 results_pairwise <-
                     survminer::pairwise_survdiff(formula = formula_p,
                                                  data = mydata,
-                                                 p.adjust.method = "BH")
+                                                 p.adjust.method = padjustmethod)
 
 
                 mypairwise2 <-
@@ -750,7 +817,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 data_frame <- mypairwise2
                 for (i in seq_along(data_frame[, 1, drop = T])) {
-                    pairwiseTable$addRow(rowKey = i, values = c(data_frame[i, ]))
+                    pairwiseTable$addRow(rowKey = i, values = c(data_frame[i,]))
                 }
 
                 thefactor <-
@@ -761,6 +828,16 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
 
                 pairwiseTable$setTitle(paste0('Pairwise Comparisons ', title2))
+
+                pairwiseTable$setNote(
+                    key = padjustmethod,
+                    note = paste0("p-value adjustement method: ",
+                           padjustmethod)
+                )
+
+
+
+
 
 
                 mypairwise2 %>%
@@ -797,7 +874,6 @@ survivalClass <- if (requireNamespace('jmvcore'))
             # Survival Curve ----
             ,
             .plot = function(image, ggtheme, theme, ...) {
-
                 sc <- self$options$sc
 
                 if (!sc)
@@ -809,18 +885,21 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 mytime <- jmvcore::constructFormula(terms = mytime)
 
                 myoutcome <- results$name2outcome
-                myoutcome <- jmvcore::constructFormula(terms = myoutcome)
+                myoutcome <-
+                    jmvcore::constructFormula(terms = myoutcome)
 
 
                 myfactor <- results$name3explanatory
-                myfactor <- jmvcore::constructFormula(terms = myfactor)
+                myfactor <-
+                    jmvcore::constructFormula(terms = myfactor)
 
                 plotData <- results$cleanData
 
-                plotData[[mytime]] <- jmvcore::toNumeric(plotData[[mytime]])
+                plotData[[mytime]] <-
+                    jmvcore::toNumeric(plotData[[mytime]])
 
                 myformula <-
-                    paste("survival::Surv(", mytime, ",", myoutcome,")")
+                    paste("survival::Surv(", mytime, ",", myoutcome, ")")
 
                 title2 <- as.character(myfactor)
 
@@ -864,7 +943,6 @@ survivalClass <- if (requireNamespace('jmvcore'))
             # https://rpkgs.datanovia.com/survminer/survminer_cheatsheet.pdf
             ,
             .plot2 = function(image2, ggtheme, theme, ...) {
-
                 ce <- self$options$ce
 
                 if (!ce)
@@ -876,18 +954,21 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 mytime <- jmvcore::constructFormula(terms = mytime)
 
                 myoutcome <- results$name2outcome
-                myoutcome <- jmvcore::constructFormula(terms = myoutcome)
+                myoutcome <-
+                    jmvcore::constructFormula(terms = myoutcome)
 
 
                 myfactor <- results$name3explanatory
-                myfactor <- jmvcore::constructFormula(terms = myfactor)
+                myfactor <-
+                    jmvcore::constructFormula(terms = myfactor)
 
                 plotData <- results$cleanData
 
-                plotData[[mytime]] <- jmvcore::toNumeric(plotData[[mytime]])
+                plotData[[mytime]] <-
+                    jmvcore::toNumeric(plotData[[mytime]])
 
                 myformula <-
-                    paste("survival::Surv(", mytime, ",", myoutcome,")")
+                    paste("survival::Surv(", mytime, ",", myoutcome, ")")
 
                 title2 <- as.character(myfactor)
 
@@ -927,7 +1008,6 @@ survivalClass <- if (requireNamespace('jmvcore'))
             # Cumulative Hazard ----
             ,
             .plot3 = function(image3, ggtheme, theme, ...) {
-
                 ch <- self$options$ch
 
                 if (!ch)
@@ -939,18 +1019,21 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 mytime <- jmvcore::constructFormula(terms = mytime)
 
                 myoutcome <- results$name2outcome
-                myoutcome <- jmvcore::constructFormula(terms = myoutcome)
+                myoutcome <-
+                    jmvcore::constructFormula(terms = myoutcome)
 
 
                 myfactor <- results$name3explanatory
-                myfactor <- jmvcore::constructFormula(terms = myfactor)
+                myfactor <-
+                    jmvcore::constructFormula(terms = myfactor)
 
                 plotData <- results$cleanData
 
-                plotData[[mytime]] <- jmvcore::toNumeric(plotData[[mytime]])
+                plotData[[mytime]] <-
+                    jmvcore::toNumeric(plotData[[mytime]])
 
                 myformula <-
-                    paste("survival::Surv(", mytime, ",", myoutcome,")")
+                    paste("survival::Surv(", mytime, ",", myoutcome, ")")
 
                 title2 <- as.character(myfactor)
 
@@ -987,7 +1070,6 @@ survivalClass <- if (requireNamespace('jmvcore'))
             # KMunicate Style ----
             ,
             .plot6 = function(image6, ggtheme, theme, ...) {
-
                 kmunicate <- self$options$kmunicate
 
                 if (!kmunicate)
@@ -999,15 +1081,18 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 mytime <- jmvcore::constructFormula(terms = mytime)
 
                 myoutcome <- results$name2outcome
-                myoutcome <- jmvcore::constructFormula(terms = myoutcome)
+                myoutcome <-
+                    jmvcore::constructFormula(terms = myoutcome)
 
 
                 myfactor <- results$name3explanatory
-                myfactor <- jmvcore::constructFormula(terms = myfactor)
+                myfactor <-
+                    jmvcore::constructFormula(terms = myfactor)
 
                 plotData <- results$cleanData
 
-                plotData[[mytime]] <- jmvcore::toNumeric(plotData[[mytime]])
+                plotData[[mytime]] <-
+                    jmvcore::toNumeric(plotData[[mytime]])
 
 
                 title2 <- as.character(myfactor)
@@ -1025,12 +1110,12 @@ survivalClass <- if (requireNamespace('jmvcore'))
                           ',',
                           myoutcome,
                           ') ~ ',
-                          myfactor
-                    )
+                          myfactor)
 
                 myformula <- as.formula(myformula)
 
-                km_fit <- survival::survfit(myformula, data = plotData)
+                km_fit <-
+                    survival::survfit(myformula, data = plotData)
 
                 time_scale <-
                     seq(0, self$options$endplot, by = self$options$byplot)
