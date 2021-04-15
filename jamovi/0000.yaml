@@ -29,14 +29,14 @@ analyses:
     menuSubgroup: ClinicoPath Survival
     menuTitle: Survival Analysis for Continuous Variable
     menuSubtitle: Cut-off & Univariate Survival Analysis
-  - title: Multivariate Survival Analysis
+  - title: Multivariable Survival Analysis
     name: multisurvival
     ns: jsurvival
     menuGroup: Survival
     menuSubgroup: ClinicoPath Survival
-    menuTitle: Multivariate Survival Analysis
-    description: Function for Multivariate Survival Analysis using Cox-regression.
-    menuSubtitle: 'Multivariate Cox-regression, Adjusted Survival'
+    menuTitle: Multivariable Survival Analysis
+    description: Function for Multivariable Survival Analysis using Cox-regression.
+    menuSubtitle: 'Multivariable Cox-regression, Adjusted Survival'
   - title: Odds Ratio Table and Plot
     name: oddsratio
     ns: jsurvival
