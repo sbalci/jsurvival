@@ -41,6 +41,7 @@ children:
       - type: Label
         label: Time Interval
         fitToGrid: true
+        stretchFactor: 1
         children:
           - type: LayoutBox
             margin: large
@@ -49,10 +50,10 @@ children:
               - type: CheckBox
                 name: tint
                 fitToGrid: true
-                stretchFactor: 1
               - type: Label
                 label: Date Variables
                 fitToGrid: true
+                stretchFactor: 1
                 children:
                   - type: VariableSupplier
                     persistentItems: false
