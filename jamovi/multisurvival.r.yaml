@@ -219,6 +219,7 @@ items:
 
 refs:
     - multivariable
+    - ClinicoPathJamoviModule
 
     # - name: model
     #   type: Property

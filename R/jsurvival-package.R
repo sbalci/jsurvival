@@ -1,8 +1,8 @@
-#' \code{ClinicoPath}
+#' \code{jsurvival}
 #'
-#' @title ClinicoPath: Analysis for Clinicopathological Research
+#' @title jsurvival: Analysis for jsurvivalological Research
 #'
-#' @description `ClinicoPath` ClinicoPath help researchers to generate natural
+#' @description `jsurvival` jsurvival help researchers to generate natural
 #' language summaries of their dataset, generate cross tables with statistical
 #' tests, and survival analysis with survival tables, survival plots,
 #' and natural language summaries.
@@ -16,6 +16,6 @@
 #' \href{https://sbalci.github.io/ClinicoPathJamoviModule/}{Website}.
 #'
 #' @docType package
-#' @aliases ClinicoPath ClinicoPath-package
-#' @name ClinicoPath-package
+#' @aliases jsurvival jsurvival-package
+#' @name jsurvival-package
 "_PACKAGE"

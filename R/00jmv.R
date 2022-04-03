@@ -452,4 +452,12 @@
         `volume`=103, 
         `pages`="39-40", 
         `doi`="10.2105/AJPH.2012.300897", 
-        `url`="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518362/"))
+        `url`="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518362/"), 
+    `ClinicoPathJamoviModule`=list(
+        `type`="software", 
+        `author`="Serdar Balci", 
+        `year`=2022, 
+        `title`="ClinicoPath jamovi Module doi:10.5281/zenodo.3997188", 
+        `publisher`="[R package]. Retrieved from https://github.com/sbalci/ClinicoPathJamoviModule", 
+        `doi`="10.17605/OSF.IO/9SZUD", 
+        `url`="https://www.serdarbalci.com/ClinicoPathJamoviModule/"))
