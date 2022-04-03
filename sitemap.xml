@@ -10,13 +10,13 @@
     <loc>/index.html</loc>
   </url>
   <url>
-    <loc>/reference/ClinicoPath-package.html</loc>
-  </url>
-  <url>
     <loc>/reference/histopathology.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/jsurvival-package.html</loc>
   </url>
   <url>
     <loc>/reference/multisurvival.html</loc>
