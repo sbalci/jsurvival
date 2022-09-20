@@ -50,95 +50,156 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">survivalcont</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">elapsedtime</span>,
-  tint <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">dxdate</span>,
-  <span class="va">fudate</span>,
-  <span class="va">contexpl</span>,
-  <span class="va">outcome</span>,
-  <span class="va">outcomeLevel</span>,
-  <span class="va">dod</span>,
-  <span class="va">dooc</span>,
-  <span class="va">awd</span>,
-  <span class="va">awod</span>,
-  analysistype <span class="op">=</span> <span class="st">"overall"</span>,
-  cutp <span class="op">=</span> <span class="st">"12, 36, 60"</span>,
-  timetypedata <span class="op">=</span> <span class="st">"ymd"</span>,
-  timetypeoutput <span class="op">=</span> <span class="st">"months"</span>,
-  sc <span class="op">=</span> <span class="cn">FALSE</span>,
-  kmunicate <span class="op">=</span> <span class="cn">FALSE</span>,
-  ce <span class="op">=</span> <span class="cn">FALSE</span>,
-  ch <span class="op">=</span> <span class="cn">FALSE</span>,
-  endplot <span class="op">=</span> <span class="fl">60</span>,
-  byplot <span class="op">=</span> <span class="fl">12</span>,
-  findcut <span class="op">=</span> <span class="cn">FALSE</span>,
-  multievent <span class="op">=</span> <span class="cn">FALSE</span>,
-  ci95 <span class="op">=</span> <span class="cn">FALSE</span>,
-  risktable <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">survivalcont</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">elapsedtime</span>,</span>
+<span>  tint <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">dxdate</span>,</span>
+<span>  <span class="va">fudate</span>,</span>
+<span>  <span class="va">contexpl</span>,</span>
+<span>  <span class="va">outcome</span>,</span>
+<span>  <span class="va">outcomeLevel</span>,</span>
+<span>  <span class="va">dod</span>,</span>
+<span>  <span class="va">dooc</span>,</span>
+<span>  <span class="va">awd</span>,</span>
+<span>  <span class="va">awod</span>,</span>
+<span>  analysistype <span class="op">=</span> <span class="st">"overall"</span>,</span>
+<span>  cutp <span class="op">=</span> <span class="st">"12, 36, 60"</span>,</span>
+<span>  timetypedata <span class="op">=</span> <span class="st">"ymd"</span>,</span>
+<span>  timetypeoutput <span class="op">=</span> <span class="st">"months"</span>,</span>
+<span>  sc <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  kmunicate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ce <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ch <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  endplot <span class="op">=</span> <span class="fl">60</span>,</span>
+<span>  byplot <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  findcut <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  multievent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ci95 <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  risktable <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>The data as a data frame.</p></dd>
+
+
 <dt>elapsedtime</dt>
 <dd><p>.</p></dd>
+
+
 <dt>tint</dt>
 <dd><p>.</p></dd>
+
+
 <dt>dxdate</dt>
 <dd><p>.</p></dd>
+
+
 <dt>fudate</dt>
 <dd><p>.</p></dd>
+
+
 <dt>contexpl</dt>
 <dd><p>.</p></dd>
+
+
 <dt>outcome</dt>
 <dd><p>.</p></dd>
+
+
 <dt>outcomeLevel</dt>
 <dd><p>.</p></dd>
+
+
 <dt>dod</dt>
 <dd><p>.</p></dd>
+
+
 <dt>dooc</dt>
 <dd><p>.</p></dd>
+
+
 <dt>awd</dt>
 <dd><p>.</p></dd>
+
+
 <dt>awod</dt>
 <dd><p>.</p></dd>
+
+
 <dt>analysistype</dt>
 <dd><p>.</p></dd>
+
+
 <dt>cutp</dt>
 <dd><p>.</p></dd>
+
+
 <dt>timetypedata</dt>
 <dd><p>select the time type in data</p></dd>
+
+
 <dt>timetypeoutput</dt>
 <dd><p>select the time type in output</p></dd>
+
+
 <dt>sc</dt>
 <dd><p>.</p></dd>
+
+
 <dt>kmunicate</dt>
 <dd><p>.</p></dd>
+
+
 <dt>ce</dt>
 <dd><p>.</p></dd>
+
+
 <dt>ch</dt>
 <dd><p>.</p></dd>
+
+
 <dt>endplot</dt>
 <dd><p>.</p></dd>
+
+
 <dt>byplot</dt>
 <dd><p>.</p></dd>
+
+
 <dt>findcut</dt>
 <dd><p>.</p></dd>
+
+
 <dt>multievent</dt>
 <dd><p>.</p></dd>
+
+
 <dt>ci95</dt>
 <dd><p>.</p></dd>
+
+
 <dt>risktable</dt>
 <dd><p>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A results object containing:</p><table class="table table"><tr><td><code>results$todo</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$coxSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$coxTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$tCoxtext2</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$rescutTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$plot4</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot5</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$medianSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$medianTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$survTableSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$survTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$plot2</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot3</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot6</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$calculatedtime</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$outcomeredifened</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$calculatedcutoff</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr></table><p>Tables can be converted to data frames with <code>asDF</code> or <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></code>. For example:
-<code>results$coxTable$asDF</code><code>as.data.frame(results$coxTable)</code></p>
+    
+
+<p>A results object containing:</p><table class="table table"><tr><td><code>results$todo</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$coxSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$coxTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$tCoxtext2</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$rescutTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$plot4</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot5</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$medianSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$medianTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$survTableSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$survTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$plot2</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot3</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot6</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$calculatedtime</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$outcomeredifened</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$calculatedcutoff</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr></table><p>Tables can be converted to data frames with <code>asDF</code> or <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></code>. For example:</p>
+
+
+<p><code>results$coxTable$asDF</code></p>
+
+
+
+<p><code>as.data.frame(results$coxTable)</code></p>
+
+
     </div>
 
   </div>
@@ -153,7 +214,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
