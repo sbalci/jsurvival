@@ -22,6 +22,8 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             analysistype = "overall",
             timetypedata = "ymd",
             timetypeoutput = "months",
+            uselandmark = FALSE,
+            landmark = 3,
             hr = FALSE,
             sty = "t1",
             km = FALSE,
@@ -136,6 +138,14 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "months",
                     "years"),
                 default="months")
+            private$..uselandmark <- jmvcore::OptionBool$new(
+                "uselandmark",
+                uselandmark,
+                default=FALSE)
+            private$..landmark <- jmvcore::OptionInteger$new(
+                "landmark",
+                landmark,
+                default=3)
             private$..hr <- jmvcore::OptionBool$new(
                 "hr",
                 hr,
@@ -200,6 +210,8 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..analysistype)
             self$.addOption(private$..timetypedata)
             self$.addOption(private$..timetypeoutput)
+            self$.addOption(private$..uselandmark)
+            self$.addOption(private$..landmark)
             self$.addOption(private$..hr)
             self$.addOption(private$..sty)
             self$.addOption(private$..km)
@@ -229,6 +241,8 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         analysistype = function() private$..analysistype$value,
         timetypedata = function() private$..timetypedata$value,
         timetypeoutput = function() private$..timetypeoutput$value,
+        uselandmark = function() private$..uselandmark$value,
+        landmark = function() private$..landmark$value,
         hr = function() private$..hr$value,
         sty = function() private$..sty$value,
         km = function() private$..km$value,
@@ -257,6 +271,8 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ..analysistype = NA,
         ..timetypedata = NA,
         ..timetypeoutput = NA,
+        ..uselandmark = NA,
+        ..landmark = NA,
         ..hr = NA,
         ..sty = NA,
         ..km = NA,
@@ -292,6 +308,7 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 title="Multivariable Survival Analysis",
                 refs=list(
                     "multivariable",
+                    "survivaltutorial",
                     "ClinicoPathJamoviModule"),
                 clearWith=list(
                     "outcome",
@@ -516,6 +533,8 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param analysistype .
 #' @param timetypedata select the time type in data
 #' @param timetypeoutput select the time type in output
+#' @param uselandmark .
+#' @param landmark .
 #' @param hr .
 #' @param sty .
 #' @param km .
@@ -557,6 +576,8 @@ multisurvival <- function(
     analysistype = "overall",
     timetypedata = "ymd",
     timetypeoutput = "months",
+    uselandmark = FALSE,
+    landmark = 3,
     hr = FALSE,
     sty = "t1",
     km = FALSE,
@@ -608,6 +629,8 @@ multisurvival <- function(
         analysistype = analysistype,
         timetypedata = timetypedata,
         timetypeoutput = timetypeoutput,
+        uselandmark = uselandmark,
+        landmark = landmark,
         hr = hr,
         sty = sty,
         km = km,

@@ -2,6 +2,7 @@
 
 export(multisurvival)
 export(oddsratio)
+export(singlearm)
 export(survival)
 export(survivalcont)
 import(jmvcore)

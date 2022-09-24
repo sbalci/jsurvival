@@ -438,7 +438,7 @@
         `publisher`="[R package]. Retrieved from https://github.com/yanlinlin82/ggvenn", 
         `url`="https://github.com/yanlinlin82/ggvenn"), 
     `padjust`=list(
-        `type`="website", 
+        `type`="article", 
         `year`=2020, 
         `title`="p.adjust {stats} Adjust P-values for Multiple Comparisons", 
         `publisher`="[R package]. Retrieved from https://stat.ethz.ch/R-manual/R-devel/library/stats/html/p.adjust.html", 
@@ -453,6 +453,13 @@
         `pages`="39-40", 
         `doi`="10.2105/AJPH.2012.300897", 
         `url`="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518362/"), 
+    `survivaltutorial`=list(
+        `type`="article", 
+        `author`="Emily C. Zabor", 
+        `year`=2022, 
+        `title`="Survival analysis in R: A detailed tutorial on conducting survival analyses in R, including an introduction to the basics of survival analysis, landmark analyses and time-dependent covariates, competing risks, and a selection of advanced topics.", 
+        `publisher`="[GitHub Repository]. Retrieved from https://github.com/zabore/tutorials", 
+        `url`="https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html"), 
     `ClinicoPathJamoviModule`=list(
         `type`="software", 
         `author`="Serdar Balci", 

@@ -1,6 +1,4 @@
 #' @title Multivariable Survival Analysis
-#'
-#'
 #' @importFrom R6 R6Class
 #' @import jmvcore
 #'
@@ -311,7 +309,16 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 
+                # Landmark ----
+                # https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html#landmark_method
+                if (self$options$uselandmark) {
 
+                  landmark <- jmvcore::toNumeric(self$options$landmark)
+
+                  mydata <- mydata %>%
+                    dplyr::filter(mytime >= landmark) %>%
+                    dplyr::mutate(mytime = mytime - landmark)
+                }
 
 
 
@@ -324,6 +331,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 # Define Data For Analysis ----
 
                 mydata <- jmvcore::select(df = mydata, columnNames = c("mytime", "myoutcome", myfactors))
+
+
 
 
                 # naOmit ----
@@ -483,6 +492,20 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                                 "
                                 <br>
                                 ")
+
+                if (self$options$uselandmark) {
+
+                  landmark <- jmvcore::toNumeric(self$options$landmark)
+
+                  text2 <- glue::glue(text2,
+                                          "Landmark time used as: ",
+                                          landmark, " ",
+                                          self$options$timetypeoutput, "."
+                  )
+                }
+
+
+
 
 
                 self$results$text2$setContent(text2)

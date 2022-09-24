@@ -1,15 +1,15 @@
 Type: Package
 Package: jsurvival
 Title: Survival Module of ClinicoPath for jamovi
-Version: 0.0.2.04
-Date: 2022-09-20
+Version: 0.0.2.05
+Date: 2022-09-22
 Authors@R: 
     person(given = "Serdar",
            family = "Balci",
            role = c("aut", "cre"),
-           email = "drserdarbalci@gmail.com",
+           email = "serdarbalci@serdarbalci.com",
            comment = c(ORCID = "0000-0002-7852-3851"))
-Maintainer: Serdar Balci <drserdarbalci@gmail.com>
+Maintainer: Serdar Balci <serdarbalci@serdarbalci.com>
 Description: Analysis for Clinicopathological Research Survival Module of
     ClinicoPath for jamovi ClinicoPath help researchers to generate
     natural language summaries of their dataset, generate cross tables
@@ -41,8 +41,9 @@ Imports:
     tidyr,
     magrittr,
     checkmate,
-    pammtools
+    pammtools,
+    xml2
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1

@@ -219,6 +219,7 @@ items:
 
 refs:
     - multivariable
+    - survivaltutorial
     - ClinicoPathJamoviModule
 
     # - name: model

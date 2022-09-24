@@ -1,8 +1,4 @@
 #' @title Odds Ratio Table and Plot
-#'
-#'
-#'
-#'
 #' @importFrom R6 R6Class
 #' @import jmvcore
 #'

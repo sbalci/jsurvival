@@ -1,21 +1,35 @@
 ---
-name:  multisurvival
-title: Multivariable Survival Analysis
+name:  singlearm
+title: Single Arm Survival
 menuGroup: Survival
 menuSubgroup: ClinicoPath Survival
-menuSubtitle: 'Multivariable Cox-regression, Adjusted Survival'
+menuSubtitle: 'Survival for whole group, no explanatory factor'
 version: '1.0.0'
 jas: '1.2'
 
 description:
-    main: Function for Multivariable Survival Analysis using Cox-regression.
+    main: Function for Generating Summaries for Survival Analysis.
     R:
-        dontrun: true
+        dontrun: false
         usage: |
             # example will be added
 
 
 options:
+
+    # - name: lang
+    #   title: Language
+    #   type: List
+    #   options:
+    #     - title: English
+    #       name: English
+    #     - title: Türkçe
+    #       name: Türkçe
+    #     - title: Deutsch
+    #       name: Deutsch
+    #   default: English
+    #   description:
+    #       R: select language
 
     - name: data
       type: Data
@@ -42,6 +56,12 @@ options:
     - name: fudate
       title: 'Follow-up Date'
       type: Variable
+
+
+    - name: calculatedtime
+      title: Add Calculated Time to Data
+      type: Output
+
 
     - name: outcome
       title: 'Outcome'
@@ -74,28 +94,6 @@ options:
       variable: (outcome)
       allowNone: true
 
-
-    - name: explanatory
-      title: Explanatory Variables
-      type: Variables
-      suggested: [ ordinal, nominal ]
-      permitted: [ factor ]
-
-    - name: contexpl
-      title: Continuous Explanatory Variable
-      type: Variables
-      suggested: [ continuous ]
-      permitted: [ numeric ]
-
-
-
-
-
-    - name: multievent
-      title: Multiple Event Levels
-      type: Bool
-      default: false
-
     - name: analysistype
       title: 'Survival Type'
       type: List
@@ -108,6 +106,18 @@ options:
         #   name: compete
       default: overall
 
+
+    - name: outcomeredifened
+      title: Add Redefined Outcome to Data
+      type: Output
+
+
+
+
+    - name: cutp
+      title: Cutpoints
+      type: String
+      default: '12, 36, 60'
 
 
     - name: timetypedata
@@ -161,44 +171,27 @@ options:
       default: 3
 
 
+    - name: sc
+      title: Survival Plot
+      type: Bool
+      default: false
 
-
-
-    - name: hr
-      title: Hazards Regression Plot
+    - name: kmunicate
+      title: KMunicate-Style Plot
       type: Bool
       default: false
 
 
-    - name: sty
-      title: Plot Style
-      type: List
-      options:
-        - title: finalfit
-          name: t1
-        # - title: ggstatsplot
-        #   name: t2
-        - title: survminer forestplot
-          name: t3
-      default: t1
-
-    - name: km
-      title: Kaplan-Meier
+    - name: ce
+      title: Cumulative Events
       type: Bool
       default: false
 
 
-    - name: ac
-      title: Adjusted Survival Curve
+    - name: ch
+      title: Cumulative Hazard
       type: Bool
       default: false
-
-
-    - name: adjexplanatory
-      title: Variable for Adjusted Survival Curve
-      type: Variable
-      suggested: [ ordinal, nominal ]
-      permitted: [ factor ]
 
 
     - name: endplot
@@ -212,6 +205,12 @@ options:
       type: Integer
       default: 12
 
+
+    - name: multievent
+      title: Multiple Event Levels
+      type: Bool
+      default: false
+
     - name: ci95
       title: '95% CI'
       type: Bool
@@ -222,21 +221,11 @@ options:
       type: Bool
       default: false
 
-    - name: calculatedtime
-      title: Add Calculated Time to Data
-      type: Output
-
-    - name: outcomeredifened
-      title: Add Redefined Outcome to Data
-      type: Output
-
-
-
-
-    # - name: modelTerms
-    #   title: Model Terms
-    #   type: Terms
-    #   default: null
+    - name: censored
+      title: censored
+      type: Bool
+      default: false
 
 
 ...
+
