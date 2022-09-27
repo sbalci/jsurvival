@@ -544,7 +544,6 @@ refs:
         doi: 10.2105/AJPH.2012.300897
         url: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518362/
 
-
     survivaltutorial:
         type: 'article'
         author: Emily C. Zabor
@@ -552,6 +551,15 @@ refs:
         title: "Survival analysis in R: A detailed tutorial on conducting survival analyses in R, including an introduction to the basics of survival analysis, landmark analyses and time-dependent covariates, competing risks, and a selection of advanced topics."
         publisher: '[GitHub Repository]. Retrieved from https://github.com/zabore/tutorials'
         url: https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html
+
+    survivalrviews:
+        type: 'article'
+        author: Joseph Rickert
+        year: 2017
+        title: "Survival Analysis with R"
+        publisher: 'R Views, An R community blog edited by RStudio'
+        url: https://rviews.rstudio.com/2017/09/25/survival-analysis-with-r/
+
 
     ClinicoPathJamoviModule:
         type: 'software'

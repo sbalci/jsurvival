@@ -340,8 +340,9 @@ survivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "finalfit",
                     "survival",
                     "survminer",
-                    "ClinicoPathJamoviModule",
-                    "survivaltutorial"))
+                    "survivaltutorial",
+                    "survivalrviews",
+                    "ClinicoPathJamoviModule"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="todo",
