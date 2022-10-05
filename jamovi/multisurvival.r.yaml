@@ -165,6 +165,9 @@ items:
           - tint
           - multievent
           - adjexplanatory
+          - pplot
+          - censored
+
 
     - name: plot7
       title: '`Adjusted Survival Curve - ${adjexplanatory}`'
@@ -192,6 +195,8 @@ items:
           - tint
           - multievent
           - adjexplanatory
+          - pplot
+          - censored
 
 
 

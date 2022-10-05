@@ -151,7 +151,8 @@ oddsratioClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         ,
 
-        .plot = function(image, ggtheme, theme, ...) {  # <-- the plot function ----
+        .plot = function(image, ggtheme, theme, ...) {
+          # -- the plot function ----
 
             # plotData <- image$state
 

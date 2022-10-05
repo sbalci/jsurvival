@@ -90,6 +90,20 @@ children:
                 enable: (tint)
               - type: ComboBox
                 name: timetypeoutput
+      - type: Label
+        label: Landmark Time
+        fitToGrid: true
+        children:
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: CheckBox
+                name: uselandmark
+                children:
+                  - type: TextBox
+                    name: landmark
+                    format: number
+                    enable: (uselandmark)
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
     collapsed: true
@@ -120,11 +134,6 @@ children:
               - type: LevelSelector
                 name: awod
                 enable: (outcome && multievent)
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: CheckBox
-        name: uselandmark
   - type: CollapseBox
     label: Plots
     collapsed: false
@@ -200,12 +209,12 @@ children:
               - type: CheckBox
                 name: risktable
                 enable: (km || ac)
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: TextBox
-        name: landmark
-        format: number
+              - type: CheckBox
+                name: censored
+                enable: (km || ac)
+              - type: CheckBox
+                name: pplot
+                enable: (km || ac)
   - type: CollapseBox
     label: Save Converted Variables to Data
     collapsed: true

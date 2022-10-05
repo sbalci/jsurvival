@@ -32,7 +32,9 @@ multisurvival(
   endplot = 60,
   byplot = 12,
   ci95 = FALSE,
-  risktable = FALSE
+  risktable = FALSE,
+  censored = FALSE,
+  pplot = TRUE
 )
 }
 \arguments{
@@ -91,6 +93,10 @@ multisurvival(
 \item{ci95}{.}
 
 \item{risktable}{.}
+
+\item{censored}{.}
+
+\item{pplot}{.}
 }
 \value{
 A results object containing:

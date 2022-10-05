@@ -32,7 +32,9 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             endplot = 60,
             byplot = 12,
             ci95 = FALSE,
-            risktable = FALSE, ...) {
+            risktable = FALSE,
+            censored = FALSE,
+            pplot = TRUE, ...) {
 
             super$initialize(
                 package="jsurvival",
@@ -189,6 +191,14 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 "risktable",
                 risktable,
                 default=FALSE)
+            private$..censored <- jmvcore::OptionBool$new(
+                "censored",
+                censored,
+                default=FALSE)
+            private$..pplot <- jmvcore::OptionBool$new(
+                "pplot",
+                pplot,
+                default=TRUE)
             private$..calculatedtime <- jmvcore::OptionOutput$new(
                 "calculatedtime")
             private$..outcomeredifened <- jmvcore::OptionOutput$new(
@@ -221,6 +231,8 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..byplot)
             self$.addOption(private$..ci95)
             self$.addOption(private$..risktable)
+            self$.addOption(private$..censored)
+            self$.addOption(private$..pplot)
             self$.addOption(private$..calculatedtime)
             self$.addOption(private$..outcomeredifened)
         }),
@@ -252,6 +264,8 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         byplot = function() private$..byplot$value,
         ci95 = function() private$..ci95$value,
         risktable = function() private$..risktable$value,
+        censored = function() private$..censored$value,
+        pplot = function() private$..pplot$value,
         calculatedtime = function() private$..calculatedtime$value,
         outcomeredifened = function() private$..outcomeredifened$value),
     private = list(
@@ -282,6 +296,8 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ..byplot = NA,
         ..ci95 = NA,
         ..risktable = NA,
+        ..censored = NA,
+        ..pplot = NA,
         ..calculatedtime = NA,
         ..outcomeredifened = NA)
 )
@@ -439,7 +455,9 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "dxdate",
                     "tint",
                     "multievent",
-                    "adjexplanatory")))
+                    "adjexplanatory",
+                    "pplot",
+                    "censored")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot7",
@@ -466,7 +484,9 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "dxdate",
                     "tint",
                     "multievent",
-                    "adjexplanatory")))
+                    "adjexplanatory",
+                    "pplot",
+                    "censored")))
             self$add(jmvcore::Output$new(
                 options=options,
                 name="calculatedtime",
@@ -544,6 +564,8 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param byplot .
 #' @param ci95 .
 #' @param risktable .
+#' @param censored .
+#' @param pplot .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
@@ -586,7 +608,9 @@ multisurvival <- function(
     endplot = 60,
     byplot = 12,
     ci95 = FALSE,
-    risktable = FALSE) {
+    risktable = FALSE,
+    censored = FALSE,
+    pplot = TRUE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("multisurvival requires jmvcore to be installed (restart may be required)")
@@ -639,7 +663,9 @@ multisurvival <- function(
         endplot = endplot,
         byplot = byplot,
         ci95 = ci95,
-        risktable = risktable)
+        risktable = risktable,
+        censored = censored,
+        pplot = pplot)
 
     analysis <- multisurvivalClass$new(
         options = options,

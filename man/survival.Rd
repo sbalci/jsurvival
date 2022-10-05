@@ -35,6 +35,7 @@ survival(
   ci95 = FALSE,
   risktable = FALSE,
   censored = FALSE,
+  pplot = TRUE,
   sas = FALSE
 )
 }
@@ -98,6 +99,8 @@ survival(
 \item{risktable}{.}
 
 \item{censored}{.}
+
+\item{pplot}{.}
 
 \item{sas}{.}
 }

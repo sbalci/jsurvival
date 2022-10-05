@@ -306,6 +306,7 @@ items:
           - dxdate
           - tint
           - multievent
+          - pplot
 
 
 

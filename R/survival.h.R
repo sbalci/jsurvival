@@ -35,6 +35,7 @@ survivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             ci95 = FALSE,
             risktable = FALSE,
             censored = FALSE,
+            pplot = TRUE,
             sas = FALSE, ...) {
 
             super$initialize(
@@ -203,6 +204,10 @@ survivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "censored",
                 censored,
                 default=FALSE)
+            private$..pplot <- jmvcore::OptionBool$new(
+                "pplot",
+                pplot,
+                default=TRUE)
             private$..sas <- jmvcore::OptionBool$new(
                 "sas",
                 sas,
@@ -239,6 +244,7 @@ survivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..ci95)
             self$.addOption(private$..risktable)
             self$.addOption(private$..censored)
+            self$.addOption(private$..pplot)
             self$.addOption(private$..sas)
         }),
     active = list(
@@ -273,6 +279,7 @@ survivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ci95 = function() private$..ci95$value,
         risktable = function() private$..risktable$value,
         censored = function() private$..censored$value,
+        pplot = function() private$..pplot$value,
         sas = function() private$..sas$value),
     private = list(
         ..elapsedtime = NA,
@@ -306,6 +313,7 @@ survivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..ci95 = NA,
         ..risktable = NA,
         ..censored = NA,
+        ..pplot = NA,
         ..sas = NA)
 )
 
@@ -616,7 +624,8 @@ survivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "fudate",
                     "dxdate",
                     "tint",
-                    "multievent")))
+                    "multievent",
+                    "pplot")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot2",
@@ -785,6 +794,7 @@ survivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param ci95 .
 #' @param risktable .
 #' @param censored .
+#' @param pplot .
 #' @param sas .
 #' @return A results object containing:
 #' \tabular{llllll}{
@@ -844,6 +854,7 @@ survival <- function(
     ci95 = FALSE,
     risktable = FALSE,
     censored = FALSE,
+    pplot = TRUE,
     sas = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
@@ -895,6 +906,7 @@ survival <- function(
         ci95 = ci95,
         risktable = risktable,
         censored = censored,
+        pplot = pplot,
         sas = sas)
 
     analysis <- survivalClass$new(

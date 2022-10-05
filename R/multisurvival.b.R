@@ -746,14 +746,18 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                                                 dependent = 'survival::Surv(mytime, myoutcome)',
                                                 explanatory = as.vector(self$options$explanatory),
                                                 xlab = paste0('Time (', self$options$timetypeoutput, ')'),
-                                                pval = TRUE,
+                                                pval = self$options$pplot,
+                                                pval.method	= self$options$pplot,
+                                                # pval = TRUE,
                                                 legend = 'none',
                                                 break.time.by = self$options$byplot,
                                                 xlim = c(0,self$options$endplot),
                                                 title = paste0("Survival curves for ", title2),
                                                 subtitle = "Based on Kaplan-Meier estimates",
                                                 risk.table = self$options$risktable,
-                                                conf.int = self$options$ci95
+                                                conf.int = self$options$ci95,
+                                                censored = self$options$censored
+
                             )
 
                         # plot <- plot + ggtheme
