@@ -188,17 +188,17 @@ options:
       default: false
 
 
-    - name: ac
-      title: Adjusted Survival Curve
-      type: Bool
-      default: false
+    # - name: ac
+    #   title: Adjusted Survival Curve
+    #   type: Bool
+    #   default: false
 
 
-    - name: adjexplanatory
-      title: Variable for Adjusted Survival Curve
-      type: Variable
-      suggested: [ ordinal, nominal ]
-      permitted: [ factor ]
+    # - name: adjexplanatory
+    #   title: Variable for Adjusted Survival Curve
+    #   type: Variable
+    #   suggested: [ ordinal, nominal ]
+    #   permitted: [ factor ]
 
 
     - name: endplot

@@ -408,8 +408,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                             imageKM <- self$results$plotKM
                             imageKM$setState(mydata)
 
-                            image7 <- self$results$plot7
-                            image7$setState(mydata)
+                            # image7 <- self$results$plot7
+                            # image7$setState(mydata)
 
 
 
@@ -443,7 +443,6 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 formula2 <- c(myexplanatory, mycontexpl)
 
-
                 # formula2 <-c(as.vector(self$options$explanatory),
                 #              as.vector(self$options$contexpl)
                 # )
@@ -463,15 +462,6 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 myformula <-
                     paste("Surv(mytime, myoutcome)")
-
-                # resultsdeneme2 <- list(
-                #     formula2,
-                #     formulaL,
-                #     # formulaR,
-                #     myformula
-                # )
-
-                # self$results$text3$setContent(resultsdeneme2)
 
                 # finalfit Multivariable table ----
 
@@ -520,6 +510,67 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 )
 
                 self$results$text$setContent(results1)
+
+                # Cox2 ----
+
+                LHT <- "survival::Surv(mytime, myoutcome)"
+
+                RHT <- formula2
+
+                RHT <- paste(RHT, collapse = " + ")
+
+                coxformula <- paste0(LHT, " ~ ", RHT)
+
+                coxformula <- as.formula(coxformula)
+
+                coxmodel <- survival::coxph(
+                  coxformula,
+                  data = mydata
+                )
+
+                summarycoxmodel <- summary(coxmodel)
+
+
+# https://forum.jamovi.org/viewtopic.php?p=9359&hilit=typeof#p9359
+                # Create a function ----
+                type_info <- function(x) {
+                    c(x,
+                      class = class(x),
+                      typeof = typeof(x),
+                      mode = mode(x),
+                      storage.mode = storage.mode(x)
+                    )
+                }
+
+
+                resultsdeneme2 <- list(
+                  headdata = head(mydata),
+                  myexplanatory = myexplanatory,
+                  mycontexpl = mycontexpl,
+                  formula2 = formula2,
+                  RHT = RHT,
+                  LHT = LHT,
+                  coxformula = coxformula,
+                  summarycoxmodel = summarycoxmodel,
+                  coxmodel = coxmodel
+                )
+
+                resultsdeneme2 <- lapply(resultsdeneme2, type_info)
+
+
+
+                self$results$text3$setContent(resultsdeneme2)
+
+
+
+
+
+
+
+
+
+
+
 
 
                 # Reduced model ----
@@ -771,92 +822,92 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 
-            # Adjusted Survival ----
-            ,
-            .plot7 = function(image7, ggtheme, theme, ...) {
-
-                plotData <- image7$state
-
-
-                if (!(self$options$adjexplanatory %in% c(self$options$explanatory, self$options$contexpl)))
-                    stop("Please use the explanatory variable used to build the multivariable survival model.")
-
-
-
-                formula2 <-
-                    jmvcore::constructFormula(terms = c(self$options$explanatory, self$options$contexpl))
-
-                formula3 <-
-                    paste("survival::Surv(mytime, myoutcome) ~ ", formula2)
-
-                formula3 <- as.formula(formula3)
-
-                # get fitted model ----
-
-                mod <-
-                    survival::coxph(formula = formula3,
-                                    data = plotData)
-
-
-                # plot
-
-                # https://rpkgs.datanovia.com/survminer/survminer_cheatsheet.pdf
-
-
-                # The function ggadjustedcurves() from the survminer package plots Adjusted Survival Curves for Cox Proportional Hazards Model. Adjusted Survival Curves show how a selected factor influences survival estimated from a Cox model.
-                # Note that these curves differ from Kaplan Meier estimates since they present expected ssurvival based on given Cox model.
-
-                # lung$sex <- ifelse(lung$sex == 1, "Male", "Female")
-
-                # fit <- coxph(Surv(time, status) ~ sex + ph.ecog + age +
-                #                  strata(sex), data = lung)
-                # ggcoxadjustedcurves(fit, data=lung)
-
-
-                # Note that it is not necessary to include the grouping factor in the Cox model. Survival curves are estimated from Cox model for each group defined by the factor independently.
-
-                # lung$age3 <- cut(lung$age,
-                #                  c(35,55,65,85))
-
-
-                # ggcoxadjustedcurves(fit, data=lung,
-                #                     variable=”lage3”)
-
-
-                # select adjexplanatory ----
-
-
-                adjexplanatory <- NULL
-
-                if (!is.null(self$options$adjexplanatory)) {
-
-                adjexplanatory <- self$options$adjexplanatory
-
-                adjexplanatory <-
-                    jmvcore::composeTerm(components = adjexplanatory)
-
-                }
-
-                # ggadjustedcurves ----
-
-                plot7 <- survminer::ggadjustedcurves(fit = mod,
-                                                     data = plotData,
-                                                     variable = adjexplanatory
-                                                     # method = ,
-                                                     # fun =
-                                                     )
-
-
-                # https://rpkgs.datanovia.com/survminer/reference/ggadjustedcurves.html
-
-                # https://stackoverflow.com/questions/55404550/computing-se-or-ci-for-ggadjustedcurves
-
-                # print plot -----
-
-                print(plot7)
-                TRUE
-
-                }
+            # # Adjusted Survival ----
+            # ,
+            # .plot7 = function(image7, ggtheme, theme, ...) {
+            #
+            #     plotData <- image7$state
+            #
+            #
+            #     if (!(self$options$adjexplanatory %in% c(self$options$explanatory, self$options$contexpl)))
+            #         stop("Please use the explanatory variable used to build the multivariable survival model.")
+            #
+            #
+            #
+            #     formula2 <-
+            #         jmvcore::constructFormula(terms = c(self$options$explanatory, self$options$contexpl))
+            #
+            #     formula3 <-
+            #         paste("survival::Surv(mytime, myoutcome) ~ ", formula2)
+            #
+            #     formula3 <- as.formula(formula3)
+            #
+            #     # get fitted model ----
+            #
+            #     mod <-
+            #         survival::coxph(formula = formula3,
+            #                         data = plotData)
+            #
+            #
+            #     # plot
+            #
+            #     # https://rpkgs.datanovia.com/survminer/survminer_cheatsheet.pdf
+            #
+            #
+            #     # The function ggadjustedcurves() from the survminer package plots Adjusted Survival Curves for Cox Proportional Hazards Model. Adjusted Survival Curves show how a selected factor influences survival estimated from a Cox model.
+            #     # Note that these curves differ from Kaplan Meier estimates since they present expected ssurvival based on given Cox model.
+            #
+            #     # lung$sex <- ifelse(lung$sex == 1, "Male", "Female")
+            #
+            #     # fit <- coxph(Surv(time, status) ~ sex + ph.ecog + age +
+            #     #                  strata(sex), data = lung)
+            #     # ggcoxadjustedcurves(fit, data=lung)
+            #
+            #
+            #     # Note that it is not necessary to include the grouping factor in the Cox model. Survival curves are estimated from Cox model for each group defined by the factor independently.
+            #
+            #     # lung$age3 <- cut(lung$age,
+            #     #                  c(35,55,65,85))
+            #
+            #
+            #     # ggcoxadjustedcurves(fit, data=lung,
+            #     #                     variable=”lage3”)
+            #
+            #
+            #     # select adjexplanatory ----
+            #
+            #
+            #     # adjexplanatory <- NULL
+            #     #
+            #     # if (!is.null(self$options$adjexplanatory)) {
+            #     #
+            #     # adjexplanatory <- self$options$adjexplanatory
+            #     #
+            #     # adjexplanatory <-
+            #     #     jmvcore::composeTerm(components = adjexplanatory)
+            #     #
+            #     # }
+            #
+            #     # ggadjustedcurves ----
+            #
+            #     plot7 <- survminer::ggadjustedcurves(fit = mod,
+            #                                          data = plotData,
+            #                                          variable = adjexplanatory
+            #                                          # method = ,
+            #                                          # fun =
+            #                                          )
+            #
+            #
+            #     # https://rpkgs.datanovia.com/survminer/reference/ggadjustedcurves.html
+            #
+            #     # https://stackoverflow.com/questions/55404550/computing-se-or-ci-for-ggadjustedcurves
+            #
+            #     # print plot -----
+            #
+            #     print(plot7)
+            #     TRUE
+            #
+            #     }
 
 
 

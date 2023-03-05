@@ -27,8 +27,6 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             hr = FALSE,
             sty = "t1",
             km = FALSE,
-            ac = FALSE,
-            adjexplanatory = NULL,
             endplot = 60,
             byplot = 12,
             ci95 = FALSE,
@@ -163,18 +161,6 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 "km",
                 km,
                 default=FALSE)
-            private$..ac <- jmvcore::OptionBool$new(
-                "ac",
-                ac,
-                default=FALSE)
-            private$..adjexplanatory <- jmvcore::OptionVariable$new(
-                "adjexplanatory",
-                adjexplanatory,
-                suggested=list(
-                    "ordinal",
-                    "nominal"),
-                permitted=list(
-                    "factor"))
             private$..endplot <- jmvcore::OptionInteger$new(
                 "endplot",
                 endplot,
@@ -225,8 +211,6 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..hr)
             self$.addOption(private$..sty)
             self$.addOption(private$..km)
-            self$.addOption(private$..ac)
-            self$.addOption(private$..adjexplanatory)
             self$.addOption(private$..endplot)
             self$.addOption(private$..byplot)
             self$.addOption(private$..ci95)
@@ -258,8 +242,6 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         hr = function() private$..hr$value,
         sty = function() private$..sty$value,
         km = function() private$..km$value,
-        ac = function() private$..ac$value,
-        adjexplanatory = function() private$..adjexplanatory$value,
         endplot = function() private$..endplot$value,
         byplot = function() private$..byplot$value,
         ci95 = function() private$..ci95$value,
@@ -290,8 +272,6 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ..hr = NA,
         ..sty = NA,
         ..km = NA,
-        ..ac = NA,
-        ..adjexplanatory = NA,
         ..endplot = NA,
         ..byplot = NA,
         ..ci95 = NA,
@@ -307,12 +287,12 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
     inherit = jmvcore::Group,
     active = list(
         todo = function() private$.items[["todo"]],
+        text3 = function() private$.items[["text3"]],
         text = function() private$.items[["text"]],
         text2 = function() private$.items[["text2"]],
         plot = function() private$.items[["plot"]],
         plot3 = function() private$.items[["plot3"]],
         plotKM = function() private$.items[["plotKM"]],
-        plot7 = function() private$.items[["plot7"]],
         calculatedtime = function() private$.items[["calculatedtime"]],
         outcomeredifened = function() private$.items[["outcomeredifened"]]),
     private = list(),
@@ -352,6 +332,10 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "tint",
                     "multievent",
                     "adjexplanatory")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="text3",
+                title="resultsdeneme2"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="text",
@@ -458,35 +442,6 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "adjexplanatory",
                     "pplot",
                     "censored")))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="plot7",
-                title="`Adjusted Survival Curve - ${adjexplanatory}`",
-                width=800,
-                height=600,
-                renderFun=".plot7",
-                requiresData=TRUE,
-                visible="(ac)",
-                refs="survminer",
-                clearWith=list(
-                    "ac",
-                    "adjexplanatory",
-                    "endplot",
-                    "byplot",
-                    "ci95",
-                    "risktable",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "explanatory",
-                    "contexpl",
-                    "fudate",
-                    "dxdate",
-                    "tint",
-                    "multievent",
-                    "adjexplanatory",
-                    "pplot",
-                    "censored")))
             self$add(jmvcore::Output$new(
                 options=options,
                 name="calculatedtime",
@@ -558,8 +513,6 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param hr .
 #' @param sty .
 #' @param km .
-#' @param ac .
-#' @param adjexplanatory .
 #' @param endplot .
 #' @param byplot .
 #' @param ci95 .
@@ -569,12 +522,12 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$text3} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text2} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$plot7} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$outcomeredifened} \tab \tab \tab \tab \tab an output \cr
 #' }
@@ -603,8 +556,6 @@ multisurvival <- function(
     hr = FALSE,
     sty = "t1",
     km = FALSE,
-    ac = FALSE,
-    adjexplanatory,
     endplot = 60,
     byplot = 12,
     ci95 = FALSE,
@@ -621,7 +572,6 @@ multisurvival <- function(
     if ( ! missing(outcome)) outcome <- jmvcore::resolveQuo(jmvcore::enquo(outcome))
     if ( ! missing(explanatory)) explanatory <- jmvcore::resolveQuo(jmvcore::enquo(explanatory))
     if ( ! missing(contexpl)) contexpl <- jmvcore::resolveQuo(jmvcore::enquo(contexpl))
-    if ( ! missing(adjexplanatory)) adjexplanatory <- jmvcore::resolveQuo(jmvcore::enquo(adjexplanatory))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
@@ -630,11 +580,9 @@ multisurvival <- function(
             `if`( ! missing(fudate), fudate, NULL),
             `if`( ! missing(outcome), outcome, NULL),
             `if`( ! missing(explanatory), explanatory, NULL),
-            `if`( ! missing(contexpl), contexpl, NULL),
-            `if`( ! missing(adjexplanatory), adjexplanatory, NULL))
+            `if`( ! missing(contexpl), contexpl, NULL))
 
     for (v in explanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
-    for (v in adjexplanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- multisurvivalOptions$new(
         elapsedtime = elapsedtime,
@@ -658,8 +606,6 @@ multisurvival <- function(
         hr = hr,
         sty = sty,
         km = km,
-        ac = ac,
-        adjexplanatory = adjexplanatory,
         endplot = endplot,
         byplot = byplot,
         ci95 = ci95,

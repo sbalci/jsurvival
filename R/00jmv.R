@@ -467,6 +467,14 @@
         `title`="Survival Analysis with R", 
         `publisher`="R Views, An R community blog edited by RStudio", 
         `url`="https://rviews.rstudio.com/2017/09/25/survival-analysis-with-r/"), 
+    `appliedsurvivalanalysisR`=list(
+        `type`="book", 
+        `author`="Dirk F. Moore", 
+        `year`=2016, 
+        `title`="Applied Survival Analysis Using R", 
+        `publisher`="Springer Cham", 
+        `doi`="10.1007/978-3-319-31245-3", 
+        `url`="https://link.springer.com/book/10.1007/978-3-319-31245-3"), 
     `ClinicoPathJamoviModule`=list(
         `type`="software", 
         `author`="Serdar Balci", 

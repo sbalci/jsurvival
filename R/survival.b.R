@@ -439,6 +439,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     private$.todo()
 
                     return()
+                } else {
+                  self$results$todo$setVisible(FALSE)
                 }
 
                 # Empty data ----
@@ -555,11 +557,18 @@ survivalClass <- if (requireNamespace('jmvcore'))
                                 "."
                             )
                     ) %>%
-                    dplyr::mutate(description = gsub(
-                        pattern = "=",
-                        replacement = " is ",
-                        x = description
-                    )) %>%
+                  dplyr::mutate(
+                    description = dplyr::case_when(
+                      is.na(median) ~ paste0(
+                        glue::glue("{description} \n Note that when {factor}, the survival curve does not drop below 1/2 during \n the observation period, thus the median survival is undefined.")),
+                      TRUE ~ paste0(description)
+                    )
+                  ) %>%
+                  dplyr::mutate(description = gsub(
+                    pattern = "=",
+                    replacement = " is ",
+                    x = description
+                  )) %>%
                     dplyr::select(description) %>%
                     dplyr::pull(.) -> km_fit_median_definition
 

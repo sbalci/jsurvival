@@ -321,6 +321,7 @@ survivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "survivalResults",
     inherit = jmvcore::Group,
     active = list(
+        subtitle = function() private$.items[["subtitle"]],
         todo = function() private$.items[["todo"]],
         medianSummary = function() private$.items[["medianSummary"]],
         medianTable = function() private$.items[["medianTable"]],
@@ -343,14 +344,19 @@ survivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="`Survival Analysis - ${explanatory}`",
+                title="Survival Analysis",
                 refs=list(
                     "finalfit",
                     "survival",
                     "survminer",
                     "survivaltutorial",
                     "survivalrviews",
+                    "appliedsurvivalanalysisR",
                     "ClinicoPathJamoviModule"))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="subtitle",
+                title="`Survival Analysis - ${explanatory}`"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="todo",
@@ -798,6 +804,7 @@ survivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param sas .
 #' @return A results object containing:
 #' \tabular{llllll}{
+#'   \code{results$subtitle} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$medianSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
