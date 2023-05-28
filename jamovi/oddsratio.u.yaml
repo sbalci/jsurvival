@@ -14,6 +14,8 @@ children:
           - type: VariablesListBox
             name: explanatory
             isTarget: true
+
+
       - type: TargetLayoutBox
         label: Mortality or Recurrence
         children:
@@ -21,3 +23,8 @@ children:
             name: outcome
             maxItemCount: 1
             isTarget: true
+            fitToGrid: true
+          - type: LevelSelector
+            name: outcomeLevel
+            enable: (outcome)
+

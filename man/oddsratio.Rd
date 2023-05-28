@@ -4,7 +4,7 @@
 \alias{oddsratio}
 \title{Odds Ratio Table and Plot}
 \usage{
-oddsratio(data, explanatory, outcome)
+oddsratio(data, explanatory, outcome, outcomeLevel)
 }
 \arguments{
 \item{data}{The data as a data frame.}
@@ -12,14 +12,16 @@ oddsratio(data, explanatory, outcome)
 \item{explanatory}{.}
 
 \item{outcome}{.}
+
+\item{outcomeLevel}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
 \code{results$todo} \tab \tab \tab \tab \tab a html \cr
+\code{results$textmydata} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$text} \tab \tab \tab \tab \tab a html \cr
 \code{results$text2} \tab \tab \tab \tab \tab a html \cr
-\code{results$plot} \tab \tab \tab \tab \tab an image \cr
 }
 }
 \description{

@@ -27,8 +27,6 @@ multisurvival(
   hr = FALSE,
   sty = "t1",
   km = FALSE,
-  ac = FALSE,
-  adjexplanatory,
   endplot = 60,
   byplot = 12,
   ci95 = FALSE,
@@ -82,10 +80,6 @@ multisurvival(
 
 \item{km}{.}
 
-\item{ac}{.}
-
-\item{adjexplanatory}{.}
-
 \item{endplot}{.}
 
 \item{byplot}{.}
@@ -108,7 +102,6 @@ A results object containing:
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 \code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
-\code{results$plot7} \tab \tab \tab \tab \tab an image \cr
 \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
 \code{results$outcomeredifened} \tab \tab \tab \tab \tab an output \cr
 }

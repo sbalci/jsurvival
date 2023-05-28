@@ -7,7 +7,8 @@ oddsratioOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     public = list(
         initialize = function(
             explanatory = NULL,
-            outcome = NULL, ...) {
+            outcome = NULL,
+            outcomeLevel = NULL, ...) {
 
             super$initialize(
                 package="jsurvival",
@@ -26,16 +27,23 @@ oddsratioOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "nominal"),
                 permitted=list(
                     "factor"))
+            private$..outcomeLevel <- jmvcore::OptionLevel$new(
+                "outcomeLevel",
+                outcomeLevel,
+                variable="(outcome)")
 
             self$.addOption(private$..explanatory)
             self$.addOption(private$..outcome)
+            self$.addOption(private$..outcomeLevel)
         }),
     active = list(
         explanatory = function() private$..explanatory$value,
-        outcome = function() private$..outcome$value),
+        outcome = function() private$..outcome$value,
+        outcomeLevel = function() private$..outcomeLevel$value),
     private = list(
         ..explanatory = NA,
-        ..outcome = NA)
+        ..outcome = NA,
+        ..outcomeLevel = NA)
 )
 
 oddsratioResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -43,9 +51,7 @@ oddsratioResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         todo = function() private$.items[["todo"]],
-        text = function() private$.items[["text"]],
-        text2 = function() private$.items[["text2"]],
-        plot = function() private$.items[["plot"]]),
+        textmydata = function() private$.items[["textmydata"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -64,28 +70,10 @@ oddsratioResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome")))
-            self$add(jmvcore::Html$new(
+            self$add(jmvcore::Preformatted$new(
                 options=options,
-                name="text",
-                title="Odds Ratio Table",
-                clearWith=list(
-                    "explanatory",
-                    "outcome")))
-            self$add(jmvcore::Html$new(
-                options=options,
-                name="text2",
-                title=""))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="plot",
-                title="Odds Ratio Plot",
-                width=600,
-                height=450,
-                renderFun=".plot",
-                requiresData=TRUE,
-                clearWith=list(
-                    "explanatory",
-                    "outcome")))}))
+                name="textmydata",
+                title="textmydata"))}))
 
 oddsratioBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "oddsratioBase",
@@ -118,19 +106,19 @@ oddsratioBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param data The data as a data frame.
 #' @param explanatory .
 #' @param outcome .
+#' @param outcomeLevel .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$text} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$text2} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$textmydata} \tab \tab \tab \tab \tab a preformatted \cr
 #' }
 #'
 #' @export
 oddsratio <- function(
     data,
     explanatory,
-    outcome) {
+    outcome,
+    outcomeLevel) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("oddsratio requires jmvcore to be installed (restart may be required)")
@@ -147,7 +135,8 @@ oddsratio <- function(
 
     options <- oddsratioOptions$new(
         explanatory = explanatory,
-        outcome = outcome)
+        outcome = outcome,
+        outcomeLevel = outcomeLevel)
 
     analysis <- oddsratioClass$new(
         options = options,
