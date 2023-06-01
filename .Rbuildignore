@@ -1,0 +1,12 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+.omv$
+build
+docs
+jamovi
+.*\.code\-workspace$
+.jmo$
+^\.github$
+^\.github/workflows/check-release\.yaml$
+^\.github/workflows/check-standard\.yaml$
+^\.github/workflows/pkgdown\.yaml$

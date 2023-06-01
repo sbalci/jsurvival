@@ -28,8 +28,8 @@ vignettes/*.pdf
 .Renviron
 .Rprofile
 build
-.Rbuildignore
-*.jmo
+# .Rbuildignore
+# *.jmo
 .Rprofile
 .Rproj.user
 .DS_Store

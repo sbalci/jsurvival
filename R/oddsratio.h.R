@@ -7,8 +7,7 @@ oddsratioOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     public = list(
         initialize = function(
             explanatory = NULL,
-            outcome = NULL,
-            outcomeLevel = NULL, ...) {
+            outcome = NULL, ...) {
 
             super$initialize(
                 package="jsurvival",
@@ -27,23 +26,16 @@ oddsratioOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "nominal"),
                 permitted=list(
                     "factor"))
-            private$..outcomeLevel <- jmvcore::OptionLevel$new(
-                "outcomeLevel",
-                outcomeLevel,
-                variable="(outcome)")
 
             self$.addOption(private$..explanatory)
             self$.addOption(private$..outcome)
-            self$.addOption(private$..outcomeLevel)
         }),
     active = list(
         explanatory = function() private$..explanatory$value,
-        outcome = function() private$..outcome$value,
-        outcomeLevel = function() private$..outcomeLevel$value),
+        outcome = function() private$..outcome$value),
     private = list(
         ..explanatory = NA,
-        ..outcome = NA,
-        ..outcomeLevel = NA)
+        ..outcome = NA)
 )
 
 oddsratioResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -51,7 +43,9 @@ oddsratioResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         todo = function() private$.items[["todo"]],
-        textmydata = function() private$.items[["textmydata"]]),
+        text = function() private$.items[["text"]],
+        text2 = function() private$.items[["text2"]],
+        plot = function() private$.items[["plot"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -70,10 +64,28 @@ oddsratioResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 clearWith=list(
                     "explanatory",
                     "outcome")))
-            self$add(jmvcore::Preformatted$new(
+            self$add(jmvcore::Html$new(
                 options=options,
-                name="textmydata",
-                title="textmydata"))}))
+                name="text",
+                title="Odds Ratio Table",
+                clearWith=list(
+                    "explanatory",
+                    "outcome")))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="text2",
+                title=""))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot",
+                title="Odds Ratio Plot",
+                width=600,
+                height=450,
+                renderFun=".plot",
+                requiresData=TRUE,
+                clearWith=list(
+                    "explanatory",
+                    "outcome")))}))
 
 oddsratioBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "oddsratioBase",
@@ -92,7 +104,8 @@ oddsratioBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 revision = revision,
                 pause = NULL,
                 completeWhenFilled = FALSE,
-                requiresMissings = FALSE)
+                requiresMissings = FALSE,
+                weightsSupport = 'auto')
         }))
 
 #' Odds Ratio Table and Plot
@@ -106,19 +119,19 @@ oddsratioBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param data The data as a data frame.
 #' @param explanatory .
 #' @param outcome .
-#' @param outcomeLevel .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$textmydata} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$text} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$text2} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' @export
 oddsratio <- function(
     data,
     explanatory,
-    outcome,
-    outcomeLevel) {
+    outcome) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("oddsratio requires jmvcore to be installed (restart may be required)")
@@ -135,8 +148,7 @@ oddsratio <- function(
 
     options <- oddsratioOptions$new(
         explanatory = explanatory,
-        outcome = outcome,
-        outcomeLevel = outcomeLevel)
+        outcome = outcome)
 
     analysis <- oddsratioClass$new(
         options = options,
