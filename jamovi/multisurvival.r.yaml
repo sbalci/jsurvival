@@ -42,9 +42,9 @@ items:
     #   type:  Preformatted
 
 
-    - name:  text3
-      title: resultsdeneme2
-      type:  Preformatted
+    # - name:  text3
+    #   title: resultsdeneme2
+    #   type:  Preformatted
 
 
 

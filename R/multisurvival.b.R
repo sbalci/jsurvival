@@ -532,34 +532,35 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 # https://forum.jamovi.org/viewtopic.php?p=9359&hilit=typeof#p9359
-                # Create a function ----
-                type_info <- function(x) {
-                    c(x,
-                      class = class(x),
-                      typeof = typeof(x),
-                      mode = mode(x),
-                      storage.mode = storage.mode(x)
-                    )
-                }
+
+                # # Create a function ----
+                # type_info <- function(x) {
+                #     c(x,
+                #       class = class(x),
+                #       typeof = typeof(x),
+                #       mode = mode(x),
+                #       storage.mode = storage.mode(x)
+                #     )
+                # }
 
 
-                resultsdeneme2 <- list(
-                  headdata = head(mydata),
-                  myexplanatory = myexplanatory,
-                  mycontexpl = mycontexpl,
-                  formula2 = formula2,
-                  RHT = RHT,
-                  LHT = LHT,
-                  coxformula = coxformula,
-                  summarycoxmodel = summarycoxmodel,
-                  coxmodel = coxmodel
-                )
+                # resultsdeneme2 <- list(
+                #   headdata = head(mydata),
+                #   myexplanatory = myexplanatory,
+                #   mycontexpl = mycontexpl,
+                #   formula2 = formula2,
+                #   RHT = RHT,
+                #   LHT = LHT,
+                #   coxformula = coxformula,
+                #   summarycoxmodel = summarycoxmodel,
+                #   coxmodel = coxmodel
+                # )
 
-                resultsdeneme2 <- lapply(resultsdeneme2, type_info)
+                # resultsdeneme2 <- lapply(resultsdeneme2, type_info)
 
 
 
-                self$results$text3$setContent(resultsdeneme2)
+                # self$results$text3$setContent(resultsdeneme2)
 
 
 

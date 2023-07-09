@@ -22,9 +22,10 @@ children:
             name: outcome
             maxItemCount: 1
             isTarget: true
+            fitToGrid: true
           - type: LevelSelector
             name: outcomeLevel
-            enable: (outcome)
+            enable: (outcome && !multievent)
       - type: TargetLayoutBox
         label: Explanatory Variables
         children:

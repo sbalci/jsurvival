@@ -53,6 +53,7 @@ options:
       title: Event Level
       type: Level
       variable: (outcome)
+
     - name: dod
       title: Dead of Disease
       type: Level
