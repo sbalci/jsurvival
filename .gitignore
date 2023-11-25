@@ -33,3 +33,4 @@ build
 .Rprofile
 .Rproj.user
 .DS_Store
+*.log
