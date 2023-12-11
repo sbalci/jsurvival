@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jsurvival</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2.07</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2.14</span>
       </span>
     </div>
 
@@ -71,18 +71,20 @@
 <span>  landmark <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  pw <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  padjustmethod <span class="op">=</span> <span class="st">"holm"</span>,</span>
+<span>  ph_cox <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  sc <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  kmunicate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ce <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ch <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  endplot <span class="op">=</span> <span class="fl">60</span>,</span>
+<span>  ybegin_plot <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  yend_plot <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  byplot <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  multievent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ci95 <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  risktable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  censored <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  pplot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  sas <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  pplot <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -168,6 +170,10 @@
 <dd><p>.</p></dd>
 
 
+<dt>ph_cox</dt>
+<dd><p>.</p></dd>
+
+
 <dt>sc</dt>
 <dd><p>.</p></dd>
 
@@ -185,6 +191,14 @@
 
 
 <dt>endplot</dt>
+<dd><p>.</p></dd>
+
+
+<dt>ybegin_plot</dt>
+<dd><p>.</p></dd>
+
+
+<dt>yend_plot</dt>
 <dd><p>.</p></dd>
 
 
@@ -211,16 +225,12 @@
 <dt>pplot</dt>
 <dd><p>.</p></dd>
 
-
-<dt>sas</dt>
-<dd><p>.</p></dd>
-
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>A results object containing:</p><table class="table table"><tr><td><code>results$subtitle</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$todo</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$medianSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$medianTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$coxSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$coxTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$tCoxtext2</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$survTableSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$survTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$pairwiseSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$pairwiseTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$plot</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot2</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot3</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot6</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$calculatedtime</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$outcomeredifened</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr></table><p>Tables can be converted to data frames with <code>asDF</code> or <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></code>. For example:</p>
+<p>A results object containing:</p><table class="table table"><tr><td><code>results$subtitle</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$todo</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$medianSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$medianTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$coxSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$coxTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$tCoxtext2</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$cox_ph</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$plot7</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$survTableSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$survTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$pairwiseSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$pairwiseTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$plot</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot2</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot3</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot6</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$calculatedtime</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$outcomeredifened</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr></table><p>Tables can be converted to data frames with <code>asDF</code> or <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></code>. For example:</p>
 
 
 <p><code>results$medianTable$asDF</code></p>
