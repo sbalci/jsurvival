@@ -25,18 +25,20 @@ survival(
   landmark = 3,
   pw = FALSE,
   padjustmethod = "holm",
+  ph_cox = FALSE,
   sc = FALSE,
   kmunicate = FALSE,
   ce = FALSE,
   ch = FALSE,
   endplot = 60,
+  ybegin_plot = 0,
+  yend_plot = 1,
   byplot = 12,
   multievent = FALSE,
   ci95 = FALSE,
   risktable = FALSE,
   censored = FALSE,
-  pplot = TRUE,
-  sas = FALSE
+  pplot = TRUE
 )
 }
 \arguments{
@@ -80,6 +82,8 @@ survival(
 
 \item{padjustmethod}{.}
 
+\item{ph_cox}{.}
+
 \item{sc}{.}
 
 \item{kmunicate}{.}
@@ -89,6 +93,10 @@ survival(
 \item{ch}{.}
 
 \item{endplot}{.}
+
+\item{ybegin_plot}{.}
+
+\item{yend_plot}{.}
 
 \item{byplot}{.}
 
@@ -101,8 +109,6 @@ survival(
 \item{censored}{.}
 
 \item{pplot}{.}
-
-\item{sas}{.}
 }
 \value{
 A results object containing:
@@ -114,6 +120,8 @@ A results object containing:
 \code{results$coxSummary} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$coxTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$tCoxtext2} \tab \tab \tab \tab \tab a html \cr
+\code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$plot7} \tab \tab \tab \tab \tab an image \cr
 \code{results$survTableSummary} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$pairwiseSummary} \tab \tab \tab \tab \tab a preformatted \cr

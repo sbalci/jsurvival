@@ -102,6 +102,17 @@ children:
                     name: landmark
                     format: number
                     enable: (uselandmark)
+      - type: Label
+        label: Calculated Time to Data
+        fitToGrid: true
+        children:
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: Output
+                name: calculatedtime
+                fitToGrid: true
+                enable: (tint)
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
     collapsed: true
@@ -133,16 +144,19 @@ children:
           - type: ComboBox
             name: analysistype
             enable: (outcome && multievent)
-  - type: CollapseBox
-    label: Single Arm Survival
-    collapsed: true
-    children:
+
       - type: Label
-        label: Single Arm Survival
+        label: Calculated Outcome to Data
         fitToGrid: true
         children:
-          - type: CheckBox
-            name: sas
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: Output
+                name: outcomeredifened
+                fitToGrid: true
+                enable: (outcome && multievent)
+
   - type: CollapseBox
     label: Pairwise Comparisons
     collapsed: true
@@ -158,6 +172,7 @@ children:
               - type: ComboBox
                 name: padjustmethod
                 enable: (pw)
+
   - type: CollapseBox
     label: Plots
     collapsed: true
@@ -169,6 +184,8 @@ children:
           - type: LayoutBox
             fitToGrid: true
             children:
+              - type: CheckBox
+                name: ph_cox
               - type: CheckBox
                 name: sc
               - type: CheckBox
@@ -189,6 +206,12 @@ children:
               - type: TextBox
                 name: byplot
                 format: number
+              - type: TextBox
+                name: ybegin_plot
+                format: number
+              - type: TextBox
+                name: yend_plot
+                format: number
               - type: CheckBox
                 name: ci95
               - type: CheckBox
@@ -208,23 +231,3 @@ children:
             name: cutp
             format: string
             width: large
-  - type: CollapseBox
-    label: Save Converted Variables to Data
-    collapsed: true
-    children:
-      - type: Label
-        label: Add Calculated Time to Your Data
-        fitToGrid: true
-        children:
-          - type: Output
-            name: calculatedtime
-            enable: (tint)
-            fitToGrid: true
-      - type: Label
-        label: Add Redefined Outcome to Data
-        fitToGrid: true
-        children:
-          - type: Output
-            name: outcomeredifened
-            enable: (multievent)
-            fitToGrid: true
