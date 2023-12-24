@@ -68,19 +68,21 @@ children:
                             isTarget: true
                             fitToGrid: true
                             stretchFactor: 1
-      - type: Label
-        label: Time Type
-        fitToGrid: true
-        children:
-          - type: LayoutBox
-            margin: large
-            fitToGrid: true
-            children:
-              - type: ComboBox
-                name: timetypedata
-                enable: (tint)
-              - type: ComboBox
-                name: timetypeoutput
+              - type: Label
+                label: Time Type
+                fitToGrid: true
+                stretchFactor: 1
+                children:
+                  - type: LayoutBox
+                    margin: large
+                    fitToGrid: true
+                    children:
+                      - type: ComboBox
+                        name: timetypedata
+                        enable: (tint)
+                      - type: ComboBox
+                        name: timetypeoutput
+                        enable: (tint)
       - type: Label
         label: Landmark Time
         fitToGrid: true
@@ -95,6 +97,16 @@ children:
                     name: landmark
                     format: number
                     enable: (uselandmark)
+      - type: Label
+        label: Calculated Time to Data 
+        fitToGrid: true
+        children:
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: Output
+                name: calculatedtime
+                enable: (tint)
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
     collapsed: true
@@ -105,6 +117,7 @@ children:
         children:
           - type: CheckBox
             name: multievent
+            enable: (outcome)
           - type: LayoutBox
             fitToGrid: true
             children:
@@ -126,6 +139,17 @@ children:
           - type: ComboBox
             name: analysistype
             enable: (outcome && multievent)
+      - type: Label
+        label: Calculated Outcome to Data 
+        fitToGrid: true
+        children:
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: Output
+                name: outcomeredifened
+                enable: (outcome && multievent)
+                
   - type: CollapseBox
     label: Plots
     collapsed: true
@@ -157,6 +181,12 @@ children:
               - type: TextBox
                 name: byplot
                 format: number
+              - type: TextBox
+                name: ybegin_plot
+                format: number
+              - type: TextBox
+                name: yend_plot
+                format: number
               - type: CheckBox
                 name: ci95
               - type: CheckBox
@@ -174,23 +204,4 @@ children:
             name: cutp
             format: string
             width: large
-  - type: CollapseBox
-    label: Save Converted Variables to Data
-    collapsed: true
-    children:
-      - type: Label
-        label: Add Calculated Time to Your Data
-        fitToGrid: true
-        children:
-          - type: Output
-            name: calculatedtime
-            enable: (tint)
-            fitToGrid: true
-      - type: Label
-        label: Add Redefined Outcome to Data
-        fitToGrid: true
-        children:
-          - type: Output
-            name: outcomeredifened
-            enable: (multievent)
-            fitToGrid: true
+

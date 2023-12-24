@@ -27,6 +27,8 @@ singlearmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             ce = FALSE,
             ch = FALSE,
             endplot = 60,
+            ybegin_plot = 0,
+            yend_plot = 1,
             byplot = 12,
             multievent = FALSE,
             ci95 = FALSE,
@@ -97,7 +99,8 @@ singlearmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 analysistype,
                 options=list(
                     "overall",
-                    "cause"),
+                    "cause",
+                    "compete"),
                 default="overall")
             private$..outcomeredifened <- jmvcore::OptionOutput$new(
                 "outcomeredifened")
@@ -154,6 +157,14 @@ singlearmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "endplot",
                 endplot,
                 default=60)
+            private$..ybegin_plot <- jmvcore::OptionNumber$new(
+                "ybegin_plot",
+                ybegin_plot,
+                default=0)
+            private$..yend_plot <- jmvcore::OptionNumber$new(
+                "yend_plot",
+                yend_plot,
+                default=1)
             private$..byplot <- jmvcore::OptionInteger$new(
                 "byplot",
                 byplot,
@@ -198,6 +209,8 @@ singlearmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..ce)
             self$.addOption(private$..ch)
             self$.addOption(private$..endplot)
+            self$.addOption(private$..ybegin_plot)
+            self$.addOption(private$..yend_plot)
             self$.addOption(private$..byplot)
             self$.addOption(private$..multievent)
             self$.addOption(private$..ci95)
@@ -228,6 +241,8 @@ singlearmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ce = function() private$..ce$value,
         ch = function() private$..ch$value,
         endplot = function() private$..endplot$value,
+        ybegin_plot = function() private$..ybegin_plot$value,
+        yend_plot = function() private$..yend_plot$value,
         byplot = function() private$..byplot$value,
         multievent = function() private$..multievent$value,
         ci95 = function() private$..ci95$value,
@@ -257,6 +272,8 @@ singlearmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..ce = NA,
         ..ch = NA,
         ..endplot = NA,
+        ..ybegin_plot = NA,
+        ..yend_plot = NA,
         ..byplot = NA,
         ..multievent = NA,
         ..ci95 = NA,
@@ -291,7 +308,8 @@ singlearmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "survival",
                     "survminer",
                     "ClinicoPathJamoviModule",
-                    "survivaltutorial"))
+                    "survivaltutorial",
+                    "survivalrwnahhas"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="todo",
@@ -515,36 +533,23 @@ singlearmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="calculatedtime",
                 title="Add Calculated Time to Data",
-                varTitle="`Calculated Time - from ${ dxdate } to { fudate }`",
-                varDescription="Calculated Time from given Dates",
+                varTitle="Calculated Time Single Arm",
+                varDescription="`Calculated Time from given Dates in Single Arm Analysis - from ${ dxdate } to { fudate }`",
                 clearWith=list(
                     "tint",
                     "dxdate",
-                    "fudate",
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "fudate",
-                    "dxdate",
-                    "tint",
-                    "multievent")))
+                    "fudate")))
             self$add(jmvcore::Output$new(
                 options=options,
                 name="outcomeredifened",
                 title="Add Redefined Outcome to Data",
-                varTitle="`Redefined Outcome - from ${ outcome } for analysis { analysistype }`",
-                varDescription="Redefined Outcome from Outcome based on Analysis Type",
+                varTitle="Redefined Outcome Single Arm",
+                varDescription="`Redefined Outcome - from ${ outcome } for analysis { analysistype } in Single Arm Analysis`",
                 clearWith=list(
                     "outcome",
                     "analysistype",
                     "multievent",
-                    "explanatory",
-                    "outcomeLevel",
-                    "overalltime",
-                    "fudate",
-                    "dxdate",
-                    "tint",
-                    "multievent")))}))
+                    "outcomeLevel")))}))
 
 singlearmBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "singlearmBase",
@@ -596,6 +601,8 @@ singlearmBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param ce .
 #' @param ch .
 #' @param endplot .
+#' @param ybegin_plot .
+#' @param yend_plot .
 #' @param byplot .
 #' @param multievent .
 #' @param ci95 .
@@ -646,6 +653,8 @@ singlearm <- function(
     ce = FALSE,
     ch = FALSE,
     endplot = 60,
+    ybegin_plot = 0,
+    yend_plot = 1,
     byplot = 12,
     multievent = FALSE,
     ci95 = FALSE,
@@ -690,6 +699,8 @@ singlearm <- function(
         ce = ce,
         ch = ch,
         endplot = endplot,
+        ybegin_plot = ybegin_plot,
+        yend_plot = yend_plot,
         byplot = byplot,
         multievent = multievent,
         ci95 = ci95,

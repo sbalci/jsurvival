@@ -162,6 +162,15 @@ refs:
         url: https://CRAN.R-project.org/package=ggstatsplot
         doi: '10.5281/zenodo.2074621'
 
+    ggstatsplot_article:
+        type: 'article'
+        author: Patil, I.
+        year: 2021
+        title: "Visualizations with statistical details: The 'ggstatsplot' approach."
+        publisher: 'PsyArxiv'
+        doi: 'doi:10.31234/osf.io/p7mku'
+
+
     report:
         type: 'software'
         author: Makowski, Dominique, Lüdecke, Daniel
@@ -463,6 +472,15 @@ refs:
         url: http://github.com/carloscinelli/benford.analysis
 
 
+    benford.nedir:
+        type: 'website'
+        author: "Ümit Işlak"
+        year: 2021
+        title: "Benford (ilk basamak) kanunu nedir?"
+        publisher: 'sarkac.org'
+        url: https://sarkac.org/2021/09/benford-ilk-basamak-kanunu-nedir/
+
+
     vtree:
         type: 'software'
         author: Nick Barrowman
@@ -526,7 +544,7 @@ refs:
         url: https://github.com/yanlinlin82/ggvenn
 
     padjust:
-        type: 'article'
+        type: 'website'
         year: 2020
         title: "p.adjust {stats} Adjust P-values for Multiple Comparisons"
         publisher: '[R package]. Retrieved from https://stat.ethz.ch/R-manual/R-devel/library/stats/html/p.adjust.html'
@@ -543,6 +561,52 @@ refs:
         pages: 39-40
         doi: 10.2105/AJPH.2012.300897
         url: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518362/
+
+    ClinicoPathJamoviModule:
+        type: 'software'
+        author: Serdar Balci
+        year: 2022
+        title: "ClinicoPath jamovi Module doi:10.5281/zenodo.3997188"
+        publisher: '[R package]. Retrieved from https://github.com/sbalci/ClinicoPathJamoviModule'
+        doi: 10.17605/OSF.IO/9SZUD
+        url: https://www.serdarbalci.com/ClinicoPathJamoviModule/
+
+
+    iwillsurvive:
+        type: 'software'
+        author: Nathaniel Phillips
+        year: 2021
+        title: "iwillsurvive"
+        publisher: '[R package]. Retrieved from https://github.com/ndphillips/iwillsurvive'
+        url: https://github.com/ndphillips/iwillsurvive
+
+    sensspecwiki:
+        type: 'webpage'
+        author: "Wikipedia contributors"
+        title: "Sensitivity and specificity --- Wikipedia, The Free Encyclopedia"
+        year: "2022"
+        url: https://en.wikipedia.org/w/index.php?title=Sensitivity_and_specificity&oldid=1077556477
+        note: "[Online; accessed 3-April-2022]"
+
+
+
+    kappaSize:
+        type: 'software'
+        author: Michael A Rotondi
+        year: 2022
+        title: "kappaSize: Sample Size Estimation Functions for Studies of Interobserver Agreement"
+        publisher: '[R package]. Retrieved from https://cran.r-project.org/web/packages/kappaSize/'
+        url: https://cran.r-project.org/web/packages/kappaSize/
+
+
+    gtExtras:
+        type: 'software'
+        author: Thomas Mock, Daniel D. Sjoberg
+        year: 2023
+        title: "gtExtras"
+        publisher: '[R package]. Retrieved from https://cran.r-project.org/web/packages/gtExtras/'
+        url: https://cran.r-project.org/web/packages/gtExtras/
+
 
     survivaltutorial:
         type: 'article'
@@ -570,16 +634,13 @@ refs:
         doi: 10.1007/978-3-319-31245-3
         url: https://link.springer.com/book/10.1007/978-3-319-31245-3
 
-
-
-    ClinicoPathJamoviModule:
-        type: 'software'
-        author: Serdar Balci
-        year: 2022
-        title: "ClinicoPath jamovi Module doi:10.5281/zenodo.3997188"
-        publisher: '[R package]. Retrieved from https://github.com/sbalci/ClinicoPathJamoviModule'
-        doi: 10.17605/OSF.IO/9SZUD
-        url: https://www.serdarbalci.com/ClinicoPathJamoviModule/
+    survivalrwnahhas:
+        type: 'book chapter'
+        author: Ramzi W. Nahhas
+        year: 2023
+        title: "Chapter 7 Survival Analysis. Introduction to Regression Methods for Public Health Using R."
+        url: https://bookdown.org/rwnahhas/RMPH/survival.html
+        
 
 
 ...

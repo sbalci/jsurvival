@@ -26,13 +26,7 @@ multisurvival(
   landmark = 3,
   hr = FALSE,
   sty = "t1",
-  km = FALSE,
-  endplot = 60,
-  byplot = 12,
-  ci95 = FALSE,
-  risktable = FALSE,
-  censored = FALSE,
-  pplot = TRUE
+  ph_cox = FALSE
 )
 }
 \arguments{
@@ -78,19 +72,7 @@ multisurvival(
 
 \item{sty}{.}
 
-\item{km}{.}
-
-\item{endplot}{.}
-
-\item{byplot}{.}
-
-\item{ci95}{.}
-
-\item{risktable}{.}
-
-\item{censored}{.}
-
-\item{pplot}{.}
+\item{ph_cox}{.}
 }
 \value{
 A results object containing:
@@ -100,7 +82,8 @@ A results object containing:
 \code{results$text2} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
-\code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
+\code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$plot8} \tab \tab \tab \tab \tab an image \cr
 \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
 \code{results$outcomeredifened} \tab \tab \tab \tab \tab an output \cr
 }
