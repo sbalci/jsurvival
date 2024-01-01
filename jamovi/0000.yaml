@@ -1,12 +1,12 @@
 ---
 title: Survival Module of ClinicoPath for jamovi
 name: jsurvival
-version: 0.0.2.18
+version: 0.0.2.19
 jms: '1.0'
 authors:
   - Serdar Balci
 maintainer: Serdar Balci <serdarbalci@serdarbalci.com>
-date: '2023-12-31'
+date: '2024-01-01'
 type: R
 description: >-
   Analysis for Clinicopathological Research Survival Module of ClinicoPath for
