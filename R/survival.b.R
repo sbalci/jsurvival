@@ -880,7 +880,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     utimes <- c(12, 36, 60)
                 }
 
-                km_fit_summary <- summary(km_fit, times = utimes)
+                km_fit_summary <- summary(km_fit, times = utimes, extend = TRUE)
 
                 km_fit_df <-
                     as.data.frame(km_fit_summary[c("strata",

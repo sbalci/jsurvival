@@ -3,7 +3,6 @@
 \docType{package}
 \name{jsurvival-package}
 \alias{jsurvival-package}
-\alias{_PACKAGE}
 \alias{jsurvival}
 \title{jsurvival: Analysis for jsurvivalological Research}
 \description{

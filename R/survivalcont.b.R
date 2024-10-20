@@ -961,7 +961,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 km_fit <- survival::survfit(formula, data = mydata)
 
-                km_fit_summary <- summary(km_fit, times = utimes)
+                km_fit_summary <- summary(km_fit, times = utimes, extend = TRUE)
 
                 km_fit_df <-
                     as.data.frame(km_fit_summary[c(
