@@ -829,6 +829,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 formula <- as.formula(formula)
 
                     cox_model <- survival::coxph(formula, data = mydata)
+                                                 # , na.action = na.exclude)
 
                     zph <- survival::cox.zph(cox_model)
 
