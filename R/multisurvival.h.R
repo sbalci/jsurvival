@@ -27,7 +27,8 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             hr = FALSE,
             sty = "t1",
             ph_cox = FALSE,
-            calculateRiskScore = FALSE, ...) {
+            calculateRiskScore = FALSE,
+            plotRiskGroups = FALSE, ...) {
 
             super$initialize(
                 package="jsurvival",
@@ -165,6 +166,10 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 "calculateRiskScore",
                 calculateRiskScore,
                 default=FALSE)
+            private$..plotRiskGroups <- jmvcore::OptionBool$new(
+                "plotRiskGroups",
+                plotRiskGroups,
+                default=FALSE)
             private$..addRiskScore <- jmvcore::OptionOutput$new(
                 "addRiskScore")
             private$..addRiskGroup <- jmvcore::OptionOutput$new(
@@ -194,6 +199,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..sty)
             self$.addOption(private$..ph_cox)
             self$.addOption(private$..calculateRiskScore)
+            self$.addOption(private$..plotRiskGroups)
             self$.addOption(private$..addRiskScore)
             self$.addOption(private$..addRiskGroup)
         }),
@@ -222,6 +228,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         sty = function() private$..sty$value,
         ph_cox = function() private$..ph_cox$value,
         calculateRiskScore = function() private$..calculateRiskScore$value,
+        plotRiskGroups = function() private$..plotRiskGroups$value,
         addRiskScore = function() private$..addRiskScore$value,
         addRiskGroup = function() private$..addRiskGroup$value),
     private = list(
@@ -249,6 +256,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ..sty = NA,
         ..ph_cox = NA,
         ..calculateRiskScore = NA,
+        ..plotRiskGroups = NA,
         ..addRiskScore = NA,
         ..addRiskGroup = NA)
 )
@@ -266,8 +274,8 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         plot8 = function() private$.items[["plot8"]],
         mydataview = function() private$.items[["mydataview"]],
         riskScoreTable = function() private$.items[["riskScoreTable"]],
-        riskScorePlot = function() private$.items[["riskScorePlot"]],
         riskScoreMetrics = function() private$.items[["riskScoreMetrics"]],
+        riskGroupPlot = function() private$.items[["riskGroupPlot"]],
         calculatedtime = function() private$.items[["calculatedtime"]],
         outcomeredefined = function() private$.items[["outcomeredefined"]],
         addRiskScore = function() private$.items[["addRiskScore"]],
@@ -446,21 +454,6 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "outcomeLevel",
                     "explanatory",
                     "contexpl")))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="riskScorePlot",
-                title="Survival by Risk Group",
-                width=800,
-                height=600,
-                renderFun=".plotRiskGroups",
-                visible="(calculateRiskScore)",
-                requiresData=TRUE,
-                clearWith=list(
-                    "calculateRiskScore",
-                    "outcome",
-                    "outcomeLevel",
-                    "explanatory",
-                    "contexpl")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="riskScoreMetrics",
@@ -472,6 +465,15 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "outcomeLevel",
                     "explanatory",
                     "contexpl")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="riskGroupPlot",
+                title="Risk Group Survival Plot",
+                width=600,
+                height=450,
+                renderFun=".plotRiskGroups",
+                requiresData=TRUE,
+                visible="(plotRiskGroups)"))
             self$add(jmvcore::Output$new(
                 options=options,
                 name="calculatedtime",
@@ -583,6 +585,7 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param sty .
 #' @param ph_cox .
 #' @param calculateRiskScore .
+#' @param plotRiskGroups .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
@@ -594,8 +597,8 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$riskScoreTable} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$riskScorePlot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$riskScoreMetrics} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$riskGroupPlot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
@@ -632,7 +635,8 @@ multisurvival <- function(
     hr = FALSE,
     sty = "t1",
     ph_cox = FALSE,
-    calculateRiskScore = FALSE) {
+    calculateRiskScore = FALSE,
+    plotRiskGroups = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("multisurvival requires jmvcore to be installed (restart may be required)")
@@ -677,7 +681,8 @@ multisurvival <- function(
         hr = hr,
         sty = sty,
         ph_cox = ph_cox,
-        calculateRiskScore = calculateRiskScore)
+        calculateRiskScore = calculateRiskScore,
+        plotRiskGroups = plotRiskGroups)
 
     analysis <- multisurvivalClass$new(
         options = options,

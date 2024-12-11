@@ -27,7 +27,8 @@ multisurvival(
   hr = FALSE,
   sty = "t1",
   ph_cox = FALSE,
-  calculateRiskScore = FALSE
+  calculateRiskScore = FALSE,
+  plotRiskGroups = FALSE
 )
 }
 \arguments{
@@ -76,6 +77,8 @@ multisurvival(
 \item{ph_cox}{.}
 
 \item{calculateRiskScore}{.}
+
+\item{plotRiskGroups}{.}
 }
 \value{
 A results object containing:
@@ -89,8 +92,8 @@ A results object containing:
 \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
 \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$riskScoreTable} \tab \tab \tab \tab \tab a table \cr
-\code{results$riskScorePlot} \tab \tab \tab \tab \tab an image \cr
 \code{results$riskScoreMetrics} \tab \tab \tab \tab \tab a html \cr
+\code{results$riskGroupPlot} \tab \tab \tab \tab \tab an image \cr
 \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
 \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr

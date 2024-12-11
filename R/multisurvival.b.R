@@ -712,13 +712,31 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                     # Calculate risk scores and create groups
                     mydata <- private$.calculateRiskScore(cox_model, mydata)
 
-                    # Add risk scores to output if requested
+
+
+                    # Store data for plot
+                    image <- self$results$riskGroupPlot
+                    image$setState(list(riskData = mydata))
+
+
+                    # # Store data for plot
+                    # risk_plotData <- list(
+                    #     "riskData" = mydata,
+                    #     "timetypeoutput" = self$options$timetypeoutput
+                    # )
+                    #
+                    # image <- self$results$riskGroupPlot
+                    # image$setState(risk_plotData)
+
+
+
+                    # Add risk scores to output if requested ----
                     if (self$options$addRiskScore && self$results$addRiskScore$isNotFilled()) {
                         self$results$addRiskScore$setRowNums(mydata$row_names)
                         self$results$addRiskScore$setValues(mydata$risk_score)
                     }
 
-                    # Add risk group to output if requested
+                    # Add risk group to output if requested ----
                     if (self$options$addRiskGroup && self$results$addRiskGroup$isNotFilled()) {
                         self$results$addRiskGroup$setRowNums(mydata$row_names)
                         self$results$addRiskGroup$setValues(mydata$risk_group)
@@ -740,11 +758,11 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                     # risk_scores <- predict(cox_model, type = "risk")
 
 
-                    ### Add risk scores to data in analysis ----
+                    ### Add risk scores to data in analysis
                     # mydata$risk_score <- risk_scores
 
 
-                    ## Add Calculated Risk Score to Data ----
+                    ## Add Calculated Risk Score to Data
 
                     # if (self$options$calculateRiskScore && self$options$addRiskScore && self$results$addRiskScore$isNotFilled()) {
                     #     self$results$addRiskScore$setRowNums(mydata$row_names)
@@ -753,7 +771,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 
-                    ## Create risk groups using quartiles ----
+                    ## Create risk groups using quartiles
                     # mydata$risk_group <- cut(
                     #     mydata$risk_score,
                     #     breaks = quantile(mydata$risk_score,
@@ -765,7 +783,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 
-                    # ## Calculate summary statistics for risk groups ----
+                    # ## Calculate summary statistics for risk groups
                     # risk_summary <- data.frame(
                     #     group = levels(mydata$risk_group),
                     #     n = as.numeric(table(mydata$risk_group)),
@@ -773,7 +791,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                     #     median_score = tapply(mydata$risk_score, mydata$risk_group, median)
                     # )
 
-                    # # Fit survival curves for risk groups ----
+                    # # Fit survival curves for risk groups
                     # risk_formula <- paste("survival::Surv(mytime, myoutcome) ~ risk_group")
                     # risk_formula <- as.formula(risk_formula)
                     # km_fit <- survival::survfit(risk_formula, data = mydata)
@@ -829,7 +847,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 # image7 <- self$results$plot7
                 # image7$setState(mydata)
 
-                # View mydata ----
+                # View mydata
                 # self$results$mydataview$setContent(
                 #     list(
                 #         head(cleanData)
@@ -1688,50 +1706,63 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             return(mydata)
         }
 
-        # ,
-        # .plotRiskGroups = function(image, ggtheme, theme, ...) {
-        #
-        #     if (!self$options$calculateRiskScore) {
-        #         return()
-        #     }
-        #
-        #     plotData <- image$state$data
-        #     if (is.null(plotData)) {
-        #         return()
-        #     }
-        #
-        #
-        #
-        #         # Create survival object directly
-        #         surv_obj <- survival::Surv(time = plotData$mytime,
-        #                                    event = plotData$myoutcome)
-        #
-        #         # Fit survival model with the risk groups
-        #         fit <- survival::survfit(surv_obj ~ plotData$risk_group)
-        #
-        #         # Create plot
-        #         plot <- survminer::ggsurvplot(
-        #             fit = fit,
-        #             data = plotData,
-        #             pval = TRUE,
-        #             conf.int = TRUE,
-        #             risk.table = TRUE,
-        #             risk.table.height = 0.3,
-        #             xlab = paste0("Time (", self$options$timetypeoutput, ")"),
-        #             title = "Survival by Risk Group",
-        #             legend.title = "Risk Group",
-        #             palette = "Set2",
-        #             ggtheme = ggplot2::theme_bw()
-        #         )
-        #
-        #         print(plot)
-        #         TRUE
-        #
-        #
-        #
-        #
-        # }
+        ,
+        .plotRiskGroups = function(image, ggtheme, theme, ...) {
+            # Check if risk score calculation is enabled
+            if (!self$options$calculateRiskScore || !self$options$plotRiskGroups) {
+                return()
+            }
 
+            # Get data from image state
+            riskData <- image$state$riskData
+            if (is.null(riskData)) {
+                return()
+            }
+
+            # Keep only needed columns
+            plotData <- data.frame(
+                time = riskData$mytime,
+                status = riskData$myoutcome,
+                group = riskData$risk_group
+            )
+
+            # Create survival object and fit
+            fit <- survival::survfit(
+                survival::Surv(time, status) ~ group,
+                data = plotData
+            )
+
+            # Create plot
+            plot <- survminer::ggsurvplot(
+                fit = fit,
+                data = plotData,
+                pval = TRUE,
+                conf.int = TRUE,
+                risk.table = TRUE,
+                risk.table.height = 0.3,
+                risk.table.y.text.col = TRUE,
+                risk.table.y.text = FALSE,
+                ncensor.plot = TRUE,
+                ncensor.plot.height = 0.25,
+                xlab = paste0("Time (", self$options$timetypeoutput, ")"),
+                ylab = "Survival probability",
+                title = "Survival by Risk Group",
+                subtitle = "Based on Cox model risk score quartiles",
+                legend.title = "Risk Group",
+                palette = "Set2",
+                ggtheme = ggplot2::theme_bw() +
+                    ggplot2::theme(
+                        plot.title = ggplot2::element_text(size = 14, face = "bold"),
+                        plot.subtitle = ggplot2::element_text(size = 12),
+                        axis.title = ggplot2::element_text(size = 12),
+                        axis.text = ggplot2::element_text(size = 10),
+                        legend.text = ggplot2::element_text(size = 10)
+                    )
+            )
+
+            print(plot)
+            TRUE
+        }
 
 
 

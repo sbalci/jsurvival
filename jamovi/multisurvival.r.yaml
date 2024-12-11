@@ -301,20 +301,6 @@ items:
           - explanatory
           - contexpl
 
-    - name: riskScorePlot
-      title: Survival by Risk Group
-      type: Image
-      width: 800
-      height: 600
-      renderFun: .plotRiskGroups
-      visible: (calculateRiskScore)
-      requiresData: true
-      clearWith:
-          - calculateRiskScore
-          - outcome
-          - outcomeLevel
-          - explanatory
-          - contexpl
 
     - name: riskScoreMetrics
       title: Risk Score Model Metrics
@@ -326,6 +312,20 @@ items:
           - outcomeLevel
           - explanatory
           - contexpl
+
+
+
+    - name: riskGroupPlot
+      title: Risk Group Survival Plot
+      type: Image
+      width: 600
+      height: 450
+      renderFun: .plotRiskGroups
+      requiresData: true
+      visible: (plotRiskGroups)
+
+
+
 
 
     - name: calculatedtime

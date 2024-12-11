@@ -192,16 +192,29 @@ children:
     stretchFactor: 1
     children:
       - type: Label
-        label: Grouping Based on Calculated Risk Score
-        fitToGrid: true
-        stretchFactor: 1
+        label: Risk Score Analysis
         children:
-          - type: CheckBox
-            name: calculateRiskScore
-          - type: Output
-            name: addRiskScore
-          - type: Output
-            name: addRiskGroup
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: CheckBox
+                name: calculateRiskScore
+              - type: CheckBox
+                name: plotRiskGroups
+                enable: (calculateRiskScore)
+              - type: Label
+                label: Risk Score Output
+                children:
+                  - type: LayoutBox
+                    margin: large
+                    children:
+                      - type: Output
+                        name: addRiskScore
+                        enable: (calculateRiskScore)
+                      - type: Output
+                        name: addRiskGroup
+                        enable: (calculateRiskScore)
+
   - type: CollapseBox
     label: Adjusted Survival Curve (Being Updated)
     collapsed: true

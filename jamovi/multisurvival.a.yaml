@@ -197,6 +197,11 @@ options:
       type: Bool
       default: false
 
+    - name: plotRiskGroups
+      title: Plot Risk Group Survival
+      type: Bool
+      default: false
+
     - name: addRiskScore
       title: Add Risk Score to Data
       type: Output
