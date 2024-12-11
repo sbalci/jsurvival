@@ -718,6 +718,18 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                         self$results$addRiskScore$setValues(mydata$risk_score)
                     }
 
+                    # Add risk group to output if requested
+                    if (self$options$addRiskGroup && self$results$addRiskGroup$isNotFilled()) {
+                        self$results$addRiskGroup$setRowNums(mydata$row_names)
+                        self$results$addRiskGroup$setValues(mydata$risk_group)
+                    }
+
+
+
+
+
+
+
                     # Add data to plot state
                     # image <- self$results$riskScorePlot
                     # image$setState(list(data = mydata))

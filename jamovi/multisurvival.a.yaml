@@ -199,8 +199,12 @@ options:
 
     - name: addRiskScore
       title: Add Risk Score to Data
-      type: Bool
-      default: false
+      type: Output
+
+
+    - name: addRiskGroup
+      title: Add Risk Group to Data
+      type: Output
 
 
 

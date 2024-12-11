@@ -198,8 +198,10 @@ children:
         children:
           - type: CheckBox
             name: calculateRiskScore
-          - type: CheckBox
+          - type: Output
             name: addRiskScore
+          - type: Output
+            name: addRiskGroup
   - type: CollapseBox
     label: Adjusted Survival Curve (Being Updated)
     collapsed: true

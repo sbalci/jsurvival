@@ -351,12 +351,44 @@ items:
 
 
 
-    # - name: addRiskScore
-    #   title: Add Calculated Risk Score to Data
-    #   type: Output
-    #   varTitle: '`Calculated Risk Score in Multivariable Survival Function`'
-    #   varDescription: Calculated Risk Score Based on Model
+    - name: addRiskScore
+      title: Add Calculated Risk Score to Data
+      type: Output
+      varTitle: '`Calculated Risk Score in Multivariable Survival Function`'
+      varDescription: Calculated Risk Score Based on Model
+      clearWith:
+          - addRiskScore
+          - calculateRiskScore
+          - outcome
+          - outcomeLevel
+          - overalltime
+          - explanatory
+          - contexpl
+          - fudate
+          - dxdate
+          - tint
+          - multievent
+          - addRiskGroup
 
+
+    - name: addRiskGroup
+      title: Add Calculated Risk Group to Data
+      type: Output
+      varTitle: '`Calculated Risk Group in Multivariable Survival Function`'
+      varDescription: Calculated Risk Group Based on Model
+      clearWith:
+          - addRiskScore
+          - calculateRiskScore
+          - outcome
+          - outcomeLevel
+          - overalltime
+          - explanatory
+          - contexpl
+          - fudate
+          - dxdate
+          - tint
+          - multievent
+          - addRiskGroup
 
 
 

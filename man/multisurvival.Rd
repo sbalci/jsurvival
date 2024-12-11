@@ -27,8 +27,7 @@ multisurvival(
   hr = FALSE,
   sty = "t1",
   ph_cox = FALSE,
-  calculateRiskScore = FALSE,
-  addRiskScore = FALSE
+  calculateRiskScore = FALSE
 )
 }
 \arguments{
@@ -77,8 +76,6 @@ multisurvival(
 \item{ph_cox}{.}
 
 \item{calculateRiskScore}{.}
-
-\item{addRiskScore}{.}
 }
 \value{
 A results object containing:
@@ -94,6 +91,10 @@ A results object containing:
 \code{results$riskScoreTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$riskScorePlot} \tab \tab \tab \tab \tab an image \cr
 \code{results$riskScoreMetrics} \tab \tab \tab \tab \tab a html \cr
+\code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
+\code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
+\code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
+\code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
