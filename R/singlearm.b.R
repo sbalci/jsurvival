@@ -522,9 +522,9 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         ## Add Redefined Outcome to Data ----
 
-        if (self$options$multievent  && self$options$outcomeredifened && self$results$outcomeredifened$isNotFilled()) {
-          self$results$outcomeredifened$setRowNums(results$cleanData$row_names)
-          self$results$outcomeredifened$setValues(results$cleanData$CalculatedOutcome)
+        if (self$options$multievent  && self$options$outcomeredefined && self$results$outcomeredefined$isNotFilled()) {
+          self$results$outcomeredefined$setRowNums(results$cleanData$row_names)
+          self$results$outcomeredefined$setValues(results$cleanData$CalculatedOutcome)
         }
       }
 
@@ -610,7 +610,11 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           dplyr::select(description) %>%
           dplyr::pull(.) -> km_fit_median_definition
 
-        medianSummary <- km_fit_median_definition
+
+        medianSummary <- c(km_fit_median_definition,
+                           "The median survival time is when 50% of subjects have experienced the event.",
+                           "This means that 50% of subjects in this group survived longer than this time period."
+        )
 
 
         self$results$medianSummary$setContent(medianSummary)
@@ -708,7 +712,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           dplyr::mutate(
             description =
               glue::glue(
-                "{time} month survival is {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]."
+                "{time} month survival is {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]. \n The estimated probability of surviving beyond {time} months was {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]. \n At this time point, there were {n.risk} subjects still at risk and {n.event} events had occurred in this group."
               )
           ) %>%
           dplyr::select(description) %>%

@@ -102,8 +102,8 @@ singlearmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "cause",
                     "compete"),
                 default="overall")
-            private$..outcomeredifened <- jmvcore::OptionOutput$new(
-                "outcomeredifened")
+            private$..outcomeredefined <- jmvcore::OptionOutput$new(
+                "outcomeredefined")
             private$..cutp <- jmvcore::OptionString$new(
                 "cutp",
                 cutp,
@@ -198,7 +198,7 @@ singlearmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..awd)
             self$.addOption(private$..awod)
             self$.addOption(private$..analysistype)
-            self$.addOption(private$..outcomeredifened)
+            self$.addOption(private$..outcomeredefined)
             self$.addOption(private$..cutp)
             self$.addOption(private$..timetypedata)
             self$.addOption(private$..timetypeoutput)
@@ -230,7 +230,7 @@ singlearmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         awd = function() private$..awd$value,
         awod = function() private$..awod$value,
         analysistype = function() private$..analysistype$value,
-        outcomeredifened = function() private$..outcomeredifened$value,
+        outcomeredefined = function() private$..outcomeredefined$value,
         cutp = function() private$..cutp$value,
         timetypedata = function() private$..timetypedata$value,
         timetypeoutput = function() private$..timetypeoutput$value,
@@ -261,7 +261,7 @@ singlearmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..awd = NA,
         ..awod = NA,
         ..analysistype = NA,
-        ..outcomeredifened = NA,
+        ..outcomeredefined = NA,
         ..cutp = NA,
         ..timetypedata = NA,
         ..timetypeoutput = NA,
@@ -295,7 +295,7 @@ singlearmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         plot3 = function() private$.items[["plot3"]],
         plot6 = function() private$.items[["plot6"]],
         calculatedtime = function() private$.items[["calculatedtime"]],
-        outcomeredifened = function() private$.items[["outcomeredifened"]]),
+        outcomeredefined = function() private$.items[["outcomeredefined"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -541,7 +541,7 @@ singlearmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "fudate")))
             self$add(jmvcore::Output$new(
                 options=options,
-                name="outcomeredifened",
+                name="outcomeredefined",
                 title="Add Redefined Outcome to Data",
                 varTitle="Redefined Outcome Single Arm",
                 varDescription="`Redefined Outcome - from ${ outcome } for analysis { analysistype } in Single Arm Analysis`",
@@ -620,7 +620,7 @@ singlearmBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot6} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
-#'   \code{results$outcomeredifened} \tab \tab \tab \tab \tab an output \cr
+#'   \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

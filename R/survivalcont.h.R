@@ -111,8 +111,8 @@ survivalcontOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "cause",
                     "compete"),
                 default="overall")
-            private$..outcomeredifened <- jmvcore::OptionOutput$new(
-                "outcomeredifened")
+            private$..outcomeredefined <- jmvcore::OptionOutput$new(
+                "outcomeredefined")
             private$..cutp <- jmvcore::OptionString$new(
                 "cutp",
                 cutp,
@@ -214,7 +214,7 @@ survivalcontOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
             self$.addOption(private$..awd)
             self$.addOption(private$..awod)
             self$.addOption(private$..analysistype)
-            self$.addOption(private$..outcomeredifened)
+            self$.addOption(private$..outcomeredefined)
             self$.addOption(private$..cutp)
             self$.addOption(private$..timetypedata)
             self$.addOption(private$..timetypeoutput)
@@ -249,7 +249,7 @@ survivalcontOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
         awd = function() private$..awd$value,
         awod = function() private$..awod$value,
         analysistype = function() private$..analysistype$value,
-        outcomeredifened = function() private$..outcomeredifened$value,
+        outcomeredefined = function() private$..outcomeredefined$value,
         cutp = function() private$..cutp$value,
         timetypedata = function() private$..timetypedata$value,
         timetypeoutput = function() private$..timetypeoutput$value,
@@ -283,7 +283,7 @@ survivalcontOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
         ..awd = NA,
         ..awod = NA,
         ..analysistype = NA,
-        ..outcomeredifened = NA,
+        ..outcomeredefined = NA,
         ..cutp = NA,
         ..timetypedata = NA,
         ..timetypeoutput = NA,
@@ -324,7 +324,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
         plot3 = function() private$.items[["plot3"]],
         plot6 = function() private$.items[["plot6"]],
         calculatedtime = function() private$.items[["calculatedtime"]],
-        outcomeredifened = function() private$.items[["outcomeredifened"]],
+        outcomeredefined = function() private$.items[["outcomeredefined"]],
         calculatedcutoff = function() private$.items[["calculatedcutoff"]]),
     private = list(),
     public=list(
@@ -755,7 +755,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "multievent")))
             self$add(jmvcore::Output$new(
                 options=options,
-                name="outcomeredifened",
+                name="outcomeredefined",
                 title="Add Redefined Outcome to Data",
                 varTitle="`Redefined Outcome in Continious Survival Function - from ${ outcome } for analysis { analysistype }`",
                 varDescription="Redefined Outcome from Outcome based on Analysis Type in Continious Survival Function",
@@ -876,7 +876,7 @@ survivalcontBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot6} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
-#'   \code{results$outcomeredifened} \tab \tab \tab \tab \tab an output \cr
+#'   \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$calculatedcutoff} \tab \tab \tab \tab \tab an output \cr
 #' }
 #'

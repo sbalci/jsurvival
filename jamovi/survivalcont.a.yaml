@@ -89,7 +89,7 @@ options:
           name: compete
       default: overall
 
-    - name: outcomeredifened
+    - name: outcomeredefined
       title: Add Redefined Outcome to Data
       type: Output
 

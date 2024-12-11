@@ -26,7 +26,9 @@ multisurvival(
   landmark = 3,
   hr = FALSE,
   sty = "t1",
-  ph_cox = FALSE
+  ph_cox = FALSE,
+  calculateRiskScore = FALSE,
+  addRiskScore = FALSE
 )
 }
 \arguments{
@@ -73,6 +75,10 @@ multisurvival(
 \item{sty}{.}
 
 \item{ph_cox}{.}
+
+\item{calculateRiskScore}{.}
+
+\item{addRiskScore}{.}
 }
 \value{
 A results object containing:
@@ -84,8 +90,10 @@ A results object containing:
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
+\code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
-\code{results$outcomeredifened} \tab \tab \tab \tab \tab an output \cr
+\code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
+\code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 }
 }
 \description{
