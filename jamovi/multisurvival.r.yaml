@@ -6,15 +6,15 @@ jrs:   '1.1'
 
 
 # clearWith:
-    # - outcome
-    # - outcomeLevel
-    # - overalltime
-    # - explanatory
-    # - contexpl
-    # - fudate
-    # - dxdate
-    # - tint
-    # - multievent
+# - outcome
+# - outcomeLevel
+# - overalltime
+# - explanatory
+# - contexpl
+# - fudate
+# - dxdate
+# - tint
+# - multievent
     # - adjexplanatory
 
 
@@ -180,6 +180,24 @@ items:
           - contexpl
 
 
+    - name:  mydataview
+      title: mydataview
+      type:  Preformatted
+
+
+    # - name:  riskSummaryTable
+    #   title: riskSummaryTable
+    #   type:  Preformatted
+
+
+    # - name:  riskScoreText
+    #   title: riskScoreText
+    #   type:  Preformatted
+
+
+
+
+
     # - name: plot4
     #   title: coxzph Plot
     #   type: Image
@@ -248,7 +266,66 @@ items:
     #       - adjexplanatory
     #       - pplot
     #       - censored
-#
+
+
+
+
+
+
+
+    - name: riskScoreTable
+      title: Risk Score Summary
+      type: Table
+      visible: (calculateRiskScore)
+      rows: 0
+      columns:
+        - name: group
+          title: Risk Group
+          type: text
+        - name: n_patients
+          title: N
+          type: integer
+        - name: percent
+          title: Percent
+          type: number
+        - name: median_score
+          title: Median Score
+          type: number
+        - name: events
+          title: Events
+          type: integer
+      clearWith:
+          - calculateRiskScore
+          - outcome
+          - outcomeLevel
+          - explanatory
+          - contexpl
+
+    - name: riskScorePlot
+      title: Survival by Risk Group
+      type: Image
+      width: 800
+      height: 600
+      renderFun: .plotRiskGroups
+      visible: (calculateRiskScore)
+      requiresData: true
+      clearWith:
+          - calculateRiskScore
+          - outcome
+          - outcomeLevel
+          - explanatory
+          - contexpl
+
+    - name: riskScoreMetrics
+      title: Risk Score Model Metrics
+      type: Html
+      visible: (calculateRiskScore)
+      clearWith:
+          - calculateRiskScore
+          - outcome
+          - outcomeLevel
+          - explanatory
+          - contexpl
 
 
     - name: calculatedtime
@@ -262,7 +339,7 @@ items:
           - fudate
 
 
-    - name: outcomeredifened
+    - name: outcomeredefined
       title: Add Redefined Outcome to Data
       type: Output
       varTitle: '`Redefined Outcome in Multivariable Survival Function - from ${ outcome } for analysis { analysistype }`'
@@ -271,6 +348,16 @@ items:
           - outcome
           - analysistype
           - multievent
+
+
+
+    # - name: addRiskScore
+    #   title: Add Calculated Risk Score to Data
+    #   type: Output
+    #   varTitle: '`Calculated Risk Score in Multivariable Survival Function`'
+    #   varDescription: Calculated Risk Score Based on Model
+
+
 
 
 refs:

@@ -26,7 +26,9 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             landmark = 3,
             hr = FALSE,
             sty = "t1",
-            ph_cox = FALSE, ...) {
+            ph_cox = FALSE,
+            calculateRiskScore = FALSE,
+            addRiskScore = FALSE, ...) {
 
             super$initialize(
                 package="jsurvival",
@@ -112,8 +114,8 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "cause",
                     "compete"),
                 default="overall")
-            private$..outcomeredifened <- jmvcore::OptionOutput$new(
-                "outcomeredifened")
+            private$..outcomeredefined <- jmvcore::OptionOutput$new(
+                "outcomeredefined")
             private$..timetypedata <- jmvcore::OptionList$new(
                 "timetypedata",
                 timetypedata,
@@ -160,6 +162,14 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 "ph_cox",
                 ph_cox,
                 default=FALSE)
+            private$..calculateRiskScore <- jmvcore::OptionBool$new(
+                "calculateRiskScore",
+                calculateRiskScore,
+                default=FALSE)
+            private$..addRiskScore <- jmvcore::OptionBool$new(
+                "addRiskScore",
+                addRiskScore,
+                default=FALSE)
 
             self$.addOption(private$..elapsedtime)
             self$.addOption(private$..tint)
@@ -175,7 +185,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..contexpl)
             self$.addOption(private$..multievent)
             self$.addOption(private$..analysistype)
-            self$.addOption(private$..outcomeredifened)
+            self$.addOption(private$..outcomeredefined)
             self$.addOption(private$..timetypedata)
             self$.addOption(private$..timetypeoutput)
             self$.addOption(private$..uselandmark)
@@ -184,6 +194,8 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..hr)
             self$.addOption(private$..sty)
             self$.addOption(private$..ph_cox)
+            self$.addOption(private$..calculateRiskScore)
+            self$.addOption(private$..addRiskScore)
         }),
     active = list(
         elapsedtime = function() private$..elapsedtime$value,
@@ -200,7 +212,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         contexpl = function() private$..contexpl$value,
         multievent = function() private$..multievent$value,
         analysistype = function() private$..analysistype$value,
-        outcomeredifened = function() private$..outcomeredifened$value,
+        outcomeredefined = function() private$..outcomeredefined$value,
         timetypedata = function() private$..timetypedata$value,
         timetypeoutput = function() private$..timetypeoutput$value,
         uselandmark = function() private$..uselandmark$value,
@@ -208,7 +220,9 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         calculatedtime = function() private$..calculatedtime$value,
         hr = function() private$..hr$value,
         sty = function() private$..sty$value,
-        ph_cox = function() private$..ph_cox$value),
+        ph_cox = function() private$..ph_cox$value,
+        calculateRiskScore = function() private$..calculateRiskScore$value,
+        addRiskScore = function() private$..addRiskScore$value),
     private = list(
         ..elapsedtime = NA,
         ..tint = NA,
@@ -224,7 +238,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ..contexpl = NA,
         ..multievent = NA,
         ..analysistype = NA,
-        ..outcomeredifened = NA,
+        ..outcomeredefined = NA,
         ..timetypedata = NA,
         ..timetypeoutput = NA,
         ..uselandmark = NA,
@@ -232,7 +246,9 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ..calculatedtime = NA,
         ..hr = NA,
         ..sty = NA,
-        ..ph_cox = NA)
+        ..ph_cox = NA,
+        ..calculateRiskScore = NA,
+        ..addRiskScore = NA)
 )
 
 multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -246,8 +262,12 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         plot3 = function() private$.items[["plot3"]],
         cox_ph = function() private$.items[["cox_ph"]],
         plot8 = function() private$.items[["plot8"]],
+        mydataview = function() private$.items[["mydataview"]],
+        riskScoreTable = function() private$.items[["riskScoreTable"]],
+        riskScorePlot = function() private$.items[["riskScorePlot"]],
+        riskScoreMetrics = function() private$.items[["riskScoreMetrics"]],
         calculatedtime = function() private$.items[["calculatedtime"]],
-        outcomeredifened = function() private$.items[["outcomeredifened"]]),
+        outcomeredefined = function() private$.items[["outcomeredefined"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -385,6 +405,69 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "tint",
                     "multievent",
                     "contexpl")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="mydataview",
+                title="mydataview"))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="riskScoreTable",
+                title="Risk Score Summary",
+                visible="(calculateRiskScore)",
+                rows=0,
+                columns=list(
+                    list(
+                        `name`="group", 
+                        `title`="Risk Group", 
+                        `type`="text"),
+                    list(
+                        `name`="n_patients", 
+                        `title`="N", 
+                        `type`="integer"),
+                    list(
+                        `name`="percent", 
+                        `title`="Percent", 
+                        `type`="number"),
+                    list(
+                        `name`="median_score", 
+                        `title`="Median Score", 
+                        `type`="number"),
+                    list(
+                        `name`="events", 
+                        `title`="Events", 
+                        `type`="integer")),
+                clearWith=list(
+                    "calculateRiskScore",
+                    "outcome",
+                    "outcomeLevel",
+                    "explanatory",
+                    "contexpl")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="riskScorePlot",
+                title="Survival by Risk Group",
+                width=800,
+                height=600,
+                renderFun=".plotRiskGroups",
+                visible="(calculateRiskScore)",
+                requiresData=TRUE,
+                clearWith=list(
+                    "calculateRiskScore",
+                    "outcome",
+                    "outcomeLevel",
+                    "explanatory",
+                    "contexpl")))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="riskScoreMetrics",
+                title="Risk Score Model Metrics",
+                visible="(calculateRiskScore)",
+                clearWith=list(
+                    "calculateRiskScore",
+                    "outcome",
+                    "outcomeLevel",
+                    "explanatory",
+                    "contexpl")))
             self$add(jmvcore::Output$new(
                 options=options,
                 name="calculatedtime",
@@ -397,7 +480,7 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "fudate")))
             self$add(jmvcore::Output$new(
                 options=options,
-                name="outcomeredifened",
+                name="outcomeredefined",
                 title="Add Redefined Outcome to Data",
                 varTitle="`Redefined Outcome in Multivariable Survival Function - from ${ outcome } for analysis { analysistype }`",
                 varDescription="Redefined Outcome from Outcome based on Analysis Type in Multivariable Survival Analysis",
@@ -457,6 +540,8 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param hr .
 #' @param sty .
 #' @param ph_cox .
+#' @param calculateRiskScore .
+#' @param addRiskScore .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
@@ -466,9 +551,19 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$riskScoreTable} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$riskScorePlot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$riskScoreMetrics} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
-#'   \code{results$outcomeredifened} \tab \tab \tab \tab \tab an output \cr
+#'   \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 #' }
+#'
+#' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
+#'
+#' \code{results$riskScoreTable$asDF}
+#'
+#' \code{as.data.frame(results$riskScoreTable)}
 #'
 #' @export
 multisurvival <- function(
@@ -493,7 +588,9 @@ multisurvival <- function(
     landmark = 3,
     hr = FALSE,
     sty = "t1",
-    ph_cox = FALSE) {
+    ph_cox = FALSE,
+    calculateRiskScore = FALSE,
+    addRiskScore = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("multisurvival requires jmvcore to be installed (restart may be required)")
@@ -537,7 +634,9 @@ multisurvival <- function(
         landmark = landmark,
         hr = hr,
         sty = sty,
-        ph_cox = ph_cox)
+        ph_cox = ph_cox,
+        calculateRiskScore = calculateRiskScore,
+        addRiskScore = addRiskScore)
 
     analysis <- multisurvivalClass$new(
         options = options,

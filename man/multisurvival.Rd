@@ -91,10 +91,16 @@ A results object containing:
 \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
 \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
-\code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
-\code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
+\code{results$riskScoreTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$riskScorePlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$riskScoreMetrics} \tab \tab \tab \tab \tab a html \cr
 }
+
+Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
+
+\code{results$riskScoreTable$asDF}
+
+\code{as.data.frame(results$riskScoreTable)}
 }
 \description{
 Function for Multivariable Survival Analysis using Cox-regression.

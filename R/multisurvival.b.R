@@ -574,84 +574,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 # Cox ----
 
-                private$.cox()
+                # private$.cox()
 
 
 
 
-                # Prepare Data For Plots ----
-
-                image <- self$results$plot
-                image$setState(cleaneddata)
-
-                image3 <- self$results$plot3
-                image3$setState(cleaneddata)
-
-
-                # image4 <- self$results$plot4
-                # image4$setState(mydata)
-
-                # imageKM <- self$results$plotKM
-                # imageKM$setState(mydata)
-
-                # image7 <- self$results$plot7
-                # image7$setState(mydata)
-
-                # View mydata ----
-                # self$results$mydataview$setContent(
-                #     list(
-                #         head(cleanData)
-                #         )
-                #     )
-
-                # Add Calculated Time to Data ----
-
-                if (self$options$tint && self$options$calculatedtime && self$results$calculatedtime$isNotFilled()) {
-                    self$results$calculatedtime$setRowNums(cleanData$row_names)
-                    self$results$calculatedtime$setValues(cleanData$mytime)
-                    }
-
-
-
-
-                # Add Redefined Outcome to Data ----
-
-                if (self$options$multievent  && self$options$outcomeredifened && self$results$outcomeredifened$isNotFilled()) {
-               self$results$outcomeredifened$setRowNums(cleanData$row_names)
-               self$results$outcomeredifened$setValues(cleanData$myoutcome)
-                            }
-
-
-
-
-
-                }
-
-
-            # cox  ----
-        ,
-            .cox = function() {
-
-
-                cleaneddata <- private$.cleandata()
-
-                name1time <- cleaneddata$name1time
-                name2outcome <- cleaneddata$name2outcome
-
-                name3contexpl <- cleaneddata$name3contexpl
-                name3expl <- cleaneddata$name3expl
-
-                mydata <- cleanData <- cleaneddata$cleanData
-
-                mytime_labelled <- cleaneddata$mytime_labelled
-                myoutcome_labelled <- cleaneddata$myoutcome_labelled
-                mydxdate_labelled <- cleaneddata$mydxdate_labelled
-                myfudate_labelled <- cleaneddata$myfudate_labelled
-                myexplanatory_labelled <- cleaneddata$myexplanatory_labelled
-                mycontexpl_labelled <- cleaneddata$mycontexpl_labelled
-
-
-                ### prepare formula ----
+                ## prepare formula ----
 
 
                 myexplanatory <- NULL
@@ -680,15 +608,15 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 myformula <- as.formula(myformula)
 
 
-                # self$results$mydataview$setContent(
-                #     list(
-                #         mydata = head(mydata, n = 30),
-                #         myformula = myformula,
-                #         myexplanatory = myexplanatory,
-                #         mycontexpl = mycontexpl,
-                #         formula2 = formula2
-                #         )
-                # )
+                self$results$mydataview$setContent(
+                    list(
+                        mydata = head(mydata, n = 30),
+                        myformula = myformula,
+                        myexplanatory = myexplanatory,
+                        mycontexpl = mycontexpl,
+                        formula2 = formula2
+                        )
+                )
 
 
                 ## finalfit Multivariable table ----
@@ -707,20 +635,20 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                                 <br>
                                 <b>Model Metrics:</b>
                                   ",
-                                unlist(tMultivariable[[2]]),
-                                "
+                                    unlist(tMultivariable[[2]]),
+                                    "
                                 <br>
                                 ")
 
                 if (self$options$uselandmark) {
 
-                  landmark <- jmvcore::toNumeric(self$options$landmark)
+                    landmark <- jmvcore::toNumeric(self$options$landmark)
 
-                  text2 <- glue::glue(text2,
-                                          "Landmark time used as: ",
-                                          landmark, " ",
-                                          self$options$timetypeoutput, "."
-                  )
+                    text2 <- glue::glue(text2,
+                                        "Landmark time used as: ",
+                                        landmark, " ",
+                                        self$options$timetypeoutput, "."
+                    )
                 }
 
 
@@ -741,98 +669,125 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 self$results$text$setContent(results1)
 
                 ## coxph Proportional Hazards Assumption ----
-                if (self$options$ph_cox) {
+                if (self$options$ph_cox || self$options$calculateRiskScore) {
 
 
-                LHT <- "survival::Surv(mytime, myoutcome)"
+                    LHT <- "survival::Surv(mytime, myoutcome)"
 
-                RHT <- formula2
+                    RHT <- formula2
 
-                RHT <- paste(RHT, collapse = " + ")
+                    RHT <- paste(RHT, collapse = " + ")
 
-                coxformula <- paste0(LHT, " ~ ", RHT)
+                    coxformula <- paste0(LHT, " ~ ", RHT)
 
-                coxformula <- as.formula(coxformula)
+                    coxformula <- as.formula(coxformula)
 
-                cox_model <- survival::coxph(
-                  coxformula,
-                  data = mydata
-                )
+                    cox_model <- survival::coxph(
+                        coxformula,
+                        data = mydata
+                    )
 
-                zph <- survival::cox.zph(cox_model)
-
-                self$results$cox_ph$setContent(print(zph))
-
-
-                # myfactor <- c("Smoker", "LVI", "PNI", "MeasurementB", "Measurement2")
-
-                # formula <-
-                #     paste0("survival::Surv(",
-                #            "mytime",
-                #            ",",
-                #            "myoutcome",
-                #            ") ~ ",
-                #            paste0(myfactor, collapse = " + ")
-                #     )
-
-                # formula <- as.formula(formula)
-
-
-
-                # cox_model <- survival::coxph(formula, data = histopathology)
-
-                # summary(cox_model)
-
-                # plot(survival::survfit(formula, data = histopathology), xlab = "Time (days)", ylab = "Survival probability")
-
-                # cox.zph.fit <- survival::cox.zph(cox_model)
-
-                # summary(cox.zph.fit)
-
-                # plot(cox.zph.fit, var = 4, xlab = "Time (days)", ylab = "Scaled Schoenfeld residuals")
-
-                # survminer::ggcoxzph(cox.zph.fit)
-
-
-
-
-                image8 <- self$results$plot8
-                image8$setState(zph)
 
                 }
 
 
-                # Diagnostics of Cox Model ----
+                if (self$options$ph_cox){
 
-                # https://forum.jamovi.org/viewtopic.php?t=2563&sid=1e80bc4f5cc91581b11be1ca1b9cc169
+                    zph <- survival::cox.zph(cox_model)
 
+                    self$results$cox_ph$setContent(print(zph))
 
-                # fit <- coxph(Surv(futime, fustat) ~ age + ecog.ps + rx, data=ovarian)
-                # cox_zph_fit <- survival::cox.zph(coxmodel)
+                    image8 <- self$results$plot8
+                    image8$setState(zph)
 
-
-                # plot all variables
-                # ggcoxzph(cox.zph.fit)
-
-                # plot all variables in specified order
-                # ggcoxzph(cox.zph.fit,
-                #          var = c("ecog.ps", "rx", "age"))
-
-                # plot specified variables in specified order
-                # ggcoxzph(cox.zph.fit,
-                #          var = c("ecog.ps", "rx"),
-                #          font.main = 12,
-                #          caption = "Caption goes here")
+                }
 
 
 
+                ## Risk Score Calculation ----
 
-                # ggcoxzph(): Graphical test of proportional hazards. Displays a graph of the scaled Schoenfeld residuals, along with a smooth curve using ggplot2.
-                # Wrapper around plot.cox.zph().
-                # ggcoxdiagnostics(): Displays diagnostics graphs presenting goodness of Cox Proportional Hazards Model fit.
-                # ggcoxfunctional(): Displays graphs of continuous explanatory variable against martingale residuals of null cox proportional hazards model. It helps to properly choose the functional form of continuous variable in cox model.
+                if (self$options$calculateRiskScore) {
 
 
+                    # Calculate risk scores and create groups
+                    mydata <- private$.calculateRiskScore(cox_model, mydata)
+
+                    # Add risk scores to output if requested
+                    if (self$options$addRiskScore && self$results$addRiskScore$isNotFilled()) {
+                        self$results$addRiskScore$setRowNums(mydata$row_names)
+                        self$results$addRiskScore$setValues(mydata$risk_score)
+                    }
+
+                    # Add data to plot state
+                    # image <- self$results$riskScorePlot
+                    # image$setState(list(data = mydata))
+
+
+
+                    # Calculate risk scores
+                    # risk_scores <- predict(cox_model, type = "risk")
+
+
+                    ### Add risk scores to data in analysis ----
+                    # mydata$risk_score <- risk_scores
+
+
+                    ## Add Calculated Risk Score to Data ----
+
+                    # if (self$options$calculateRiskScore && self$options$addRiskScore && self$results$addRiskScore$isNotFilled()) {
+                    #     self$results$addRiskScore$setRowNums(mydata$row_names)
+                    #     self$results$addRiskScore$setValues(mydata$risk_score)
+                    # }
+
+
+
+                    ## Create risk groups using quartiles ----
+                    # mydata$risk_group <- cut(
+                    #     mydata$risk_score,
+                    #     breaks = quantile(mydata$risk_score,
+                    #                       probs = seq(0, 1, by = 0.25)),
+                    #     include.lowest = TRUE,
+                    #     labels = c("Low Risk", "Intermediate-Low Risk",
+                    #                "Intermediate-High Risk", "High Risk")
+                    # )
+
+
+
+                    # ## Calculate summary statistics for risk groups ----
+                    # risk_summary <- data.frame(
+                    #     group = levels(mydata$risk_group),
+                    #     n = as.numeric(table(mydata$risk_group)),
+                    #     mean_score = tapply(mydata$risk_score, mydata$risk_group, mean),
+                    #     median_score = tapply(mydata$risk_score, mydata$risk_group, median)
+                    # )
+
+                    # # Fit survival curves for risk groups ----
+                    # risk_formula <- paste("survival::Surv(mytime, myoutcome) ~ risk_group")
+                    # risk_formula <- as.formula(risk_formula)
+                    # km_fit <- survival::survfit(risk_formula, data = mydata)
+
+                    # # Calculate log-rank test ----
+                    # log_rank <- survival::survdiff(risk_formula, data = mydata)
+
+
+
+
+                    # self$results$mydataview$setContent(
+                    #     list(
+                    #         cox_model = cox_model,
+                    #         risk_scores = risk_scores,
+                    #         mydata = head(mydata, n = 30)
+                    #         # risk_summary = head(risk_summary, n = 30),
+                    #         # risk_formula = risk_formula,
+                    #         # km_fit = km_fit,
+                    #         # log_rank = log_rank
+                    #
+                    #     )
+                    # )
+
+
+
+                }
 
 
 
@@ -844,96 +799,361 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 
+                ## Prepare Data For Plots ----
+
+                image <- self$results$plot
+                image$setState(cleaneddata)
+
+                image3 <- self$results$plot3
+                image3$setState(cleaneddata)
 
 
-                # https://forum.jamovi.org/viewtopic.php?p=9359&hilit=typeof#p9359
+                # image4 <- self$results$plot4
+                # image4$setState(mydata)
 
-                # # Create a function ----
-                # type_info <- function(x) {
-                #     c(x,
-                #       class = class(x),
-                #       typeof = typeof(x),
-                #       mode = mode(x),
-                #       storage.mode = storage.mode(x)
+                # imageKM <- self$results$plotKM
+                # imageKM$setState(mydata)
+
+                # image7 <- self$results$plot7
+                # image7$setState(mydata)
+
+                # View mydata ----
+                # self$results$mydataview$setContent(
+                #     list(
+                #         head(cleanData)
+                #         )
                 #     )
-                # }
 
+                ## Add Calculated Time to Data ----
 
-                # resultsdeneme2 <- list(
-                #   headdata = head(mydata),
-                #   myexplanatory = myexplanatory,
-                #   mycontexpl = mycontexpl,
-                #   formula2 = formula2,
-                #   RHT = RHT,
-                #   LHT = LHT,
-                #   coxformula = coxformula,
-                #   summarycoxmodel = summarycoxmodel,
-                #   coxmodel = coxmodel
-                # )
-
-                # resultsdeneme2 <- lapply(resultsdeneme2, type_info)
+                if (self$options$tint && self$options$calculatedtime && self$results$calculatedtime$isNotFilled()) {
+                    self$results$calculatedtime$setRowNums(cleanData$row_names)
+                    self$results$calculatedtime$setValues(cleanData$mytime)
+                    }
 
 
 
-                # self$results$text3$setContent(resultsdeneme2)
+
+                ## Add Redefined Outcome to Data ----
+
+                if (self$options$multievent  && self$options$outcomeredefined && self$results$outcomeredefined$isNotFilled()) {
+               self$results$outcomeredefined$setRowNums(cleanData$row_names)
+               self$results$outcomeredefined$setValues(cleanData$myoutcome)
+                            }
 
 
 
 
 
+                }
 
 
-
-
-
-
-
-
-                # Reduced model ----
-                # If you are using a backwards selection approach or similar, a reduced model can be directly specified and compared. The full model can be kept or dropped.
-
-                # explanatory_multi = c("age", "thickness", "ulcer")
-                # melanoma %>%
-                #     finalfit(dependent_os, explanatory, explanatory_multi, keep_models = TRUE) %>%
-                #     mykable()
-
-
-                # Testing for proportional hazards ----
-                # An assumption of CPH regression is that the hazard (think risk) associated with a particular variable does not change over time. For example, is the magnitude of the increase in risk of death associated with tumour ulceration the same in the early post-operative period as it is in later years?
-                #
-                #     The cox.zph() function from the survival package allows us to test this assumption for each variable. The plot of scaled Schoenfeld residuals should be a horizontal line. The included hypothesis test identifies whether the gradient differs from zero for each variable. No variable significantly differs from zero at the 5% significance level.
-
-                # explanatory = c("age", "sex", "thickness", "ulcer", "year")
-                # melanoma %>%
-                #     coxphmulti(dependent_os, explanatory) %>%
-                #     cox.zph() %>%
-                #     {zph_result <<- .} %>%
-                #     plot(var=5)
-
-                # zph_result
-                # #>               rho  chisq      p
-                # #> age        0.1633 2.4544 0.1172
-                # #> sexMale   -0.0781 0.4473 0.5036
-                # #> thickness -0.1493 1.3492 0.2454
-                # #> ulcerYes  -0.2044 2.8256 0.0928
-                # #> year       0.0195 0.0284 0.8663
-                # #> GLOBAL         NA 8.4695 0.1322
-
-
-                # Stratified models ----
-                # One approach to dealing with a violation of the proportional hazards assumption is to stratify by that variable. Including a strata() term will result in a separate baseline hazard function being fit for each level in the stratification variable. It will be no longer possible to make direct inference on the effect associated with that variable.
-                #
-                # This can be incorporated directly into the explanatory variable list.
-
-                # explanatory= c("age", "sex", "ulcer", "thickness", "strata(year)")
-                # melanoma %>%
-                #     finalfit(dependent_os, explanatory) %>%
-                #     mykable()
-
-
-
-
-            }
+        #     # cox  ----
+        # ,
+        #     .cox = function() {
+        #
+        #
+        #         cleaneddata <- private$.cleandata()
+        #
+        #         name1time <- cleaneddata$name1time
+        #         name2outcome <- cleaneddata$name2outcome
+        #
+        #         name3contexpl <- cleaneddata$name3contexpl
+        #         name3expl <- cleaneddata$name3expl
+        #
+        #         mydata <- cleanData <- cleaneddata$cleanData
+        #
+        #         mytime_labelled <- cleaneddata$mytime_labelled
+        #         myoutcome_labelled <- cleaneddata$myoutcome_labelled
+        #         mydxdate_labelled <- cleaneddata$mydxdate_labelled
+        #         myfudate_labelled <- cleaneddata$myfudate_labelled
+        #         myexplanatory_labelled <- cleaneddata$myexplanatory_labelled
+        #         mycontexpl_labelled <- cleaneddata$mycontexpl_labelled
+        #
+        #
+        #         ### prepare formula ----
+        #
+        #
+        #         myexplanatory <- NULL
+        #
+        #         if(!is.null(self$options$explanatory)) {
+        #             myexplanatory <- as.vector(myexplanatory_labelled)
+        #         }
+        #
+        #
+        #         mycontexpl <- NULL
+        #         if(!is.null(self$options$contexpl)) {
+        #
+        #             mycontexpl <- as.vector(mycontexpl_labelled)
+        #
+        #         }
+        #
+        #
+        #         formula2 <- c(myexplanatory, mycontexpl)
+        #
+        #
+        #         myformula <-
+        #             paste("Surv( mytime, myoutcome ) ~ ",
+        #                   paste(formula2, collapse = " + ")
+        #             )
+        #
+        #         myformula <- as.formula(myformula)
+        #
+        #
+        #         # self$results$mydataview$setContent(
+        #         #     list(
+        #         #         mydata = head(mydata, n = 30),
+        #         #         myformula = myformula,
+        #         #         myexplanatory = myexplanatory,
+        #         #         mycontexpl = mycontexpl,
+        #         #         formula2 = formula2
+        #         #         )
+        #         # )
+        #
+        #
+        #         ## finalfit Multivariable table ----
+        #
+        #         finalfit::finalfit(
+        #             .data = mydata,
+        #             formula = myformula,
+        #             # dependent = myformula,
+        #             # explanatory = formula2,
+        #
+        #             metrics = TRUE
+        #         ) -> tMultivariable
+        #
+        #
+        #         text2 <- glue::glue("
+        #                         <br>
+        #                         <b>Model Metrics:</b>
+        #                           ",
+        #                         unlist(tMultivariable[[2]]),
+        #                         "
+        #                         <br>
+        #                         ")
+        #
+        #         if (self$options$uselandmark) {
+        #
+        #           landmark <- jmvcore::toNumeric(self$options$landmark)
+        #
+        #           text2 <- glue::glue(text2,
+        #                                   "Landmark time used as: ",
+        #                                   landmark, " ",
+        #                                   self$options$timetypeoutput, "."
+        #           )
+        #         }
+        #
+        #
+        #
+        #
+        #
+        #         self$results$text2$setContent(text2)
+        #
+        #
+        #
+        #         results1 <- knitr::kable(
+        #             tMultivariable[[1]],
+        #             row.names = FALSE,
+        #             align = c('l', 'l', 'r', 'r', 'r', 'r'),
+        #             format = "html"
+        #         )
+        #
+        #         self$results$text$setContent(results1)
+        #
+        #         ## coxph Proportional Hazards Assumption ----
+        #         if (self$options$ph_cox) {
+        #
+        #
+        #         LHT <- "survival::Surv(mytime, myoutcome)"
+        #
+        #         RHT <- formula2
+        #
+        #         RHT <- paste(RHT, collapse = " + ")
+        #
+        #         coxformula <- paste0(LHT, " ~ ", RHT)
+        #
+        #         coxformula <- as.formula(coxformula)
+        #
+        #         cox_model <- survival::coxph(
+        #           coxformula,
+        #           data = mydata
+        #         )
+        #
+        #         zph <- survival::cox.zph(cox_model)
+        #
+        #         self$results$cox_ph$setContent(print(zph))
+        #
+        #
+        #         # myfactor <- c("Smoker", "LVI", "PNI", "MeasurementB", "Measurement2")
+        #
+        #         # formula <-
+        #         #     paste0("survival::Surv(",
+        #         #            "mytime",
+        #         #            ",",
+        #         #            "myoutcome",
+        #         #            ") ~ ",
+        #         #            paste0(myfactor, collapse = " + ")
+        #         #     )
+        #
+        #         # formula <- as.formula(formula)
+        #
+        #
+        #
+        #         # cox_model <- survival::coxph(formula, data = histopathology)
+        #
+        #         # summary(cox_model)
+        #
+        #         # plot(survival::survfit(formula, data = histopathology), xlab = "Time (days)", ylab = "Survival probability")
+        #
+        #         # cox.zph.fit <- survival::cox.zph(cox_model)
+        #
+        #         # summary(cox.zph.fit)
+        #
+        #         # plot(cox.zph.fit, var = 4, xlab = "Time (days)", ylab = "Scaled Schoenfeld residuals")
+        #
+        #         # survminer::ggcoxzph(cox.zph.fit)
+        #
+        #
+        #
+        #
+        #         image8 <- self$results$plot8
+        #         image8$setState(zph)
+        #
+        #         }
+        #
+        #
+        #         # Diagnostics of Cox Model ----
+        #
+        #         # https://forum.jamovi.org/viewtopic.php?t=2563&sid=1e80bc4f5cc91581b11be1ca1b9cc169
+        #
+        #
+        #         # fit <- coxph(Surv(futime, fustat) ~ age + ecog.ps + rx, data=ovarian)
+        #         # cox_zph_fit <- survival::cox.zph(coxmodel)
+        #
+        #
+        #         # plot all variables
+        #         # ggcoxzph(cox.zph.fit)
+        #
+        #         # plot all variables in specified order
+        #         # ggcoxzph(cox.zph.fit,
+        #         #          var = c("ecog.ps", "rx", "age"))
+        #
+        #         # plot specified variables in specified order
+        #         # ggcoxzph(cox.zph.fit,
+        #         #          var = c("ecog.ps", "rx"),
+        #         #          font.main = 12,
+        #         #          caption = "Caption goes here")
+        #
+        #
+        #
+        #
+        #         # ggcoxzph(): Graphical test of proportional hazards. Displays a graph of the scaled Schoenfeld residuals, along with a smooth curve using ggplot2.
+        #         # Wrapper around plot.cox.zph().
+        #         # ggcoxdiagnostics(): Displays diagnostics graphs presenting goodness of Cox Proportional Hazards Model fit.
+        #         # ggcoxfunctional(): Displays graphs of continuous explanatory variable against martingale residuals of null cox proportional hazards model. It helps to properly choose the functional form of continuous variable in cox model.
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #         # https://forum.jamovi.org/viewtopic.php?p=9359&hilit=typeof#p9359
+        #
+        #         # # Create a function ----
+        #         # type_info <- function(x) {
+        #         #     c(x,
+        #         #       class = class(x),
+        #         #       typeof = typeof(x),
+        #         #       mode = mode(x),
+        #         #       storage.mode = storage.mode(x)
+        #         #     )
+        #         # }
+        #
+        #
+        #         # resultsdeneme2 <- list(
+        #         #   headdata = head(mydata),
+        #         #   myexplanatory = myexplanatory,
+        #         #   mycontexpl = mycontexpl,
+        #         #   formula2 = formula2,
+        #         #   RHT = RHT,
+        #         #   LHT = LHT,
+        #         #   coxformula = coxformula,
+        #         #   summarycoxmodel = summarycoxmodel,
+        #         #   coxmodel = coxmodel
+        #         # )
+        #
+        #         # resultsdeneme2 <- lapply(resultsdeneme2, type_info)
+        #
+        #
+        #
+        #         # self$results$text3$setContent(resultsdeneme2)
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #         # Reduced model ----
+        #         # If you are using a backwards selection approach or similar, a reduced model can be directly specified and compared. The full model can be kept or dropped.
+        #
+        #         # explanatory_multi = c("age", "thickness", "ulcer")
+        #         # melanoma %>%
+        #         #     finalfit(dependent_os, explanatory, explanatory_multi, keep_models = TRUE) %>%
+        #         #     mykable()
+        #
+        #
+        #         # Testing for proportional hazards ----
+        #         # An assumption of CPH regression is that the hazard (think risk) associated with a particular variable does not change over time. For example, is the magnitude of the increase in risk of death associated with tumour ulceration the same in the early post-operative period as it is in later years?
+        #         #
+        #         #     The cox.zph() function from the survival package allows us to test this assumption for each variable. The plot of scaled Schoenfeld residuals should be a horizontal line. The included hypothesis test identifies whether the gradient differs from zero for each variable. No variable significantly differs from zero at the 5% significance level.
+        #
+        #         # explanatory = c("age", "sex", "thickness", "ulcer", "year")
+        #         # melanoma %>%
+        #         #     coxphmulti(dependent_os, explanatory) %>%
+        #         #     cox.zph() %>%
+        #         #     {zph_result <<- .} %>%
+        #         #     plot(var=5)
+        #
+        #         # zph_result
+        #         # #>               rho  chisq      p
+        #         # #> age        0.1633 2.4544 0.1172
+        #         # #> sexMale   -0.0781 0.4473 0.5036
+        #         # #> thickness -0.1493 1.3492 0.2454
+        #         # #> ulcerYes  -0.2044 2.8256 0.0928
+        #         # #> year       0.0195 0.0284 0.8663
+        #         # #> GLOBAL         NA 8.4695 0.1322
+        #
+        #
+        #         # Stratified models ----
+        #         # One approach to dealing with a violation of the proportional hazards assumption is to stratify by that variable. Including a strata() term will result in a separate baseline hazard function being fit for each level in the stratification variable. It will be no longer possible to make direct inference on the effect associated with that variable.
+        #         #
+        #         # This can be incorporated directly into the explanatory variable list.
+        #
+        #         # explanatory= c("age", "sex", "ulcer", "thickness", "strata(year)")
+        #         # melanoma %>%
+        #         #     finalfit(dependent_os, explanatory) %>%
+        #         #     mykable()
+        #
+        #
+        #
+        #
+        #     }
 
 
 
@@ -1391,6 +1611,114 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             #     TRUE
             #
             #     }
+
+
+
+
+        ,
+        # Risk Score Methods ----
+        .calculateRiskScore = function(cox_model, mydata) {
+            # Calculate risk scores
+            risk_scores <- predict(cox_model, type = "risk")
+
+            # Add risk scores to data
+            mydata$risk_score <- risk_scores
+
+            # Create risk groups using quantiles
+            mydata$risk_group <- cut(
+                mydata$risk_score,
+                breaks = quantile(mydata$risk_score, probs = seq(0, 1, by = 0.25)),
+                labels = c("Low Risk", "Intermediate-Low Risk",
+                           "Intermediate-High Risk", "High Risk"),
+                include.lowest = TRUE
+            )
+
+            # Calculate summary statistics
+            risk_summary <- data.frame(
+                group = levels(mydata$risk_group),
+                n_patients = as.numeric(table(mydata$risk_group)),
+                events = tapply(mydata$myoutcome, mydata$risk_group, sum),
+                median_score = tapply(mydata$risk_score, mydata$risk_group, median)
+            )
+
+            risk_summary$percent <- (risk_summary$n_patients / sum(risk_summary$n_patients)) * 100
+
+            # Fill risk score table
+            riskScoreTable <- self$results$riskScoreTable
+
+            for(i in seq_len(nrow(risk_summary))) {
+                riskScoreTable$addRow(rowKey = i, values = list(
+                    group = risk_summary$group[i],
+                    n_patients = risk_summary$n_patients[i],
+                    percent = risk_summary$percent[i],
+                    median_score = risk_summary$median_score[i],
+                    events = risk_summary$events[i]
+                ))
+            }
+
+            # Create metrics summary
+            c_index <- survival::concordance(cox_model)$concordance
+
+            metrics_html <- glue::glue("
+        <br>
+        <b>Risk Score Model Performance:</b><br>
+        Harrell's C-index: {format(c_index, digits=3)}<br>
+        <br>
+        Number of patients in risk groups:<br>
+        Low Risk: {risk_summary$n_patients[1]} ({format(risk_summary$percent[1], digits=1)}%)<br>
+        Intermediate-Low: {risk_summary$n_patients[2]} ({format(risk_summary$percent[2], digits=1)}%)<br>
+        Intermediate-High: {risk_summary$n_patients[3]} ({format(risk_summary$percent[3], digits=1)}%)<br>
+        High Risk: {risk_summary$n_patients[4]} ({format(risk_summary$percent[4], digits=1)}%)<br>
+    ")
+
+            self$results$riskScoreMetrics$setContent(metrics_html)
+
+            return(mydata)
+        }
+
+        # ,
+        # .plotRiskGroups = function(image, ggtheme, theme, ...) {
+        #
+        #     if (!self$options$calculateRiskScore) {
+        #         return()
+        #     }
+        #
+        #     plotData <- image$state$data
+        #     if (is.null(plotData)) {
+        #         return()
+        #     }
+        #
+        #
+        #
+        #         # Create survival object directly
+        #         surv_obj <- survival::Surv(time = plotData$mytime,
+        #                                    event = plotData$myoutcome)
+        #
+        #         # Fit survival model with the risk groups
+        #         fit <- survival::survfit(surv_obj ~ plotData$risk_group)
+        #
+        #         # Create plot
+        #         plot <- survminer::ggsurvplot(
+        #             fit = fit,
+        #             data = plotData,
+        #             pval = TRUE,
+        #             conf.int = TRUE,
+        #             risk.table = TRUE,
+        #             risk.table.height = 0.3,
+        #             xlab = paste0("Time (", self$options$timetypeoutput, ")"),
+        #             title = "Survival by Risk Group",
+        #             legend.title = "Risk Group",
+        #             palette = "Set2",
+        #             ggtheme = ggplot2::theme_bw()
+        #         )
+        #
+        #         print(plot)
+        #         TRUE
+        #
+        #
+        #
+        #
+        # }
 
 
 

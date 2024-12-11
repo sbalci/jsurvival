@@ -38,7 +38,6 @@ children:
           - type: VariablesListBox
             name: contexpl
             isTarget: true
-
   - type: CollapseBox
     label: Advanced Elapsed Time Options
     collapsed: true
@@ -111,7 +110,7 @@ children:
                     format: number
                     enable: (uselandmark)
       - type: Label
-        label: Calculated Time to Data 
+        label: Calculated Time to Data
         fitToGrid: true
         children:
           - type: LayoutBox
@@ -153,17 +152,11 @@ children:
             name: analysistype
             enable: (outcome && multievent)
       - type: Label
-        label: Calculated Outcome to Data 
+        label: Calculated Outcome to Data
         fitToGrid: true
         children:
-          - type: LayoutBox
-            margin: large
-            children:
-              - type: Output
-                name: outcomeredifened
-                enable: (outcome && multievent)
-
-
+          - type: Output
+            name: outcomeredefined
   - type: CollapseBox
     label: Plots
     collapsed: true
@@ -184,7 +177,6 @@ children:
               - type: ComboBox
                 name: sty
                 enable: (hr)
-
       - type: Label
         label: Proportional Hazards Assumption
         fitToGrid: true
@@ -194,7 +186,20 @@ children:
             children:
               - type: CheckBox
                 name: ph_cox
-
+  - type: CollapseBox
+    label: Risk Score Grouping
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: Label
+        label: Grouping Based on Calculated Risk Score
+        fitToGrid: true
+        stretchFactor: 1
+        children:
+          - type: CheckBox
+            name: calculateRiskScore
+          - type: CheckBox
+            name: addRiskScore
   - type: CollapseBox
     label: Adjusted Survival Curve (Being Updated)
     collapsed: true

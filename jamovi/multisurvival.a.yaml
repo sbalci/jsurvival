@@ -106,7 +106,7 @@ options:
           name: compete
       default: overall
 
-    - name: outcomeredifened
+    - name: outcomeredefined
       title: Add Redefined Outcome to Data
       type: Output
 
@@ -189,6 +189,19 @@ options:
       title: Proportional Hazards Assumption
       type: Bool
       default: false
+
+
+
+    - name: calculateRiskScore
+      title: Calculate Risk Score
+      type: Bool
+      default: false
+
+    - name: addRiskScore
+      title: Add Risk Score to Data
+      type: Bool
+      default: false
+
 
 
     # - name: km
