@@ -28,7 +28,6 @@ multisurvival(
   sty = "t1",
   ph_cox = FALSE,
   calculateRiskScore = FALSE,
-  plotRiskGroups = FALSE,
   ac = FALSE,
   adjexplanatory,
   km = FALSE,
@@ -37,7 +36,11 @@ multisurvival(
   ci95 = FALSE,
   risktable = FALSE,
   censored = FALSE,
-  pplot = TRUE
+  pplot = TRUE,
+  ac_method = "average",
+  ac_summary = FALSE,
+  ac_timepoints = "12, 36, 60",
+  ac_compare = FALSE
 )
 }
 \arguments{
@@ -87,8 +90,6 @@ multisurvival(
 
 \item{calculateRiskScore}{.}
 
-\item{plotRiskGroups}{.}
-
 \item{ac}{.}
 
 \item{adjexplanatory}{.}
@@ -106,6 +107,16 @@ multisurvival(
 \item{censored}{.}
 
 \item{pplot}{.}
+
+\item{ac_method}{Method for computing adjusted survival curves}
+
+\item{ac_summary}{Calculate and display summary statistics for adjusted
+curves}
+
+\item{ac_timepoints}{Timepoints for calculating summary statistics
+(comma-separated)}
+
+\item{ac_compare}{Perform statistical comparison between adjusted curves}
 }
 \value{
 A results object containing:
@@ -123,13 +134,15 @@ A results object containing:
 \code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
 \code{results$riskScoreTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$riskScoreMetrics} \tab \tab \tab \tab \tab a html \cr
-\code{results$riskGroupPlot} \tab \tab \tab \tab \tab an image \cr
 \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
 \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
 \code{results$mydataview_plot_adj} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
+\code{results$mydataview_calculateAdjustedStats} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$adjustedSummaryTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$adjustedComparison} \tab \tab \tab \tab \tab a html \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

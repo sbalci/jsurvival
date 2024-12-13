@@ -197,10 +197,10 @@ options:
       type: Bool
       default: false
 
-    - name: plotRiskGroups
-      title: Plot Risk Group Survival
-      type: Bool
-      default: false
+    # - name: plotRiskGroups
+    #   title: Plot Risk Group Survival
+    #   type: Bool
+    #   default: false
 
     - name: addRiskScore
       title: Add Risk Score to Data
@@ -261,10 +261,44 @@ options:
       default: true
 
 
-    # - name: modelTerms
-    #   title: Model Terms
-    #   type: Terms
-    #   default: null
+
+    - name: ac_method
+      title: Adjustment Method
+      type: List
+      options:
+        - title: Average
+          name: average
+        - title: Conditional Mean
+          name: conditional_mean
+        - title: Direct
+          name: direct
+        - title: Marginal
+          name: marginal
+      default: average
+      description:
+          R: Method for computing adjusted survival curves
+
+    - name: ac_summary
+      title: Show Summary Statistics
+      type: Bool
+      default: false
+      description:
+          R: Calculate and display summary statistics for adjusted curves
+
+    - name: ac_timepoints
+      title: Summary Timepoints
+      type: String
+      default: '12, 36, 60'
+      description:
+          R: Timepoints for calculating summary statistics (comma-separated)
+
+    - name: ac_compare
+      title: Compare Curves
+      type: Bool
+      default: false
+      description:
+          R: Perform statistical comparison between adjusted curves
+
 
 
 ...

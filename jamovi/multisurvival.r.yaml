@@ -4,20 +4,6 @@ title: Multivariable Survival Analysis
 jrs:   '1.1'
 
 
-
-# clearWith:
-# - outcome
-# - outcomeLevel
-# - overalltime
-# - explanatory
-# - contexpl
-# - fudate
-# - dxdate
-# - tint
-# - multievent
-    # - adjexplanatory
-
-
 items:
 
     - name:  todo
@@ -33,17 +19,6 @@ items:
           - dxdate
           - tint
           - multievent
-
-
-
-    # - name:  mydataview
-    #   title: mydataview
-    #   type:  Preformatted
-
-
-    # - name:  text3
-    #   title: resultsdeneme2
-    #   type:  Preformatted
 
 
 
@@ -315,14 +290,14 @@ items:
 
 
 
-    - name: riskGroupPlot
-      title: Risk Group Survival Plot
-      type: Image
-      width: 600
-      height: 450
-      renderFun: .plotRiskGroups
-      requiresData: true
-      visible: (plotRiskGroups)
+    # - name: riskGroupPlot
+    #   title: Risk Group Survival Plot
+    #   type: Image
+    #   width: 600
+    #   height: 450
+    #   renderFun: .plotRiskGroups
+    #   requiresData: true
+    #   visible: (plotRiskGroups)
 
 
 
@@ -409,6 +384,58 @@ items:
           - adjexplanatory
           - ci95
           - risktable
+          - ac_method
+
+
+    - name:  mydataview_calculateAdjustedStats
+      title: mydataview_calculateAdjustedStats
+      type:  Preformatted
+
+
+
+
+    - name: adjustedSummaryTable
+      title: Adjusted Survival Summary
+      type: Table
+      visible: (ac_summary)
+      rows: 0
+      columns:
+        - name: Level
+          title: Level
+          type: text
+        - name: Timepoint
+          title: "Time"
+          type: integer
+        - name: Survival
+          title: "Adjusted Survival"
+          type: number
+          format: proportion
+        - name: SE
+          title: "SE"
+          type: number
+        - name: CI_Lower
+          title: "95% CI Lower"
+          type: number
+          format: proportion
+        - name: CI_Upper
+          title: "95% CI Upper"
+          type: number
+          format: proportion
+      clearWith:
+          - ac_summary
+          - ac_timepoints
+          - ac_method
+          - adjexplanatory
+
+    - name: adjustedComparison
+      title: Statistical Comparison of Adjusted Curves
+      type: Html
+      visible: (ac_compare)
+      clearWith:
+          - ac_compare
+          - ac_method
+          - adjexplanatory
+
 
 
 refs:
@@ -417,7 +444,6 @@ refs:
     - survivalrwnahhas
     - ClinicoPathJamoviModule
 
-    # - name: model
-    #   type: Property
+
 
 ...
