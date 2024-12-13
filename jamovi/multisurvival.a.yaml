@@ -211,57 +211,54 @@ options:
       title: Add Risk Group to Data
       type: Output
 
+    - name: ac
+      title: Adjusted Survival Curve
+      type: Bool
+      default: false
+
+    - name: adjexplanatory
+      title: Variable for Adjusted Curve
+      type: Variable
+      suggested: [ ordinal, nominal ]
+      permitted: [ factor ]
+
+    - name: km
+      title: Kaplan-Meier
+      type: Bool
+      default: false
 
 
-    # - name: km
-    #   title: Kaplan-Meier
-    #   type: Bool
-    #   default: false
+
+    - name: endplot
+      title: Plot End Time
+      type: Integer
+      default: 60
 
 
-    # - name: ac
-    #   title: Adjusted Survival Curve
-    #   type: Bool
-    #   default: false
+    - name: byplot
+      title: Time Interval
+      type: Integer
+      default: 12
 
+    - name: ci95
+      title: '95% CI'
+      type: Bool
+      default: false
 
-    # - name: adjexplanatory
-    #   title: Variable for Adjusted Survival Curve
-    #   type: Variable
-    #   suggested: [ ordinal, nominal ]
-    #   permitted: [ factor ]
+    - name: risktable
+      title: risktable
+      type: Bool
+      default: false
 
+    - name: censored
+      title: censored
+      type: Bool
+      default: false
 
-    # - name: endplot
-    #   title: Plot End Time
-    #   type: Integer
-    #   default: 60
-
-
-    # - name: byplot
-    #   title: Time Interval
-    #   type: Integer
-    #   default: 12
-
-    # - name: ci95
-    #   title: '95% CI'
-    #   type: Bool
-    #   default: false
-
-    # - name: risktable
-    #   title: risktable
-    #   type: Bool
-    #   default: false
-
-    # - name: censored
-    #   title: censored
-    #   type: Bool
-    #   default: false
-
-    # - name: pplot
-    #   title: p-value
-    #   type: Bool
-    #   default: true
+    - name: pplot
+      title: p-value
+      type: Bool
+      default: true
 
 
     # - name: modelTerms

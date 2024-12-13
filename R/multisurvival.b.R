@@ -25,38 +25,109 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             # getData ----
             ,
             .getData = function() {
+                # Check if data exists and has content
+                if (is.null(self$data) || nrow(self$data) == 0) {
+                    stop('Data contains no (complete) rows')
+                }
+
+                # Get the data
                 mydata <- self$data
 
-                mydata$row_names <- rownames(mydata)
+                # Check if data has names
+                if (is.null(names(mydata))) {
+                    stop('Data must have column names')
+                }
 
+                # Add row names if missing
+                if (is.null(rownames(mydata))) {
+                    mydata$row_names <- seq_len(nrow(mydata))
+                } else {
+                    mydata$row_names <- rownames(mydata)
+                }
+
+                # Get original names
                 original_names <- names(mydata)
 
-                labels <- setNames(original_names, original_names)
+                # Check if original names exist
+                if (length(original_names) == 0) {
+                    stop('Data must have column names')
+                }
 
-                mydata <- mydata %>% janitor::clean_names()
+                # Create labels vector
+                labels <- stats::setNames(original_names, original_names)
 
-                corrected_labels <-
-                    setNames(original_names, names(mydata))
+                # Clean names safely
+                mydata_cleaned <- try({
+                    janitor::clean_names(mydata)
+                }, silent = TRUE)
 
-                mydata <- labelled::set_variable_labels(
-                    .data = mydata,
-                    .labels = corrected_labels
-                )
-
-                all_labels <- labelled::var_label(mydata)
+                # mydata <- mydata %>% janitor::clean_names()
 
 
-                mytime <-
+                if (inherits(mydata_cleaned, "try-error")) {
+                    stop('Error cleaning variable names. Please check column names.')
+                }
+
+
+                # Create corrected labels
+                corrected_labels <- stats::setNames(original_names, names(mydata_cleaned))
+
+                # Apply labels
+                mydata_labelled <- try({
+                    labelled::set_variable_labels(
+                        .data = mydata_cleaned,
+                        .labels = corrected_labels
+                    )
+                }, silent = TRUE)
+
+                # mydata <- labelled::set_variable_labels(
+                #     .data = mydata,
+                #     .labels = corrected_labels
+                # )
+
+
+                if (inherits(mydata_labelled, "try-error")) {
+                    stop('Error setting variable labels')
+                }
+
+
+                # Get all labels
+                all_labels <- labelled::var_label(mydata_labelled)
+
+                # all_labels <- labelled::var_label(mydata)
+
+
+                # Get variable names from labels
+                mytime <- try({
                     names(all_labels)[all_labels == self$options$elapsedtime]
+                }, silent = TRUE)
 
-                myoutcome <-
+                # mytime <-
+                #     names(all_labels)[all_labels == self$options$elapsedtime]
+
+                myoutcome <- try({
                     names(all_labels)[all_labels == self$options$outcome]
+                }, silent = TRUE)
 
-                mydxdate <-
+                # myoutcome <-
+                #     names(all_labels)[all_labels == self$options$outcome]
+
+
+                mydxdate <- try({
                     names(all_labels)[all_labels == self$options$dxdate]
+                }, silent = TRUE)
 
-                myfudate <-
+                # mydxdate <-
+                #     names(all_labels)[all_labels == self$options$dxdate]
+
+
+                myfudate <- try({
                     names(all_labels)[all_labels == self$options$fudate]
+                }, silent = TRUE)
+
+                # myfudate <-
+                #     names(all_labels)[all_labels == self$options$fudate]
+
 
 
                 labels_explanatory <- self$options$explanatory
@@ -71,15 +142,50 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                     names(all_labels)[match(labels_contexpl,
                                             all_labels)]
 
+
+                # Get adjexplanatory only if it exists and ac option is TRUE
+                adjexplanatory <- NULL
+                if (!is.null(self$options$adjexplanatory) && self$options$ac) {
+                    adjexplanatory <- names(all_labels)[all_labels == self$options$adjexplanatory]
+                }
+
+
+
+                # Check if required variables were found
+                if (length(mytime) == 0 && !is.null(self$options$elapsedtime)) {
+                    stop('Could not find elapsed time variable')
+                }
+                if (length(myoutcome) == 0 && !is.null(self$options$outcome)) {
+                    stop('Could not find outcome variable')
+                }
+
+                # Return results
                 return(list(
-                    "mydata_labelled" = mydata,
+                    "mydata_labelled" = mydata_labelled,
                     "mytime_labelled" = mytime,
                     "myoutcome_labelled" = myoutcome,
                     "mydxdate_labelled" = mydxdate,
                     "myfudate_labelled" = myfudate,
                     "mycontexpl_labelled" = mycontexpl,
-                    "myexplanatory_labelled" = myexplanatory
+                    "myexplanatory_labelled" = myexplanatory,
+                    "adjexplanatory_labelled" = adjexplanatory
+
                 ))
+
+
+
+                # return(list(
+                #     "mydata_labelled" = mydata,
+                #     "mytime_labelled" = mytime,
+                #     "myoutcome_labelled" = myoutcome,
+                #     "mydxdate_labelled" = mydxdate,
+                #     "myfudate_labelled" = myfudate,
+                #     "mycontexpl_labelled" = mycontexpl,
+                #     "myexplanatory_labelled" = myexplanatory
+                # ))
+
+
+
             }
 
             # todo ----
@@ -391,7 +497,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 mydxdate_labelled      <- labelled_data$mydxdate_labelled
                 myfudate_labelled      <- labelled_data$myfudate_labelled
                 myexplanatory_labelled <- labelled_data$myexplanatory_labelled
-                mycontexpl_labelled <- labelled_data$mycontexpl_labelled
+                mycontexpl_labelled    <- labelled_data$mycontexpl_labelled
+                adjexplanatory_labelled <- labelled_data$adjexplanatory_labelled
+
 
                 time <- private$.definemytime()
                 outcome <- private$.definemyoutcome()
@@ -446,6 +554,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                     name3contexpl <- mycontexpl_labelled
                 }
 
+                # Add adjexplanatory name if present
+                adjexplanatory_name <- NULL
+                if (!is.null(adjexplanatory_labelled)) {
+                    adjexplanatory_name <- adjexplanatory_labelled
+                }
+
 
                 # cleanData <- cleanData %>%
                 #     dplyr::rename(
@@ -466,13 +580,17 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                         "name2outcome" = name2outcome,
                         "name3contexpl" = name3contexpl,
                         "name3expl" = name3expl,
+                        "adjexplanatory_name" = adjexplanatory_name,
+
                         "cleanData" = cleanData,
                         "mytime_labelled" = mytime_labelled,
                         "myoutcome_labelled" = myoutcome_labelled,
                         "mydxdate_labelled" = mydxdate_labelled,
                         "myfudate_labelled" = myfudate_labelled,
                         "myexplanatory_labelled" = myexplanatory_labelled,
-                        "mycontexpl_labelled" = mycontexpl_labelled
+                        "mycontexpl_labelled" = mycontexpl_labelled,
+                        "adjexplanatory_labelled" = adjexplanatory_labelled
+
                     )
                 )
 
@@ -554,7 +672,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 if (nrow(self$data) == 0)
                     stop('Data contains no (complete) rows')
 
-                ## mydata ----
+                # mydata ----
 
                 cleaneddata <- private$.cleandata()
 
@@ -562,6 +680,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 name2outcome <- cleaneddata$name2outcome
                 name3contexpl <- cleaneddata$name3contexpl
                 name3expl <- cleaneddata$name3expl
+                adjexplanatory_name <- cleaneddata$adjexplanatory_name
 
                 mydata <- cleanData <- cleaneddata$cleanData
 
@@ -571,6 +690,32 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 myfudate_labelled <- cleaneddata$myfudate_labelled
                 myexplanatory_labelled <- cleaneddata$myexplanatory_labelled
                 mycontexpl_labelled <- cleaneddata$mycontexpl_labelled
+                adjexplanatory_labelled <- cleaneddata$adjexplanatory_labelled
+
+
+
+                ## Add Calculated Time to Data ----
+
+                if (self$options$tint && self$options$calculatedtime && self$results$calculatedtime$isNotFilled()) {
+                    self$results$calculatedtime$setRowNums(cleanData$row_names)
+                    self$results$calculatedtime$setValues(cleanData$mytime)
+                }
+
+
+
+
+                ## Add Redefined Outcome to Data ----
+
+                if (self$options$multievent  && self$options$outcomeredefined && self$results$outcomeredefined$isNotFilled()) {
+                    self$results$outcomeredefined$setRowNums(cleanData$row_names)
+                    self$results$outcomeredefined$setValues(cleanData$myoutcome)
+                }
+
+
+
+
+
+
 
                 # Cox ----
 
@@ -709,34 +854,27 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 if (self$options$calculateRiskScore) {
 
 
-                    # Calculate risk scores and create groups
-                    mydata <- private$.calculateRiskScore(cox_model, mydata)
+                ### Calculate risk scores and create groups
+
+                mydata <- private$.calculateRiskScore(cox_model, mydata)
 
 
 
-                    # Store data for plot
+                ### Store data for plot
                     image <- self$results$riskGroupPlot
                     image$setState(list(riskData = mydata))
 
 
-                    # # Store data for plot
-                    # risk_plotData <- list(
-                    #     "riskData" = mydata,
-                    #     "timetypeoutput" = self$options$timetypeoutput
-                    # )
-                    #
-                    # image <- self$results$riskGroupPlot
-                    # image$setState(risk_plotData)
 
 
-
-                    # Add risk scores to output if requested ----
+                ### Add risk scores to output if requested ----
                     if (self$options$addRiskScore && self$results$addRiskScore$isNotFilled()) {
                         self$results$addRiskScore$setRowNums(mydata$row_names)
                         self$results$addRiskScore$setValues(mydata$risk_score)
                     }
 
-                    # Add risk group to output if requested ----
+
+                ### Add risk group to output if requested ----
                     if (self$options$addRiskGroup && self$results$addRiskGroup$isNotFilled()) {
                         self$results$addRiskGroup$setRowNums(mydata$row_names)
                         self$results$addRiskGroup$setValues(mydata$risk_group)
@@ -796,7 +934,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                     # risk_formula <- as.formula(risk_formula)
                     # km_fit <- survival::survfit(risk_formula, data = mydata)
 
-                    # # Calculate log-rank test ----
+                    # # Calculate log-rank test
                     # log_rank <- survival::survdiff(risk_formula, data = mydata)
 
 
@@ -829,7 +967,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 
-                ## Prepare Data For Plots ----
+                # Prepare Data For Plots ----
 
                 image <- self$results$plot
                 image$setState(cleaneddata)
@@ -839,37 +977,24 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
                 # image4 <- self$results$plot4
-                # image4$setState(mydata)
+                # image4$setState(cleaneddata)
 
-                # imageKM <- self$results$plotKM
-                # imageKM$setState(mydata)
+                imageKM <- self$results$plotKM
+                imageKM$setState(cleaneddata)
 
                 # image7 <- self$results$plot7
-                # image7$setState(mydata)
+                # image7$setState(cleaneddata)
 
-                # View mydata
-                # self$results$mydataview$setContent(
-                #     list(
-                #         head(cleanData)
-                #         )
-                #     )
-
-                ## Add Calculated Time to Data ----
-
-                if (self$options$tint && self$options$calculatedtime && self$results$calculatedtime$isNotFilled()) {
-                    self$results$calculatedtime$setRowNums(cleanData$row_names)
-                    self$results$calculatedtime$setValues(cleanData$mytime)
-                    }
+                image_plot_adj <- self$results$plot_adj
+                image_plot_adj$setState(cleaneddata)
 
 
-
-
-                ## Add Redefined Outcome to Data ----
-
-                if (self$options$multievent  && self$options$outcomeredefined && self$results$outcomeredefined$isNotFilled()) {
-               self$results$outcomeredefined$setRowNums(cleanData$row_names)
-               self$results$outcomeredefined$setValues(cleanData$myoutcome)
-                            }
+                # View plot data ----
+                self$results$mydataview_plot_adj$setContent(
+                    list(
+                        head(cleaneddata)
+                        )
+                    )
 
 
 
@@ -901,7 +1026,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         #         mycontexpl_labelled <- cleaneddata$mycontexpl_labelled
         #
         #
-        #         ### prepare formula ----
+        #         ### prepare formula
         #
         #
         #         myexplanatory <- NULL
@@ -941,7 +1066,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         #         # )
         #
         #
-        #         ## finalfit Multivariable table ----
+        #         ## finalfit Multivariable table
         #
         #         finalfit::finalfit(
         #             .data = mydata,
@@ -990,7 +1115,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         #
         #         self$results$text$setContent(results1)
         #
-        #         ## coxph Proportional Hazards Assumption ----
+        #         ## coxph Proportional Hazards Assumption
         #         if (self$options$ph_cox) {
         #
         #
@@ -1052,7 +1177,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         #         }
         #
         #
-        #         # Diagnostics of Cox Model ----
+        #         # Diagnostics of Cox Model
         #
         #         # https://forum.jamovi.org/viewtopic.php?t=2563&sid=1e80bc4f5cc91581b11be1ca1b9cc169
         #
@@ -1098,7 +1223,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         #
         #         # https://forum.jamovi.org/viewtopic.php?p=9359&hilit=typeof#p9359
         #
-        #         # # Create a function ----
+        #         # # Create a function
         #         # type_info <- function(x) {
         #         #     c(x,
         #         #       class = class(x),
@@ -1139,7 +1264,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         #
         #
         #
-        #         # Reduced model ----
+        #         # Reduced model
         #         # If you are using a backwards selection approach or similar, a reduced model can be directly specified and compared. The full model can be kept or dropped.
         #
         #         # explanatory_multi = c("age", "thickness", "ulcer")
@@ -1148,7 +1273,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         #         #     mykable()
         #
         #
-        #         # Testing for proportional hazards ----
+        #         # Testing for proportional hazards
         #         # An assumption of CPH regression is that the hazard (think risk) associated with a particular variable does not change over time. For example, is the magnitude of the increase in risk of death associated with tumour ulceration the same in the early post-operative period as it is in later years?
         #         #
         #         #     The cox.zph() function from the survival package allows us to test this assumption for each variable. The plot of scaled Schoenfeld residuals should be a horizontal line. The included hypothesis test identifies whether the gradient differs from zero for each variable. No variable significantly differs from zero at the 5% significance level.
@@ -1170,7 +1295,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         #         # #> GLOBAL         NA 8.4695 0.1322
         #
         #
-        #         # Stratified models ----
+        #         # Stratified models
         #         # One approach to dealing with a violation of the proportional hazards assumption is to stratify by that variable. Including a strata() term will result in a separate baseline hazard function being fit for each level in the stratification variable. It will be no longer possible to make direct inference on the effect associated with that variable.
         #         #
         #         # This can be incorporated directly into the explanatory variable list.
@@ -1480,7 +1605,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             #     plot4 <- survminer::ggcoxzph(cox_zph_fit)
             #
             #
-            #     # print plot ----
+            #     # print plot
             #
             #     print(plot4)
             #     TRUE
@@ -1510,52 +1635,52 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
             # Kaplan-Meier ----
 
-            # ,
-            # .plotKM = function(imageKM, ggtheme, theme, ...) {
-            #
-            #             plotData <- imageKM$state
-            #
-            #             thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
-            #
-            #             if (length(self$options$explanatory) > 2)
-            #                 stop("Kaplan-Meier function allows maximum of 2 explanatory variables")
-            #
-            #             if (!is.null(self$options$contexpl))
-            #                 stop("Kaplan-Meier function does not use continuous explanatory variables.")
-            #
-            #             title2 <- as.character(thefactor)
-            #
-            #             plotKM <- plotData %>%
-            #                 finalfit::surv_plot(.data = .,
-            #                                     dependent = 'survival::Surv(mytime, myoutcome)',
-            #                                     explanatory = as.vector(self$options$explanatory),
-            #                                     xlab = paste0('Time (', self$options$timetypeoutput, ')'),
-            #                                     pval = self$options$pplot,
-            #                                     pval.method	= self$options$pplot,
-            #                                     # pval = TRUE,
-            #                                     legend = 'none',
-            #                                     break.time.by = self$options$byplot,
-            #                                     xlim = c(0,self$options$endplot),
-            #                                     title = paste0("Survival curves for ", title2),
-            #                                     subtitle = "Based on Kaplan-Meier estimates",
-            #                                     risk.table = self$options$risktable,
-            #                                     conf.int = self$options$ci95,
-            #                                     censored = self$options$censored
-            #
-            #                 )
-            #
-            #             # plot <- plot + ggtheme
-            #
-            #             print(plotKM)
-            #             TRUE
-            #
-            #
-            #
-            #         }
+            ,
+            .plotKM = function(imageKM, ggtheme, theme, ...) {
+
+                        plotData <- imageKM$state
+
+                        thefactor <- jmvcore::constructFormula(terms = self$options$explanatory)
+
+                        if (length(self$options$explanatory) > 2)
+                            stop("Kaplan-Meier function allows maximum of 2 explanatory variables")
+
+                        if (!is.null(self$options$contexpl))
+                            stop("Kaplan-Meier function does not use continuous explanatory variables.")
+
+                        title2 <- as.character(thefactor)
+
+                        plotKM <- plotData %>%
+                            finalfit::surv_plot(.data = .,
+                                                dependent = 'survival::Surv(mytime, myoutcome)',
+                                                explanatory = as.vector(self$options$explanatory),
+                                                xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+                                                pval = self$options$pplot,
+                                                pval.method	= self$options$pplot,
+                                                # pval = TRUE,
+                                                legend = 'none',
+                                                break.time.by = self$options$byplot,
+                                                xlim = c(0,self$options$endplot),
+                                                title = paste0("Survival curves for ", title2),
+                                                subtitle = "Based on Kaplan-Meier estimates",
+                                                risk.table = self$options$risktable,
+                                                conf.int = self$options$ci95,
+                                                censored = self$options$censored
+
+                            )
+
+                        # plot <- plot + ggtheme
+
+                        print(plotKM)
+                        TRUE
 
 
 
-            # # Adjusted Survival ----
+                    }
+
+
+
+            # Adjusted Survival ----
             # ,
             # .plot7 = function(image7, ggtheme, theme, ...) {
             #
@@ -1763,6 +1888,86 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             print(plot)
             TRUE
         }
+
+
+
+
+        ,
+        # Adjusted survival ----
+
+        .plot_adj = function(image_plot_adj, ggtheme, theme, ...) {
+
+            if (!self$options$ac)
+                return()
+
+            plotData <- image_plot_adj$state
+
+            if (is.null(plotData)) {
+                return()
+            }
+
+            name1time <- plotData$name1time
+            name2outcome <- plotData$name2outcome
+            name3contexpl <- plotData$name3contexpl
+            name3expl <- plotData$name3expl
+            adjexplanatory_name <- plotData$adjexplanatory_name
+
+            mydata <- cleanData <- plotData$cleanData
+
+            mytime_labelled <- plotData$mytime_labelled
+            myoutcome_labelled <- plotData$myoutcome_labelled
+            mydxdate_labelled <- plotData$mydxdate_labelled
+            myfudate_labelled <- plotData$myfudate_labelled
+            myexplanatory_labelled <- plotData$myexplanatory_labelled
+            mycontexpl_labelled <- plotData$mycontexpl_labelled
+            adjexplanatory_labelled <- plotData$adjexplanatory_labelled
+
+
+            if (is.null(plotData$adjexplanatory_name)) {
+                stop('Please select a variable for adjusted curves')
+            }
+
+
+            ### prepare formula ----
+
+            myexplanatory <- NULL
+            if(!is.null(self$options$explanatory)) {
+                myexplanatory <- as.vector(myexplanatory_labelled)
+            }
+
+            mycontexpl <- NULL
+            if(!is.null(self$options$contexpl)) {
+                mycontexpl <- as.vector(mycontexpl_labelled)
+            }
+
+            formula2 <- c(myexplanatory, mycontexpl)
+
+            myformula <-
+                paste("survival::Surv(mytime, myoutcome) ~ ",
+                      paste(formula2, collapse = " + ")
+                )
+
+            myformula <- as.formula(myformula)
+
+            # Fit model
+            cox_model <- survival::coxph(myformula, data = mydata)
+
+            # Create adjusted curves
+            plot <- survminer::ggadjustedcurves(
+                fit = cox_model,
+                data = mydata,
+                variable = adjexplanatory_name,
+                method = "average",
+                conf.int = self$options$ci95,
+                risk.table = self$options$risktable,
+                xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+                title = paste0("Adjusted Survival Curves for ", self$options$adjexplanatory)
+            )
+
+            print(plot)
+            TRUE
+        }
+
 
 
 

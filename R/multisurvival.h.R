@@ -28,7 +28,16 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             sty = "t1",
             ph_cox = FALSE,
             calculateRiskScore = FALSE,
-            plotRiskGroups = FALSE, ...) {
+            plotRiskGroups = FALSE,
+            ac = FALSE,
+            adjexplanatory = NULL,
+            km = FALSE,
+            endplot = 60,
+            byplot = 12,
+            ci95 = FALSE,
+            risktable = FALSE,
+            censored = FALSE,
+            pplot = TRUE, ...) {
 
             super$initialize(
                 package="jsurvival",
@@ -174,6 +183,46 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 "addRiskScore")
             private$..addRiskGroup <- jmvcore::OptionOutput$new(
                 "addRiskGroup")
+            private$..ac <- jmvcore::OptionBool$new(
+                "ac",
+                ac,
+                default=FALSE)
+            private$..adjexplanatory <- jmvcore::OptionVariable$new(
+                "adjexplanatory",
+                adjexplanatory,
+                suggested=list(
+                    "ordinal",
+                    "nominal"),
+                permitted=list(
+                    "factor"))
+            private$..km <- jmvcore::OptionBool$new(
+                "km",
+                km,
+                default=FALSE)
+            private$..endplot <- jmvcore::OptionInteger$new(
+                "endplot",
+                endplot,
+                default=60)
+            private$..byplot <- jmvcore::OptionInteger$new(
+                "byplot",
+                byplot,
+                default=12)
+            private$..ci95 <- jmvcore::OptionBool$new(
+                "ci95",
+                ci95,
+                default=FALSE)
+            private$..risktable <- jmvcore::OptionBool$new(
+                "risktable",
+                risktable,
+                default=FALSE)
+            private$..censored <- jmvcore::OptionBool$new(
+                "censored",
+                censored,
+                default=FALSE)
+            private$..pplot <- jmvcore::OptionBool$new(
+                "pplot",
+                pplot,
+                default=TRUE)
 
             self$.addOption(private$..elapsedtime)
             self$.addOption(private$..tint)
@@ -202,6 +251,15 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..plotRiskGroups)
             self$.addOption(private$..addRiskScore)
             self$.addOption(private$..addRiskGroup)
+            self$.addOption(private$..ac)
+            self$.addOption(private$..adjexplanatory)
+            self$.addOption(private$..km)
+            self$.addOption(private$..endplot)
+            self$.addOption(private$..byplot)
+            self$.addOption(private$..ci95)
+            self$.addOption(private$..risktable)
+            self$.addOption(private$..censored)
+            self$.addOption(private$..pplot)
         }),
     active = list(
         elapsedtime = function() private$..elapsedtime$value,
@@ -230,7 +288,16 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         calculateRiskScore = function() private$..calculateRiskScore$value,
         plotRiskGroups = function() private$..plotRiskGroups$value,
         addRiskScore = function() private$..addRiskScore$value,
-        addRiskGroup = function() private$..addRiskGroup$value),
+        addRiskGroup = function() private$..addRiskGroup$value,
+        ac = function() private$..ac$value,
+        adjexplanatory = function() private$..adjexplanatory$value,
+        km = function() private$..km$value,
+        endplot = function() private$..endplot$value,
+        byplot = function() private$..byplot$value,
+        ci95 = function() private$..ci95$value,
+        risktable = function() private$..risktable$value,
+        censored = function() private$..censored$value,
+        pplot = function() private$..pplot$value),
     private = list(
         ..elapsedtime = NA,
         ..tint = NA,
@@ -258,7 +325,16 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ..calculateRiskScore = NA,
         ..plotRiskGroups = NA,
         ..addRiskScore = NA,
-        ..addRiskGroup = NA)
+        ..addRiskGroup = NA,
+        ..ac = NA,
+        ..adjexplanatory = NA,
+        ..km = NA,
+        ..endplot = NA,
+        ..byplot = NA,
+        ..ci95 = NA,
+        ..risktable = NA,
+        ..censored = NA,
+        ..pplot = NA)
 )
 
 multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -273,13 +349,18 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         cox_ph = function() private$.items[["cox_ph"]],
         plot8 = function() private$.items[["plot8"]],
         mydataview = function() private$.items[["mydataview"]],
+        riskSummaryTable = function() private$.items[["riskSummaryTable"]],
+        riskScoreText = function() private$.items[["riskScoreText"]],
+        plotKM = function() private$.items[["plotKM"]],
         riskScoreTable = function() private$.items[["riskScoreTable"]],
         riskScoreMetrics = function() private$.items[["riskScoreMetrics"]],
         riskGroupPlot = function() private$.items[["riskGroupPlot"]],
         calculatedtime = function() private$.items[["calculatedtime"]],
         outcomeredefined = function() private$.items[["outcomeredefined"]],
         addRiskScore = function() private$.items[["addRiskScore"]],
-        addRiskGroup = function() private$.items[["addRiskGroup"]]),
+        addRiskGroup = function() private$.items[["addRiskGroup"]],
+        mydataview_plot_adj = function() private$.items[["mydataview_plot_adj"]],
+        plot_adj = function() private$.items[["plot_adj"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -421,6 +502,42 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 options=options,
                 name="mydataview",
                 title="mydataview"))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="riskSummaryTable",
+                title="riskSummaryTable"))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="riskScoreText",
+                title="riskScoreText"))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotKM",
+                title="Kaplan-Meier",
+                width=600,
+                height=450,
+                renderFun=".plotKM",
+                requiresData=TRUE,
+                visible="(km)",
+                refs="finalfit",
+                clearWith=list(
+                    "km",
+                    "endplot",
+                    "byplot",
+                    "ci95",
+                    "risktable",
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime",
+                    "explanatory",
+                    "contexpl",
+                    "fudate",
+                    "dxdate",
+                    "tint",
+                    "multievent",
+                    "adjexplanatory",
+                    "pplot",
+                    "censored")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="riskScoreTable",
@@ -531,7 +648,25 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "dxdate",
                     "tint",
                     "multievent",
-                    "addRiskGroup")))}))
+                    "addRiskGroup")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="mydataview_plot_adj",
+                title="plot_adj"))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot_adj",
+                title="Adjusted Survival Plot",
+                width=600,
+                height=450,
+                renderFun=".plot_adj",
+                visible="(ac)",
+                refs="survminer",
+                clearWith=list(
+                    "ac",
+                    "adjexplanatory",
+                    "ci95",
+                    "risktable")))}))
 
 multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "multisurvivalBase",
@@ -586,6 +721,15 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param ph_cox .
 #' @param calculateRiskScore .
 #' @param plotRiskGroups .
+#' @param ac .
+#' @param adjexplanatory .
+#' @param km .
+#' @param endplot .
+#' @param byplot .
+#' @param ci95 .
+#' @param risktable .
+#' @param censored .
+#' @param pplot .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
@@ -596,6 +740,9 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$riskSummaryTable} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$riskScoreText} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$riskScoreTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$riskScoreMetrics} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$riskGroupPlot} \tab \tab \tab \tab \tab an image \cr
@@ -603,6 +750,8 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
+#'   \code{results$mydataview_plot_adj} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -636,7 +785,16 @@ multisurvival <- function(
     sty = "t1",
     ph_cox = FALSE,
     calculateRiskScore = FALSE,
-    plotRiskGroups = FALSE) {
+    plotRiskGroups = FALSE,
+    ac = FALSE,
+    adjexplanatory,
+    km = FALSE,
+    endplot = 60,
+    byplot = 12,
+    ci95 = FALSE,
+    risktable = FALSE,
+    censored = FALSE,
+    pplot = TRUE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("multisurvival requires jmvcore to be installed (restart may be required)")
@@ -647,6 +805,7 @@ multisurvival <- function(
     if ( ! missing(outcome)) outcome <- jmvcore::resolveQuo(jmvcore::enquo(outcome))
     if ( ! missing(explanatory)) explanatory <- jmvcore::resolveQuo(jmvcore::enquo(explanatory))
     if ( ! missing(contexpl)) contexpl <- jmvcore::resolveQuo(jmvcore::enquo(contexpl))
+    if ( ! missing(adjexplanatory)) adjexplanatory <- jmvcore::resolveQuo(jmvcore::enquo(adjexplanatory))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
@@ -655,9 +814,11 @@ multisurvival <- function(
             `if`( ! missing(fudate), fudate, NULL),
             `if`( ! missing(outcome), outcome, NULL),
             `if`( ! missing(explanatory), explanatory, NULL),
-            `if`( ! missing(contexpl), contexpl, NULL))
+            `if`( ! missing(contexpl), contexpl, NULL),
+            `if`( ! missing(adjexplanatory), adjexplanatory, NULL))
 
     for (v in explanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
+    for (v in adjexplanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- multisurvivalOptions$new(
         elapsedtime = elapsedtime,
@@ -682,7 +843,16 @@ multisurvival <- function(
         sty = sty,
         ph_cox = ph_cox,
         calculateRiskScore = calculateRiskScore,
-        plotRiskGroups = plotRiskGroups)
+        plotRiskGroups = plotRiskGroups,
+        ac = ac,
+        adjexplanatory = adjexplanatory,
+        km = km,
+        endplot = endplot,
+        byplot = byplot,
+        ci95 = ci95,
+        risktable = risktable,
+        censored = censored,
+        pplot = pplot)
 
     analysis <- multisurvivalClass$new(
         options = options,

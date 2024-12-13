@@ -185,14 +185,14 @@ items:
       type:  Preformatted
 
 
-    # - name:  riskSummaryTable
-    #   title: riskSummaryTable
-    #   type:  Preformatted
+    - name:  riskSummaryTable
+      title: riskSummaryTable
+      type:  Preformatted
 
 
-    # - name:  riskScoreText
-    #   title: riskScoreText
-    #   type:  Preformatted
+    - name:  riskScoreText
+      title: riskScoreText
+      type:  Preformatted
 
 
 
@@ -208,36 +208,36 @@ items:
 
 
 
-    # - name: plotKM
-    #   title: Kaplan-Meier
-    #   type: Image
-    #   width:  600
-    #   height: 450
-    #   renderFun: .plotKM
-    #   requiresData: true
-    #   visible: (km)
-    #   refs: finalfit
-    #   clearWith:
-    #       - km
-    #       - endplot
-    #       - byplot
-    #       - ci95
-    #       - risktable
-    #       - outcome
-    #       - outcomeLevel
-    #       - overalltime
-    #       - explanatory
-    #       - contexpl
-    #       - fudate
-    #       - dxdate
-    #       - tint
-    #       - multievent
-    #       - adjexplanatory
-    #       - pplot
-    #       - censored
+    - name: plotKM
+      title: Kaplan-Meier
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .plotKM
+      requiresData: true
+      visible: (km)
+      refs: finalfit
+      clearWith:
+          - km
+          - endplot
+          - byplot
+          - ci95
+          - risktable
+          - outcome
+          - outcomeLevel
+          - overalltime
+          - explanatory
+          - contexpl
+          - fudate
+          - dxdate
+          - tint
+          - multievent
+          - adjexplanatory
+          - pplot
+          - censored
 
 
-#
+
     # - name: plot7
     #   title: '`Adjusted Survival Curve - ${adjexplanatory}`'
     #   type: Image
@@ -390,6 +390,25 @@ items:
           - multievent
           - addRiskGroup
 
+
+    - name:  mydataview_plot_adj
+      title: plot_adj
+      type:  Preformatted
+
+
+    - name: plot_adj
+      title: Adjusted Survival Plot
+      type: Image
+      width: 600
+      height: 450
+      renderFun: .plot_adj
+      visible: (ac)
+      refs: survminer
+      clearWith:
+          - ac
+          - adjexplanatory
+          - ci95
+          - risktable
 
 
 refs:

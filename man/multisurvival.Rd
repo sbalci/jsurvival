@@ -28,7 +28,16 @@ multisurvival(
   sty = "t1",
   ph_cox = FALSE,
   calculateRiskScore = FALSE,
-  plotRiskGroups = FALSE
+  plotRiskGroups = FALSE,
+  ac = FALSE,
+  adjexplanatory,
+  km = FALSE,
+  endplot = 60,
+  byplot = 12,
+  ci95 = FALSE,
+  risktable = FALSE,
+  censored = FALSE,
+  pplot = TRUE
 )
 }
 \arguments{
@@ -79,6 +88,24 @@ multisurvival(
 \item{calculateRiskScore}{.}
 
 \item{plotRiskGroups}{.}
+
+\item{ac}{.}
+
+\item{adjexplanatory}{.}
+
+\item{km}{.}
+
+\item{endplot}{.}
+
+\item{byplot}{.}
+
+\item{ci95}{.}
+
+\item{risktable}{.}
+
+\item{censored}{.}
+
+\item{pplot}{.}
 }
 \value{
 A results object containing:
@@ -91,6 +118,9 @@ A results object containing:
 \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
 \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$riskSummaryTable} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$riskScoreText} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
 \code{results$riskScoreTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$riskScoreMetrics} \tab \tab \tab \tab \tab a html \cr
 \code{results$riskGroupPlot} \tab \tab \tab \tab \tab an image \cr
@@ -98,6 +128,8 @@ A results object containing:
 \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
+\code{results$mydataview_plot_adj} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
