@@ -574,13 +574,28 @@ singlearmBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
 #' Single Arm Survival
 #'
-#' Function for Generating Summaries for Survival Analysis.
+#' Performs survival analysis for a single cohort of patients without group 
+#' comparisons. Use this when you want to analyze overall survival 
+#' characteristics of your entire study population - for example, to determine 
+#' median survival time or 1/3/5-year survival rates for all patients 
+#' collectively. This differs from regular survival analysis which compares 
+#' survival between groups.
 #'
 #' @examples
-#' # example will be added
-#'
+#' \donttest{
+#' # Example analyzing overall survival for a patient cohort:
+#' singlearm(
+#'   data = patient_data,
+#'   time = "months_survival",
+#'   outcome = "death_status",
+#'   outcome_level = "Dead"
+#' )
+#'}
 #' @param data The data as a data frame.
-#' @param elapsedtime .
+#' @param elapsedtime The time-to-event or follow-up duration for each
+#'   patient. Should be numeric and continuous, measured in consistent units
+#'   (e.g., months or years). Can be calculated automatically from dates if
+#'   using the date options below.
 #' @param tint .
 #' @param dxdate .
 #' @param fudate .
@@ -595,16 +610,20 @@ singlearmBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param timetypedata select the time type in data
 #' @param timetypeoutput select the time type in output
 #' @param uselandmark .
-#' @param landmark .
-#' @param sc .
-#' @param kmunicate .
+#' @param landmark Enables landmark analysis, which addresses immortal time
+#'   bias by analyzing survival only for patients who survive to a specified
+#'   timepoint (the landmark). Use this when you want to eliminate the effect of
+#'   early deaths or when comparing treatments that can only be given to
+#'   patients who survive long enough to receive them.
+#' @param sc Generate a Kaplan-Meier survival plot with confidence intervals.
+#' @param kmunicate Generate a publication-ready survival plot.
 #' @param ce .
 #' @param ch .
 #' @param endplot .
 #' @param ybegin_plot .
 #' @param yend_plot .
 #' @param byplot .
-#' @param multievent .
+#' @param multievent Enable analysis for datasets with multiple event levels.
 #' @param ci95 .
 #' @param risktable .
 #' @param censored .

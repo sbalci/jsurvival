@@ -155,9 +155,9 @@ items:
           - contexpl
 
 
-    - name:  mydataview
-      title: mydataview
-      type:  Preformatted
+    # - name:  mydataview
+    #   title: mydataview
+    #   type:  Preformatted
 
 
     - name:  riskSummaryTable
@@ -366,10 +366,25 @@ items:
           - addRiskGroup
 
 
-    - name:  mydataview_plot_adj
-      title: plot_adj
-      type:  Preformatted
+    # - name:  mydataview_plot_adj
+    #   title: plot_adj
+    #   type:  Preformatted
 
+
+
+    - name: adj_curves
+      title: Adjusted Survival Curves
+      type: Image
+      width: 600
+      height: 450
+      renderFun: .plotAdjustedCurves
+      visible: (ac)
+      requiresData: true
+
+    - name: adj_stats
+      title: Adjusted Survival Statistics
+      type: Html
+      visible: (ac)
 
     - name: plot_adj
       title: Adjusted Survival Plot
@@ -387,9 +402,9 @@ items:
           - ac_method
 
 
-    - name:  mydataview_calculateAdjustedStats
-      title: mydataview_calculateAdjustedStats
-      type:  Preformatted
+    # - name:  mydataview_calculateAdjustedStats
+    #   title: mydataview_calculateAdjustedStats
+    #   type:  Preformatted
 
 
 
@@ -451,6 +466,83 @@ items:
 
 
 
+
+    - name:  text_model_selection
+      title: Multivariable Survival with Model Selection
+      type:  Html
+      refs: finalfit
+      visible: (use_modelSelection)
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - overalltime
+          - explanatory
+          - contexpl
+          - fudate
+          - dxdate
+          - tint
+          - multievent
+          - modelSelection
+          - selectionCriteria
+          - pEntry
+          - pRemoval
+
+
+    - name:  text2_model_selection
+      title: ''
+      type:  Html
+      refs: finalfit
+      visible: (use_modelSelection)
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - overalltime
+          - explanatory
+          - contexpl
+          - fudate
+          - dxdate
+          - tint
+          - multievent
+          - modelSelection
+          - selectionCriteria
+          - pEntry
+          - pRemoval
+
+    - name: selectionSteps
+      title: Model Selection Steps
+      type: Table
+      visible: (use_modelSelection)
+      columns:
+        - name: step
+          title: Step
+          type: integer
+        - name: variable
+          title: Variable
+          type: text
+        - name: action
+          title: Action
+          type: text
+        - name: criterion
+          title: Criterion Value
+          type: number
+        - name: pvalue
+          title: P-value
+          type: number
+      refs: finalfit
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - overalltime
+          - explanatory
+          - contexpl
+          - fudate
+          - dxdate
+          - tint
+          - multievent
+          - modelSelection
+          - selectionCriteria
+          - pEntry
+          - pRemoval
 
 refs:
     - multivariable

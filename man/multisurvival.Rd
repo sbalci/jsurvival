@@ -43,7 +43,14 @@ multisurvival(
   ac_timepoints = "12, 36, 60",
   ac_compare = FALSE,
   reduced_explanatory,
-  compare_models = FALSE
+  compare_models = FALSE,
+  use_modelSelection = FALSE,
+  modelSelection = "enter",
+  selectionCriteria = "aic",
+  pEntry = 0.05,
+  pRemoval = 0.1,
+  use_stratify = FALSE,
+  stratvar
 )
 }
 \arguments{
@@ -126,6 +133,22 @@ curves}
 \item{reduced_explanatory}{.}
 
 \item{compare_models}{.}
+
+\item{use_modelSelection}{.}
+
+\item{modelSelection}{.}
+
+\item{selectionCriteria}{.}
+
+\item{pEntry}{.}
+
+\item{pRemoval}{.}
+
+\item{use_stratify}{Use stratification when proportional hazards assumption
+is violated.}
+
+\item{stratvar}{Variables to stratify by. Use when proportional hazards
+assumption is violated.}
 }
 \value{
 A results object containing:
@@ -137,7 +160,6 @@ A results object containing:
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
-\code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$riskSummaryTable} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$riskScoreText} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
@@ -148,13 +170,16 @@ A results object containing:
 \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
-\code{results$mydataview_plot_adj} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$adj_curves} \tab \tab \tab \tab \tab an image \cr
+\code{results$adj_stats} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
-\code{results$mydataview_calculateAdjustedStats} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$adjustedSummaryTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$adjustedComparison} \tab \tab \tab \tab \tab a html \cr
 \code{results$model_comparison} \tab \tab \tab \tab \tab a html \cr
 \code{results$reduced_model_metrics} \tab \tab \tab \tab \tab a html \cr
+\code{results$text_model_selection} \tab \tab \tab \tab \tab a html \cr
+\code{results$text2_model_selection} \tab \tab \tab \tab \tab a html \cr
+\code{results$selectionSteps} \tab \tab \tab \tab \tab a table \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

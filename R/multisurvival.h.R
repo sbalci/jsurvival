@@ -43,7 +43,14 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             ac_timepoints = "12, 36, 60",
             ac_compare = FALSE,
             reduced_explanatory = NULL,
-            compare_models = FALSE, ...) {
+            compare_models = FALSE,
+            use_modelSelection = FALSE,
+            modelSelection = "enter",
+            selectionCriteria = "aic",
+            pEntry = 0.05,
+            pRemoval = 0.1,
+            use_stratify = FALSE,
+            stratvar = NULL, ...) {
 
             super$initialize(
                 package="jsurvival",
@@ -262,6 +269,50 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 "compare_models",
                 compare_models,
                 default=FALSE)
+            private$..use_modelSelection <- jmvcore::OptionBool$new(
+                "use_modelSelection",
+                use_modelSelection,
+                default=FALSE)
+            private$..modelSelection <- jmvcore::OptionList$new(
+                "modelSelection",
+                modelSelection,
+                options=list(
+                    "enter",
+                    "forward",
+                    "backward",
+                    "both"),
+                default="enter")
+            private$..selectionCriteria <- jmvcore::OptionList$new(
+                "selectionCriteria",
+                selectionCriteria,
+                options=list(
+                    "aic",
+                    "lrt"),
+                default="aic")
+            private$..pEntry <- jmvcore::OptionNumber$new(
+                "pEntry",
+                pEntry,
+                min=0,
+                max=1,
+                default=0.05)
+            private$..pRemoval <- jmvcore::OptionNumber$new(
+                "pRemoval",
+                pRemoval,
+                min=0,
+                max=1,
+                default=0.1)
+            private$..use_stratify <- jmvcore::OptionBool$new(
+                "use_stratify",
+                use_stratify,
+                default=FALSE)
+            private$..stratvar <- jmvcore::OptionVariables$new(
+                "stratvar",
+                stratvar,
+                suggested=list(
+                    "ordinal",
+                    "nominal"),
+                permitted=list(
+                    "factor"))
 
             self$.addOption(private$..elapsedtime)
             self$.addOption(private$..tint)
@@ -305,6 +356,13 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..ac_compare)
             self$.addOption(private$..reduced_explanatory)
             self$.addOption(private$..compare_models)
+            self$.addOption(private$..use_modelSelection)
+            self$.addOption(private$..modelSelection)
+            self$.addOption(private$..selectionCriteria)
+            self$.addOption(private$..pEntry)
+            self$.addOption(private$..pRemoval)
+            self$.addOption(private$..use_stratify)
+            self$.addOption(private$..stratvar)
         }),
     active = list(
         elapsedtime = function() private$..elapsedtime$value,
@@ -348,7 +406,14 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ac_timepoints = function() private$..ac_timepoints$value,
         ac_compare = function() private$..ac_compare$value,
         reduced_explanatory = function() private$..reduced_explanatory$value,
-        compare_models = function() private$..compare_models$value),
+        compare_models = function() private$..compare_models$value,
+        use_modelSelection = function() private$..use_modelSelection$value,
+        modelSelection = function() private$..modelSelection$value,
+        selectionCriteria = function() private$..selectionCriteria$value,
+        pEntry = function() private$..pEntry$value,
+        pRemoval = function() private$..pRemoval$value,
+        use_stratify = function() private$..use_stratify$value,
+        stratvar = function() private$..stratvar$value),
     private = list(
         ..elapsedtime = NA,
         ..tint = NA,
@@ -391,7 +456,14 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ..ac_timepoints = NA,
         ..ac_compare = NA,
         ..reduced_explanatory = NA,
-        ..compare_models = NA)
+        ..compare_models = NA,
+        ..use_modelSelection = NA,
+        ..modelSelection = NA,
+        ..selectionCriteria = NA,
+        ..pEntry = NA,
+        ..pRemoval = NA,
+        ..use_stratify = NA,
+        ..stratvar = NA)
 )
 
 multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -405,7 +477,6 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         plot3 = function() private$.items[["plot3"]],
         cox_ph = function() private$.items[["cox_ph"]],
         plot8 = function() private$.items[["plot8"]],
-        mydataview = function() private$.items[["mydataview"]],
         riskSummaryTable = function() private$.items[["riskSummaryTable"]],
         riskScoreText = function() private$.items[["riskScoreText"]],
         plotKM = function() private$.items[["plotKM"]],
@@ -416,13 +487,16 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         outcomeredefined = function() private$.items[["outcomeredefined"]],
         addRiskScore = function() private$.items[["addRiskScore"]],
         addRiskGroup = function() private$.items[["addRiskGroup"]],
-        mydataview_plot_adj = function() private$.items[["mydataview_plot_adj"]],
+        adj_curves = function() private$.items[["adj_curves"]],
+        adj_stats = function() private$.items[["adj_stats"]],
         plot_adj = function() private$.items[["plot_adj"]],
-        mydataview_calculateAdjustedStats = function() private$.items[["mydataview_calculateAdjustedStats"]],
         adjustedSummaryTable = function() private$.items[["adjustedSummaryTable"]],
         adjustedComparison = function() private$.items[["adjustedComparison"]],
         model_comparison = function() private$.items[["model_comparison"]],
-        reduced_model_metrics = function() private$.items[["reduced_model_metrics"]]),
+        reduced_model_metrics = function() private$.items[["reduced_model_metrics"]],
+        text_model_selection = function() private$.items[["text_model_selection"]],
+        text2_model_selection = function() private$.items[["text2_model_selection"]],
+        selectionSteps = function() private$.items[["selectionSteps"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -560,10 +634,6 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "tint",
                     "multievent",
                     "contexpl")))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="mydataview",
-                title="mydataview"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="riskSummaryTable",
@@ -711,10 +781,20 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "tint",
                     "multievent",
                     "addRiskGroup")))
-            self$add(jmvcore::Preformatted$new(
+            self$add(jmvcore::Image$new(
                 options=options,
-                name="mydataview_plot_adj",
-                title="plot_adj"))
+                name="adj_curves",
+                title="Adjusted Survival Curves",
+                width=600,
+                height=450,
+                renderFun=".plotAdjustedCurves",
+                visible="(ac)",
+                requiresData=TRUE))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="adj_stats",
+                title="Adjusted Survival Statistics",
+                visible="(ac)"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot_adj",
@@ -730,10 +810,6 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "ci95",
                     "risktable",
                     "ac_method")))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="mydataview_calculateAdjustedStats",
-                title="mydataview_calculateAdjustedStats"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="adjustedSummaryTable",
@@ -791,7 +867,88 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 options=options,
                 name="reduced_model_metrics",
                 title="Reduced Model Performance Metrics",
-                visible="(compare_models)"))}))
+                visible="(compare_models)"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="text_model_selection",
+                title="Multivariable Survival with Model Selection",
+                refs="finalfit",
+                visible="(use_modelSelection)",
+                clearWith=list(
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime",
+                    "explanatory",
+                    "contexpl",
+                    "fudate",
+                    "dxdate",
+                    "tint",
+                    "multievent",
+                    "modelSelection",
+                    "selectionCriteria",
+                    "pEntry",
+                    "pRemoval")))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="text2_model_selection",
+                title="",
+                refs="finalfit",
+                visible="(use_modelSelection)",
+                clearWith=list(
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime",
+                    "explanatory",
+                    "contexpl",
+                    "fudate",
+                    "dxdate",
+                    "tint",
+                    "multievent",
+                    "modelSelection",
+                    "selectionCriteria",
+                    "pEntry",
+                    "pRemoval")))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="selectionSteps",
+                title="Model Selection Steps",
+                visible="(use_modelSelection)",
+                columns=list(
+                    list(
+                        `name`="step", 
+                        `title`="Step", 
+                        `type`="integer"),
+                    list(
+                        `name`="variable", 
+                        `title`="Variable", 
+                        `type`="text"),
+                    list(
+                        `name`="action", 
+                        `title`="Action", 
+                        `type`="text"),
+                    list(
+                        `name`="criterion", 
+                        `title`="Criterion Value", 
+                        `type`="number"),
+                    list(
+                        `name`="pvalue", 
+                        `title`="P-value", 
+                        `type`="number")),
+                refs="finalfit",
+                clearWith=list(
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime",
+                    "explanatory",
+                    "contexpl",
+                    "fudate",
+                    "dxdate",
+                    "tint",
+                    "multievent",
+                    "modelSelection",
+                    "selectionCriteria",
+                    "pEntry",
+                    "pRemoval")))}))
 
 multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "multisurvivalBase",
@@ -863,6 +1020,15 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param ac_compare Perform statistical comparison between adjusted curves
 #' @param reduced_explanatory .
 #' @param compare_models .
+#' @param use_modelSelection .
+#' @param modelSelection .
+#' @param selectionCriteria .
+#' @param pEntry .
+#' @param pRemoval .
+#' @param use_stratify Use stratification when proportional hazards assumption
+#'   is violated.
+#' @param stratvar Variables to stratify by. Use when proportional hazards
+#'   assumption is violated.
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
@@ -872,7 +1038,6 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$riskSummaryTable} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$riskScoreText} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
@@ -883,13 +1048,16 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
-#'   \code{results$mydataview_plot_adj} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$adj_curves} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$adj_stats} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$mydataview_calculateAdjustedStats} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$adjustedSummaryTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$adjustedComparison} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$model_comparison} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$reduced_model_metrics} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$text_model_selection} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$text2_model_selection} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$selectionSteps} \tab \tab \tab \tab \tab a table \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -938,7 +1106,14 @@ multisurvival <- function(
     ac_timepoints = "12, 36, 60",
     ac_compare = FALSE,
     reduced_explanatory,
-    compare_models = FALSE) {
+    compare_models = FALSE,
+    use_modelSelection = FALSE,
+    modelSelection = "enter",
+    selectionCriteria = "aic",
+    pEntry = 0.05,
+    pRemoval = 0.1,
+    use_stratify = FALSE,
+    stratvar) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("multisurvival requires jmvcore to be installed (restart may be required)")
@@ -951,6 +1126,7 @@ multisurvival <- function(
     if ( ! missing(contexpl)) contexpl <- jmvcore::resolveQuo(jmvcore::enquo(contexpl))
     if ( ! missing(adjexplanatory)) adjexplanatory <- jmvcore::resolveQuo(jmvcore::enquo(adjexplanatory))
     if ( ! missing(reduced_explanatory)) reduced_explanatory <- jmvcore::resolveQuo(jmvcore::enquo(reduced_explanatory))
+    if ( ! missing(stratvar)) stratvar <- jmvcore::resolveQuo(jmvcore::enquo(stratvar))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
@@ -961,11 +1137,13 @@ multisurvival <- function(
             `if`( ! missing(explanatory), explanatory, NULL),
             `if`( ! missing(contexpl), contexpl, NULL),
             `if`( ! missing(adjexplanatory), adjexplanatory, NULL),
-            `if`( ! missing(reduced_explanatory), reduced_explanatory, NULL))
+            `if`( ! missing(reduced_explanatory), reduced_explanatory, NULL),
+            `if`( ! missing(stratvar), stratvar, NULL))
 
     for (v in explanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
     for (v in adjexplanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
     for (v in reduced_explanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
+    for (v in stratvar) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- multisurvivalOptions$new(
         elapsedtime = elapsedtime,
@@ -1005,7 +1183,14 @@ multisurvival <- function(
         ac_timepoints = ac_timepoints,
         ac_compare = ac_compare,
         reduced_explanatory = reduced_explanatory,
-        compare_models = compare_models)
+        compare_models = compare_models,
+        use_modelSelection = use_modelSelection,
+        modelSelection = modelSelection,
+        selectionCriteria = selectionCriteria,
+        pEntry = pEntry,
+        pRemoval = pRemoval,
+        use_stratify = use_stratify,
+        stratvar = stratvar)
 
     analysis <- multisurvivalClass$new(
         options = options,

@@ -224,12 +224,12 @@ children:
                         name: addRiskGroup
                         enable: (calculateRiskScore)
   - type: CollapseBox
-    label: Adjusted Survival Curve
+    label: Adjusted Survival Analysis
     collapsed: true
     stretchFactor: 1
     children:
       - type: Label
-        label: Adjust Survival For Variable
+        label: Adjusted Survival Curves
         fitToGrid: true
         stretchFactor: 1
         children:
@@ -250,6 +250,7 @@ children:
                     stretchFactor: 1
                     children:
                       - type: TargetLayoutBox
+                        label: Adjustment Variable
                         children:
                           - type: VariablesListBox
                             name: adjexplanatory
@@ -257,6 +258,7 @@ children:
                             isTarget: true
                             fitToGrid: true
                             stretchFactor: 1
+                            enable: (ac)
       - type: Label
         label: Plot Arguments
         children:
@@ -329,6 +331,65 @@ children:
                     children:
                       - type: VariablesListBox
                         name: reduced_explanatory
+                        isTarget: true
+                        fitToGrid: true
+                        stretchFactor: 1
+
+  - type: CollapseBox
+    label: Model Selection
+    collapsed: true
+    children:
+      - type: Label
+        label: Variable Selection Method
+        children:
+          - type: CheckBox
+            name: use_modelSelection
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: ComboBox
+                name: modelSelection
+                enable: (use_modelSelection)
+              - type: ComboBox
+                name: selectionCriteria
+                enable: (use_modelSelection)
+              - type: TextBox
+                name: pEntry
+                format: number
+                label: Entry Significance (p-value)
+                enable: (use_modelSelection)
+              - type: TextBox
+                name: pRemoval
+                format: number
+                label: Removal Significance (p-value)
+                enable: (use_modelSelection)
+
+
+
+  - type: CollapseBox
+    label: Stratification Variables
+    collapsed: true
+    children:
+      - type: Label
+        label: Stratification Variables
+        children:
+          - type: CheckBox
+            name: use_stratify
+            fitToGrid: true
+          - type: Label
+            label: Select Stratification Variables
+            fitToGrid: true
+            stretchFactor: 1
+            children:
+              - type: VariableSupplier
+                persistentItems: false
+                stretchFactor: 1
+                children:
+                  - type: TargetLayoutBox
+                    label: Stratification Variables
+                    children:
+                      - type: VariablesListBox
+                        name: stratvar
                         isTarget: true
                         fitToGrid: true
                         stretchFactor: 1

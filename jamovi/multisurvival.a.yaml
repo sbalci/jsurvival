@@ -314,5 +314,69 @@ options:
       default: false
 
 
+    - name: use_modelSelection
+      title: Use Models
+      type: Bool
+      default: false
+
+    - name: modelSelection
+      title: Model Selection Method
+      type: List
+      options:
+        - title: Enter (No Selection)
+          name: enter
+        - title: Forward Selection
+          name: forward
+        - title: Backward Selection
+          name: backward
+        - title: Stepwise (Both)
+          name: both
+      default: enter
+
+    - name: selectionCriteria
+      title: Selection Criteria
+      type: List
+      options:
+        - title: AIC (Akaike Information Criterion)
+          name: aic
+        - title: Likelihood Ratio Test
+          name: lrt
+      default: aic
+
+    - name: pEntry
+      title: Entry Significance
+      type: Number
+      min: 0
+      max: 1
+      default: 0.05
+
+    - name: pRemoval
+      title: Removal Significance
+      type: Number
+      min: 0
+      max: 1
+      default: 0.10
+
+
+
+    - name: use_stratify
+      title: Use Variable Stratification
+      type: Bool
+      default: false
+      description:
+          R: >
+            Use stratification when proportional hazards assumption is violated.
+
+
+    - name: stratvar
+      title: Stratification Variables
+      type: Variables
+      suggested: [ ordinal, nominal ]
+      permitted: [ factor ]
+      description:
+          R: >
+            Variables to stratify by. Use when proportional hazards assumption is violated.
+
+
 
 ...

@@ -39,7 +39,10 @@ singlearm(
 \arguments{
 \item{data}{The data as a data frame.}
 
-\item{elapsedtime}{.}
+\item{elapsedtime}{The time-to-event or follow-up duration for each
+patient. Should be numeric and continuous, measured in consistent units
+(e.g., months or years). Can be calculated automatically from dates if
+using the date options below.}
 
 \item{tint}{.}
 
@@ -69,11 +72,15 @@ singlearm(
 
 \item{uselandmark}{.}
 
-\item{landmark}{.}
+\item{landmark}{Enables landmark analysis, which addresses immortal time
+bias by analyzing survival only for patients who survive to a specified
+timepoint (the landmark). Use this when you want to eliminate the effect of
+early deaths or when comparing treatments that can only be given to
+patients who survive long enough to receive them.}
 
-\item{sc}{.}
+\item{sc}{Generate a Kaplan-Meier survival plot with confidence intervals.}
 
-\item{kmunicate}{.}
+\item{kmunicate}{Generate a publication-ready survival plot.}
 
 \item{ce}{.}
 
@@ -87,7 +94,7 @@ singlearm(
 
 \item{byplot}{.}
 
-\item{multievent}{.}
+\item{multievent}{Enable analysis for datasets with multiple event levels.}
 
 \item{ci95}{.}
 
@@ -118,9 +125,21 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 \code{as.data.frame(results$medianTable)}
 }
 \description{
-Function for Generating Summaries for Survival Analysis.
+Performs survival analysis for a single cohort of patients without group
+comparisons. Use this when you want to analyze overall survival
+characteristics of your entire study population - for example, to determine
+median survival time or 1/3/5-year survival rates for all patients
+collectively. This differs from regular survival analysis which compares
+survival between groups.
 }
 \examples{
-# example will be added
-
+\donttest{
+# Example analyzing overall survival for a patient cohort:
+singlearm(
+  data = patient_data,
+  time = "months_survival",
+  outcome = "death_status",
+  outcome_level = "Dead"
+)
+}
 }
