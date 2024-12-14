@@ -195,10 +195,6 @@ children:
             children:
               - type: CheckBox
                 name: km
-
-
-
-
   - type: CollapseBox
     label: Risk Score Grouping
     collapsed: true
@@ -212,9 +208,9 @@ children:
             children:
               - type: CheckBox
                 name: calculateRiskScore
-              # - type: CheckBox
-              #   name: plotRiskGroups
-              #   enable: (calculateRiskScore)
+              - type: CheckBox
+                name: plotRiskGroups
+                enable: (calculateRiskScore)
               - type: Label
                 label: Risk Score Output
                 children:
@@ -261,8 +257,6 @@ children:
                             isTarget: true
                             fitToGrid: true
                             stretchFactor: 1
-
-
       - type: Label
         label: Plot Arguments
         children:
@@ -285,10 +279,6 @@ children:
               - type: TextBox
                 name: byplot
                 format: number
-
-
-
-
       - type: Label
         label: Adjustment Method
         children:
@@ -312,3 +302,34 @@ children:
               - type: CheckBox
                 name: ac_compare
                 enable: (ac_summary)
+
+
+
+  - type: CollapseBox
+    label: Reduced Model Options
+    collapsed: true
+    children:
+      - type: Label
+        label: Model Comparison
+        children:
+          - type: CheckBox
+            name: compare_models
+            fitToGrid: true
+          - type: Label
+            label: Select Reduced Model Variables
+            fitToGrid: true
+            stretchFactor: 1
+            children:
+              - type: VariableSupplier
+                persistentItems: false
+                stretchFactor: 1
+                children:
+                  - type: TargetLayoutBox
+                    label: Reduced Model Variables
+                    children:
+                      - type: VariablesListBox
+                        name: reduced_explanatory
+                        isTarget: true
+                        fitToGrid: true
+                        stretchFactor: 1
+

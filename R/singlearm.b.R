@@ -3,6 +3,15 @@
 #' @import jmvcore
 #' @import magrittr
 #'
+#' @description
+#' This function prepares and cleans data for single-arm survival analysis by
+#' calculating survival time, filtering based on landmark time, and merging
+#' survival outcomes with other factors.
+#'
+#' @return A list containing cleaned data and metadata for plotting and analysis.
+#' @note Ensure the input data contains the required variables (elapsed time,
+#' outcome) and meets specified formatting criteria.
+
 
 singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     "singlearmClass",
@@ -74,7 +83,26 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 This function uses survival, survminer, and finalfit packages. Please cite jamovi and the packages as given below.
                 <br><hr>
                 <br>
-                See details for survival <a href = 'https://cran.r-project.org/web/packages/survival/vignettes/survival.pdf'>here</a>."
+                See details for survival <a href = 'https://cran.r-project.org/web/packages/survival/vignettes/survival.pdf'>here</a>.",
+
+
+            "<b>Welcome to Single-Arm Survival Analysis!</b><br><br>
+            This tool calculates <b>median survival</b> and <b>1-, 3-, 5-year survival rates</b>
+            for a single group.<br>
+            <ul>
+            <li><b>Median Survival:</b> The time by which 50% of subjects have experienced the event.</li>
+            <li><b>1-, 3-, 5-Year Survival:</b> Proportion of subjects surviving at these milestones.</li>
+            </ul>
+            <br><b>Key Features:</b><br>
+            <ul>
+            <li>Use dates or elapsed time to calculate survival.</li>
+            <li>Adjust results with landmark times.</li>
+            <li>Generate survival and cumulative hazard plots.</li>
+            </ul>
+            <br>Please cite jamovi and relevant packages (survival, survminer) in your publications.<br>
+            "
+
+
         )
 
         html <- self$results$todo
@@ -574,6 +602,9 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         medianTable <- self$results$medianTable
         data_frame <- results1table
+        data_frame <- data_frame %>%
+          dplyr::mutate(mean_time = round(rmean, 2),
+                        mean_ci = glue::glue("{round(lower, 2)} - {round(upper, 2)}"))
         for (i in seq_along(data_frame[, 1, drop = T])) {
           medianTable$addRow(rowKey = i, values = c(data_frame[i,]))
         }
@@ -587,7 +618,10 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
               glue::glue(
                 "Median survival is {round(median, digits = 1)} [{round(x0_95lcl, digits = 1)} - {round(x0_95ucl, digits = 1)}, 95% CI] ",
                 self$options$timetypeoutput,
-                "."
+                ".",
+                "The median survival is {round(median, 2)} months [95% CI: {round(lower, 2)} - {round(upper, 2)}].
+       At 1 year, survival is approximately {scales::percent(surv_12)},
+       and at 5 years, it is {scales::percent(surv_60)}."
               )
           ) %>%
           # dplyr::mutate(

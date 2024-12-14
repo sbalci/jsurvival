@@ -11,10 +11,14 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             # init ----
             .init = function() {
                 explanatory_len <- length(self$options$explanatory)
-
                 contexpl_len <- length(self$options$contexpl)
 
-                self$results$plot8$setSize(explanatory_len * 400, contexpl_len * 300)
+                if (explanatory_len > 0 || contexpl_len > 0) {
+                    self$results$plot8$setSize((explanatory_len + contexpl_len) * 400,
+                                               (explanatory_len + contexpl_len) * 300)
+                } else {
+                    self$results$plot8$setVisible(FALSE)
+                }
 
             }
 
@@ -613,19 +617,22 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 condition1 <- subcondition1a &&
                     !subcondition1b1 ||
                     subcondition1b1 &&
-                    subcondition1b2 || subcondition1b1 && subcondition1b3
+                    subcondition1b2 ||
+                    subcondition1b1 && subcondition1b3
 
                 condition2 <- subcondition2b1 &&
                     subcondition2b2 &&
                     subcondition2b3 ||
                     subcondition2a &&
-                    !subcondition2b1 && !subcondition2b2 && !subcondition2b3
+                    !subcondition2b1 &&
+                    !subcondition2b2 && !subcondition2b3
 
 
                 condition3 <- condition3a || condition3b
 
                 not_continue_analysis <- !(condition1 &&
-                                               condition2 && condition3)
+                                               condition2 &&
+                                               condition3)
 
 
                 if (not_continue_analysis) {
@@ -677,14 +684,37 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 ## generate cox model ----
 
                 if (self$options$ph_cox ||
-                    self$options$calculateRiskScore || self$options$ac) {
-                    private$.cox_model()
+                    self$options$calculateRiskScore ||
+                    self$options$ac) {
+                    cox_model <- private$.cox_model()
                 }
 
                 ## run coxph ----
 
                 if (self$options$ph_cox) {
-                    private$.cox_ph()
+                    private$.cox_ph(cox_model)
+                }
+
+
+                ## Calculate Risk Score ----
+
+                if (self$options$calculateRiskScore) {
+                    riskData <- private$.calculateRiskScore(cox_model, mydata)
+
+                }
+
+
+                ## Compare models ----
+
+                if (self$options$compare_models) {
+                    private$.compare_models()
+                }
+
+
+                ## Adjusted survival ----
+
+                if (self$options$ac) {
+                    private$.runAdjustedSurvival()
                 }
 
 
@@ -712,6 +742,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 image_plot_adj <- self$results$plot_adj
                 image_plot_adj$setState(cleaneddata)
 
+
+                if (self$options$calculateRiskScore) {
+                    image_riskGroupPlot <- self$results$riskGroupPlot
+                    image_riskGroupPlot$setState(riskData)
+
+                }
 
                 # View plot data ----
                 self$results$mydataview_plot_adj$setContent(list(head(cleaneddata)))
@@ -880,34 +916,43 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
             # coxph Proportional Hazards Assumption  ----
             ,
-            .cox_ph = function() {
-                cleaneddata <- private$.cleandata()
-
-                name1time <- cleaneddata$name1time
-                name2outcome <- cleaneddata$name2outcome
-                name3contexpl <- cleaneddata$name3contexpl
-                name3expl <- cleaneddata$name3expl
-                adjexplanatory_name <- cleaneddata$adjexplanatory_name
-
-                mydata <- cleanData <- cleaneddata$cleanData
-
-                mytime_labelled <- cleaneddata$mytime_labelled
-                myoutcome_labelled <- cleaneddata$myoutcome_labelled
-                mydxdate_labelled <- cleaneddata$mydxdate_labelled
-                myfudate_labelled <- cleaneddata$myfudate_labelled
-                myexplanatory_labelled <- cleaneddata$myexplanatory_labelled
-                mycontexpl_labelled <- cleaneddata$mycontexpl_labelled
-                adjexplanatory_labelled <- cleaneddata$adjexplanatory_labelled
-
-
-                cox_model <- private$.cox_model()
+            .cox_ph = function(cox_model) {
+                # cleaneddata <- private$.cleandata()
+                #
+                # name1time <- cleaneddata$name1time
+                # name2outcome <- cleaneddata$name2outcome
+                # name3contexpl <- cleaneddata$name3contexpl
+                # name3expl <- cleaneddata$name3expl
+                # adjexplanatory_name <- cleaneddata$adjexplanatory_name
+                #
+                # mydata <- cleanData <- cleaneddata$cleanData
+                #
+                # mytime_labelled <- cleaneddata$mytime_labelled
+                # myoutcome_labelled <- cleaneddata$myoutcome_labelled
+                # mydxdate_labelled <- cleaneddata$mydxdate_labelled
+                # myfudate_labelled <- cleaneddata$myfudate_labelled
+                # myexplanatory_labelled <- cleaneddata$myexplanatory_labelled
+                # mycontexpl_labelled <- cleaneddata$mycontexpl_labelled
+                # adjexplanatory_labelled <- cleaneddata$adjexplanatory_labelled
+                #
+                #
+                # cox_model <- private$.cox_model()
 
                 zph <- survival::cox.zph(cox_model)
 
+
+                # Display test results
                 self$results$cox_ph$setContent(print(zph))
 
-                image8 <- self$results$plot8
-                image8$setState(zph)
+                # Only create plots if there are variables to plot
+                if (!is.null(zph$y)) {
+                    # Pass zph object to plot function
+                    image8 <- self$results$plot8
+                    image8$setState(zph)
+                } else {
+                    # If no variables to plot, hide the plot
+                    self$results$plot8$setVisible(FALSE)
+                }
 
             }
 
@@ -1066,12 +1111,10 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             }
 
 
-            # cox.zph ----
+            # cox.zph plot8 ----
             ,
             .plot8 = function(image8, ggtheme, theme, ...) {
-                ph_cox <- self$options$ph_cox
-
-                if (!ph_cox)
+                if (!self$options$ph_cox)
                     return()
 
                 zph <- image8$state
@@ -1080,8 +1123,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                     return()
                 }
 
-                # plot8 <- plot(zph)
+                # Check if there are variables to plot
+                if (is.null(zph$y)) {
+                    return()
+                }
 
+                # Create plot using survminer
                 plot8 <- survminer::ggcoxzph(zph)
 
                 print(plot8)
@@ -1095,6 +1142,39 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
             .plotKM = function(imageKM, ggtheme, theme, ...) {
+                # Check conditions and show message if not met
+                if (length(self$options$explanatory) > 2) {
+                    text_warning <- "Kaplan-Meier plot requires 2 categorical explanatory variables. You have selected more than 2 variables."
+                    grid::grid.newpage()
+                    grid::grid.text(text_warning, 0.5, 0.5)
+                    return(TRUE)
+                }
+
+                if (!is.null(self$options$contexpl)) {
+                    text_warning <- "Kaplan-Meier plot cannot be created with continuous explanatory variables. Please select only categorical variables."
+                    grid::grid.newpage()
+                    grid::grid.text(text_warning, 0.5, 0.5)
+                    return(TRUE)
+                }
+
+                if (length(self$options$explanatory) < 2) {
+                    text_warning <- "Please select 2 categorical explanatory variables to create the Kaplan-Meier plot."
+                    grid::grid.newpage()
+                    grid::grid.text(text_warning, 0.5, 0.5)
+                    return(TRUE)
+                }
+
+
+                # if (length(self$options$explanatory) > 2)
+                #     stop("Kaplan-Meier function allows maximum of 2 explanatory variables")
+                #
+                # if (!is.null(self$options$contexpl))
+                #     stop("Kaplan-Meier function does not use continuous explanatory variables.")
+
+
+
+
+
                 plotData <- imageKM$state
 
                 if (is.null(plotData)) {
@@ -1135,11 +1215,6 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 thefactor <- jmvcore::constructFormula(terms = myexplanatory)
 
-                if (length(self$options$explanatory) > 2)
-                    stop("Kaplan-Meier function allows maximum of 2 explanatory variables")
-
-                if (!is.null(self$options$contexpl))
-                    stop("Kaplan-Meier function does not use continuous explanatory variables.")
 
                 title2 <- as.character(thefactor)
 
@@ -1184,6 +1259,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
             ,
             # Risk Score Methods ----
+
+            ## Calculate Risk Score ----
+
             .calculateRiskScore = function(cox_model, mydata) {
                 # Calculate risk scores
                 risk_scores <- predict(cox_model, type = "risk")
@@ -1203,6 +1281,27 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                     ),
                     include.lowest = TRUE
                 )
+
+
+                ### Add risk scores to output if requested ----
+                if (self$options$addRiskScore &&
+                    self$results$addRiskScore$isNotFilled()) {
+                    self$results$addRiskScore$setRowNums(mydata$row_names)
+                    self$results$addRiskScore$setValues(mydata$risk_score)
+                }
+
+
+                ### Add risk group to output if requested ----
+                if (self$options$addRiskGroup &&
+                    self$results$addRiskGroup$isNotFilled()) {
+                    self$results$addRiskGroup$setRowNums(mydata$row_names)
+                    self$results$addRiskGroup$setValues(mydata$risk_group)
+                }
+
+
+
+
+
 
                 # Calculate summary statistics
                 risk_summary <- data.frame(
@@ -1252,8 +1351,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 return(mydata)
             }
 
+            ## Plot Risk Groups ----
             ,
-            .plotRiskGroups = function(image, ggtheme, theme, ...) {
+            .plotRiskGroups = function(image_riskGroupPlot, ggtheme, theme, ...) {
                 # Check if risk score calculation is enabled
                 if (!self$options$calculateRiskScore ||
                     !self$options$plotRiskGroups) {
@@ -1261,7 +1361,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 }
 
                 # Get data from image state
-                riskData <- image$state$riskData
+                riskData <- image_riskGroupPlot$state
                 if (is.null(riskData)) {
                     return()
                 }
@@ -1306,6 +1406,304 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 print(plot)
                 TRUE
+            }
+
+
+
+
+
+
+            ,
+            # Compare Models ----
+            .compare_models = function() {
+                # Get clean data
+                cleaneddata <- private$.cleandata()
+                mydata <- cleaneddata$cleanData
+
+                # Get full model variables
+                full_explanatory <- NULL
+                if (!is.null(self$options$explanatory)) {
+                    full_explanatory <- as.vector(cleaneddata$myexplanatory_labelled)
+                }
+
+                full_contexpl <- NULL
+                if (!is.null(self$options$contexpl)) {
+                    full_contexpl <- as.vector(cleaneddata$mycontexpl_labelled)
+                }
+
+                # Get reduced model variables
+                reduced_explanatory <- NULL
+                if (!is.null(self$options$reduced_explanatory)) {
+                    reduced_explanatory <- names(labelled::var_label(mydata))[match(self$options$reduced_explanatory,
+                                                                                    labelled::var_label(mydata))]
+                }
+
+                # Create formulas
+                full_formula <- c(full_explanatory, full_contexpl)
+
+                # Run finalfit with model comparison
+                comparison <- finalfit::finalfit(
+                    .data = mydata,
+                    dependent = 'survival::Surv(mytime, myoutcome)',
+                    explanatory = full_formula,
+                    explanatory_multi = reduced_explanatory,
+                    keep_models = TRUE
+                )
+
+                # Create comparison table
+                html_comparison <- knitr::kable(comparison[[1]], format = 'html', caption = "Full vs Reduced Model Comparison")
+
+                # Add metrics
+                metrics_html <- glue::glue(
+                    "
+        <br>
+        <b>Model Comparison Metrics:</b><br>
+        Full model AIC: {comparison[[2]]$AIC.full}<br>
+        Reduced model AIC: {comparison[[2]]$AIC.reduced}<br>
+        Likelihood ratio test p-value: {comparison[[2]]$lrtest.pvalue}
+    "
+                )
+
+                # Set results
+                self$results$model_comparison$setContent(html_comparison)
+                self$results$reduced_model_metrics$setContent(metrics_html)
+            }
+
+            ,
+            # Helper function to validate timepoints input ----
+
+            .validateTimepoints = function(timepoints_str) {
+                if (is.null(timepoints_str) || nchar(timepoints_str) == 0) {
+                    return(NULL)
+                }
+
+                tryCatch({
+                    # Split and clean the timepoints string
+                    pts <- trimws(unlist(strsplit(timepoints_str, ",")))
+                    pts <- as.numeric(pts)
+                    pts <- sort(unique(pts[!is.na(pts)]))
+
+                    if (length(pts) == 0) {
+                        stop("No valid timepoints found")
+                    }
+                    if (any(pts < 0)) {
+                        stop("Timepoints must be positive")
+                    }
+
+                    return(pts)
+                }, error = function(e) {
+                    stop(paste("Invalid timepoints format:", e$message))
+                })
+            }
+
+            ,
+            # Calculate adjusted survival statistics ----
+
+            .calculateAdjustedStats = function(data,
+                                                cox_model,
+                                                adj_var,
+                                                timepoints,
+                                                method = "average") {
+                # Input validation
+                if (!adj_var %in% names(data)) {
+                    stop("Adjustment variable not found in data")
+                }
+
+                # Get unique levels of adjustment variable
+                levels <- sort(unique(data[[adj_var]]))
+                if (length(levels) < 2) {
+                    stop("Adjustment variable must have at least 2 levels")
+                }
+
+                # Initialize results list
+                results <- list()
+
+                # Calculate adjusted survival for each level
+                for (level in levels) {
+                    # Create modified dataset with current level
+                    newdata <- data
+                    newdata[[adj_var]] <- level
+
+                    # Calculate predicted survival
+                    pred_surv <- tryCatch({
+                        survival::survfit(cox_model, newdata = newdata)
+                    }, error = function(e) {
+                        warning(paste(
+                            "Error calculating survival for level:",
+                            level,
+                            "-",
+                            e$message
+                        ))
+                        return(NULL)
+                    })
+
+                    if (is.null(pred_surv))
+                        next
+
+                    # Extract survival estimates
+                    level_stats <- data.frame(
+                        time = pred_surv$time,
+                        survival = pred_surv$surv,
+                        std.err = pred_surv$std.err,
+                        lower = pred_surv$lower,
+                        upper = pred_surv$upper,
+                        n.risk = pred_surv$n.risk
+                    )
+
+                    # Calculate statistics at specified timepoints
+                    timepoint_stats <- lapply(timepoints, function(t) {
+                        idx <- which.min(abs(level_stats$time - t))
+                        if (length(idx) == 0 ||
+                            t > max(level_stats$time)) {
+                            return(NULL)
+                        }
+
+                        list(
+                            timepoint = t,
+                            survival = level_stats$survival[idx],
+                            se = level_stats$std.err[idx],
+                            ci_lower = level_stats$lower[idx],
+                            ci_upper = level_stats$upper[idx],
+                            n_risk = level_stats$n.risk[idx]
+                        )
+                    })
+
+                    # Store results
+                    timepoint_stats <- Filter(Negate(is.null), timepoint_stats)
+                    if (length(timepoint_stats) > 0) {
+                        results[[as.character(level)]] <- list(full_curve = level_stats, timepoints = timepoint_stats)
+                    }
+                }
+
+                # Add metadata
+                attr(results, "timepoints") <- timepoints
+                attr(results, "levels") <- levels
+                attr(results, "variable") <- adj_var
+                attr(results, "method") <- method
+
+                return(results)
+            }
+
+            ,
+            # Generate summary table from adjusted statistics ----
+            .generateAdjustedSummary = function(adj_stats) {
+                # Initialize summary dataframe
+                summary_df <- data.frame(
+                    Level = character(),
+                    Timepoint = numeric(),
+                    Survival = numeric(),
+                    SE = numeric(),
+                    CI_Lower = numeric(),
+                    CI_Upper = numeric(),
+                    N_at_Risk = integer(),
+                    stringsAsFactors = FALSE
+                )
+
+                # Process each level's statistics
+                for (level in names(adj_stats)) {
+                    level_data <- adj_stats[[level]]
+
+                    if (is.null(level_data$timepoints)) {
+                        warning(sprintf("No timepoint data available for level: %s", level))
+                        next
+                    }
+
+                    # Extract timepoint statistics
+                    for (tp_stat in level_data$timepoints) {
+                        row <- data.frame(
+                            Level = level,
+                            Timepoint = tp_stat$timepoint,
+                            Survival = round(tp_stat$survival, 3),
+                            SE = round(tp_stat$se, 3),
+                            CI_Lower = round(tp_stat$ci_lower, 3),
+                            CI_Upper = round(tp_stat$ci_upper, 3),
+                            N_at_Risk = tp_stat$n_risk,
+                            stringsAsFactors = FALSE
+                        )
+                        summary_df <- rbind(summary_df, row)
+                    }
+                }
+
+                # Sort and add metadata
+                if (nrow(summary_df) > 0) {
+                    summary_df <- summary_df[order(summary_df$Level, summary_df$Timepoint), ]
+
+                    # Calculate median survival times
+                    median_stats <- lapply(adj_stats, function(x) {
+                        full_curve <- x$full_curve
+                        median_idx <- which.min(abs(full_curve$survival - 0.5))
+                        if (length(median_idx) > 0) {
+                            return(full_curve$time[median_idx])
+                        }
+                        return(NA)
+                    })
+
+                    attr(summary_df, "median_survival") <- median_stats
+                    attr(summary_df, "analysis_info") <- list(
+                        variable = attr(adj_stats, "variable"),
+                        method = attr(adj_stats, "method"),
+                        timepoints = attr(adj_stats, "timepoints"),
+                        n_levels = length(unique(summary_df$Level))
+                    )
+                }
+
+                return(summary_df)
+            }
+
+            ,
+            # Main adjusted survival analysis function ----
+            .runAdjustedSurvival = function() {
+                if (!self$options$ac)
+                    return(NULL)
+
+                # Validate inputs
+                timepoints <- private$.validateTimepoints(self$options$ac_timepoints)
+                if (is.null(timepoints)) {
+                    stop("No valid timepoints specified for adjusted survival analysis")
+                }
+
+                # Get cleaned data and model
+                cleaneddata <- private$.cleandata()
+                cox_model <- private$.cox_model()
+
+                # Calculate adjusted statistics
+                adj_stats <- tryCatch({
+                    private$.calculateAdjustedStats(
+                        data = cleaneddata$cleanData,
+                        cox_model = cox_model,
+                        adj_var = cleaneddata$adjexplanatory_name,
+                        timepoints = timepoints,
+                        method = self$options$ac_method
+                    )
+                }, error = function(e) {
+                    stop(paste("Error in adjusted survival analysis:", e$message))
+                })
+
+                # Generate and display summary if requested
+                if (self$options$ac_summary &&
+                    !is.null(adj_stats)) {
+                    summary_table <- private$.generateAdjustedSummary(adj_stats)
+
+                    if (nrow(summary_table) > 0) {
+                        # Add rows to results table
+                        for (i in seq_len(nrow(summary_table))) {
+                            self$results$adjustedSummaryTable$addRow(
+                                rowKey = i,
+                                values = list(
+                                    Level = summary_table$Level[i],
+                                    Timepoint = summary_table$Timepoint[i],
+                                    Survival = summary_table$Survival[i],
+                                    SE = summary_table$SE[i],
+                                    CI_Lower = summary_table$CI_Lower[i],
+                                    CI_Upper = summary_table$CI_Upper[i],
+                                    N_at_Risk = summary_table$N_at_Risk[i]
+                                )
+                            )
+                        }
+                    }
+                }
+
+                return(adj_stats)
             }
 
 
@@ -1387,6 +1785,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 print(plot)
                 TRUE
             }
+
 
 
 

@@ -197,10 +197,10 @@ options:
       type: Bool
       default: false
 
-    # - name: plotRiskGroups
-    #   title: Plot Risk Group Survival
-    #   type: Bool
-    #   default: false
+    - name: plotRiskGroups
+      title: Plot Risk Group Survival
+      type: Bool
+      default: false
 
     - name: addRiskScore
       title: Add Risk Score to Data
@@ -298,6 +298,20 @@ options:
       default: false
       description:
           R: Perform statistical comparison between adjusted curves
+
+
+
+    - name: reduced_explanatory
+      title: Reduced Model Variables
+      type: Variables
+      suggested: [ ordinal, nominal ]
+      permitted: [ factor ]
+
+
+    - name: compare_models
+      title: Compare with reduced model
+      type: Bool
+      default: false
 
 
 

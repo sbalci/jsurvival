@@ -290,14 +290,14 @@ items:
 
 
 
-    # - name: riskGroupPlot
-    #   title: Risk Group Survival Plot
-    #   type: Image
-    #   width: 600
-    #   height: 450
-    #   renderFun: .plotRiskGroups
-    #   requiresData: true
-    #   visible: (plotRiskGroups)
+    - name: riskGroupPlot
+      title: Risk Group Survival Plot
+      type: Image
+      width: 600
+      height: 450
+      renderFun: .plotRiskGroups
+      requiresData: true
+      visible: (plotRiskGroups)
 
 
 
@@ -435,6 +435,20 @@ items:
           - ac_compare
           - ac_method
           - adjexplanatory
+
+
+
+
+    - name: model_comparison
+      title: Model Comparison
+      type: Html
+      visible: (compare_models)
+
+    - name: reduced_model_metrics
+      title: Reduced Model Performance Metrics
+      type: Html
+      visible: (compare_models)
+
 
 
 

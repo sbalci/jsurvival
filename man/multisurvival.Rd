@@ -28,6 +28,7 @@ multisurvival(
   sty = "t1",
   ph_cox = FALSE,
   calculateRiskScore = FALSE,
+  plotRiskGroups = FALSE,
   ac = FALSE,
   adjexplanatory,
   km = FALSE,
@@ -40,7 +41,9 @@ multisurvival(
   ac_method = "average",
   ac_summary = FALSE,
   ac_timepoints = "12, 36, 60",
-  ac_compare = FALSE
+  ac_compare = FALSE,
+  reduced_explanatory,
+  compare_models = FALSE
 )
 }
 \arguments{
@@ -90,6 +93,8 @@ multisurvival(
 
 \item{calculateRiskScore}{.}
 
+\item{plotRiskGroups}{.}
+
 \item{ac}{.}
 
 \item{adjexplanatory}{.}
@@ -117,6 +122,10 @@ curves}
 (comma-separated)}
 
 \item{ac_compare}{Perform statistical comparison between adjusted curves}
+
+\item{reduced_explanatory}{.}
+
+\item{compare_models}{.}
 }
 \value{
 A results object containing:
@@ -134,6 +143,7 @@ A results object containing:
 \code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
 \code{results$riskScoreTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$riskScoreMetrics} \tab \tab \tab \tab \tab a html \cr
+\code{results$riskGroupPlot} \tab \tab \tab \tab \tab an image \cr
 \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
 \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
@@ -143,6 +153,8 @@ A results object containing:
 \code{results$mydataview_calculateAdjustedStats} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$adjustedSummaryTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$adjustedComparison} \tab \tab \tab \tab \tab a html \cr
+\code{results$model_comparison} \tab \tab \tab \tab \tab a html \cr
+\code{results$reduced_model_metrics} \tab \tab \tab \tab \tab a html \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

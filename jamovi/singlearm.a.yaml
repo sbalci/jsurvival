@@ -172,12 +172,14 @@ options:
 
 
     - name: sc
-      title: Survival Plot
+      title: "Kaplan-Meier Survival Plot"
+      description: "Generate a Kaplan-Meier survival plot with confidence intervals."
       type: Bool
       default: false
 
     - name: kmunicate
-      title: KMunicate-Style Plot
+      title: "KMunicate-Style Plot"
+      description: "Generate a publication-ready survival plot."
       type: Bool
       default: false
 
@@ -216,7 +218,8 @@ options:
 
 
     - name: multievent
-      title: Multiple Event Levels
+      title: "Multiple Event Levels"
+      description: "Enable analysis for datasets with multiple event levels."
       type: Bool
       default: false
 
