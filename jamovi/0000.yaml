@@ -59,6 +59,13 @@ analyses:
       determine median survival time or 1/3/5-year survival rates for all
       patients collectively. This differs from regular survival analysis which
       compares survival between groups.
+  - title: Lasso-Cox Regression
+    name: lassocox
+    ns: jsurvival
+    menuGroup: Survival
+    menuSubgroup: ClinicoPath Survival
+    menuTitle: Lasso-Cox Regression
+    menuSubtitle: Variable Selection with Lasso Regularization
 datasets:
   - name: histopathology including analysis
     path: histopathologySurvival.omv

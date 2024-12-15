@@ -26,6 +26,7 @@ Imports:
     dplyr,
     finalfit,
     ggplot2,
+    glmnet,
     glue,
     janitor,
     jmvcore,

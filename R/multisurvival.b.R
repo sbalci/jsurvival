@@ -2021,7 +2021,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         formula2 <- c(myexplanatory, mycontexpl)
 
         myformula <-
-          paste("Surv( mytime, myoutcome ) ~ ", paste(formula2, collapse = " + "))
+          paste("survival::Surv( mytime, myoutcome ) ~ ", paste(formula2, collapse = " + "))
 
         myformula <- as.formula(myformula)
 
