@@ -169,29 +169,32 @@ options:
           If true, adds a new outcome variable (redefined based on the chosen event specification)
           to the data set.
 
+
     - name: timetypedata
       title: 'Time Type in Data (default: YYYY-MM-DD)'
       type: List
       options:
-        - title: ymdhms
+        - title: 'Year-Month-Day Hour-Minute-Second'
           name: ymdhms
-        - title: ymd
+        - title: 'Year-Month-Day'
           name: ymd
-        - title: ydm
+        - title: 'Year-Day-Month'
           name: ydm
-        - title: mdy
+        - title: 'Month-Day-Year'
           name: mdy
-        - title: myd
+        - title: 'Month-Year-Day'
           name: myd
-        - title: dmy
+        - title: 'Day-Month-Year'
           name: dmy
-        - title: dym
+        - title: 'Day-Year-Month'
           name: dym
       default: ymd
       description:
         R: >
-          The date format in the input data. Select the format that matches your data.
-
+          Specifies the format of the date variables in the input data.
+          This is critical if `tint = true`, as `dxdate` and `fudate` will be parsed
+          according to this format to calculate survival time. For example, if your
+          data files record dates as "YYYY-MM-DD", select `ymd`.
 
     - name: timetypeoutput
       title: Time Type in Output
