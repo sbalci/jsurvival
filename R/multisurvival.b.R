@@ -2056,7 +2056,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                                     <br>
                                     <b>Model Metrics:</b>
                                     ",
-                                            unlist(tMultivariable[[2]]),
+                                            unlist(model[[2]]),
                                             "
                                     <br>
                                     ")
@@ -2106,7 +2106,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
         text_model_selection <- knitr::kable(
-          tMultivariable[[1]],
+          model[[1]],
           row.names = FALSE,
           align = c('l', 'l', 'r', 'r', 'r', 'r'),
           format = "html"
