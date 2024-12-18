@@ -29,8 +29,6 @@ multisurvival(
   ph_cox = FALSE,
   calculateRiskScore = FALSE,
   plotRiskGroups = FALSE,
-  ac = FALSE,
-  adjexplanatory,
   km = FALSE,
   endplot = 60,
   byplot = 12,
@@ -38,6 +36,9 @@ multisurvival(
   risktable = FALSE,
   censored = FALSE,
   pplot = TRUE,
+  ac = FALSE,
+  adjexplanatory,
+  ac_curve = FALSE,
   ac_method = "average",
   ac_summary = FALSE,
   ac_timepoints = "12, 36, 60",
@@ -54,101 +55,165 @@ multisurvival(
 )
 }
 \arguments{
-\item{data}{The data as a data frame.}
+\item{data}{The dataset to be analyzed, provided as a data frame. Must
+contain the variables specified in the options below.}
 
-\item{elapsedtime}{.}
+\item{elapsedtime}{The numeric variable representing follow-up time until
+the event or last observation. If \code{tint} = false, this should be a
+pre-calculated numeric time variable. If \code{tint} = true, \code{dxdate}
+and \code{fudate} will be used to calculate this time.}
 
-\item{tint}{.}
+\item{tint}{If true, survival time will be calculated from \code{dxdate}
+and \code{fudate}. If false, \code{elapsedtime} should be provided as a
+pre-calculated numeric variable.}
 
-\item{dxdate}{.}
+\item{dxdate}{Date of diagnosis. Required if \code{tint} = true. Must match
+the format specified in \code{timetypedata}.}
 
-\item{fudate}{.}
+\item{fudate}{Follow-up date or date of last observation. Required if
+\code{tint} = true. Must match the format specified in \code{timetypedata}.}
 
-\item{outcome}{.}
+\item{outcome}{The outcome variable. Typically indicates event status
+(e.g., death, recurrence). For survival analysis, this may be a factor or
+numeric event indicator.}
 
-\item{outcomeLevel}{.}
+\item{outcomeLevel}{The level of \code{outcome} considered as the event.
+For example, if \code{outcome} is a factor, specify which level indicates
+the event occurrence.}
 
-\item{dod}{.}
+\item{dod}{The level of \code{outcome} corresponding to death due to
+disease, if applicable.}
 
-\item{dooc}{.}
+\item{dooc}{The level of \code{outcome} corresponding to death due to other
+causes, if applicable.}
 
-\item{awd}{.}
+\item{awd}{The level of \code{outcome} corresponding to alive with disease,
+if applicable.}
 
-\item{awod}{.}
+\item{awod}{The level of \code{outcome} corresponding to alive without
+disease, if applicable.}
 
-\item{explanatory}{.}
+\item{explanatory}{Categorical explanatory (predictor) variables included
+in the Cox model.}
 
-\item{contexpl}{.}
+\item{contexpl}{Continuous explanatory (predictor) variables included in
+the Cox model.}
 
-\item{multievent}{.}
+\item{multievent}{If true, multiple event levels will be considered for
+competing risks analysis. Requires specifying \code{dod}, \code{dooc}, etc.}
 
-\item{analysistype}{.}
+\item{analysistype}{Type of survival analysis: - overall: All-cause
+survival - cause: Cause-specific survival - compete: Competing risks
+analysis}
 
-\item{timetypedata}{select the time type in data}
+\item{timetypedata}{Specifies the format of the date variables in the input
+data. This is critical if \code{tint = true}, as \code{dxdate} and
+\code{fudate} will be parsed according to this format to calculate survival
+time. For example, if your data files record dates as "YYYY-MM-DD", select
+\code{ymd}.}
 
-\item{timetypeoutput}{select the time type in output}
+\item{timetypeoutput}{The units in which survival time is reported in the
+output. Choose from days, weeks, months, or years.}
 
-\item{uselandmark}{.}
+\item{uselandmark}{If true, applies a landmark analysis starting at a
+specified time point.}
 
-\item{landmark}{.}
+\item{landmark}{The time point (in the units defined by
+\code{timetypeoutput}) at which to start landmark analyses. Only used if
+\code{uselandmark} = true.}
 
-\item{hr}{.}
+\item{hr}{If true, generates a plot of hazard ratios for each explanatory
+variable in the Cox model.}
 
-\item{sty}{.}
+\item{sty}{The style of the hazard ratio (forest) plot. "finalfit" or
+"survminer forestplot".}
 
-\item{ph_cox}{.}
+\item{ph_cox}{If true, tests the proportional hazards assumption for the
+Cox model. Use if you suspect violations of the PH assumption.}
 
-\item{calculateRiskScore}{.}
+\item{calculateRiskScore}{If true, calculates a risk score from the Cox
+model coefficients for each individual.}
 
-\item{plotRiskGroups}{.}
+\item{plotRiskGroups}{If true, stratifies individuals into risk groups
+based on their calculated risk scores and plots their survival curves.}
 
-\item{ac}{.}
+\item{km}{If true, produces a Kaplan-Meier survival plot. Useful for
+visualization of survival functions without covariate adjustment.}
 
-\item{adjexplanatory}{.}
+\item{endplot}{The maximum follow-up time (in units defined by
+\code{timetypeoutput}) to display on survival plots.}
 
-\item{km}{.}
+\item{byplot}{The interval (in units defined by \code{timetypeoutput}) at
+which time points or labels are shown on plots.}
 
-\item{endplot}{.}
+\item{ci95}{If true, displays 95\\% confidence intervals around the survival
+estimates on plots.}
 
-\item{byplot}{.}
+\item{risktable}{If true, displays the number of subjects at risk at each
+time point below the survival plot.}
 
-\item{ci95}{.}
+\item{censored}{If true, marks censored observations (e.g., using tick
+marks) on the survival plot.}
 
-\item{risktable}{.}
+\item{pplot}{If true, displays the p-value from the survival comparison
+test on the survival plot.}
 
-\item{censored}{.}
+\item{ac}{If true, computes and displays adjusted survival curves based on
+specified variables.}
 
-\item{pplot}{.}
+\item{adjexplanatory}{The categorical variable used to stratify and adjust
+the survival curve. Only relevant if \code{ac} = true.}
 
-\item{ac_method}{Method for computing adjusted survival curves}
+\item{ac_curve}{.}
 
-\item{ac_summary}{Calculate and display summary statistics for adjusted
-curves}
+\item{ac_method}{The method used to compute adjusted survival curves. This
+affects how covariates are handled when producing adjusted survival
+estimates.}
 
-\item{ac_timepoints}{Timepoints for calculating summary statistics
-(comma-separated)}
+\item{ac_summary}{If true, calculates and displays summary statistics
+(e.g., survival probabilities at specific timepoints) for the adjusted
+survival curves.}
 
-\item{ac_compare}{Perform statistical comparison between adjusted curves}
+\item{ac_timepoints}{Comma-separated time points (in \code{timetypeoutput}
+units) at which summary statistics for adjusted curves are calculated. For
+example: '12, 36, 60' for 12, 36, and 60 months.}
 
-\item{reduced_explanatory}{.}
+\item{ac_compare}{If true, performs a statistical comparison (e.g.,
+log-rank test) between adjusted survival curves.}
 
-\item{compare_models}{.}
+\item{reduced_explanatory}{Variables to include in a reduced model for
+comparison. This can be used to test whether excluding some variables
+affects model fit.}
 
-\item{use_modelSelection}{.}
+\item{compare_models}{If true, compares the full model against the reduced
+model to assess the impact of removing certain explanatory variables.}
 
-\item{modelSelection}{.}
+\item{use_modelSelection}{If true, applies a variable selection procedure
+to find the best-fitting model based on criteria like AIC or likelihood
+ratio tests.}
 
-\item{selectionCriteria}{.}
+\item{modelSelection}{The method used to select variables: - enter:
+Includes all variables (no selection) - forward: Adds variables one at a
+time if they improve the model - backward: Removes variables that do not
+significantly contribute - both: Combination of forward and backward steps}
 
-\item{pEntry}{.}
+\item{selectionCriteria}{The criterion used for adding or removing
+variables in model selection: - aic: Balances model fit and complexity -
+lrt: Uses likelihood ratio tests to decide inclusion/removal}
 
-\item{pRemoval}{.}
+\item{pEntry}{Significance level at which a variable enters the model
+during forward or stepwise selection.}
 
-\item{use_stratify}{Use stratification when proportional hazards assumption
-is violated.}
+\item{pRemoval}{Significance level at which a variable is removed from the
+model during backward or stepwise selection.}
 
-\item{stratvar}{Variables to stratify by. Use when proportional hazards
-assumption is violated.}
+\item{use_stratify}{If true, uses stratification to handle variables that
+violate the proportional hazards assumption. Stratification creates
+separate baseline hazard functions for different groups.}
+
+\item{stratvar}{Variables used for stratification. When proportional
+hazards are not met, stratification can adjust the model to better fit the
+data by allowing different baseline hazards.}
 }
 \value{
 A results object containing:
@@ -160,8 +225,8 @@ A results object containing:
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
-\code{results$riskSummaryTable} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$riskScoreText} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$mydataview_adj_stats} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$mydataview_adj_summary} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
 \code{results$riskScoreTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$riskScoreMetrics} \tab \tab \tab \tab \tab a html \cr
@@ -170,11 +235,14 @@ A results object containing:
 \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
-\code{results$adj_curves} \tab \tab \tab \tab \tab an image \cr
-\code{results$adj_stats} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
+\code{results$mydataview_curve_data} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$adjustedSummaryStats} \tab \tab \tab \tab \tab a html \cr
 \code{results$adjustedSummaryTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$adjustedComparison} \tab \tab \tab \tab \tab a html \cr
+\code{results$ac_summary_table} \tab \tab \tab \tab \tab a table \cr
+\code{results$ac_landmark_table} \tab \tab \tab \tab \tab a table \cr
+\code{results$ac_text_summary} \tab \tab \tab \tab \tab a html \cr
 \code{results$model_comparison} \tab \tab \tab \tab \tab a html \cr
 \code{results$reduced_model_metrics} \tab \tab \tab \tab \tab a html \cr
 \code{results$text_model_selection} \tab \tab \tab \tab \tab a html \cr

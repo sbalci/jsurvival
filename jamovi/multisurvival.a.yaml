@@ -23,7 +23,7 @@ options:
           R: >
             The dataset to be analyzed, provided as a data frame. Must contain the
             variables specified in the options below.
-          
+
     - name: elapsedtime
       title: 'Time Elapsed'
       type: Variable
@@ -271,7 +271,7 @@ options:
       default: false
       description:
         R: >
-          If true, tests the proportional hazards assumption for the Cox model. 
+          If true, tests the proportional hazards assumption for the Cox model.
           Use if you suspect violations of the PH assumption.
 
 
@@ -308,23 +308,6 @@ options:
         R: >
           If true, adds a categorical variable indicating risk group assignment to the dataset.
 
-    - name: ac
-      title: Adjusted Survival Curve
-      type: Bool
-      default: false
-      description:
-        R: >
-          If true, computes and displays adjusted survival curves based on specified variables.
-
-    - name: adjexplanatory
-      title: Variable for Adjusted Curve
-      type: Variable
-      suggested: [ ordinal, nominal ]
-      permitted: [ factor ]
-      description:
-        R: >
-          The categorical variable used to stratify and adjust the survival curve.
-          Only relevant if `ac` = true.
 
     - name: km
       title: Kaplan-Meier
@@ -385,16 +368,44 @@ options:
         R: >
           If true, displays the p-value from the survival comparison test on the survival plot.
 
+
+
+
+
+    - name: ac
+      title: Adjusted Survival Analysis
+      type: Bool
+      default: false
+      description:
+        R: >
+          If true, computes and displays adjusted survival curves based on specified variables.
+
+    - name: adjexplanatory
+      title: Variable for Adjusted Curve
+      type: Variable
+      suggested: [ ordinal, nominal ]
+      permitted: [ factor ]
+      description:
+        R: >
+          The categorical variable used to stratify and adjust the survival curve.
+          Only relevant if `ac` = true.
+
+
+    - name: ac_curve
+      title: Adjusted Survival Curve
+      type: Bool
+      default: false
+
     - name: ac_method
       title: Adjustment Method
       type: List
       options:
         - title: Average
           name: average
-        - title: Conditional Mean
-          name: conditional_mean
-        - title: Direct
-          name: direct
+        - title: Conditional
+          name: conditional
+        - title: Single
+          name: single
         - title: Marginal
           name: marginal
       default: average
@@ -402,6 +413,15 @@ options:
         R: >
           The method used to compute adjusted survival curves. This affects how covariates
           are handled when producing adjusted survival estimates.
+
+
+    - name: ac_curves_output
+      title: Save Adjusted Curves
+      type: Output
+
+    - name: ac_analysis_output
+      title: Save Analysis Results
+      type: Output
 
     - name: ac_summary
       title: Show Summary Statistics
@@ -536,6 +556,12 @@ options:
         R: >
           Variables used for stratification. When proportional hazards are not met,
           stratification can adjust the model to better fit the data by allowing different baseline hazards.
+
+
+
+
+
+
 
 
 ...

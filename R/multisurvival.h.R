@@ -29,8 +29,6 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             ph_cox = FALSE,
             calculateRiskScore = FALSE,
             plotRiskGroups = FALSE,
-            ac = FALSE,
-            adjexplanatory = NULL,
             km = FALSE,
             endplot = 60,
             byplot = 12,
@@ -38,6 +36,9 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             risktable = FALSE,
             censored = FALSE,
             pplot = TRUE,
+            ac = FALSE,
+            adjexplanatory = NULL,
+            ac_curve = FALSE,
             ac_method = "average",
             ac_summary = FALSE,
             ac_timepoints = "12, 36, 60",
@@ -196,18 +197,6 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 "addRiskScore")
             private$..addRiskGroup <- jmvcore::OptionOutput$new(
                 "addRiskGroup")
-            private$..ac <- jmvcore::OptionBool$new(
-                "ac",
-                ac,
-                default=FALSE)
-            private$..adjexplanatory <- jmvcore::OptionVariable$new(
-                "adjexplanatory",
-                adjexplanatory,
-                suggested=list(
-                    "ordinal",
-                    "nominal"),
-                permitted=list(
-                    "factor"))
             private$..km <- jmvcore::OptionBool$new(
                 "km",
                 km,
@@ -236,15 +225,35 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 "pplot",
                 pplot,
                 default=TRUE)
+            private$..ac <- jmvcore::OptionBool$new(
+                "ac",
+                ac,
+                default=FALSE)
+            private$..adjexplanatory <- jmvcore::OptionVariable$new(
+                "adjexplanatory",
+                adjexplanatory,
+                suggested=list(
+                    "ordinal",
+                    "nominal"),
+                permitted=list(
+                    "factor"))
+            private$..ac_curve <- jmvcore::OptionBool$new(
+                "ac_curve",
+                ac_curve,
+                default=FALSE)
             private$..ac_method <- jmvcore::OptionList$new(
                 "ac_method",
                 ac_method,
                 options=list(
                     "average",
-                    "conditional_mean",
-                    "direct",
+                    "conditional",
+                    "single",
                     "marginal"),
                 default="average")
+            private$..ac_curves_output <- jmvcore::OptionOutput$new(
+                "ac_curves_output")
+            private$..ac_analysis_output <- jmvcore::OptionOutput$new(
+                "ac_analysis_output")
             private$..ac_summary <- jmvcore::OptionBool$new(
                 "ac_summary",
                 ac_summary,
@@ -341,8 +350,6 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..plotRiskGroups)
             self$.addOption(private$..addRiskScore)
             self$.addOption(private$..addRiskGroup)
-            self$.addOption(private$..ac)
-            self$.addOption(private$..adjexplanatory)
             self$.addOption(private$..km)
             self$.addOption(private$..endplot)
             self$.addOption(private$..byplot)
@@ -350,7 +357,12 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..risktable)
             self$.addOption(private$..censored)
             self$.addOption(private$..pplot)
+            self$.addOption(private$..ac)
+            self$.addOption(private$..adjexplanatory)
+            self$.addOption(private$..ac_curve)
             self$.addOption(private$..ac_method)
+            self$.addOption(private$..ac_curves_output)
+            self$.addOption(private$..ac_analysis_output)
             self$.addOption(private$..ac_summary)
             self$.addOption(private$..ac_timepoints)
             self$.addOption(private$..ac_compare)
@@ -392,8 +404,6 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         plotRiskGroups = function() private$..plotRiskGroups$value,
         addRiskScore = function() private$..addRiskScore$value,
         addRiskGroup = function() private$..addRiskGroup$value,
-        ac = function() private$..ac$value,
-        adjexplanatory = function() private$..adjexplanatory$value,
         km = function() private$..km$value,
         endplot = function() private$..endplot$value,
         byplot = function() private$..byplot$value,
@@ -401,7 +411,12 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         risktable = function() private$..risktable$value,
         censored = function() private$..censored$value,
         pplot = function() private$..pplot$value,
+        ac = function() private$..ac$value,
+        adjexplanatory = function() private$..adjexplanatory$value,
+        ac_curve = function() private$..ac_curve$value,
         ac_method = function() private$..ac_method$value,
+        ac_curves_output = function() private$..ac_curves_output$value,
+        ac_analysis_output = function() private$..ac_analysis_output$value,
         ac_summary = function() private$..ac_summary$value,
         ac_timepoints = function() private$..ac_timepoints$value,
         ac_compare = function() private$..ac_compare$value,
@@ -442,8 +457,6 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ..plotRiskGroups = NA,
         ..addRiskScore = NA,
         ..addRiskGroup = NA,
-        ..ac = NA,
-        ..adjexplanatory = NA,
         ..km = NA,
         ..endplot = NA,
         ..byplot = NA,
@@ -451,7 +464,12 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ..risktable = NA,
         ..censored = NA,
         ..pplot = NA,
+        ..ac = NA,
+        ..adjexplanatory = NA,
+        ..ac_curve = NA,
         ..ac_method = NA,
+        ..ac_curves_output = NA,
+        ..ac_analysis_output = NA,
         ..ac_summary = NA,
         ..ac_timepoints = NA,
         ..ac_compare = NA,
@@ -477,8 +495,8 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         plot3 = function() private$.items[["plot3"]],
         cox_ph = function() private$.items[["cox_ph"]],
         plot8 = function() private$.items[["plot8"]],
-        riskSummaryTable = function() private$.items[["riskSummaryTable"]],
-        riskScoreText = function() private$.items[["riskScoreText"]],
+        mydataview_adj_stats = function() private$.items[["mydataview_adj_stats"]],
+        mydataview_adj_summary = function() private$.items[["mydataview_adj_summary"]],
         plotKM = function() private$.items[["plotKM"]],
         riskScoreTable = function() private$.items[["riskScoreTable"]],
         riskScoreMetrics = function() private$.items[["riskScoreMetrics"]],
@@ -487,11 +505,14 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         outcomeredefined = function() private$.items[["outcomeredefined"]],
         addRiskScore = function() private$.items[["addRiskScore"]],
         addRiskGroup = function() private$.items[["addRiskGroup"]],
-        adj_curves = function() private$.items[["adj_curves"]],
-        adj_stats = function() private$.items[["adj_stats"]],
         plot_adj = function() private$.items[["plot_adj"]],
+        mydataview_curve_data = function() private$.items[["mydataview_curve_data"]],
+        adjustedSummaryStats = function() private$.items[["adjustedSummaryStats"]],
         adjustedSummaryTable = function() private$.items[["adjustedSummaryTable"]],
         adjustedComparison = function() private$.items[["adjustedComparison"]],
+        ac_summary_table = function() private$.items[["ac_summary_table"]],
+        ac_landmark_table = function() private$.items[["ac_landmark_table"]],
+        ac_text_summary = function() private$.items[["ac_text_summary"]],
         model_comparison = function() private$.items[["model_comparison"]],
         reduced_model_metrics = function() private$.items[["reduced_model_metrics"]],
         text_model_selection = function() private$.items[["text_model_selection"]],
@@ -636,12 +657,12 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "contexpl")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
-                name="riskSummaryTable",
-                title="riskSummaryTable"))
+                name="mydataview_adj_stats",
+                title="mydataview"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
-                name="riskScoreText",
-                title="riskScoreText"))
+                name="mydataview_adj_summary",
+                title="mydataview"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plotKM",
@@ -783,26 +804,13 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "addRiskGroup")))
             self$add(jmvcore::Image$new(
                 options=options,
-                name="adj_curves",
-                title="Adjusted Survival Curves",
-                width=600,
-                height=450,
-                renderFun=".plotAdjustedCurves",
-                visible="(ac)",
-                requiresData=TRUE))
-            self$add(jmvcore::Html$new(
-                options=options,
-                name="adj_stats",
-                title="Adjusted Survival Statistics",
-                visible="(ac)"))
-            self$add(jmvcore::Image$new(
-                options=options,
                 name="plot_adj",
                 title="Adjusted Survival Plot",
                 width=600,
                 height=450,
                 renderFun=".plot_adj",
-                visible="(ac)",
+                visible="(ac && ac_curve)",
+                requiresData=TRUE,
                 refs="survminer",
                 clearWith=list(
                     "ac",
@@ -810,6 +818,15 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "ci95",
                     "risktable",
                     "ac_method")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="mydataview_curve_data",
+                title="mydataview_curve_data",
+                visible="(ac)"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="adjustedSummaryStats",
+                title="adjustedSummaryStats"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="adjustedSummaryTable",
@@ -858,6 +875,73 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "ac_compare",
                     "ac_method",
                     "adjexplanatory")))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="ac_summary_table",
+                title="Adjusted Survival Analysis",
+                rows=0,
+                visible="(ac_summary)",
+                columns=list(
+                    list(
+                        `name`="group", 
+                        `title`="Group", 
+                        `type`="text"),
+                    list(
+                        `name`="n", 
+                        `title`="N", 
+                        `type`="integer"),
+                    list(
+                        `name`="median_time", 
+                        `title`="Median Survival", 
+                        `type`="number"),
+                    list(
+                        `name`="median_surv", 
+                        `title`="Median Survival Rate", 
+                        `type`="number"),
+                    list(
+                        `name`="hr", 
+                        `title`="Hazard Ratio", 
+                        `type`="number"),
+                    list(
+                        `name`="hr_ci_lower", 
+                        `title`="HR CI Lower", 
+                        `type`="number"),
+                    list(
+                        `name`="hr_ci_upper", 
+                        `title`="HR CI Upper", 
+                        `type`="number"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="ac_landmark_table",
+                title="Landmark Analysis",
+                rows=0,
+                visible="(ac_summary)",
+                columns=list(
+                    list(
+                        `name`="group", 
+                        `title`="Group", 
+                        `type`="text"),
+                    list(
+                        `name`="timepoint", 
+                        `title`="Time", 
+                        `type`="integer"),
+                    list(
+                        `name`="survival_rate", 
+                        `title`="Survival Rate", 
+                        `type`="number"),
+                    list(
+                        `name`="ci_lower", 
+                        `title`="CI Lower", 
+                        `type`="number"),
+                    list(
+                        `name`="ci_upper", 
+                        `title`="CI Upper", 
+                        `type`="number"))))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="ac_text_summary",
+                title="Analysis Summary",
+                visible="(ac_summary)"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="model_comparison",
@@ -979,56 +1063,119 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' \donttest{
 #' # example will be added
 #'}
-#' @param data The data as a data frame.
-#' @param elapsedtime .
-#' @param tint .
-#' @param dxdate .
-#' @param fudate .
-#' @param outcome .
-#' @param outcomeLevel .
-#' @param dod .
-#' @param dooc .
-#' @param awd .
-#' @param awod .
-#' @param explanatory .
-#' @param contexpl .
-#' @param multievent .
-#' @param analysistype .
-#' @param timetypedata select the time type in data
-#' @param timetypeoutput select the time type in output
-#' @param uselandmark .
-#' @param landmark .
-#' @param hr .
-#' @param sty .
-#' @param ph_cox .
-#' @param calculateRiskScore .
-#' @param plotRiskGroups .
-#' @param ac .
-#' @param adjexplanatory .
-#' @param km .
-#' @param endplot .
-#' @param byplot .
-#' @param ci95 .
-#' @param risktable .
-#' @param censored .
-#' @param pplot .
-#' @param ac_method Method for computing adjusted survival curves
-#' @param ac_summary Calculate and display summary statistics for adjusted
-#'   curves
-#' @param ac_timepoints Timepoints for calculating summary statistics
-#'   (comma-separated)
-#' @param ac_compare Perform statistical comparison between adjusted curves
-#' @param reduced_explanatory .
-#' @param compare_models .
-#' @param use_modelSelection .
-#' @param modelSelection .
-#' @param selectionCriteria .
-#' @param pEntry .
-#' @param pRemoval .
-#' @param use_stratify Use stratification when proportional hazards assumption
-#'   is violated.
-#' @param stratvar Variables to stratify by. Use when proportional hazards
-#'   assumption is violated.
+#' @param data The dataset to be analyzed, provided as a data frame. Must
+#'   contain the variables specified in the options below.
+#' @param elapsedtime The numeric variable representing follow-up time until
+#'   the event or last observation. If \code{tint} = false, this should be a
+#'   pre-calculated numeric time variable. If \code{tint} = true, \code{dxdate}
+#'   and \code{fudate} will be used to calculate this time.
+#' @param tint If true, survival time will be calculated from \code{dxdate}
+#'   and \code{fudate}. If false, \code{elapsedtime} should be provided as a
+#'   pre-calculated numeric variable.
+#' @param dxdate Date of diagnosis. Required if \code{tint} = true. Must match
+#'   the format specified in \code{timetypedata}.
+#' @param fudate Follow-up date or date of last observation. Required if
+#'   \code{tint} = true. Must match the format specified in \code{timetypedata}.
+#' @param outcome The outcome variable. Typically indicates event status
+#'   (e.g., death, recurrence). For survival analysis, this may be a factor or
+#'   numeric event indicator.
+#' @param outcomeLevel The level of \code{outcome} considered as the event.
+#'   For example, if \code{outcome} is a factor, specify which level indicates
+#'   the event occurrence.
+#' @param dod The level of \code{outcome} corresponding to death due to
+#'   disease, if applicable.
+#' @param dooc The level of \code{outcome} corresponding to death due to other
+#'   causes, if applicable.
+#' @param awd The level of \code{outcome} corresponding to alive with disease,
+#'   if applicable.
+#' @param awod The level of \code{outcome} corresponding to alive without
+#'   disease, if applicable.
+#' @param explanatory Categorical explanatory (predictor) variables included
+#'   in the Cox model.
+#' @param contexpl Continuous explanatory (predictor) variables included in
+#'   the Cox model.
+#' @param multievent If true, multiple event levels will be considered for
+#'   competing risks analysis. Requires specifying \code{dod}, \code{dooc}, etc.
+#' @param analysistype Type of survival analysis: - overall: All-cause
+#'   survival - cause: Cause-specific survival - compete: Competing risks
+#'   analysis
+#' @param timetypedata Specifies the format of the date variables in the input
+#'   data. This is critical if \code{tint = true}, as \code{dxdate} and
+#'   \code{fudate} will be parsed according to this format to calculate survival
+#'   time. For example, if your data files record dates as "YYYY-MM-DD", select
+#'   \code{ymd}.
+#' @param timetypeoutput The units in which survival time is reported in the
+#'   output. Choose from days, weeks, months, or years.
+#' @param uselandmark If true, applies a landmark analysis starting at a
+#'   specified time point.
+#' @param landmark The time point (in the units defined by
+#'   \code{timetypeoutput}) at which to start landmark analyses. Only used if
+#'   \code{uselandmark} = true.
+#' @param hr If true, generates a plot of hazard ratios for each explanatory
+#'   variable in the Cox model.
+#' @param sty The style of the hazard ratio (forest) plot. "finalfit" or
+#'   "survminer forestplot".
+#' @param ph_cox If true, tests the proportional hazards assumption for the
+#'   Cox model. Use if you suspect violations of the PH assumption.
+#' @param calculateRiskScore If true, calculates a risk score from the Cox
+#'   model coefficients for each individual.
+#' @param plotRiskGroups If true, stratifies individuals into risk groups
+#'   based on their calculated risk scores and plots their survival curves.
+#' @param km If true, produces a Kaplan-Meier survival plot. Useful for
+#'   visualization of survival functions without covariate adjustment.
+#' @param endplot The maximum follow-up time (in units defined by
+#'   \code{timetypeoutput}) to display on survival plots.
+#' @param byplot The interval (in units defined by \code{timetypeoutput}) at
+#'   which time points or labels are shown on plots.
+#' @param ci95 If true, displays 95\% confidence intervals around the survival
+#'   estimates on plots.
+#' @param risktable If true, displays the number of subjects at risk at each
+#'   time point below the survival plot.
+#' @param censored If true, marks censored observations (e.g., using tick
+#'   marks) on the survival plot.
+#' @param pplot If true, displays the p-value from the survival comparison
+#'   test on the survival plot.
+#' @param ac If true, computes and displays adjusted survival curves based on
+#'   specified variables.
+#' @param adjexplanatory The categorical variable used to stratify and adjust
+#'   the survival curve. Only relevant if \code{ac} = true.
+#' @param ac_curve .
+#' @param ac_method The method used to compute adjusted survival curves. This
+#'   affects how covariates are handled when producing adjusted survival
+#'   estimates.
+#' @param ac_summary If true, calculates and displays summary statistics
+#'   (e.g., survival probabilities at specific timepoints) for the adjusted
+#'   survival curves.
+#' @param ac_timepoints Comma-separated time points (in \code{timetypeoutput}
+#'   units) at which summary statistics for adjusted curves are calculated. For
+#'   example: '12, 36, 60' for 12, 36, and 60 months.
+#' @param ac_compare If true, performs a statistical comparison (e.g.,
+#'   log-rank test) between adjusted survival curves.
+#' @param reduced_explanatory Variables to include in a reduced model for
+#'   comparison. This can be used to test whether excluding some variables
+#'   affects model fit.
+#' @param compare_models If true, compares the full model against the reduced
+#'   model to assess the impact of removing certain explanatory variables.
+#' @param use_modelSelection If true, applies a variable selection procedure
+#'   to find the best-fitting model based on criteria like AIC or likelihood
+#'   ratio tests.
+#' @param modelSelection The method used to select variables: - enter:
+#'   Includes all variables (no selection) - forward: Adds variables one at a
+#'   time if they improve the model - backward: Removes variables that do not
+#'   significantly contribute - both: Combination of forward and backward steps
+#' @param selectionCriteria The criterion used for adding or removing
+#'   variables in model selection: - aic: Balances model fit and complexity -
+#'   lrt: Uses likelihood ratio tests to decide inclusion/removal
+#' @param pEntry Significance level at which a variable enters the model
+#'   during forward or stepwise selection.
+#' @param pRemoval Significance level at which a variable is removed from the
+#'   model during backward or stepwise selection.
+#' @param use_stratify If true, uses stratification to handle variables that
+#'   violate the proportional hazards assumption. Stratification creates
+#'   separate baseline hazard functions for different groups.
+#' @param stratvar Variables used for stratification. When proportional
+#'   hazards are not met, stratification can adjust the model to better fit the
+#'   data by allowing different baseline hazards.
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
@@ -1038,8 +1185,8 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$riskSummaryTable} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$riskScoreText} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$mydataview_adj_stats} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$mydataview_adj_summary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$riskScoreTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$riskScoreMetrics} \tab \tab \tab \tab \tab a html \cr
@@ -1048,11 +1195,14 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
-#'   \code{results$adj_curves} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$adj_stats} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$mydataview_curve_data} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$adjustedSummaryStats} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$adjustedSummaryTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$adjustedComparison} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$ac_summary_table} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$ac_landmark_table} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$ac_text_summary} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$model_comparison} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$reduced_model_metrics} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text_model_selection} \tab \tab \tab \tab \tab a html \cr
@@ -1092,8 +1242,6 @@ multisurvival <- function(
     ph_cox = FALSE,
     calculateRiskScore = FALSE,
     plotRiskGroups = FALSE,
-    ac = FALSE,
-    adjexplanatory,
     km = FALSE,
     endplot = 60,
     byplot = 12,
@@ -1101,6 +1249,9 @@ multisurvival <- function(
     risktable = FALSE,
     censored = FALSE,
     pplot = TRUE,
+    ac = FALSE,
+    adjexplanatory,
+    ac_curve = FALSE,
     ac_method = "average",
     ac_summary = FALSE,
     ac_timepoints = "12, 36, 60",
@@ -1169,8 +1320,6 @@ multisurvival <- function(
         ph_cox = ph_cox,
         calculateRiskScore = calculateRiskScore,
         plotRiskGroups = plotRiskGroups,
-        ac = ac,
-        adjexplanatory = adjexplanatory,
         km = km,
         endplot = endplot,
         byplot = byplot,
@@ -1178,6 +1327,9 @@ multisurvival <- function(
         risktable = risktable,
         censored = censored,
         pplot = pplot,
+        ac = ac,
+        adjexplanatory = adjexplanatory,
+        ac_curve = ac_curve,
         ac_method = ac_method,
         ac_summary = ac_summary,
         ac_timepoints = ac_timepoints,

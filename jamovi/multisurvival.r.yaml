@@ -155,18 +155,14 @@ items:
           - contexpl
 
 
-    # - name:  mydataview
-    #   title: mydataview
-    #   type:  Preformatted
 
-
-    - name:  riskSummaryTable
-      title: riskSummaryTable
+    - name:  mydataview_adj_stats
+      title: mydataview
       type:  Preformatted
 
 
-    - name:  riskScoreText
-      title: riskScoreText
+    - name:  mydataview_adj_summary
+      title: mydataview
       type:  Preformatted
 
 
@@ -372,19 +368,16 @@ items:
 
 
 
-    - name: adj_curves
-      title: Adjusted Survival Curves
-      type: Image
-      width: 600
-      height: 450
-      renderFun: .plotAdjustedCurves
-      visible: (ac)
-      requiresData: true
+    # - name: adj_curves
+    #   title: Adjusted Survival Curves
+    #   type: Image
+    #   width: 600
+    #   height: 450
+    #   renderFun: .plotAdjustedCurves
+    #   visible: (ac)
+    #   requiresData: true
 
-    - name: adj_stats
-      title: Adjusted Survival Statistics
-      type: Html
-      visible: (ac)
+
 
     - name: plot_adj
       title: Adjusted Survival Plot
@@ -392,7 +385,8 @@ items:
       width: 600
       height: 450
       renderFun: .plot_adj
-      visible: (ac)
+      visible: (ac && ac_curve)
+      requiresData: true
       refs: survminer
       clearWith:
           - ac
@@ -406,6 +400,18 @@ items:
     #   title: mydataview_calculateAdjustedStats
     #   type:  Preformatted
 
+
+
+    - name:  mydataview_curve_data
+      title: mydataview_curve_data
+      type:  Preformatted
+      visible: (ac)
+
+
+
+    - name:  adjustedSummaryStats
+      title: adjustedSummaryStats
+      type:  Html
 
 
 
@@ -452,6 +458,69 @@ items:
           - adjexplanatory
 
 
+
+    - name: ac_summary_table
+      title: Adjusted Survival Analysis
+      type: Table
+      rows: 0
+      visible: (ac_summary)
+      columns:
+        - name: group
+          title: Group
+          type: text
+        - name: n
+          title: N
+          type: integer
+        - name: median_time
+          title: Median Survival
+          type: number
+        - name: median_surv
+          title: Median Survival Rate
+          type: number
+        - name: hr
+          title: Hazard Ratio
+          type: number
+        - name: hr_ci_lower
+          title: HR CI Lower
+          type: number
+        - name: hr_ci_upper
+          title: HR CI Upper
+          type: number
+
+    - name: ac_landmark_table
+      title: Landmark Analysis
+      type: Table
+      rows: 0
+      visible: (ac_summary)
+      columns:
+        - name: group
+          title: Group
+          type: text
+        - name: timepoint
+          title: Time
+          type: integer
+        - name: survival_rate
+          title: Survival Rate
+          type: number
+        - name: ci_lower
+          title: CI Lower
+          type: number
+        - name: ci_upper
+          title: CI Upper
+          type: number
+
+    - name: ac_text_summary
+      title: Analysis Summary
+      type: Html
+      visible: (ac_summary)
+
+    # - name: plot_adjusted_curves
+    #   title: Adjusted Survival Plot
+    #   type: Image
+    #   width: 600
+    #   height: 450
+    #   renderFun: .plot_adjusted_curves
+    #   visible: (ac)
 
 
     - name: model_comparison

@@ -1,12 +1,12 @@
 ---
 title: Survival Module of ClinicoPath for jamovi
 name: jsurvival
-version: 0.0.2.36
+version: 0.0.2.38
 jms: '1.0'
 authors:
   - Serdar Balci
 maintainer: Serdar Balci <serdarbalci@serdarbalci.com>
-date: '2024-12-15'
+date: '2024-12-18'
 type: R
 description: >-
   Survival Module of ClinicoPath for jamovi ClinicoPath help researchers to
@@ -14,6 +14,20 @@ description: >-
   with statistical tests, and survival analysis with survival tables, survival
   plots, and natural language summaries.
 analyses:
+  - title: Single Arm Survival
+    name: singlearm
+    ns: jsurvival
+    menuGroup: Survival
+    menuTitle: Single Arm Survival
+    menuSubgroup: ClinicoPath Survival
+    menuSubtitle: Survival for whole group, no explanatory factor
+    description: >-
+      Performs survival analysis for a single cohort of patients without group
+      comparisons. Use this when you want to analyze overall survival
+      characteristics of your entire study population - for example, to
+      determine median survival time or 1/3/5-year survival rates for all
+      patients collectively. This differs from regular survival analysis which
+      compares survival between groups.
   - title: Survival Analysis
     name: survival
     ns: jsurvival
@@ -45,27 +59,6 @@ analyses:
     menuTitle: Odds Ratio Table and Plot
     description: Function for Odds Ratio Table and Plot.
     menuSubtitle: Odds Ratio for Binary Outcomes
-  - title: Single Arm Survival
-    name: singlearm
-    ns: jsurvival
-    menuGroup: Survival
-    menuTitle: Single Arm Survival
-    menuSubgroup: ClinicoPath Survival
-    menuSubtitle: Survival for whole group, no explanatory factor
-    description: >-
-      Performs survival analysis for a single cohort of patients without group
-      comparisons. Use this when you want to analyze overall survival
-      characteristics of your entire study population - for example, to
-      determine median survival time or 1/3/5-year survival rates for all
-      patients collectively. This differs from regular survival analysis which
-      compares survival between groups.
-  - title: Lasso-Cox Regression
-    name: lassocox
-    ns: jsurvival
-    menuGroup: Survival
-    menuSubgroup: ClinicoPath Survival
-    menuTitle: Lasso-Cox Regression
-    menuSubtitle: Variable Selection with Lasso Regularization
 datasets:
   - name: histopathology including analysis
     path: histopathologySurvival.omv

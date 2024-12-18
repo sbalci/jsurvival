@@ -259,28 +259,11 @@ children:
                             fitToGrid: true
                             stretchFactor: 1
                             enable: (ac)
-      - type: Label
-        label: Plot Arguments
-        children:
-          - type: LayoutBox
-            fitToGrid: true
-            children:
-              - type: CheckBox
-                name: ci95
-                enable: (ac)
-              - type: CheckBox
-                name: risktable
-                enable: (ac)
-              - type: CheckBox
-                name: censored
-              - type: CheckBox
-                name: pplot
-              - type: TextBox
-                name: endplot
-                format: number
-              - type: TextBox
-                name: byplot
-                format: number
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: CheckBox
+                    name: ac_curve
       - type: Label
         label: Adjustment Method
         children:
@@ -301,12 +284,13 @@ children:
                 format: string
                 enable: (ac_summary)
                 width: large
+              - type: Output
+                name: ac_curves_output
               - type: CheckBox
                 name: ac_compare
                 enable: (ac_summary)
-
-
-
+              - type: Output
+                name: ac_analysis_output
   - type: CollapseBox
     label: Reduced Model Options
     collapsed: true
@@ -334,7 +318,6 @@ children:
                         isTarget: true
                         fitToGrid: true
                         stretchFactor: 1
-
   - type: CollapseBox
     label: Model Selection
     collapsed: true
@@ -363,9 +346,6 @@ children:
                 format: number
                 label: Removal Significance (p-value)
                 enable: (use_modelSelection)
-
-
-
   - type: CollapseBox
     label: Stratification Variables
     collapsed: true
@@ -393,4 +373,33 @@ children:
                         isTarget: true
                         fitToGrid: true
                         stretchFactor: 1
-
+  - type: CollapseBox
+    label: Plot Options
+    collapsed: true
+    children:
+      - type: Label
+        label: Plot Arguments
+        children:
+          - type: LayoutBox
+            fitToGrid: true
+            children:
+              - type: CheckBox
+                name: ci95
+                enable: (ac || km || plotRiskGroups)
+              - type: CheckBox
+                name: risktable
+                enable: (ac || km || plotRiskGroups)
+              - type: CheckBox
+                name: censored
+                enable: (ac || km || plotRiskGroups)
+              - type: CheckBox
+                name: pplot
+                enable: (ac || km || plotRiskGroups)
+              - type: TextBox
+                name: endplot
+                format: number
+                enable: (ac || km || plotRiskGroups)
+              - type: TextBox
+                name: byplot
+                format: number
+                enable: (ac || km || plotRiskGroups)
