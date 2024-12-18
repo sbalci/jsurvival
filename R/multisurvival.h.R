@@ -505,6 +505,7 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         outcomeredefined = function() private$.items[["outcomeredefined"]],
         addRiskScore = function() private$.items[["addRiskScore"]],
         addRiskGroup = function() private$.items[["addRiskGroup"]],
+        mydataview_plot_adj = function() private$.items[["mydataview_plot_adj"]],
         plot_adj = function() private$.items[["plot_adj"]],
         mydataview_curve_data = function() private$.items[["mydataview_curve_data"]],
         adjustedSummaryStats = function() private$.items[["adjustedSummaryStats"]],
@@ -802,6 +803,10 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "tint",
                     "multievent",
                     "addRiskGroup")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="mydataview_plot_adj",
+                title="mydataview_plot_adj"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot_adj",
@@ -810,7 +815,6 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 height=450,
                 renderFun=".plot_adj",
                 visible="(ac && ac_curve)",
-                requiresData=TRUE,
                 refs="survminer",
                 clearWith=list(
                     "ac",
@@ -1195,6 +1199,7 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
+#'   \code{results$mydataview_plot_adj} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$mydataview_curve_data} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$adjustedSummaryStats} \tab \tab \tab \tab \tab a html \cr

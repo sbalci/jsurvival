@@ -793,8 +793,16 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # image7$setState(cleaneddata)
 
 
+        if (self$options$ac_curve) {
         image_plot_adj <- self$results$plot_adj
-        image_plot_adj$setState(cleaneddata)
+        image_plot_adj$setState(list(
+          cox_model = cox_model,
+          mydata = mydata,
+          adjexplanatory_name = adjexplanatory_labelled
+        )
+        )
+        }
+
 
 
         if (self$options$calculateRiskScore) {
@@ -804,7 +812,15 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         }
 
         # View plot data ----
-        # self$results$mydataview_plot_adj$setContent(list(head(cleaneddata)))
+                if (self$options$ac) {
+        self$results$mydataview_plot_adj$setContent(
+          list(
+            cox_model = cox_model,
+            mydata = mydata,
+            adjexplanatory_name = adjexplanatory_labelled
+          ))
+                }
+
 
 
 
@@ -1635,21 +1651,21 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
         # Extract and structure the data
-        curve_data <- list(
-          # curves = adj_curves,
-          model = cox_model,
-          data = mydata,
-          variable = adjexplanatory_name,
-          method = method
-        )
+        # curve_data <- list(
+        #   curves = adj_curves,
+        #   model = cox_model,
+        #   data = mydata,
+        #   variable = adjexplanatory_name,
+        #   method = method
+        # )
 
-        class(curve_data) <- "adjusted_curves"
+        # class(curve_data) <- "adjusted_curves"
 
 
         # View curve_data ----
         self$results$mydataview_curve_data$setContent(
           list(
-            curves = adj_curves,
+            # curves = adj_curves,
             model = cox_model,
             data = mydata,
             variable = adjexplanatory_name,
@@ -1663,8 +1679,32 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 
+      # ,
+      # .plot_adj = function(image_plot_adj, ggtheme, theme, ...) {
+      #   if (!self$options$ac) {
+      #     return()
+      #   }
+      #   if (is.null(curve_data)) {
+      #     return()
+      #   }
+      #
+      #   plot <- image_plot_adj$state
+      #
+      #
+      #   # plot <- survminer::ggadjustedcurves(plot)
+      #
+      #
+      #   print(plot)
+      #   TRUE
+      #
+      #
+      # }
+
+
+
+
       ,
-      .plot_adj = function(cox_model, mydata, adjexplanatory_name, fallback = TRUE, ggtheme, theme, ...) {
+      .plot_adj = function(image_plot_adj, ggtheme, theme, ...) {
         if (!self$options$ac) {
           return()
         }
@@ -1673,18 +1713,73 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           return()
         }
 
-        # plot <- image_plot_adj$state
-        #
-        # if (is.null(plot)) {
-        #   return()
-        # }
 
-        # plot <- survminer::ggadjustedcurves(plot)
+        # mydata <- image_plot_adj$state$mydata
+        # cox_model <- image_plot_adj$state$cox_model
+        # adjexplanatory_name <- image_plot_adj$state$adjexplanatory_name
 
 
 
+        cleaneddata <- private$.cleandata()
+
+        name1time <- cleaneddata$name1time
+        name2outcome <- cleaneddata$name2outcome
+        name3contexpl <- cleaneddata$name3contexpl
+        name3expl <- cleaneddata$name3expl
+        adjexplanatory_name <- cleaneddata$adjexplanatory_name
+
+        mydata <- cleanData <- cleaneddata$cleanData
+
+        mytime_labelled <- cleaneddata$mytime_labelled
+        myoutcome_labelled <- cleaneddata$myoutcome_labelled
+        mydxdate_labelled <- cleaneddata$mydxdate_labelled
+        myfudate_labelled <- cleaneddata$myfudate_labelled
+        myexplanatory_labelled <- cleaneddata$myexplanatory_labelled
+        mycontexpl_labelled <- cleaneddata$mycontexpl_labelled
+        adjexplanatory_labelled <- cleaneddata$adjexplanatory_labelled
 
 
+
+        # Add stratification variables
+        mystratvar <- NULL
+        if (self$options$use_stratify && !is.null(self$options$stratvar)) {
+          mystratvar <- as.vector(cleaneddata$mystratvar_labelled)
+          # Create strata terms
+          mystratvar <- paste0("strata(", mystratvar, ")")
+        }
+
+
+
+        myexplanatory <- NULL
+        if (!is.null(self$options$explanatory)) {
+          myexplanatory <- as.vector(myexplanatory_labelled)
+        }
+
+        mycontexpl <- NULL
+        if (!is.null(self$options$contexpl)) {
+          mycontexpl <- as.vector(mycontexpl_labelled)
+        }
+
+
+        formula2 <- c(myexplanatory, mycontexpl, mystratvar)
+
+
+
+        LHT <- "survival::Surv(mytime, myoutcome)"
+
+        RHT <- formula2
+
+        RHT <- paste(RHT, collapse = " + ")
+
+        coxformula <- paste0(LHT, " ~ ", RHT)
+
+        coxformula <- as.formula(coxformula)
+
+        cox_model <- survival::coxph(coxformula, data = mydata)
+
+
+
+        fallback <- TRUE
         method <- self$options$ac_method
 
         # Try to calculate adjusted curves with specified method
@@ -1752,26 +1847,6 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 
-      # ,
-      # .plot_adj = function(image_plot_adj, ggtheme, theme, ...) {
-      #   if (!self$options$ac) {
-      #     return()
-      #   }
-      #
-      #   plot <- image_plot_adj$state
-      #
-      #   if (is.null(plot)) {
-      #     return()
-      #   }
-      #
-      #   # plot <- survminer::ggadjustedcurves(plot)
-      #
-      #
-      #   print(plot)
-      #   TRUE
-      #
-      #
-      # }
 
 
 

@@ -362,9 +362,9 @@ items:
           - addRiskGroup
 
 
-    # - name:  mydataview_plot_adj
-    #   title: plot_adj
-    #   type:  Preformatted
+    - name:  mydataview_plot_adj
+      title: mydataview_plot_adj
+      type:  Preformatted
 
 
 
@@ -386,7 +386,6 @@ items:
       height: 450
       renderFun: .plot_adj
       visible: (ac && ac_curve)
-      requiresData: true
       refs: survminer
       clearWith:
           - ac

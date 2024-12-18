@@ -44,11 +44,16 @@ patient. Should be numeric and continuous, measured in consistent units
 (e.g., months or years). Can be calculated automatically from dates if
 using the date options below.}
 
-\item{tint}{.}
+\item{tint}{Enable this option if you want to calculate survival time from
+dates in your data. This is useful when you have separate columns for
+diagnosis date and follow-up date and want to calculate the time elapsed
+between them.}
 
-\item{dxdate}{.}
+\item{dxdate}{The date of diagnosis or study entry for each patient. Should
+be in a consistent date format (e.g., YYYY-MM-DD).}
 
-\item{fudate}{.}
+\item{fudate}{The date of last follow-up or event for each patient. Should
+be in a consistent date format (e.g., YYYY-MM-DD).}
 
 \item{outcome}{.}
 

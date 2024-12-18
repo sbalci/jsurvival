@@ -63,19 +63,32 @@ options:
       title: Using Dates to Calculate Survival Time
       type: Bool
       default: false
+      description: >-
+        Enable this option if you want to calculate survival time from dates in your data.
+        This is useful when you have separate columns for diagnosis date and follow-up date
+        and want to calculate the time elapsed between them.
 
     - name: dxdate
       title: 'Diagnosis Date'
       type: Variable
+      description: >-
+        The date of diagnosis or study entry for each patient. Should be in a consistent
+        date format (e.g., YYYY-MM-DD).
 
     - name: fudate
       title: 'Follow-up Date'
       type: Variable
+      description: >-
+        The date of last follow-up or event for each patient. Should be in a consistent
+        date format (e.g., YYYY-MM-DD).
 
 
     - name: calculatedtime
       title: Add Calculated Time to Data
       type: Output
+      description: >-
+        If enabled, the calculated time-to-event will be added to your data as a new
+        variable. This is useful for verifying the accuracy of the calculated time.
 
 
     - name: outcome

@@ -596,9 +596,14 @@ singlearmBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   patient. Should be numeric and continuous, measured in consistent units
 #'   (e.g., months or years). Can be calculated automatically from dates if
 #'   using the date options below.
-#' @param tint .
-#' @param dxdate .
-#' @param fudate .
+#' @param tint Enable this option if you want to calculate survival time from
+#'   dates in your data. This is useful when you have separate columns for
+#'   diagnosis date and follow-up date and want to calculate the time elapsed
+#'   between them.
+#' @param dxdate The date of diagnosis or study entry for each patient. Should
+#'   be in a consistent date format (e.g., YYYY-MM-DD).
+#' @param fudate The date of last follow-up or event for each patient. Should
+#'   be in a consistent date format (e.g., YYYY-MM-DD).
 #' @param outcome .
 #' @param outcomeLevel .
 #' @param dod .
