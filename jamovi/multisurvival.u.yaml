@@ -259,11 +259,6 @@ children:
                             fitToGrid: true
                             stretchFactor: 1
                             enable: (ac)
-              - type: LayoutBox
-                margin: large
-                children:
-                  - type: CheckBox
-                    name: ac_curve
       - type: Label
         label: Adjustment Method
         children:
@@ -284,13 +279,9 @@ children:
                 format: string
                 enable: (ac_summary)
                 width: large
-              - type: Output
-                name: ac_curves_output
               - type: CheckBox
                 name: ac_compare
                 enable: (ac_summary)
-              - type: Output
-                name: ac_analysis_output
   - type: CollapseBox
     label: Reduced Model Options
     collapsed: true

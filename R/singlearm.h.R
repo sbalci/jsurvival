@@ -604,34 +604,88 @@ singlearmBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   be in a consistent date format (e.g., YYYY-MM-DD).
 #' @param fudate The date of last follow-up or event for each patient. Should
 #'   be in a consistent date format (e.g., YYYY-MM-DD).
-#' @param outcome .
-#' @param outcomeLevel .
-#' @param dod .
-#' @param dooc .
-#' @param awd .
-#' @param awod .
-#' @param analysistype .
-#' @param cutp .
-#' @param timetypedata select the time type in data
-#' @param timetypeoutput select the time type in output
-#' @param uselandmark .
+#' @param outcome The outcome or event of interest for each patient. Should be
+#'   a factor or numeric variable indicating whether the patient experienced the
+#'   event (e.g., death) or censoring (e.g., end of follow-up).
+#' @param outcomeLevel Select the level of the outcome variable that
+#'   represents the event of interest. For example, if the outcome variable is
+#'   "death_status" with levels "Alive" and "Dead", select "Dead" as the event
+#'   level.
+#' @param dod Select the level of the outcome variable that represents death
+#'   due to disease. This is useful for competing risk analysis when there are
+#'   multiple event types.
+#' @param dooc Select the level of the outcome variable that represents death
+#'   due to other causes. This is useful for competing risk analysis when there
+#'   are multiple event types.
+#' @param awd Select the level of the outcome variable that represents being
+#'   alive with disease. This is useful for competing risk analysis when there
+#'   are multiple event types.
+#' @param awod Select the level of the outcome variable that represents being
+#'   alive without disease. This is useful for competing risk analysis when
+#'   there are multiple event types.
+#' @param analysistype Select the type of survival analysis to perform.
+#'   "Overall" analyzes the survival of all patients regardless of event type.
+#'   "Cause Specific" analyzes the survival for a specific event type (e.g.,
+#'   death due to disease). "Competing Risk" analyzes the survival for multiple
+#'   event types simultaneously.
+#' @param cutp Specify the time points at which to calculate survival
+#'   probabilities. Enter a comma-separated list of time points in consistent
+#'   units (e.g., months or years). For example, "12, 36, 60" calculates
+#'   survival probabilities at 1, 3, and 5 years.
+#' @param timetypedata select the time type in data (e.g., YYYY-MM-DD)
+#' @param timetypeoutput select the time type in output (default is months)
+#' @param uselandmark Enables landmark analysis, which addresses immortal time
+#'   bias by analyzing survival only for patients who survive to a specified
+#'   timepoint (the landmark). Use this when you want to eliminate the effect of
+#'   early deaths or when comparing treatments that can only be given to
+#'   patients who survive long enough to receive them.
 #' @param landmark Enables landmark analysis, which addresses immortal time
 #'   bias by analyzing survival only for patients who survive to a specified
 #'   timepoint (the landmark). Use this when you want to eliminate the effect of
 #'   early deaths or when comparing treatments that can only be given to
 #'   patients who survive long enough to receive them.
-#' @param sc Generate a Kaplan-Meier survival plot with confidence intervals.
-#' @param kmunicate Generate a publication-ready survival plot.
-#' @param ce .
-#' @param ch .
-#' @param endplot .
-#' @param ybegin_plot .
-#' @param yend_plot .
-#' @param byplot .
-#' @param multievent Enable analysis for datasets with multiple event levels.
-#' @param ci95 .
-#' @param risktable .
-#' @param censored .
+#' @param sc Enable this option to generate a Kaplan-Meier survival plot with
+#'   confidence intervals. This plot shows the estimated survival probability
+#'   over time and is useful for visualizing survival trends in your data.
+#' @param kmunicate Enable this option to generate a publication-ready
+#'   survival plot in the style of KMunicate. This plot shows the estimated
+#'   survival probability over time with confidence intervals and is suitable
+#'   for publication or presentation.
+#' @param ce Enable this option to calculate and plot the cumulative number of
+#'   events over time. This plot shows the total number of events (e.g., deaths)
+#'   that have occurred at each time point and is useful for visualizing event
+#'   rates in your data.
+#' @param ch Enable this option to calculate and plot the cumulative hazard
+#'   function over time. This plot shows the cumulative risk of experiencing the
+#'   event (e.g., death) at each time point and is useful for visualizing the
+#'   risk of the event over time.
+#' @param endplot The maximum time point to include in the survival plots.
+#'   This is the end time for the survival curves and cumulative event/hazard
+#'   plots. Enter a positive integer representing the time in consistent units
+#'   (e.g., months or years).
+#' @param ybegin_plot The minimum value for the y-axis in the survival plots.
+#'   Enter a number between 0 and 1 to set the lower limit of the y-axis.
+#' @param yend_plot The maximum value for the y-axis in the survival plots.
+#'   Enter a number between 0 and 1 to set the upper limit of the y-axis.
+#' @param byplot The interval for plotting survival probabilities. Enter a
+#'   positive integer representing the time interval in consistent units (e.g.,
+#'   months or years).
+#' @param multievent Enable this option to perform survival analysis for
+#'   datasets with multiple event levels. This is useful for competing risk
+#'   analysis when there are multiple event types (e.g., death due to disease,
+#'   death due to other causes).
+#' @param ci95 Enable this option to display 95\% confidence intervals on the
+#'   survival plots. These intervals show the range of uncertainty around the
+#'   estimated survival probabilities and are useful for assessing the precision
+#'   of the estimates.
+#' @param risktable Enable this option to display a table of risk estimates at
+#'   each time point. This table shows the estimated survival probability,
+#'   cumulative event rate, and cumulative hazard at each time point and is
+#'   useful for summarizing the survival characteristics of your data.
+#' @param censored Enable this option to display censored observations on the
+#'   survival plots. Censored observations are patients who have not experienced
+#'   the event of interest by the end of follow-up and are indicated by vertical
+#'   ticks on the survival curves.
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr

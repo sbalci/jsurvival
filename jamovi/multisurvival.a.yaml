@@ -171,7 +171,7 @@ options:
 
 
     - name: timetypedata
-      title: 'Time Type in Data (default: YYYY-MM-DD)'
+      title: 'Time Type in Data (e.g., YYYY-MM-DD)'
       type: List
       options:
         - title: 'Year-Month-Day Hour-Minute-Second'
@@ -370,31 +370,16 @@ options:
 
 
 
-
-
     - name: ac
-      title: Adjusted Survival Analysis
+      title: Adjusted Survival Curve
       type: Bool
       default: false
-      description:
-        R: >
-          If true, computes and displays adjusted survival curves based on specified variables.
 
     - name: adjexplanatory
       title: Variable for Adjusted Curve
       type: Variable
       suggested: [ ordinal, nominal ]
       permitted: [ factor ]
-      description:
-        R: >
-          The categorical variable used to stratify and adjust the survival curve.
-          Only relevant if `ac` = true.
-
-
-    - name: ac_curve
-      title: Adjusted Survival Curve
-      type: Bool
-      default: false
 
     - name: ac_method
       title: Adjustment Method
@@ -402,7 +387,7 @@ options:
       options:
         - title: Average
           name: average
-        - title: Conditional
+        - title: Conditional Mean
           name: conditional
         - title: Single
           name: single
@@ -410,44 +395,29 @@ options:
           name: marginal
       default: average
       description:
-        R: >
-          The method used to compute adjusted survival curves. This affects how covariates
-          are handled when producing adjusted survival estimates.
-
-
-    - name: ac_curves_output
-      title: Save Adjusted Curves
-      type: Output
-
-    - name: ac_analysis_output
-      title: Save Analysis Results
-      type: Output
+          R: Method for computing adjusted survival curves
 
     - name: ac_summary
       title: Show Summary Statistics
       type: Bool
       default: false
       description:
-        R: >
-          If true, calculates and displays summary statistics (e.g., survival probabilities at specific timepoints)
-          for the adjusted survival curves.
+          R: Calculate and display summary statistics for adjusted curves
 
     - name: ac_timepoints
       title: Summary Timepoints
       type: String
       default: '12, 36, 60'
       description:
-        R: >
-          Comma-separated time points (in `timetypeoutput` units) at which summary statistics for adjusted curves
-          are calculated. For example: '12, 36, 60' for 12, 36, and 60 months.
+          R: Timepoints for calculating summary statistics (comma-separated)
 
     - name: ac_compare
       title: Compare Curves
       type: Bool
       default: false
       description:
-        R: >
-          If true, performs a statistical comparison (e.g., log-rank test) between adjusted survival curves.
+          R: Perform statistical comparison between adjusted curves
+
 
 
     - name: reduced_explanatory

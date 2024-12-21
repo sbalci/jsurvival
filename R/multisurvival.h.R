@@ -38,7 +38,6 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             pplot = TRUE,
             ac = FALSE,
             adjexplanatory = NULL,
-            ac_curve = FALSE,
             ac_method = "average",
             ac_summary = FALSE,
             ac_timepoints = "12, 36, 60",
@@ -237,10 +236,6 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "nominal"),
                 permitted=list(
                     "factor"))
-            private$..ac_curve <- jmvcore::OptionBool$new(
-                "ac_curve",
-                ac_curve,
-                default=FALSE)
             private$..ac_method <- jmvcore::OptionList$new(
                 "ac_method",
                 ac_method,
@@ -250,10 +245,6 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "single",
                     "marginal"),
                 default="average")
-            private$..ac_curves_output <- jmvcore::OptionOutput$new(
-                "ac_curves_output")
-            private$..ac_analysis_output <- jmvcore::OptionOutput$new(
-                "ac_analysis_output")
             private$..ac_summary <- jmvcore::OptionBool$new(
                 "ac_summary",
                 ac_summary,
@@ -359,10 +350,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..pplot)
             self$.addOption(private$..ac)
             self$.addOption(private$..adjexplanatory)
-            self$.addOption(private$..ac_curve)
             self$.addOption(private$..ac_method)
-            self$.addOption(private$..ac_curves_output)
-            self$.addOption(private$..ac_analysis_output)
             self$.addOption(private$..ac_summary)
             self$.addOption(private$..ac_timepoints)
             self$.addOption(private$..ac_compare)
@@ -413,10 +401,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         pplot = function() private$..pplot$value,
         ac = function() private$..ac$value,
         adjexplanatory = function() private$..adjexplanatory$value,
-        ac_curve = function() private$..ac_curve$value,
         ac_method = function() private$..ac_method$value,
-        ac_curves_output = function() private$..ac_curves_output$value,
-        ac_analysis_output = function() private$..ac_analysis_output$value,
         ac_summary = function() private$..ac_summary$value,
         ac_timepoints = function() private$..ac_timepoints$value,
         ac_compare = function() private$..ac_compare$value,
@@ -466,10 +451,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ..pplot = NA,
         ..ac = NA,
         ..adjexplanatory = NA,
-        ..ac_curve = NA,
         ..ac_method = NA,
-        ..ac_curves_output = NA,
-        ..ac_analysis_output = NA,
         ..ac_summary = NA,
         ..ac_timepoints = NA,
         ..ac_compare = NA,
@@ -495,8 +477,6 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         plot3 = function() private$.items[["plot3"]],
         cox_ph = function() private$.items[["cox_ph"]],
         plot8 = function() private$.items[["plot8"]],
-        mydataview_adj_stats = function() private$.items[["mydataview_adj_stats"]],
-        mydataview_adj_summary = function() private$.items[["mydataview_adj_summary"]],
         plotKM = function() private$.items[["plotKM"]],
         riskScoreTable = function() private$.items[["riskScoreTable"]],
         riskScoreMetrics = function() private$.items[["riskScoreMetrics"]],
@@ -505,15 +485,20 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         outcomeredefined = function() private$.items[["outcomeredefined"]],
         addRiskScore = function() private$.items[["addRiskScore"]],
         addRiskGroup = function() private$.items[["addRiskGroup"]],
-        mydataview_plot_adj = function() private$.items[["mydataview_plot_adj"]],
         plot_adj = function() private$.items[["plot_adj"]],
-        mydataview_curve_data = function() private$.items[["mydataview_curve_data"]],
-        adjustedSummaryStats = function() private$.items[["adjustedSummaryStats"]],
         adjustedSummaryTable = function() private$.items[["adjustedSummaryTable"]],
         adjustedComparison = function() private$.items[["adjustedComparison"]],
-        ac_summary_table = function() private$.items[["ac_summary_table"]],
-        ac_landmark_table = function() private$.items[["ac_landmark_table"]],
-        ac_text_summary = function() private$.items[["ac_text_summary"]],
+        adjustedSurvTable = function() private$.items[["adjustedSurvTable"]],
+        adjustedSurvTableSummary = function() private$.items[["adjustedSurvTableSummary"]],
+        adjustedPairwiseTable = function() private$.items[["adjustedPairwiseTable"]],
+        adjustedPairwiseSummary = function() private$.items[["adjustedPairwiseSummary"]],
+        adjustedMedianTable = function() private$.items[["adjustedMedianTable"]],
+        adjustedMedianSummary = function() private$.items[["adjustedMedianSummary"]],
+        adjustedCoxTable = function() private$.items[["adjustedCoxTable"]],
+        adjustedCoxText = function() private$.items[["adjustedCoxText"]],
+        adjustedCoxSummary = function() private$.items[["adjustedCoxSummary"]],
+        adjustedCoxPH = function() private$.items[["adjustedCoxPH"]],
+        adjustedCoxPHPlot = function() private$.items[["adjustedCoxPHPlot"]],
         model_comparison = function() private$.items[["model_comparison"]],
         reduced_model_metrics = function() private$.items[["reduced_model_metrics"]],
         text_model_selection = function() private$.items[["text_model_selection"]],
@@ -656,14 +641,6 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "tint",
                     "multievent",
                     "contexpl")))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="mydataview_adj_stats",
-                title="mydataview"))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="mydataview_adj_summary",
-                title="mydataview"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plotKM",
@@ -803,10 +780,6 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "tint",
                     "multievent",
                     "addRiskGroup")))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="mydataview_plot_adj",
-                title="mydataview_plot_adj"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot_adj",
@@ -814,7 +787,7 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 width=600,
                 height=450,
                 renderFun=".plot_adj",
-                visible="(ac && ac_curve)",
+                visible="(ac)",
                 refs="survminer",
                 clearWith=list(
                     "ac",
@@ -822,15 +795,6 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "ci95",
                     "risktable",
                     "ac_method")))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="mydataview_curve_data",
-                title="mydataview_curve_data",
-                visible="(ac)"))
-            self$add(jmvcore::Html$new(
-                options=options,
-                name="adjustedSummaryStats",
-                title="adjustedSummaryStats"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="adjustedSummaryTable",
@@ -870,7 +834,7 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "ac_timepoints",
                     "ac_method",
                     "adjexplanatory")))
-            self$add(jmvcore::Html$new(
+            self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="adjustedComparison",
                 title="Statistical Comparison of Adjusted Curves",
@@ -881,71 +845,186 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "adjexplanatory")))
             self$add(jmvcore::Table$new(
                 options=options,
-                name="ac_summary_table",
-                title="Adjusted Survival Analysis",
+                name="adjustedSurvTable",
+                title="Adjusted Survival Table",
                 rows=0,
-                visible="(ac_summary)",
                 columns=list(
                     list(
-                        `name`="group", 
-                        `title`="Group", 
+                        `name`="strata", 
+                        `title`="Level", 
                         `type`="text"),
                     list(
-                        `name`="n", 
-                        `title`="N", 
-                        `type`="integer"),
-                    list(
-                        `name`="median_time", 
-                        `title`="Median Survival", 
-                        `type`="number"),
-                    list(
-                        `name`="median_surv", 
-                        `title`="Median Survival Rate", 
-                        `type`="number"),
-                    list(
-                        `name`="hr", 
-                        `title`="Hazard Ratio", 
-                        `type`="number"),
-                    list(
-                        `name`="hr_ci_lower", 
-                        `title`="HR CI Lower", 
-                        `type`="number"),
-                    list(
-                        `name`="hr_ci_upper", 
-                        `title`="HR CI Upper", 
-                        `type`="number"))))
-            self$add(jmvcore::Table$new(
-                options=options,
-                name="ac_landmark_table",
-                title="Landmark Analysis",
-                rows=0,
-                visible="(ac_summary)",
-                columns=list(
-                    list(
-                        `name`="group", 
-                        `title`="Group", 
-                        `type`="text"),
-                    list(
-                        `name`="timepoint", 
+                        `name`="time", 
                         `title`="Time", 
                         `type`="integer"),
                     list(
-                        `name`="survival_rate", 
-                        `title`="Survival Rate", 
-                        `type`="number"),
+                        `name`="n.risk", 
+                        `title`="Number at Risk", 
+                        `type`="integer"),
                     list(
-                        `name`="ci_lower", 
-                        `title`="CI Lower", 
-                        `type`="number"),
+                        `name`="n.event", 
+                        `title`="Events", 
+                        `type`="integer"),
                     list(
-                        `name`="ci_upper", 
-                        `title`="CI Upper", 
-                        `type`="number"))))
+                        `name`="surv", 
+                        `title`="Adjusted Survival", 
+                        `type`="text"),
+                    list(
+                        `name`="lower", 
+                        `title`="95% CI Lower", 
+                        `type`="text"),
+                    list(
+                        `name`="upper", 
+                        `title`="95% CI Upper", 
+                        `type`="text")),
+                clearWith=list(
+                    "ac",
+                    "ac_timepoints",
+                    "adjexplanatory")))
             self$add(jmvcore::Html$new(
                 options=options,
-                name="ac_text_summary",
-                title="Analysis Summary",
-                visible="(ac_summary)"))
+                name="adjustedSurvTableSummary",
+                title="Adjusted Survival Summary",
+                clearWith=list(
+                    "ac",
+                    "ac_timepoints",
+                    "adjexplanatory")))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="adjustedPairwiseTable",
+                title="Pairwise Comparisons of Adjusted Survival",
+                rows=0,
+                columns=list(
+                    list(
+                        `name`="rowname", 
+                        `title`="Group 1", 
+                        `type`="text"),
+                    list(
+                        `name`="name", 
+                        `title`="Group 2", 
+                        `type`="text"),
+                    list(
+                        `name`="value", 
+                        `title`="Adjusted p-value", 
+                        `type`="number", 
+                        `format`="zto,pvalue")),
+                visible="(ac_compare)",
+                clearWith=list(
+                    "ac",
+                    "ac_compare",
+                    "adjexplanatory",
+                    "padjustmethod"),
+                refs=list(
+                    "padjust")))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="adjustedPairwiseSummary",
+                title="Pairwise Comparison Summary",
+                visible="(ac_compare)",
+                clearWith=list(
+                    "ac",
+                    "ac_compare",
+                    "adjexplanatory",
+                    "padjustmethod")))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="adjustedMedianTable",
+                title="Adjusted Median Survival",
+                rows=0,
+                columns=list(
+                    list(
+                        `name`="factor", 
+                        `title`="Level", 
+                        `type`="text"),
+                    list(
+                        `name`="records", 
+                        `title`="Records", 
+                        `type`="integer"),
+                    list(
+                        `name`="events", 
+                        `title`="Events", 
+                        `type`="integer"),
+                    list(
+                        `name`="median", 
+                        `title`="Median", 
+                        `type`="number"),
+                    list(
+                        `name`="x0_95lcl", 
+                        `title`="Lower", 
+                        `superTitle`="95% CI", 
+                        `type`="number"),
+                    list(
+                        `name`="x0_95ucl", 
+                        `title`="Upper", 
+                        `superTitle`="95% CI", 
+                        `type`="number")),
+                clearWith=list(
+                    "ac",
+                    "adjexplanatory")))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="adjustedMedianSummary",
+                title="Adjusted Median Survival Summary",
+                clearWith=list(
+                    "ac",
+                    "adjexplanatory")))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="adjustedCoxTable",
+                title="Adjusted Cox Model Results",
+                rows=0,
+                columns=list(
+                    list(
+                        `name`="Variable", 
+                        `title`="Variable", 
+                        `type`="text"),
+                    list(
+                        `name`="HR", 
+                        `title`="HR (95% CI)", 
+                        `type`="text"),
+                    list(
+                        `name`="Pvalue", 
+                        `title`="P-value", 
+                        `type`="number", 
+                        `format`="zto,pvalue")),
+                clearWith=list(
+                    "ac",
+                    "adjexplanatory")))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="adjustedCoxText",
+                title="Adjusted Cox Model Metrics",
+                clearWith=list(
+                    "ac",
+                    "adjexplanatory")))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="adjustedCoxSummary",
+                title="Adjusted Cox Model Interpretation",
+                clearWith=list(
+                    "ac",
+                    "adjexplanatory")))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="adjustedCoxPH",
+                title="Proportional Hazards Test",
+                visible="(ph_cox)",
+                clearWith=list(
+                    "ac",
+                    "adjexplanatory",
+                    "ph_cox")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="adjustedCoxPHPlot",
+                title="Proportional Hazards Plot",
+                width=600,
+                height=450,
+                renderFun=".plotAdjustedPH",
+                visible="(ph_cox)",
+                clearWith=list(
+                    "ac",
+                    "adjexplanatory",
+                    "ph_cox")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="model_comparison",
@@ -1139,22 +1218,14 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   marks) on the survival plot.
 #' @param pplot If true, displays the p-value from the survival comparison
 #'   test on the survival plot.
-#' @param ac If true, computes and displays adjusted survival curves based on
-#'   specified variables.
-#' @param adjexplanatory The categorical variable used to stratify and adjust
-#'   the survival curve. Only relevant if \code{ac} = true.
-#' @param ac_curve .
-#' @param ac_method The method used to compute adjusted survival curves. This
-#'   affects how covariates are handled when producing adjusted survival
-#'   estimates.
-#' @param ac_summary If true, calculates and displays summary statistics
-#'   (e.g., survival probabilities at specific timepoints) for the adjusted
-#'   survival curves.
-#' @param ac_timepoints Comma-separated time points (in \code{timetypeoutput}
-#'   units) at which summary statistics for adjusted curves are calculated. For
-#'   example: '12, 36, 60' for 12, 36, and 60 months.
-#' @param ac_compare If true, performs a statistical comparison (e.g.,
-#'   log-rank test) between adjusted survival curves.
+#' @param ac .
+#' @param adjexplanatory .
+#' @param ac_method Method for computing adjusted survival curves
+#' @param ac_summary Calculate and display summary statistics for adjusted
+#'   curves
+#' @param ac_timepoints Timepoints for calculating summary statistics
+#'   (comma-separated)
+#' @param ac_compare Perform statistical comparison between adjusted curves
 #' @param reduced_explanatory Variables to include in a reduced model for
 #'   comparison. This can be used to test whether excluding some variables
 #'   affects model fit.
@@ -1189,8 +1260,6 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$mydataview_adj_stats} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$mydataview_adj_summary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$riskScoreTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$riskScoreMetrics} \tab \tab \tab \tab \tab a html \cr
@@ -1199,15 +1268,20 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
-#'   \code{results$mydataview_plot_adj} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$mydataview_curve_data} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$adjustedSummaryStats} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$adjustedSummaryTable} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$adjustedComparison} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$ac_summary_table} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$ac_landmark_table} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$ac_text_summary} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$adjustedComparison} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$adjustedSurvTable} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$adjustedSurvTableSummary} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$adjustedPairwiseTable} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$adjustedPairwiseSummary} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$adjustedMedianTable} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$adjustedMedianSummary} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$adjustedCoxTable} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$adjustedCoxText} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$adjustedCoxSummary} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$adjustedCoxPH} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$adjustedCoxPHPlot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$model_comparison} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$reduced_model_metrics} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text_model_selection} \tab \tab \tab \tab \tab a html \cr
@@ -1256,7 +1330,6 @@ multisurvival <- function(
     pplot = TRUE,
     ac = FALSE,
     adjexplanatory,
-    ac_curve = FALSE,
     ac_method = "average",
     ac_summary = FALSE,
     ac_timepoints = "12, 36, 60",
@@ -1334,7 +1407,6 @@ multisurvival <- function(
         pplot = pplot,
         ac = ac,
         adjexplanatory = adjexplanatory,
-        ac_curve = ac_curve,
         ac_method = ac_method,
         ac_summary = ac_summary,
         ac_timepoints = ac_timepoints,

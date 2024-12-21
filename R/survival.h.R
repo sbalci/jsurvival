@@ -815,13 +815,25 @@ survivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' # example will be added
 #'
 #' @param data The data as a data frame.
-#' @param elapsedtime .
-#' @param tint .
-#' @param dxdate .
-#' @param fudate .
-#' @param explanatory .
-#' @param outcome .
-#' @param outcomeLevel .
+#' @param elapsedtime The time elapsed from the start of the study to the
+#'   event or censoring.
+#' @param tint If the time is in date format, select this option to calculate
+#'   the survival time. The time will be calculated as the difference between
+#'   the event date and the diagnosis date. If the follow-up date is available,
+#'   the time will be  calculated as the difference between the event date and
+#'   the follow-up date.
+#' @param dxdate The date of diagnosis. If the time is in date format, the
+#'   time will be calculated as the difference between the event date and the
+#'   diagnosis date.
+#' @param fudate The date of follow-up. If the time is in date format, the
+#'   time will be calculated as the difference between the event date and the
+#'   follow-up date.
+#' @param explanatory The explanatory variable that will be used to compare
+#'   the survival times of different groups.
+#' @param outcome The outcome variable that will be used to compare the
+#'   survival times of different groups.
+#' @param outcomeLevel The level of the outcome variable that will be used as
+#'   the event level.
 #' @param dod .
 #' @param dooc .
 #' @param awd .

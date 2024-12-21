@@ -761,8 +761,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         ## Adjusted survival ----
 
         if (self$options$ac) {
-          private$.calculateAdjustedCurves(cox_model, mydata, adjexplanatory_name = adjexplanatory_labelled)
-        }
+          private$.calculateAdjustedStats()
+          }
 
 
 
@@ -793,15 +793,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # image7$setState(cleaneddata)
 
 
-        if (self$options$ac_curve) {
         image_plot_adj <- self$results$plot_adj
-        image_plot_adj$setState(list(
-          cox_model = cox_model,
-          mydata = mydata,
-          adjexplanatory_name = adjexplanatory_labelled
-        )
-        )
-        }
+        image_plot_adj$setState(cleaneddata)
+
 
 
 
@@ -812,14 +806,14 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         }
 
         # View plot data ----
-                if (self$options$ac) {
-        self$results$mydataview_plot_adj$setContent(
-          list(
-            cox_model = cox_model,
-            mydata = mydata,
-            adjexplanatory_name = adjexplanatory_labelled
-          ))
-                }
+        #         if (self$options$ac) {
+        # self$results$mydataview_plot_adj$setContent(
+        #   list(
+        #     cox_model = cox_model,
+        #     mydata = mydata,
+        #     adjexplanatory_name = adjexplanatory_labelled
+        #   ))
+        #         }
 
 
 
@@ -1586,28 +1580,312 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 
-      #Adjusted ----
+      # Adjusted ----
+
 
       ,
-      .calculateAdjustedCurves = function(cox_model, mydata, adjexplanatory_name, fallback = TRUE) {
+      .calculateAdjustedStats = function() {
+        # Skip if adjusted curves not requested
+        if (!self$options$ac) return(NULL)
 
+        # Get cleaned data
+        cleaneddata <- private$.cleandata()
+        if (is.null(cleaneddata)) return(NULL)
+
+        # Get relevant data elements
+        data <- cleaneddata$cleanData
+        adj_var <- cleaneddata$adjexplanatory_name
+
+        if (is.null(adj_var)) {
+          stop('Please select a variable for adjusted curves')
+        }
+
+        # Get unique levels of adjustment variable
+        levels <- sort(unique(data[[adj_var]]))
+        if (length(levels) < 2) {
+          stop("Adjustment variable must have at least 2 levels")
+        }
+
+        # Prepare formula for Cox model
+        myexplanatory <- NULL
+        if (!is.null(self$options$explanatory)) {
+          myexplanatory <- as.vector(cleaneddata$myexplanatory_labelled)
+        }
+
+        mycontexpl <- NULL
+        if (!is.null(self$options$contexpl)) {
+          mycontexpl <- as.vector(cleaneddata$mycontexpl_labelled)
+        }
+
+        formula2 <- c(myexplanatory, mycontexpl)
+        myformula <- paste("survival::Surv(mytime, myoutcome) ~ ",
+                           paste(formula2, collapse = " + "))
+        myformula <- as.formula(myformula)
+
+        # Fit Cox model
+        cox_model <- survival::coxph(myformula, data = data)
+
+        # Get timepoints
+        timepoints <- if (self$options$ac_summary) {
+          tryCatch({
+            pts <- as.numeric(trimws(unlist(strsplit(self$options$ac_timepoints, ","))))
+            pts <- sort(unique(pts[!is.na(pts)]))
+            if (length(pts) == 0) c(12, 36, 60) else pts
+          }, error = function(e) c(12, 36, 60))
+        } else {
+          NULL
+        }
+
+        # Initialize results list and summary rows
+        results <- list()
+        summary_rows <- list()
+
+        # Calculate adjusted survival for each level
+        for (level in levels) {
+          tryCatch({
+            # Create prediction data with mean/mode values
+            pred_df <- data.frame(
+              mytime = sort(unique(c(timepoints, data$mytime)))
+            )
+
+            # Add all other variables with their mean/mode values
+            for (var in names(data)) {
+              if (var != "mytime" && var != adj_var && var != "row_names") {
+                if (is.numeric(data[[var]])) {
+                  pred_df[[var]] <- mean(data[[var]], na.rm = TRUE)
+                } else if (is.factor(data[[var]])) {
+                  pred_df[[var]] <- names(which.max(table(data[[var]])))
+                }
+              }
+            }
+            pred_df[[adj_var]] <- level
+
+            # Calculate survival
+            pred_surv <- survival::survfit(cox_model, newdata = pred_df)
+
+            if (!is.null(pred_surv)) {
+              # Store full curve
+              level_stats <- data.frame(
+                time = pred_surv$time,
+                survival = pred_surv$surv,
+                std.err = pred_surv$std.err,
+                lower = pred_surv$lower,
+                upper = pred_surv$upper,
+                n.risk = pred_surv$n.risk
+              )
+
+              results[[as.character(level)]] <- list(
+                full_curve = level_stats
+              )
+
+              # Calculate timepoint statistics if requested
+              if (!is.null(timepoints)) {
+                for (t in timepoints) {
+                  # Find closest time point
+                  idx <- which.min(abs(level_stats$time - t))
+                  if (length(idx) > 0) {
+                    # Create summary row
+                    summary_row <- list(
+                      Level = as.character(level),
+                      Timepoint = t,
+                      Survival = level_stats$survival[idx],
+                      SE = level_stats$std.err[idx],
+                      CI_Lower = level_stats$lower[idx],
+                      CI_Upper = level_stats$upper[idx],
+                      N_at_Risk = level_stats$n.risk[idx]
+                    )
+
+                    # Check if all values are valid
+                    if (!any(sapply(summary_row, is.null)) &&
+                        !any(sapply(summary_row, is.na))) {
+                      summary_rows[[length(summary_rows) + 1]] <- summary_row
+                    }
+                  }
+                }
+              }
+            }
+          }, error = function(e) {
+            warning(paste("Error processing level", level, ":", e$message))
+          })
+        }
+
+        # Add metadata
+        attr(results, "timepoints") <- timepoints
+        attr(results, "levels") <- levels
+        attr(results, "variable") <- adj_var
+        attr(results, "method") <- self$options$ac_method
+
+        # Add summary table if we have valid data
+        if (length(summary_rows) > 0) {
+          # Sort rows by level and timepoint
+          sorted_indices <- order(
+            sapply(summary_rows, function(x) x$Level),
+            sapply(summary_rows, function(x) x$Timepoint)
+          )
+          summary_rows <- summary_rows[sorted_indices]
+
+          # Add rows to table
+          for (i in seq_along(summary_rows)) {
+            row <- summary_rows[[i]]
+            self$results$adjustedSummaryTable$addRow(
+              rowKey = i,
+              values = list(
+                Level = row$Level,
+                Timepoint = row$Timepoint,
+                Survival = round(row$Survival, 3),
+                SE = round(row$SE, 3),
+                CI_Lower = round(row$CI_Lower, 3),
+                CI_Upper = round(row$CI_Upper, 3)
+              )
+            )
+          }
+        }
+
+        # Add statistical comparison if requested
+        if (self$options$ac_compare) {
+          comp_text <- tryCatch({
+            survdiff_res <- survival::survdiff(eval(myformula), data = data)
+            pval <- 1 - pchisq(survdiff_res$chisq, length(levels) - 1)
+            glue::glue(
+              "Statistical comparison of adjusted survival curves:<br>",
+              "Log-rank test p-value: {format.pval(pval, digits=3)}"
+            )
+          }, error = function(e) {
+            "Statistical comparison could not be performed"
+          })
+          self$results$adjustedComparison$setContent(comp_text)
+        }
+
+
+        # mydataview_calculateAdjustedStats <- self$results$mydataview_calculateAdjustedStats
+        # mydataview_calculateAdjustedStats$setContent(
+        #   list(
+        #     results = results,
+        #     summary_rows = summary_rows
+        #   )
+        # )
+
+
+        if (self$options$ac_summary) {
+          adjusted_surv_df <- private$.adjustedSurvTable(results, cox_model)
+        }
+
+
+        if (self$options$ac_compare) {
+          private$.adjustedPairwise(results, cox_model)
+        }
+
+        # After fitting Cox model
+        if (self$options$ac_summary) {
+          private$.adjustedMedianSurv(results, cox_model)
+          private$.adjustedCox(results, cox_model)
+        }
+
+
+        return(results)
+      }
+
+
+      # mydataview_calculateAdjustedStats <- self$results$mydataview_calculateAdjustedStats
+      # mydataview_calculateAdjustedStats$setContent(
+      #   list(
+      #     results = results,
+      #     summary_rows = summary_rows
+      #   )
+      # )
+
+      ,
+      .plot_adj = function(image_plot_adj, ggtheme, theme, ...) {
+        if (!self$options$ac) return()
+
+        plotData <- image_plot_adj$state
+
+        if (is.null(plotData)) {
+          return()
+        }
+
+        name1time <- plotData$name1time
+        name2outcome <- plotData$name2outcome
+        name3contexpl <- plotData$name3contexpl
+        name3expl <- plotData$name3expl
+        adjexplanatory_name <- plotData$adjexplanatory_name
+
+        mydata <- cleanData <- plotData$cleanData
+
+        mytime_labelled <- plotData$mytime_labelled
+        myoutcome_labelled <- plotData$myoutcome_labelled
+        mydxdate_labelled <- plotData$mydxdate_labelled
+        myfudate_labelled <- plotData$myfudate_labelled
+        myexplanatory_labelled <- plotData$myexplanatory_labelled
+        mycontexpl_labelled <- plotData$mycontexpl_labelled
+        adjexplanatory_labelled <- plotData$adjexplanatory_labelled
+
+
+        if (is.null(plotData$adjexplanatory_name)) {
+          stop('Please select a variable for adjusted curves')
+        }
+
+
+        ### prepare formula ----
+
+        myexplanatory <- NULL
+        if (!is.null(self$options$explanatory)) {
+          myexplanatory <- as.vector(myexplanatory_labelled)
+        }
+
+        mycontexpl <- NULL
+        if (!is.null(self$options$contexpl)) {
+          mycontexpl <- as.vector(mycontexpl_labelled)
+        }
+
+        formula2 <- c(myexplanatory, mycontexpl)
+
+        myformula <-
+          paste("survival::Surv(mytime, myoutcome) ~ ",
+                paste(formula2, collapse = " + "))
+
+        myformula <- as.formula(myformula)
+
+        # Fit model
+        cox_model <- survival::coxph(myformula, data = mydata)
+
+        # Validate method and try fallback if needed
         method <- self$options$ac_method
 
-        # Try to calculate adjusted curves with specified method
-        adj_curves <-  tryCatch({
+        # Try to create plot with specified method
+        plot <- tryCatch({
+          survminer::ggadjustedcurves(
+            fit = cox_model,
+            data = mydata,
+            variable = adjexplanatory_name,
+            method = method,
+            conf.int = self$options$ci95,
+            risk.table = self$options$risktable,
+            xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+            title = paste0("Adjusted Survival Curves for ", self$options$adjexplanatory,
+                           " (", method, " adjustment)"),
+            pval = self$options$pplot,
+            pval.method = self$options$pplot,
+            legend = "none",
+            break.time.by = self$options$byplot,
+            xlim = c(0, self$options$endplot),
+            censored = self$options$censored
+          )
+        }, error = function(e) {
+          # If marginal method fails, try average method instead
+          if (method == "marginal") {
+            warning("Marginal method failed, falling back to average method")
             survminer::ggadjustedcurves(
               fit = cox_model,
               data = mydata,
               variable = adjexplanatory_name,
-              method = method,
+              method = "average",  # Fallback to average method
               conf.int = self$options$ci95,
               risk.table = self$options$risktable,
               xlab = paste0('Time (', self$options$timetypeoutput, ')'),
-              title = paste0(
-                "Adjusted Survival Curves for ",
-                self$options$adjexplanatory,
-                " (", method, " adjustment)"
-              ),
+              title = paste0("Adjusted Survival Curves for ",
+                             self$options$adjexplanatory,
+                             " (average adjustment - marginal failed)"),
               pval = self$options$pplot,
               pval.method = self$options$pplot,
               legend = "none",
@@ -1615,67 +1893,543 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
               xlim = c(0, self$options$endplot),
               censored = self$options$censored
             )
-          }, error = function(e) {
-            # If marginal method fails, try average method instead
-            if (method == "marginal") {
-              warning("Marginal method failed, falling back to average method")
-              survminer::ggadjustedcurves(
-                fit = cox_model,
-                data = mydata,
-                variable = adjexplanatory_name,
-                method = "average",  # Fallback to average method
-                conf.int = self$options$ci95,
-                risk.table = self$options$risktable,
-                xlab = paste0('Time (', self$options$timetypeoutput, ')'),
-                title = paste0(
-                  "Adjusted Survival Curves for ",
-                  self$options$adjexplanatory,
-                  " (average adjustment - marginal failed)"
-                ),
-                pval = self$options$pplot,
-                pval.method = self$options$pplot,
-                legend = "none",
-                break.time.by = self$options$byplot,
-                xlim = c(0, self$options$endplot),
-                censored = self$options$censored
-              )
-            } else {
-              stop(paste("Error creating adjusted curves:", e$message))
+          } else {
+            stop(paste("Error creating adjusted curves:", e$message))
+          }
+        })
+
+        print(plot)
+        TRUE
+      }
+
+
+
+      ,
+      .adjustedSurvTable = function(results, cox_model) {
+        # Get data components
+        mytime <- results$name1time
+        myoutcome <- results$name2outcome
+        adj_var <- results$adjexplanatory_name
+        mydata <- results$cleanData
+
+        # Verify we have valid data and model
+        if (is.null(mydata) || is.null(cox_model)) {
+          return(NULL)
+        }
+
+        # Get timepoints
+        timepoints <- tryCatch({
+          pts <- as.numeric(trimws(unlist(strsplit(self$options$ac_timepoints, ","))))
+          pts <- sort(unique(pts[!is.na(pts)]))
+          if (length(pts) == 0) c(12, 36, 60) else pts
+        }, error = function(e) c(12, 36, 60))
+
+        # Get levels of adjustment variable
+        levels <- sort(unique(mydata[[adj_var]]))
+        if (length(levels) < 1) {
+          warning("No levels found in adjustment variable")
+          return(NULL)
+        }
+
+        # Create base prediction dataset
+        pred_base <- list()
+        for (var in names(mydata)) {
+          if (var != "mytime" && var != adj_var && var != "row_names") {
+            if (is.numeric(mydata[[var]])) {
+              pred_base[[var]] <- mean(mydata[[var]], na.rm = TRUE)
+            } else if (is.factor(mydata[[var]])) {
+              pred_base[[var]] <- levels(mydata[[var]])[which.max(table(mydata[[var]]))]
             }
           }
-            )
+        }
 
+        # Initialize storage for results
+        all_results <- list()
+        row_counter <- 1
 
-        # image_plot_adj <- self$results$plot_adj
-        # image_plot_adj$setState(adj_curves)
-
-
-        # Extract and structure the data
-        # curve_data <- list(
-        #   curves = adj_curves,
-        #   model = cox_model,
-        #   data = mydata,
-        #   variable = adjexplanatory_name,
-        #   method = method
-        # )
-
-        # class(curve_data) <- "adjusted_curves"
-
-
-        # View curve_data ----
-        self$results$mydataview_curve_data$setContent(
-          list(
-            # curves = adj_curves,
-            model = cox_model,
-            data = mydata,
-            variable = adjexplanatory_name,
-            method = method
+        # Calculate survival for each level and timepoint
+        for (level in levels) {
+          # Create prediction data for this level
+          pred_data <- data.frame(
+            mytime = timepoints
           )
+
+          # Add averaged covariates
+          for (var in names(pred_base)) {
+            pred_data[[var]] <- pred_base[[var]]
+          }
+          pred_data[[adj_var]] <- level
+
+          tryCatch({
+            # Get predicted survival
+            surv_fit <- survival::survfit(cox_model, newdata = pred_data)
+            surv_summary <- summary(surv_fit, times = timepoints)
+
+            # Extract results for each timepoint
+            for (i in seq_along(timepoints)) {
+              if (i <= length(surv_summary$time)) {
+                all_results[[row_counter]] <- list(
+                  strata = level,
+                  time = timepoints[i],
+                  n.risk = surv_summary$n.risk[i],
+                  n.event = surv_summary$n.event[i],
+                  surv = surv_summary$surv[i],
+                  lower = surv_summary$lower[i],
+                  upper = surv_summary$upper[i]
+                )
+                row_counter <- row_counter + 1
+              }
+            }
+          }, error = function(e) {
+            warning(paste("Error processing level", level, ":", e$message))
+          })
+        }
+
+        # Convert results to data frame if we have any
+        if (length(all_results) > 0) {
+          results_df <- do.call(rbind, lapply(all_results, as.data.frame))
+
+          # Add to results table
+          survTable <- self$results$adjustedSurvTable
+          survTable$setRows(NULL) # Clear existing rows
+
+          for (i in seq_len(nrow(results_df))) {
+            survTable$addRow(
+              rowKey = i,
+              values = list(
+                strata = results_df$strata[i],
+                time = results_df$time[i],
+                n.risk = results_df$n.risk[i],
+                n.event = results_df$n.event[i],
+                surv = scales::percent(results_df$surv[i], accuracy = 0.1),
+                lower = scales::percent(results_df$lower[i], accuracy = 0.1),
+                upper = scales::percent(results_df$upper[i], accuracy = 0.1)
+              )
+            )
+          }
+
+          # Generate summary text
+          survTableSummary <- sapply(seq_len(nrow(results_df)), function(i) {
+            glue::glue(
+              "For {results_df$strata[i]} at {results_df$time[i]} months, ",
+              "the adjusted survival probability is {scales::percent(results_df$surv[i], accuracy=0.1)} ",
+              "[{scales::percent(results_df$lower[i], accuracy=0.1)}-",
+              "{scales::percent(results_df$upper[i], accuracy=0.1)}, 95% CI]. ",
+              "These estimates account for the average values of all covariates in the model."
+            )
+          })
+
+          self$results$adjustedSurvTableSummary$setContent(survTableSummary)
+
+          return(results_df)
+        }
+
+        return(NULL)
+      }
+
+
+
+
+
+      ,
+      .adjustedPairwise = function(results, cox_model) {
+        mytime <- results$name1time
+        myoutcome <- results$name2outcome
+        adj_var <- results$adjexplanatory_name
+        mydata <- results$cleanData
+
+        # Error checking
+        if (is.null(mydata) || is.null(cox_model)) {
+          warning("Missing data or model for pairwise comparisons")
+          return(NULL)
+        }
+
+        # Get levels of adjustment variable
+        levels <- sort(unique(mydata[[adj_var]]))
+        if (length(levels) < 2) {
+          warning("Need at least 2 levels for pairwise comparisons")
+          return(NULL)
+        }
+
+        # Create base prediction dataset with average covariate values
+        pred_base <- data.frame(mytime = max(mydata[[mytime]]))
+        for (var in names(mydata)) {
+          if (var != "mytime" && var != adj_var && var != "row_names") {
+            if (is.numeric(mydata[[var]])) {
+              pred_base[[var]] <- mean(mydata[[var]], na.rm = TRUE)
+            } else if (is.factor(mydata[[var]])) {
+              pred_base[[var]] <- names(which.max(table(mydata[[var]])))
+            }
+          }
+        }
+
+        # Initialize p-value matrix
+        n_levels <- length(levels)
+        p_values <- matrix(NA, n_levels, n_levels)
+        rownames(p_values) <- levels
+        colnames(p_values) <- levels
+
+        # Calculate pairwise comparisons
+        for (i in 1:(n_levels-1)) {
+          for (j in (i+1):n_levels) {
+            tryCatch({
+              # Create test dataset for these two levels
+              test_data <- rbind(pred_base, pred_base)
+              test_data[[adj_var]] <- factor(c(levels[i], levels[j]))
+
+              # Calculate survival difference
+              test_fit <- survival::survfit(cox_model, newdata = test_data)
+              surv_diff <- survdiff(Surv(mytime, myoutcome) ~ factor(test_data[[adj_var]]))
+              p_val <- 1 - pchisq(surv_diff$chisq, df = 1)
+
+              p_values[i,j] <- p_val
+              p_values[j,i] <- p_val
+            }, error = function(e) {
+              warning(paste("Error comparing levels", levels[i], "and", levels[j], ":", e$message))
+            })
+          }
+        }
+
+        # Adjust p-values
+        padjustmethod <- self$options$padjustmethod
+        adj_p <- p.adjust(p_values[upper.tri(p_values)], method = padjustmethod)
+        p_values[upper.tri(p_values)] <- adj_p
+        p_values[lower.tri(p_values)] <- t(p_values)[lower.tri(p_values)]
+
+        # Convert to long format
+        comparisons <- list()
+        counter <- 1
+        for (i in 1:(n_levels-1)) {
+          for (j in (i+1):n_levels) {
+            if (!is.na(p_values[i,j])) {
+              comparisons[[counter]] <- list(
+                rowname = levels[i],
+                name = levels[j],
+                value = p_values[i,j]
+              )
+              counter <- counter + 1
+            }
+          }
+        }
+
+        # Add to results if we have any comparisons
+        if (length(comparisons) > 0) {
+          # Clear existing rows
+          self$results$adjustedPairwiseTable$setRows(NULL)
+
+          # Add new rows
+          for (i in seq_along(comparisons)) {
+            comp <- comparisons[[i]]
+            self$results$adjustedPairwiseTable$addRow(
+              rowKey = i,
+              values = list(
+                rowname = comp$rowname,
+                name = comp$name,
+                value = format.pval(comp$value, digits = 3)
+              )
+            )
+          }
+
+          # Create summary text
+          summaries <- lapply(comparisons, function(comp) {
+            glue::glue(
+              "The adjusted survival difference between {comp$rowname} and {comp$name} groups ",
+              "has a p-value of {format.pval(comp$value, digits=3, eps=0.001)}. ",
+              "This comparison accounts for covariates set at their average values. ",
+              "{if(comp$value < 0.05) 'This difference is statistically significant' else 'This difference is not statistically significant'} ",
+              "after {padjustmethod} adjustment for multiple comparisons."
+            )
+          })
+
+          self$results$adjustedPairwiseSummary$setContent(unlist(summaries))
+        }
+
+        return(comparisons)
+      }
+
+
+
+      ,
+      .adjustedMedianSurv = function(results, cox_model) {
+        mytime <- results$name1time
+        myoutcome <- results$name2outcome
+        adj_var <- results$adjexplanatory_name
+        mydata <- results$cleanData
+
+        # Get levels of adjustment variable
+        levels <- sort(unique(mydata[[adj_var]]))
+
+        # Create prediction data with average covariate values
+        pred_data <- data.frame(
+          mytime = sort(unique(mydata[[mytime]]))
         )
 
+        # Add mean/mode values for covariates
+        for (var in names(mydata)) {
+          if (var != "mytime" && var != adj_var && var != "row_names") {
+            if (is.numeric(mydata[[var]])) {
+              pred_data[[var]] <- mean(mydata[[var]], na.rm = TRUE)
+            } else if (is.factor(mydata[[var]])) {
+              pred_data[[var]] <- names(which.max(table(mydata[[var]])))
+            }
+          }
+        }
 
-        # return(curve_data)
+        # Calculate adjusted survival for each level
+        results_list <- list()
+
+        for (level in levels) {
+          level_data <- pred_data
+          level_data[[adj_var]] <- level
+
+          # Calculate adjusted survival
+          adj_surv <- survival::survfit(cox_model, newdata = level_data)
+
+          # Get summary stats
+          surv_summary <- summary(adj_surv)
+
+          # Extract median and CI
+          median_time <- surv_summary$table["median"]
+          lcl <- surv_summary$table["0.95LCL"]
+          ucl <- surv_summary$table["0.95UCL"]
+
+          results_list[[level]] <- list(
+            factor = level,
+            median = median_time,
+            x0_95lcl = lcl,
+            x0_95ucl = ucl,
+            records = sum(!is.na(mydata[[mytime]][mydata[[adj_var]] == level])),
+            events = sum(mydata[[myoutcome]][mydata[[adj_var]] == level] == 1, na.rm = TRUE)
+          )
+        }
+
+        # Convert to data frame
+        results_df <- do.call(rbind, lapply(results_list, as.data.frame))
+        results_df <- as.data.frame(results_df)
+
+        # Add to results table
+        medianTable <- self$results$adjustedMedianTable
+        for (i in seq_len(nrow(results_df))) {
+          medianTable$addRow(
+            rowKey = i,
+            values = list(
+              factor = results_df$factor[i],
+              records = results_df$records[i],
+              events = results_df$events[i],
+              median = round(results_df$median[i], 1),
+              x0_95lcl = round(results_df$x0_95lcl[i], 1),
+              x0_95ucl = round(results_df$x0_95ucl[i], 1)
+            )
+          )
+        }
+
+        # Create summary text
+        summaries <- lapply(levels, function(level) {
+          result <- results_df[results_df$factor == level,]
+
+          description <- glue::glue(
+            "For {adj_var} = {level}, adjusted median survival is {round(result$median, 1)} ",
+            "[{round(result$x0_95lcl, 1)} - {round(result$x0_95ucl, 1)}, 95% CI] ",
+            self$options$timetypeoutput, "."
+          )
+
+          if (is.na(result$median)) {
+            description <- paste0(
+              description,
+              "\nNote: The adjusted survival curve for this group does not drop below 1/2 during ",
+              "the observation period, thus the median survival is undefined."
+            )
+          }
+
+          return(description)
+        })
+
+        medianSummary <- c(
+          unlist(summaries),
+          "The median survival time is when 50% of subjects have experienced the event.",
+          "These estimates account for the average values of all other covariates in the model."
+        )
+
+        self$results$adjustedMedianSummary$setContent(medianSummary)
       }
+
+      ,
+      .adjustedCox = function(results, cox_model) {
+        mydata <- results$cleanData
+        adj_var <- results$adjexplanatory_name
+
+        # Get Cox model summary
+        cox_summary <- summary(cox_model)
+
+        # Create metrics summary
+        tCoxtext2 <- glue::glue("
+        <br>
+        <b>Model Metrics:</b><br>
+        Concordance: {round(cox_summary$concordance[1], 3)} (SE = {round(cox_summary$concordance[2], 3)})<br>
+        Likelihood ratio test = {round(cox_summary$logtest[1], 2)}, df = {cox_summary$logtest[2]}, p = {format.pval(cox_summary$logtest[3], digits=3)}<br>
+        Wald test = {round(cox_summary$waldtest[1], 2)}, df = {cox_summary$waldtest[2]}, p = {format.pval(cox_summary$waldtest[3], digits=3)}<br>
+        Score test = {round(cox_summary$sctest[1], 2)}, df = {cox_summary$sctest[2]}, p = {format.pval(cox_summary$sctest[3], digits=3)}<br>
+    ")
+
+        if (self$options$uselandmark) {
+          landmark <- jmvcore::toNumeric(self$options$landmark)
+          tCoxtext2 <- glue::glue(
+            tCoxtext2,
+            "Landmark time used as: ", landmark, " ", self$options$timetypeoutput, "."
+          )
+        }
+
+        self$results$adjustedCoxText$setContent(tCoxtext2)
+
+        # Extract hazard ratios and CIs
+        coef_matrix <- cbind(
+          exp(cox_summary$coefficients[, 1]),  # HR
+          exp(cox_summary$coefficients[, 1] - 1.96 * cox_summary$coefficients[, 3]),  # Lower CI
+          exp(cox_summary$coefficients[, 1] + 1.96 * cox_summary$coefficients[, 3]),  # Upper CI
+          cox_summary$coefficients[, 5]  # p-value
+        )
+
+        # Create Cox table
+        coxTable <- self$results$adjustedCoxTable
+        rownames <- row.names(cox_summary$coefficients)
+
+        for (i in seq_len(nrow(coef_matrix))) {
+          coxTable$addRow(
+            rowKey = i,
+            values = list(
+              Variable = rownames[i],
+              HR = sprintf("%.2f (%.2f-%.2f)",
+                           coef_matrix[i,1], coef_matrix[i,2], coef_matrix[i,3]),
+              Pvalue = format.pval(coef_matrix[i,4], digits=3)
+            )
+          )
+        }
+
+        # Create interpretive summary
+        coxSummary <- sapply(seq_len(nrow(coef_matrix)), function(i) {
+          hr <- coef_matrix[i,1]
+          var_name <- rownames[i]
+
+          glue::glue(
+            "For {var_name}, the adjusted hazard ratio is {round(hr,2)} ",
+            "({round(coef_matrix[i,2],2)}-{round(coef_matrix[i,3],2)}, 95% CI). ",
+            "This means that, after adjusting for other covariates, ",
+            "{ifelse(hr > 1,
+                paste('there is a', round((hr-1)*100,1), '% increase in hazard'),
+                paste('there is a', round((1-hr)*100,1), '% decrease in hazard'))} ",
+            "for each unit increase in {var_name}."
+          )
+        })
+
+        coxSummary <- c(
+          unlist(coxSummary),
+          "A hazard ratio greater than 1 indicates increased risk, while less than 1 indicates decreased risk.",
+          "All estimates are adjusted for other variables in the model."
+        )
+
+        self$results$adjustedCoxSummary$setContent(coxSummary)
+
+        # Proportional hazards check if requested
+        if (self$options$ph_cox) {
+          zph <- survival::cox.zph(cox_model)
+          self$results$adjustedCoxPH$setContent(print(zph))
+
+          # Set state for plot
+          image8 <- self$results$adjustedCoxPHPlot
+          image8$setState(zph)
+        }
+      }
+
+
+
+      # ,
+      # .calculateAdjustedCurves = function(cox_model, mydata, adjexplanatory_name, fallback = TRUE) {
+      #
+      #   method <- self$options$ac_method
+      #
+      #   # Try to calculate adjusted curves with specified method
+      #   adj_curves <-  tryCatch({
+      #       survminer::ggadjustedcurves(
+      #         fit = cox_model,
+      #         data = mydata,
+      #         variable = adjexplanatory_name,
+      #         method = method,
+      #         conf.int = self$options$ci95,
+      #         risk.table = self$options$risktable,
+      #         xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+      #         title = paste0(
+      #           "Adjusted Survival Curves for ",
+      #           self$options$adjexplanatory,
+      #           " (", method, " adjustment)"
+      #         ),
+      #         pval = self$options$pplot,
+      #         pval.method = self$options$pplot,
+      #         legend = "none",
+      #         break.time.by = self$options$byplot,
+      #         xlim = c(0, self$options$endplot),
+      #         censored = self$options$censored
+      #       )
+      #     }, error = function(e) {
+      #       # If marginal method fails, try average method instead
+      #       if (method == "marginal") {
+      #         warning("Marginal method failed, falling back to average method")
+      #         survminer::ggadjustedcurves(
+      #           fit = cox_model,
+      #           data = mydata,
+      #           variable = adjexplanatory_name,
+      #           method = "average",  # Fallback to average method
+      #           conf.int = self$options$ci95,
+      #           risk.table = self$options$risktable,
+      #           xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+      #           title = paste0(
+      #             "Adjusted Survival Curves for ",
+      #             self$options$adjexplanatory,
+      #             " (average adjustment - marginal failed)"
+      #           ),
+      #           pval = self$options$pplot,
+      #           pval.method = self$options$pplot,
+      #           legend = "none",
+      #           break.time.by = self$options$byplot,
+      #           xlim = c(0, self$options$endplot),
+      #           censored = self$options$censored
+      #         )
+      #       } else {
+      #         stop(paste("Error creating adjusted curves:", e$message))
+      #       }
+      #     }
+      #       )
+      #
+      #
+      #   # image_plot_adj <- self$results$plot_adj
+      #   # image_plot_adj$setState(adj_curves)
+      #
+      #
+      #   # Extract and structure the data
+      #   # curve_data <- list(
+      #   #   curves = adj_curves,
+      #   #   model = cox_model,
+      #   #   data = mydata,
+      #   #   variable = adjexplanatory_name,
+      #   #   method = method
+      #   # )
+      #
+      #   # class(curve_data) <- "adjusted_curves"
+      #
+      #
+      #   # View curve_data ----
+      #   self$results$mydataview_curve_data$setContent(
+      #     list(
+      #       # curves = adj_curves,
+      #       model = cox_model,
+      #       data = mydata,
+      #       variable = adjexplanatory_name,
+      #       method = method
+      #     )
+      #   )
+      #
+      #
+      #   # return(curve_data)
+      # }
 
 
 
@@ -1703,145 +2457,145 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 
-      ,
-      .plot_adj = function(image_plot_adj, ggtheme, theme, ...) {
-        if (!self$options$ac) {
-          return()
-        }
-
-        if (!self$options$ac_curve) {
-          return()
-        }
-
-
-        # mydata <- image_plot_adj$state$mydata
-        # cox_model <- image_plot_adj$state$cox_model
-        # adjexplanatory_name <- image_plot_adj$state$adjexplanatory_name
-
-
-
-        cleaneddata <- private$.cleandata()
-
-        name1time <- cleaneddata$name1time
-        name2outcome <- cleaneddata$name2outcome
-        name3contexpl <- cleaneddata$name3contexpl
-        name3expl <- cleaneddata$name3expl
-        adjexplanatory_name <- cleaneddata$adjexplanatory_name
-
-        mydata <- cleanData <- cleaneddata$cleanData
-
-        mytime_labelled <- cleaneddata$mytime_labelled
-        myoutcome_labelled <- cleaneddata$myoutcome_labelled
-        mydxdate_labelled <- cleaneddata$mydxdate_labelled
-        myfudate_labelled <- cleaneddata$myfudate_labelled
-        myexplanatory_labelled <- cleaneddata$myexplanatory_labelled
-        mycontexpl_labelled <- cleaneddata$mycontexpl_labelled
-        adjexplanatory_labelled <- cleaneddata$adjexplanatory_labelled
-
-
-
-        # Add stratification variables
-        mystratvar <- NULL
-        if (self$options$use_stratify && !is.null(self$options$stratvar)) {
-          mystratvar <- as.vector(cleaneddata$mystratvar_labelled)
-          # Create strata terms
-          mystratvar <- paste0("strata(", mystratvar, ")")
-        }
-
-
-
-        myexplanatory <- NULL
-        if (!is.null(self$options$explanatory)) {
-          myexplanatory <- as.vector(myexplanatory_labelled)
-        }
-
-        mycontexpl <- NULL
-        if (!is.null(self$options$contexpl)) {
-          mycontexpl <- as.vector(mycontexpl_labelled)
-        }
-
-
-        formula2 <- c(myexplanatory, mycontexpl, mystratvar)
-
-
-
-        LHT <- "survival::Surv(mytime, myoutcome)"
-
-        RHT <- formula2
-
-        RHT <- paste(RHT, collapse = " + ")
-
-        coxformula <- paste0(LHT, " ~ ", RHT)
-
-        coxformula <- as.formula(coxformula)
-
-        cox_model <- survival::coxph(coxformula, data = mydata)
-
-
-
-        fallback <- TRUE
-        method <- self$options$ac_method
-
-        # Try to calculate adjusted curves with specified method
-        adj_curves <-  tryCatch({
-          survminer::ggadjustedcurves(
-            fit = cox_model,
-            data = mydata,
-            variable = adjexplanatory_name,
-            method = method,
-            conf.int = self$options$ci95,
-            risk.table = self$options$risktable,
-            xlab = paste0('Time (', self$options$timetypeoutput, ')'),
-            title = paste0(
-              "Adjusted Survival Curves for ",
-              self$options$adjexplanatory,
-              " (", method, " adjustment)"
-            ),
-            pval = self$options$pplot,
-            pval.method = self$options$pplot,
-            legend = "none",
-            break.time.by = self$options$byplot,
-            xlim = c(0, self$options$endplot),
-            censored = self$options$censored
-          )
-        }, error = function(e) {
-          # If marginal method fails, try average method instead
-          if (method == "marginal") {
-            warning("Marginal method failed, falling back to average method")
-            survminer::ggadjustedcurves(
-              fit = cox_model,
-              data = mydata,
-              variable = adjexplanatory_name,
-              method = "average",  # Fallback to average method
-              conf.int = self$options$ci95,
-              risk.table = self$options$risktable,
-              xlab = paste0('Time (', self$options$timetypeoutput, ')'),
-              title = paste0(
-                "Adjusted Survival Curves for ",
-                self$options$adjexplanatory,
-                " (average adjustment - marginal failed)"
-              ),
-              pval = self$options$pplot,
-              pval.method = self$options$pplot,
-              legend = "none",
-              break.time.by = self$options$byplot,
-              xlim = c(0, self$options$endplot),
-              censored = self$options$censored
-            )
-          } else {
-            stop(paste("Error creating adjusted curves:", e$message))
-          }
-        }
-        )
-
-
-
-
-        print(adj_curves)
-        TRUE
-
-
-      }
+      # ,
+      # .plot_adj = function(image_plot_adj, ggtheme, theme, ...) {
+      #   if (!self$options$ac) {
+      #     return()
+      #   }
+      #
+      #   if (!self$options$ac_curve) {
+      #     return()
+      #   }
+      #
+      #
+      #   # mydata <- image_plot_adj$state$mydata
+      #   # cox_model <- image_plot_adj$state$cox_model
+      #   # adjexplanatory_name <- image_plot_adj$state$adjexplanatory_name
+      #
+      #
+      #
+      #   cleaneddata <- private$.cleandata()
+      #
+      #   name1time <- cleaneddata$name1time
+      #   name2outcome <- cleaneddata$name2outcome
+      #   name3contexpl <- cleaneddata$name3contexpl
+      #   name3expl <- cleaneddata$name3expl
+      #   adjexplanatory_name <- cleaneddata$adjexplanatory_name
+      #
+      #   mydata <- cleanData <- cleaneddata$cleanData
+      #
+      #   mytime_labelled <- cleaneddata$mytime_labelled
+      #   myoutcome_labelled <- cleaneddata$myoutcome_labelled
+      #   mydxdate_labelled <- cleaneddata$mydxdate_labelled
+      #   myfudate_labelled <- cleaneddata$myfudate_labelled
+      #   myexplanatory_labelled <- cleaneddata$myexplanatory_labelled
+      #   mycontexpl_labelled <- cleaneddata$mycontexpl_labelled
+      #   adjexplanatory_labelled <- cleaneddata$adjexplanatory_labelled
+      #
+      #
+      #
+      #   # Add stratification variables
+      #   mystratvar <- NULL
+      #   if (self$options$use_stratify && !is.null(self$options$stratvar)) {
+      #     mystratvar <- as.vector(cleaneddata$mystratvar_labelled)
+      #     # Create strata terms
+      #     mystratvar <- paste0("strata(", mystratvar, ")")
+      #   }
+      #
+      #
+      #
+      #   myexplanatory <- NULL
+      #   if (!is.null(self$options$explanatory)) {
+      #     myexplanatory <- as.vector(myexplanatory_labelled)
+      #   }
+      #
+      #   mycontexpl <- NULL
+      #   if (!is.null(self$options$contexpl)) {
+      #     mycontexpl <- as.vector(mycontexpl_labelled)
+      #   }
+      #
+      #
+      #   formula2 <- c(myexplanatory, mycontexpl, mystratvar)
+      #
+      #
+      #
+      #   LHT <- "survival::Surv(mytime, myoutcome)"
+      #
+      #   RHT <- formula2
+      #
+      #   RHT <- paste(RHT, collapse = " + ")
+      #
+      #   coxformula <- paste0(LHT, " ~ ", RHT)
+      #
+      #   coxformula <- as.formula(coxformula)
+      #
+      #   cox_model <- survival::coxph(coxformula, data = mydata)
+      #
+      #
+      #
+      #   fallback <- TRUE
+      #   method <- self$options$ac_method
+      #
+      #   # Try to calculate adjusted curves with specified method
+      #   adj_curves <-  tryCatch({
+      #     survminer::ggadjustedcurves(
+      #       fit = cox_model,
+      #       data = mydata,
+      #       variable = adjexplanatory_name,
+      #       method = method,
+      #       conf.int = self$options$ci95,
+      #       risk.table = self$options$risktable,
+      #       xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+      #       title = paste0(
+      #         "Adjusted Survival Curves for ",
+      #         self$options$adjexplanatory,
+      #         " (", method, " adjustment)"
+      #       ),
+      #       pval = self$options$pplot,
+      #       pval.method = self$options$pplot,
+      #       legend = "none",
+      #       break.time.by = self$options$byplot,
+      #       xlim = c(0, self$options$endplot),
+      #       censored = self$options$censored
+      #     )
+      #   }, error = function(e) {
+      #     # If marginal method fails, try average method instead
+      #     if (method == "marginal") {
+      #       warning("Marginal method failed, falling back to average method")
+      #       survminer::ggadjustedcurves(
+      #         fit = cox_model,
+      #         data = mydata,
+      #         variable = adjexplanatory_name,
+      #         method = "average",  # Fallback to average method
+      #         conf.int = self$options$ci95,
+      #         risk.table = self$options$risktable,
+      #         xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+      #         title = paste0(
+      #           "Adjusted Survival Curves for ",
+      #           self$options$adjexplanatory,
+      #           " (average adjustment - marginal failed)"
+      #         ),
+      #         pval = self$options$pplot,
+      #         pval.method = self$options$pplot,
+      #         legend = "none",
+      #         break.time.by = self$options$byplot,
+      #         xlim = c(0, self$options$endplot),
+      #         censored = self$options$censored
+      #       )
+      #     } else {
+      #       stop(paste("Error creating adjusted curves:", e$message))
+      #     }
+      #   }
+      #   )
+      #
+      #
+      #
+      #
+      #   print(adj_curves)
+      #   TRUE
+      #
+      #
+      # }
 
 
 

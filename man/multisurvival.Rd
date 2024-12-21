@@ -38,7 +38,6 @@ multisurvival(
   pplot = TRUE,
   ac = FALSE,
   adjexplanatory,
-  ac_curve = FALSE,
   ac_method = "average",
   ac_summary = FALSE,
   ac_timepoints = "12, 36, 60",
@@ -158,28 +157,19 @@ marks) on the survival plot.}
 \item{pplot}{If true, displays the p-value from the survival comparison
 test on the survival plot.}
 
-\item{ac}{If true, computes and displays adjusted survival curves based on
-specified variables.}
+\item{ac}{.}
 
-\item{adjexplanatory}{The categorical variable used to stratify and adjust
-the survival curve. Only relevant if \code{ac} = true.}
+\item{adjexplanatory}{.}
 
-\item{ac_curve}{.}
+\item{ac_method}{Method for computing adjusted survival curves}
 
-\item{ac_method}{The method used to compute adjusted survival curves. This
-affects how covariates are handled when producing adjusted survival
-estimates.}
+\item{ac_summary}{Calculate and display summary statistics for adjusted
+curves}
 
-\item{ac_summary}{If true, calculates and displays summary statistics
-(e.g., survival probabilities at specific timepoints) for the adjusted
-survival curves.}
+\item{ac_timepoints}{Timepoints for calculating summary statistics
+(comma-separated)}
 
-\item{ac_timepoints}{Comma-separated time points (in \code{timetypeoutput}
-units) at which summary statistics for adjusted curves are calculated. For
-example: '12, 36, 60' for 12, 36, and 60 months.}
-
-\item{ac_compare}{If true, performs a statistical comparison (e.g.,
-log-rank test) between adjusted survival curves.}
+\item{ac_compare}{Perform statistical comparison between adjusted curves}
 
 \item{reduced_explanatory}{Variables to include in a reduced model for
 comparison. This can be used to test whether excluding some variables
@@ -225,8 +215,6 @@ A results object containing:
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
-\code{results$mydataview_adj_stats} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$mydataview_adj_summary} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
 \code{results$riskScoreTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$riskScoreMetrics} \tab \tab \tab \tab \tab a html \cr
@@ -236,13 +224,19 @@ A results object containing:
 \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
 \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
-\code{results$mydataview_curve_data} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$adjustedSummaryStats} \tab \tab \tab \tab \tab a html \cr
 \code{results$adjustedSummaryTable} \tab \tab \tab \tab \tab a table \cr
-\code{results$adjustedComparison} \tab \tab \tab \tab \tab a html \cr
-\code{results$ac_summary_table} \tab \tab \tab \tab \tab a table \cr
-\code{results$ac_landmark_table} \tab \tab \tab \tab \tab a table \cr
-\code{results$ac_text_summary} \tab \tab \tab \tab \tab a html \cr
+\code{results$adjustedComparison} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$adjustedSurvTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$adjustedSurvTableSummary} \tab \tab \tab \tab \tab a html \cr
+\code{results$adjustedPairwiseTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$adjustedPairwiseSummary} \tab \tab \tab \tab \tab a html \cr
+\code{results$adjustedMedianTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$adjustedMedianSummary} \tab \tab \tab \tab \tab a html \cr
+\code{results$adjustedCoxTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$adjustedCoxText} \tab \tab \tab \tab \tab a html \cr
+\code{results$adjustedCoxSummary} \tab \tab \tab \tab \tab a html \cr
+\code{results$adjustedCoxPH} \tab \tab \tab \tab \tab a html \cr
+\code{results$adjustedCoxPHPlot} \tab \tab \tab \tab \tab an image \cr
 \code{results$model_comparison} \tab \tab \tab \tab \tab a html \cr
 \code{results$reduced_model_metrics} \tab \tab \tab \tab \tab a html \cr
 \code{results$text_model_selection} \tab \tab \tab \tab \tab a html \cr

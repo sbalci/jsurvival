@@ -21,7 +21,6 @@ options:
           R: >
             The data as a data frame.
 
-
     - name: explanatory
       title: Explanatory Variables
       type: Variables

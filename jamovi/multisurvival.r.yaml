@@ -156,14 +156,14 @@ items:
 
 
 
-    - name:  mydataview_adj_stats
-      title: mydataview
-      type:  Preformatted
+    # - name:  mydataview_adj_stats
+    #   title: mydataview
+    #   type:  Preformatted
 
 
-    - name:  mydataview_adj_summary
-      title: mydataview
-      type:  Preformatted
+    # - name:  mydataview_adj_summary
+    #   title: mydataview
+    #   type:  Preformatted
 
 
 
@@ -362,20 +362,15 @@ items:
           - addRiskGroup
 
 
-    - name:  mydataview_plot_adj
-      title: mydataview_plot_adj
-      type:  Preformatted
+    # - name:  mydataview_plot_adj
+    #   title: mydataview_plot_adj
+    #   type:  Preformatted
 
 
+    # - name:  mydataview_calculateAdjustedStats
+    #   title: mydataview_calculateAdjustedStats
+    #   type:  Preformatted
 
-    # - name: adj_curves
-    #   title: Adjusted Survival Curves
-    #   type: Image
-    #   width: 600
-    #   height: 450
-    #   renderFun: .plotAdjustedCurves
-    #   visible: (ac)
-    #   requiresData: true
 
 
 
@@ -385,7 +380,7 @@ items:
       width: 600
       height: 450
       renderFun: .plot_adj
-      visible: (ac && ac_curve)
+      visible: (ac)
       refs: survminer
       clearWith:
           - ac
@@ -393,26 +388,6 @@ items:
           - ci95
           - risktable
           - ac_method
-
-
-    # - name:  mydataview_calculateAdjustedStats
-    #   title: mydataview_calculateAdjustedStats
-    #   type:  Preformatted
-
-
-
-    - name:  mydataview_curve_data
-      title: mydataview_curve_data
-      type:  Preformatted
-      visible: (ac)
-
-
-
-    - name:  adjustedSummaryStats
-      title: adjustedSummaryStats
-      type:  Html
-
-
 
     - name: adjustedSummaryTable
       title: Adjusted Survival Summary
@@ -449,77 +424,176 @@ items:
 
     - name: adjustedComparison
       title: Statistical Comparison of Adjusted Curves
-      type: Html
+      type: Preformatted
       visible: (ac_compare)
       clearWith:
           - ac_compare
           - ac_method
           - adjexplanatory
 
-
-
-    - name: ac_summary_table
-      title: Adjusted Survival Analysis
+    - name: adjustedSurvTable
+      title: Adjusted Survival Table
       type: Table
       rows: 0
-      visible: (ac_summary)
       columns:
-        - name: group
-          title: Group
+        - name: strata
+          title: "Level"
           type: text
-        - name: n
-          title: N
+        - name: time
+          title: "Time"
           type: integer
-        - name: median_time
-          title: Median Survival
-          type: number
-        - name: median_surv
-          title: Median Survival Rate
-          type: number
-        - name: hr
-          title: Hazard Ratio
-          type: number
-        - name: hr_ci_lower
-          title: HR CI Lower
-          type: number
-        - name: hr_ci_upper
-          title: HR CI Upper
-          type: number
-
-    - name: ac_landmark_table
-      title: Landmark Analysis
-      type: Table
-      rows: 0
-      visible: (ac_summary)
-      columns:
-        - name: group
-          title: Group
+        - name: n.risk
+          title: "Number at Risk"
+          type: integer
+        - name: n.event
+          title: "Events"
+          type: integer
+        - name: surv
+          title: "Adjusted Survival"
           type: text
-        - name: timepoint
-          title: Time
-          type: integer
-        - name: survival_rate
-          title: Survival Rate
-          type: number
-        - name: ci_lower
-          title: CI Lower
-          type: number
-        - name: ci_upper
-          title: CI Upper
-          type: number
+        - name: lower
+          title: "95% CI Lower"
+          type: text
+        - name: upper
+          title: "95% CI Upper"
+          type: text
+      clearWith:
+          - ac
+          - ac_timepoints
+          - adjexplanatory
 
-    - name: ac_text_summary
-      title: Analysis Summary
+    - name: adjustedSurvTableSummary
+      title: Adjusted Survival Summary
       type: Html
-      visible: (ac_summary)
+      clearWith:
+          - ac
+          - ac_timepoints
+          - adjexplanatory
 
-    # - name: plot_adjusted_curves
-    #   title: Adjusted Survival Plot
-    #   type: Image
-    #   width: 600
-    #   height: 450
-    #   renderFun: .plot_adjusted_curves
-    #   visible: (ac)
+    - name: adjustedPairwiseTable
+      title: Pairwise Comparisons of Adjusted Survival
+      type: Table
+      rows: 0
+      columns:
+        - name: rowname
+          title: "Group 1"
+          type: text
+        - name: name
+          title: "Group 2"
+          type: text
+        - name: value
+          title: "Adjusted p-value"
+          type: number
+          format: zto,pvalue
+      visible: (ac_compare)
+      clearWith:
+          - ac
+          - ac_compare
+          - adjexplanatory
+          - padjustmethod
+      refs:
+          - padjust
+
+    - name: adjustedPairwiseSummary
+      title: Pairwise Comparison Summary
+      type: Html
+      visible: (ac_compare)
+      clearWith:
+          - ac
+          - ac_compare
+          - adjexplanatory
+          - padjustmethod
+
+    - name: adjustedMedianTable
+      title: Adjusted Median Survival
+      type: Table
+      rows: 0
+      columns:
+        - name: factor
+          title: "Level"
+          type: text
+        - name: records
+          title: "Records"
+          type: integer
+        - name: events
+          title: "Events"
+          type: integer
+        - name: median
+          title: "Median"
+          type: number
+        - name: x0_95lcl
+          title: "Lower"
+          superTitle: "95% CI"
+          type: number
+        - name: x0_95ucl
+          title: "Upper"
+          superTitle: "95% CI"
+          type: number
+      clearWith:
+          - ac
+          - adjexplanatory
+
+    - name: adjustedMedianSummary
+      title: Adjusted Median Survival Summary
+      type: Html
+      clearWith:
+          - ac
+          - adjexplanatory
+
+    - name: adjustedCoxTable
+      title: Adjusted Cox Model Results
+      type: Table
+      rows: 0
+      columns:
+        - name: Variable
+          title: "Variable"
+          type: text
+        - name: HR
+          title: "HR (95% CI)"
+          type: text
+        - name: Pvalue
+          title: "P-value"
+          type: number
+          format: zto,pvalue
+      clearWith:
+          - ac
+          - adjexplanatory
+
+    - name: adjustedCoxText
+      title: Adjusted Cox Model Metrics
+      type: Html
+      clearWith:
+          - ac
+          - adjexplanatory
+
+    - name: adjustedCoxSummary
+      title: Adjusted Cox Model Interpretation
+      type: Html
+      clearWith:
+          - ac
+          - adjexplanatory
+
+    - name: adjustedCoxPH
+      title: Proportional Hazards Test
+      type: Html
+      visible: (ph_cox)
+      clearWith:
+          - ac
+          - adjexplanatory
+          - ph_cox
+
+    - name: adjustedCoxPHPlot
+      title: Proportional Hazards Plot
+      type: Image
+      width: 600
+      height: 450
+      renderFun: .plotAdjustedPH
+      visible: (ph_cox)
+      clearWith:
+          - ac
+          - adjexplanatory
+          - ph_cox
+
 
 
     - name: model_comparison
