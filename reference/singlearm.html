@@ -126,47 +126,71 @@ be in a consistent date format (e.g., YYYY-MM-DD).</p></dd>
 
 
 <dt id="arg-outcome">outcome<a class="anchor" aria-label="anchor" href="#arg-outcome"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>The outcome or event of interest for each patient. Should be
+a factor or numeric variable indicating whether the patient experienced the
+event (e.g., death) or censoring (e.g., end of follow-up).</p></dd>
 
 
 <dt id="arg-outcomelevel">outcomeLevel<a class="anchor" aria-label="anchor" href="#arg-outcomelevel"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Select the level of the outcome variable that
+represents the event of interest. For example, if the outcome variable is
+"death_status" with levels "Alive" and "Dead", select "Dead" as the event
+level.</p></dd>
 
 
 <dt id="arg-dod">dod<a class="anchor" aria-label="anchor" href="#arg-dod"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Select the level of the outcome variable that represents death
+due to disease. This is useful for competing risk analysis when there are
+multiple event types.</p></dd>
 
 
 <dt id="arg-dooc">dooc<a class="anchor" aria-label="anchor" href="#arg-dooc"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Select the level of the outcome variable that represents death
+due to other causes. This is useful for competing risk analysis when there
+are multiple event types.</p></dd>
 
 
 <dt id="arg-awd">awd<a class="anchor" aria-label="anchor" href="#arg-awd"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Select the level of the outcome variable that represents being
+alive with disease. This is useful for competing risk analysis when there
+are multiple event types.</p></dd>
 
 
 <dt id="arg-awod">awod<a class="anchor" aria-label="anchor" href="#arg-awod"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Select the level of the outcome variable that represents being
+alive without disease. This is useful for competing risk analysis when
+there are multiple event types.</p></dd>
 
 
 <dt id="arg-analysistype">analysistype<a class="anchor" aria-label="anchor" href="#arg-analysistype"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Select the type of survival analysis to perform.
+"Overall" analyzes the survival of all patients regardless of event type.
+"Cause Specific" analyzes the survival for a specific event type (e.g.,
+death due to disease). "Competing Risk" analyzes the survival for multiple
+event types simultaneously.</p></dd>
 
 
 <dt id="arg-cutp">cutp<a class="anchor" aria-label="anchor" href="#arg-cutp"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Specify the time points at which to calculate survival
+probabilities. Enter a comma-separated list of time points in consistent
+units (e.g., months or years). For example, "12, 36, 60" calculates
+survival probabilities at 1, 3, and 5 years.</p></dd>
 
 
 <dt id="arg-timetypedata">timetypedata<a class="anchor" aria-label="anchor" href="#arg-timetypedata"></a></dt>
-<dd><p>select the time type in data</p></dd>
+<dd><p>select the time type in data (e.g., YYYY-MM-DD)</p></dd>
 
 
 <dt id="arg-timetypeoutput">timetypeoutput<a class="anchor" aria-label="anchor" href="#arg-timetypeoutput"></a></dt>
-<dd><p>select the time type in output</p></dd>
+<dd><p>select the time type in output (default is months)</p></dd>
 
 
 <dt id="arg-uselandmark">uselandmark<a class="anchor" aria-label="anchor" href="#arg-uselandmark"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enables landmark analysis, which addresses immortal time
+bias by analyzing survival only for patients who survive to a specified
+timepoint (the landmark). Use this when you want to eliminate the effect of
+early deaths or when comparing treatments that can only be given to
+patients who survive long enough to receive them.</p></dd>
 
 
 <dt id="arg-landmark">landmark<a class="anchor" aria-label="anchor" href="#arg-landmark"></a></dt>
@@ -178,51 +202,81 @@ patients who survive long enough to receive them.</p></dd>
 
 
 <dt id="arg-sc">sc<a class="anchor" aria-label="anchor" href="#arg-sc"></a></dt>
-<dd><p>Generate a Kaplan-Meier survival plot with confidence intervals.</p></dd>
+<dd><p>Enable this option to generate a Kaplan-Meier survival plot with
+confidence intervals. This plot shows the estimated survival probability
+over time and is useful for visualizing survival trends in your data.</p></dd>
 
 
 <dt id="arg-kmunicate">kmunicate<a class="anchor" aria-label="anchor" href="#arg-kmunicate"></a></dt>
-<dd><p>Generate a publication-ready survival plot.</p></dd>
+<dd><p>Enable this option to generate a publication-ready
+survival plot in the style of KMunicate. This plot shows the estimated
+survival probability over time with confidence intervals and is suitable
+for publication or presentation.</p></dd>
 
 
 <dt id="arg-ce">ce<a class="anchor" aria-label="anchor" href="#arg-ce"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option to calculate and plot the cumulative number of
+events over time. This plot shows the total number of events (e.g., deaths)
+that have occurred at each time point and is useful for visualizing event
+rates in your data.</p></dd>
 
 
 <dt id="arg-ch">ch<a class="anchor" aria-label="anchor" href="#arg-ch"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option to calculate and plot the cumulative hazard
+function over time. This plot shows the cumulative risk of experiencing the
+event (e.g., death) at each time point and is useful for visualizing the
+risk of the event over time.</p></dd>
 
 
 <dt id="arg-endplot">endplot<a class="anchor" aria-label="anchor" href="#arg-endplot"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>The maximum time point to include in the survival plots.
+This is the end time for the survival curves and cumulative event/hazard
+plots. Enter a positive integer representing the time in consistent units
+(e.g., months or years).</p></dd>
 
 
 <dt id="arg-ybegin-plot">ybegin_plot<a class="anchor" aria-label="anchor" href="#arg-ybegin-plot"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>The minimum value for the y-axis in the survival plots.
+Enter a number between 0 and 1 to set the lower limit of the y-axis.</p></dd>
 
 
 <dt id="arg-yend-plot">yend_plot<a class="anchor" aria-label="anchor" href="#arg-yend-plot"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>The maximum value for the y-axis in the survival plots.
+Enter a number between 0 and 1 to set the upper limit of the y-axis.</p></dd>
 
 
 <dt id="arg-byplot">byplot<a class="anchor" aria-label="anchor" href="#arg-byplot"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>The interval for plotting survival probabilities. Enter a
+positive integer representing the time interval in consistent units (e.g.,
+months or years).</p></dd>
 
 
 <dt id="arg-multievent">multievent<a class="anchor" aria-label="anchor" href="#arg-multievent"></a></dt>
-<dd><p>Enable analysis for datasets with multiple event levels.</p></dd>
+<dd><p>Enable this option to perform survival analysis for
+datasets with multiple event levels. This is useful for competing risk
+analysis when there are multiple event types (e.g., death due to disease,
+death due to other causes).</p></dd>
 
 
 <dt id="arg-ci-">ci95<a class="anchor" aria-label="anchor" href="#arg-ci-"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option to display 95\<!-- % confidence intervals on the -->
+survival plots. These intervals show the range of uncertainty around the
+estimated survival probabilities and are useful for assessing the precision
+of the estimates.</p></dd>
 
 
 <dt id="arg-risktable">risktable<a class="anchor" aria-label="anchor" href="#arg-risktable"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option to display a table of risk estimates at
+each time point. This table shows the estimated survival probability,
+cumulative event rate, and cumulative hazard at each time point and is
+useful for summarizing the survival characteristics of your data.</p></dd>
 
 
 <dt id="arg-censored">censored<a class="anchor" aria-label="anchor" href="#arg-censored"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option to display censored observations on the
+survival plots. Censored observations are patients who have not experienced
+the event of interest by the end of follow-up and are indicated by vertical
+ticks on the survival curves.</p></dd>
 
 </dl></div>
     <div id="value">

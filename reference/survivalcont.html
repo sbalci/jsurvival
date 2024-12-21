@@ -94,31 +94,41 @@
 
 
 <dt id="arg-elapsedtime">elapsedtime<a class="anchor" aria-label="anchor" href="#arg-elapsedtime"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>The time-to-event or follow-up duration for each
+patient. Should be numeric and continuous, measured in consistent units
+(e.g., months or years). Can be calculated automatically from dates if
+using the date options below.</p></dd>
 
 
 <dt id="arg-tint">tint<a class="anchor" aria-label="anchor" href="#arg-tint"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option if you want to calculate survival time from
+dates in your data. This is useful when you have separate columns for
+diagnosis date and follow-up date and want to calculate the time elapsed
+between them.</p></dd>
 
 
 <dt id="arg-dxdate">dxdate<a class="anchor" aria-label="anchor" href="#arg-dxdate"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>The date of diagnosis or study entry for each patient. Should
+be in a consistent date format (e.g., YYYY-MM-DD).</p></dd>
 
 
 <dt id="arg-fudate">fudate<a class="anchor" aria-label="anchor" href="#arg-fudate"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>The date of last follow-up or event for each patient. Should
+be in a consistent date format (e.g., YYYY-MM-DD).</p></dd>
 
 
 <dt id="arg-contexpl">contexpl<a class="anchor" aria-label="anchor" href="#arg-contexpl"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>The continuous explanatory variable to be used in the
+analysis.</p></dd>
 
 
 <dt id="arg-outcome">outcome<a class="anchor" aria-label="anchor" href="#arg-outcome"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>The outcome variable to be used in the analysis.</p></dd>
 
 
 <dt id="arg-outcomelevel">outcomeLevel<a class="anchor" aria-label="anchor" href="#arg-outcomelevel"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>The level of the outcome variable that represents the
+event of interest.</p></dd>
 
 
 <dt id="arg-dod">dod<a class="anchor" aria-label="anchor" href="#arg-dod"></a></dt>
@@ -134,15 +144,24 @@
 
 
 <dt id="arg-awod">awod<a class="anchor" aria-label="anchor" href="#arg-awod"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Select the levels of the outcome variable that correspond to
+different event types in your data. For example, you might have separate
+levels for "Dead of Disease" and "Alive w Disease" in a survival analysis
+of cancer patients.</p></dd>
 
 
 <dt id="arg-analysistype">analysistype<a class="anchor" aria-label="anchor" href="#arg-analysistype"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Select the type of survival analysis to perform.
+"Overall" survival analysis considers all events as equivalent, while
+"Cause Specific" analysis distinguishes between different event types.
+"Competing Risk" analysis accounts for competing risks that may prevent the
+event of interest from occurring.</p></dd>
 
 
 <dt id="arg-cutp">cutp<a class="anchor" aria-label="anchor" href="#arg-cutp"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Specify the cutpoints at which to divide the continuous
+explanatory variable into groups for survival analysis. Separate multiple
+cutpoints with commas (e.g., "12, 36, 60").</p></dd>
 
 
 <dt id="arg-timetypedata">timetypedata<a class="anchor" aria-label="anchor" href="#arg-timetypedata"></a></dt>
@@ -154,63 +173,84 @@
 
 
 <dt id="arg-uselandmark">uselandmark<a class="anchor" aria-label="anchor" href="#arg-uselandmark"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option to perform landmark survival analysis
+at a specified time point.</p></dd>
 
 
 <dt id="arg-landmark">landmark<a class="anchor" aria-label="anchor" href="#arg-landmark"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Specify the landmark time at which to evaluate survival
+probabilities in landmark analysis. This option is only available if you
+enable the "Use Landmark Time" option.</p></dd>
 
 
 <dt id="arg-sc">sc<a class="anchor" aria-label="anchor" href="#arg-sc"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option to create a Kaplan-Meier survival plot for the
+continuous explanatory variable.</p></dd>
 
 
 <dt id="arg-kmunicate">kmunicate<a class="anchor" aria-label="anchor" href="#arg-kmunicate"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option to create a KMunicate-style survival
+plot for the continuous explanatory variable.</p></dd>
 
 
 <dt id="arg-ce">ce<a class="anchor" aria-label="anchor" href="#arg-ce"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option to create a plot of cumulative events over
+time for the continuous explanatory variable.</p></dd>
 
 
 <dt id="arg-ch">ch<a class="anchor" aria-label="anchor" href="#arg-ch"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option to create a plot of cumulative hazard over
+time for the continuous explanatory variable.</p></dd>
 
 
 <dt id="arg-endplot">endplot<a class="anchor" aria-label="anchor" href="#arg-endplot"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Specify the end time for the survival plots. This option
+determines the maximum time point to include in the plots.</p></dd>
 
 
 <dt id="arg-ybegin-plot">ybegin_plot<a class="anchor" aria-label="anchor" href="#arg-ybegin-plot"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Specify the starting value for the y-axis in the
+survival plots. This option allows you to customize the range of the
+y-axis.</p></dd>
 
 
 <dt id="arg-yend-plot">yend_plot<a class="anchor" aria-label="anchor" href="#arg-yend-plot"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Specify the ending value for the y-axis in the survival
+plots. This option allows you to customize the range of the y-axis.</p></dd>
 
 
 <dt id="arg-byplot">byplot<a class="anchor" aria-label="anchor" href="#arg-byplot"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Specify the time interval for the survival plots. This option
+determines the spacing of tick marks on the x-axis.</p></dd>
 
 
 <dt id="arg-findcut">findcut<a class="anchor" aria-label="anchor" href="#arg-findcut"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option to automatically find the optimal cut-off
+point for the continuous explanatory variable using the maximally selected
+rank statistic. This option is only available if you enable the "Survival
+Plot" option. The optimal cut-off point will be displayed on the survival
+plot as a vertical dashed line.</p></dd>
 
 
 <dt id="arg-multievent">multievent<a class="anchor" aria-label="anchor" href="#arg-multievent"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option if your data includes multiple event
+levels (e.g., different types of events or outcomes). This option is
+required for cause-specific and competing risk survival analyses.</p></dd>
 
 
 <dt id="arg-ci-">ci95<a class="anchor" aria-label="anchor" href="#arg-ci-"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option to display 95\<!-- % confidence intervals around -->
+the survival estimates in the plots.</p></dd>
 
 
 <dt id="arg-risktable">risktable<a class="anchor" aria-label="anchor" href="#arg-risktable"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option to display a table of risk estimates
+for each group in the survival analysis.</p></dd>
 
 
 <dt id="arg-censored">censored<a class="anchor" aria-label="anchor" href="#arg-censored"></a></dt>
-<dd><p>.</p></dd>
+<dd><p>Enable this option to display censored observations in the
+survival plots.</p></dd>
 
 </dl></div>
     <div id="value">
