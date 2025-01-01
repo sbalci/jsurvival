@@ -22,7 +22,7 @@ survival between groups."><!-- mathjax --><script src="https://cdnjs.cloudflare.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jsurvival</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2.38</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2.41</span>
       </span>
     </div>
 
@@ -89,7 +89,8 @@ survival between groups.</p>
 <span>  multievent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ci95 <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  risktable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  censored <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  censored <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  medianline <span class="op">=</span> <span class="st">"none"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -277,6 +278,11 @@ useful for summarizing the survival characteristics of your data.</p></dd>
 survival plots. Censored observations are patients who have not experienced
 the event of interest by the end of follow-up and are indicated by vertical
 ticks on the survival curves.</p></dd>
+
+
+<dt id="arg-medianline">medianline<a class="anchor" aria-label="anchor" href="#arg-medianline"></a></dt>
+<dd><p>If true, displays a line indicating the median survival
+time on the survival plot.</p></dd>
 
 </dl></div>
     <div id="value">
