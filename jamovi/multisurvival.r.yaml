@@ -206,6 +206,7 @@ items:
           - adjexplanatory
           - pplot
           - censored
+          - medianline
 
 
 
@@ -388,6 +389,29 @@ items:
           - ci95
           - risktable
           - ac_method
+          - endplot
+          - byplot
+          - outcome
+          - outcomeLevel
+          - overalltime
+          - explanatory
+          - contexpl
+          - fudate
+          - dxdate
+          - tint
+          - multievent
+          - adjexplanatory
+          - pplot
+          - censored
+          - medianline
+
+
+
+    - name: adjustedSummaryTable2
+      title: Adjusted Survival Summary 2
+      type: Preformatted
+      visible: (ac_summary)
+
 
     - name: adjustedSummaryTable
       title: Adjusted Survival Summary
@@ -430,6 +454,20 @@ items:
           - ac_compare
           - ac_method
           - adjexplanatory
+
+    - name: adjustedComparison_survdiff_res
+      title: Statistical Comparison of Adjusted Curves
+      type: Preformatted
+      visible: (ac_compare)
+      clearWith:
+          - ac_compare
+          - ac_method
+          - adjexplanatory
+
+    - name: adjustedSurvTable2
+      title: Adjusted Survival Table 2
+      type: Preformatted
+
 
     - name: adjustedSurvTable
       title: Adjusted Survival Table
@@ -596,95 +634,95 @@ items:
 
 
 
-    - name: model_comparison
-      title: Model Comparison
-      type: Html
-      visible: (compare_models)
+    # - name: model_comparison
+    #   title: Model Comparison
+    #   type: Html
+    #   visible: (compare_models)
 
-    - name: reduced_model_metrics
-      title: Reduced Model Performance Metrics
-      type: Html
-      visible: (compare_models)
-
-
+    # - name: reduced_model_metrics
+    #   title: Reduced Model Performance Metrics
+    #   type: Html
+    #   visible: (compare_models)
 
 
-    - name:  text_model_selection
-      title: Multivariable Survival with Model Selection
-      type:  Html
-      refs: finalfit
-      visible: (use_modelSelection)
-      clearWith:
-          - outcome
-          - outcomeLevel
-          - overalltime
-          - explanatory
-          - contexpl
-          - fudate
-          - dxdate
-          - tint
-          - multievent
-          - modelSelection
-          - selectionCriteria
-          - pEntry
-          - pRemoval
 
 
-    - name:  text2_model_selection
-      title: ''
-      type:  Html
-      refs: finalfit
-      visible: (use_modelSelection)
-      clearWith:
-          - outcome
-          - outcomeLevel
-          - overalltime
-          - explanatory
-          - contexpl
-          - fudate
-          - dxdate
-          - tint
-          - multievent
-          - modelSelection
-          - selectionCriteria
-          - pEntry
-          - pRemoval
+    # - name:  text_model_selection
+    #   title: Multivariable Survival with Model Selection
+    #   type:  Html
+    #   refs: finalfit
+    #   visible: (use_modelSelection)
+    #   clearWith:
+    #       - outcome
+    #       - outcomeLevel
+    #       - overalltime
+    #       - explanatory
+    #       - contexpl
+    #       - fudate
+    #       - dxdate
+    #       - tint
+    #       - multievent
+    #       - modelSelection
+    #       - selectionCriteria
+    #       - pEntry
+    #       - pRemoval
 
-    - name: selectionSteps
-      title: Model Selection Steps
-      type: Table
-      visible: (use_modelSelection)
-      columns:
-        - name: step
-          title: Step
-          type: integer
-        - name: variable
-          title: Variable
-          type: text
-        - name: action
-          title: Action
-          type: text
-        - name: criterion
-          title: Criterion Value
-          type: number
-        - name: pvalue
-          title: P-value
-          type: number
-      refs: finalfit
-      clearWith:
-          - outcome
-          - outcomeLevel
-          - overalltime
-          - explanatory
-          - contexpl
-          - fudate
-          - dxdate
-          - tint
-          - multievent
-          - modelSelection
-          - selectionCriteria
-          - pEntry
-          - pRemoval
+
+    # - name:  text2_model_selection
+    #   title: ''
+    #   type:  Html
+    #   refs: finalfit
+    #   visible: (use_modelSelection)
+    #   clearWith:
+    #       - outcome
+    #       - outcomeLevel
+    #       - overalltime
+    #       - explanatory
+    #       - contexpl
+    #       - fudate
+    #       - dxdate
+    #       - tint
+    #       - multievent
+    #       - modelSelection
+    #       - selectionCriteria
+    #       - pEntry
+    #       - pRemoval
+
+    # - name: selectionSteps
+    #   title: Model Selection Steps
+    #   type: Table
+    #   visible: (use_modelSelection)
+    #   columns:
+    #     - name: step
+    #       title: Step
+    #       type: integer
+    #     - name: variable
+    #       title: Variable
+    #       type: text
+    #     - name: action
+    #       title: Action
+    #       type: text
+    #     - name: criterion
+    #       title: Criterion Value
+    #       type: number
+    #     - name: pvalue
+    #       title: P-value
+    #       type: number
+    #   refs: finalfit
+    #   clearWith:
+    #       - outcome
+    #       - outcomeLevel
+    #       - overalltime
+    #       - explanatory
+    #       - contexpl
+    #       - fudate
+    #       - dxdate
+    #       - tint
+    #       - multievent
+    #       - modelSelection
+    #       - selectionCriteria
+    #       - pEntry
+    #       - pRemoval
 
 refs:
     - multivariable

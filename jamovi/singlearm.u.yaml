@@ -193,6 +193,8 @@ children:
                 name: risktable
               - type: CheckBox
                 name: censored
+              - type: ComboBox
+                name: medianline
   - type: CollapseBox
     label: Survival Tables
     collapsed: true

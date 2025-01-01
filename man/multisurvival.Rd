@@ -10,47 +10,40 @@ multisurvival(
   tint = FALSE,
   dxdate,
   fudate,
+  timetypedata = "ymd",
+  timetypeoutput = "months",
+  uselandmark = FALSE,
+  landmark = 3,
   outcome,
   outcomeLevel,
   dod,
   dooc,
   awd,
   awod,
+  analysistype = "overall",
   explanatory,
   contexpl,
   multievent = FALSE,
-  analysistype = "overall",
-  timetypedata = "ymd",
-  timetypeoutput = "months",
-  uselandmark = FALSE,
-  landmark = 3,
   hr = FALSE,
   sty = "t1",
   ph_cox = FALSE,
-  calculateRiskScore = FALSE,
-  plotRiskGroups = FALSE,
   km = FALSE,
   endplot = 60,
   byplot = 12,
   ci95 = FALSE,
   risktable = FALSE,
   censored = FALSE,
+  medianline = "none",
   pplot = TRUE,
+  calculateRiskScore = FALSE,
+  plotRiskGroups = FALSE,
   ac = FALSE,
   adjexplanatory,
   ac_method = "average",
   ac_summary = FALSE,
   ac_timepoints = "12, 36, 60",
   ac_compare = FALSE,
-  reduced_explanatory,
-  compare_models = FALSE,
-  use_modelSelection = FALSE,
-  modelSelection = "enter",
-  selectionCriteria = "aic",
-  pEntry = 0.05,
-  pRemoval = 0.1,
-  use_stratify = FALSE,
-  stratvar
+  use_stratify = FALSE
 )
 }
 \arguments{
@@ -72,6 +65,22 @@ the format specified in \code{timetypedata}.}
 \item{fudate}{Follow-up date or date of last observation. Required if
 \code{tint} = true. Must match the format specified in \code{timetypedata}.}
 
+\item{timetypedata}{Specifies the format of the date variables in the input
+data. This is critical if \code{tint = true}, as \code{dxdate} and
+\code{fudate} will be parsed according to this format to calculate survival
+time. For example, if your data files record dates as "YYYY-MM-DD", select
+\code{ymd}.}
+
+\item{timetypeoutput}{The units in which survival time is reported in the
+output. Choose from days, weeks, months, or years.}
+
+\item{uselandmark}{If true, applies a landmark analysis starting at a
+specified time point.}
+
+\item{landmark}{The time point (in the units defined by
+\code{timetypeoutput}) at which to start landmark analyses. Only used if
+\code{uselandmark} = true.}
+
 \item{outcome}{The outcome variable. Typically indicates event status
 (e.g., death, recurrence). For survival analysis, this may be a factor or
 numeric event indicator.}
@@ -92,6 +101,10 @@ if applicable.}
 \item{awod}{The level of \code{outcome} corresponding to alive without
 disease, if applicable.}
 
+\item{analysistype}{Type of survival analysis: - overall: All-cause
+survival - cause: Cause-specific survival - compete: Competing risks
+analysis}
+
 \item{explanatory}{Categorical explanatory (predictor) variables included
 in the Cox model.}
 
@@ -101,26 +114,6 @@ the Cox model.}
 \item{multievent}{If true, multiple event levels will be considered for
 competing risks analysis. Requires specifying \code{dod}, \code{dooc}, etc.}
 
-\item{analysistype}{Type of survival analysis: - overall: All-cause
-survival - cause: Cause-specific survival - compete: Competing risks
-analysis}
-
-\item{timetypedata}{Specifies the format of the date variables in the input
-data. This is critical if \code{tint = true}, as \code{dxdate} and
-\code{fudate} will be parsed according to this format to calculate survival
-time. For example, if your data files record dates as "YYYY-MM-DD", select
-\code{ymd}.}
-
-\item{timetypeoutput}{The units in which survival time is reported in the
-output. Choose from days, weeks, months, or years.}
-
-\item{uselandmark}{If true, applies a landmark analysis starting at a
-specified time point.}
-
-\item{landmark}{The time point (in the units defined by
-\code{timetypeoutput}) at which to start landmark analyses. Only used if
-\code{uselandmark} = true.}
-
 \item{hr}{If true, generates a plot of hazard ratios for each explanatory
 variable in the Cox model.}
 
@@ -129,12 +122,6 @@ variable in the Cox model.}
 
 \item{ph_cox}{If true, tests the proportional hazards assumption for the
 Cox model. Use if you suspect violations of the PH assumption.}
-
-\item{calculateRiskScore}{If true, calculates a risk score from the Cox
-model coefficients for each individual.}
-
-\item{plotRiskGroups}{If true, stratifies individuals into risk groups
-based on their calculated risk scores and plots their survival curves.}
 
 \item{km}{If true, produces a Kaplan-Meier survival plot. Useful for
 visualization of survival functions without covariate adjustment.}
@@ -154,8 +141,17 @@ time point below the survival plot.}
 \item{censored}{If true, marks censored observations (e.g., using tick
 marks) on the survival plot.}
 
+\item{medianline}{If true, displays a line indicating the median survival
+time on the survival plot.}
+
 \item{pplot}{If true, displays the p-value from the survival comparison
 test on the survival plot.}
+
+\item{calculateRiskScore}{If true, calculates a risk score from the Cox
+model coefficients for each individual.}
+
+\item{plotRiskGroups}{If true, stratifies individuals into risk groups
+based on their calculated risk scores and plots their survival curves.}
 
 \item{ac}{.}
 
@@ -171,39 +167,7 @@ curves}
 
 \item{ac_compare}{Perform statistical comparison between adjusted curves}
 
-\item{reduced_explanatory}{Variables to include in a reduced model for
-comparison. This can be used to test whether excluding some variables
-affects model fit.}
-
-\item{compare_models}{If true, compares the full model against the reduced
-model to assess the impact of removing certain explanatory variables.}
-
-\item{use_modelSelection}{If true, applies a variable selection procedure
-to find the best-fitting model based on criteria like AIC or likelihood
-ratio tests.}
-
-\item{modelSelection}{The method used to select variables: - enter:
-Includes all variables (no selection) - forward: Adds variables one at a
-time if they improve the model - backward: Removes variables that do not
-significantly contribute - both: Combination of forward and backward steps}
-
-\item{selectionCriteria}{The criterion used for adding or removing
-variables in model selection: - aic: Balances model fit and complexity -
-lrt: Uses likelihood ratio tests to decide inclusion/removal}
-
-\item{pEntry}{Significance level at which a variable enters the model
-during forward or stepwise selection.}
-
-\item{pRemoval}{Significance level at which a variable is removed from the
-model during backward or stepwise selection.}
-
-\item{use_stratify}{If true, uses stratification to handle variables that
-violate the proportional hazards assumption. Stratification creates
-separate baseline hazard functions for different groups.}
-
-\item{stratvar}{Variables used for stratification. When proportional
-hazards are not met, stratification can adjust the model to better fit the
-data by allowing different baseline hazards.}
+\item{use_stratify}{.}
 }
 \value{
 A results object containing:
@@ -224,8 +188,11 @@ A results object containing:
 \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
 \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
+\code{results$adjustedSummaryTable2} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$adjustedSummaryTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$adjustedComparison} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$adjustedComparison_survdiff_res} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$adjustedSurvTable2} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$adjustedSurvTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$adjustedSurvTableSummary} \tab \tab \tab \tab \tab a html \cr
 \code{results$adjustedPairwiseTable} \tab \tab \tab \tab \tab a table \cr
@@ -237,11 +204,6 @@ A results object containing:
 \code{results$adjustedCoxSummary} \tab \tab \tab \tab \tab a html \cr
 \code{results$adjustedCoxPH} \tab \tab \tab \tab \tab a html \cr
 \code{results$adjustedCoxPHPlot} \tab \tab \tab \tab \tab an image \cr
-\code{results$model_comparison} \tab \tab \tab \tab \tab a html \cr
-\code{results$reduced_model_metrics} \tab \tab \tab \tab \tab a html \cr
-\code{results$text_model_selection} \tab \tab \tab \tab \tab a html \cr
-\code{results$text2_model_selection} \tab \tab \tab \tab \tab a html \cr
-\code{results$selectionSteps} \tab \tab \tab \tab \tab a table \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

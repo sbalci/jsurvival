@@ -814,7 +814,9 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             subtitle = "Based on Kaplan-Meier estimates",
             risk.table = self$options$risktable,
             conf.int = self$options$ci95,
-            censor = self$options$censored
+            censor = self$options$censored,
+            surv.median.line = self$options$medianline
+
           )
 
         # plot <- plot + ggtheme
@@ -880,7 +882,8 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             fun = "event",
             risk.table = self$options$risktable,
             conf.int = self$options$ci95,
-            censored = self$options$censored
+            censor = self$options$censored,
+            surv.median.line = self$options$medianline
           )
 
         print(plot2)
@@ -943,7 +946,8 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             fun = "cumhaz",
             risk.table = self$options$risktable,
             conf.int = self$options$ci95,
-            censored = self$options$censored
+            censor = self$options$censored,
+            surv.median.line = self$options$medianline
           )
 
 

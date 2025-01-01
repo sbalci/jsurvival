@@ -10,47 +10,40 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             tint = FALSE,
             dxdate = NULL,
             fudate = NULL,
+            timetypedata = "ymd",
+            timetypeoutput = "months",
+            uselandmark = FALSE,
+            landmark = 3,
             outcome = NULL,
             outcomeLevel = NULL,
             dod = NULL,
             dooc = NULL,
             awd = NULL,
             awod = NULL,
+            analysistype = "overall",
             explanatory = NULL,
             contexpl = NULL,
             multievent = FALSE,
-            analysistype = "overall",
-            timetypedata = "ymd",
-            timetypeoutput = "months",
-            uselandmark = FALSE,
-            landmark = 3,
             hr = FALSE,
             sty = "t1",
             ph_cox = FALSE,
-            calculateRiskScore = FALSE,
-            plotRiskGroups = FALSE,
             km = FALSE,
             endplot = 60,
             byplot = 12,
             ci95 = FALSE,
             risktable = FALSE,
             censored = FALSE,
+            medianline = "none",
             pplot = TRUE,
+            calculateRiskScore = FALSE,
+            plotRiskGroups = FALSE,
             ac = FALSE,
             adjexplanatory = NULL,
             ac_method = "average",
             ac_summary = FALSE,
             ac_timepoints = "12, 36, 60",
             ac_compare = FALSE,
-            reduced_explanatory = NULL,
-            compare_models = FALSE,
-            use_modelSelection = FALSE,
-            modelSelection = "enter",
-            selectionCriteria = "aic",
-            pEntry = 0.05,
-            pRemoval = 0.1,
-            use_stratify = FALSE,
-            stratvar = NULL, ...) {
+            use_stratify = FALSE, ...) {
 
             super$initialize(
                 package="jsurvival",
@@ -75,6 +68,37 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             private$..fudate <- jmvcore::OptionVariable$new(
                 "fudate",
                 fudate)
+            private$..timetypedata <- jmvcore::OptionList$new(
+                "timetypedata",
+                timetypedata,
+                options=list(
+                    "ymdhms",
+                    "ymd",
+                    "ydm",
+                    "mdy",
+                    "myd",
+                    "dmy",
+                    "dym"),
+                default="ymd")
+            private$..timetypeoutput <- jmvcore::OptionList$new(
+                "timetypeoutput",
+                timetypeoutput,
+                options=list(
+                    "days",
+                    "weeks",
+                    "months",
+                    "years"),
+                default="months")
+            private$..uselandmark <- jmvcore::OptionBool$new(
+                "uselandmark",
+                uselandmark,
+                default=FALSE)
+            private$..landmark <- jmvcore::OptionInteger$new(
+                "landmark",
+                landmark,
+                default=3)
+            private$..calculatedtime <- jmvcore::OptionOutput$new(
+                "calculatedtime")
             private$..outcome <- jmvcore::OptionVariable$new(
                 "outcome",
                 outcome,
@@ -109,6 +133,16 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 awod,
                 variable="(outcome)",
                 allowNone=TRUE)
+            private$..analysistype <- jmvcore::OptionList$new(
+                "analysistype",
+                analysistype,
+                options=list(
+                    "overall",
+                    "cause",
+                    "compete"),
+                default="overall")
+            private$..outcomeredefined <- jmvcore::OptionOutput$new(
+                "outcomeredefined")
             private$..explanatory <- jmvcore::OptionVariables$new(
                 "explanatory",
                 explanatory,
@@ -128,47 +162,6 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 "multievent",
                 multievent,
                 default=FALSE)
-            private$..analysistype <- jmvcore::OptionList$new(
-                "analysistype",
-                analysistype,
-                options=list(
-                    "overall",
-                    "cause",
-                    "compete"),
-                default="overall")
-            private$..outcomeredefined <- jmvcore::OptionOutput$new(
-                "outcomeredefined")
-            private$..timetypedata <- jmvcore::OptionList$new(
-                "timetypedata",
-                timetypedata,
-                options=list(
-                    "ymdhms",
-                    "ymd",
-                    "ydm",
-                    "mdy",
-                    "myd",
-                    "dmy",
-                    "dym"),
-                default="ymd")
-            private$..timetypeoutput <- jmvcore::OptionList$new(
-                "timetypeoutput",
-                timetypeoutput,
-                options=list(
-                    "days",
-                    "weeks",
-                    "months",
-                    "years"),
-                default="months")
-            private$..uselandmark <- jmvcore::OptionBool$new(
-                "uselandmark",
-                uselandmark,
-                default=FALSE)
-            private$..landmark <- jmvcore::OptionInteger$new(
-                "landmark",
-                landmark,
-                default=3)
-            private$..calculatedtime <- jmvcore::OptionOutput$new(
-                "calculatedtime")
             private$..hr <- jmvcore::OptionBool$new(
                 "hr",
                 hr,
@@ -184,18 +177,6 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 "ph_cox",
                 ph_cox,
                 default=FALSE)
-            private$..calculateRiskScore <- jmvcore::OptionBool$new(
-                "calculateRiskScore",
-                calculateRiskScore,
-                default=FALSE)
-            private$..plotRiskGroups <- jmvcore::OptionBool$new(
-                "plotRiskGroups",
-                plotRiskGroups,
-                default=FALSE)
-            private$..addRiskScore <- jmvcore::OptionOutput$new(
-                "addRiskScore")
-            private$..addRiskGroup <- jmvcore::OptionOutput$new(
-                "addRiskGroup")
             private$..km <- jmvcore::OptionBool$new(
                 "km",
                 km,
@@ -220,10 +201,31 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 "censored",
                 censored,
                 default=FALSE)
+            private$..medianline <- jmvcore::OptionList$new(
+                "medianline",
+                medianline,
+                options=list(
+                    "none",
+                    "h",
+                    "v",
+                    "hv"),
+                default="none")
             private$..pplot <- jmvcore::OptionBool$new(
                 "pplot",
                 pplot,
                 default=TRUE)
+            private$..calculateRiskScore <- jmvcore::OptionBool$new(
+                "calculateRiskScore",
+                calculateRiskScore,
+                default=FALSE)
+            private$..plotRiskGroups <- jmvcore::OptionBool$new(
+                "plotRiskGroups",
+                plotRiskGroups,
+                default=FALSE)
+            private$..addRiskScore <- jmvcore::OptionOutput$new(
+                "addRiskScore")
+            private$..addRiskGroup <- jmvcore::OptionOutput$new(
+                "addRiskGroup")
             private$..ac <- jmvcore::OptionBool$new(
                 "ac",
                 ac,
@@ -257,213 +259,140 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 "ac_compare",
                 ac_compare,
                 default=FALSE)
-            private$..reduced_explanatory <- jmvcore::OptionVariables$new(
-                "reduced_explanatory",
-                reduced_explanatory,
-                suggested=list(
-                    "ordinal",
-                    "nominal"),
-                permitted=list(
-                    "factor"))
-            private$..compare_models <- jmvcore::OptionBool$new(
-                "compare_models",
-                compare_models,
-                default=FALSE)
-            private$..use_modelSelection <- jmvcore::OptionBool$new(
-                "use_modelSelection",
-                use_modelSelection,
-                default=FALSE)
-            private$..modelSelection <- jmvcore::OptionList$new(
-                "modelSelection",
-                modelSelection,
-                options=list(
-                    "enter",
-                    "forward",
-                    "backward",
-                    "both"),
-                default="enter")
-            private$..selectionCriteria <- jmvcore::OptionList$new(
-                "selectionCriteria",
-                selectionCriteria,
-                options=list(
-                    "aic",
-                    "lrt"),
-                default="aic")
-            private$..pEntry <- jmvcore::OptionNumber$new(
-                "pEntry",
-                pEntry,
-                min=0,
-                max=1,
-                default=0.05)
-            private$..pRemoval <- jmvcore::OptionNumber$new(
-                "pRemoval",
-                pRemoval,
-                min=0,
-                max=1,
-                default=0.1)
             private$..use_stratify <- jmvcore::OptionBool$new(
                 "use_stratify",
                 use_stratify,
                 default=FALSE)
-            private$..stratvar <- jmvcore::OptionVariables$new(
-                "stratvar",
-                stratvar,
-                suggested=list(
-                    "ordinal",
-                    "nominal"),
-                permitted=list(
-                    "factor"))
 
             self$.addOption(private$..elapsedtime)
             self$.addOption(private$..tint)
             self$.addOption(private$..dxdate)
             self$.addOption(private$..fudate)
+            self$.addOption(private$..timetypedata)
+            self$.addOption(private$..timetypeoutput)
+            self$.addOption(private$..uselandmark)
+            self$.addOption(private$..landmark)
+            self$.addOption(private$..calculatedtime)
             self$.addOption(private$..outcome)
             self$.addOption(private$..outcomeLevel)
             self$.addOption(private$..dod)
             self$.addOption(private$..dooc)
             self$.addOption(private$..awd)
             self$.addOption(private$..awod)
+            self$.addOption(private$..analysistype)
+            self$.addOption(private$..outcomeredefined)
             self$.addOption(private$..explanatory)
             self$.addOption(private$..contexpl)
             self$.addOption(private$..multievent)
-            self$.addOption(private$..analysistype)
-            self$.addOption(private$..outcomeredefined)
-            self$.addOption(private$..timetypedata)
-            self$.addOption(private$..timetypeoutput)
-            self$.addOption(private$..uselandmark)
-            self$.addOption(private$..landmark)
-            self$.addOption(private$..calculatedtime)
             self$.addOption(private$..hr)
             self$.addOption(private$..sty)
             self$.addOption(private$..ph_cox)
-            self$.addOption(private$..calculateRiskScore)
-            self$.addOption(private$..plotRiskGroups)
-            self$.addOption(private$..addRiskScore)
-            self$.addOption(private$..addRiskGroup)
             self$.addOption(private$..km)
             self$.addOption(private$..endplot)
             self$.addOption(private$..byplot)
             self$.addOption(private$..ci95)
             self$.addOption(private$..risktable)
             self$.addOption(private$..censored)
+            self$.addOption(private$..medianline)
             self$.addOption(private$..pplot)
+            self$.addOption(private$..calculateRiskScore)
+            self$.addOption(private$..plotRiskGroups)
+            self$.addOption(private$..addRiskScore)
+            self$.addOption(private$..addRiskGroup)
             self$.addOption(private$..ac)
             self$.addOption(private$..adjexplanatory)
             self$.addOption(private$..ac_method)
             self$.addOption(private$..ac_summary)
             self$.addOption(private$..ac_timepoints)
             self$.addOption(private$..ac_compare)
-            self$.addOption(private$..reduced_explanatory)
-            self$.addOption(private$..compare_models)
-            self$.addOption(private$..use_modelSelection)
-            self$.addOption(private$..modelSelection)
-            self$.addOption(private$..selectionCriteria)
-            self$.addOption(private$..pEntry)
-            self$.addOption(private$..pRemoval)
             self$.addOption(private$..use_stratify)
-            self$.addOption(private$..stratvar)
         }),
     active = list(
         elapsedtime = function() private$..elapsedtime$value,
         tint = function() private$..tint$value,
         dxdate = function() private$..dxdate$value,
         fudate = function() private$..fudate$value,
+        timetypedata = function() private$..timetypedata$value,
+        timetypeoutput = function() private$..timetypeoutput$value,
+        uselandmark = function() private$..uselandmark$value,
+        landmark = function() private$..landmark$value,
+        calculatedtime = function() private$..calculatedtime$value,
         outcome = function() private$..outcome$value,
         outcomeLevel = function() private$..outcomeLevel$value,
         dod = function() private$..dod$value,
         dooc = function() private$..dooc$value,
         awd = function() private$..awd$value,
         awod = function() private$..awod$value,
+        analysistype = function() private$..analysistype$value,
+        outcomeredefined = function() private$..outcomeredefined$value,
         explanatory = function() private$..explanatory$value,
         contexpl = function() private$..contexpl$value,
         multievent = function() private$..multievent$value,
-        analysistype = function() private$..analysistype$value,
-        outcomeredefined = function() private$..outcomeredefined$value,
-        timetypedata = function() private$..timetypedata$value,
-        timetypeoutput = function() private$..timetypeoutput$value,
-        uselandmark = function() private$..uselandmark$value,
-        landmark = function() private$..landmark$value,
-        calculatedtime = function() private$..calculatedtime$value,
         hr = function() private$..hr$value,
         sty = function() private$..sty$value,
         ph_cox = function() private$..ph_cox$value,
-        calculateRiskScore = function() private$..calculateRiskScore$value,
-        plotRiskGroups = function() private$..plotRiskGroups$value,
-        addRiskScore = function() private$..addRiskScore$value,
-        addRiskGroup = function() private$..addRiskGroup$value,
         km = function() private$..km$value,
         endplot = function() private$..endplot$value,
         byplot = function() private$..byplot$value,
         ci95 = function() private$..ci95$value,
         risktable = function() private$..risktable$value,
         censored = function() private$..censored$value,
+        medianline = function() private$..medianline$value,
         pplot = function() private$..pplot$value,
+        calculateRiskScore = function() private$..calculateRiskScore$value,
+        plotRiskGroups = function() private$..plotRiskGroups$value,
+        addRiskScore = function() private$..addRiskScore$value,
+        addRiskGroup = function() private$..addRiskGroup$value,
         ac = function() private$..ac$value,
         adjexplanatory = function() private$..adjexplanatory$value,
         ac_method = function() private$..ac_method$value,
         ac_summary = function() private$..ac_summary$value,
         ac_timepoints = function() private$..ac_timepoints$value,
         ac_compare = function() private$..ac_compare$value,
-        reduced_explanatory = function() private$..reduced_explanatory$value,
-        compare_models = function() private$..compare_models$value,
-        use_modelSelection = function() private$..use_modelSelection$value,
-        modelSelection = function() private$..modelSelection$value,
-        selectionCriteria = function() private$..selectionCriteria$value,
-        pEntry = function() private$..pEntry$value,
-        pRemoval = function() private$..pRemoval$value,
-        use_stratify = function() private$..use_stratify$value,
-        stratvar = function() private$..stratvar$value),
+        use_stratify = function() private$..use_stratify$value),
     private = list(
         ..elapsedtime = NA,
         ..tint = NA,
         ..dxdate = NA,
         ..fudate = NA,
+        ..timetypedata = NA,
+        ..timetypeoutput = NA,
+        ..uselandmark = NA,
+        ..landmark = NA,
+        ..calculatedtime = NA,
         ..outcome = NA,
         ..outcomeLevel = NA,
         ..dod = NA,
         ..dooc = NA,
         ..awd = NA,
         ..awod = NA,
+        ..analysistype = NA,
+        ..outcomeredefined = NA,
         ..explanatory = NA,
         ..contexpl = NA,
         ..multievent = NA,
-        ..analysistype = NA,
-        ..outcomeredefined = NA,
-        ..timetypedata = NA,
-        ..timetypeoutput = NA,
-        ..uselandmark = NA,
-        ..landmark = NA,
-        ..calculatedtime = NA,
         ..hr = NA,
         ..sty = NA,
         ..ph_cox = NA,
-        ..calculateRiskScore = NA,
-        ..plotRiskGroups = NA,
-        ..addRiskScore = NA,
-        ..addRiskGroup = NA,
         ..km = NA,
         ..endplot = NA,
         ..byplot = NA,
         ..ci95 = NA,
         ..risktable = NA,
         ..censored = NA,
+        ..medianline = NA,
         ..pplot = NA,
+        ..calculateRiskScore = NA,
+        ..plotRiskGroups = NA,
+        ..addRiskScore = NA,
+        ..addRiskGroup = NA,
         ..ac = NA,
         ..adjexplanatory = NA,
         ..ac_method = NA,
         ..ac_summary = NA,
         ..ac_timepoints = NA,
         ..ac_compare = NA,
-        ..reduced_explanatory = NA,
-        ..compare_models = NA,
-        ..use_modelSelection = NA,
-        ..modelSelection = NA,
-        ..selectionCriteria = NA,
-        ..pEntry = NA,
-        ..pRemoval = NA,
-        ..use_stratify = NA,
-        ..stratvar = NA)
+        ..use_stratify = NA)
 )
 
 multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -486,8 +415,11 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         addRiskScore = function() private$.items[["addRiskScore"]],
         addRiskGroup = function() private$.items[["addRiskGroup"]],
         plot_adj = function() private$.items[["plot_adj"]],
+        adjustedSummaryTable2 = function() private$.items[["adjustedSummaryTable2"]],
         adjustedSummaryTable = function() private$.items[["adjustedSummaryTable"]],
         adjustedComparison = function() private$.items[["adjustedComparison"]],
+        adjustedComparison_survdiff_res = function() private$.items[["adjustedComparison_survdiff_res"]],
+        adjustedSurvTable2 = function() private$.items[["adjustedSurvTable2"]],
         adjustedSurvTable = function() private$.items[["adjustedSurvTable"]],
         adjustedSurvTableSummary = function() private$.items[["adjustedSurvTableSummary"]],
         adjustedPairwiseTable = function() private$.items[["adjustedPairwiseTable"]],
@@ -498,12 +430,7 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         adjustedCoxText = function() private$.items[["adjustedCoxText"]],
         adjustedCoxSummary = function() private$.items[["adjustedCoxSummary"]],
         adjustedCoxPH = function() private$.items[["adjustedCoxPH"]],
-        adjustedCoxPHPlot = function() private$.items[["adjustedCoxPHPlot"]],
-        model_comparison = function() private$.items[["model_comparison"]],
-        reduced_model_metrics = function() private$.items[["reduced_model_metrics"]],
-        text_model_selection = function() private$.items[["text_model_selection"]],
-        text2_model_selection = function() private$.items[["text2_model_selection"]],
-        selectionSteps = function() private$.items[["selectionSteps"]]),
+        adjustedCoxPHPlot = function() private$.items[["adjustedCoxPHPlot"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -668,7 +595,8 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "multievent",
                     "adjexplanatory",
                     "pplot",
-                    "censored")))
+                    "censored",
+                    "medianline")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="riskScoreTable",
@@ -794,7 +722,27 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "adjexplanatory",
                     "ci95",
                     "risktable",
-                    "ac_method")))
+                    "ac_method",
+                    "endplot",
+                    "byplot",
+                    "outcome",
+                    "outcomeLevel",
+                    "overalltime",
+                    "explanatory",
+                    "contexpl",
+                    "fudate",
+                    "dxdate",
+                    "tint",
+                    "multievent",
+                    "adjexplanatory",
+                    "pplot",
+                    "censored",
+                    "medianline")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="adjustedSummaryTable2",
+                title="Adjusted Survival Summary 2",
+                visible="(ac_summary)"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="adjustedSummaryTable",
@@ -843,6 +791,19 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "ac_compare",
                     "ac_method",
                     "adjexplanatory")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="adjustedComparison_survdiff_res",
+                title="Statistical Comparison of Adjusted Curves",
+                visible="(ac_compare)",
+                clearWith=list(
+                    "ac_compare",
+                    "ac_method",
+                    "adjexplanatory")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="adjustedSurvTable2",
+                title="Adjusted Survival Table 2"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="adjustedSurvTable",
@@ -1024,98 +985,7 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 clearWith=list(
                     "ac",
                     "adjexplanatory",
-                    "ph_cox")))
-            self$add(jmvcore::Html$new(
-                options=options,
-                name="model_comparison",
-                title="Model Comparison",
-                visible="(compare_models)"))
-            self$add(jmvcore::Html$new(
-                options=options,
-                name="reduced_model_metrics",
-                title="Reduced Model Performance Metrics",
-                visible="(compare_models)"))
-            self$add(jmvcore::Html$new(
-                options=options,
-                name="text_model_selection",
-                title="Multivariable Survival with Model Selection",
-                refs="finalfit",
-                visible="(use_modelSelection)",
-                clearWith=list(
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "explanatory",
-                    "contexpl",
-                    "fudate",
-                    "dxdate",
-                    "tint",
-                    "multievent",
-                    "modelSelection",
-                    "selectionCriteria",
-                    "pEntry",
-                    "pRemoval")))
-            self$add(jmvcore::Html$new(
-                options=options,
-                name="text2_model_selection",
-                title="",
-                refs="finalfit",
-                visible="(use_modelSelection)",
-                clearWith=list(
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "explanatory",
-                    "contexpl",
-                    "fudate",
-                    "dxdate",
-                    "tint",
-                    "multievent",
-                    "modelSelection",
-                    "selectionCriteria",
-                    "pEntry",
-                    "pRemoval")))
-            self$add(jmvcore::Table$new(
-                options=options,
-                name="selectionSteps",
-                title="Model Selection Steps",
-                visible="(use_modelSelection)",
-                columns=list(
-                    list(
-                        `name`="step", 
-                        `title`="Step", 
-                        `type`="integer"),
-                    list(
-                        `name`="variable", 
-                        `title`="Variable", 
-                        `type`="text"),
-                    list(
-                        `name`="action", 
-                        `title`="Action", 
-                        `type`="text"),
-                    list(
-                        `name`="criterion", 
-                        `title`="Criterion Value", 
-                        `type`="number"),
-                    list(
-                        `name`="pvalue", 
-                        `title`="P-value", 
-                        `type`="number")),
-                refs="finalfit",
-                clearWith=list(
-                    "outcome",
-                    "outcomeLevel",
-                    "overalltime",
-                    "explanatory",
-                    "contexpl",
-                    "fudate",
-                    "dxdate",
-                    "tint",
-                    "multievent",
-                    "modelSelection",
-                    "selectionCriteria",
-                    "pEntry",
-                    "pRemoval")))}))
+                    "ph_cox")))}))
 
 multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "multisurvivalBase",
@@ -1159,6 +1029,18 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   the format specified in \code{timetypedata}.
 #' @param fudate Follow-up date or date of last observation. Required if
 #'   \code{tint} = true. Must match the format specified in \code{timetypedata}.
+#' @param timetypedata Specifies the format of the date variables in the input
+#'   data. This is critical if \code{tint = true}, as \code{dxdate} and
+#'   \code{fudate} will be parsed according to this format to calculate survival
+#'   time. For example, if your data files record dates as "YYYY-MM-DD", select
+#'   \code{ymd}.
+#' @param timetypeoutput The units in which survival time is reported in the
+#'   output. Choose from days, weeks, months, or years.
+#' @param uselandmark If true, applies a landmark analysis starting at a
+#'   specified time point.
+#' @param landmark The time point (in the units defined by
+#'   \code{timetypeoutput}) at which to start landmark analyses. Only used if
+#'   \code{uselandmark} = true.
 #' @param outcome The outcome variable. Typically indicates event status
 #'   (e.g., death, recurrence). For survival analysis, this may be a factor or
 #'   numeric event indicator.
@@ -1173,37 +1055,21 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   if applicable.
 #' @param awod The level of \code{outcome} corresponding to alive without
 #'   disease, if applicable.
+#' @param analysistype Type of survival analysis: - overall: All-cause
+#'   survival - cause: Cause-specific survival - compete: Competing risks
+#'   analysis
 #' @param explanatory Categorical explanatory (predictor) variables included
 #'   in the Cox model.
 #' @param contexpl Continuous explanatory (predictor) variables included in
 #'   the Cox model.
 #' @param multievent If true, multiple event levels will be considered for
 #'   competing risks analysis. Requires specifying \code{dod}, \code{dooc}, etc.
-#' @param analysistype Type of survival analysis: - overall: All-cause
-#'   survival - cause: Cause-specific survival - compete: Competing risks
-#'   analysis
-#' @param timetypedata Specifies the format of the date variables in the input
-#'   data. This is critical if \code{tint = true}, as \code{dxdate} and
-#'   \code{fudate} will be parsed according to this format to calculate survival
-#'   time. For example, if your data files record dates as "YYYY-MM-DD", select
-#'   \code{ymd}.
-#' @param timetypeoutput The units in which survival time is reported in the
-#'   output. Choose from days, weeks, months, or years.
-#' @param uselandmark If true, applies a landmark analysis starting at a
-#'   specified time point.
-#' @param landmark The time point (in the units defined by
-#'   \code{timetypeoutput}) at which to start landmark analyses. Only used if
-#'   \code{uselandmark} = true.
 #' @param hr If true, generates a plot of hazard ratios for each explanatory
 #'   variable in the Cox model.
 #' @param sty The style of the hazard ratio (forest) plot. "finalfit" or
 #'   "survminer forestplot".
 #' @param ph_cox If true, tests the proportional hazards assumption for the
 #'   Cox model. Use if you suspect violations of the PH assumption.
-#' @param calculateRiskScore If true, calculates a risk score from the Cox
-#'   model coefficients for each individual.
-#' @param plotRiskGroups If true, stratifies individuals into risk groups
-#'   based on their calculated risk scores and plots their survival curves.
 #' @param km If true, produces a Kaplan-Meier survival plot. Useful for
 #'   visualization of survival functions without covariate adjustment.
 #' @param endplot The maximum follow-up time (in units defined by
@@ -1216,8 +1082,14 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   time point below the survival plot.
 #' @param censored If true, marks censored observations (e.g., using tick
 #'   marks) on the survival plot.
+#' @param medianline If true, displays a line indicating the median survival
+#'   time on the survival plot.
 #' @param pplot If true, displays the p-value from the survival comparison
 #'   test on the survival plot.
+#' @param calculateRiskScore If true, calculates a risk score from the Cox
+#'   model coefficients for each individual.
+#' @param plotRiskGroups If true, stratifies individuals into risk groups
+#'   based on their calculated risk scores and plots their survival curves.
 #' @param ac .
 #' @param adjexplanatory .
 #' @param ac_method Method for computing adjusted survival curves
@@ -1226,31 +1098,7 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param ac_timepoints Timepoints for calculating summary statistics
 #'   (comma-separated)
 #' @param ac_compare Perform statistical comparison between adjusted curves
-#' @param reduced_explanatory Variables to include in a reduced model for
-#'   comparison. This can be used to test whether excluding some variables
-#'   affects model fit.
-#' @param compare_models If true, compares the full model against the reduced
-#'   model to assess the impact of removing certain explanatory variables.
-#' @param use_modelSelection If true, applies a variable selection procedure
-#'   to find the best-fitting model based on criteria like AIC or likelihood
-#'   ratio tests.
-#' @param modelSelection The method used to select variables: - enter:
-#'   Includes all variables (no selection) - forward: Adds variables one at a
-#'   time if they improve the model - backward: Removes variables that do not
-#'   significantly contribute - both: Combination of forward and backward steps
-#' @param selectionCriteria The criterion used for adding or removing
-#'   variables in model selection: - aic: Balances model fit and complexity -
-#'   lrt: Uses likelihood ratio tests to decide inclusion/removal
-#' @param pEntry Significance level at which a variable enters the model
-#'   during forward or stepwise selection.
-#' @param pRemoval Significance level at which a variable is removed from the
-#'   model during backward or stepwise selection.
-#' @param use_stratify If true, uses stratification to handle variables that
-#'   violate the proportional hazards assumption. Stratification creates
-#'   separate baseline hazard functions for different groups.
-#' @param stratvar Variables used for stratification. When proportional
-#'   hazards are not met, stratification can adjust the model to better fit the
-#'   data by allowing different baseline hazards.
+#' @param use_stratify .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
@@ -1269,8 +1117,11 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$adjustedSummaryTable2} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$adjustedSummaryTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$adjustedComparison} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$adjustedComparison_survdiff_res} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$adjustedSurvTable2} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$adjustedSurvTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$adjustedSurvTableSummary} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$adjustedPairwiseTable} \tab \tab \tab \tab \tab a table \cr
@@ -1282,11 +1133,6 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$adjustedCoxSummary} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$adjustedCoxPH} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$adjustedCoxPHPlot} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$model_comparison} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$reduced_model_metrics} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$text_model_selection} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$text2_model_selection} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$selectionSteps} \tab \tab \tab \tab \tab a table \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -1302,47 +1148,40 @@ multisurvival <- function(
     tint = FALSE,
     dxdate,
     fudate,
+    timetypedata = "ymd",
+    timetypeoutput = "months",
+    uselandmark = FALSE,
+    landmark = 3,
     outcome,
     outcomeLevel,
     dod,
     dooc,
     awd,
     awod,
+    analysistype = "overall",
     explanatory,
     contexpl,
     multievent = FALSE,
-    analysistype = "overall",
-    timetypedata = "ymd",
-    timetypeoutput = "months",
-    uselandmark = FALSE,
-    landmark = 3,
     hr = FALSE,
     sty = "t1",
     ph_cox = FALSE,
-    calculateRiskScore = FALSE,
-    plotRiskGroups = FALSE,
     km = FALSE,
     endplot = 60,
     byplot = 12,
     ci95 = FALSE,
     risktable = FALSE,
     censored = FALSE,
+    medianline = "none",
     pplot = TRUE,
+    calculateRiskScore = FALSE,
+    plotRiskGroups = FALSE,
     ac = FALSE,
     adjexplanatory,
     ac_method = "average",
     ac_summary = FALSE,
     ac_timepoints = "12, 36, 60",
     ac_compare = FALSE,
-    reduced_explanatory,
-    compare_models = FALSE,
-    use_modelSelection = FALSE,
-    modelSelection = "enter",
-    selectionCriteria = "aic",
-    pEntry = 0.05,
-    pRemoval = 0.1,
-    use_stratify = FALSE,
-    stratvar) {
+    use_stratify = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("multisurvival requires jmvcore to be installed (restart may be required)")
@@ -1354,8 +1193,6 @@ multisurvival <- function(
     if ( ! missing(explanatory)) explanatory <- jmvcore::resolveQuo(jmvcore::enquo(explanatory))
     if ( ! missing(contexpl)) contexpl <- jmvcore::resolveQuo(jmvcore::enquo(contexpl))
     if ( ! missing(adjexplanatory)) adjexplanatory <- jmvcore::resolveQuo(jmvcore::enquo(adjexplanatory))
-    if ( ! missing(reduced_explanatory)) reduced_explanatory <- jmvcore::resolveQuo(jmvcore::enquo(reduced_explanatory))
-    if ( ! missing(stratvar)) stratvar <- jmvcore::resolveQuo(jmvcore::enquo(stratvar))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
@@ -1365,61 +1202,50 @@ multisurvival <- function(
             `if`( ! missing(outcome), outcome, NULL),
             `if`( ! missing(explanatory), explanatory, NULL),
             `if`( ! missing(contexpl), contexpl, NULL),
-            `if`( ! missing(adjexplanatory), adjexplanatory, NULL),
-            `if`( ! missing(reduced_explanatory), reduced_explanatory, NULL),
-            `if`( ! missing(stratvar), stratvar, NULL))
+            `if`( ! missing(adjexplanatory), adjexplanatory, NULL))
 
     for (v in explanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
     for (v in adjexplanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
-    for (v in reduced_explanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
-    for (v in stratvar) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- multisurvivalOptions$new(
         elapsedtime = elapsedtime,
         tint = tint,
         dxdate = dxdate,
         fudate = fudate,
+        timetypedata = timetypedata,
+        timetypeoutput = timetypeoutput,
+        uselandmark = uselandmark,
+        landmark = landmark,
         outcome = outcome,
         outcomeLevel = outcomeLevel,
         dod = dod,
         dooc = dooc,
         awd = awd,
         awod = awod,
+        analysistype = analysistype,
         explanatory = explanatory,
         contexpl = contexpl,
         multievent = multievent,
-        analysistype = analysistype,
-        timetypedata = timetypedata,
-        timetypeoutput = timetypeoutput,
-        uselandmark = uselandmark,
-        landmark = landmark,
         hr = hr,
         sty = sty,
         ph_cox = ph_cox,
-        calculateRiskScore = calculateRiskScore,
-        plotRiskGroups = plotRiskGroups,
         km = km,
         endplot = endplot,
         byplot = byplot,
         ci95 = ci95,
         risktable = risktable,
         censored = censored,
+        medianline = medianline,
         pplot = pplot,
+        calculateRiskScore = calculateRiskScore,
+        plotRiskGroups = plotRiskGroups,
         ac = ac,
         adjexplanatory = adjexplanatory,
         ac_method = ac_method,
         ac_summary = ac_summary,
         ac_timepoints = ac_timepoints,
         ac_compare = ac_compare,
-        reduced_explanatory = reduced_explanatory,
-        compare_models = compare_models,
-        use_modelSelection = use_modelSelection,
-        modelSelection = modelSelection,
-        selectionCriteria = selectionCriteria,
-        pEntry = pEntry,
-        pRemoval = pRemoval,
-        use_stratify = use_stratify,
-        stratvar = stratvar)
+        use_stratify = use_stratify)
 
     analysis <- multisurvivalClass$new(
         options = options,
