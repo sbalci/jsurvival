@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">jsurvival</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2.41</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2.46</span>
       </span>
     </div>
 
@@ -86,9 +86,6 @@
 <span>  ac <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">adjexplanatory</span>,</span>
 <span>  ac_method <span class="op">=</span> <span class="st">"average"</span>,</span>
-<span>  ac_summary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  ac_timepoints <span class="op">=</span> <span class="st">"12, 36, 60"</span>,</span>
-<span>  ac_compare <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  use_stratify <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -279,27 +276,13 @@ based on their calculated risk scores and plots their survival curves.</p></dd>
 <dd><p>Method for computing adjusted survival curves</p></dd>
 
 
-<dt id="arg-ac-summary">ac_summary<a class="anchor" aria-label="anchor" href="#arg-ac-summary"></a></dt>
-<dd><p>Calculate and display summary statistics for adjusted
-curves</p></dd>
-
-
-<dt id="arg-ac-timepoints">ac_timepoints<a class="anchor" aria-label="anchor" href="#arg-ac-timepoints"></a></dt>
-<dd><p>Timepoints for calculating summary statistics
-(comma-separated)</p></dd>
-
-
-<dt id="arg-ac-compare">ac_compare<a class="anchor" aria-label="anchor" href="#arg-ac-compare"></a></dt>
-<dd><p>Perform statistical comparison between adjusted curves</p></dd>
-
-
 <dt id="arg-use-stratify">use_stratify<a class="anchor" aria-label="anchor" href="#arg-use-stratify"></a></dt>
 <dd><p>.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A results object containing:</p><table class="table table"><tr><td><code>results$todo</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$text</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$text2</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$plot</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot3</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$cox_ph</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$plot8</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plotKM</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$riskScoreTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$riskScoreMetrics</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$riskGroupPlot</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$calculatedtime</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$outcomeredefined</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$addRiskScore</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$addRiskGroup</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$plot_adj</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$adjustedSummaryTable2</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$adjustedSummaryTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$adjustedComparison</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$adjustedComparison_survdiff_res</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$adjustedSurvTable2</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$adjustedSurvTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$adjustedSurvTableSummary</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$adjustedPairwiseTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$adjustedPairwiseSummary</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$adjustedMedianTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$adjustedMedianSummary</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$adjustedCoxTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$adjustedCoxText</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$adjustedCoxSummary</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$adjustedCoxPH</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$adjustedCoxPHPlot</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr></table><p>Tables can be converted to data frames with <code>asDF</code> or <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></code>. For example:</p>
+    <p>A results object containing:</p><table class="table table"><tr><td><code>results$todo</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$text</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$text2</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$plot</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot3</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$cox_ph</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$plot8</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plotKM</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$riskScoreTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$riskScoreMetrics</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$riskGroupPlot</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$calculatedtime</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$outcomeredefined</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$addRiskScore</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$addRiskGroup</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$plot_adj</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr></table><p>Tables can be converted to data frames with <code>asDF</code> or <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></code>. For example:</p>
 <p><code>results$riskScoreTable$asDF</code></p>
 <p><code>as.data.frame(results$riskScoreTable)</code></p>
     </div>
