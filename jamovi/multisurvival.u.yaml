@@ -301,23 +301,23 @@ children:
           - type: ComboBox
             name: ac_method
             enable: (ac)
-      - type: Label
-        label: Summary Statistics
-        children:
-          - type: LayoutBox
-            margin: large
-            children:
-              - type: CheckBox
-                name: ac_summary
-                enable: (ac)
-              - type: TextBox
-                name: ac_timepoints
-                format: string
-                enable: (ac_summary)
-                width: large
-              - type: CheckBox
-                name: ac_compare
-                enable: (ac_summary)
+      # - type: Label
+      #   label: Summary Statistics
+      #   children:
+      #     - type: LayoutBox
+      #       margin: large
+      #       children:
+      #         - type: CheckBox
+      #           name: ac_summary
+      #           enable: (ac)
+      #         - type: TextBox
+      #           name: ac_timepoints
+      #           format: string
+      #           enable: (ac_summary)
+      #           width: large
+      #         - type: CheckBox
+      #           name: ac_compare
+      #           enable: (ac_summary)
   # - type: CollapseBox
   #   label: Reduced Model Options
   #   collapsed: true

@@ -762,9 +762,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         ## Adjusted survival ----
 
-        if (self$options$ac) {
-          private$.calculateAdjustedStats()
-          }
+        # if (self$options$ac) {
+        #   private$.calculateAdjustedStats()
+        #   }
 
 
 
@@ -1600,18 +1600,30 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
       data <- cleaneddata$cleanData
       adj_var <- cleaneddata$adjexplanatory_name
 
-      if (is.null(adj_var)) {
-        stop('Please select a variable for adjusted curves')
-      }
+      # if (is.null(adj_var)) {
+      #   stop('Please select a variable for adjusted curves')
+      # }
+
+      todo <- 'Please select a variable for adjusted curves'
+
+      html <- self$results$todo
+      html$setContent(todo)
+      return()
+
 
       # Get baseline Cox model
       cox_model <- private$.cox_model()
 
       # Get unique levels and validate
       levels <- sort(unique(data[[adj_var]]))
-      if (length(levels) < 2) {
-        stop("Adjustment variable must have at least 2 levels")
-      }
+      # if (length(levels) < 2) {
+      #   stop("Adjustment variable must have at least 2 levels")
+      # }
+      todo <- 'Adjustment variable must have at least 2 levels'
+
+      html <- self$results$todo
+      html$setContent(todo)
+      return()
 
       # Get timepoints for summaries
       timepoints <- if (self$options$ac_summary) {
@@ -1896,6 +1908,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
       ,
     ## Adjusted Survival Plot ----
       .plot_adj = function(image_plot_adj, ggtheme, theme, ...) {
+
         if (!self$options$ac) return()
 
         plotData <- image_plot_adj$state
@@ -1922,8 +1935,17 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
         if (is.null(plotData$adjexplanatory_name)) {
-          stop('Please select a variable for adjusted curves')
+          text_warning <- "Please select a variable for adjusted curves."
+          grid::grid.newpage()
+          grid::grid.text(text_warning, 0.5, 0.5)
+          return(TRUE)
         }
+
+
+
+
+
+
 
 
         ### prepare formula ----
@@ -2002,6 +2024,70 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             stop(paste("Error creating adjusted curves:", e$message))
           }
         })
+
+
+
+
+        # # Prepare plot parameters
+        # plot_params <- list(
+        #   fit = cox_model,
+        #   data = mydata,
+        #   variable = adjexplanatory_name,
+        #   method = self$options$ac_method,
+        #   conf.int = self$options$ci95,
+        #   risk.table = self$options$risktable,
+        #   xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+        #   title = paste0("Adjusted Survival Curves for ",
+        #                  self$options$adjexplanatory,
+        #                  " (", self$options$ac_method, " adjustment)"),
+        #   pval = self$options$pplot,
+        #   pval.method = self$options$pplot,
+        #   legend = "none",
+        #   break.time.by = self$options$byplot,
+        #   xlim = c(0, self$options$endplot),
+        #   censor = self$options$censored,
+        #   surv.median.line = self$options$medianline,
+        #   risk.table.height = 0.25,  # Added for better risk table sizing
+        #   risk.table.y.text.col = TRUE,  # Color code risk table text
+        #   ncensor.plot = FALSE,  # Turn off censor plot by default
+        #   fontsize = 3.5  # Adjust font size
+        # )
+        # # Try to create plot with specified method
+        # plot <- tryCatch({
+        #   do.call(survminer::ggadjustedcurves, plot_params)
+        # }, error = function(e) {
+        #   # If marginal method fails, try average method instead
+        #   if (self$options$ac_method == "marginal") {
+        #     warning("Marginal method failed, falling back to average method")
+        #     plot_params$method <- "average"
+        #     plot_params$title <- paste0("Adjusted Survival Curves for ",
+        #                                 self$options$adjexplanatory,
+        #                                 " (average adjustment - marginal failed)")
+        #     do.call(survminer::ggadjustedcurves, plot_params)
+        #   } else {
+        #     stop(paste("Error creating adjusted curves:", e$message))
+        #   }
+        # })
+        # # Add additional theme elements if needed
+        # plot <- plot +
+        #   ggplot2::theme(
+        #     plot.title = ggplot2::element_text(size = 14, face = "bold"),
+        #     plot.subtitle = ggplot2::element_text(size = 12),
+        #     axis.title = ggplot2::element_text(size = 12),
+        #     axis.text = ggplot2::element_text(size = 10),
+        #     legend.text = ggplot2::element_text(size = 10)
+        #   )
+
+
+
+
+
+
+
+
+
+
+
 
         print(plot)
         TRUE

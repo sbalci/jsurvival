@@ -40,9 +40,6 @@ multisurvival(
   ac = FALSE,
   adjexplanatory,
   ac_method = "average",
-  ac_summary = FALSE,
-  ac_timepoints = "12, 36, 60",
-  ac_compare = FALSE,
   use_stratify = FALSE
 )
 }
@@ -159,14 +156,6 @@ based on their calculated risk scores and plots their survival curves.}
 
 \item{ac_method}{Method for computing adjusted survival curves}
 
-\item{ac_summary}{Calculate and display summary statistics for adjusted
-curves}
-
-\item{ac_timepoints}{Timepoints for calculating summary statistics
-(comma-separated)}
-
-\item{ac_compare}{Perform statistical comparison between adjusted curves}
-
 \item{use_stratify}{.}
 }
 \value{
@@ -188,22 +177,6 @@ A results object containing:
 \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
 \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
-\code{results$adjustedSummaryTable2} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$adjustedSummaryTable} \tab \tab \tab \tab \tab a table \cr
-\code{results$adjustedComparison} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$adjustedComparison_survdiff_res} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$adjustedSurvTable2} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$adjustedSurvTable} \tab \tab \tab \tab \tab a table \cr
-\code{results$adjustedSurvTableSummary} \tab \tab \tab \tab \tab a html \cr
-\code{results$adjustedPairwiseTable} \tab \tab \tab \tab \tab a table \cr
-\code{results$adjustedPairwiseSummary} \tab \tab \tab \tab \tab a html \cr
-\code{results$adjustedMedianTable} \tab \tab \tab \tab \tab a table \cr
-\code{results$adjustedMedianSummary} \tab \tab \tab \tab \tab a html \cr
-\code{results$adjustedCoxTable} \tab \tab \tab \tab \tab a table \cr
-\code{results$adjustedCoxText} \tab \tab \tab \tab \tab a html \cr
-\code{results$adjustedCoxSummary} \tab \tab \tab \tab \tab a html \cr
-\code{results$adjustedCoxPH} \tab \tab \tab \tab \tab a html \cr
-\code{results$adjustedCoxPHPlot} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
