@@ -36,11 +36,13 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             medianline = "none",
             pplot = TRUE,
             calculateRiskScore = FALSE,
+            numRiskGroups = "four",
             plotRiskGroups = FALSE,
             ac = FALSE,
             adjexplanatory = NULL,
             ac_method = "average",
-            use_stratify = FALSE, ...) {
+            use_stratify = FALSE,
+            stratvar = NULL, ...) {
 
             super$initialize(
                 package="jsurvival",
@@ -215,6 +217,14 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 "calculateRiskScore",
                 calculateRiskScore,
                 default=FALSE)
+            private$..numRiskGroups <- jmvcore::OptionList$new(
+                "numRiskGroups",
+                numRiskGroups,
+                options=list(
+                    "two",
+                    "three",
+                    "four"),
+                default="four")
             private$..plotRiskGroups <- jmvcore::OptionBool$new(
                 "plotRiskGroups",
                 plotRiskGroups,
@@ -248,6 +258,14 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 "use_stratify",
                 use_stratify,
                 default=FALSE)
+            private$..stratvar <- jmvcore::OptionVariables$new(
+                "stratvar",
+                stratvar,
+                suggested=list(
+                    "ordinal",
+                    "nominal"),
+                permitted=list(
+                    "factor"))
 
             self$.addOption(private$..elapsedtime)
             self$.addOption(private$..tint)
@@ -281,6 +299,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..medianline)
             self$.addOption(private$..pplot)
             self$.addOption(private$..calculateRiskScore)
+            self$.addOption(private$..numRiskGroups)
             self$.addOption(private$..plotRiskGroups)
             self$.addOption(private$..addRiskScore)
             self$.addOption(private$..addRiskGroup)
@@ -288,6 +307,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..adjexplanatory)
             self$.addOption(private$..ac_method)
             self$.addOption(private$..use_stratify)
+            self$.addOption(private$..stratvar)
         }),
     active = list(
         elapsedtime = function() private$..elapsedtime$value,
@@ -322,13 +342,15 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         medianline = function() private$..medianline$value,
         pplot = function() private$..pplot$value,
         calculateRiskScore = function() private$..calculateRiskScore$value,
+        numRiskGroups = function() private$..numRiskGroups$value,
         plotRiskGroups = function() private$..plotRiskGroups$value,
         addRiskScore = function() private$..addRiskScore$value,
         addRiskGroup = function() private$..addRiskGroup$value,
         ac = function() private$..ac$value,
         adjexplanatory = function() private$..adjexplanatory$value,
         ac_method = function() private$..ac_method$value,
-        use_stratify = function() private$..use_stratify$value),
+        use_stratify = function() private$..use_stratify$value,
+        stratvar = function() private$..stratvar$value),
     private = list(
         ..elapsedtime = NA,
         ..tint = NA,
@@ -362,13 +384,15 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ..medianline = NA,
         ..pplot = NA,
         ..calculateRiskScore = NA,
+        ..numRiskGroups = NA,
         ..plotRiskGroups = NA,
         ..addRiskScore = NA,
         ..addRiskGroup = NA,
         ..ac = NA,
         ..adjexplanatory = NA,
         ..ac_method = NA,
-        ..use_stratify = NA)
+        ..use_stratify = NA,
+        ..stratvar = NA)
 )
 
 multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -383,9 +407,12 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         cox_ph = function() private$.items[["cox_ph"]],
         plot8 = function() private$.items[["plot8"]],
         plotKM = function() private$.items[["plotKM"]],
+        risk_score_analysis = function() private$.items[["risk_score_analysis"]],
+        risk_score_analysis2 = function() private$.items[["risk_score_analysis2"]],
         riskScoreTable = function() private$.items[["riskScoreTable"]],
         riskScoreMetrics = function() private$.items[["riskScoreMetrics"]],
         riskGroupPlot = function() private$.items[["riskGroupPlot"]],
+        stratificationExplanation = function() private$.items[["stratificationExplanation"]],
         calculatedtime = function() private$.items[["calculatedtime"]],
         outcomeredefined = function() private$.items[["outcomeredefined"]],
         addRiskScore = function() private$.items[["addRiskScore"]],
@@ -557,6 +584,30 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "pplot",
                     "censored",
                     "medianline")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="risk_score_analysis",
+                title="Risk Score Analysis",
+                visible="(calculateRiskScore)",
+                clearWith=list(
+                    "calculateRiskScore",
+                    "outcome",
+                    "outcomeLevel",
+                    "explanatory",
+                    "contexpl",
+                    "numRiskGroups")))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="risk_score_analysis2",
+                title="Risk Score Analysis",
+                visible="(calculateRiskScore)",
+                clearWith=list(
+                    "calculateRiskScore",
+                    "outcome",
+                    "outcomeLevel",
+                    "explanatory",
+                    "contexpl",
+                    "numRiskGroups")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="riskScoreTable",
@@ -589,7 +640,8 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "outcome",
                     "outcomeLevel",
                     "explanatory",
-                    "contexpl")))
+                    "contexpl",
+                    "numRiskGroups")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="riskScoreMetrics",
@@ -600,7 +652,8 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "outcome",
                     "outcomeLevel",
                     "explanatory",
-                    "contexpl")))
+                    "contexpl",
+                    "numRiskGroups")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="riskGroupPlot",
@@ -609,7 +662,19 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 height=450,
                 renderFun=".plotRiskGroups",
                 requiresData=TRUE,
-                visible="(plotRiskGroups)"))
+                visible="(plotRiskGroups)",
+                clearWith=list(
+                    "calculateRiskScore",
+                    "outcome",
+                    "outcomeLevel",
+                    "explanatory",
+                    "contexpl",
+                    "numRiskGroups")))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="stratificationExplanation",
+                title="Stratification Notes",
+                visible="(use_stratify)"))
             self$add(jmvcore::Output$new(
                 options=options,
                 name="calculatedtime",
@@ -800,12 +865,20 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   test on the survival plot.
 #' @param calculateRiskScore If true, calculates a risk score from the Cox
 #'   model coefficients for each individual.
+#' @param numRiskGroups Select the number of risk groups to create from the
+#'   risk scores. The data will be divided into equal quantiles based on this
+#'   selection.
 #' @param plotRiskGroups If true, stratifies individuals into risk groups
 #'   based on their calculated risk scores and plots their survival curves.
 #' @param ac .
 #' @param adjexplanatory .
 #' @param ac_method Method for computing adjusted survival curves
-#' @param use_stratify .
+#' @param use_stratify If true, uses stratification to handle variables that
+#'   violate the proportional hazards assumption. Stratification creates
+#'   separate baseline hazard functions for different groups.
+#' @param stratvar Variables used for stratification. When proportional
+#'   hazards are not met, stratification can adjust the model to better fit the
+#'   data by allowing different baseline hazards.
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
@@ -816,9 +889,12 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$risk_score_analysis} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$risk_score_analysis2} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$riskScoreTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$riskScoreMetrics} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$riskGroupPlot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$stratificationExplanation} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
@@ -865,11 +941,13 @@ multisurvival <- function(
     medianline = "none",
     pplot = TRUE,
     calculateRiskScore = FALSE,
+    numRiskGroups = "four",
     plotRiskGroups = FALSE,
     ac = FALSE,
     adjexplanatory,
     ac_method = "average",
-    use_stratify = FALSE) {
+    use_stratify = FALSE,
+    stratvar) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("multisurvival requires jmvcore to be installed (restart may be required)")
@@ -881,6 +959,7 @@ multisurvival <- function(
     if ( ! missing(explanatory)) explanatory <- jmvcore::resolveQuo(jmvcore::enquo(explanatory))
     if ( ! missing(contexpl)) contexpl <- jmvcore::resolveQuo(jmvcore::enquo(contexpl))
     if ( ! missing(adjexplanatory)) adjexplanatory <- jmvcore::resolveQuo(jmvcore::enquo(adjexplanatory))
+    if ( ! missing(stratvar)) stratvar <- jmvcore::resolveQuo(jmvcore::enquo(stratvar))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
@@ -890,10 +969,12 @@ multisurvival <- function(
             `if`( ! missing(outcome), outcome, NULL),
             `if`( ! missing(explanatory), explanatory, NULL),
             `if`( ! missing(contexpl), contexpl, NULL),
-            `if`( ! missing(adjexplanatory), adjexplanatory, NULL))
+            `if`( ! missing(adjexplanatory), adjexplanatory, NULL),
+            `if`( ! missing(stratvar), stratvar, NULL))
 
     for (v in explanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
     for (v in adjexplanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
+    for (v in stratvar) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- multisurvivalOptions$new(
         elapsedtime = elapsedtime,
@@ -926,11 +1007,13 @@ multisurvival <- function(
         medianline = medianline,
         pplot = pplot,
         calculateRiskScore = calculateRiskScore,
+        numRiskGroups = numRiskGroups,
         plotRiskGroups = plotRiskGroups,
         ac = ac,
         adjexplanatory = adjexplanatory,
         ac_method = ac_method,
-        use_stratify = use_stratify)
+        use_stratify = use_stratify,
+        stratvar = stratvar)
 
     analysis <- multisurvivalClass$new(
         options = options,

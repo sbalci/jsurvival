@@ -36,11 +36,13 @@ multisurvival(
   medianline = "none",
   pplot = TRUE,
   calculateRiskScore = FALSE,
+  numRiskGroups = "four",
   plotRiskGroups = FALSE,
   ac = FALSE,
   adjexplanatory,
   ac_method = "average",
-  use_stratify = FALSE
+  use_stratify = FALSE,
+  stratvar
 )
 }
 \arguments{
@@ -147,6 +149,10 @@ test on the survival plot.}
 \item{calculateRiskScore}{If true, calculates a risk score from the Cox
 model coefficients for each individual.}
 
+\item{numRiskGroups}{Select the number of risk groups to create from the
+risk scores. The data will be divided into equal quantiles based on this
+selection.}
+
 \item{plotRiskGroups}{If true, stratifies individuals into risk groups
 based on their calculated risk scores and plots their survival curves.}
 
@@ -156,7 +162,13 @@ based on their calculated risk scores and plots their survival curves.}
 
 \item{ac_method}{Method for computing adjusted survival curves}
 
-\item{use_stratify}{.}
+\item{use_stratify}{If true, uses stratification to handle variables that
+violate the proportional hazards assumption. Stratification creates
+separate baseline hazard functions for different groups.}
+
+\item{stratvar}{Variables used for stratification. When proportional
+hazards are not met, stratification can adjust the model to better fit the
+data by allowing different baseline hazards.}
 }
 \value{
 A results object containing:
@@ -169,9 +181,12 @@ A results object containing:
 \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
 \code{results$plotKM} \tab \tab \tab \tab \tab an image \cr
+\code{results$risk_score_analysis} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$risk_score_analysis2} \tab \tab \tab \tab \tab a html \cr
 \code{results$riskScoreTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$riskScoreMetrics} \tab \tab \tab \tab \tab a html \cr
 \code{results$riskGroupPlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$stratificationExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
 \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr

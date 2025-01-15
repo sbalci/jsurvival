@@ -505,7 +505,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         myexplanatory_labelled <- labelled_data$myexplanatory_labelled
         mycontexpl_labelled    <- labelled_data$mycontexpl_labelled
         adjexplanatory_labelled <- labelled_data$adjexplanatory_labelled
-
+        mystratvar_labelled <- labelled_data$mystratvar_labelled
 
         time <- private$.definemytime()
         outcome <- private$.definemyoutcome()
@@ -632,7 +632,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             "myfudate_labelled" = myfudate_labelled,
             "myexplanatory_labelled" = myexplanatory_labelled,
             "mycontexpl_labelled" = mycontexpl_labelled,
-            "adjexplanatory_labelled" = adjexplanatory_labelled
+            "adjexplanatory_labelled" = adjexplanatory_labelled,
+            "mystratvar_labelled" = mystratvar_labelled
 
           )
         )
@@ -722,6 +723,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         myexplanatory_labelled <- cleaneddata$myexplanatory_labelled
         mycontexpl_labelled <- cleaneddata$mycontexpl_labelled
         adjexplanatory_labelled <- cleaneddata$adjexplanatory_labelled
+        mystratvar_labelled <- cleaneddata$mystratvar_labelled
 
 
 
@@ -774,6 +776,65 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         #   private$.final_fit2()
         # }
 
+
+
+        ## stratification ----
+        if (self$options$use_stratify) {
+          stratify_explanation <- glue::glue("
+    <h4>Understanding Stratification in Your Survival Analysis</h4>
+
+    <p>You have chosen to stratify your analysis by: <b>{paste(self$options$stratvar, collapse=', ')}</b></p>
+
+    <h5>What This Means:</h5>
+    <ul>
+        <li>The model creates separate baseline hazard functions for each level of {paste(self$options$stratvar, collapse=' and ')}</li>
+        <li>Hazard ratios are not calculated for stratified variables because they are used to define different baseline hazards</li>
+        <li>The effects of other variables are estimated while accounting for these different baseline hazards</li>
+    </ul>
+
+    <h5>Interpretation:</h5>
+    <ul>
+        <li>The hazard ratios shown in the results are adjusted for the stratification</li>
+        <li>You can think of this as pooling the effects of your other variables across different strata</li>
+        <li>This approach is particularly useful when the effect of a variable changes over time</li>
+    </ul>
+
+    <h5>When This is Useful:</h5>
+    <ul>
+        <li>When variables violate the proportional hazards assumption</li>
+        <li>When baseline hazards differ substantially between groups</li>
+        <li>When you need to control for a variable but don't need its hazard ratio</li>
+    </ul>
+")
+
+          self$results$stratificationExplanation$setContent(stratify_explanation)
+        }
+
+
+
+
+
+        # specific details ph_cox startify ----
+        if (self$options$ph_cox && self$options$use_stratify) {
+          zph <- survival::cox.zph(cox_model)
+
+          # Check if stratification was appropriate
+          violations <- which(zph$table[,"p"] < 0.05)
+          violation_vars <- rownames(zph$table)[violations]
+
+          additional_info <- ""
+          if (length(intersect(mystratvar_labelled, violation_vars)) > 0) {
+            additional_info <- glue::glue("
+            <h5>Stratification Assessment:</h5>
+            <p>Your choice to stratify was supported by the proportional hazards test results.
+            The stratified variables showed violations of the proportional hazards assumption.</p>
+        ")
+          }
+
+          self$results$stratificationExplanation$setContent(
+            paste(stratify_explanation, additional_info)
+          )
+        }
 
 
         # Prepare Data For Plots ----
@@ -844,6 +905,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         myexplanatory_labelled <- cleaneddata$myexplanatory_labelled
         mycontexpl_labelled <- cleaneddata$mycontexpl_labelled
         adjexplanatory_labelled <- cleaneddata$adjexplanatory_labelled
+        mystratvar_labelled <- cleaneddata$mystratvar_labelled
 
 
         ## prepare formula ----
@@ -862,17 +924,27 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         formula2 <- c(myexplanatory, mycontexpl)
 
+
+        # Remove stratification variables from the finalfit output
+        if (self$options$use_stratify && !is.null(self$options$stratvar)) {
+          # Remove stratified variables from the display
+          formula2 <- formula2[!formula2 %in% mystratvar_labelled]
+        }
+
+
+
         myformula <-
           paste("Surv( mytime, myoutcome ) ~ ", paste(formula2, collapse = " + "))
 
         myformula <- as.formula(myformula)
 
-        # self$results$mydataview$setContent(
+        # self$results$mydataview_finalfit$setContent(
         #     list(
         #         mydata = head(mydata, n = 30),
         #         myformula = myformula,
         #         myexplanatory = myexplanatory,
         #         mycontexpl = mycontexpl,
+        #         mystratvar_labelled = mystratvar_labelled,
         #         formula2 = formula2
         #     )
         # )
@@ -888,6 +960,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                            # explanatory = formula2,
 
                            metrics = TRUE) -> tMultivariable
+
 
 
         text2 <- glue::glue("
@@ -909,6 +982,18 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                               self$options$timetypeoutput,
                               ".")
         }
+
+
+
+        # Add note about stratified variables if any
+        if (self$options$use_stratify && !is.null(self$options$stratvar)) {
+          text2 <- glue::glue(text2,
+
+          "
+            <b>Note:</b> This model is stratified by: {paste(self$options$stratvar, collapse=', ')}.
+            Hazard ratios are not shown for stratification variables as they are used to create separate baseline hazard functions.
+            ")
+          }
 
         self$results$text2$setContent(text2)
 
@@ -945,6 +1030,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         myexplanatory_labelled <- cleaneddata$myexplanatory_labelled
         mycontexpl_labelled <- cleaneddata$mycontexpl_labelled
         adjexplanatory_labelled <- cleaneddata$adjexplanatory_labelled
+        mystratvar_labelled <- cleaneddata$mystratvar_labelled
 
 
 
@@ -953,8 +1039,14 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         if (self$options$use_stratify && !is.null(self$options$stratvar)) {
           mystratvar <- as.vector(cleaneddata$mystratvar_labelled)
-          # Create strata terms
-          mystratvar <- paste0("strata(", mystratvar, ")")
+          if (length(mystratvar) > 0) {
+            # FIXED: Each strata variable should be in its own strata() function
+            mystratvar <- paste(sprintf("survival::strata(%s)", mystratvar), collapse = " + ")
+
+            # # Only create strata terms if we have variables
+            # mystratvar <- paste0("survival::strata(", paste(mystratvar, collapse = "+"), ")")
+          }
+
         }
 
 
@@ -969,20 +1061,44 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           mycontexpl <- as.vector(mycontexpl_labelled)
         }
 
+        # Build formula parts
+        formula_parts <- c(myexplanatory, mycontexpl)
 
-        formula2 <- c(myexplanatory, mycontexpl, mystratvar)
+        # Add strata term only if it exists
+        if (!is.null(mystratvar) && mystratvar != "") {
+          formula_parts <- c(formula_parts, mystratvar)
+        }
+        # formula2 <- c(myexplanatory, mycontexpl, mystratvar)
 
 
 
         LHT <- "survival::Surv(mytime, myoutcome)"
 
-        RHT <- formula2
+        # RHT <- formula2
 
-        RHT <- paste(RHT, collapse = " + ")
+        RHT <- paste(formula_parts, collapse = " + ")
 
         coxformula <- paste0(LHT, " ~ ", RHT)
 
         coxformula <- as.formula(coxformula)
+
+
+        # Remove any rows with NA in stratification variables
+        # if (self$options$use_stratify && !is.null(self$options$stratvar)) {
+        #   complete_cases <- complete.cases(mydata[, mystratvar])
+        #   mydata <- mydata[complete_cases, ]
+        # }
+
+
+
+        # self$results$mydataview_cox$setContent(
+        #   list(
+        #     mydata = head(mydata, n = 30),
+        #     coxformula = coxformula
+        #   )
+        # )
+
+
 
         cox_model <- survival::coxph(coxformula, data = mydata)
 
@@ -1092,6 +1208,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         myfudate_labelled <- plotData$myfudate_labelled
         myexplanatory_labelled <- plotData$myexplanatory_labelled
         mycontexpl_labelled <- plotData$mycontexpl_labelled
+        mystratvar_labelled <- plotData$mystratvar_labelled
 
 
         ### prepare formula ----
@@ -1107,6 +1224,16 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         }
 
         formula2 <- c(myexplanatory, mycontexpl)
+
+
+        # Remove stratification variables from the finalfit output
+        if (self$options$use_stratify && !is.null(self$options$stratvar)) {
+          # Remove stratified variables from the display
+          formula2 <- formula2[!formula2 %in% mystratvar_labelled]
+        }
+
+
+
 
         myformula <-
           paste0('Surv( mytime, myoutcome )')
@@ -1173,6 +1300,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         myfudate_labelled <- plotData$myfudate_labelled
         myexplanatory_labelled <- plotData$myexplanatory_labelled
         mycontexpl_labelled <- plotData$mycontexpl_labelled
+        mystratvar_labelled <- plotData$mystratvar_labelled
 
 
         ### prepare formula ----
@@ -1188,6 +1316,14 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         }
 
         formula2 <- c(myexplanatory, mycontexpl)
+
+
+        # Remove stratification variables from the finalfit output
+        if (self$options$use_stratify && !is.null(self$options$stratvar)) {
+          # Remove stratified variables from the display
+          formula2 <- formula2[!formula2 %in% mystratvar_labelled]
+        }
+
 
         myformula <-
           paste("survival::Surv(mytime, myoutcome) ~ ",
@@ -1247,11 +1383,46 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
       .plotKM = function(imageKM, ggtheme, theme, ...) {
         # Check conditions and show message if not met
         if (length(self$options$explanatory) > 2) {
-          text_warning <- "Kaplan-Meier plot requires 2 categorical explanatory variables. You have selected more than 2 variables."
-          grid::grid.newpage()
-          grid::grid.text(text_warning, 0.5, 0.5)
+          text_warning <- "Kaplan-Meier plot requires 2 categorical explanatory variables.\nYou have selected more than 2 variables."
+          # grid::grid.newpage()
+          # grid::grid.text(text_warning, 0.5, 0.5)
+
+
+        # Create a new page
+        grid::grid.newpage()
+
+        # Create a viewport with margins for better readability
+        vp <- grid::viewport(
+          width = 0.9,    # Wider viewport for left-aligned text
+          height = 0.9,   # Keep reasonable margins
+          x = 0.5,        # Center the viewport
+          y = 0.5         # Center the viewport
+        )
+        grid::pushViewport(vp)
+
+        # Add the text with left alignment
+        grid::grid.text(
+          text_warning,
+          x = 0.05,           # Move text to the left (5% margin)
+          y = 0.95,           # Start from top (5% margin)
+          just = c("left", "top"),  # Left align and top justify
+          gp = grid::gpar(
+            fontsize = 11,        # Maintain readable size
+            fontface = "plain",   # Regular font
+            lineheight = 1.3      # Slightly increased line spacing for readability
+          )
+        )
+
+        # Reset viewport
+        grid::popViewport()
+
           return(TRUE)
         }
+
+
+
+
+
 
         if (!is.null(self$options$contexpl)) {
           text_warning <- "Kaplan-Meier plot cannot be created with continuous explanatory variables. Please select only categorical variables."
@@ -1367,24 +1538,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
       ## Calculate Risk Score ----
 
       .calculateRiskScore = function(cox_model, mydata) {
-        # Calculate risk scores
+
+        ### Calculate risk scores ----
         risk_scores <- predict(cox_model, type = "risk")
 
-        # Add risk scores to data
+        ### Add risk scores to data ----
         mydata$risk_score <- risk_scores
-
-        # Create risk groups using quantiles
-        mydata$risk_group <- cut(
-          mydata$risk_score,
-          breaks = quantile(mydata$risk_score, probs = seq(0, 1, by = 0.25)),
-          labels = c(
-            "Low Risk",
-            "Intermediate-Low Risk",
-            "Intermediate-High Risk",
-            "High Risk"
-          ),
-          include.lowest = TRUE
-        )
 
 
         ### Add risk scores to output if requested ----
@@ -1395,6 +1554,79 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         }
 
 
+        # # Create risk groups using quantiles
+        # mydata$risk_group <- cut(
+        #   mydata$risk_score,
+        #   breaks = quantile(mydata$risk_score, probs = seq(0, 1, by = 0.25)),
+        #   labels = c(
+        #     "Low Risk",
+        #     "Intermediate-Low Risk",
+        #     "Intermediate-High Risk",
+        #     "High Risk"
+        #   ),
+        #   include.lowest = TRUE
+        # )
+
+
+        ### Function to try creating risk groups ----
+        createRiskGroups <- function(n_groups) {
+          tryCatch({
+            if(n_groups == 2) {
+              probs <- c(0, 0.5, 1)
+              labels <- c("Low Risk", "High Risk")
+            } else if(n_groups == 3) {
+              probs <- c(0, 1/3, 2/3, 1)
+              labels <- c("Low Risk", "Intermediate Risk", "High Risk")
+            } else {
+              probs <- c(0, 0.25, 0.5, 0.75, 1)
+              labels <- c("Low Risk", "Intermediate-Low Risk",
+                          "Intermediate-High Risk", "High Risk")
+            }
+
+            groups <- cut(mydata$risk_score,
+                          breaks = quantile(mydata$risk_score, probs = probs),
+                          labels = labels,
+                          include.lowest = TRUE)
+
+            #### Verify we have at least one observation per group ----
+            if(any(table(groups) == 0)) {
+              stop("Some groups have zero observations")
+            }
+
+            return(list(success = TRUE, groups = groups))
+          }, error = function(e) {
+            return(list(success = FALSE, error = e$message))
+          })
+        }
+
+        #### Try to create requested number of groups with fallback ----
+        desired_groups <- switch(self$options$numRiskGroups,
+                                 "four" = 4,
+                                 "three" = 3,
+                                 "two" = 2)
+
+        result <- NULL
+        warning_message <- NULL
+
+        while(desired_groups >= 2 && is.null(result)) {
+          attempt <- createRiskGroups(desired_groups)
+          if(attempt$success) {
+            result <- attempt$groups
+            if(desired_groups < switch(self$options$numRiskGroups,
+                                       "four" = 4,
+                                       "three" = 3,
+                                       "two" = 2)) {
+              warning_message <- paste("Could not create", self$options$numRiskGroups,
+                               "groups. Fell back to", desired_groups, "groups.")
+            }
+          } else {
+            desired_groups <- desired_groups - 1
+          }
+        }
+
+
+        mydata$risk_group <- result
+
         ### Add risk group to output if requested ----
         if (self$options$addRiskGroup &&
             self$results$addRiskGroup$isNotFilled()) {
@@ -1402,12 +1634,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           self$results$addRiskGroup$setValues(mydata$risk_group)
         }
 
-
-
-
-
-
-        # Calculate summary statistics
+        ### Calculate summary statistics ----
         risk_summary <- data.frame(
           group = levels(mydata$risk_group),
           n_patients = as.numeric(table(mydata$risk_group)),
@@ -1417,7 +1644,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         risk_summary$percent <- (risk_summary$n_patients / sum(risk_summary$n_patients)) * 100
 
-        # Fill risk score table
+        ### Fill risk score table ----
         riskScoreTable <- self$results$riskScoreTable
 
         for (i in seq_len(nrow(risk_summary))) {
@@ -1426,31 +1653,85 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             values = list(
               group = risk_summary$group[i],
               n_patients = risk_summary$n_patients[i],
-              percent = risk_summary$percent[i],
-              median_score = risk_summary$median_score[i],
+              # percent = risk_summary$percent[i],
+              percent = round(risk_summary$percent[i], 1),  # Round to 1 decimal
+              # median_score = risk_summary$median_score[i],
+              median_score = round(risk_summary$median_score[i], 3),  # Round to 3 decimals
               events = risk_summary$events[i]
             )
           )
         }
 
-        # Create metrics summary
+        ### Create metrics summary ----
         c_index <- survival::concordance(cox_model)$concordance
+
+        c_index_formatted <- sprintf("%.3f", c_index)
+
+        # Create dynamic group summary text
+        group_summary <- character()
+        for(i in seq_len(nrow(risk_summary))) {
+          group_summary[i] <- glue::glue("{risk_summary$group[i]}: {risk_summary$n_patients[i]} ({format(risk_summary$percent[i], digits=1, nsmall=1)}%)")
+
+        }
+        group_text <- paste(group_summary, collapse = "<br>")
 
         metrics_html <- glue::glue(
           "
-        <br>
-        <b>Risk Score Model Performance:</b><br>
-        Harrell's C-index: {format(c_index, digits=3)}<br>
-        <br>
-        Number of patients in risk groups:<br>
-        Low Risk: {risk_summary$n_patients[1]} ({format(risk_summary$percent[1], digits=1)}%)<br>
-        Intermediate-Low: {risk_summary$n_patients[2]} ({format(risk_summary$percent[2], digits=1)}%)<br>
-        Intermediate-High: {risk_summary$n_patients[3]} ({format(risk_summary$percent[3], digits=1)}%)<br>
-        High Risk: {risk_summary$n_patients[4]} ({format(risk_summary$percent[4], digits=1)}%)<br>
-    "
+<br>
+<b>Risk Score Model Performance:</b><br>
+Harrell's C-index: {sprintf('%.3f', c_index)}<br>
+<br>"
+# Number of patients in risk groups:<br>
+# {group_text}<br>
+# "
         )
 
         self$results$riskScoreMetrics$setContent(metrics_html)
+
+
+        percentile_text <- switch(
+          as.character(length(levels(mydata$risk_group))),
+          "2" = "50th percentile are classified as Low Risk, above as High Risk",
+          "3" = "33rd percentile are Low Risk, between 33rd-67th percentiles are Intermediate Risk, and above 67th percentile are High Risk",
+          "4" = "25th percentile are Low Risk, 25th-50th are Intermediate-Low Risk, 50th-75th are Intermediate-High Risk, and above 75th percentile are High Risk"
+        )
+
+        message_risk_score_analysis <- glue::glue(
+"<b>Risk Scores Were Calculated As Follows:</b><br>
+The risk scores were calculated using the coefficients from the Cox proportional hazards model.
+These scores represent the predicted risk of the event occurring based on the combined effect of all variables in the model.
+A higher score indicates a greater predicted risk.<br>
+<br>
+Patients were then divided into {as.character(length(levels(mydata$risk_group)))} equal-sized groups based on these risk scores:
+ <br>
+- Scores below the {percentile_text}.<br>
+<br>
+The Harrell's C-index of {c_index_formatted} indicates the model's discriminative ability,
+where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimination between risk groups.
+<br><br>
+"
+        )
+
+        if(is.null(result)) {
+          message_risk_score_analysis <- "Unable to create risk groups. Check if risk scores have enough variation."
+        }
+
+
+        self$results$risk_score_analysis$setContent(""
+          # list(
+          #   desired_groups,
+          #   percentile_text,
+          #   message_risk_score_analysis,
+          #   warning_message,
+          #   length(levels(mydata$risk_group)),
+          #   levels(mydata$risk_group),
+          #   c_index,
+          #   c_index_formatted
+          #   )
+        )
+
+        self$results$risk_score_analysis2$setContent(message_risk_score_analysis)
+
 
         return(mydata)
       }

@@ -401,6 +401,23 @@ options:
         R: >
           If true, calculates a risk score from the Cox model coefficients for each individual.
 
+
+    - name: numRiskGroups
+      title: Number of Risk Groups
+      type: List
+      options:
+        - title: Two Groups
+          name: two
+        - title: Three Groups
+          name: three
+        - title: Four Groups
+          name: four
+      default: four
+      description: >-
+        Select the number of risk groups to create from the risk scores.
+        The data will be divided into equal quantiles based on this selection.
+
+
     - name: plotRiskGroups
       title: Plot Risk Group Survival
       type: Bool
@@ -638,49 +655,22 @@ options:
       title: Use Variable Stratification
       type: Bool
       default: false
-    #   description:
-    #     R: >
-    #       If true, uses stratification to handle variables that violate the proportional hazards assumption.
-    #       Stratification creates separate baseline hazard functions for different groups.
+      description:
+        R: >
+          If true, uses stratification to handle variables that violate the proportional hazards assumption.
+          Stratification creates separate baseline hazard functions for different groups.
 
 
-    # - name: stratvar
-    #   title: Stratification Variables
-    #   type: Variables
-    #   suggested: [ ordinal, nominal ]
-    #   permitted: [ factor ]
-    #   description:
-    #     R: >
-    #       Variables used for stratification. When proportional hazards are not met,
-    #       stratification can adjust the model to better fit the data by allowing different baseline hazards.
+    - name: stratvar
+      title: Stratification Variables
+      type: Variables
+      suggested: [ ordinal, nominal ]
+      permitted: [ factor ]
+      description:
+        R: >
+          Variables used for stratification. When proportional hazards are not met,
+          stratification can adjust the model to better fit the data by allowing different baseline hazards.
 
-  # - type: CollapseBox
-  #   label: Stratification Variables
-  #   collapsed: true
-  #   children:
-  #     - type: Label
-  #       label: Stratification Variables
-  #       children:
-  #         - type: CheckBox
-  #           name: use_stratify
-  #           fitToGrid: true
-  #         - type: Label
-  #           label: Select Stratification Variables
-  #           fitToGrid: true
-  #           stretchFactor: 1
-  #           children:
-  #             - type: VariableSupplier
-  #               persistentItems: false
-  #               stretchFactor: 1
-  #               children:
-  #                 - type: TargetLayoutBox
-  #                   label: Stratification Variables
-  #                   children:
-  #                     - type: VariablesListBox
-  #                       name: stratvar
-  #                       isTarget: true
-  #                       fitToGrid: true
-  #                       stretchFactor: 1
 
 
 

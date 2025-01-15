@@ -20,8 +20,13 @@ items:
           - tint
           - multievent
 
+    # - name:  mydataview
+    #   title: mydataview
+    #   type:  Preformatted
 
-
+    # - name:  mydataview_cox
+    #   title: mydataview_cox
+    #   type:  Preformatted
 
     - name:  text
       title: Multivariable Survival
@@ -240,10 +245,29 @@ items:
     #       - censored
 
 
+    - name: risk_score_analysis
+      title: 'Risk Score Analysis'
+      type:  Preformatted
+      visible: (calculateRiskScore)
+      clearWith:
+          - calculateRiskScore
+          - outcome
+          - outcomeLevel
+          - explanatory
+          - contexpl
+          - numRiskGroups
 
-
-
-
+    - name: risk_score_analysis2
+      title: 'Risk Score Analysis'
+      type:  Html
+      visible: (calculateRiskScore)
+      clearWith:
+          - calculateRiskScore
+          - outcome
+          - outcomeLevel
+          - explanatory
+          - contexpl
+          - numRiskGroups
 
     - name: riskScoreTable
       title: Risk Score Summary
@@ -272,6 +296,7 @@ items:
           - outcomeLevel
           - explanatory
           - contexpl
+          - numRiskGroups
 
 
     - name: riskScoreMetrics
@@ -284,6 +309,7 @@ items:
           - outcomeLevel
           - explanatory
           - contexpl
+          - numRiskGroups
 
 
 
@@ -295,10 +321,24 @@ items:
       renderFun: .plotRiskGroups
       requiresData: true
       visible: (plotRiskGroups)
+      clearWith:
+          - calculateRiskScore
+          - outcome
+          - outcomeLevel
+          - explanatory
+          - contexpl
+          - numRiskGroups
 
 
+# Startification
+
+    - name: stratificationExplanation
+      title: Stratification Notes
+      type: Html
+      visible: (use_stratify)
 
 
+# Outputs
 
     - name: calculatedtime
       title: Add Calculated Time to Data

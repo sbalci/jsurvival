@@ -231,7 +231,7 @@ children:
                 enable:  (ac || km || plotRiskGroups)
 
   - type: CollapseBox
-    label: Risk Score Grouping - Being Updated
+    label: Risk Score Grouping # - Being Updated
     collapsed: true
     stretchFactor: 1
     children:
@@ -243,7 +243,10 @@ children:
             children:
               - type: CheckBox
                 name: calculateRiskScore
-                enable: ()
+                # enable: ()
+              - type: ComboBox
+                name: numRiskGroups
+                enable: (calculateRiskScore)
               - type: CheckBox
                 name: plotRiskGroups
                 enable: (calculateRiskScore)
@@ -374,7 +377,7 @@ children:
   #               label: Removal Significance (p-value)
   #               enable: (use_modelSelection)
   - type: CollapseBox
-    label: Stratification Variables - Being Updated
+    label: Stratification Variables # - Being Updated
     collapsed: true
     children:
       - type: Label
@@ -383,21 +386,22 @@ children:
           - type: CheckBox
             name: use_stratify
             fitToGrid: true
-            enable: ()
-  #         - type: Label
-  #           label: Select Stratification Variables
-  #           fitToGrid: true
-  #           stretchFactor: 1
-  #           children:
-  #             - type: VariableSupplier
-  #               persistentItems: false
-  #               stretchFactor: 1
-  #               children:
-  #                 - type: TargetLayoutBox
-  #                   label: Stratification Variables
-  #                   children:
-  #                     - type: VariablesListBox
-  #                       name: stratvar
-  #                       isTarget: true
-  #                       fitToGrid: true
-  #                       stretchFactor: 1
+            # enable: ()
+          - type: Label
+            label: Select Stratification Variables
+            fitToGrid: true
+            stretchFactor: 1
+            children:
+              - type: VariableSupplier
+                persistentItems: false
+                stretchFactor: 1
+                children:
+                  - type: TargetLayoutBox
+                    label: Stratification Variables
+                    children:
+                      - type: VariablesListBox
+                        name: stratvar
+                        isTarget: true
+                        fitToGrid: true
+                        stretchFactor: 1
+
