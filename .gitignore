@@ -34,3 +34,4 @@ build
 .Rproj.user
 .DS_Store
 *.log
+*.jmo
