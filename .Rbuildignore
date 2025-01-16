@@ -11,3 +11,6 @@ jamovi
 ^\.github/workflows/check-standard\.yaml$
 ^\.github/workflows/pkgdown\.yaml$
 ^LICENSE\.md$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
