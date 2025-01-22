@@ -59,6 +59,13 @@ analyses:
     menuTitle: Odds Ratio Table and Plot
     description: Function for Odds Ratio Table and Plot.
     menuSubtitle: Odds Ratio for Binary Outcomes
+  - title: Lasso-Cox Regression
+    name: lassocox
+    ns: jsurvival
+    menuGroup: Survival
+    menuSubgroup: ClinicoPath Survival
+    menuTitle: Lasso-Cox Regression
+    menuSubtitle: Variable Selection with Lasso Regularization
 datasets:
   - name: histopathology including analysis
     path: histopathologySurvival.omv

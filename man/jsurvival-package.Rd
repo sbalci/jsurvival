@@ -23,6 +23,7 @@ Useful links:
   \item \url{https://github.com/sbalci/ClinicoPathJamoviModule/}
   \item \url{https://github.com/sbalci/jsurvival/}
   \item \url{https://sbalci.github.io/ClinicoPathJamoviModule/}
+  \item \url{https://www.serdarbalci.com/jsurvival/}
   \item Report bugs at \url{https://github.com/sbalci/ClinicoPathJamoviModule/issues/}
 }
 
