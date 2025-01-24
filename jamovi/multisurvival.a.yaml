@@ -385,7 +385,10 @@ options:
 
 
 
-
+    - name: cutp
+      title: Cutpoints
+      type: String
+      default: '12, 36, 60'
 
 
 
@@ -492,6 +495,15 @@ options:
     #   default: false
     #   description:
     #       R: Perform statistical comparison between adjusted curves
+
+
+# Nomogram ----
+
+    - name: showNomogram
+      title: Show Nomogram
+      type: Bool
+      default: false
+
 
 
 # Reduced Explanatory ----

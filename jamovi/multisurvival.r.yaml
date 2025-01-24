@@ -446,6 +446,31 @@ items:
           - medianline
 
 
+# Nomogram
+
+    - name:  mydataview_nomogram2
+      title: mydataview_nomogram2
+      type:  Preformatted
+
+    - name:  mydataview_nomogram
+      title: mydataview_nomogram
+      type:  Preformatted
+
+
+    - name: plot_nomogram
+      title: Nomogram
+      type: Image
+      width: 800
+      height: 600
+      requiresData: true
+      renderFun: .plot_nomogram
+      visible: (showNomogram)
+
+    - name: nomogram_display
+      title: "Nomogram Scoring Guide"
+      type: Html
+      visible: (showNomogram)
+
 
     # - name: adjustedSummaryTable2
     #   title: Adjusted Survival Summary 2

@@ -8,6 +8,10 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
     "multisurvivalClass",
     inherit = multisurvivalBase,
     private = list(
+
+      .nom_object = NULL,
+
+
       # init ----
       .init = function() {
         explanatory_len <- length(self$options$explanatory)
@@ -736,7 +740,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         if (self$options$ph_cox ||
             self$options$calculateRiskScore ||
-            self$options$ac) {
+            self$options$ac || self$options$showNomogram) {
           cox_model <- private$.cox_model()
         }
 
@@ -835,6 +839,16 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             paste(stratify_explanation, additional_info)
           )
         }
+
+
+        # Nomogram ----
+
+        if (self$options$showNomogram) {
+          private$.nomogram(cox_model)
+        }
+
+
+
 
 
         # Prepare Data For Plots ----
@@ -1105,7 +1119,309 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         return(cox_model)
 
+      },
+
+
+      # Nomogram ----
+
+      .nomogram = function(cox_model) {
+
+        if (!self$options$showNomogram) {
+          return()
+        }
+
+        # Get cleaned data
+        cleaneddata <- private$.cleandata()
+        mydata <- cleaneddata$cleanData
+        myexplanatory_labelled <- cleaneddata$myexplanatory_labelled
+        mycontexpl_labelled <- cleaneddata$mycontexpl_labelled
+        mystratvar_labelled <- cleaneddata$mystratvar_labelled
+
+        # Combine variables
+        var_names <- c(myexplanatory_labelled, mycontexpl_labelled)
+
+        # Remove stratification variables if needed
+        if (self$options$use_stratify && !is.null(self$options$stratvar)) {
+          var_names <- var_names[!var_names %in% mystratvar_labelled]
+        }
+
+        # First create datadist object
+        dd <- rms::datadist(mydata[, var_names])
+
+        # Handle limits for continuous variables properly
+        for(var in var_names) {
+          if(is.numeric(mydata[[var]])) {
+            # Get required dimensions
+            needed_cols <- ncol(dd$limits)
+
+            # Calculate basic limits
+            basic_limits <- c(
+              quantile(mydata[[var]], 0.1, na.rm=TRUE),  # Low
+              median(mydata[[var]], na.rm=TRUE),         # Median
+              quantile(mydata[[var]], 0.9, na.rm=TRUE)   # High
+            )
+
+            # Create full limits vector of correct length
+            full_limits <- numeric(needed_cols)
+            full_limits[1:3] <- basic_limits  # First 3 are our calculated limits
+
+            if(needed_cols > 3) {
+              # Fill remaining positions with median value
+              full_limits[4:needed_cols] <- basic_limits[2]
+            }
+
+            # Assign to datadist object
+            dd$limits[var,] <- full_limits
+          }
+        }
+
+        # Set datadist globally
+        options(datadist = dd)
+
+        # Create formula and fit model
+        coxformula <- paste0("survival::Surv(mytime, myoutcome) ~ ",
+                             paste(var_names, collapse = " + "))
+
+        # Fit the model
+        f <- rms::cph(formula = as.formula(coxformula),
+                      data = mydata,
+                      x = TRUE,
+                      y = TRUE,
+                      surv = TRUE)
+
+        # Get prediction timepoints
+        pred_times <- as.numeric(unlist(strsplit(self$options$cutp, ",")))
+        if(length(pred_times) == 0) pred_times <- c(12, 36, 60)
+
+        # Create nomogram
+        nom <- try({
+          base_surv <- survival::survfit(cox_model)
+          surv_at_time <- summary(base_surv, times = pred_times[1])$surv[1]
+
+          rms::nomogram(f,
+                        fun = function(lp) {
+                          1 - surv_at_time^exp(lp - mean(cox_model$linear.predictors))
+                        },
+                        funlabel = paste("Predicted", pred_times[1], "month risk"),
+                        fun.at = seq(0.1, 0.9, by = 0.1))
+        })
+
+
+        # private$.nom_object <- nom
+
+        # Store results
+        if (!inherits(nom, "try-error")) {
+          private$.nom_object <- nom
+
+          # Create the nomogram points table
+          html_display <- private$.create_nomogram_display(nom)
+
+          # mydataview_nomogram
+          cox_summary <- cox_model$coefficient
+          modelSummary <- summary(cox_model)
+          self$results$mydataview_nomogram$setContent(
+            list(
+              cox_model = cox_model,
+              modelSummary = modelSummary,
+              coef_table = modelSummary$coefficients,
+              conf_table = modelSummary$conf.int,
+              cox_summary = cox_summary,
+              dd = dd,
+              f = f,
+              pred_times = pred_times,
+              nomogram = if(!inherits(nom, "try-error")) nom else NULL,
+              error = if(inherits(nom, "try-error")) attr(nom, "condition") else NULL,
+              html_display = if(exists(html_display)) html_display else NULL
+
+            )
+          )
+
+          self$results$nomogram_display$setContent(html_display)
+
+          }
+
+
+
+
+
+        }
+
+
+
+
+
+
+      ,
+      # Plotting function
+      .plot_nomogram = function(image, ggtheme, theme, ...) {
+        if(is.null(private$.nom_object)) {
+          return(FALSE)
+        }
+
+        par(mar = c(4, 4, 2, 2))
+        plot(private$.nom_object)
+        return(TRUE)
       }
+
+
+      ,
+      .create_nomogram_display = function(nom) {
+        if(is.null(private$.nom_object)) {
+          return(FALSE)
+        }
+
+        # Capture the nomogram output
+        nom_output <- capture.output(print(nom))
+
+        # First extract the technical details
+        tech_details <- c()
+        i <- 1
+        while(i <= length(nom_output) && !grepl("Points$", nom_output[i])) {
+          if(nzchar(nom_output[i])) {
+            tech_details <- c(tech_details, nom_output[i])
+          }
+          i <- i + 1
+        }
+
+        # Process the remaining output to extract sections
+        sections <- list()
+        current_section <- NULL
+        current_lines <- character(0)
+
+        while(i <= length(nom_output)) {
+          line <- nom_output[i]
+
+          # Check for section headers
+          if(grepl("Points$", line) && !grepl("Total Points", line)) {
+            # Store previous section if it exists
+            if(!is.null(current_section) && length(current_lines) > 0) {
+              sections[[current_section]] <- current_lines
+            }
+            # Start new section
+            current_section <- trimws(sub("Points$", "", line))
+            current_lines <- character(0)
+          } else if(nzchar(trimws(line))) {
+            # Add non-empty lines to current section
+            current_lines <- c(current_lines, line)
+          }
+          i <- i + 1
+        }
+
+        # Add the last section
+        if(!is.null(current_section) && length(current_lines) > 0) {
+          sections[[current_section]] <- current_lines
+        }
+
+        # Separate out risk prediction table
+        risk_table <- NULL
+        if("Total Points" %in% names(sections)) {
+          risk_table <- sections[["Total Points"]]
+          sections[["Total Points"]] <- NULL
+        }
+
+        # Create HTML content
+        html_content <- paste0('
+    <style>
+        .nomogram-container {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            border-radius: 4px;
+        }
+        .tech-details {
+            font-family: "Roboto Mono", monospace;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            color: #666;
+        }
+        .section-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .values {
+            font-family: "Roboto Mono", monospace;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            color: #34495e;
+            padding-left: 20px;
+        }
+        .risk-table {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+        }
+        .instructions {
+            background-color: #e9f7ef;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+    </style>
+    <div class="nomogram-container">
+        <h2>Nomogram Scoring Guide</h2>
+
+        <div class="tech-details">
+            ', paste(tech_details, collapse="<br>"), '
+        </div>
+
+        <div class="instructions">
+            <h3>How to Use This Nomogram:</h3>
+            <p>1. For each variable below, find your patient\'s value</p>
+            <p>2. Read across to the Points scale to determine points for that variable</p>
+            <p>3. Add up total points from all variables</p>
+            <p>4. Use total points to find predicted risk in the bottom section</p>
+        </div>
+    ')
+
+        # Add variable sections
+        for(section_name in names(sections)) {
+          html_content <- paste0(html_content, '
+        <div class="section">
+            <div class="section-title">', section_name, '</div>
+            <div class="values">',
+                                 paste(sections[[section_name]], collapse="<br>"),
+                                 '</div>
+        </div>')
+        }
+
+        # Add risk prediction table
+        if(!is.null(risk_table)) {
+          html_content <- paste0(html_content, '
+        <div class="section risk-table">
+            <div class="section-title">Risk Prediction</div>
+            <div class="values">',
+                                 paste(risk_table, collapse="<br>"),
+                                 '</div>
+        </div>')
+        }
+
+        # Add closing notes
+        html_content <- paste0(html_content, '
+        <div class="instructions">
+            <h3>Notes:</h3>
+            <p>• For continuous variables (like Age and MeasurementA), interpolate between given values</p>
+            <p>• For categorical variables (like LVI, PNI, Smoker), use exact points shown</p>
+            <p>• Total points correspond directly to predicted 12-month risk</p>
+        </div>
+    </div>')
+
+        return(html_content)
+      }
+
+
 
 
       # coxph Proportional Hazards Assumption  ----

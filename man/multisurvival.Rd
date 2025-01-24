@@ -35,12 +35,14 @@ multisurvival(
   censored = FALSE,
   medianline = "none",
   pplot = TRUE,
+  cutp = "12, 36, 60",
   calculateRiskScore = FALSE,
   numRiskGroups = "four",
   plotRiskGroups = FALSE,
   ac = FALSE,
   adjexplanatory,
   ac_method = "average",
+  showNomogram = FALSE,
   use_stratify = FALSE,
   stratvar
 )
@@ -146,6 +148,8 @@ time on the survival plot.}
 \item{pplot}{If true, displays the p-value from the survival comparison
 test on the survival plot.}
 
+\item{cutp}{.}
+
 \item{calculateRiskScore}{If true, calculates a risk score from the Cox
 model coefficients for each individual.}
 
@@ -161,6 +165,8 @@ based on their calculated risk scores and plots their survival curves.}
 \item{adjexplanatory}{.}
 
 \item{ac_method}{Method for computing adjusted survival curves}
+
+\item{showNomogram}{.}
 
 \item{use_stratify}{If true, uses stratification to handle variables that
 violate the proportional hazards assumption. Stratification creates
@@ -192,6 +198,10 @@ A results object containing:
 \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
 \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
+\code{results$mydataview_nomogram2} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$mydataview_nomogram} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$plot_nomogram} \tab \tab \tab \tab \tab an image \cr
+\code{results$nomogram_display} \tab \tab \tab \tab \tab a html \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

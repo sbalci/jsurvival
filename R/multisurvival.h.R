@@ -35,12 +35,14 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             censored = FALSE,
             medianline = "none",
             pplot = TRUE,
+            cutp = "12, 36, 60",
             calculateRiskScore = FALSE,
             numRiskGroups = "four",
             plotRiskGroups = FALSE,
             ac = FALSE,
             adjexplanatory = NULL,
             ac_method = "average",
+            showNomogram = FALSE,
             use_stratify = FALSE,
             stratvar = NULL, ...) {
 
@@ -213,6 +215,10 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 "pplot",
                 pplot,
                 default=TRUE)
+            private$..cutp <- jmvcore::OptionString$new(
+                "cutp",
+                cutp,
+                default="12, 36, 60")
             private$..calculateRiskScore <- jmvcore::OptionBool$new(
                 "calculateRiskScore",
                 calculateRiskScore,
@@ -254,6 +260,10 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "single",
                     "marginal"),
                 default="average")
+            private$..showNomogram <- jmvcore::OptionBool$new(
+                "showNomogram",
+                showNomogram,
+                default=FALSE)
             private$..use_stratify <- jmvcore::OptionBool$new(
                 "use_stratify",
                 use_stratify,
@@ -298,6 +308,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..censored)
             self$.addOption(private$..medianline)
             self$.addOption(private$..pplot)
+            self$.addOption(private$..cutp)
             self$.addOption(private$..calculateRiskScore)
             self$.addOption(private$..numRiskGroups)
             self$.addOption(private$..plotRiskGroups)
@@ -306,6 +317,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..ac)
             self$.addOption(private$..adjexplanatory)
             self$.addOption(private$..ac_method)
+            self$.addOption(private$..showNomogram)
             self$.addOption(private$..use_stratify)
             self$.addOption(private$..stratvar)
         }),
@@ -341,6 +353,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         censored = function() private$..censored$value,
         medianline = function() private$..medianline$value,
         pplot = function() private$..pplot$value,
+        cutp = function() private$..cutp$value,
         calculateRiskScore = function() private$..calculateRiskScore$value,
         numRiskGroups = function() private$..numRiskGroups$value,
         plotRiskGroups = function() private$..plotRiskGroups$value,
@@ -349,6 +362,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ac = function() private$..ac$value,
         adjexplanatory = function() private$..adjexplanatory$value,
         ac_method = function() private$..ac_method$value,
+        showNomogram = function() private$..showNomogram$value,
         use_stratify = function() private$..use_stratify$value,
         stratvar = function() private$..stratvar$value),
     private = list(
@@ -383,6 +397,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ..censored = NA,
         ..medianline = NA,
         ..pplot = NA,
+        ..cutp = NA,
         ..calculateRiskScore = NA,
         ..numRiskGroups = NA,
         ..plotRiskGroups = NA,
@@ -391,6 +406,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ..ac = NA,
         ..adjexplanatory = NA,
         ..ac_method = NA,
+        ..showNomogram = NA,
         ..use_stratify = NA,
         ..stratvar = NA)
 )
@@ -417,7 +433,11 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         outcomeredefined = function() private$.items[["outcomeredefined"]],
         addRiskScore = function() private$.items[["addRiskScore"]],
         addRiskGroup = function() private$.items[["addRiskGroup"]],
-        plot_adj = function() private$.items[["plot_adj"]]),
+        plot_adj = function() private$.items[["plot_adj"]],
+        mydataview_nomogram2 = function() private$.items[["mydataview_nomogram2"]],
+        mydataview_nomogram = function() private$.items[["mydataview_nomogram"]],
+        plot_nomogram = function() private$.items[["plot_nomogram"]],
+        nomogram_display = function() private$.items[["nomogram_display"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -762,7 +782,29 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "adjexplanatory",
                     "pplot",
                     "censored",
-                    "medianline")))}))
+                    "medianline")))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="mydataview_nomogram2",
+                title="mydataview_nomogram2"))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="mydataview_nomogram",
+                title="mydataview_nomogram"))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plot_nomogram",
+                title="Nomogram",
+                width=800,
+                height=600,
+                requiresData=TRUE,
+                renderFun=".plot_nomogram",
+                visible="(showNomogram)"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="nomogram_display",
+                title="Nomogram Scoring Guide",
+                visible="(showNomogram)"))}))
 
 multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "multisurvivalBase",
@@ -863,6 +905,7 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   time on the survival plot.
 #' @param pplot If true, displays the p-value from the survival comparison
 #'   test on the survival plot.
+#' @param cutp .
 #' @param calculateRiskScore If true, calculates a risk score from the Cox
 #'   model coefficients for each individual.
 #' @param numRiskGroups Select the number of risk groups to create from the
@@ -873,6 +916,7 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param ac .
 #' @param adjexplanatory .
 #' @param ac_method Method for computing adjusted survival curves
+#' @param showNomogram .
 #' @param use_stratify If true, uses stratification to handle variables that
 #'   violate the proportional hazards assumption. Stratification creates
 #'   separate baseline hazard functions for different groups.
@@ -900,6 +944,10 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$mydataview_nomogram2} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$mydataview_nomogram} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$plot_nomogram} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$nomogram_display} \tab \tab \tab \tab \tab a html \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -940,12 +988,14 @@ multisurvival <- function(
     censored = FALSE,
     medianline = "none",
     pplot = TRUE,
+    cutp = "12, 36, 60",
     calculateRiskScore = FALSE,
     numRiskGroups = "four",
     plotRiskGroups = FALSE,
     ac = FALSE,
     adjexplanatory,
     ac_method = "average",
+    showNomogram = FALSE,
     use_stratify = FALSE,
     stratvar) {
 
@@ -1006,12 +1056,14 @@ multisurvival <- function(
         censored = censored,
         medianline = medianline,
         pplot = pplot,
+        cutp = cutp,
         calculateRiskScore = calculateRiskScore,
         numRiskGroups = numRiskGroups,
         plotRiskGroups = plotRiskGroups,
         ac = ac,
         adjexplanatory = adjexplanatory,
         ac_method = ac_method,
+        showNomogram = showNomogram,
         use_stratify = use_stratify,
         stratvar = stratvar)
 
