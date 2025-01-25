@@ -1,8 +1,8 @@
 Type: Package
 Package: jsurvival
 Title: Survival Module of ClinicoPath for jamovi
-Version: 0.0.2.54
-Date: 2025-01-24
+Version: 0.0.2.56
+Date: 2025-01-25
 Authors@R: 
     person(given = "Serdar",
            family = "Balci",
@@ -42,7 +42,8 @@ Imports:
     checkmate,
     pammtools,
     xml2,
-    labelled
+    labelled,
+    rms
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
