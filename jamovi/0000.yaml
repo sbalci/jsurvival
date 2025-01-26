@@ -73,6 +73,11 @@ analyses:
     menuTitle: Time Interval Calculator
     menuSubgroup: Time Analysis
     menuSubtitle: Calculate time intervals from dates or values
+  - title: Treatment Pathway Alluvial Plot
+    name: alluvialSurvival
+    ns: jsurvival
+    menuGroup: jsurvival
+    menuTitle: Treatment Pathway Alluvial Plot
 datasets:
   - name: histopathology including analysis
     path: histopathologySurvival.omv
