@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">jsurvival</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.56</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.57</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,20 +38,65 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">alluvialSurvival</span><span class="op">(</span><span class="va">timeVar</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">alluvialSurvival</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">timeVar</span>,</span>
+<span>  <span class="va">stageVar</span>,</span>
+<span>  <span class="va">treatmentVar</span>,</span>
+<span>  <span class="va">patientId</span>,</span>
+<span>  <span class="va">survivalVar</span>,</span>
+<span>  showRightAxis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  colorScheme <span class="op">=</span> <span class="st">"clinical"</span>,</span>
+<span>  showSurvival <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-timevar">timeVar<a class="anchor" aria-label="anchor" href="#arg-timevar"></a></dt>
+<dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
+<dd><p>.</p></dd>
+
+
+<dt id="arg-timevar">timeVar<a class="anchor" aria-label="anchor" href="#arg-timevar"></a></dt>
 <dd><p>The name of the time variable in the dataset</p></dd>
+
+
+<dt id="arg-stagevar">stageVar<a class="anchor" aria-label="anchor" href="#arg-stagevar"></a></dt>
+<dd><p>The name of the disease stage variable</p></dd>
+
+
+<dt id="arg-treatmentvar">treatmentVar<a class="anchor" aria-label="anchor" href="#arg-treatmentvar"></a></dt>
+<dd><p>Treatment received at each time point</p></dd>
+
+
+<dt id="arg-patientid">patientId<a class="anchor" aria-label="anchor" href="#arg-patientid"></a></dt>
+<dd><p>Unique patient identifier for tracking</p></dd>
+
+
+<dt id="arg-survivalvar">survivalVar<a class="anchor" aria-label="anchor" href="#arg-survivalvar"></a></dt>
+<dd><p>Survival status at each time point</p></dd>
+
+
+<dt id="arg-showrightaxis">showRightAxis<a class="anchor" aria-label="anchor" href="#arg-showrightaxis"></a></dt>
+<dd><p>.</p></dd>
+
+
+<dt id="arg-colorscheme">colorScheme<a class="anchor" aria-label="anchor" href="#arg-colorscheme"></a></dt>
+<dd><p>.</p></dd>
+
+
+<dt id="arg-showsurvival">showSurvival<a class="anchor" aria-label="anchor" href="#arg-showsurvival"></a></dt>
+<dd><p>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A results object containing:</p><table class="table table"><tr><td><code>results$mydataview</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr></table></div>
+    <p>A results object containing:</p><table class="table table"><tr><td><code>results$todo</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$mydataview</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$plot</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$summaryTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$survivalStats</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr></table><p>Tables can be converted to data frames with <code>asDF</code> or <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></code>. For example:</p>
+<p><code>results$summaryTable$asDF</code></p>
+<p><code>as.data.frame(results$summaryTable)</code></p>
+    </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
