@@ -339,3 +339,4 @@ children:
     children:
       - type: CheckBox
         name: showNomogram
+        enable: ()
