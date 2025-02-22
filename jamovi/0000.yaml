@@ -6,7 +6,7 @@ jms: '1.0'
 authors:
   - Serdar Balci
 maintainer: Serdar Balci <serdarbalci@serdarbalci.com>
-date: '2024-02-21'
+date: '2024-02-22'
 type: R
 description: >-
   Survival Module of ClinicoPath for jamovi ClinicoPath help researchers to
