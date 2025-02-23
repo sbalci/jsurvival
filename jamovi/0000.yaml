@@ -1,7 +1,7 @@
 ---
 title: Survival Module of ClinicoPath for jamovi
 name: jsurvival
-version: 0.0.2.69
+version: 0.0.2.71
 jms: '1.0'
 authors:
   - Serdar Balci
