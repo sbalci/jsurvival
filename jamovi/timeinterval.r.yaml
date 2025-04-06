@@ -1,0 +1,20 @@
+---
+name:  timeinterval
+title: Time Interval Calculator
+jrs:   '1.1'
+
+items:
+    - name: todo
+      title: ''
+      type: Html
+
+    - name: summary
+      title: Summary Statistics
+      type: Html
+
+    - name: calculated_time
+      title: Calculated Time Intervals
+      type: Output
+      measureType: continuous
+
+...
