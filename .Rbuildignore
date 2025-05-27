@@ -15,3 +15,4 @@ jamovi
 ^docs$
 ^pkgdown$
 ^vignettes$
+vignettes/

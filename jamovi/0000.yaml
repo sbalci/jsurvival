@@ -28,6 +28,7 @@ analyses:
       determine median survival time or 1/3/5-year survival rates for all
       patients collectively. This differs from regular survival analysis which
       compares survival between groups.
+    ribbon: analyses
   - title: Survival Analysis
     name: survival
     ns: jsurvival
@@ -36,6 +37,7 @@ analyses:
     menuTitle: Survival Analysis
     description: Function for Generating Summaries for Survival Analysis.
     menuSubtitle: Univariate Survival Analysis, Cox, Kaplan-Meier, 1,3,5-yr
+    ribbon: analyses
   - title: Survival Analysis for Continuous Variable
     name: survivalcont
     ns: jsurvival
@@ -43,6 +45,7 @@ analyses:
     menuSubgroup: ClinicoPath Survival
     menuTitle: Survival Analysis for Continuous Variable
     menuSubtitle: Cut-off & Univariate Survival Analysis
+    ribbon: analyses
   - title: Multivariable Survival Analysis
     name: multisurvival
     ns: jsurvival
@@ -51,6 +54,7 @@ analyses:
     menuTitle: Multivariable Survival Analysis
     description: Function for Multivariable Survival Analysis using Cox-regression.
     menuSubtitle: Multivariable Cox-regression, Adjusted Survival
+    ribbon: analyses
   - title: Odds Ratio Table and Plot
     name: oddsratio
     ns: jsurvival
@@ -59,6 +63,15 @@ analyses:
     menuTitle: Odds Ratio Table and Plot
     description: Function for Odds Ratio Table and Plot.
     menuSubtitle: Odds Ratio for Binary Outcomes
+    ribbon: analyses
+  - title: Time Interval Calculator
+    name: timeinterval
+    ns: jsurvival
+    ribbon: analyses
+    menuGroup: Survival
+    menuSubgroup: Data Preparation
+    menuTitle: Time Interval Calculator
+    menuSubtitle: Calculate time intervals from dates or values
 datasets:
   - name: histopathology including analysis
     path: histopathologySurvival.omv
