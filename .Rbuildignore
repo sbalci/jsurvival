@@ -14,3 +14,4 @@ jamovi
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^vignettes$
