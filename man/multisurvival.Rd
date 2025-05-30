@@ -43,8 +43,16 @@ multisurvival(
   adjexplanatory,
   ac_method = "average",
   showNomogram = FALSE,
+  use_modelSelection = FALSE,
+  modelSelection = "enter",
+  selectionCriteria = "aic",
+  pEntry = 0.05,
+  pRemoval = 0.1,
   use_stratify = FALSE,
-  stratvar
+  stratvar,
+  person_time = FALSE,
+  time_intervals = "12, 36, 60",
+  rate_multiplier = 100
 )
 }
 \arguments{
@@ -168,6 +176,25 @@ based on their calculated risk scores and plots their survival curves.}
 
 \item{showNomogram}{.}
 
+\item{use_modelSelection}{If true, applies a variable selection procedure
+to find the best-fitting model based on criteria like AIC or likelihood
+ratio tests.}
+
+\item{modelSelection}{The method used to select variables: - enter:
+Includes all variables (no selection) - forward: Adds variables one at a
+time if they improve the model - backward: Removes variables that do not
+significantly contribute - both: Combination of forward and backward steps}
+
+\item{selectionCriteria}{The criterion used for adding or removing
+variables in model selection: - aic: Balances model fit and complexity -
+lrt: Uses likelihood ratio tests to decide inclusion/removal}
+
+\item{pEntry}{Significance level at which a variable enters the model
+during forward or stepwise selection.}
+
+\item{pRemoval}{Significance level at which a variable is removed from the
+model during backward or stepwise selection.}
+
 \item{use_stratify}{If true, uses stratification to handle variables that
 violate the proportional hazards assumption. Stratification creates
 separate baseline hazard functions for different groups.}
@@ -175,6 +202,18 @@ separate baseline hazard functions for different groups.}
 \item{stratvar}{Variables used for stratification. When proportional
 hazards are not met, stratification can adjust the model to better fit the
 data by allowing different baseline hazards.}
+
+\item{person_time}{Enable this option to calculate and display person-time
+metrics, including total follow-up time and incidence rates. These metrics
+help quantify the rate of events per unit of time in your study population.}
+
+\item{time_intervals}{Specify time intervals for stratified person-time
+analysis. Enter a  comma-separated list of time points to create intervals.
+For example,  "12, 36, 60" will create intervals 0-12, 12-36, 36-60, and
+60+.}
+
+\item{rate_multiplier}{Specify the multiplier for incidence rates (e.g.,
+100 for rates per 100 person-years, 1000 for rates per 1000 person-years).}
 }
 \value{
 A results object containing:
@@ -182,6 +221,8 @@ A results object containing:
 \code{results$todo} \tab \tab \tab \tab \tab a html \cr
 \code{results$text} \tab \tab \tab \tab \tab a html \cr
 \code{results$text2} \tab \tab \tab \tab \tab a html \cr
+\code{results$personTimeTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$personTimeSummary} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
@@ -198,17 +239,19 @@ A results object containing:
 \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
 \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
-\code{results$mydataview_nomogram2} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$mydataview_nomogram} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plot_nomogram} \tab \tab \tab \tab \tab an image \cr
 \code{results$nomogram_display} \tab \tab \tab \tab \tab a html \cr
+\code{results$mydataview_modelselection} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$text_model_selection} \tab \tab \tab \tab \tab a html \cr
+\code{results$selection_method} \tab \tab \tab \tab \tab a html \cr
+\code{results$text2_model_selection} \tab \tab \tab \tab \tab a html \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 
-\code{results$riskScoreTable$asDF}
+\code{results$personTimeTable$asDF}
 
-\code{as.data.frame(results$riskScoreTable)}
+\code{as.data.frame(results$personTimeTable)}
 }
 \description{
 Function for Multivariable Survival Analysis using Cox-regression.
