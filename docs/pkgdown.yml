@@ -1,5 +1,9 @@
-pandoc: '3.2'
+pandoc: '3.4'
 pkgdown: 2.1.1
 pkgdown_sha: ~
-articles: {}
-last_built: 2024-12-13T06:57Z
+articles:
+  jsurvival: jsurvival.html
+last_built: 2025-05-31T10:33Z
+urls:
+  reference: https://www.serdarbalci.com/jsurvival/reference
+  article: https://www.serdarbalci.com/jsurvival/articles
