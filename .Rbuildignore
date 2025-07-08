@@ -16,3 +16,7 @@ jamovi
 ^pkgdown$
 ^vignettes$
 vignettes/
+CITATION.cff
+CLAUDE.md
+README_badges.md
+.claude
