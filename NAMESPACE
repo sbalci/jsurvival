@@ -2,6 +2,7 @@
 
 export(multisurvival)
 export(oddsratio)
+export(outcomeorganizer)
 export(singlearm)
 export(stagemigration)
 export(survival)

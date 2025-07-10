@@ -1,7 +1,7 @@
 Type: Package
 Package: jsurvival
 Title: Survival Module of ClinicoPath for jamovi
-Version: 0.0.3.48
+Version: 0.0.3.49
 Date: 2025-07-10
 Authors@R: 
     person(given = "Serdar",
@@ -43,7 +43,9 @@ Imports:
     pammtools,
     xml2,
     labelled,
-    rms
+    rms,
+    dcurves,
+    timeROC
 Suggests:
     rmarkdown
 VignetteBuilder: knitr

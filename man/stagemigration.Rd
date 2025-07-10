@@ -193,22 +193,38 @@ metrics using bootstrap validation to avoid overly optimistic estimates.}
 \value{
 A results object containing:
 \tabular{llllll}{
-\code{results$todo} \tab \tab \tab \tab \tab a html \cr
+\code{results$welcomeMessage} \tab \tab \tab \tab \tab a html \cr
+\code{results$migrationOverview} \tab \tab \tab \tab \tab a table \cr
 \code{results$migrationSummary} \tab \tab \tab \tab \tab a table \cr
+\code{results$statisticalComparison} \tab \tab \tab \tab \tab a table \cr
 \code{results$stageDistribution} \tab \tab \tab \tab \tab a table \cr
-\code{results$migrationTable} \tab \tab \tab \tab \tab a table \cr
-\code{results$survivalComparison} \tab \tab \tab \tab \tab a table \cr
-\code{results$stagingPerformance} \tab \tab \tab \tab \tab a table \cr
-\code{results$migrationPlot} \tab \tab \tab \tab \tab an image \cr
-\code{results$survivalPlot} \tab \tab \tab \tab \tab an image \cr
-\code{results$concordancePlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$migrationMatrix} \tab \tab \tab \tab \tab a table \cr
+\code{results$concordanceComparison} \tab \tab \tab \tab \tab a table \cr
+\code{results$nriResults} \tab \tab \tab \tab \tab a table \cr
+\code{results$idiResults} \tab \tab \tab \tab \tab a table \cr
+\code{results$rocAnalysis} \tab \tab \tab \tab \tab a table \cr
+\code{results$dcaResults} \tab \tab \tab \tab \tab a table \cr
+\code{results$bootstrapResults} \tab \tab \tab \tab \tab a table \cr
+\code{results$willRogersAnalysis} \tab \tab \tab \tab \tab a table \cr
+\code{results$likelihoodTests} \tab \tab \tab \tab \tab a table \cr
+\code{results$homogeneityTests} \tab \tab \tab \tab \tab a table \cr
+\code{results$clinicalInterpretation} \tab \tab \tab \tab \tab a table \cr
+\code{results$executiveSummary} \tab \tab \tab \tab \tab a table \cr
+\code{results$statisticalSummary} \tab \tab \tab \tab \tab a table \cr
+\code{results$methodologyNotes} \tab \tab \tab \tab \tab a html \cr
+\code{results$migrationHeatmap} \tab \tab \tab \tab \tab an image \cr
+\code{results$rocComparisonPlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$forestPlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$calibrationPlots} \tab \tab \tab \tab \tab an image \cr
+\code{results$decisionCurves} \tab \tab \tab \tab \tab an image \cr
+\code{results$survivalCurves} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 
-\code{results$migrationSummary$asDF}
+\code{results$migrationOverview$asDF}
 
-\code{as.data.frame(results$migrationSummary)}
+\code{as.data.frame(results$migrationOverview)}
 }
 \description{
 Comprehensive analysis for validating TNM staging system improvements using

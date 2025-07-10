@@ -2,7 +2,7 @@
 name: stagemigration
 title: Advanced TNM Stage Migration Analysis
 menuGroup: Survival
-menuSubgroup: ClinicoPath Survival
+menuSubgroup: Stage Migration Analysis
 menuSubtitle: 'State-of-the-Art Staging System Validation'
 version: '0.0.3'
 jas: '1.2'
