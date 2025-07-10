@@ -80,9 +80,37 @@
 #'   \item Implementation considerations
 #' }
 #'
+#' @section Data Requirements:
+#' \itemize{
+#'   \item \strong{Sample Size:} Minimum 30 patients (100+ recommended)
+#'   \item \strong{Follow-up:} Adequate survival time for meaningful analysis
+#'   \item \strong{Staging:} Both old and new staging variables with 2+ levels
+#'   \item \strong{Events:} Binary event indicator (0/1) or factor with specified level
+#'   \item \strong{Data Quality:} Complete case analysis (missing values removed)
+#' }
+#'
+#' @section Troubleshooting:
+#' \itemize{
+#'   \item \strong{"TRUE/FALSE error":} Check for missing values in staging or survival variables
+#'   \item \strong{"Not atomic error":} Disable individual tables to isolate problematic components
+#'   \item \strong{Model fitting errors:} Ensure adequate sample size and event rate (5-95%)
+#'   \item \strong{Stage level errors:} Verify staging variables have multiple distinct levels
+#' }
+#'
 #' @examples
 #' \dontrun{
-#' # TNM 7th to 8th edition validation
+#' # Basic staging comparison
+#' stagemigration(
+#'   data = cancer_data,
+#'   oldStage = "old_stage",
+#'   newStage = "new_stage", 
+#'   survivalTime = "survival_months",
+#'   event = "outcome",
+#'   eventLevel = "DEAD",
+#'   analysisType = "basic"
+#' )
+#' 
+#' # Comprehensive analysis with all options
 #' stagemigration(
 #'   data = lung_cancer_cohort,
 #'   oldStage = "tnm7_stage",
@@ -223,6 +251,13 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
             
             # Extract and validate data
             data <- self$data[required_vars]
+            
+            # Check for rows with invalid data before removing them
+            incomplete_rows <- which(!complete.cases(data))
+            if (length(incomplete_rows) > 0) {
+                warning(paste("Removing", length(incomplete_rows), "rows with missing values."))
+            }
+            
             data <- data[complete.cases(data), ]
             
             if (nrow(data) < 30) {
@@ -246,25 +281,55 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
             }
             
             # Validate survival variables
-            if (any(data[[self$options$survivalTime]] <= 0, na.rm = TRUE)) {
+            survival_times <- data[[self$options$survivalTime]]
+            if (any(is.na(survival_times))) {
+                stop("Survival time contains missing values after data cleaning")
+            }
+            if (any(survival_times <= 0)) {
                 stop("Survival time must be positive")
             }
+            if (!is.numeric(survival_times)) {
+                stop("Survival time must be numeric")
+            }
             
-            # Handle event variable
-            if (is.factor(data[[self$options$event]])) {
-                if (is.null(self$options$eventLevel)) {
-                    stop("Event level must be specified for factor event variables")
+            # Handle event variable with improved validation
+            event_var <- data[[self$options$event]]
+            
+            if (is.factor(event_var) || is.character(event_var)) {
+                if (is.null(self$options$eventLevel) || self$options$eventLevel == "") {
+                    stop("Event level must be specified for factor/character event variables")
                 }
-                data[["event_binary"]] <- ifelse(data[[self$options$event]] == self$options$eventLevel, 1, 0)
+                
+                # Get unique event values (excluding NA)
+                unique_events_raw <- unique(event_var[!is.na(event_var)])
+                
+                if (!self$options$eventLevel %in% unique_events_raw) {
+                    stop(paste("Event level '", self$options$eventLevel, "' not found in event variable. ",
+                              "Available values: ", paste(unique_events_raw, collapse=", "), sep=""))
+                }
+                
+                # Create binary event variable
+                data[["event_binary"]] <- ifelse(event_var == self$options$eventLevel, 1, 0)
             } else {
-                data[["event_binary"]] <- as.numeric(data[[self$options$event]])
+                # Convert numeric event variable
+                data[["event_binary"]] <- as.numeric(event_var)
+            }
+            
+            # Check for NA values in event_binary
+            if (any(is.na(data[["event_binary"]]))) {
+                stop("Event variable contains values that could not be converted to binary (0/1)")
             }
             
             # Ensure binary event coding
             unique_events <- unique(data[["event_binary"]])
-            unique_events <- unique_events[!is.na(unique_events)]
+            if (length(unique_events) == 0) {
+                stop("No valid event values found")
+            }
             if (!all(unique_events %in% c(0, 1))) {
-                stop("Event variable must be binary (0/1) or factor with specified event level")
+                stop(paste("Event variable must be binary (0/1). Found values:", paste(unique_events, collapse=", ")))
+            }
+            if (length(unique_events) < 2) {
+                stop("Event variable must have both event and non-event cases (0 and 1)")
             }
             
             # Check event frequency
@@ -334,7 +399,11 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
             old_levels <- suppressWarnings(as.numeric(gsub("[^0-9]", "", rownames(migration_table))))
             new_levels <- suppressWarnings(as.numeric(gsub("[^0-9]", "", colnames(migration_table))))
             
-            if (!any(is.na(old_levels)) && !any(is.na(new_levels))) {
+            # Check if we have valid numeric levels for both old and new stages
+            old_levels_valid <- !is.na(old_levels) & is.finite(old_levels)
+            new_levels_valid <- !is.na(new_levels) & is.finite(new_levels)
+            
+            if (all(old_levels_valid) && all(new_levels_valid) && length(old_levels) > 0 && length(new_levels) > 0) {
                 for (i in 1:nrow(migration_table)) {
                     for (j in 1:ncol(migration_table)) {
                         if (i != j && migration_table[i, j] > 0) {
@@ -348,11 +417,26 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
                 }
             }
             
-            # Statistical tests
-            chi_test <- chisq.test(migration_table)
+            
+            # Statistical tests with proper error handling
+            chi_test <- NULL
             fisher_test <- NULL
-            if (total_patients <= 1000 && min(migration_table) >= 5) {
-                fisher_test <- fisher.test(migration_table, simulate.p.value = TRUE)
+            
+            # Chi-square test
+            tryCatch({
+                chi_test <- chisq.test(migration_table)
+            }, error = function(e) {
+                warning(paste("Chi-square test failed:", e$message))
+            })
+            
+            # Fisher's exact test (only for smaller tables)
+            min_cell_count <- min(as.vector(migration_table))
+            if (total_patients <= 1000 && min_cell_count >= 1) {
+                tryCatch({
+                    fisher_test <- fisher.test(migration_table, simulate.p.value = TRUE)
+                }, error = function(e) {
+                    warning(paste("Fisher's exact test failed:", e$message))
+                })
             }
             
             return(list(
@@ -372,25 +456,60 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
         },
         
         .calculateAdvancedMetrics = function(data) {
-            # Advanced discrimination and calibration metrics
+            # Advanced discrimination and calibration metrics with error handling
             old_stage <- self$options$oldStage
             new_stage <- self$options$newStage
             time_var <- self$options$survivalTime
             event_var <- "event_binary"
             
-            # Fit Cox models
+            # Validate required columns exist
+            required_cols <- c(old_stage, new_stage, time_var, event_var)
+            missing_cols <- setdiff(required_cols, names(data))
+            if (length(missing_cols) > 0) {
+                stop(paste("Missing required columns for advanced metrics:", paste(missing_cols, collapse=", ")))
+            }
+            
+            # Fit Cox models with error handling
             old_formula <- as.formula(paste("Surv(", time_var, ",", event_var, ") ~", old_stage))
             new_formula <- as.formula(paste("Surv(", time_var, ",", event_var, ") ~", new_stage))
             
-            old_cox <- coxph(old_formula, data = data)
-            new_cox <- coxph(new_formula, data = data)
+            old_cox <- NULL
+            new_cox <- NULL
             
-            # Calculate C-index with confidence intervals
-            old_concordance <- concordance(old_cox)
-            new_concordance <- concordance(new_cox)
+            tryCatch({
+                old_cox <- coxph(old_formula, data = data)
+            }, error = function(e) {
+                stop(paste("Failed to fit Cox model for original staging:", e$message))
+            })
+            
+            tryCatch({
+                new_cox <- coxph(new_formula, data = data)
+            }, error = function(e) {
+                stop(paste("Failed to fit Cox model for new staging:", e$message))
+            })
+            
+            # Calculate C-index with error handling
+            old_concordance <- NULL
+            new_concordance <- NULL
+            
+            tryCatch({
+                old_concordance <- concordance(old_cox)
+                new_concordance <- concordance(new_cox)
+            }, error = function(e) {
+                stop(paste("Failed to calculate concordance indices:", e$message))
+            })
+            
+            # Validate concordance objects
+            if (is.null(old_concordance$concordance) || is.null(new_concordance$concordance)) {
+                stop("Concordance calculation returned invalid results")
+            }
             
             c_improvement <- new_concordance$concordance - old_concordance$concordance
-            c_improvement_pct <- (c_improvement / old_concordance$concordance) * 100
+            c_improvement_pct <- if (old_concordance$concordance > 0) {
+                (c_improvement / old_concordance$concordance) * 100
+            } else {
+                0
+            }
             
             # Bootstrap C-index confidence intervals
             if (self$options$performBootstrap) {
@@ -399,17 +518,22 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
                 c_bootstrap <- NULL
             }
             
-            # Model comparison tests
-            aic_old <- AIC(old_cox)
-            aic_new <- AIC(new_cox)
-            aic_improvement <- aic_old - aic_new
+            # Model comparison tests with error handling
+            aic_old <- tryCatch(AIC(old_cox), error = function(e) NA)
+            aic_new <- tryCatch(AIC(new_cox), error = function(e) NA)
+            aic_improvement <- if (!is.na(aic_old) && !is.na(aic_new)) aic_old - aic_new else NA
             
-            bic_old <- BIC(old_cox)
-            bic_new <- BIC(new_cox)
-            bic_improvement <- bic_old - bic_new
+            bic_old <- tryCatch(BIC(old_cox), error = function(e) NA)
+            bic_new <- tryCatch(BIC(new_cox), error = function(e) NA)
+            bic_improvement <- if (!is.na(bic_old) && !is.na(bic_new)) bic_old - bic_new else NA
             
-            # Likelihood ratio test
-            lr_test <- anova(old_cox, new_cox, test = "Chisq")
+            # Likelihood ratio test with error handling
+            lr_test <- NULL
+            tryCatch({
+                lr_test <- anova(old_cox, new_cox, test = "Chisq")
+            }, error = function(e) {
+                warning(paste("Likelihood ratio test failed:", e$message))
+            })
             
             # Pseudo R-squared measures
             if (self$options$calculatePseudoR2) {
@@ -1515,8 +1639,10 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
                 private$.initializeInterface()
                 
                 # Check if core variables are selected
-                if (is.null(self$options$oldStage) || is.null(self$options$newStage) || 
-                    is.null(self$options$survivalTime) || is.null(self$options$event)) {
+                if (is.null(self$options$oldStage) || self$options$oldStage == "" ||
+                    is.null(self$options$newStage) || self$options$newStage == "" ||
+                    is.null(self$options$survivalTime) || self$options$survivalTime == "" ||
+                    is.null(self$options$event) || self$options$event == "") {
                     
                     # Show welcome message
                     welcome_html <- private$.generateWelcomeMessage()
@@ -1527,6 +1653,19 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
                 # Validate and prepare data
                 data <- private$.validateData()
                 
+
+                mydataview <- self$results$mydataview
+                
+                mydataview$setContent(
+                list(
+                    head(data),
+                    names(data),
+                    dim(data)
+                    )
+                    )
+
+
+
                 # Perform analyses based on selected scope
                 all_results <- list()
                 
@@ -1581,18 +1720,32 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
                 private$.populateResults(all_results, data)
                 
             }, error = function(e) {
-                # Handle errors gracefully
+                # Handle errors gracefully with improved messaging
+                error_type <- if (grepl("TRUE/FALSE", e$message)) {
+                    "Data validation error (missing or invalid values)"
+                } else if (grepl("atomic", e$message)) {
+                    "Table formatting error (internal processing issue)"
+                } else if (grepl("concordance", e$message, ignore.case = TRUE)) {
+                    "Statistical calculation error (concordance/C-index)"
+                } else if (grepl("Cox", e$message, ignore.case = TRUE)) {
+                    "Survival model fitting error"
+                } else {
+                    "General analysis error"
+                }
+                
                 error_html <- paste0("
                 <div style='color: #721c24; background-color: #f8d7da; padding: 20px; border-radius: 8px; margin: 20px 0;'>
                 <h4>Analysis Error</h4>
-                <p><strong>Error:</strong> ", e$message, "</p>
-                <h5>Possible Solutions:</h5>
+                <p><strong>Error Type:</strong> ", error_type, "</p>
+                <p><strong>Technical Details:</strong> ", e$message, "</p>
+                <h5>Troubleshooting Steps:</h5>
                 <ul>
-                <li>Check that all variables are properly selected</li>
-                <li>Ensure staging variables have at least 2 levels</li>
-                <li>Verify that survival time is positive</li>
-                <li>Check that event variable is properly coded</li>
-                <li>Consider reducing analysis scope if sample size is small</li>
+                <li><strong>Data Issues:</strong> Check for missing values, ensure event variable contains only expected values</li>
+                <li><strong>Variable Selection:</strong> Verify all required variables are properly selected</li>
+                <li><strong>Sample Size:</strong> Ensure adequate sample size (minimum 30 patients recommended)</li>
+                <li><strong>Staging Variables:</strong> Confirm staging variables have at least 2 different stages</li>
+                <li><strong>Survival Data:</strong> Verify survival times are positive numbers</li>
+                <li><strong>Table Options:</strong> Try disabling some table options to isolate the issue</li>
                 </ul>
                 </div>")
                 
@@ -1706,16 +1859,62 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
         .populateResults = function(all_results, data) {
             # Populate all result tables and configure plots
             
-            # Executive Summary
+            # Executive Summary with debug (disabled by default)
             if (self$options$generateExecutiveSummary) {
-                private$.populateExecutiveSummary(all_results)
+                tryCatch({
+                    private$.populateExecutiveSummary(all_results)
+                }, error = function(e) {
+                    warning(paste("Executive Summary failed:", e$message))
+                })
             }
             
-            # Migration Overview
-            private$.populateMigrationOverview(all_results$basic_migration)
+            # Migration Overview with debug
+            tryCatch({
+                private$.populateMigrationOverview(all_results$basic_migration)
+                self$results$debug_migration_overview$setContent("Migration Overview: OK")
+            }, error = function(e) {
+                self$results$debug_migration_overview$setContent(paste("Migration Overview ERROR:", e$message))
+            })
             
-            # Statistical Comparison
-            private$.populateStatisticalComparison(all_results$advanced_metrics)
+            # Migration Summary with debug
+            tryCatch({
+                private$.populateMigrationSummary(all_results$basic_migration)
+                self$results$debug_migration_summary$setContent("Migration Summary: OK")
+            }, error = function(e) {
+                self$results$debug_migration_summary$setContent(paste("Migration Summary ERROR:", e$message))
+            })
+            
+            # Stage Distribution with debug
+            tryCatch({
+                private$.populateStageDistribution(all_results$basic_migration)
+                self$results$debug_stage_distribution$setContent("Stage Distribution: OK")
+            }, error = function(e) {
+                self$results$debug_stage_distribution$setContent(paste("Stage Distribution ERROR:", e$message))
+            })
+            
+            # Migration Matrix with debug
+            tryCatch({
+                private$.populateMigrationMatrix(all_results$basic_migration)
+                self$results$debug_migration_matrix$setContent("Migration Matrix: OK")
+            }, error = function(e) {
+                self$results$debug_migration_matrix$setContent(paste("Migration Matrix ERROR:", e$message))
+            })
+            
+            # Statistical Comparison with debug
+            tryCatch({
+                private$.populateStatisticalComparison(all_results$advanced_metrics)
+                self$results$debug_statistical_comparison$setContent("Statistical Comparison: OK")
+            }, error = function(e) {
+                self$results$debug_statistical_comparison$setContent(paste("Statistical Comparison ERROR:", e$message))
+            })
+            
+            # Concordance Comparison with debug
+            tryCatch({
+                private$.populateConcordanceComparison(all_results$advanced_metrics)
+                self$results$debug_concordance_comparison$setContent("Concordance Comparison: OK")
+            }, error = function(e) {
+                self$results$debug_concordance_comparison$setContent(paste("Concordance Comparison ERROR:", e$message))
+            })
             
             # NRI Analysis
             if (!is.null(all_results$nri_analysis)) {
@@ -1755,55 +1954,77 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
             # Generate executive summary table
             table <- self$results$executiveSummary
             
+            # Safety checks for all required data
+            if (is.null(all_results$basic_migration) || is.null(all_results$advanced_metrics)) {
+                return()
+            }
+            
             basic <- all_results$basic_migration
             advanced <- all_results$advanced_metrics
             interpretation <- all_results$clinical_interpretation
             
-            # Key findings
+            # Key findings with safe default values
             table$addRow(rowKey = "patients", values = list(
-                Category = "Sample Size",
-                Finding = "Total Patients",
-                Evidence = basic$total_patients,
-                Strength = "Cohort size for validation analysis"
+                Category = as.character("Sample Size"),
+                Finding = as.character("Total Patients"),
+                Evidence = as.character(basic$total_patients),
+                Strength = as.character("Cohort size for validation analysis")
             ))
             
-            table$addRow(rowKey = "migration", values = list(
-                Category = "Stage Migration",
-                Finding = "Stage Migration Rate",
-                Evidence = sprintf("%.1f%%", basic$migration_rate * 100),
-                Strength = paste0("Proportion of patients changing stages (", 
-                                interpretation$overall_assessment$migration_magnitude, " migration)")
-            ))
-            
-            table$addRow(rowKey = "c_index", values = list(
-                Category = "Discrimination",
-                Finding = "C-index Improvement",
-                Evidence = sprintf("+%.3f (%.1f%%)", 
-                                 advanced$c_improvement, 
-                                 advanced$c_improvement_pct),
-                Strength = paste0("Discrimination improvement (", 
-                                interpretation$overall_assessment$c_index_magnitude, " effect)")
-            ))
-            
-            if (!is.null(all_results$nri_analysis) && length(all_results$nri_analysis) > 0) {
-                nri_first <- all_results$nri_analysis[[1]]
-                table$addRow(rowKey = "nri", values = list(
-                    Category = "Reclassification",
-                    Finding = "Net Reclassification Improvement",
-                    Evidence = sprintf("%.1f%%", nri_first$nri_overall * 100),
-                    Strength = paste0("Net improvement in risk classification (", 
-                                    interpretation$overall_assessment$nri_magnitude, " effect)")
-                ))
+            # Safe migration magnitude
+            migration_magnitude <- if (!is.null(interpretation) && !is.null(interpretation$overall_assessment)) {
+                as.character(interpretation$overall_assessment$migration_magnitude)
+            } else {
+                "moderate"
             }
             
-            # Recommendation
-            if (!is.null(interpretation$recommendation)) {
+            table$addRow(rowKey = "migration", values = list(
+                Category = as.character("Stage Migration"),
+                Finding = as.character("Stage Migration Rate"),
+                Evidence = as.character(sprintf("%.1f%%", basic$migration_rate * 100)),
+                Strength = as.character(paste0("Proportion of patients changing stages (", migration_magnitude, " migration)"))
+            ))
+            
+            # Safe C-index magnitude
+            c_index_magnitude <- if (!is.null(interpretation) && !is.null(interpretation$overall_assessment)) {
+                as.character(interpretation$overall_assessment$c_index_magnitude)
+            } else {
+                "small"
+            }
+            
+            table$addRow(rowKey = "c_index", values = list(
+                Category = as.character("Discrimination"),
+                Finding = as.character("C-index Improvement"),
+                Evidence = as.character(sprintf("+%.3f (%.1f%%)", advanced$c_improvement, advanced$c_improvement_pct)),
+                Strength = as.character(paste0("Discrimination improvement (", c_index_magnitude, " effect)"))
+            ))
+            
+            # NRI analysis with safety checks
+            if (!is.null(all_results$nri_analysis) && length(all_results$nri_analysis) > 0) {
+                nri_first <- all_results$nri_analysis[[1]]
+                if (!is.null(nri_first$nri_overall)) {
+                    nri_magnitude <- if (!is.null(interpretation) && !is.null(interpretation$overall_assessment)) {
+                        as.character(interpretation$overall_assessment$nri_magnitude)
+                    } else {
+                        "moderate"
+                    }
+                    
+                    table$addRow(rowKey = "nri", values = list(
+                        Category = as.character("Reclassification"),
+                        Finding = as.character("Net Reclassification Improvement"),
+                        Evidence = as.character(sprintf("%.1f%%", nri_first$nri_overall * 100)),
+                        Strength = as.character(paste0("Net improvement in risk classification (", nri_magnitude, " effect)"))
+                    ))
+                }
+            }
+            
+            # Recommendation with safety checks
+            if (!is.null(interpretation) && !is.null(interpretation$recommendation)) {
                 table$addRow(rowKey = "recommendation", values = list(
-                    Category = "Recommendation",
-                    Finding = "Overall Recommendation",
-                    Evidence = interpretation$recommendation$primary,
-                    Strength = paste0(interpretation$recommendation$confidence, " confidence: ", 
-                                    interpretation$recommendation$rationale)
+                    Category = as.character("Recommendation"),
+                    Finding = as.character("Overall Recommendation"),
+                    Evidence = as.character(interpretation$recommendation$primary),
+                    Strength = as.character(paste0(interpretation$recommendation$confidence, " confidence: ", interpretation$recommendation$rationale))
                 ))
             }
         },
@@ -1812,28 +2033,31 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
             # Populate migration overview table
             table <- self$results$migrationOverview
             
+            # Ensure values are atomic
+            total_patients <- as.character(basic_results$total_patients)
+            
             table$addRow(rowKey = "total", values = list(
                 statistic = "Total Patients",
-                value = basic_results$total_patients,
+                value = total_patients,
                 percentage = "100.0%"
             ))
             
             table$addRow(rowKey = "unchanged", values = list(
                 statistic = "Patients with Unchanged Stage",
-                value = basic_results$unchanged,
+                value = as.character(basic_results$unchanged),
                 percentage = sprintf("%.1f%%", (basic_results$unchanged / basic_results$total_patients) * 100)
             ))
             
             table$addRow(rowKey = "migrated", values = list(
                 statistic = "Patients with Stage Migration",
-                value = basic_results$migrated,
+                value = as.character(basic_results$migrated),
                 percentage = sprintf("%.1f%%", basic_results$migration_rate * 100)
             ))
             
             if (basic_results$upstaging > 0) {
                 table$addRow(rowKey = "upstaging", values = list(
                     statistic = "Upstaging (to higher stage)",
-                    value = basic_results$upstaging,
+                    value = as.character(basic_results$upstaging),
                     percentage = sprintf("%.1f%%", basic_results$upstaging_rate * 100)
                 ))
             }
@@ -1841,68 +2065,96 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
             if (basic_results$downstaging > 0) {
                 table$addRow(rowKey = "downstaging", values = list(
                     statistic = "Downstaging (to lower stage)",
-                    value = basic_results$downstaging,
+                    value = as.character(basic_results$downstaging),
                     percentage = sprintf("%.1f%%", basic_results$downstaging_rate * 100)
                 ))
             }
             
-            # Statistical tests
-            table$addRow(rowKey = "chi_test", values = list(
-                statistic = "Chi-square Test",
-                value = sprintf("χ² = %.2f", basic_results$chi_test$statistic),
-                percentage = sprintf("p = %.4f", basic_results$chi_test$p.value)
-            ))
+            # Statistical tests - with safety check
+            if (!is.null(basic_results$chi_test)) {
+                table$addRow(rowKey = "chi_test", values = list(
+                    statistic = "Chi-square Test",
+                    value = sprintf("χ² = %.2f", basic_results$chi_test$statistic),
+                    percentage = sprintf("p = %.4f", basic_results$chi_test$p.value)
+                ))
+            } else {
+                table$addRow(rowKey = "chi_test", values = list(
+                    statistic = "Chi-square Test",
+                    value = "Test failed",
+                    percentage = "—"
+                ))
+            }
         },
         
         .populateStatisticalComparison = function(advanced_results) {
             # Populate statistical comparison table
             table <- self$results$statisticalComparison
             
-            # C-index comparison
+            # Safety check
+            if (is.null(advanced_results) || is.null(advanced_results$old_concordance) || is.null(advanced_results$new_concordance)) {
+                return()
+            }
+            
+            # C-index comparison with correct field names and atomic values
+            old_se <- advanced_results$old_concordance$std.err
+            new_se <- advanced_results$new_concordance$std.err
+            
             table$addRow(rowKey = "c_old", values = list(
-                metric = "C-index (Original)",
-                value = sprintf("%.3f", advanced_results$old_concordance$concordance),
-                ci = sprintf("[%.3f - %.3f]", 
-                           advanced_results$old_concordance$concordance - 1.96 * sqrt(advanced_results$old_concordance$var),
-                           advanced_results$old_concordance$concordance + 1.96 * sqrt(advanced_results$old_concordance$var)),
-                interpretation = "Discrimination ability of original staging"
+                metric = as.character("C-index (Original)"),
+                value = as.character(sprintf("%.3f", advanced_results$old_concordance$concordance)),
+                ci = as.character(sprintf("[%.3f - %.3f]", 
+                           advanced_results$old_concordance$concordance - 1.96 * old_se,
+                           advanced_results$old_concordance$concordance + 1.96 * old_se)),
+                interpretation = as.character("Discrimination ability of original staging")
             ))
             
             table$addRow(rowKey = "c_new", values = list(
-                metric = "C-index (New)",
-                value = sprintf("%.3f", advanced_results$new_concordance$concordance),
-                ci = sprintf("[%.3f - %.3f]", 
-                           advanced_results$new_concordance$concordance - 1.96 * sqrt(advanced_results$new_concordance$var),
-                           advanced_results$new_concordance$concordance + 1.96 * sqrt(advanced_results$new_concordance$var)),
-                interpretation = "Discrimination ability of new staging"
+                metric = as.character("C-index (New)"),
+                value = as.character(sprintf("%.3f", advanced_results$new_concordance$concordance)),
+                ci = as.character(sprintf("[%.3f - %.3f]", 
+                           advanced_results$new_concordance$concordance - 1.96 * new_se,
+                           advanced_results$new_concordance$concordance + 1.96 * new_se)),
+                interpretation = as.character("Discrimination ability of new staging")
             ))
             
             table$addRow(rowKey = "c_improvement", values = list(
-                metric = "C-index Improvement",
-                value = sprintf("+%.3f (%.1f%%)", 
+                metric = as.character("C-index Improvement"),
+                value = as.character(sprintf("+%.3f (%.1f%%)", 
                                advanced_results$c_improvement,
-                               advanced_results$c_improvement_pct),
-                ci = "See bootstrap results",
-                interpretation = ifelse(advanced_results$c_improvement > 0, "Improvement favors new staging", "No meaningful improvement")
+                               advanced_results$c_improvement_pct)),
+                ci = as.character("See bootstrap results"),
+                interpretation = as.character(ifelse(advanced_results$c_improvement > 0, "Improvement favors new staging", "No meaningful improvement"))
             ))
             
-            # AIC comparison
+            # AIC comparison with safety check
+            aic_value <- if (!is.null(advanced_results$aic_improvement) && !is.na(advanced_results$aic_improvement)) {
+                as.character(sprintf("%.1f", advanced_results$aic_improvement))
+            } else {
+                as.character("Not available")
+            }
+            
+            aic_interpretation <- if (!is.null(advanced_results$aic_improvement) && !is.na(advanced_results$aic_improvement)) {
+                as.character(ifelse(advanced_results$aic_improvement > 0, "New staging preferred by AIC", "Original staging preferred by AIC"))
+            } else {
+                as.character("AIC comparison not available")
+            }
+            
             table$addRow(rowKey = "aic", values = list(
-                metric = "AIC Improvement",
-                value = sprintf("%.1f", advanced_results$aic_improvement),
-                ci = "—",
-                interpretation = ifelse(advanced_results$aic_improvement > 0, "New staging preferred by AIC", "Original staging preferred by AIC")
+                metric = as.character("AIC Improvement"),
+                value = aic_value,
+                ci = as.character("—"),
+                interpretation = aic_interpretation
             ))
             
-            # Likelihood ratio test
+            # Likelihood ratio test with safety checks
             if (!is.null(advanced_results$lr_test) && nrow(advanced_results$lr_test) > 1) {
                 table$addRow(rowKey = "lr_test", values = list(
-                    metric = "Likelihood Ratio Test",
-                    value = sprintf("χ² = %.2f", advanced_results$lr_test[2, "Chisq"]),
-                    ci = sprintf("p = %.4f", advanced_results$lr_test[2, "Pr(>Chi)"]),
-                    interpretation = ifelse(advanced_results$lr_test[2, "Pr(>Chi)"] < 0.05, 
+                    metric = as.character("Likelihood Ratio Test"),
+                    value = as.character(sprintf("χ² = %.2f", advanced_results$lr_test[2, "Chisq"])),
+                    ci = as.character(sprintf("p = %.4f", advanced_results$lr_test[2, "Pr(>Chi)"])),
+                    interpretation = as.character(ifelse(advanced_results$lr_test[2, "Pr(>Chi)"] < 0.05, 
                                           "Statistically significant improvement", 
-                                          "No significant improvement")
+                                          "No significant improvement"))
                 ))
             }
         },
@@ -2153,6 +2405,136 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
             }
             
             self$results$clinicalInterpretation$setContent(html_content)
+        },
+        
+        .populateMigrationSummary = function(basic_results) {
+            # Populate migration summary table
+            table <- self$results$migrationSummary
+            
+            table$addRow(rowKey = "rate", values = list(
+                statistic = "Overall Migration Rate",
+                value = sprintf("%.1f%%", basic_results$migration_rate * 100)
+            ))
+            
+            table$addRow(rowKey = "upstaging", values = list(
+                statistic = "Upstaging Rate",
+                value = sprintf("%.1f%%", basic_results$upstaging_rate * 100)
+            ))
+            
+            table$addRow(rowKey = "downstaging", values = list(
+                statistic = "Downstaging Rate", 
+                value = sprintf("%.1f%%", basic_results$downstaging_rate * 100)
+            ))
+            
+            table$addRow(rowKey = "chi_p", values = list(
+                statistic = "Chi-square Test P-value",
+                value = sprintf("%.4f", basic_results$chi_test$p.value)
+            ))
+        },
+        
+        .populateStageDistribution = function(basic_results) {
+            # Populate stage distribution table
+            table <- self$results$stageDistribution
+            
+            # Safety check
+            if (is.null(basic_results) || is.null(basic_results$migration_table)) {
+                return()
+            }
+            
+            migration_table <- basic_results$migration_table
+            
+            # Get unique stages
+            all_stages <- unique(c(rownames(migration_table), colnames(migration_table)))
+            all_stages <- sort(all_stages)
+            
+            for (stage in all_stages) {
+                old_count <- if(stage %in% rownames(migration_table)) sum(migration_table[stage,]) else 0
+                new_count <- if(stage %in% colnames(migration_table)) sum(migration_table[,stage]) else 0
+                change <- new_count - old_count
+                
+                table$addRow(rowKey = stage, values = list(
+                    stage = as.character(stage),
+                    oldCount = as.integer(old_count),
+                    oldPct = as.character(sprintf("%.1f%%", (old_count / basic_results$total_patients) * 100)),
+                    newCount = as.integer(new_count),
+                    newPct = as.character(sprintf("%.1f%%", (new_count / basic_results$total_patients) * 100)),
+                    change = as.character(sprintf("%+d", change))
+                ))
+            }
+        },
+        
+        .populateMigrationMatrix = function(basic_results) {
+            # Populate migration matrix table
+            table <- self$results$migrationMatrix
+            
+            # Safety check
+            if (is.null(basic_results) || is.null(basic_results$migration_table)) {
+                return()
+            }
+            
+            migration_table <- basic_results$migration_table
+            
+            # Add columns dynamically
+            for (col_name in c("From\\To", colnames(migration_table))) {
+                table$addColumn(name = col_name, 
+                              title = col_name,
+                              type = if(col_name == "From\\To") "text" else "integer")
+            }
+            
+            # Add rows with safety checks
+            for (i in 1:nrow(migration_table)) {
+                row_values <- list()
+                row_values[["From\\To"]] <- as.character(rownames(migration_table)[i])
+                
+                for (j in 1:ncol(migration_table)) {
+                    row_values[[colnames(migration_table)[j]]] <- as.integer(migration_table[i,j])
+                }
+                
+                table$addRow(rowKey = rownames(migration_table)[i], values = row_values)
+            }
+        },
+        
+        .populateConcordanceComparison = function(advanced_results) {
+            # Populate concordance comparison table
+            table <- self$results$concordanceComparison
+            
+            # Check if advanced results exist
+            if (is.null(advanced_results) || is.null(advanced_results$old_concordance) || is.null(advanced_results$new_concordance)) {
+                return()
+            }
+            
+            # Original model - use correct field names
+            old_c <- advanced_results$old_concordance
+            old_se <- old_c$std.err  # Use std.err, not var
+            
+            table$addRow(rowKey = "original", values = list(
+                Model = "Original Staging",
+                C_Index = as.numeric(old_c$concordance),
+                SE = as.numeric(old_se),
+                CI_Lower = as.numeric(old_c$concordance - 1.96 * old_se),
+                CI_Upper = as.numeric(old_c$concordance + 1.96 * old_se),
+                Difference = 0,
+                p_value = NaN
+            ))
+            
+            # New model - use correct field names
+            new_c <- advanced_results$new_concordance
+            new_se <- new_c$std.err  # Use std.err, not var
+            
+            # Calculate p-value for difference using standard errors
+            se_diff <- sqrt(old_se^2 + new_se^2)
+            z_stat <- advanced_results$c_improvement / se_diff
+            p_value <- 2 * (1 - pnorm(abs(z_stat)))
+            
+            table$addRow(rowKey = "new", values = list(
+                Model = "New Staging",
+                C_Index = as.numeric(new_c$concordance),
+                SE = as.numeric(new_se),
+                CI_Lower = as.numeric(new_c$concordance - 1.96 * new_se),
+                CI_Upper = as.numeric(new_c$concordance + 1.96 * new_se),
+                Difference = as.numeric(advanced_results$c_improvement),
+                p_value = as.numeric(if(is.na(p_value) || is.nan(p_value)) NaN else p_value)
+            ))
         },
         
         .configurePlots = function(all_results, data) {

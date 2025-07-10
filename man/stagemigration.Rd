@@ -13,40 +13,46 @@ stagemigration(
   eventLevel,
   analysisType = "comprehensive",
   confidenceLevel = 0.95,
-  calculateNRI = TRUE,
+  calculateNRI = FALSE,
   nriTimePoints = "12, 24, 60",
-  calculateIDI = TRUE,
-  performROCAnalysis = TRUE,
+  calculateIDI = FALSE,
+  performROCAnalysis = FALSE,
   rocTimePoints = "12, 24, 36, 60",
-  performDCA = TRUE,
-  performCalibration = TRUE,
-  performBootstrap = TRUE,
+  performDCA = FALSE,
+  performCalibration = FALSE,
+  performBootstrap = FALSE,
   bootstrapReps = 1000,
   performCrossValidation = FALSE,
   cvFolds = 5,
   clinicalSignificanceThreshold = 0.02,
   nriClinicalThreshold = 0.2,
-  performHomogeneityTests = TRUE,
-  performTrendTests = TRUE,
-  performLikelihoodTests = TRUE,
-  calculatePseudoR2 = TRUE,
-  showMigrationHeatmap = TRUE,
-  showROCComparison = TRUE,
-  showCalibrationPlots = TRUE,
-  showDecisionCurves = TRUE,
-  showForestPlot = TRUE,
-  showWillRogersAnalysis = TRUE,
+  performHomogeneityTests = FALSE,
+  performTrendTests = FALSE,
+  performLikelihoodTests = FALSE,
+  calculatePseudoR2 = FALSE,
+  showMigrationOverview = FALSE,
+  showMigrationSummary = FALSE,
+  showStageDistribution = FALSE,
+  showMigrationMatrix = FALSE,
+  showStatisticalComparison = FALSE,
+  showConcordanceComparison = FALSE,
+  showMigrationHeatmap = FALSE,
+  showROCComparison = FALSE,
+  showCalibrationPlots = FALSE,
+  showDecisionCurves = FALSE,
+  showForestPlot = FALSE,
+  showWillRogersAnalysis = FALSE,
   survivalPlotType = "separate",
-  showConfidenceIntervals = TRUE,
-  showRiskTables = TRUE,
+  showConfidenceIntervals = FALSE,
+  showRiskTables = FALSE,
   plotTimeRange = "auto",
-  showClinicalInterpretation = TRUE,
-  showStatisticalSummary = TRUE,
-  showMethodologyNotes = TRUE,
-  includeEffectSizes = TRUE,
-  generateExecutiveSummary = TRUE,
+  showClinicalInterpretation = FALSE,
+  showStatisticalSummary = FALSE,
+  showMethodologyNotes = FALSE,
+  includeEffectSizes = FALSE,
+  generateExecutiveSummary = FALSE,
   cancerType = "general",
-  useOptimismCorrection = TRUE
+  useOptimismCorrection = FALSE
 )
 }
 \arguments{
@@ -135,6 +141,24 @@ for staging improvement.}
 \item{calculatePseudoR2}{Calculate multiple pseudo R-squared measures for
 model comparison (Nagelkerke, McFadden, Cox-Snell).}
 
+\item{showMigrationOverview}{Display overview table with basic migration
+statistics.}
+
+\item{showMigrationSummary}{Display summary table with migration rates and
+statistical tests.}
+
+\item{showStageDistribution}{Display table comparing stage distributions
+between old and new systems.}
+
+\item{showMigrationMatrix}{Display cross-tabulation matrix showing
+migration patterns.}
+
+\item{showStatisticalComparison}{Display table with C-index comparisons and
+other statistical metrics.}
+
+\item{showConcordanceComparison}{Display detailed concordance comparison
+between staging systems.}
+
 \item{showMigrationHeatmap}{Display detailed heatmap showing migration
 patterns between staging systems.}
 
@@ -194,6 +218,14 @@ metrics using bootstrap validation to avoid overly optimistic estimates.}
 A results object containing:
 \tabular{llllll}{
 \code{results$welcomeMessage} \tab \tab \tab \tab \tab a html \cr
+\code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$mydataview2} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$debug_migration_overview} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$debug_migration_summary} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$debug_stage_distribution} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$debug_migration_matrix} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$debug_statistical_comparison} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$debug_concordance_comparison} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$migrationOverview} \tab \tab \tab \tab \tab a table \cr
 \code{results$migrationSummary} \tab \tab \tab \tab \tab a table \cr
 \code{results$statisticalComparison} \tab \tab \tab \tab \tab a table \cr

@@ -15,6 +15,42 @@ items:
           - event
           - eventLevel
 
+
+    # Debugging Information
+    - name: mydataview
+      title: mydataview
+      type: Preformatted
+
+    - name: mydataview2
+      title: mydataview2
+      type: Preformatted
+
+    - name: debug_migration_overview
+      title: Debug Migration Overview
+      type: Preformatted
+
+    - name: debug_migration_summary
+      title: Debug Migration Summary
+      type: Preformatted
+
+    - name: debug_stage_distribution
+      title: Debug Stage Distribution
+      type: Preformatted
+
+    - name: debug_migration_matrix
+      title: Debug Migration Matrix
+      type: Preformatted
+
+    - name: debug_statistical_comparison
+      title: Debug Statistical Comparison
+      type: Preformatted
+
+    - name: debug_concordance_comparison
+      title: Debug Concordance Comparison
+      type: Preformatted
+
+
+
     # Migration Overview
     - name: migrationOverview
       title: Migration Overview

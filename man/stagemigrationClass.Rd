@@ -93,9 +93,41 @@ Results include comprehensive guidance for staging system adoption:
 }
 }
 
+\section{Data Requirements}{
+
+\itemize{
+\item \strong{Sample Size:} Minimum 30 patients (100+ recommended)
+\item \strong{Follow-up:} Adequate survival time for meaningful analysis
+\item \strong{Staging:} Both old and new staging variables with 2+ levels
+\item \strong{Events:} Binary event indicator (0/1) or factor with specified level
+\item \strong{Data Quality:} Complete case analysis (missing values removed)
+}
+}
+
+\section{Troubleshooting}{
+
+\itemize{
+\item \strong{"TRUE/FALSE error":} Check for missing values in staging or survival variables
+\item \strong{"Not atomic error":} Disable individual tables to isolate problematic components
+\item \strong{Model fitting errors:} Ensure adequate sample size and event rate (5-95\%)
+\item \strong{Stage level errors:} Verify staging variables have multiple distinct levels
+}
+}
+
 \examples{
 \dontrun{
-# TNM 7th to 8th edition validation
+# Basic staging comparison
+stagemigration(
+  data = cancer_data,
+  oldStage = "old_stage",
+  newStage = "new_stage", 
+  survivalTime = "survival_months",
+  event = "outcome",
+  eventLevel = "DEAD",
+  analysisType = "basic"
+)
+
+# Comprehensive analysis with all options
 stagemigration(
   data = lung_cancer_cohort,
   oldStage = "tnm7_stage",

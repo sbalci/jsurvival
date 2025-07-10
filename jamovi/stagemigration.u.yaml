@@ -126,6 +126,18 @@ children:
       - type: CheckBox
         name: calculatePseudoR2
       - type: CheckBox
+        name: showMigrationOverview
+      - type: CheckBox
+        name: showMigrationSummary
+      - type: CheckBox
+        name: showStageDistribution
+      - type: CheckBox
+        name: showMigrationMatrix
+      - type: CheckBox
+        name: showStatisticalComparison
+      - type: CheckBox
+        name: showConcordanceComparison
+      - type: CheckBox
         name: showMigrationHeatmap
       - type: CheckBox
         name: showROCComparison
