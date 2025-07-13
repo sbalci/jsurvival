@@ -136,7 +136,6 @@ stagemigration(
   event = "death",
   eventLevel = "dead",
   analysisType = "comprehensive",
-  cancerType = "lung",
   calculateNRI = TRUE,
   performBootstrap = TRUE,
   bootstrapReps = 1000

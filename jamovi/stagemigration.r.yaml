@@ -15,46 +15,30 @@ items:
           - event
           - eventLevel
 
-
     # Debugging Information
     - name: mydataview
       title: mydataview
       type: Preformatted
+      visible: false
 
     - name: mydataview2
       title: mydataview2
       type: Preformatted
+      visible: false
 
-    - name: debug_migration_overview
-      title: Debug Migration Overview
-      type: Preformatted
-
-    - name: debug_migration_summary
-      title: Debug Migration Summary
-      type: Preformatted
-
-    - name: debug_stage_distribution
-      title: Debug Stage Distribution
-      type: Preformatted
-
-    - name: debug_migration_matrix
-      title: Debug Migration Matrix
-      type: Preformatted
-
-    - name: debug_statistical_comparison
-      title: Debug Statistical Comparison
-      type: Preformatted
-
-    - name: debug_concordance_comparison
-      title: Debug Concordance Comparison
-      type: Preformatted
-
-
+    # Migration Overview Explanation
+    - name: migrationOverviewExplanation
+      title: Understanding the Migration Overview
+      type: Html
+      visible: (showMigrationOverview && showExplanations)
+      clearWith:
+          - showMigrationOverview
 
     # Migration Overview
     - name: migrationOverview
       title: Migration Overview
       type: Table
+      visible: (showMigrationOverview)
       clearWith:
           - oldStage
           - newStage
@@ -72,10 +56,19 @@ items:
             title: "Percentage"
             type: text
 
+    # Migration Summary Explanation
+    - name: migrationSummaryExplanation
+      title: Understanding Statistical Tests for Migration
+      type: Html
+      visible: (showMigrationSummary && showExplanations)
+      clearWith:
+          - showMigrationSummary
+
     # Migration Summary
     - name: migrationSummary
       title: Migration Summary
       type: Table
+      visible: (showMigrationSummary)
       clearWith:
           - oldStage
           - newStage
@@ -90,10 +83,19 @@ items:
             title: "Value"
             type: text
 
+    # Statistical Comparison Explanation
+    - name: statisticalComparisonExplanation
+      title: Understanding Statistical Comparison Metrics
+      type: Html
+      visible: (showStatisticalComparison && showExplanations)
+      clearWith:
+          - showStatisticalComparison
+
     # Statistical Comparison
     - name: statisticalComparison
       title: Statistical Comparison
       type: Table
+      visible: (showStatisticalComparison)
       clearWith:
           - oldStage
           - newStage
@@ -114,10 +116,19 @@ items:
             title: "Interpretation"
             type: text
 
+    # Stage Distribution Explanation
+    - name: stageDistributionExplanation
+      title: Understanding Stage Distribution Changes
+      type: Html
+      visible: (showStageDistribution && showExplanations)
+      clearWith:
+          - showStageDistribution
+
     # Stage Distribution Comparison
     - name: stageDistribution
       title: Stage Distribution Comparison
       type: Table
+      visible: (showStageDistribution)
       clearWith:
           - oldStage
           - newStage
@@ -141,19 +152,40 @@ items:
             title: "Change"
             type: text
 
+    # Migration Matrix Explanation
+    - name: migrationMatrixExplanation
+      title: Understanding the Migration Matrix
+      type: Html
+      visible: (showMigrationMatrix && showExplanations)
+      clearWith:
+          - showMigrationMatrix
+
     # Migration Matrix
     - name: migrationMatrix
       title: Stage Migration Matrix
       type: Table
+      visible: (showMigrationMatrix)
       clearWith:
           - oldStage
           - newStage
-      columns: []  # Columns will be added dynamically
+      columns:
+        - name: .name
+          title: "Original Stage"
+          type: text
+
+    # Concordance Comparison Explanation
+    - name: concordanceComparisonExplanation
+      title: Understanding Concordance (C-Index) Analysis
+      type: Html
+      visible: (showConcordanceComparison && showExplanations)
+      clearWith:
+          - showConcordanceComparison
 
     # Discrimination Comparison
     - name: concordanceComparison
       title: Discrimination Comparison (C-Index)
       type: Table
+      visible: (showConcordanceComparison)
       clearWith:
           - oldStage
           - newStage
@@ -188,6 +220,14 @@ items:
             title: "p-value"
             type: number
             format: zto,pvalue
+
+    # Net Reclassification Improvement Explanation
+    - name: nriResultsExplanation
+      title: Understanding Net Reclassification Improvement (NRI)
+      type: Html
+      visible: (calculateNRI && showExplanations)
+      clearWith:
+          - calculateNRI
 
     # Net Reclassification Improvement
     - name: nriResults
@@ -230,6 +270,14 @@ items:
             title: "p-value"
             type: number
             format: zto,pvalue
+
+    # Integrated Discrimination Improvement Explanation
+    - name: idiResultsExplanation
+      title: Understanding Integrated Discrimination Improvement (IDI)
+      type: Html
+      visible: (calculateIDI && showExplanations)
+      clearWith:
+          - calculateIDI
 
     # Integrated Discrimination Improvement
     - name: idiResults
@@ -370,6 +418,14 @@ items:
             type: number
             format: zto
 
+    # Will Rogers Phenomenon Analysis Explanation
+    - name: willRogersAnalysisExplanation
+      title: Understanding Will Rogers Phenomenon Analysis
+      type: Html
+      visible: (showWillRogersAnalysis && showExplanations)
+      clearWith:
+          - showWillRogersAnalysis
+
     # Will Rogers Phenomenon Analysis
     - name: willRogersAnalysis
       title: Will Rogers Phenomenon Analysis
@@ -461,6 +517,14 @@ items:
             type: number
             format: zto,pvalue
 
+    # Clinical Interpretation Explanation
+    - name: clinicalInterpretationExplanation
+      title: Understanding Clinical Interpretation Guide
+      type: Html
+      visible: (showClinicalInterpretation && showExplanations)
+      clearWith:
+          - showClinicalInterpretation
+
     # Clinical Interpretation
     - name: clinicalInterpretation
       title: Clinical Interpretation
@@ -488,6 +552,14 @@ items:
             title: "Recommendation"
             type: text
 
+    # Executive Summary Explanation
+    - name: executiveSummaryExplanation
+      title: Understanding the Executive Summary
+      type: Html
+      visible: (generateExecutiveSummary && showExplanations)
+      clearWith:
+          - generateExecutiveSummary
+
     # Executive Summary
     - name: executiveSummary
       title: Executive Summary
@@ -513,6 +585,14 @@ items:
           - name: Strength
             title: "Strength"
             type: text
+
+    # Statistical Summary Explanation
+    - name: statisticalSummaryExplanation
+      title: Understanding the Statistical Summary
+      type: Html
+      visible: (showStatisticalSummary && showExplanations)
+      clearWith:
+          - showStatisticalSummary
 
     # Statistical Summary
     - name: statisticalSummary
@@ -554,6 +634,14 @@ items:
 
     # Plots Section
 
+    # Migration Heatmap Explanation
+    - name: migrationHeatmapExplanation
+      title: Interpreting the Migration Heatmap
+      type: Html
+      visible: (showMigrationHeatmap && showExplanations)
+      clearWith:
+          - showMigrationHeatmap
+
     # Migration Heatmap
     - name: migrationHeatmap
       title: Migration Heatmap
@@ -566,6 +654,14 @@ items:
           - oldStage
           - newStage
           - showMigrationHeatmap
+
+    # ROC Comparison Explanation
+    - name: rocComparisonExplanation
+      title: Understanding Time-dependent ROC Curves
+      type: Html
+      visible: (showROCComparison && showExplanations)
+      clearWith:
+          - showROCComparison
 
     # ROC Comparison Plot
     - name: rocComparisonPlot
@@ -584,6 +680,14 @@ items:
           - showROCComparison
           - rocTimePoints
 
+    # Forest Plot Explanation
+    - name: forestPlotExplanation
+      title: Understanding Hazard Ratio Forest Plots
+      type: Html
+      visible: (showForestPlot && showExplanations)
+      clearWith:
+          - showForestPlot
+
     # Forest Plot
     - name: forestPlot
       title: Hazard Ratio Forest Plot
@@ -599,6 +703,69 @@ items:
           - event
           - eventLevel
           - showForestPlot
+
+    # Calibration Analysis Explanation
+    - name: calibrationAnalysisExplanation
+      title: Understanding Calibration Analysis
+      type: Html
+      visible: (performCalibration && showExplanations)
+      clearWith:
+          - performCalibration
+
+    # Calibration Analysis
+    - name: calibrationAnalysis
+      title: Calibration Analysis
+      type: Table
+      visible: (performCalibration)
+      clearWith:
+          - oldStage
+          - newStage
+          - survivalTime
+          - event
+          - eventLevel
+          - performCalibration
+      columns:
+          - name: Model
+            title: "Model"
+            type: text
+          - name: Hosmer_Lemeshow_Chi2
+            title: "H-L Chi²"
+            type: number
+            format: zto
+          - name: Hosmer_Lemeshow_df
+            title: "H-L df"
+            type: integer
+          - name: Hosmer_Lemeshow_p
+            title: "H-L p-value"
+            type: number
+            format: zto,pvalue
+          - name: Calibration_Slope
+            title: "Calibration Slope"
+            type: number
+            format: zto
+          - name: Calibration_Intercept
+            title: "Calibration Intercept"
+            type: number
+            format: zto
+          - name: C_Slope_CI_Lower
+            title: "Slope 95% CI Lower"
+            type: number
+            format: zto
+          - name: C_Slope_CI_Upper
+            title: "Slope 95% CI Upper"
+            type: number
+            format: zto
+          - name: Interpretation
+            title: "Interpretation"
+            type: text
+
+    # Calibration Plots Explanation
+    - name: calibrationPlotsExplanation
+      title: Understanding Calibration Plots
+      type: Html
+      visible: (showCalibrationPlots && showExplanations)
+      clearWith:
+          - showCalibrationPlots
 
     # Calibration Plots
     - name: calibrationPlots
@@ -617,6 +784,14 @@ items:
           - showCalibrationPlots
           - performCalibration
 
+    # Decision Curves Explanation
+    - name: decisionCurvesExplanation
+      title: Understanding Decision Curve Analysis
+      type: Html
+      visible: (showDecisionCurves && showExplanations)
+      clearWith:
+          - showDecisionCurves
+
     # Decision Curves
     - name: decisionCurves
       title: Decision Curves
@@ -634,6 +809,14 @@ items:
           - showDecisionCurves
           - performDCA
 
+    # Survival Curves Explanation
+    - name: survivalCurvesExplanation
+      title: Understanding Survival Curves Comparison
+      type: Html
+      visible: (showSurvivalCurves && showExplanations)
+      clearWith:
+          - showSurvivalCurves
+
     # Survival Curves
     - name: survivalCurves
       title: Survival Curves by Stage
@@ -641,13 +824,14 @@ items:
       width: 900
       height: 700
       renderFun: .plotSurvivalCurves
-      visible: (survivalPlotType)
+      visible: (showSurvivalCurves)
       clearWith:
           - oldStage
           - newStage
           - survivalTime
           - event
           - eventLevel
+          - showSurvivalCurves
           - survivalPlotType
           - showConfidenceIntervals
           - showRiskTables

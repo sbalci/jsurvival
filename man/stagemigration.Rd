@@ -30,18 +30,19 @@ stagemigration(
   performTrendTests = FALSE,
   performLikelihoodTests = FALSE,
   calculatePseudoR2 = FALSE,
-  showMigrationOverview = FALSE,
-  showMigrationSummary = FALSE,
-  showStageDistribution = FALSE,
-  showMigrationMatrix = FALSE,
-  showStatisticalComparison = FALSE,
-  showConcordanceComparison = FALSE,
+  showMigrationOverview = TRUE,
+  showMigrationSummary = TRUE,
+  showStageDistribution = TRUE,
+  showMigrationMatrix = TRUE,
+  showStatisticalComparison = TRUE,
+  showConcordanceComparison = TRUE,
   showMigrationHeatmap = FALSE,
   showROCComparison = FALSE,
   showCalibrationPlots = FALSE,
   showDecisionCurves = FALSE,
   showForestPlot = FALSE,
   showWillRogersAnalysis = FALSE,
+  showSurvivalCurves = FALSE,
   survivalPlotType = "separate",
   showConfidenceIntervals = FALSE,
   showRiskTables = FALSE,
@@ -52,7 +53,8 @@ stagemigration(
   includeEffectSizes = FALSE,
   generateExecutiveSummary = FALSE,
   cancerType = "general",
-  useOptimismCorrection = FALSE
+  useOptimismCorrection = FALSE,
+  showExplanations = TRUE
 )
 }
 \arguments{
@@ -141,17 +143,33 @@ for staging improvement.}
 \item{calculatePseudoR2}{Calculate multiple pseudo R-squared measures for
 model comparison (Nagelkerke, McFadden, Cox-Snell).}
 
-\item{showMigrationOverview}{Display overview table with basic migration
-statistics.}
+\item{showMigrationOverview}{Display overview table showing the fundamental
+migration statistics including: total number of patients, number and
+percentage of patients who migrated stages, direction of migration
+(upstaged vs downstaged), and net migration effect. This is the essential
+first table for understanding the overall impact of the new staging system.}
 
-\item{showMigrationSummary}{Display summary table with migration rates and
-statistical tests.}
+\item{showMigrationSummary}{Display statistical summary of migration
+patterns including overall migration rate and formal statistical tests.
+Shows Chi-square test results for independence and Fisher's exact test
+p-values to determine if the migration patterns are statistically
+significant. Essential for validating whether observed changes are due to
+genuine staging improvements or random variation.}
 
-\item{showStageDistribution}{Display table comparing stage distributions
-between old and new systems.}
+\item{showStageDistribution}{Display side-by-side comparison of how
+patients are distributed across stages in both the original and new staging
+systems. Shows the count and percentage of patients in each stage, along
+with the net change. This helps identify which stages are gaining or losing
+patients and whether the new system creates better separation between
+prognostic groups.}
 
-\item{showMigrationMatrix}{Display cross-tabulation matrix showing
-migration patterns.}
+\item{showMigrationMatrix}{Display detailed cross-tabulation matrix showing
+exactly how patients moved between stages. Rows represent the original
+staging system and columns represent the new staging system. Diagonal
+values indicate patients who remained in the same stage, while off-diagonal
+values show stage migrations. This is essential for understanding the
+specific migration patterns and identifying which stages are most affected
+by the new criteria.}
 
 \item{showStatisticalComparison}{Display table with C-index comparisons and
 other statistical metrics.}
@@ -159,8 +177,12 @@ other statistical metrics.}
 \item{showConcordanceComparison}{Display detailed concordance comparison
 between staging systems.}
 
-\item{showMigrationHeatmap}{Display detailed heatmap showing migration
-patterns between staging systems.}
+\item{showMigrationHeatmap}{Display a color-coded heatmap visualization of
+the migration matrix.  Darker colors indicate more patients, with the
+diagonal showing patients  who remained in the same stage. This visual
+representation makes it easy  to identify migration patterns at a glance -
+upstaging appears above the  diagonal, downstaging below. Essential for
+presentations and publications.}
 
 \item{showROCComparison}{Display time-dependent ROC curves comparing
 staging systems.}
@@ -177,6 +199,9 @@ and confidence intervals.}
 \item{showWillRogersAnalysis}{Detailed analysis of Will Rogers phenomenon
 with survival comparisons between migrated and non-migrated patients within
 stages.}
+
+\item{showSurvivalCurves}{Display survival curves comparing the staging
+systems.}
 
 \item{survivalPlotType}{Controls display of survival curves for staging
 system comparison.}
@@ -213,6 +238,8 @@ literature.}
 
 \item{useOptimismCorrection}{Apply optimism correction to performance
 metrics using bootstrap validation to avoid overly optimistic estimates.}
+
+\item{showExplanations}{Include detailed explanations for results.}
 }
 \value{
 A results object containing:
@@ -220,35 +247,49 @@ A results object containing:
 \code{results$welcomeMessage} \tab \tab \tab \tab \tab a html \cr
 \code{results$mydataview} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$mydataview2} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$debug_migration_overview} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$debug_migration_summary} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$debug_stage_distribution} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$debug_migration_matrix} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$debug_statistical_comparison} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$debug_concordance_comparison} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$migrationOverviewExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$migrationOverview} \tab \tab \tab \tab \tab a table \cr
+\code{results$migrationSummaryExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$migrationSummary} \tab \tab \tab \tab \tab a table \cr
+\code{results$statisticalComparisonExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$statisticalComparison} \tab \tab \tab \tab \tab a table \cr
+\code{results$stageDistributionExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$stageDistribution} \tab \tab \tab \tab \tab a table \cr
+\code{results$migrationMatrixExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$migrationMatrix} \tab \tab \tab \tab \tab a table \cr
+\code{results$concordanceComparisonExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$concordanceComparison} \tab \tab \tab \tab \tab a table \cr
+\code{results$nriResultsExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$nriResults} \tab \tab \tab \tab \tab a table \cr
+\code{results$idiResultsExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$idiResults} \tab \tab \tab \tab \tab a table \cr
 \code{results$rocAnalysis} \tab \tab \tab \tab \tab a table \cr
 \code{results$dcaResults} \tab \tab \tab \tab \tab a table \cr
 \code{results$bootstrapResults} \tab \tab \tab \tab \tab a table \cr
+\code{results$willRogersAnalysisExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$willRogersAnalysis} \tab \tab \tab \tab \tab a table \cr
 \code{results$likelihoodTests} \tab \tab \tab \tab \tab a table \cr
 \code{results$homogeneityTests} \tab \tab \tab \tab \tab a table \cr
+\code{results$clinicalInterpretationExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$clinicalInterpretation} \tab \tab \tab \tab \tab a table \cr
+\code{results$executiveSummaryExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$executiveSummary} \tab \tab \tab \tab \tab a table \cr
+\code{results$statisticalSummaryExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$statisticalSummary} \tab \tab \tab \tab \tab a table \cr
 \code{results$methodologyNotes} \tab \tab \tab \tab \tab a html \cr
+\code{results$migrationHeatmapExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$migrationHeatmap} \tab \tab \tab \tab \tab an image \cr
+\code{results$rocComparisonExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$rocComparisonPlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$forestPlotExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$forestPlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$calibrationAnalysisExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$calibrationAnalysis} \tab \tab \tab \tab \tab a table \cr
+\code{results$calibrationPlotsExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$calibrationPlots} \tab \tab \tab \tab \tab an image \cr
+\code{results$decisionCurvesExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$decisionCurves} \tab \tab \tab \tab \tab an image \cr
+\code{results$survivalCurvesExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$survivalCurves} \tab \tab \tab \tab \tab an image \cr
 }
 

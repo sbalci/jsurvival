@@ -264,42 +264,59 @@ options:
     - name: showMigrationOverview
       title: 'Migration Overview Table'
       type: Bool
-      default: false
+      default: true
       description: >-
-        Display overview table with basic migration statistics.
+        Display overview table showing the fundamental migration statistics including:
+        total number of patients, number and percentage of patients who migrated stages,
+        direction of migration (upstaged vs downstaged), and net migration effect.
+        This is the essential first table for understanding the overall impact of the
+        new staging system.
 
     - name: showMigrationSummary
       title: 'Migration Summary Table'
       type: Bool
-      default: false
+      default: true
       description: >-
-        Display summary table with migration rates and statistical tests.
+        Display statistical summary of migration patterns including overall migration
+        rate and formal statistical tests. Shows Chi-square test results for
+        independence and Fisher's exact test p-values to determine if the migration
+        patterns are statistically significant. Essential for validating whether
+        observed changes are due to genuine staging improvements or random variation.
 
     - name: showStageDistribution
       title: 'Stage Distribution Comparison Table'
       type: Bool
-      default: false
+      default: true
       description: >-
-        Display table comparing stage distributions between old and new systems.
+        Display side-by-side comparison of how patients are distributed across stages
+        in both the original and new staging systems. Shows the count and percentage
+        of patients in each stage, along with the net change. This helps identify
+        which stages are gaining or losing patients and whether the new system
+        creates better separation between prognostic groups.
 
     - name: showMigrationMatrix
       title: 'Migration Matrix Table'
       type: Bool
-      default: false
+      default: true
       description: >-
-        Display cross-tabulation matrix showing migration patterns.
+        Display detailed cross-tabulation matrix showing exactly how patients moved
+        between stages. Rows represent the original staging system and columns represent
+        the new staging system. Diagonal values indicate patients who remained in the
+        same stage, while off-diagonal values show stage migrations. This is essential
+        for understanding the specific migration patterns and identifying which stages
+        are most affected by the new criteria.
 
     - name: showStatisticalComparison
       title: 'Statistical Comparison Table'
       type: Bool
-      default: false
+      default: true
       description: >-
         Display table with C-index comparisons and other statistical metrics.
 
     - name: showConcordanceComparison
       title: 'Concordance Comparison Table'
       type: Bool
-      default: false
+      default: true
       description: >-
         Display detailed concordance comparison between staging systems.
 
@@ -309,7 +326,11 @@ options:
       type: Bool
       default: false
       description: >-
-        Display detailed heatmap showing migration patterns between staging systems.
+        Display a color-coded heatmap visualization of the migration matrix. 
+        Darker colors indicate more patients, with the diagonal showing patients 
+        who remained in the same stage. This visual representation makes it easy 
+        to identify migration patterns at a glance - upstaging appears above the 
+        diagonal, downstaging below. Essential for presentations and publications.
 
     - name: showROCComparison
       title: 'ROC Curve Comparison'
@@ -348,6 +369,13 @@ options:
         between migrated and non-migrated patients within stages.
 
     # Survival Plot Options
+    - name: showSurvivalCurves
+      title: 'Show Survival Curves'
+      type: Bool
+      default: false
+      description: >-
+        Display survival curves comparing the staging systems.
+    
     - name: survivalPlotType
       title: 'Survival Plot Display'
       type: List
@@ -458,5 +486,14 @@ options:
       description: >-
         Apply optimism correction to performance metrics using bootstrap
         validation to avoid overly optimistic estimates.
+
+
+    - name: showExplanations
+      title: 'Explanations for Results'
+      type: Bool
+      default: true
+      description: >-
+        Include detailed explanations for results.
+
 
 ...
