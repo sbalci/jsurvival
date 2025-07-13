@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">jsurvival</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3.21</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3.55</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,8 +15,7 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/jsurvival.html">Get started</a></li>
-<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/sbalci/ClinicoPathJamoviModule/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -67,6 +66,10 @@
 <span>  yend_plot <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  byplot <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  findcut <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  multiple_cutoffs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  num_cutoffs <span class="op">=</span> <span class="st">"two"</span>,</span>
+<span>  cutoff_method <span class="op">=</span> <span class="st">"quantile"</span>,</span>
+<span>  min_group_size <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  multievent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ci95 <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  risktable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -225,6 +228,33 @@ Plot" option. The optimal cut-off point will be displayed on the survival
 plot as a vertical dashed line.</p></dd>
 
 
+<dt id="arg-multiple-cutoffs">multiple_cutoffs<a class="anchor" aria-label="anchor" href="#arg-multiple-cutoffs"></a></dt>
+<dd><p>Enable this option to find multiple optimal cut-off
+points for the continuous explanatory variable. This extends the single
+cutoff analysis to identify 2-4 optimal cut-off points that maximize
+survival group separation. Creates stratified groups for enhanced survival
+analysis.</p></dd>
+
+
+<dt id="arg-num-cutoffs">num_cutoffs<a class="anchor" aria-label="anchor" href="#arg-num-cutoffs"></a></dt>
+<dd><p>Select the number of cut-off points to identify. This
+will create multiple risk groups for stratified survival analysis (e.g., 2
+cut-offs create Low, Medium, High risk groups).</p></dd>
+
+
+<dt id="arg-cutoff-method">cutoff_method<a class="anchor" aria-label="anchor" href="#arg-cutoff-method"></a></dt>
+<dd><p>Method for finding multiple cut-offs. Quantile-based
+uses tertiles/quartiles, Recursive finds sequential optimal points,
+Tree-based uses survival trees, Minimum P-value finds points that minimize
+log-rank p-values.</p></dd>
+
+
+<dt id="arg-min-group-size">min_group_size<a class="anchor" aria-label="anchor" href="#arg-min-group-size"></a></dt>
+<dd><p>Minimum percentage of patients required in each group
+created by cut-offs. Prevents creating groups with insufficient sample
+sizes for reliable analysis.</p></dd>
+
+
 <dt id="arg-multievent">multievent<a class="anchor" aria-label="anchor" href="#arg-multievent"></a></dt>
 <dd><p>Enable this option if your data includes multiple event
 levels (e.g., different types of events or outcomes). This option is
@@ -271,7 +301,7 @@ For example,  "12, 36, 60" will create intervals 0-12, 12-36, 36-60, and
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A results object containing:</p><table class="table table"><tr><td><code>results$todo</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$coxSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$coxTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$tCoxtext2</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$personTimeTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$personTimeSummary</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$rescutTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$plot4</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot5</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$medianSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$medianTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$survTableSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$survTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$plot2</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot3</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot6</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$calculatedtime</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$outcomeredefined</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$calculatedcutoff</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr></table><p>Tables can be converted to data frames with <code>asDF</code> or <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></code>. For example:</p>
+    <p>A results object containing:</p><table class="table table"><tr><td><code>results$todo</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$coxSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$coxTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$tCoxtext2</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$personTimeTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$personTimeSummary</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$rescutTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$plot4</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot5</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$medianSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$medianTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$survTableSummary</code></td><td></td><td></td><td></td><td></td><td>a preformatted</td></tr><tr><td><code>results$survTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$plot2</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot3</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot6</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$calculatedtime</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$outcomeredefined</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$calculatedcutoff</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr><tr><td><code>results$multipleCutTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$multipleMedianTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$multipleSurvTable</code></td><td></td><td></td><td></td><td></td><td>a table</td></tr><tr><td><code>results$plotMultipleCutoffs</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plotMultipleSurvival</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$calculatedmulticut</code></td><td></td><td></td><td></td><td></td><td>an output</td></tr></table><p>Tables can be converted to data frames with <code>asDF</code> or <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></code>. For example:</p>
 <p><code>results$coxTable$asDF</code></p>
 <p><code>as.data.frame(results$coxTable)</code></p>
     </div>

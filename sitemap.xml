@@ -1,19 +1,21 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://www.serdarbalci.com/jsurvival/404.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/CLAUDE.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/LICENSE.html</loc></url>
-<url><loc>https://www.serdarbalci.com/jsurvival/articles/index.html</loc></url>
-<url><loc>https://www.serdarbalci.com/jsurvival/articles/jsurvival.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/authors.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/index.html</loc></url>
-<url><loc>https://www.serdarbalci.com/jsurvival/reference/histopathology.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/index.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/jsurvival-package.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/multisurvival.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/multisurvivalClass.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/oddsratio.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/oddsratioClass.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/reference/outcomeorganizer.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/reference/outcomeorganizerClass.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/singlearm.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/singlearmClass.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/reference/stagemigration.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/reference/stagemigrationClass.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/survival.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/survivalClass.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/survivalcont.html</loc></url>
