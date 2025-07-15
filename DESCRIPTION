@@ -1,8 +1,8 @@
 Type: Package
 Package: jsurvival
 Title: Survival Module of ClinicoPath for jamovi
-Version: 0.0.3.59
-Date: 2025-07-15
+Version: 0.0.3.60
+Date: 2025-07-16
 Authors@R: 
     person(given = "Serdar",
            family = "Balci",
@@ -45,10 +45,13 @@ Imports:
     labelled,
     rms,
     dcurves,
-    timeROC
+    timeROC,
+    boot,
+    pROC,
+    rlang,
+    Hmisc
 Suggests:
     rmarkdown
-VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
