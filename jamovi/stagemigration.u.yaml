@@ -8,7 +8,6 @@ children:
     persistentItems: false
     stretchFactor: 1
     children:
-
       - type: TargetLayoutBox
         label: Original Staging System
         children:
@@ -51,8 +50,6 @@ children:
           - type: VariablesListBox
             name: categoricalCovariates
             isTarget: true
-
-
   - type: CollapseBox
     label: Main Analysis
     collapsed: false
@@ -87,37 +84,8 @@ children:
               - type: CheckBox
                 name: showExplanations
                 label: Show Explanations for Results
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+              - type: CheckBox
+                name: showAbbreviationGlossary
   - type: CollapseBox
     label: Analysis Configuration
     collapsed: false
@@ -155,10 +123,12 @@ children:
                 name: nriTimePoints
                 label: NRI Time Points (months)
                 format: string
+                enable: (calculateNRI)
               - type: TextBox
                 name: nriClinicalThreshold
                 label: NRI Clinical Threshold
                 format: number
+                enable: (calculateNRI)
               - type: CheckBox
                 name: calculateIDI
                 label: Integrated Discrimination Improvement (IDI)
@@ -175,6 +145,7 @@ children:
                 name: rocTimePoints
                 label: ROC Time Points (months)
                 format: string
+                enable: (performROCAnalysis)
       - type: Label
         label: Clinical Utility Assessment
         children:
@@ -208,9 +179,11 @@ children:
                 name: bootstrapReps
                 label: Bootstrap Repetitions
                 format: number
+                enable: (performBootstrap)
               - type: CheckBox
                 name: useOptimismCorrection
                 label: Apply Optimism Correction
+                enable: (performBootstrap)
       - type: Label
         label: Cross-Validation (Optional)
         children:
@@ -224,6 +197,7 @@ children:
                 name: cvFolds
                 label: CV Folds
                 format: number
+                enable: (performCrossValidation)
   - type: CollapseBox
     label: Model Comparison Tests
     collapsed: false
@@ -255,6 +229,21 @@ children:
               - type: CheckBox
                 name: showWillRogersAnalysis
                 label: Will Rogers Phenomenon Analysis
+              - type: CheckBox
+                name: showWillRogersVisualization
+              - type: CheckBox
+                name: showMigrationSurvivalComparison
+  - type: VariableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: Institution Variable
+        children:
+          - type: VariablesListBox
+            name: institutionVariable
+            maxItemCount: 1
+            isTarget: true
   - type: CollapseBox
     label: Multifactorial Analysis
     collapsed: false
@@ -311,7 +300,7 @@ children:
               - type: CheckBox
                 name: showStepwiseResults
                 label: Show Stepwise Selection Results
-                enable: (enableMultifactorialAnalysis)
+                enable: (enableMultifactorialAnalysis && (multifactorialComparisonType:stepwise || multifactorialComparisonType:comprehensive))
   - type: CollapseBox
     label: Visualization Options
     collapsed: false
@@ -326,8 +315,12 @@ children:
                 name: showMigrationHeatmap
                 label: Migration Heatmap
               - type: CheckBox
+                name: showSankeyDiagram
+                label: Sankey Diagram
+              - type: CheckBox
                 name: showROCComparison
                 label: ROC Curve Comparison
+                enable: (performROCAnalysis)
               - type: CheckBox
                 name: showForestPlot
                 label: Hazard Ratio Forest Plot
@@ -338,11 +331,13 @@ children:
             margin: large
             children:
               - type: CheckBox
-                name: showCalibrationPlots
-                label: Calibration Plots
-              - type: CheckBox
                 name: showDecisionCurves
                 label: Decision Curves
+                enable: (performDCA)
+              - type: CheckBox
+                name: showCalibrationPlots
+                label: Calibration Plots
+                enable: (performCalibration || advancedMigrationAnalysis)
       - type: Label
         label: Survival Curve Options
         children:
@@ -355,16 +350,20 @@ children:
               - type: ComboBox
                 name: survivalPlotType
                 label: Survival Plot Display
+                enable: (showSurvivalCurves)
               - type: CheckBox
                 name: showConfidenceIntervals
                 label: Show Confidence Intervals
+                enable: (showSurvivalCurves)
               - type: CheckBox
                 name: showRiskTables
                 label: Show Risk Tables
+                enable: (showSurvivalCurves)
               - type: TextBox
                 name: plotTimeRange
                 label: Plot Time Range (months)
                 format: string
+                enable: (showSurvivalCurves)
   - type: CollapseBox
     label: Output and Reporting
     collapsed: false
@@ -384,6 +383,8 @@ children:
               - type: CheckBox
                 name: includeEffectSizes
                 label: Include Effect Sizes
+              - type: CheckBox
+                name: advancedMigrationAnalysis
       - type: Label
         label: Technical Details
         children:
@@ -396,5 +397,3 @@ children:
               - type: CheckBox
                 name: showMethodologyNotes
                 label: Methodology Notes
-
-

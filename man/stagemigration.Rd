@@ -24,12 +24,13 @@ stagemigration(
   bootstrapReps = 1000,
   performCrossValidation = FALSE,
   cvFolds = 5,
+  institutionVariable,
   clinicalSignificanceThreshold = 0.02,
   nriClinicalThreshold = 0.2,
   performHomogeneityTests = FALSE,
   performTrendTests = FALSE,
   performLikelihoodTests = FALSE,
-  calculatePseudoR2 = FALSE,
+  calculatePseudoR2 = TRUE,
   showMigrationOverview = TRUE,
   showMigrationSummary = TRUE,
   showStageDistribution = TRUE,
@@ -37,11 +38,14 @@ stagemigration(
   showStatisticalComparison = TRUE,
   showConcordanceComparison = TRUE,
   showMigrationHeatmap = FALSE,
+  showSankeyDiagram = FALSE,
   showROCComparison = FALSE,
   showCalibrationPlots = FALSE,
   showDecisionCurves = FALSE,
   showForestPlot = FALSE,
   showWillRogersAnalysis = FALSE,
+  showWillRogersVisualization = FALSE,
+  showMigrationSurvivalComparison = FALSE,
   showSurvivalCurves = FALSE,
   survivalPlotType = "separate",
   showConfidenceIntervals = FALSE,
@@ -51,12 +55,13 @@ stagemigration(
   showStatisticalSummary = FALSE,
   showMethodologyNotes = FALSE,
   includeEffectSizes = FALSE,
+  advancedMigrationAnalysis = FALSE,
   generateExecutiveSummary = FALSE,
   cancerType = "general",
   useOptimismCorrection = FALSE,
   enableMultifactorialAnalysis = FALSE,
-  continuousCovariates,
-  categoricalCovariates,
+  continuousCovariates = NULL,
+  categoricalCovariates = NULL,
   multifactorialComparisonType = "comprehensive",
   baselineModel = "covariates_only",
   performInteractionTests = FALSE,
@@ -65,7 +70,8 @@ stagemigration(
   showAdjustedCIndexComparison = FALSE,
   showNestedModelTests = FALSE,
   showStepwiseResults = FALSE,
-  showExplanations = TRUE
+  showExplanations = TRUE,
+  showAbbreviationGlossary = FALSE
 )
 }
 \arguments{
@@ -134,6 +140,12 @@ validation.}
 
 \item{cvFolds}{Number of folds for cross-validation when enabled.}
 
+\item{institutionVariable}{Optional variable indicating institution or
+study center for  multi-institutional validation. When provided, performs
+internal-external cross-validation using k-1 centers for development and
+remaining center for validation. Essential for multi-center staging
+validation studies.}
+
 \item{clinicalSignificanceThreshold}{Minimum improvement in C-index
 considered clinically significant. Default 0.02 based on oncology
 literature recommendations.}
@@ -195,6 +207,12 @@ representation makes it easy  to identify migration patterns at a glance -
 upstaging appears above the  diagonal, downstaging below. Essential for
 presentations and publications.}
 
+\item{showSankeyDiagram}{Display a Sankey flow diagram showing patient
+migration patterns between  original and new staging systems. Flow
+thickness represents the number of  patients moving between stages, making
+it easy to visualize dominant  migration patterns. Excellent for
+presentations and understanding the  overall reclassification impact.}
+
 \item{showROCComparison}{Display time-dependent ROC curves comparing
 staging systems.}
 
@@ -210,6 +228,17 @@ and confidence intervals.}
 \item{showWillRogersAnalysis}{Detailed analysis of Will Rogers phenomenon
 with survival comparisons between migrated and non-migrated patients within
 stages.}
+
+\item{showWillRogersVisualization}{Display visualization showing how stage
+migration affects survival within each stage. Shows before/after survival
+curves demonstrating the Will Rogers paradox where both stages appear to
+improve.}
+
+\item{showMigrationSurvivalComparison}{Display Kaplan-Meier survival curves
+comparing the same stages before  and after patient migration. Shows how
+survival curves change when  patients are reclassified between staging
+systems, providing visual  evidence of the Will Rogers phenomenon and
+staging system improvements.}
 
 \item{showSurvivalCurves}{Display survival curves comparing the staging
 systems.}
@@ -239,6 +268,11 @@ used and their interpretation.}
 \item{includeEffectSizes}{Calculate and display effect sizes for all
 comparisons to assess practical significance beyond statistical
 significance.}
+
+\item{advancedMigrationAnalysis}{Perform comprehensive stage migration
+analysis including monotonicity  checks, Will Rogers phenomenon detection,
+stage-specific validation,  and enhanced discrimination metrics. Provides
+detailed assessment of  staging system quality and migration patterns.}
 
 \item{generateExecutiveSummary}{Generate executive summary with key
 findings and recommendations for clinical and research stakeholders.}
@@ -295,6 +329,11 @@ showing which variables (including staging systems) are selected in the
 final model.}
 
 \item{showExplanations}{Include detailed explanations for results.}
+
+\item{showAbbreviationGlossary}{Display a comprehensive glossary of all
+abbreviations, statistical terms,  and technical terminology used in the
+stage migration analysis. This  provides a quick reference for interpreting
+dashboard values and  understanding statistical outputs.}
 }
 \value{
 A results object containing:
@@ -304,14 +343,14 @@ A results object containing:
 \code{results$mydataview2} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$migrationOverviewExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$migrationOverview} \tab \tab \tab \tab \tab a table \cr
+\code{results$migrationMatrixExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$migrationMatrix} \tab \tab \tab \tab \tab a table \cr
+\code{results$stageDistributionExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$stageDistribution} \tab \tab \tab \tab \tab a table \cr
 \code{results$migrationSummaryExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$migrationSummary} \tab \tab \tab \tab \tab a table \cr
 \code{results$statisticalComparisonExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$statisticalComparison} \tab \tab \tab \tab \tab a table \cr
-\code{results$stageDistributionExplanation} \tab \tab \tab \tab \tab a html \cr
-\code{results$stageDistribution} \tab \tab \tab \tab \tab a table \cr
-\code{results$migrationMatrixExplanation} \tab \tab \tab \tab \tab a html \cr
-\code{results$migrationMatrix} \tab \tab \tab \tab \tab a table \cr
 \code{results$concordanceComparisonExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$concordanceComparison} \tab \tab \tab \tab \tab a table \cr
 \code{results$nriResultsExplanation} \tab \tab \tab \tab \tab a html \cr
@@ -332,21 +371,35 @@ A results object containing:
 \code{results$stratifiedAnalysis} \tab \tab \tab \tab \tab a table \cr
 \code{results$stratifiedAnalysisExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$rocAnalysis} \tab \tab \tab \tab \tab a table \cr
+\code{results$integratedAUCAnalysis} \tab \tab \tab \tab \tab a table \cr
+\code{results$dcaResultsExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$dcaResults} \tab \tab \tab \tab \tab a table \cr
+\code{results$pseudoR2ResultsExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$pseudoR2Results} \tab \tab \tab \tab \tab a table \cr
+\code{results$decisionCurvesExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$decisionCurves} \tab \tab \tab \tab \tab an image \cr
 \code{results$bootstrapResults} \tab \tab \tab \tab \tab a table \cr
+\code{results$bootstrapValidationExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$willRogersAnalysisExplanation} \tab \tab \tab \tab \tab a html \cr
-\code{results$willRogersAnalysis} \tab \tab \tab \tab \tab a table \cr
+\code{results$willRogersBasicAnalysis} \tab \tab \tab \tab \tab a table \cr
+\code{results$likelihoodTestsExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$likelihoodTests} \tab \tab \tab \tab \tab a table \cr
+\code{results$homogeneityTestsExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$homogeneityTests} \tab \tab \tab \tab \tab a table \cr
+\code{results$trendTestsExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$trendTests} \tab \tab \tab \tab \tab a table \cr
 \code{results$clinicalInterpretationExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$clinicalInterpretation} \tab \tab \tab \tab \tab a table \cr
 \code{results$executiveSummaryExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$executiveSummary} \tab \tab \tab \tab \tab a table \cr
 \code{results$statisticalSummaryExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$statisticalSummary} \tab \tab \tab \tab \tab a table \cr
+\code{results$effectSizesExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$effectSizes} \tab \tab \tab \tab \tab a table \cr
 \code{results$methodologyNotes} \tab \tab \tab \tab \tab a html \cr
 \code{results$migrationHeatmapExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$migrationHeatmap} \tab \tab \tab \tab \tab an image \cr
+\code{results$sankeyDiagram} \tab \tab \tab \tab \tab an image \cr
 \code{results$rocComparisonExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$rocComparisonPlot} \tab \tab \tab \tab \tab an image \cr
 \code{results$forestPlotExplanation} \tab \tab \tab \tab \tab a html \cr
@@ -355,10 +408,33 @@ A results object containing:
 \code{results$calibrationAnalysis} \tab \tab \tab \tab \tab a table \cr
 \code{results$calibrationPlotsExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$calibrationPlots} \tab \tab \tab \tab \tab an image \cr
-\code{results$decisionCurvesExplanation} \tab \tab \tab \tab \tab a html \cr
-\code{results$decisionCurves} \tab \tab \tab \tab \tab an image \cr
+\code{results$advancedMigrationExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$monotonicityCheck} \tab \tab \tab \tab \tab a table \cr
+\code{results$willRogersAnalysis} \tab \tab \tab \tab \tab a table \cr
+\code{results$willRogersVisualization} \tab \tab \tab \tab \tab an image \cr
+\code{results$migrationSurvivalComparison} \tab \tab \tab \tab \tab an image \cr
+\code{results$willRogersEnhancedAnalysis} \tab \tab \tab \tab \tab a table \cr
+\code{results$willRogersStageDetail} \tab \tab \tab \tab \tab a table \cr
+\code{results$stageSpecificCIndex} \tab \tab \tab \tab \tab a table \cr
+\code{results$enhancedPseudoR2} \tab \tab \tab \tab \tab a table \cr
+\code{results$enhancedReclassificationMetrics} \tab \tab \tab \tab \tab a table \cr
+\code{results$proportionalHazardsTest} \tab \tab \tab \tab \tab a table \cr
+\code{results$decisionCurveAnalysis} \tab \tab \tab \tab \tab a table \cr
 \code{results$survivalCurvesExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$survivalCurves} \tab \tab \tab \tab \tab an image \cr
+\code{results$dashboardExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$comparativeAnalysisDashboard} \tab \tab \tab \tab \tab a table \cr
+\code{results$willRogersEvidenceSummaryExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$willRogersEvidenceSummary} \tab \tab \tab \tab \tab a table \cr
+\code{results$willRogersClinicalRecommendation} \tab \tab \tab \tab \tab a table \cr
+\code{results$enhancedMigrationPatternAnalysis} \tab \tab \tab \tab \tab a table \cr
+\code{results$landmarkAnalysisResults} \tab \tab \tab \tab \tab a table \cr
+\code{results$advancedMigrationHeatmapStats} \tab \tab \tab \tab \tab a table \cr
+\code{results$abbreviationGlossary} \tab \tab \tab \tab \tab a html \cr
+\code{results$crossValidationExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$crossValidationResults} \tab \tab \tab \tab \tab a table \cr
+\code{results$crossValidationPlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$enhancedLRComparison} \tab \tab \tab \tab \tab a table \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

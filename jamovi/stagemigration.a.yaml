@@ -205,6 +205,21 @@ options:
       description: >-
         Number of folds for cross-validation when enabled.
 
+    - name: institutionVariable
+      title: 'Institution Variable'
+      type: Variable
+      suggested:
+        - nominal
+        - ordinal
+      permitted:
+        - factor
+        - numeric
+      description: >-
+        Optional variable indicating institution or study center for 
+        multi-institutional validation. When provided, performs internal-external
+        cross-validation using k-1 centers for development and remaining center
+        for validation. Essential for multi-center staging validation studies.
+
     # Clinical Significance Options
     - name: clinicalSignificanceThreshold
       title: 'Clinical Significance Threshold'
@@ -255,7 +270,7 @@ options:
     - name: calculatePseudoR2
       title: 'Pseudo R-squared Measures'
       type: Bool
-      default: false
+      default: true
       description: >-
         Calculate multiple pseudo R-squared measures for model comparison
         (Nagelkerke, McFadden, Cox-Snell).
@@ -332,6 +347,17 @@ options:
         to identify migration patterns at a glance - upstaging appears above the 
         diagonal, downstaging below. Essential for presentations and publications.
 
+    - name: showSankeyDiagram
+      title: 'Stage Migration Flow Diagram'
+      type: Bool
+      default: false
+      description: >-
+        Display a Sankey flow diagram showing patient migration patterns between 
+        original and new staging systems. Flow thickness represents the number of 
+        patients moving between stages, making it easy to visualize dominant 
+        migration patterns. Excellent for presentations and understanding the 
+        overall reclassification impact.
+
     - name: showROCComparison
       title: 'ROC Curve Comparison'
       type: Bool
@@ -368,6 +394,25 @@ options:
         Detailed analysis of Will Rogers phenomenon with survival comparisons
         between migrated and non-migrated patients within stages.
 
+    - name: showWillRogersVisualization
+      title: 'Will Rogers Effect Visualization'
+      type: Bool
+      default: false
+      description: >-
+        Display visualization showing how stage migration affects survival
+        within each stage. Shows before/after survival curves demonstrating
+        the Will Rogers paradox where both stages appear to improve.
+
+    - name: showMigrationSurvivalComparison
+      title: 'Migration Survival Curve Comparison'
+      type: Bool
+      default: false
+      description: >-
+        Display Kaplan-Meier survival curves comparing the same stages before 
+        and after patient migration. Shows how survival curves change when 
+        patients are reclassified between staging systems, providing visual 
+        evidence of the Will Rogers phenomenon and staging system improvements.
+
     # Survival Plot Options
     - name: showSurvivalCurves
       title: 'Show Survival Curves'
@@ -386,8 +431,6 @@ options:
           name: sidebyside
         - title: "Overlay comparison"
           name: overlay
-        - title: "Key stages only"
-          name: keystages
       default: separate
       description: >-
         Controls display of survival curves for staging system comparison.
@@ -444,6 +487,16 @@ options:
       description: >-
         Calculate and display effect sizes for all comparisons to assess
         practical significance beyond statistical significance.
+
+    - name: advancedMigrationAnalysis
+      title: 'Advanced Migration Analysis'
+      type: Bool
+      default: false
+      description: >-
+        Perform comprehensive stage migration analysis including monotonicity 
+        checks, Will Rogers phenomenon detection, stage-specific validation, 
+        and enhanced discrimination metrics. Provides detailed assessment of 
+        staging system quality and migration patterns.
 
     - name: generateExecutiveSummary
       title: 'Executive Summary'
@@ -507,6 +560,7 @@ options:
         Continuous variables to include as covariates in the multifactorial
         analysis (e.g., age, tumor size, biomarker levels). These will be
         included in Cox regression models for both staging systems.
+      default: NULL
 
     - name: categoricalCovariates
       title: 'Categorical Covariates'
@@ -517,6 +571,7 @@ options:
         Categorical variables to include as covariates in the multifactorial
         analysis (e.g., sex, histology, treatment type). These will be
         included in Cox regression models for both staging systems.
+      default: NULL
 
     - name: multifactorialComparisonType
       title: 'Multifactorial Comparison Type'
@@ -607,6 +662,16 @@ options:
       default: true
       description: >-
         Include detailed explanations for results.
+
+    - name: showAbbreviationGlossary
+      title: 'Show Abbreviation Glossary'
+      type: Bool
+      default: false
+      description: >-
+        Display a comprehensive glossary of all abbreviations, statistical terms, 
+        and technical terminology used in the stage migration analysis. This 
+        provides a quick reference for interpreting dashboard values and 
+        understanding statistical outputs.
 
 
 ...
