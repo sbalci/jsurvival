@@ -1646,6 +1646,9 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
             # Calculate time-dependent ROC for each time point
             if (requireNamespace("timeROC", quietly = TRUE)) {
                 for (t in time_points) {
+                    # Checkpoint before each time point ROC calculation
+                    private$.checkpoint()
+                    
                     # Skip time points that are beyond the data range
                     max_time <- max(data[[time_var]], na.rm = TRUE)
                     if (t > max_time) {
@@ -8906,6 +8909,9 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
 
                 # Calculate DCA for each time point
                 for (time_point in time_points) {
+                    # Checkpoint before each time point DCA calculation
+                    private$.checkpoint()
+                    
                     dca_results <- private$.performDCAAtTimePoint(data, old_cox, new_cox, time_point)
                     
                     if (!is.null(dca_results)) {
@@ -9121,6 +9127,8 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
                 valid_times <- logical(length(time_points))
 
                 for (i in seq_along(time_points)) {
+                    # Checkpoint before each time point AUC calculation
+                    private$.checkpoint()
                     t <- time_points[i]
                     
                     # Skip time points beyond data range
@@ -9798,6 +9806,11 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
 
                 # Perform bootstrap sampling
                 for (i in 1:bootstrap_reps) {
+                    # Checkpoint every 50 iterations to allow cancellation of long-running bootstrap
+                    if (i %% 50 == 1) {
+                        private$.checkpoint()
+                    }
+                    
                     # Bootstrap sample
                     n <- nrow(data)
                     boot_indices <- sample(1:n, n, replace = TRUE)
@@ -10946,7 +10959,7 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
                     panel.grid.minor = element_blank(),
                     panel.grid.major = element_line(color = "gray90", linewidth = 0.5),
                     legend.position.inside = c(0.85, 0.15),
-                    legend.background = element_rect(fill = "white", color = NA, alpha = 0.8)
+                    legend.background = element_rect(fill = "white", color = NA)
                 ) +
                 # Add annotation for perfect calibration
                 annotate("text", x = 0.5, y = 0.48, label = "Perfect calibration", 
@@ -11004,7 +11017,7 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
                     panel.grid.minor = element_blank(),
                     panel.grid.major = element_line(color = "gray90", linewidth = 0.5),
                     legend.position.inside = c(0.85, 0.15),
-                    legend.background = element_rect(fill = "white", color = NA, alpha = 0.8)
+                    legend.background = element_rect(fill = "white", color = NA)
                 ) +
                 # Add annotation for perfect calibration
                 annotate("text", x = 0.5, y = 0.48, label = "Perfect calibration", 
@@ -11373,6 +11386,20 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
                     stringsAsFactors = FALSE
                 ))
             }
+
+            # Order stages properly (T1, T2, T3, etc. or I, II, III, IV, etc.)
+            stage_order <- c("T1", "T2", "T3", "T4", "I", "II", "III", "IV", "1", "2", "3", "4", "A", "B", "C", "D")
+            
+            # Get unique strata and order them properly
+            unique_strata <- unique(risk_data$strata)
+            ordered_strata <- intersect(stage_order, unique_strata)
+            remaining_strata <- setdiff(unique_strata, ordered_strata)
+            final_order <- c(ordered_strata, sort(remaining_strata))
+            
+            # Apply proper factor ordering
+            risk_data$strata <- factor(risk_data$strata, levels = final_order)
+            risk_data$strata_full <- factor(risk_data$strata_full, 
+                                           levels = unique(risk_data$strata_full[order(risk_data$strata)]))
 
             return(risk_data)
         },
@@ -14071,6 +14098,11 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
             
             # Bootstrap sampling and selection
             for (b in 1:n_bootstrap) {
+                # Checkpoint every 50 iterations to allow cancellation of long-running bootstrap
+                if (b %% 50 == 1) {
+                    private$.checkpoint()
+                }
+                
                 tryCatch({
                     # Bootstrap sample
                     n_obs <- nrow(covariate_data)
@@ -17245,6 +17277,9 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
                 
                 # Perform cross-validation (k-fold or multi-institutional)
                 for (fold in 1:cv_folds) {
+                    # Checkpoint before each fold to allow cancellation
+                    private$.checkpoint()
+                    
                     # Split data
                     test_idx <- fold_ids == fold
                     train_data <- data[!test_idx, ]
@@ -19063,6 +19098,9 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
                 new_stage <- self$options$newStage
                 
                 for (landmark_time in landmark_times) {
+                    # Checkpoint before each landmark time analysis (computationally expensive)
+                    private$.checkpoint()
+                    
                     # Filter patients surviving beyond landmark time
                     landmark_data <- data[data[[time_var]] >= landmark_time, ]
                     
@@ -19143,6 +19181,9 @@ stagemigrationClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Clas
                 calibration_results <- list()
                 
                 for (cal_time in calibration_times) {
+                    # Checkpoint before each calibration time point
+                    private$.checkpoint()
+                    
                     # Filter patients with follow-up >= cal_time or event before cal_time
                     cal_data <- data[data[[time_var]] >= cal_time | data[[event_var]] == 1, ]
                     
