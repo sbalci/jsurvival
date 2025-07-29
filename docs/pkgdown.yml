@@ -1,0 +1,27 @@
+pandoc: 3.7.0.2
+pkgdown: 2.1.3
+pkgdown_sha: ~
+articles:
+  01-introduction: 01-introduction.html
+  01-multisurvival-time-dependent-comprehensive: 01-multisurvival-time-dependent-comprehensive.html
+  02-person-time-analysis: 02-person-time-analysis.html
+  03-clinical-examples: 03-clinical-examples.html
+  03-treatment-response: 03-treatment-response.html
+  04-stage-migration-analysis: 04-stage-migration-analysis.html
+  05-jamovi-workflow: 05-jamovi-workflow.html
+  05-treatment-pathway-visualization: 05-treatment-pathway-visualization.html
+  06-function-waterfall: 06-function-waterfall.html
+  07-use-in-r: 07-use-in-r.html
+  08-advanced-topics: 08-advanced-topics.html
+  08-groupedforest-comprehensive: 08-groupedforest-comprehensive.html
+  09-lassocox-comprehensive: 09-lassocox-comprehensive.html
+  1-stagemigration-comprehensive: 1-stagemigration-comprehensive.html
+  11-data-preparation: 11-data-preparation.html
+  14-comparing-survival: 14-comparing-survival.html
+  15-competing-survival: 15-competing-survival.html
+  16-cox-model-diagnostics: 16-cox-model-diagnostics.html
+  17-jiwillsurvive-comprehensive: 17-jiwillsurvive-comprehensive.html
+last_built: 2025-07-29T11:00Z
+urls:
+  reference: https://www.serdarbalci.com/jsurvival/reference
+  article: https://www.serdarbalci.com/jsurvival/articles
