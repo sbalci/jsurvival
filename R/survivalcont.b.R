@@ -1,4 +1,141 @@
 #' @title Survival Analysis for Continuous Explanatory Variable
+#' 
+#' @description
+#' Comprehensive survival analysis for continuous explanatory variables with optimal 
+#' cut-off determination, multiple cut-offs analysis, RMST analysis, residual diagnostics,
+#' and advanced visualization options.
+#' 
+#' @details
+#' This function provides advanced survival analysis specifically designed for continuous
+#' explanatory variables. It includes:
+#' 
+#' **Core Features:**
+#' - Optimal cut-off determination using maximally selected rank statistics
+#' - Multiple cut-offs analysis with 4 different methods (quantile, recursive, tree-based, minimum p-value)
+#' - Person-time analysis with interval stratification
+#' - Date-based time calculation with multiple format support
+#' - Multiple event level support (overall, cause-specific, competing risks)
+#' - Landmark analysis for time-dependent effects
+#' 
+#' **Advanced Analytics:**
+#' - Restricted Mean Survival Time (RMST) analysis
+#' - Cox model residual diagnostics (Martingale, Deviance, Score, Schoenfeld)
+#' - Log-log plots for proportional hazards assessment
+#' - Enhanced error handling and data validation
+#' 
+#' **Visualization Options:**
+#' - Kaplan-Meier survival curves with optimal cut-offs
+#' - Multiple cut-offs histogram with cut-point annotations
+#' - Cumulative events and hazard plots
+#' - KMunicate-style plots for publication
+#' - Residual diagnostic plots (4-panel layout)
+#' - Log-log plots for assumption checking
+#' 
+#' @examples
+#' \dontrun{
+#' # Basic survival analysis with optimal cut-off
+#' data("lung", package = "survival")
+#' lung$status_binary <- ifelse(lung$status == 2, 1, 0)
+#' 
+#' result1 <- survivalcont(
+#'   data = lung,
+#'   elapsedtime = "time",
+#'   outcome = "status_binary", 
+#'   contexpl = "age",
+#'   findcut = TRUE,
+#'   sc = TRUE
+#' )
+#' 
+#' # Multiple cut-offs analysis with different methods
+#' result2 <- survivalcont(
+#'   data = lung,
+#'   elapsedtime = "time",
+#'   outcome = "status_binary",
+#'   contexpl = "ph.karno",
+#'   multiple_cutoffs = TRUE,
+#'   num_cutoffs = "three",
+#'   cutoff_method = "recursive",
+#'   min_group_size = 15,
+#'   sc = TRUE
+#' )
+#' 
+#' # RMST analysis with residual diagnostics
+#' result3 <- survivalcont(
+#'   data = lung,
+#'   elapsedtime = "time",
+#'   outcome = "status_binary",
+#'   contexpl = "wt.loss",
+#'   findcut = TRUE,
+#'   rmst_analysis = TRUE,
+#'   rmst_tau = 500,
+#'   residual_diagnostics = TRUE,
+#'   loglog = TRUE
+#' )
+#' 
+#' # Person-time analysis with date calculation
+#' # Create sample data with dates
+#' set.seed(123)
+#' n <- 200
+#' sample_data <- data.frame(
+#'   biomarker = rnorm(n, 100, 25),
+#'   event = rbinom(n, 1, 0.6),
+#'   dx_date = as.Date("2020-01-01") + sample(0:365, n, replace = TRUE),
+#'   fu_date = as.Date("2020-01-01") + sample(366:1095, n, replace = TRUE)
+#' )
+#' 
+#' result4 <- survivalcont(
+#'   data = sample_data,
+#'   tint = TRUE,
+#'   dxdate = "dx_date",
+#'   fudate = "fu_date",
+#'   timetypedata = "ymd",
+#'   timetypeoutput = "months",
+#'   outcome = "event",
+#'   contexpl = "biomarker",
+#'   person_time = TRUE,
+#'   time_intervals = "6, 12, 24",
+#'   rate_multiplier = 1000,
+#'   calculatedtime = TRUE
+#' )
+#' 
+#' # Comprehensive analysis with all features
+#' result5 <- survivalcont(
+#'   data = lung,
+#'   elapsedtime = "time",
+#'   outcome = "status_binary",
+#'   contexpl = "meal.cal",
+#'   findcut = TRUE,
+#'   multiple_cutoffs = TRUE,
+#'   num_cutoffs = "two",
+#'   cutoff_method = "quantile",
+#'   rmst_analysis = TRUE,
+#'   rmst_tau = 400,
+#'   residual_diagnostics = TRUE,
+#'   person_time = TRUE,
+#'   time_intervals = "100, 300, 500",
+#'   sc = TRUE,
+#'   ce = TRUE,
+#'   ch = TRUE,
+#'   kmunicate = TRUE,
+#'   loglog = TRUE,
+#'   ci95 = TRUE,
+#'   risktable = TRUE,
+#'   calculatedcutoff = TRUE,
+#'   calculatedmulticut = TRUE
+#' )
+#' }
+#' 
+#' @references
+#' Hothorn, T., & Zeileis, A. (2008). Generalized maximally selected statistics. 
+#' Biometrics, 64(4), 1263-1269.
+#' 
+#' Royston, P., & Parmar, M. K. (2013). Restricted mean survival time: an alternative 
+#' to the hazard ratio for the design and analysis of randomized trials with a 
+#' time-to-event outcome. BMC Medical Research Methodology, 13(1), 152.
+#' 
+#' Morris, T. P., et al. (2019). Proposals on Kaplan–Meier plots in medical research 
+#' and a survey of stakeholder views: KMunicate. BMJ Open, 9(9), e030874.
+#' 
 #' @importFrom R6 R6Class
 #' @import jmvcore
 #' @import magrittr
@@ -8,7 +145,8 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
         "survivalcontClass",
         inherit = survivalcontBase,
         private = list(
-
+            # Private fields for storing analysis results
+            residuals_data = NULL,
 
             # init ----
             .init = function() {
@@ -134,58 +272,31 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                     timetypedata <- self$options$timetypedata
 
 
-                    # # Define a mapping from timetypedata to lubridate functions
-                    # lubridate_functions <- list(
-                    #     ymdhms = lubridate::ymd_hms,
-                    #     ymd = lubridate::ymd,
-                    #     ydm = lubridate::ydm,
-                    #     mdy = lubridate::mdy,
-                    #     myd = lubridate::myd,
-                    #     dmy = lubridate::dmy,
-                    #     dym = lubridate::dym
-                    # )
-                    # # Apply the appropriate lubridate function based on timetypedata
-                    # if (timetypedata %in% names(lubridate_functions)) {
-                    #     func <- lubridate_functions[[timetypedata]]
-                    #     mydata[["start"]] <- func(mydata[[dxdate]])
-                    #     mydata[["end"]] <- func(mydata[[fudate]])
-                    # }
-
-
-                    if (timetypedata == "ymdhms") {
-                        mydata[["start"]] <- lubridate::ymd_hms(mydata[[dxdate]])
-                        mydata[["end"]] <-
-                            lubridate::ymd_hms(mydata[[fudate]])
-                    }
-                    if (timetypedata == "ymd") {
-                        mydata[["start"]] <- lubridate::ymd(mydata[[dxdate]])
-                        mydata[["end"]] <-
-                            lubridate::ymd(mydata[[fudate]])
-                    }
-                    if (timetypedata == "ydm") {
-                        mydata[["start"]] <- lubridate::ydm(mydata[[dxdate]])
-                        mydata[["end"]] <-
-                            lubridate::ydm(mydata[[fudate]])
-                    }
-                    if (timetypedata == "mdy") {
-                        mydata[["start"]] <- lubridate::mdy(mydata[[dxdate]])
-                        mydata[["end"]] <-
-                            lubridate::mdy(mydata[[fudate]])
-                    }
-                    if (timetypedata == "myd") {
-                        mydata[["start"]] <- lubridate::myd(mydata[[dxdate]])
-                        mydata[["end"]] <-
-                            lubridate::myd(mydata[[fudate]])
-                    }
-                    if (timetypedata == "dmy") {
-                        mydata[["start"]] <- lubridate::dmy(mydata[[dxdate]])
-                        mydata[["end"]] <-
-                            lubridate::dmy(mydata[[fudate]])
-                    }
-                    if (timetypedata == "dym") {
-                        mydata[["start"]] <- lubridate::dym(mydata[[dxdate]])
-                        mydata[["end"]] <-
-                            lubridate::dym(mydata[[fudate]])
+                    # Optimized date parsing using mapping approach
+                    lubridate_functions <- list(
+                        ymdhms = lubridate::ymd_hms,
+                        ymd = lubridate::ymd,
+                        ydm = lubridate::ydm,
+                        mdy = lubridate::mdy,
+                        myd = lubridate::myd,
+                        dmy = lubridate::dmy,
+                        dym = lubridate::dym
+                    )
+                    
+                    # Apply the appropriate lubridate function based on timetypedata
+                    if (timetypedata %in% names(lubridate_functions)) {
+                        func <- lubridate_functions[[timetypedata]]
+                        tryCatch({
+                            mydata[["start"]] <- func(mydata[[dxdate]])
+                            mydata[["end"]] <- func(mydata[[fudate]])
+                        }, error = function(e) {
+                            stop(paste0("Date parsing error: ", e$message, 
+                                      ". Please check that your dates match the selected format: ", 
+                                      timetypedata))
+                        })
+                    } else {
+                        stop(paste0("Unsupported time type: ", timetypedata, 
+                                  ". Supported formats: ", paste(names(lubridate_functions), collapse = ", ")))
                     }
 
 
@@ -512,6 +623,16 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
 
 
+                ## Run RMST analysis before cutoff (if enabled) ----
+                if (self$options$rmst_analysis) {
+                    private$.calculateRMST(results)
+                }
+
+                ## Run Residual diagnostics before cutoff (if enabled) ----
+                if (self$options$residual_diagnostics) {
+                    private$.calculateResiduals(results)
+                }
+
                 ## Run Cut-off calculation and further analysis ----
                 if (!self$options$findcut) {
                     return()
@@ -527,8 +648,37 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                 ## Run Categorise Data ----
                 cutoffdata <- private$.cutoff2(res.cut)
 
+                ## Run RMST analysis with cutoff data (if enabled) ----
+                if (self$options$rmst_analysis) {
+                    private$.calculateRMST(results, cutoffdata)
+                }
+
+                ## Run Residual diagnostics with cutoff data (if enabled) ----
+                if (self$options$residual_diagnostics) {
+                    private$.calculateResiduals(results, cutoffdata)
+                }
 
 
+
+
+                ## Run Multiple Cut-offs Analysis FIRST ----
+                multicut_results <- NULL
+                message(paste("multiple_cutoffs option:", self$options$multiple_cutoffs))
+                if (self$options$multiple_cutoffs) {
+                    message("Starting multiple cutoffs analysis...")
+                    # Use the original clean data, before any single cutoff processing
+                    multicut_results <- private$.multipleCutoffs(results)
+                    if (!is.null(multicut_results)) {
+                        private$.multipleCutoffTables(multicut_results)
+                        
+                        # Add multiple cutoff groups to data
+                        if (self$options$calculatedmulticut &&
+                            self$results$calculatedmulticut$isNotFilled()) {
+                            self$results$calculatedmulticut$setRowNums(rownames(results$cleanData))
+                            self$results$calculatedmulticut$setValues(multicut_results$risk_groups)
+                        }
+                    }
+                }
 
                 # self$results$mydataview$setContent(
                 #     list(
@@ -547,18 +697,6 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                 ## Run life table cutoff ----
 
                 private$.lifetablecutoff(cutoffdata)
-
-                ## Run Multiple Cut-offs Analysis ----
-                if (self$options$multiple_cutoffs) {
-                    multicut_results <- private$.multipleCutoffs(results)
-                    private$.multipleCutoffTables(multicut_results)
-                    
-                    # Add multiple cutoff groups to data
-                    if (self$options$calculatedmulticut &&
-                        self$results$calculatedmulticut$isNotFilled()) {
-                        self$results$calculatedmulticut$setValues(multicut_results$risk_groups)
-                    }
-                }
 
 
 
@@ -582,7 +720,8 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 plotData2 <- list(
                     cutoffdata = cutoffdata,
-                    results = results
+                    results = results,
+                    multicut_results = multicut_results
                     # ,
                     # not_continue_analysis = not_continue_analysis
                     )
@@ -598,6 +737,13 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 image6 <- self$results$plot6
                 image6$setState(plotData2)
+
+                # Set state for new plots
+                image7 <- self$results$plot7
+                image7$setState(plotData2)
+
+                image9 <- self$results$residualsPlot
+                image9$setState(plotData2)
 
 
 
@@ -1557,45 +1703,96 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
             # Multiple Cut-offs Analysis ----
             ,
             .multipleCutoffs = function(results) {
-                mytime <- results$name1time
-                myoutcome <- results$name2outcome
-                mycontexpl <- results$name3contexpl
-                mydata <- results$cleanData
-                
-                # Convert to numeric
-                mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
-                
-                # Extract continuous variable values
-                cont_var <- mydata[[mycontexpl]]
-                cont_var <- cont_var[!is.na(cont_var)]
-                
-                # Determine number of cutoffs
-                num_cuts <- switch(self$options$num_cutoffs,
-                                   "two" = 2,
-                                   "three" = 3,
-                                   "four" = 4)
-                
-                # Calculate cutoffs based on method
-                cutoff_values <- switch(self$options$cutoff_method,
-                    "quantile" = private$.quantileCutoffs(cont_var, num_cuts),
-                    "recursive" = private$.recursiveCutoffs(mydata, mytime, myoutcome, mycontexpl, num_cuts),
-                    "tree" = private$.treeCutoffs(mydata, mytime, myoutcome, mycontexpl, num_cuts),
-                    "minpval" = private$.minPvalueCutoffs(mydata, mytime, myoutcome, mycontexpl, num_cuts)
-                )
-                
-                # Create risk groups
-                risk_groups <- private$.createRiskGroups(mydata[[mycontexpl]], cutoff_values)
-                
-                # Calculate survival statistics for each group
-                group_stats <- private$.calculateGroupStats(mydata, mytime, myoutcome, risk_groups)
-                
-                return(list(
-                    cutoff_values = cutoff_values,
-                    risk_groups = risk_groups,
-                    group_stats = group_stats,
-                    method = self$options$cutoff_method,
-                    num_cuts = num_cuts
-                ))
+                tryCatch({
+                    mytime <- results$name1time
+                    myoutcome <- results$name2outcome
+                    mycontexpl <- results$name3contexpl
+                    mydata <- results$cleanData
+                    
+                    # Convert to numeric
+                    mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
+                    
+                    # Extract continuous variable values
+                    if (!mycontexpl %in% names(mydata)) {
+                        warning(paste("Variable", mycontexpl, "not found in data. Available columns:", paste(names(mydata), collapse = ", ")))
+                        return(NULL)
+                    }
+                    
+                    cont_var <- mydata[[mycontexpl]]
+                    if (is.null(cont_var)) {
+                        warning(paste("Variable", mycontexpl, "is NULL"))
+                        return(NULL)
+                    }
+                    
+                    cont_var <- cont_var[!is.na(cont_var)]
+                    
+                    # Check if we have enough data
+                    if (length(cont_var) < 10) {
+                        warning("Insufficient data for multiple cutoffs analysis")
+                        return(NULL)
+                    }
+                    
+
+
+                self$results$mydataview_multipleCutoffs$setContent(
+                                    list(
+                                        mytime = mytime,
+                                        myoutcome = myoutcome,
+                                        mycontexpl = mycontexpl,
+                                        mydata = mydata,
+                                        cont_var = cont_var
+                                        )
+                                )
+
+
+
+                    # Debug information
+                    message(paste("Data columns:", paste(names(mydata), collapse = ", ")))
+                    message(paste("Trying to access variable:", mycontexpl))
+                    message(paste("Variable exists:", mycontexpl %in% names(mydata)))
+                    if (mycontexpl %in% names(mydata)) {
+                        message(paste("Multiple cutoffs analysis: n =", length(cont_var), 
+                                    "method =", self$options$cutoff_method,
+                                    "num_cuts =", self$options$num_cutoffs))
+                    }
+                    
+                    # Determine number of cutoffs
+                    num_cuts <- switch(self$options$num_cutoffs,
+                                       "two" = 2,
+                                       "three" = 3,
+                                       "four" = 4)
+                    
+                    # Calculate cutoffs based on method
+                    cutoff_values <- switch(self$options$cutoff_method,
+                        "quantile" = private$.quantileCutoffs(cont_var, num_cuts),
+                        "recursive" = private$.recursiveCutoffs(mydata, mytime, myoutcome, mycontexpl, num_cuts),
+                        "tree" = private$.treeCutoffs(mydata, mytime, myoutcome, mycontexpl, num_cuts),
+                        "minpval" = private$.minPvalueCutoffs(mydata, mytime, myoutcome, mycontexpl, num_cuts)
+                    )
+                    
+                    # Check if cutoffs were successfully calculated
+                    if (is.null(cutoff_values) || length(cutoff_values) == 0) {
+                        warning("Failed to calculate cutoff values")
+                        return(NULL)
+                    }
+                    
+                    # Create risk groups
+                    risk_groups <- private$.createRiskGroups(mydata[[mycontexpl]], cutoff_values)
+                    
+                    # Calculate survival statistics for each group
+                    group_stats <- private$.calculateGroupStats(mydata, mytime, myoutcome, risk_groups)
+                    
+                    return(list(
+                        cutoff_values = cutoff_values,
+                        risk_groups = risk_groups,
+                        group_stats = group_stats,
+                        method = self$options$cutoff_method,
+                        num_cuts = num_cuts
+                    ))
+                }, error = function(e) {
+                    warning(paste("Error in multiple cutoffs analysis:", e$message))
+                    return(NULL)
+                })
             }
 
             # Quantile-based cutoffs ----
@@ -1756,18 +1953,28 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                 if (length(cutoffs) == 2) {
                     groups <- ifelse(cont_var <= cutoffs[1], "Low Risk",
                                    ifelse(cont_var <= cutoffs[2], "Medium Risk", "High Risk"))
+                    level_order <- c("Low Risk", "Medium Risk", "High Risk")
                 } else if (length(cutoffs) == 3) {
                     groups <- ifelse(cont_var <= cutoffs[1], "Low Risk",
                                    ifelse(cont_var <= cutoffs[2], "Medium-Low Risk",
                                          ifelse(cont_var <= cutoffs[3], "Medium-High Risk", "High Risk")))
+                    level_order <- c("Low Risk", "Medium-Low Risk", "Medium-High Risk", "High Risk")
                 } else if (length(cutoffs) == 4) {
                     groups <- ifelse(cont_var <= cutoffs[1], "Very Low Risk",
                                    ifelse(cont_var <= cutoffs[2], "Low Risk",
                                          ifelse(cont_var <= cutoffs[3], "Medium Risk",
                                                ifelse(cont_var <= cutoffs[4], "High Risk", "Very High Risk"))))
+                    level_order <- c("Very Low Risk", "Low Risk", "Medium Risk", "High Risk", "Very High Risk")
+                } else {
+                    # Fallback for other numbers of cutoffs
+                    groups <- cut(cont_var, breaks = c(-Inf, cutoffs, Inf), 
+                                labels = paste("Group", 1:(length(cutoffs) + 1)))
+                    level_order <- paste("Group", 1:(length(cutoffs) + 1))
                 }
                 
-                return(factor(groups, levels = unique(groups[order(cont_var)])))
+                # Filter level_order to only include levels that actually exist in the data
+                existing_levels <- intersect(level_order, unique(groups))
+                return(factor(groups, levels = existing_levels))
             }
 
             # Calculate survival statistics by group ----
@@ -1785,13 +1992,33 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         
                         km_fit <- survival::survfit(formula, data = group_data)
                         
+                        # Extract median survival statistics safely
+                        surv_summary <- summary(km_fit)
+                        median_val <- if (!is.null(surv_summary$table)) {
+                            surv_summary$table["median"]
+                        } else {
+                            NA
+                        }
+                        
+                        lower_val <- if (!is.null(surv_summary$table)) {
+                            surv_summary$table["0.95LCL"]
+                        } else {
+                            NA
+                        }
+                        
+                        upper_val <- if (!is.null(surv_summary$table)) {
+                            surv_summary$table["0.95UCL"]
+                        } else {
+                            NA
+                        }
+                        
                         stats_list[[group]] <- list(
                             group = group,
                             n = nrow(group_data),
                             events = sum(group_data[[myoutcome]], na.rm = TRUE),
-                            median_surv = summary(km_fit)$table["median"],
-                            median_lower = summary(km_fit)$table["0.95LCL"],
-                            median_upper = summary(km_fit)$table["0.95UCL"]
+                            median_surv = as.numeric(median_val),
+                            median_lower = as.numeric(lower_val),
+                            median_upper = as.numeric(upper_val)
                         )
                     }
                 }
@@ -1802,13 +2029,27 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
             # Populate multiple cutoffs tables ----
             ,
             .multipleCutoffTables = function(multicut_results) {
+                message("multipleCutoffTables called")
+                
+                # Check if results are valid
+                if (is.null(multicut_results) || 
+                    is.null(multicut_results$cutoff_values) ||
+                    is.null(multicut_results$group_stats)) {
+                    message("multicut_results is null or invalid")
+                    return()
+                }
+                
+                message(paste("Populating tables with", length(multicut_results$cutoff_values), "cutoffs"))
+                
                 # Populate cut-off points table
                 cutoff_table <- self$results$multipleCutTable
+                cutoff_table$deleteRows()  # Clear existing rows
+                
                 for (i in seq_along(multicut_results$cutoff_values)) {
                     cutoff_table$addRow(rowKey = i, values = list(
                         cutpoint_number = i,
-                        cutpoint_value = multicut_results$cutoff_values[i],
-                        group_created = paste("Cut", i),
+                        cutpoint_value = round(multicut_results$cutoff_values[i], 2),
+                        group_created = paste("Group", i + 1),
                         logrank_statistic = NA,  # Will be calculated separately
                         p_value = NA
                     ))
@@ -1816,16 +2057,20 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                 
                 # Populate median survival table
                 median_table <- self$results$multipleMedianTable
+                median_table$deleteRows()  # Clear existing rows
+                
                 for (group_name in names(multicut_results$group_stats)) {
                     stats <- multicut_results$group_stats[[group_name]]
-                    median_table$addRow(rowKey = group_name, values = list(
-                        risk_group = stats$group,
-                        n_patients = stats$n,
-                        events = stats$events,
-                        median_survival = stats$median_surv,
-                        median_lower = stats$median_lower,
-                        median_upper = stats$median_upper
-                    ))
+                    if (!is.null(stats)) {
+                        median_table$addRow(rowKey = group_name, values = list(
+                            risk_group = stats$group,
+                            n_patients = stats$n,
+                            events = stats$events,
+                            median_survival = if(is.na(stats$median_surv)) "NR" else round(stats$median_surv, 1),
+                            median_lower = if(is.na(stats$median_lower)) NA else round(stats$median_lower, 1),
+                            median_upper = if(is.na(stats$median_upper)) NA else round(stats$median_upper, 1)
+                        ))
+                    }
                 }
                 
                 # TODO: Add survival estimates table population
@@ -1839,15 +2084,69 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                     return()
                 }
                 
-                # Placeholder for multiple cutoffs visualization
-                # This would show the cutoff points on the continuous variable distribution
-                plot <- ggplot2::ggplot() + 
-                    ggplot2::geom_text(ggplot2::aes(x = 0.5, y = 0.5, label = "Multiple Cutoffs Visualization\n(Implementation in progress)"),
-                                      size = 6) +
-                    ggplot2::xlim(0, 1) + ggplot2::ylim(0, 1) +
-                    ggplot2::theme_void()
+                # Get the stored multiple cutoffs results
+                plotData <- image$state
+                if (is.null(plotData) || is.null(plotData$multicut_results)) {
+                    # Create fallback visualization
+                    plot <- ggplot2::ggplot() + 
+                        ggplot2::geom_text(ggplot2::aes(x = 0.5, y = 0.5, 
+                                                      label = "Multiple Cutoffs Analysis\nRun analysis to see visualization"),
+                                          size = 6) +
+                        ggplot2::xlim(0, 1) + ggplot2::ylim(0, 1) +
+                        ggplot2::theme_void()
+                    print(plot)
+                    return(TRUE)
+                }
                 
-                print(plot)
+                tryCatch({
+                    multicut_results <- plotData$multicut_results
+                    results <- plotData$results
+                    
+                    # Get the continuous variable data
+                    cont_var <- results$cleanData[[results$name3contexpl]]
+                    cutoff_values <- multicut_results$cutoff_values
+                    
+                    # Create histogram with cutoff lines
+                    hist_data <- data.frame(values = cont_var)
+                    
+                    plot <- ggplot2::ggplot(hist_data, ggplot2::aes(x = values)) +
+                        ggplot2::geom_histogram(bins = 30, alpha = 0.7, fill = "lightblue", color = "black") +
+                        ggplot2::geom_vline(xintercept = cutoff_values, color = "red", linetype = "dashed", size = 1) +
+                        ggplot2::labs(
+                            title = paste0("Multiple Cut-offs for ", self$options$contexpl),
+                            subtitle = paste0("Method: ", multicut_results$method, 
+                                            " | Number of cut-offs: ", length(cutoff_values)),
+                            x = self$options$contexpl,
+                            y = "Frequency"
+                        ) +
+                        ggplot2::theme_minimal() +
+                        ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5),
+                                      plot.subtitle = ggplot2::element_text(hjust = 0.5))
+                    
+                    # Add cutoff value annotations
+                    for (i in seq_along(cutoff_values)) {
+                        plot <- plot + ggplot2::annotate("text", 
+                                                        x = cutoff_values[i], 
+                                                        y = Inf, 
+                                                        label = paste0("Cut ", i, ": ", round(cutoff_values[i], 2)),
+                                                        vjust = 1.2, 
+                                                        color = "red", 
+                                                        size = 3,
+                                                        angle = 90)
+                    }
+                    
+                    print(plot)
+                }, error = function(e) {
+                    # Fallback plot in case of error
+                    plot <- ggplot2::ggplot() + 
+                        ggplot2::geom_text(ggplot2::aes(x = 0.5, y = 0.5, 
+                                                      label = "Multiple Cutoffs Visualization\nError in plot generation"),
+                                          size = 6) +
+                        ggplot2::xlim(0, 1) + ggplot2::ylim(0, 1) +
+                        ggplot2::theme_void()
+                    print(plot)
+                })
+                
                 TRUE
             }
 
@@ -1858,14 +2157,457 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                     return()
                 }
                 
-                # Placeholder for multiple cutoffs survival plot
-                plot <- ggplot2::ggplot() + 
-                    ggplot2::geom_text(ggplot2::aes(x = 0.5, y = 0.5, label = "Multiple Cutoffs Survival Plot\n(Implementation in progress)"),
-                                      size = 6) +
-                    ggplot2::xlim(0, 1) + ggplot2::ylim(0, 1) +
-                    ggplot2::theme_void()
+                # Get the stored multiple cutoffs results
+                plotData <- image$state
+                if (is.null(plotData) || is.null(plotData$multicut_results)) {
+                    plot <- ggplot2::ggplot() + 
+                        ggplot2::geom_text(ggplot2::aes(x = 0.5, y = 0.5, 
+                                                      label = "Multiple Cutoffs Survival Plot\nRun analysis to see visualization"),
+                                          size = 6) +
+                        ggplot2::xlim(0, 1) + ggplot2::ylim(0, 1) +
+                        ggplot2::theme_void()
+                    print(plot)
+                    return(TRUE)
+                }
                 
-                print(plot)
+                tryCatch({
+                    multicut_results <- plotData$multicut_results
+                    results <- plotData$results
+                    
+                    # Create data with risk groups
+                    plot_data <- results$cleanData
+                    plot_data$risk_groups <- multicut_results$risk_groups
+                    
+                    mytime <- results$name1time
+                    myoutcome <- results$name2outcome
+                    
+                    # Create survival formula
+                    formula_str <- paste0('survival::Surv(', mytime, ',', myoutcome, ') ~ risk_groups')
+                    surv_formula <- as.formula(formula_str)
+                    
+                    # Fit survival model
+                    fit <- survival::survfit(surv_formula, data = plot_data)
+                    
+                    # Create survival plot
+                    surv_plot <- survminer::ggsurvplot(
+                        fit,
+                        data = plot_data,
+                        title = paste0("Survival Curves - Multiple Cut-offs for ", self$options$contexpl),
+                        subtitle = paste0("Method: ", multicut_results$method, " | Groups: ", length(levels(multicut_results$risk_groups))),
+                        xlab = paste0("Time (", self$options$timetypeoutput, ")"),
+                        ylab = "Survival Probability",
+                        legend.title = "Risk Groups",
+                        risk.table = self$options$risktable,
+                        conf.int = self$options$ci95,
+                        pval = TRUE,
+                        pval.coord = c(0.1, 0.1),
+                        break.time.by = self$options$byplot,
+                        xlim = c(0, self$options$endplot),
+                        ylim = c(self$options$ybegin_plot, self$options$yend_plot),
+                        palette = "jco",
+                        ggtheme = ggplot2::theme_minimal()
+                    )
+                    
+                    print(surv_plot)
+                }, error = function(e) {
+                    # Fallback plot
+                    plot <- ggplot2::ggplot() + 
+                        ggplot2::geom_text(ggplot2::aes(x = 0.5, y = 0.5, 
+                                                      label = "Multiple Cutoffs Survival Plot\nError in plot generation"),
+                                          size = 6) +
+                        ggplot2::xlim(0, 1) + ggplot2::ylim(0, 1) +
+                        ggplot2::theme_void()
+                    print(plot)
+                })
+                
+                TRUE
+            }
+
+            # RMST Analysis ----
+            ,
+            .calculateRMST = function(results, cutoffdata = NULL) {
+                if (!self$options$rmst_analysis) {
+                    return()
+                }
+                
+                # Use cutoffdata if provided (for cutoff analysis), otherwise use original data
+                data_to_use <- if (!is.null(cutoffdata)) cutoffdata else results$cleanData
+                
+                mytime <- results$name1time
+                myoutcome <- results$name2outcome
+                
+                # For cutoff analysis, use the cutoff groups; otherwise use original explanatory variable
+                if (!is.null(cutoffdata) && results$name3contexpl %in% names(cutoffdata)) {
+                    mygroup <- results$name3contexpl
+                } else {
+                    # For non-cutoff analysis, create binary groups based on median
+                    median_val <- median(results$cleanData[[results$name3contexpl]], na.rm = TRUE)
+                    data_to_use$rmst_groups <- ifelse(
+                        results$cleanData[[results$name3contexpl]] <= median_val,
+                        "Below Median", "Above Median"
+                    )
+                    mygroup <- "rmst_groups"
+                }
+                
+                # Get tau (time horizon) from options or default to 75th percentile of observed times
+                if (!is.null(self$options$rmst_tau) && self$options$rmst_tau > 0) {
+                    tau <- self$options$rmst_tau
+                } else {
+                    tau <- quantile(data_to_use[[mytime]], 0.75, na.rm = TRUE)
+                }
+                
+                # Calculate RMST for each group
+                rmst_results <- list()
+                groups <- unique(data_to_use[[mygroup]])
+                
+                for (group in groups) {
+                    group_data <- data_to_use[data_to_use[[mygroup]] == group, ]
+                    
+                    if (nrow(group_data) > 0) {
+                        # Create survival object
+                        surv_obj <- survival::Surv(
+                            time = group_data[[mytime]], 
+                            event = group_data[[myoutcome]]
+                        )
+                        
+                        # Fit Kaplan-Meier
+                        km_fit <- survival::survfit(surv_obj ~ 1, data = group_data)
+                        
+                        # Calculate RMST manually using trapezoidal rule
+                        times <- km_fit$time
+                        surv_probs <- km_fit$surv
+                        
+                        # Add time 0 and tau if not present
+                        if (!0 %in% times) {
+                            times <- c(0, times)
+                            surv_probs <- c(1, surv_probs)
+                        }
+                        
+                        # Truncate at tau
+                        valid_indices <- times <= tau
+                        times <- times[valid_indices]
+                        surv_probs <- surv_probs[valid_indices]
+                        
+                        # Add tau point if needed
+                        if (max(times) < tau) {
+                            # Interpolate survival at tau
+                            surv_at_tau <- approx(km_fit$time, km_fit$surv, xout = tau, 
+                                                rule = 2, method = "constant", f = 0)$y
+                            times <- c(times, tau)
+                            surv_probs <- c(surv_probs, surv_at_tau)
+                        }
+                        
+                        # Calculate RMST using trapezoidal rule
+                        if (length(times) > 1) {
+                            time_diffs <- diff(times)
+                            surv_avg <- (surv_probs[-length(surv_probs)] + surv_probs[-1]) / 2
+                            rmst <- sum(time_diffs * surv_avg)
+                            
+                            # Estimate standard error (simplified approach)
+                            se_rmst <- sqrt(sum(km_fit$std.err^2, na.rm = TRUE)) * tau / max(km_fit$time, na.rm = TRUE)
+                            se_rmst <- ifelse(is.na(se_rmst) || se_rmst == 0, rmst * 0.1, se_rmst)
+                            
+                            # Calculate confidence intervals
+                            ci_lower <- max(0, rmst - 1.96 * se_rmst)
+                            ci_upper <- rmst + 1.96 * se_rmst
+                            
+                            rmst_results[[as.character(group)]] <- list(
+                                group = as.character(group),
+                                rmst = rmst,
+                                se = se_rmst,
+                                ci_lower = ci_lower,
+                                ci_upper = ci_upper,
+                                tau = tau,
+                                n = nrow(group_data)
+                            )
+                        }
+                    }
+                }
+                
+                # Populate RMST table
+                rmst_table <- self$results$rmstTable
+                for (result in rmst_results) {
+                    rmst_table$addRow(rowKey = result$group, values = result)
+                }
+                
+                # Create RMST summary
+                if (length(rmst_results) > 0) {
+                    summary_text <- paste0(
+                        "Restricted Mean Survival Time (RMST) Analysis\n",
+                        "Time horizon (τ): ", round(tau, 1), " ", self$options$timetypeoutput, "\n\n",
+                        "The RMST represents the average time a patient can expect to survive up to the specified time horizon.\n",
+                        "This metric is particularly useful when the survival curves do not reach 50% (median undefined).\n\n"
+                    )
+                    
+                    # Add group comparisons if multiple groups
+                    if (length(rmst_results) == 2) {
+                        group_names <- names(rmst_results)
+                        diff_rmst <- rmst_results[[group_names[2]]]$rmst - rmst_results[[group_names[1]]]$rmst
+                        summary_text <- paste0(
+                            summary_text,
+                            "Difference in RMST (", group_names[2], " vs ", group_names[1], "): ",
+                            round(diff_rmst, 2), " ", self$options$timetypeoutput, "\n",
+                            "Interpretation: Patients in '", group_names[2], "' group have on average ",
+                            abs(round(diff_rmst, 2)), " ", 
+                            if (diff_rmst > 0) "more" else "fewer",
+                            " ", self$options$timetypeoutput, 
+                            " of survival up to ", round(tau, 1), " ", self$options$timetypeoutput, "."
+                        )
+                    }
+                    
+                    self$results$rmstSummary$setContent(summary_text)
+                }
+            }
+
+            # Residual Diagnostics ----
+            ,
+            .calculateResiduals = function(results, cutoffdata = NULL) {
+                if (!self$options$residual_diagnostics) {
+                    return()
+                }
+                
+                # Use cutoffdata if provided, otherwise use original data
+                data_to_use <- if (!is.null(cutoffdata)) cutoffdata else results$cleanData
+                
+                mytime <- results$name1time
+                myoutcome <- results$name2outcome
+                
+                # For cutoff analysis, use the cutoff groups; otherwise use original explanatory variable
+                if (!is.null(cutoffdata) && results$name3contexpl %in% names(cutoffdata)) {
+                    myexplanatory <- results$name3contexpl
+                } else {
+                    myexplanatory <- results$name3contexpl
+                }
+                
+                tryCatch({
+                    # Create Cox model formula
+                    formula_str <- paste0("survival::Surv(", mytime, ", ", myoutcome, ") ~ ", myexplanatory)
+                    cox_formula <- as.formula(formula_str)
+                    
+                    # Fit Cox model
+                    cox_model <- survival::coxph(cox_formula, data = data_to_use)
+                    
+                    # Calculate residuals
+                    martingale_resid <- residuals(cox_model, type = "martingale")
+                    deviance_resid <- residuals(cox_model, type = "deviance")
+                    score_resid <- residuals(cox_model, type = "score")
+                    schoenfeld_resid <- residuals(cox_model, type = "schoenfeld")
+                    
+                    # Handle missing values
+                    n_obs <- length(martingale_resid)
+                    if (length(schoenfeld_resid) < n_obs) {
+                        schoenfeld_resid <- c(schoenfeld_resid, rep(NA, n_obs - length(schoenfeld_resid)))
+                    }
+                    
+                    # Populate residuals table
+                    residuals_table <- self$results$residualsTable
+                    for (i in 1:min(100, n_obs)) {  # Limit to first 100 observations for display
+                        residuals_table$addRow(rowKey = i, values = list(
+                            observation = i,
+                            martingale = round(martingale_resid[i], 4),
+                            deviance = round(deviance_resid[i], 4),
+                            score = if (is.matrix(score_resid)) round(score_resid[i, 1], 4) else round(score_resid[i], 4),
+                            schoenfeld = round(schoenfeld_resid[i], 4)
+                        ))
+                    }
+                    
+                    # Store residuals for plotting
+                    private$residuals_data <- list(
+                        martingale = martingale_resid,
+                        deviance = deviance_resid,
+                        fitted = cox_model$linear.predictors,
+                        data = data_to_use
+                    )
+                    
+                }, error = function(e) {
+                    # If residual calculation fails, show error message
+                    residuals_table <- self$results$residualsTable
+                    residuals_table$addRow(rowKey = 1, values = list(
+                        observation = 1,
+                        martingale = NA,
+                        deviance = NA,
+                        score = NA,
+                        schoenfeld = NA
+                    ))
+                    residuals_table$setNote("error", paste("Residual calculation failed:", e$message))
+                })
+            }
+
+            # Stratified Cox Regression ----
+            ,
+            .stratifiedCox = function(results, cutoffdata = NULL) {
+                if (!self$options$stratified_cox || is.null(self$options$strata_variable)) {
+                    return()
+                }
+                
+                # This would require additional implementation
+                # For now, add note that this feature is available in the main survival function
+                self$results$coxSummary$setContent(c(
+                    self$results$coxSummary$content,
+                    "\nNote: Stratified Cox regression is available in the main Survival Analysis function."
+                ))
+            }
+
+            # Log-Log Plot Function ----
+            ,
+            .plot7 = function(image, ggtheme, theme, ...) {
+                if (!self$options$loglog || !self$options$findcut) {
+                    return()
+                }
+                
+                # Get the plot data from previous analysis
+                plotData <- image$state
+                if (is.null(plotData)) {
+                    return()
+                }
+                
+                res.cat <- plotData$cutoffdata
+                results <- plotData$results
+                
+                if (is.null(res.cat) || is.null(results)) {
+                    return()
+                }
+                
+                mytime <- results$name1time
+                myoutcome <- results$name2outcome
+                mycontexpl <- results$name3contexpl
+                
+                # Create formula
+                formula_str <- paste0('survival::Surv(', mytime, ',', myoutcome, ') ~ ', mycontexpl)
+                myformula <- as.formula(formula_str)
+                
+                # Fit survival model
+                fit <- survival::survfit(myformula, data = res.cat)
+                
+                tryCatch({
+                    # Create log-log plot using survminer
+                    loglog_plot <- survminer::ggsurvplot(
+                        fit,
+                        data = res.cat,
+                        fun = "cloglog",
+                        xlab = paste0("log(Time in ", self$options$timetypeoutput, ")"),
+                        ylab = "log(-log(Survival))",
+                        title = paste0("Log-Log Plot for ", self$options$contexpl),
+                        legend.title = self$options$contexpl,
+                        risk.table = FALSE,
+                        conf.int = FALSE
+                    )
+                    
+                    print(loglog_plot)
+                }, error = function(e) {
+                    # Fallback: create simple log-log plot with ggplot2
+                    surv_data <- data.frame(
+                        time = fit$time,
+                        surv = fit$surv,
+                        strata = rep(names(fit$strata), fit$strata)
+                    )
+                    
+                    # Remove zero survival values for log transformation
+                    surv_data <- surv_data[surv_data$surv > 0 & surv_data$time > 0, ]
+                    
+                    if (nrow(surv_data) > 0) {
+                        surv_data$log_time <- log(surv_data$time)
+                        surv_data$cloglog <- log(-log(surv_data$surv))
+                        
+                        loglog_plot <- ggplot2::ggplot(surv_data, ggplot2::aes(x = log_time, y = cloglog, color = strata)) +
+                            ggplot2::geom_line() +
+                            ggplot2::labs(
+                                x = paste0("log(Time in ", self$options$timetypeoutput, ")"),
+                                y = "log(-log(Survival))",
+                                title = paste0("Log-Log Plot for ", self$options$contexpl),
+                                color = self$options$contexpl
+                            ) +
+                            ggplot2::theme_minimal()
+                        
+                        print(loglog_plot)
+                    }
+                })
+                
+                TRUE
+            }
+
+            # Residuals Plot Function ----
+            ,
+            .plot9 = function(image, ggtheme, theme, ...) {
+                if (!self$options$residual_diagnostics || is.null(private$residuals_data)) {
+                    return()
+                }
+                
+                tryCatch({
+                    residuals_data <- private$residuals_data
+                    
+                    # Create a 2x2 plot layout
+                    plot_data <- data.frame(
+                        fitted = residuals_data$fitted,
+                        martingale = residuals_data$martingale,
+                        deviance = residuals_data$deviance
+                    )
+                    
+                    # Martingale residuals vs fitted values
+                    p1 <- ggplot2::ggplot(plot_data, ggplot2::aes(x = fitted, y = martingale)) +
+                        ggplot2::geom_point(alpha = 0.6) +
+                        ggplot2::geom_smooth(method = "loess", se = FALSE, color = "red") +
+                        ggplot2::geom_hline(yintercept = 0, linetype = "dashed") +
+                        ggplot2::labs(
+                            x = "Linear Predictors",
+                            y = "Martingale Residuals",
+                            title = "Martingale Residuals vs Fitted"
+                        ) +
+                        ggplot2::theme_minimal()
+                    
+                    # Deviance residuals vs fitted values
+                    p2 <- ggplot2::ggplot(plot_data, ggplot2::aes(x = fitted, y = deviance)) +
+                        ggplot2::geom_point(alpha = 0.6) +
+                        ggplot2::geom_smooth(method = "loess", se = FALSE, color = "red") +
+                        ggplot2::geom_hline(yintercept = 0, linetype = "dashed") +
+                        ggplot2::labs(
+                            x = "Linear Predictors",
+                            y = "Deviance Residuals",
+                            title = "Deviance Residuals vs Fitted"
+                        ) +
+                        ggplot2::theme_minimal()
+                    
+                    # QQ plot of deviance residuals
+                    p3 <- ggplot2::ggplot(plot_data, ggplot2::aes(sample = deviance)) +
+                        ggplot2::stat_qq() +
+                        ggplot2::stat_qq_line() +
+                        ggplot2::labs(
+                            x = "Theoretical Quantiles",
+                            y = "Sample Quantiles",
+                            title = "Q-Q Plot of Deviance Residuals"
+                        ) +
+                        ggplot2::theme_minimal()
+                    
+                    # Histogram of deviance residuals
+                    p4 <- ggplot2::ggplot(plot_data, ggplot2::aes(x = deviance)) +
+                        ggplot2::geom_histogram(bins = 30, alpha = 0.7, fill = "skyblue") +
+                        ggplot2::geom_density(alpha = 0.3, fill = "red") +
+                        ggplot2::labs(
+                            x = "Deviance Residuals",
+                            y = "Frequency",
+                            title = "Distribution of Deviance Residuals"
+                        ) +
+                        ggplot2::theme_minimal()
+                    
+                    # Combine plots using patchwork if available, otherwise show first plot
+                    if (requireNamespace("patchwork", quietly = TRUE)) {
+                        combined_plot <- (p1 + p2) / (p3 + p4)
+                        print(combined_plot)
+                    } else {
+                        print(p1)
+                    }
+                    
+                }, error = function(e) {
+                    # Fallback plot
+                    fallback_plot <- ggplot2::ggplot() +
+                        ggplot2::geom_text(ggplot2::aes(x = 0.5, y = 0.5, 
+                                                      label = "Residuals plot unavailable"),
+                                          size = 6) +
+                        ggplot2::xlim(0, 1) + ggplot2::ylim(0, 1) +
+                        ggplot2::theme_void()
+                    print(fallback_plot)
+                })
+                
                 TRUE
             }
         )

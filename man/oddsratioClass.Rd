@@ -2,11 +2,75 @@
 % Please edit documentation in R/oddsratio.b.R
 \name{oddsratioClass}
 \alias{oddsratioClass}
-\title{Odds Ratio Table and Plot}
+\title{Odds Ratio Analysis for Binary Outcomes}
 \description{
-Odds Ratio Table and Plot
+Performs logistic regression analysis to calculate odds ratios for binary outcomes.
+This function provides comprehensive odds ratio tables, forest plots, and optional
+nomogram generation for clinical prediction. It supports both categorical and
+continuous explanatory variables and includes diagnostic metrics for binary predictors.
+}
+\details{
+The function performs the following analyses:
+\itemize{
+\item Logistic regression using finalfit package
+\item Odds ratio calculation with 95\% confidence intervals
+\item Forest plot generation for visualization
+\item Optional nomogram creation for clinical prediction
+\item Likelihood ratio calculations for diagnostic metrics
+\item Sensitivity and specificity analysis for binary predictors
+}
 
-Odds Ratio Table and Plot
+The function automatically cleans variable names using janitor::clean_names()
+and preserves original variable labels for display. It handles missing data
+through complete case analysis.
+}
+\section{International Usage}{
+
+For international users, the function includes an outcomeLevel parameter to
+explicitly specify which outcome level represents the positive case. This is
+important for correct interpretation of likelihood ratios and diagnostic metrics.
+}
+
+\section{Nomogram Features}{
+
+When showNomogram is enabled, the function generates:
+\itemize{
+\item Interactive nomogram for risk prediction
+\item Diagnostic metrics (sensitivity, specificity, likelihood ratios)
+\item Contingency table analysis
+\item User guidance for interpretation
+}
+}
+
+\examples{
+\dontrun{
+# Basic odds ratio analysis
+result <- oddsratio(
+  data = clinical_data,
+  explanatory = c("age", "gender", "smoking"),
+  outcome = "mortality"
+)
+
+# With nomogram and specified outcome level
+result <- oddsratio(
+  data = clinical_data,
+  explanatory = c("age", "treatment"),
+  outcome = "recurrence",
+  outcomeLevel = "Yes",
+  showNomogram = TRUE
+)
+}
+
+}
+\references{
+Harrison, E., Drake, T., & Ots, R. (2019). finalfit: Quickly create elegant
+regression results tables and plots when modelling. R package version 0.9.7.
+}
+\seealso{
+\code{\link{finalfit}}, \code{\link{rms}}
+}
+\author{
+ClinicoPath Development Team
 }
 \section{Super classes}{
 \code{\link[jmvcore:Analysis]{jmvcore::Analysis}} -> \code{jsurvival::oddsratioBase} -> \code{oddsratioClass}
