@@ -473,7 +473,6 @@ survivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         plot6 = function() private$.items[["plot6"]],
         plot7 = function() private$.items[["plot7"]],
         residualsPlot = function() private$.items[["residualsPlot"]],
-        mydataview_multipleCutoffs = function() private$.items[["mydataview_multipleCutoffs"]],
         calculatedtime = function() private$.items[["calculatedtime"]],
         outcomeredefined = function() private$.items[["outcomeredefined"]]),
     private = list(),
@@ -1163,11 +1162,6 @@ survivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "explanatory",
                     "outcome",
                     "outcomeLevel")))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="mydataview_multipleCutoffs",
-                title="mydataview_multipleCutoffs",
-                visible="(multiple_cutoffs)"))
             self$add(jmvcore::Output$new(
                 options=options,
                 name="calculatedtime",
@@ -1341,7 +1335,6 @@ survivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$plot6} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$plot7} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$residualsPlot} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$mydataview_multipleCutoffs} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
 #'   \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 #' }

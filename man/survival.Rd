@@ -212,7 +212,6 @@ A results object containing:
 \code{results$plot6} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot7} \tab \tab \tab \tab \tab an image \cr
 \code{results$residualsPlot} \tab \tab \tab \tab \tab an image \cr
-\code{results$mydataview_multipleCutoffs} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
 \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
 }
