@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">jsurvival</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3.82</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3.89</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,14 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">oddsratio</span><span class="op">(</span><span class="va">data</span>, <span class="va">explanatory</span>, <span class="va">outcome</span>, showNomogram <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">oddsratio</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">explanatory</span>,</span>
+<span>  <span class="va">outcome</span>,</span>
+<span>  <span class="va">outcomeLevel</span>,</span>
+<span>  showNomogram <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  showExplanations <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -79,15 +86,27 @@
 <dd><p>The outcome variable to be used in the analysis.</p></dd>
 
 
+<dt id="arg-outcomelevel">outcomeLevel<a class="anchor" aria-label="anchor" href="#arg-outcomelevel"></a></dt>
+<dd><p>Specify which outcome level represents the positive
+case for likelihood ratio calculations. If not specified, the function will
+use the second level alphabetically.</p></dd>
+
+
 <dt id="arg-shownomogram">showNomogram<a class="anchor" aria-label="anchor" href="#arg-shownomogram"></a></dt>
 <dd><p>Display an interactive nomogram for converting pre-test
 to post-test  probabilities using likelihood ratios calculated from the
 data.</p></dd>
 
+
+<dt id="arg-showexplanations">showExplanations<a class="anchor" aria-label="anchor" href="#arg-showexplanations"></a></dt>
+<dd><p>Display educational explanations for each analysis
+type to help interpret  odds ratios, risk ratios, diagnostic test
+performance, ROC analysis,  and likelihood ratios.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A results object containing:</p><table class="table table"><tr><td><code>results$todo</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$text</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$text2</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$plot</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot_nomogram</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$nomogram</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr></table></div>
+    <p>A results object containing:</p><table class="table table"><tr><td><code>results$todo</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$text</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$text2</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$plot</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$plot_nomogram</code></td><td></td><td></td><td></td><td></td><td>an image</td></tr><tr><td><code>results$nomogram</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$oddsRatioExplanation</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$riskMeasuresExplanation</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$diagnosticTestExplanation</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr><tr><td><code>results$nomogramAnalysisExplanation</code></td><td></td><td></td><td></td><td></td><td>a html</td></tr></table></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
