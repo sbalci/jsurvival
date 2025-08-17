@@ -111,7 +111,6 @@ children:
                     format: number
                     label: Landmark Time
                     enable: (uselandmark)
-
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
     collapsed: true
@@ -158,11 +157,14 @@ children:
     collapsed: true
     children:
       - type: Label
-        label: Cox Regression Options
+        label: Cox Regression Analysis
         children:
           - type: LayoutBox
             margin: large
             children:
+              - type: CheckBox
+                name: ph_cox
+                label: Proportional Hazards Test
               - type: CheckBox
                 name: stratified_cox
                 label: Stratified Cox Model
@@ -209,9 +211,9 @@ children:
                 name: rmst_tau
                 format: number
                 label: Tau (Restriction Time)
-
+                enable: (rmst_analysis)
   - type: CollapseBox
-    label: Plots
+    label: Survival Plots
     collapsed: true
     children:
       - type: Label
@@ -232,14 +234,11 @@ children:
               - type: CheckBox
                 name: ch
                 label: Cumulative Hazard
-              - type: CheckBox
-                name: ph_cox
-                label: Proportional Hazards Plot
       - type: Label
-        label: Plot Arguments
+        label: Plot Appearance
         children:
           - type: LayoutBox
-            fitToGrid: true
+            margin: large
             children:
               - type: CheckBox
                 name: ci95
@@ -249,10 +248,19 @@ children:
                 label: Risk Table
               - type: CheckBox
                 name: censored
-                label: Show Censored
+                label: Show Censored Points
               - type: CheckBox
                 name: pplot
                 label: Show P-values
+              - type: ComboBox
+                name: medianline
+                label: Median Survival Line
+      - type: Label
+        label: Plot Scale & Timing
+        children:
+          - type: LayoutBox
+            margin: large
+            children:
               - type: TextBox
                 name: endplot
                 format: number
@@ -269,10 +277,6 @@ children:
                 name: yend_plot
                 format: number
                 label: Y-axis End
-              - type: ComboBox
-                name: medianline
-                label: Median Survival Line
-
   - type: CollapseBox
     label: Survival Tables
     collapsed: true
@@ -288,7 +292,6 @@ children:
                 format: string
                 width: large
                 label: Time Points for Table
-
   - type: CollapseBox
     label: Person-Time Analysis
     collapsed: true
@@ -312,7 +315,6 @@ children:
                 name: rate_multiplier
                 format: number
                 label: Rate Multiplier
-
   - type: CollapseBox
     label: Data Export Options
     collapsed: true
@@ -334,7 +336,6 @@ children:
                 name: outcomeredefined
                 label: Add Redefined Outcome to Data
                 enable: (multievent)
-
   - type: CollapseBox
     label: Analysis Explanations
     collapsed: true
@@ -348,3 +349,79 @@ children:
               - type: CheckBox
                 name: showExplanations
                 label: Show Analysis Explanations
+              - type: CheckBox
+                name: showSummaries
+                label: Show Natural Language Summaries
+  - type: CollapseBox
+    label: Parametric Survival Models
+    collapsed: true
+    children:
+      - type: Label
+        label: Parametric Model Configuration
+        children:
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: CheckBox
+                name: use_parametric
+                label: Enable Parametric Models
+              - type: ComboBox
+                name: parametric_distribution
+                enable: (use_parametric)
+                label: Distribution Type
+              - type: CheckBox
+                name: parametric_covariates
+                enable: (use_parametric)
+                label: Include Covariates
+      - type: Label
+        label: Spline Model Options
+        children:
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: TextBox
+                name: spline_knots
+                format: number
+                enable: (use_parametric && parametric_distribution:survspline)
+                label: Number of Knots
+              - type: ComboBox
+                name: spline_scale
+                enable: (use_parametric && parametric_distribution:survspline)
+                label: Spline Scale
+      - type: Label
+        label: Extrapolation Analysis
+        children:
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: CheckBox
+                name: parametric_extrapolation
+                enable: (use_parametric)
+                label: Enable Extrapolation
+              - type: TextBox
+                name: extrapolation_time
+                format: number
+                enable: (use_parametric && parametric_extrapolation)
+                label: Extrapolation Time Horizon
+      - type: Label
+        label: Parametric Model Outputs
+        children:
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: CheckBox
+                name: parametric_diagnostics
+                enable: (use_parametric)
+                label: Model Diagnostics
+              - type: CheckBox
+                name: compare_distributions
+                enable: (use_parametric)
+                label: Compare Distributions
+              - type: CheckBox
+                name: parametric_survival_plots
+                enable: (use_parametric)
+                label: Parametric Survival Plots
+              - type: CheckBox
+                name: hazard_plots
+                enable: (use_parametric)
+                label: Hazard Function Plots

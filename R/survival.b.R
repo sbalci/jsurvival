@@ -207,18 +207,240 @@ survivalClass <- if (requireNamespace('jmvcore'))
         private = list(
 
             .init = function() {
+                # Hide all outputs first - this ensures they're hidden even if we return early
+                # Hide all heading/explanation outputs
+                self$results$medianSurvivalHeading$setVisible(FALSE)
+                self$results$medianSurvivalExplanation$setVisible(FALSE)
+                self$results$medianSurvivalHeading3$setVisible(FALSE)
+                self$results$coxRegressionHeading$setVisible(FALSE)
+                self$results$coxRegressionExplanation$setVisible(FALSE)
+                self$results$coxRegressionHeading3$setVisible(FALSE)
+                self$results$survivalTablesHeading$setVisible(FALSE)
+                self$results$survivalTablesExplanation$setVisible(FALSE)
+                self$results$survivalTablesHeading3$setVisible(FALSE)
+                self$results$survivalPlotsHeading3$setVisible(FALSE)
+                self$results$survivalPlotsExplanation$setVisible(FALSE)
+                
+                # Early validation check - if essential variables are missing, show todo and return
+                if (is.null(self$options$outcome) || 
+                    is.null(self$options$explanatory) || 
+                    (is.null(self$options$elapsedtime) && 
+                     (!self$options$tint || is.null(self$options$dxdate) || is.null(self$options$fudate)))) {
+                    
+                    # Show todo message (other outputs already hidden above)
+                    self$results$todo$setVisible(TRUE)
+                    private$.todo()
+                    return()
+                }
+                
+                # Initialize all outputs to FALSE first (following singlearm pattern)
+                # Core survival analysis outputs
+                self$results$medianSurvivalHeading$setVisible(FALSE)
+                self$results$medianSurvivalExplanation$setVisible(FALSE)
+                self$results$medianSurvivalHeading3$setVisible(FALSE)
+                self$results$medianSummary$setVisible(FALSE)
+                self$results$medianTable$setVisible(FALSE)
+                
+                # Cox regression outputs
+                self$results$coxRegressionHeading$setVisible(FALSE)
+                self$results$coxRegressionExplanation$setVisible(FALSE)
+                self$results$coxRegressionHeading3$setVisible(FALSE)
+                self$results$coxSummary$setVisible(FALSE)
+                self$results$coxTable$setVisible(FALSE)
+                self$results$tCoxtext2$setVisible(FALSE)
+                self$results$cox_ph$setVisible(FALSE)
+                self$results$plot8$setVisible(FALSE)
+                
+                # Survival tables outputs
+                self$results$survivalTablesHeading$setVisible(FALSE)
+                self$results$survivalTablesExplanation$setVisible(FALSE)
+                self$results$survivalTablesHeading3$setVisible(FALSE)
+                self$results$survTableSummary$setVisible(FALSE)
+                self$results$survTable$setVisible(FALSE)
+                
+                # Survival plots outputs (only reference existing plots)
+                self$results$plot$setVisible(FALSE)
+                self$results$plot2$setVisible(FALSE)
+                self$results$plot3$setVisible(FALSE)
+                self$results$plot6$setVisible(FALSE)
+                self$results$plot7$setVisible(FALSE)
+                self$results$plot8$setVisible(FALSE)
+                self$results$survivalPlotsHeading3$setVisible(FALSE)
+                self$results$survivalPlotsExplanation$setVisible(FALSE)
+                
+                # Person-time analysis outputs
+                self$results$personTimeHeading$setVisible(FALSE)
+                self$results$personTimeTable$setVisible(FALSE)
+                self$results$personTimeSummary$setVisible(FALSE)
+                self$results$personTimeExplanation$setVisible(FALSE)
+                
+                # RMST analysis outputs
+                self$results$rmstHeading$setVisible(FALSE)
+                self$results$rmstTable$setVisible(FALSE)
+                self$results$rmstSummary$setVisible(FALSE)
+                self$results$rmstExplanation$setVisible(FALSE)
+                
+                # Residuals analysis outputs
+                self$results$residualsTable$setVisible(FALSE)
+                self$results$residualsPlot$setVisible(FALSE)
+                self$results$residualDiagnosticsExplanation$setVisible(FALSE)
+                
+                # Pairwise comparison outputs
+                self$results$pairwiseComparisonHeading$setVisible(FALSE)
+                self$results$pairwiseSummary$setVisible(FALSE)
+                self$results$pairwiseTable$setVisible(FALSE)
+                
+                # Parametric models outputs
+                self$results$parametricModelComparison$setVisible(FALSE)
+                self$results$parametricModelSummary$setVisible(FALSE)
+                self$results$parametricDiagnostics$setVisible(FALSE)
+                self$results$parametricSurvivalPlot$setVisible(FALSE)
+                self$results$hazardFunctionPlot$setVisible(FALSE)
+                self$results$extrapolationPlot$setVisible(FALSE)
+                self$results$extrapolationTable$setVisible(FALSE)
+                self$results$parametricModelsExplanation$setVisible(FALSE)
+                
+                # Always show core survival analysis elements when data is present
+                self$results$medianSurvivalHeading$setVisible(TRUE)
+                self$results$medianTable$setVisible(TRUE)
+                self$results$coxRegressionHeading$setVisible(TRUE)
+                self$results$coxTable$setVisible(TRUE)
+                self$results$tCoxtext2$setVisible(TRUE)
+                self$results$survivalTablesHeading$setVisible(TRUE)
+                self$results$survTable$setVisible(TRUE)
+                
+                # Handle showSummaries visibility
+                if (self$options$showSummaries) {
+                    self$results$medianSummary$setVisible(TRUE)
+                    self$results$coxSummary$setVisible(TRUE)
+                    self$results$survTableSummary$setVisible(TRUE)
+                    
+                    # Conditional summaries - require both showSummaries AND their specific option
+                    if (self$options$person_time) {
+                        self$results$personTimeSummary$setVisible(TRUE)
+                    }
+                    if (self$options$rmst_analysis) {
+                        self$results$rmstSummary$setVisible(TRUE)
+                    }
+                    if (self$options$pw) {
+                        self$results$pairwiseComparisonHeading$setVisible(TRUE)
+                        self$results$pairwiseSummary$setVisible(TRUE)
+                    }
+                }
 
+                # Handle showExplanations visibility  
+                if (self$options$showExplanations) {
+                    # Core explanations and headings
+                    self$results$medianSurvivalHeading3$setVisible(TRUE)
+                    self$results$medianSurvivalExplanation$setVisible(TRUE)
+                    self$results$coxRegressionHeading3$setVisible(TRUE)
+                    self$results$coxRegressionExplanation$setVisible(TRUE)
+                    self$results$survivalTablesHeading3$setVisible(TRUE)
+                    self$results$survivalTablesExplanation$setVisible(TRUE)
+                    
+                    # Conditional explanations - require both showExplanations AND their specific option
+                    if (self$options$person_time) {
+                        self$results$personTimeExplanation$setVisible(TRUE)
+                    }
+                    if (self$options$rmst_analysis) {
+                        self$results$rmstExplanation$setVisible(TRUE)
+                    }
+                    if (self$options$residual_diagnostics) {
+                        self$results$residualDiagnosticsExplanation$setVisible(TRUE)
+                    }
+                    if (self$options$use_parametric) {
+                        self$results$parametricModelsExplanation$setVisible(TRUE)
+                    }
+                    
+                    # Survival plots explanation requires showExplanations AND at least one plot
+                    if (self$options$sc || self$options$ce || self$options$ch || 
+                        self$options$kmunicate || self$options$loglog) {
+                        self$results$survivalPlotsHeading3$setVisible(TRUE)
+                        self$results$survivalPlotsExplanation$setVisible(TRUE)
+                    }
+                }
+                
+                # Handle person_time visibility
+                if (self$options$person_time) {
+                    self$results$personTimeHeading$setVisible(TRUE)
+                    self$results$personTimeTable$setVisible(TRUE)
+                }
+                
+                # Handle RMST analysis visibility
+                if (self$options$rmst_analysis) {
+                    self$results$rmstHeading$setVisible(TRUE)
+                    self$results$rmstTable$setVisible(TRUE)
+                }
+                
+                # Handle residual diagnostics visibility
+                if (self$options$residual_diagnostics) {
+                    self$results$residualsTable$setVisible(TRUE)
+                    self$results$residualsPlot$setVisible(TRUE)
+                }
+                
+                # Handle pairwise comparison visibility
+                if (self$options$pw) {
+                    self$results$pairwiseComparisonHeading$setVisible(TRUE)
+                    self$results$pairwiseSummary$setVisible(TRUE)
+                    self$results$pairwiseTable$setVisible(TRUE)
+                }
+                
+                # Handle parametric models visibility
+                if (self$options$use_parametric) {
+                    self$results$parametricModelSummary$setVisible(TRUE)
+                    if (self$options$compare_distributions) {
+                        self$results$parametricModelComparison$setVisible(TRUE)
+                    }
+                    if (self$options$parametric_diagnostics) {
+                        self$results$parametricDiagnostics$setVisible(TRUE)
+                    }
+                    if (self$options$parametric_survival_plots) {
+                        self$results$parametricSurvivalPlot$setVisible(TRUE)
+                    }
+                    if (self$options$hazard_plots) {
+                        self$results$hazardFunctionPlot$setVisible(TRUE)
+                    }
+                    if (self$options$parametric_extrapolation) {
+                        self$results$extrapolationPlot$setVisible(TRUE)
+                        self$results$extrapolationTable$setVisible(TRUE)
+                    }
+                    if (self$options$showExplanations) {
+                        self$results$parametricModelsExplanation$setVisible(TRUE)
+                    }
+                }
+                
+                # Handle Cox PH visibility
                 if (self$options$ph_cox) {
-                    # Disable tables
                     self$results$cox_ph$setVisible(TRUE)
+                    self$results$plot8$setVisible(TRUE)
                 }
-
-                if (!(self$options$ph_cox)) {
-                    # Disable tables
-                    self$results$cox_ph$setVisible(FALSE)
+                
+                # Handle plot visibility based on their options
+                if (self$options$sc) {
+                    self$results$plot$setVisible(TRUE)
                 }
-
-
+                if (self$options$ce) {
+                    self$results$plot2$setVisible(TRUE)
+                }
+                if (self$options$ch) {
+                    self$results$plot3$setVisible(TRUE)
+                }
+                if (self$options$kmunicate) {
+                    self$results$plot6$setVisible(TRUE)
+                }
+                if (self$options$loglog) {
+                    self$results$plot7$setVisible(TRUE)
+                }
+                if (self$options$residual_diagnostics) {
+                    self$results$residualsPlot$setVisible(TRUE)
+                }
+                if (self$options$use_parametric) {
+                    # Parametric plots handled in parametric section
+                    self$results$parametricSurvivalPlot$setVisible(TRUE)
+                    if (self$options$hazard_plots) {
+                        self$results$hazardFunctionPlot$setVisible(TRUE)
+                    }
+                }
             }
             ,
 
@@ -303,6 +525,113 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
             }
 
+            # Input Validation ----
+            ,
+            .validateInputs = function() {
+                # Check required variables
+                if (is.null(self$options$outcome)) {
+                    jmvcore::reject("Outcome variable is required. Please select a variable that indicates whether an event occurred (e.g., death, recurrence).", code="missing_outcome")
+                }
+                
+                if (is.null(self$options$explanatory)) {
+                    jmvcore::reject("Explanatory variable is required. Please select a categorical variable to compare survival between groups.", code="missing_explanatory")
+                }
+                
+                # Check time variables
+                time_provided <- !is.null(self$options$elapsedtime)
+                dates_provided <- self$options$tint && !is.null(self$options$dxdate) && !is.null(self$options$fudate)
+                
+                if (!time_provided && !dates_provided) {
+                    jmvcore::reject("Time information is required. Either provide a survival time variable or enable date calculation with diagnosis and follow-up dates.", code="missing_time")
+                }
+                
+                if (self$options$tint && (is.null(self$options$dxdate) || is.null(self$options$fudate))) {
+                    jmvcore::reject("When using dates to calculate survival time, both diagnosis date and follow-up date are required.", code="incomplete_dates")
+                }
+                
+                # Check multievent configuration
+                if (self$options$multievent) {
+                    if (is.null(self$options$dod) && is.null(self$options$dooc)) {
+                        jmvcore::reject("When using multiple event levels, at least one event type (Dead of Disease or Dead of Other) must be specified.", code="missing_multievent")
+                    }
+                }
+                
+                # Check data availability
+                if (nrow(self$data) == 0) {
+                    jmvcore::reject("No data available for analysis. Please check your dataset.", code="empty_data")
+                }
+                
+                return(TRUE)
+            }
+
+            # Optimized Table Population Helper ----
+            ,
+            .populateTableSafely = function(table_result, data_frame, column_mapping) {
+                # Generic helper to reduce code duplication in table population
+                # Uses explicit column mapping for type safety and better performance
+                tryCatch({
+                    if (is.null(data_frame) || nrow(data_frame) == 0) {
+                        return(invisible(NULL))
+                    }
+                    
+                    for (i in seq_len(nrow(data_frame))) {
+                        row_values <- list()
+                        
+                        # Map columns using provided mapping
+                        for (col_name in names(column_mapping)) {
+                            source_col <- column_mapping[[col_name]]
+                            if (source_col %in% names(data_frame)) {
+                                row_values[[col_name]] <- data_frame[[source_col]][i]
+                            } else {
+                                row_values[[col_name]] <- NA
+                            }
+                        }
+                        
+                        table_result$addRow(rowKey = i, values = row_values)
+                        
+                        # Add checkpoint for large tables (every 100 rows)
+                        if (i %% 100 == 0) {
+                            private$.checkpoint()
+                        }
+                    }
+                }, error = function(e) {
+                    # Log error but don't break the analysis
+                    warning(paste("Table population failed:", e$message))
+                })
+            }
+            
+            # Safe Analysis Wrapper ----
+            ,
+            .safeAnalysis = function(analysis_func, error_message = "Analysis step failed") {
+                # Wrapper for safer analysis execution with better error recovery
+                tryCatch({
+                    analysis_func()
+                    TRUE
+                }, error = function(e) {
+                    # Cleanup memory and reset state on error
+                    gc(verbose = FALSE)
+                    private$.resetErrorState()
+                    warning(paste(error_message, ":", e$message))
+                    FALSE
+                })
+            },
+            
+            .resetErrorState = function() {
+                # Hide conditional outputs on error to prevent inconsistent state
+                self$results$plot$setVisible(FALSE)
+                self$results$plot2$setVisible(FALSE)
+                self$results$plot3$setVisible(FALSE)
+                self$results$plot6$setVisible(FALSE)
+                self$results$plot7$setVisible(FALSE)
+                self$results$plot8$setVisible(FALSE)
+                self$results$pairwiseTable$setVisible(FALSE)
+                self$results$personTimeTable$setVisible(FALSE)
+                self$results$rmstTable$setVisible(FALSE)
+                # Clear any large objects from memory
+                if (exists('.large_objects', envir = private)) {
+                    rm(.large_objects, envir = private)
+                }
+            }
 
             # Define Survival Time ----
             ,
@@ -352,15 +681,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         mydata[["start"]] <- date_parser(mydata[[dxdate]])
                         mydata[["end"]] <- date_parser(mydata[[fudate]])
                     } else {
-                        stop(paste0("Unknown date format: ", timetypedata, 
-                                  ". Supported formats are: ", 
-                                  paste(names(lubridate_functions), collapse = ", ")))
+                        stop(sprintf("Unknown date format: %s. Supported formats are: %s",
+                                   timetypedata, 
+                                   paste(names(lubridate_functions), collapse = ", ")))
                     }
 
 
                     if ( sum(!is.na(mydata[["start"]])) == 0 || sum(!is.na(mydata[["end"]])) == 0)  {
-                        stop(paste0("Time difference cannot be calculated. Make sure that time type in variables are correct. Currently it is: ", self$options$timetypedata)
-                        )
+                        stop(sprintf("Time difference cannot be calculated. Make sure that time type in variables are correct. Currently it is: %s", self$options$timetypedata))
                     }
 
                     timetypeoutput <-
@@ -410,13 +738,10 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     if (inherits(outcome1, contin)) {
                         unique_values <- unique(outcome1[!is.na(outcome1)])
                         if (!(length(unique_values) == 2 && all(unique_values %in% c(0, 1)))) {
-                            stop(
-                                paste0('Outcome variable must be binary (0/1) for survival analysis.\n',
-                                      '- Use 0 for censored observations (alive/disease-free)\n',
-                                      '- Use 1 for events (death/recurrence)\n',
-                                      'Current values found: ', paste(unique_values, collapse = ", "),
-                                      '\n\nFor multi-state outcomes, enable "Multiple Event Levels" option.')
-                            )
+                            stop(sprintf(
+                                'Outcome variable must be binary (0/1) for survival analysis.\n- Use 0 for censored observations (alive/disease-free)\n- Use 1 for events (death/recurrence)\nCurrent values found: %s\n\nFor multi-state outcomes, enable "Multiple Event Levels" option.',
+                                paste(unique_values, collapse = ", ")
+                            ))
 
                         }
 
@@ -432,14 +757,10 @@ survivalClass <- if (requireNamespace('jmvcore'))
                             )
 
                     } else {
-                        stop(
-                            paste0('Invalid outcome variable format.\n',
-                                  'For survival analysis, the outcome variable must be:\n',
-                                  '- Binary numeric (0/1): 0=censored, 1=event\n',
-                                  '- Factor variable: Select appropriate event level\n',
-                                  '\nCurrent variable type: ', class(outcome1)[1], '\n',
-                                  'For complex outcomes with multiple states, enable "Multiple Event Levels" option.')
-                        )
+                        stop(sprintf(
+                            'Invalid outcome variable format.\nFor survival analysis, the outcome variable must be:\n- Binary numeric (0/1): 0=censored, 1=event\n- Factor variable: Select appropriate event level\n\nCurrent variable type: %s\nFor complex outcomes with multiple states, enable "Multiple Event Levels" option.',
+                            class(outcome1)[1]
+                        ))
 
                     }
 
@@ -528,6 +849,11 @@ survivalClass <- if (requireNamespace('jmvcore'))
             # Clean Data For Analysis ----
             ,
             .cleandata = function() {
+                # Memory management for large datasets
+                if (nrow(self$data) > 10000) {
+                    # Force garbage collection before processing large datasets
+                    gc(verbose = FALSE)
+                }
 
             labelled_data <- private$.getData()
 
@@ -641,36 +967,125 @@ survivalClass <- if (requireNamespace('jmvcore'))
             }
 
 
-            # Run Analysis ----
+            # Core Analysis Components ----
+            ,
+            .runCoreAnalysis = function(results) {
+                # Run core survival analysis components
+                private$.safeAnalysis(function() {
+                    private$.medianSurv(results)
+                }, "Median survival analysis failed")
+                private$.checkpoint()
+                
+                private$.safeAnalysis(function() {
+                    private$.cox(results)
+                }, "Cox regression analysis failed")
+                private$.checkpoint()
+                
+                private$.safeAnalysis(function() {
+                    private$.survTable(results)
+                }, "Survival table generation failed")
+                private$.checkpoint()
+            }
+            
+            # Optional Analysis Components ----
+            ,
+            .runOptionalAnalyses = function(results) {
+                # RMST Analysis
+                if (self$options$rmst_analysis) {
+                    private$.safeAnalysis(function() {
+                        rmst_tau <- if (is.null(self$options$rmst_tau) || self$options$rmst_tau <= 0) {
+                            NULL  # Use default (75th percentile)
+                        } else {
+                            self$options$rmst_tau
+                        }
+                        
+                        rmst_results <- private$.calculateRMST(results, tau = rmst_tau)
+                        
+                        if (!is.null(rmst_results$table)) {
+                            # Use helper function for table population
+                            column_mapping <- list(
+                                group = "Group",
+                                rmst = "RMST", 
+                                se = "SE",
+                                ci_lower = "CI_Lower",
+                                ci_upper = "CI_Upper",
+                                tau = "Tau"
+                            )
+                            private$.populateTableSafely(
+                                self$results$rmstTable, 
+                                rmst_results$table, 
+                                column_mapping
+                            )
+                            
+                            # Add interpretation
+                            self$results$rmstSummary$setContent(rmst_results$interpretation)
+                        }
+                    }, "RMST analysis failed")
+                    private$.checkpoint()
+                }
+                
+                # Parametric Survival Models
+                if (self$options$use_parametric) {
+                    private$.safeAnalysis(function() {
+                        private$.parametricSurvival(results)
+                    }, "Parametric survival analysis failed")
+                    private$.checkpoint()
+                }
+                
+                # Pairwise Comparisons
+                if (self$options$pw) {
+                    private$.safeAnalysis(function() {
+                        private$.pairwise(results)
+                    }, "Pairwise comparison analysis failed")
+                    private$.checkpoint()
+                }
+                
+                # Person-Time Analysis
+                if (self$options$person_time) {
+                    private$.safeAnalysis(function() {
+                        private$.personTimeAnalysis(results)
+                    }, "Person-time analysis failed")
+                    private$.checkpoint()
+                }
+            }
+            
+            # Data Export and Finalization ----
+            ,
+            .finalizeResults = function(results) {
+                # Handle data exports and final result population
+                private$.safeAnalysis(function() {
+                    private$.exportSurvivalData(results)
+                }, "Survival data export failed")
+                
+                # Add Calculated Time to Data
+                if (self$options$tint && self$options$calculatedtime && 
+                    self$results$calculatedtime$isNotFilled()) {
+                    self$results$calculatedtime$setRowNums(results$cleanData$row_names)
+                    self$results$calculatedtime$setValues(results$cleanData$CalculatedTime)
+                }
+                
+                # Add Redefined Outcome to Data
+                if (self$options$multievent && self$options$outcomeredefined && 
+                    self$results$outcomeredefined$isNotFilled()) {
+                    self$results$outcomeredefined$setRowNums(results$cleanData$row_names)
+                    self$results$outcomeredefined$setValues(results$cleanData$CalculatedOutcome)
+                }
+                
+                # Populate explanations if enabled
+                private$.populateExplanations()
+            }
+
+            # Main Run Function (Refactored) ----
             ,
             .run = function() {
 
-                # Errors, Warnings ----
-
-                ## No variable todo ----
-
-                ## Define subconditions ----
-
-                subcondition1a <- !is.null(self$options$outcome)
-                subcondition1b1 <- self$options$multievent
-                subcondition1b2 <- !is.null(self$options$dod)
-                subcondition1b3 <- !is.null(self$options$dooc)
-                # subcondition1b4 <- !is.null(self$options$awd)
-                # subcondition1b5 <- !is.null(self$options$awod)
-                subcondition2a <- !is.null(self$options$elapsedtime)
-                subcondition2b1 <- self$options$tint
-                subcondition2b2 <- !is.null(self$options$dxdate)
-                subcondition2b3 <- !is.null(self$options$fudate)
-                condition3 <- !is.null(self$options$explanatory)
-
-
-                condition1 <- subcondition1a && !subcondition1b1 || subcondition1b1 && subcondition1b2 || subcondition1b1 && subcondition1b3
-
-                condition2 <- subcondition2b1 && subcondition2b2 && subcondition2b3 || subcondition2a && !subcondition2b1 && !subcondition2b2 && !subcondition2b3
-
-                not_continue_analysis <- !(condition1 && condition2 && condition3)
-
-                if (not_continue_analysis) {
+                # Input Validation ----
+                validation_result <- tryCatch({
+                    private$.validateInputs()
+                    self$results$todo$setVisible(FALSE)
+                    TRUE
+                }, error = function(e) {
+                    # If validation fails, show todo and hide results
                     private$.todo()
                     self$results$medianSummary$setVisible(FALSE)
                     self$results$medianTable$setVisible(FALSE)
@@ -688,16 +1103,13 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     self$results$plot3$setVisible(FALSE)
                     self$results$plot6$setVisible(FALSE)
                     self$results$todo$setVisible(TRUE)
+                    FALSE
+                })
+                
+                # Return early if validation failed
+                if (validation_result != TRUE) {
                     return()
-                } else {
-                    self$results$todo$setVisible(FALSE)
                 }
-
-
-                # Empty data ----
-
-                if (nrow(self$data) == 0)
-                    stop('Data contains no (complete) rows')
 
                 # Get Clean Data ----
                 results <- private$.cleandata()
@@ -756,7 +1168,11 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 private$.exportSurvivalData(results)
                 private$.checkpoint()  # Add checkpoint here
 
-
+                ## Parametric Survival Models ----
+                if (self$options$use_parametric) {
+                    private$.parametricSurvival(results)
+                }
+                private$.checkpoint()  # Add checkpoint here
 
                 ## Pairwise ----
                 if (self$options$pw
@@ -773,6 +1189,10 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 if (self$options$person_time) {
                     private$.personTimeAnalysis(results)
                 }
+                
+                ## Additional Model Diagnostics ----
+                # Note: residual diagnostics are handled within .cox() function
+                # when self$options$residual_diagnostics is TRUE
 
 
 
@@ -918,7 +1338,18 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 medianTable <- self$results$medianTable
                 data_frame <- results2table
                 for (i in seq_along(data_frame[, 1, drop = T])) {
-                    medianTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                    # Map columns explicitly to match schema
+                    row_values <- list(
+                        factor = data_frame$factor[i],
+                        records = if ("records" %in% names(data_frame)) data_frame$records[i] else NA,
+                        events = if ("events" %in% names(data_frame)) data_frame$events[i] else NA,
+                        rmean = if ("rmean" %in% names(data_frame)) data_frame$rmean[i] else NA,
+                        se_rmean = if ("se_rmean" %in% names(data_frame)) data_frame$se_rmean[i] else NA,
+                        median = if ("median" %in% names(data_frame)) data_frame$median[i] else NA,
+                        x0_95lcl = if ("x0_95lcl" %in% names(data_frame)) data_frame$x0_95lcl[i] else NA,
+                        x0_95ucl = if ("x0_95ucl" %in% names(data_frame)) data_frame$x0_95ucl[i] else NA
+                    )
+                    medianTable$addRow(rowKey = i, values = row_values)
                 }
 
 
@@ -1088,7 +1519,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
                                        "HR_multivariable")
 
                 for (i in seq_along(data_frame[, 1, drop = T])) {
-                    coxTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                    # Map columns explicitly to match schema
+                    row_values <- list(
+                        Explanatory = if ("Explanatory" %in% names(data_frame)) data_frame$Explanatory[i] else NA,
+                        Levels = if ("Levels" %in% names(data_frame)) data_frame$Levels[i] else NA,
+                        all = if ("all" %in% names(data_frame)) data_frame$all[i] else NA,
+                        HR_univariable = if ("HR_univariable" %in% names(data_frame)) data_frame$HR_univariable[i] else NA
+                    )
+                    coxTable$addRow(rowKey = i, values = row_values)
                 }
 
 
@@ -1401,7 +1839,17 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 data_frame <- km_fit_df
                 for (i in seq_along(data_frame[, 1, drop = T])) {
-                    survTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                    # Map columns explicitly to match schema
+                    row_values <- list(
+                        strata = if ("strata" %in% names(data_frame)) data_frame$strata[i] else NA,
+                        time = if ("time" %in% names(data_frame)) data_frame$time[i] else NA,
+                        n.risk = if ("n.risk" %in% names(data_frame)) data_frame$`n.risk`[i] else NA,
+                        n.event = if ("n.event" %in% names(data_frame)) data_frame$`n.event`[i] else NA,
+                        surv = if ("surv" %in% names(data_frame)) data_frame$surv[i] else NA,
+                        lower = if ("lower" %in% names(data_frame)) data_frame$lower[i] else NA,
+                        upper = if ("upper" %in% names(data_frame)) data_frame$upper[i] else NA
+                    )
+                    survTable$addRow(rowKey = i, values = row_values)
                 }
 
 
@@ -1488,7 +1936,13 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         private$.checkpoint()  # Add checkpoint here
                     }
 
-                    pairwiseTable$addRow(rowKey = i, values = c(data_frame[i,]))
+                    # Map columns explicitly to match schema
+                    row_values <- list(
+                        rowname = if ("rowname" %in% names(data_frame)) data_frame$rowname[i] else NA,
+                        name = if ("name" %in% names(data_frame)) data_frame$name[i] else NA,
+                        value = if ("value" %in% names(data_frame)) data_frame$value[i] else NA
+                    )
+                    pairwiseTable$addRow(rowKey = i, values = row_values)
                 }
 
                 thefactor <-
@@ -1600,7 +2054,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                         # Add checkpoint for responsiveness
                         if (i %% 5 == 0) {
-                            private$.checkpoint(FALSE)
+                            private$.checkpoint()
                         }
 
                         # Filter data for this interval
@@ -2145,47 +2599,187 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 # Median Survival Explanation
                 private$.setExplanationContent("medianSurvivalExplanation", '
                 <div style="margin-bottom: 20px; padding: 15px; background-color: #e8f4f8; border-left: 4px solid #17a2b8;">
-                    <h4>Understanding Median Survival Analysis</h4>
-                    <p><strong>Median Survival Time:</strong> The time point at which 50% of patients have experienced the event (death, relapse, etc.).</p>
+                    <h4>📊 Understanding Your Median Survival Results</h4>
+                    <p><strong>What is Median Survival?</strong> The median survival time tells you when half of your study population experienced the event you are studying.</p>
+                    
+                    <h5>🔍 How to Read Your Results:</h5>
+                    <table style="width:100%; margin: 10px 0;">
+                        <tr style="background-color: #f8f9fa;">
+                            <td style="padding: 5px;"><strong>Records</strong></td>
+                            <td style="padding: 5px;">Total number of patients in your study group</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px;"><strong>Events</strong></td>
+                            <td style="padding: 5px;">Number of patients who experienced the outcome (e.g., death, recurrence)</td>
+                        </tr>
+                        <tr style="background-color: #f8f9fa;">
+                            <td style="padding: 5px;"><strong>Median</strong></td>
+                            <td style="padding: 5px;">The time when 50% of patients had the event</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px;"><strong>95% CI</strong></td>
+                            <td style="padding: 5px;">Range where we are 95% confident the true median lies</td>
+                        </tr>
+                        <tr style="background-color: #f8f9fa;">
+                            <td style="padding: 5px;"><strong>Not Reached (NR)</strong></td>
+                            <td style="padding: 5px;">Good news! Less than half the patients had the event</td>
+                        </tr>
+                    </table>
+                    
+                    <h5>💡 Practical Example:</h5>
+                    <p>If median survival = 24 months with 95% CI (18-30):</p>
                     <ul>
-                        <li><strong>Interpretation:</strong> If median survival is 24 months, half the patients survive longer than 24 months</li>
-                        <li><strong>Confidence Intervals:</strong> Provide uncertainty range around the median estimate</li>
-                        <li><strong>Not Reached (NR):</strong> Indicates that less than 50% of patients experienced the event during follow-up</li>
-                        <li><strong>Records vs Events:</strong> Records = total patients, Events = patients who experienced the outcome</li>
+                        <li>Half your patients survived longer than 24 months</li>
+                        <li>You can be 95% confident the true median is between 18 and 30 months</li>
+                        <li>This helps predict typical patient outcomes for treatment planning</li>
                     </ul>
-                    <p><em>Clinical significance:</em> Median survival is robust to outliers and provides an easily interpretable summary of survival experience.</p>
+                    
+                    <h5>⚠️ Important Notes:</h5>
+                    <ul>
+                        <li>Median is better than mean for survival data as it is not affected by extreme values</li>
+                        <li>Wide confidence intervals suggest more uncertainty (often due to small sample size)</li>
+                        <li>"Not Reached" is often a positive finding indicating good survival</li>
+                    </ul>
                 </div>
                 ')
                 
                 # Cox Regression Explanation
                 private$.setExplanationContent("coxRegressionExplanation", '
                 <div style="margin-bottom: 20px; padding: 15px; background-color: #fff3cd; border-left: 4px solid #ffc107;">
-                    <h4>Understanding Cox Regression Analysis</h4>
-                    <p><strong>Hazard Ratio (HR):</strong> Measures the relative risk of experiencing the event between groups.</p>
+                    <h4>⚖️ Understanding Your Cox Regression Results</h4>
+                    <p><strong>What is Cox Regression?</strong> This analysis compares the risk of experiencing an event between different groups, adjusting for time.</p>
+                    
+                    <h5>🎯 Key Metric: Hazard Ratio (HR)</h5>
+                    <p>The hazard ratio tells you how much more (or less) likely one group is to experience the event compared to another.</p>
+                    
+                    <table style="width:100%; margin: 10px 0; border-collapse: collapse;">
+                        <tr style="background-color: #f8f9fa;">
+                            <th style="padding: 8px; text-align: left;">HR Value</th>
+                            <th style="padding: 8px; text-align: left;">Meaning</th>
+                            <th style="padding: 8px; text-align: left;">Plain English</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border-top: 1px solid #dee2e6;"><strong>HR = 1.0</strong></td>
+                            <td style="padding: 8px; border-top: 1px solid #dee2e6;">No difference</td>
+                            <td style="padding: 8px; border-top: 1px solid #dee2e6;">Groups have equal risk</td>
+                        </tr>
+                        <tr style="background-color: #ffebee;">
+                            <td style="padding: 8px;"><strong>HR = 2.0</strong></td>
+                            <td style="padding: 8px;">Doubled risk</td>
+                            <td style="padding: 8px;">Group has 2× higher risk of event</td>
+                        </tr>
+                        <tr style="background-color: #e8f5e9;">
+                            <td style="padding: 8px;"><strong>HR = 0.5</strong></td>
+                            <td style="padding: 8px;">Halved risk</td>
+                            <td style="padding: 8px;">Group has 50% lower risk of event</td>
+                        </tr>
+                        <tr style="background-color: #ffebee;">
+                            <td style="padding: 8px;"><strong>HR = 3.0</strong></td>
+                            <td style="padding: 8px;">Tripled risk</td>
+                            <td style="padding: 8px;">Group has 3× higher risk of event</td>
+                        </tr>
+                        <tr style="background-color: #e8f5e9;">
+                            <td style="padding: 8px;"><strong>HR = 0.25</strong></td>
+                            <td style="padding: 8px;">Quarter risk</td>
+                            <td style="padding: 8px;">Group has 75% lower risk of event</td>
+                        </tr>
+                    </table>
+                    
+                    <h5>📈 Statistical Significance:</h5>
                     <ul>
-                        <li><strong>HR = 1:</strong> No difference in hazard between groups</li>
-                        <li><strong>HR > 1:</strong> Higher hazard (worse prognosis) in the comparison group</li>
-                        <li><strong>HR < 1:</strong> Lower hazard (better prognosis) in the comparison group</li>
-                        <li><strong>95% CI:</strong> If confidence interval includes 1, the difference is not statistically significant</li>
-                        <li><strong>P-value:</strong> Tests whether HR significantly differs from 1</li>
+                        <li><strong>P-value < 0.05:</strong> The difference is statistically significant (likely real, not due to chance)</li>
+                        <li><strong>95% CI includes 1.0:</strong> The difference is NOT statistically significant</li>
+                        <li><strong>95% CI excludes 1.0:</strong> The difference IS statistically significant</li>
                     </ul>
-                    <p><em>Example:</em> HR = 2.0 means the hazard is twice as high in the comparison group (twice the risk of event).</p>
+                    
+                    <h5>💊 Clinical Example:</h5>
+                    <p>If Treatment A vs Treatment B shows HR = 0.60 (95% CI: 0.40-0.85, p=0.004):</p>
+                    <ul style="background-color: #e8f5e9; padding: 10px; border-radius: 5px;">
+                        <li>Treatment A reduces risk by 40% compared to Treatment B</li>
+                        <li>The result is statistically significant (p < 0.05 and CI excludes 1.0)</li>
+                        <li>We can be 95% confident the true risk reduction is between 15% and 60%</li>
+                    </ul>
+                    
+                    <h5>⚠️ Important Considerations:</h5>
+                    <ul>
+                        <li>HR assumes proportional hazards (risk ratio stays constant over time)</li>
+                        <li>Wide confidence intervals suggest uncertainty (often from small sample size)</li>
+                        <li>Statistical significance does not always mean clinical importance</li>
+                    </ul>
                 </div>
                 ')
                 
                 # Survival Tables Explanation
                 private$.setExplanationContent("survivalTablesExplanation", '
                 <div style="margin-bottom: 20px; padding: 15px; background-color: #d4edda; border-left: 4px solid #28a745;">
-                    <h4>Understanding Survival Probability Tables</h4>
-                    <p><strong>Survival Probabilities:</strong> Estimated proportion of patients surviving at specific time points.</p>
+                    <h4>📋 Understanding Your Survival Probability Tables</h4>
+                    <p><strong>What are Survival Tables?</strong> These tables show the percentage of patients surviving at key time points, which are standard benchmarks in medical research.</p>
+                    
+                    <h5>📊 How to Read the Table Columns:</h5>
+                    <table style="width:100%; margin: 10px 0; border-collapse: collapse;">
+                        <tr style="background-color: #f8f9fa;">
+                            <th style="padding: 8px; text-align: left;">Column</th>
+                            <th style="padding: 8px; text-align: left;">What It Means</th>
+                            <th style="padding: 8px; text-align: left;">Example</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border-top: 1px solid #dee2e6;"><strong>Time</strong></td>
+                            <td style="padding: 8px; border-top: 1px solid #dee2e6;">Time point of measurement</td>
+                            <td style="padding: 8px; border-top: 1px solid #dee2e6;">12 months (1 year)</td>
+                        </tr>
+                        <tr style="background-color: #f8f9fa;">
+                            <td style="padding: 8px;"><strong>n.risk</strong></td>
+                            <td style="padding: 8px;">Patients still being followed</td>
+                            <td style="padding: 8px;">85 of 100 still in study</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>n.event</strong></td>
+                            <td style="padding: 8px;">Cumulative events occurred</td>
+                            <td style="padding: 8px;">15 events by this time</td>
+                        </tr>
+                        <tr style="background-color: #f8f9fa;">
+                            <td style="padding: 8px;"><strong>survival</strong></td>
+                            <td style="padding: 8px;">% surviving past this time</td>
+                            <td style="padding: 8px;">85% still event-free</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>95% CI</strong></td>
+                            <td style="padding: 8px;">Confidence range</td>
+                            <td style="padding: 8px;">True rate likely 78-92%</td>
+                        </tr>
+                    </table>
+                    
+                    <h5>🏥 Common Medical Benchmarks:</h5>
+                    <div style="background-color: #e3f2fd; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        <ul style="margin: 5px 0;">
+                            <li><strong>1-year survival:</strong> Short-term prognosis indicator</li>
+                            <li><strong>3-year survival:</strong> Medium-term outcome measure</li>
+                            <li><strong>5-year survival:</strong> Standard long-term benchmark (especially in cancer)</li>
+                            <li><strong>10-year survival:</strong> Very long-term outcomes (chronic diseases)</li>
+                        </ul>
+                    </div>
+                    
+                    <h5>💡 Practical Example:</h5>
+                    <p>If your table shows:</p>
+                    <table style="background-color: #f8f9fa; padding: 5px; margin: 10px 0;">
+                        <tr>
+                            <td>5-year survival = 72% (95% CI: 65-79%)</td>
+                        </tr>
+                    </table>
+                    <p>This means:</p>
                     <ul>
-                        <li><strong>Time:</strong> Specific time points (e.g., 12, 36, 60 months)</li>
-                        <li><strong>Number at Risk:</strong> Patients still under observation at that time point</li>
-                        <li><strong>Number of Events:</strong> Patients who experienced the outcome by that time</li>
-                        <li><strong>Survival %:</strong> Percentage of patients surviving past that time point</li>
-                        <li><strong>95% CI:</strong> Confidence interval for the survival estimate</li>
+                        <li>72% of patients are expected to survive beyond 5 years</li>
+                        <li>You can be 95% confident the true rate is between 65% and 79%</li>
+                        <li>This can be compared to published rates for similar populations</li>
                     </ul>
-                    <p><em>Clinical use:</em> These tables provide specific survival rates commonly reported in medical literature (1-year, 3-year, 5-year survival).</p>
+                    
+                    <h5>⚠️ Key Points to Remember:</h5>
+                    <ul>
+                        <li>Decreasing "n.risk" over time is normal (patients complete follow-up)</li>
+                        <li>Wider confidence intervals at later times reflect fewer patients at risk</li>
+                        <li>Compare your rates to established benchmarks in your field</li>
+                        <li>Consider both statistical and clinical significance</li>
+                    </ul>
                 </div>
                 ')
                 
@@ -2237,19 +2831,657 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 # Survival Plots Explanation
                 private$.setExplanationContent("survivalPlotsExplanation", '
                 <div style="margin-bottom: 20px; padding: 15px; background-color: #d1ecf1; border-left: 4px solid #bee5eb;">
-                    <h4>Understanding Survival Curves and Plots</h4>
-                    <p><strong>Survival Curves:</strong> Visual representation of survival probability over time.</p>
+                    <h4>📈 Understanding Your Survival Curves and Plots</h4>
+                    <p><strong>What are Survival Curves?</strong> These graphs show how the probability of survival changes over time for different groups.</p>
+                    
+                    <h5>🎨 Types of Plots Available:</h5>
+                    <table style="width:100%; margin: 10px 0; border-collapse: collapse;">
+                        <tr style="background-color: #f8f9fa;">
+                            <th style="padding: 8px; text-align: left;">Plot Type</th>
+                            <th style="padding: 8px; text-align: left;">What It Shows</th>
+                            <th style="padding: 8px; text-align: left;">When to Use</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border-top: 1px solid #dee2e6;"><strong>Survival Curve</strong></td>
+                            <td style="padding: 8px; border-top: 1px solid #dee2e6;">% surviving over time</td>
+                            <td style="padding: 8px; border-top: 1px solid #dee2e6;">Standard presentation</td>
+                        </tr>
+                        <tr style="background-color: #f8f9fa;">
+                            <td style="padding: 8px;"><strong>Cumulative Events</strong></td>
+                            <td style="padding: 8px;">% experiencing event</td>
+                            <td style="padding: 8px;">Focus on event occurrence</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Cumulative Hazard</strong></td>
+                            <td style="padding: 8px;">Accumulated risk</td>
+                            <td style="padding: 8px;">Technical assessment</td>
+                        </tr>
+                        <tr style="background-color: #f8f9fa;">
+                            <td style="padding: 8px;"><strong>Log-Log Plot</strong></td>
+                            <td style="padding: 8px;">Model assumptions</td>
+                            <td style="padding: 8px;">Check proportional hazards</td>
+                        </tr>
+                    </table>
+                    
+                    <h5>📖 How to Read Survival Curves:</h5>
+                    <div style="background-color: #fff3cd; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        <ul style="margin: 5px 0;">
+                            <li><strong>Y-axis (0-1 or 0-100%):</strong> Probability of survival</li>
+                            <li><strong>X-axis:</strong> Time since study start</li>
+                            <li><strong>Steps down:</strong> Each step represents an event</li>
+                            <li><strong>Tick marks (+):</strong> Censored patients (lost to follow-up)</li>
+                            <li><strong>Shaded areas:</strong> 95% confidence intervals</li>
+                        </ul>
+                    </div>
+                    
+                    <h5>🔍 What to Look For:</h5>
+                    <table style="width:100%; margin: 10px 0;">
+                        <tr>
+                            <td style="padding: 8px; background-color: #e8f5e9;"><strong>✓ Curves separate early</strong></td>
+                            <td style="padding: 8px;">Groups differ significantly</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; background-color: #ffebee;"><strong>✗ Curves overlap</strong></td>
+                            <td style="padding: 8px;">No significant difference</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; background-color: #e3f2fd;"><strong>↕ Curves cross</strong></td>
+                            <td style="padding: 8px;">Effect changes over time</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; background-color: #fff3cd;"><strong>⬇ Steep drop</strong></td>
+                            <td style="padding: 8px;">High early event rate</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; background-color: #f3e5f5;"><strong>→ Flat plateau</strong></td>
+                            <td style="padding: 8px;">Stable period (few events)</td>
+                        </tr>
+                    </table>
+                    
+                    <h5>📊 Risk Table (Below Plot):</h5>
+                    <p>Shows how many patients are still being followed at each time point:</p>
                     <ul>
-                        <li><strong>Survival Curves:</strong> Kaplan-Meier estimates showing probability of survival</li>
-                        <li><strong>Cumulative Events:</strong> Shows cumulative probability of experiencing the event</li>
-                        <li><strong>Cumulative Hazard:</strong> Displays cumulative hazard function over time</li>
-                        <li><strong>Log-Log Plot:</strong> Tests proportional hazards assumption (parallel lines expected)</li>
-                        <li><strong>Risk Tables:</strong> Show number of patients at risk at different time points</li>
-                        <li><strong>Confidence Bands:</strong> Indicate uncertainty around survival estimates</li>
+                        <li>Helps assess reliability of estimates</li>
+                        <li>Fewer patients = wider confidence intervals</li>
+                        <li>Important for interpreting late time points</li>
                     </ul>
-                    <p><em>Interpretation:</em> Curves that separate early suggest different survival experiences between groups.</p>
+                    
+                    <h5>💡 Clinical Interpretation Tips:</h5>
+                    <ul>
+                        <li><strong>Median survival:</strong> Where curve crosses 50% line</li>
+                        <li><strong>1-year survival:</strong> Height of curve at 12 months</li>
+                        <li><strong>Statistical significance:</strong> Check if confidence bands overlap</li>
+                        <li><strong>Clinical significance:</strong> Consider if differences are meaningful for patients</li>
+                    </ul>
                 </div>
                 ')
+                
+                # Parametric Models Explanation
+                private$.setExplanationContent("parametricModelsExplanation", '
+                <div style="margin-bottom: 20px; padding: 15px; background-color: #f8d7da; border-left: 4px solid #dc3545;">
+                    <h4>Understanding Parametric Survival Models</h4>
+                    <p><strong>Parametric Models:</strong> Alternative to Cox regression with explicit hazard function shapes.</p>
+                    <ul>
+                        <li><strong>Exponential:</strong> Constant hazard rate (memoryless property)</li>
+                        <li><strong>Weibull:</strong> Monotonic hazard (increasing, decreasing, or constant)</li>
+                        <li><strong>Log-Normal:</strong> Hazard increases then decreases</li>
+                        <li><strong>Log-Logistic:</strong> Similar to log-normal but with heavier tails</li>
+                        <li><strong>Gamma:</strong> Flexible hazard shape with gamma distribution</li>
+                        <li><strong>Splines:</strong> Flexible non-parametric hazard estimation</li>
+                    </ul>
+                    <p><em>Advantages:</em> Allow extrapolation, provide explicit survival functions, enable economic modeling.</p>
+                    <p><em>Model Selection:</em> Compare AIC/BIC values - lower is better. Visual fit assessment with Kaplan-Meier overlay.</p>
+                </div>
+                ')
+            }
+            
+            # Parametric Survival Analysis Methods ----
+            
+            ,
+            .parametricSurvival = function(results) {
+                
+                # Check if flexsurv package is available
+                if (!requireNamespace("flexsurv", quietly = TRUE)) {
+                    warning("flexsurv package is required for parametric survival models. Please install it: install.packages('flexsurv')")
+                    return()
+                }
+                
+                library(flexsurv)
+                
+                cleanData <- results$cleanData
+                
+                # Prepare formula for parametric models
+                if (self$options$parametric_covariates && !is.null(self$options$explanatory)) {
+                    explanatory_names <- self$options$explanatory
+                    # Build covariate formula
+                    covariate_formula <- paste(explanatory_names, collapse = " + ")
+                    formula_str <- paste("Surv(CalculatedTime, CalculatedOutcome) ~", covariate_formula)
+                } else {
+                    # Intercept-only model
+                    formula_str <- "Surv(CalculatedTime, CalculatedOutcome) ~ 1"
+                }
+                
+                survival_formula <- as.formula(formula_str)
+                
+                # List of distributions to compare if enabled
+                if (self$options$compare_distributions) {
+                    distributions <- c("exp", "weibull", "lnorm", "llogis", "gamma", "gengamma")
+                } else {
+                    distributions <- self$options$parametric_distribution
+                }
+                
+                # Fit parametric models
+                model_results <- list()
+                comparison_data <- data.frame()
+                
+                for (dist in distributions) {
+                    tryCatch({
+                        if (dist == "survspline") {
+                            # Fit spline model
+                            model <- flexsurvspline(
+                                formula = survival_formula,
+                                data = cleanData,
+                                k = self$options$spline_knots,
+                                scale = self$options$spline_scale
+                            )
+                        } else {
+                            # Fit standard parametric model
+                            model <- flexsurvreg(
+                                formula = survival_formula,
+                                data = cleanData,
+                                dist = dist
+                            )
+                        }
+                        
+                        model_results[[dist]] <- model
+                        
+                        # Extract model comparison metrics
+                        comparison_data <- rbind(comparison_data, data.frame(
+                            distribution = dist,
+                            aic = model$AIC,
+                            bic = model$AIC + (log(nrow(cleanData)) - 2) * model$npars,
+                            loglik = model$loglik,
+                            df = model$npars
+                        ))
+                        
+                    }, error = function(e) {
+                        message(paste("Failed to fit", dist, "distribution:", e$message))
+                    })
+                }
+                
+                # Select best model if comparing multiple distributions
+                if (self$options$compare_distributions && nrow(comparison_data) > 1) {
+                    best_model_name <- comparison_data$distribution[which.min(comparison_data$aic)]
+                    best_model <- model_results[[best_model_name]]
+                    
+                    # Populate comparison table
+                    comparison_table <- self$results$parametricModelComparison
+                    for (i in 1:nrow(comparison_data)) {
+                        comparison_table$addRow(rowKey = i, values = list(
+                            distribution = comparison_data$distribution[i],
+                            aic = comparison_data$aic[i],
+                            bic = comparison_data$bic[i],
+                            loglik = comparison_data$loglik[i],
+                            df = comparison_data$df[i]
+                        ))
+                    }
+                } else {
+                    # Use single specified model
+                    best_model_name <- distributions[1]
+                    best_model <- model_results[[best_model_name]]
+                }
+                
+                # Populate model summary table
+                if (!is.null(best_model)) {
+                    summary_data <- summary(best_model)
+                    coef_table <- summary_data$coefficients
+                    
+                    model_table <- self$results$parametricModelSummary
+                    for (i in 1:nrow(coef_table)) {
+                        model_table$addRow(rowKey = i, values = list(
+                            parameter = rownames(coef_table)[i],
+                            estimate = coef_table[i, "est"],
+                            se = coef_table[i, "se"],
+                            ci_lower = coef_table[i, "L95%"],
+                            ci_upper = coef_table[i, "U95%"],
+                            pvalue = coef_table[i, "p"]
+                        ))
+                    }
+                    
+                    # Generate diagnostics
+                    if (self$options$parametric_diagnostics) {
+                        diagnostics_html <- private$.generateParametricDiagnostics(best_model, best_model_name)
+                        self$results$parametricDiagnostics$setContent(diagnostics_html)
+                    }
+                    
+                    # Store model for plotting functions
+                    private$.parametric_model <- best_model
+                    private$.parametric_model_name <- best_model_name
+                    private$.parametric_results <- results
+                }
+            }
+            
+            ,
+            .generateParametricDiagnostics = function(model, model_name) {
+                
+                diagnostics <- ""
+                
+                tryCatch({
+                    # Model fit statistics
+                    aic_val <- model$AIC
+                    loglik_val <- model$loglik
+                    npars <- model$npars
+                    n_obs <- model$N
+                    
+                    diagnostics <- paste0(
+                        '<div style="margin-bottom: 20px; padding: 15px; background-color: #f8f9fa; border: 1px solid #dee2e6;">',
+                        '<h4>Parametric Model Diagnostics: ', toupper(model_name), '</h4>',
+                        '<table class="table table-striped" style="margin-bottom: 15px;">',
+                        '<tr><td><strong>Distribution:</strong></td><td>', model_name, '</td></tr>',
+                        '<tr><td><strong>Sample Size:</strong></td><td>', n_obs, '</td></tr>',
+                        '<tr><td><strong>Parameters:</strong></td><td>', npars, '</td></tr>',
+                        '<tr><td><strong>Log-likelihood:</strong></td><td>', round(loglik_val, 3), '</td></tr>',
+                        '<tr><td><strong>AIC:</strong></td><td>', round(aic_val, 3), '</td></tr>',
+                        '</table>'
+                    )
+                    
+                    # Add interpretation
+                    if (model_name == "weibull") {
+                        shape_param <- model$res[["shape", "est"]]
+                        if (shape_param < 1) {
+                            hazard_trend <- "decreasing over time (shape < 1)"
+                        } else if (shape_param > 1) {
+                            hazard_trend <- "increasing over time (shape > 1)"  
+                        } else {
+                            hazard_trend <- "constant over time (shape = 1, equivalent to exponential)"
+                        }
+                        diagnostics <- paste0(diagnostics,
+                            '<p><strong>Hazard Pattern:</strong> ', hazard_trend, '</p>'
+                        )
+                    }
+                    
+                    diagnostics <- paste0(diagnostics, '</div>')
+                    
+                }, error = function(e) {
+                    diagnostics <- paste0('<p>Error generating diagnostics: ', e$message, '</p>')
+                })
+                
+                return(diagnostics)
+            }
+            
+            # Parametric survival plot functions ----
+            
+            ,
+            .plotParametricSurvival = function(image, ...) {
+                
+                if (is.null(private$.parametric_model)) {
+                    return()
+                }
+                
+                model <- private$.parametric_model
+                results <- private$.parametric_results
+                cleanData <- results$cleanData
+                
+                library(ggplot2)
+                library(survival)
+                
+                # Generate survival curves from parametric model
+                max_time <- max(cleanData$CalculatedTime, na.rm = TRUE)
+                time_points <- seq(0, max_time, length.out = 100)
+                
+                # Get survival predictions
+                if (!is.null(self$options$explanatory) && self$options$parametric_covariates) {
+                    # Create prediction data for each group
+                    groups <- levels(cleanData[[self$options$explanatory]])
+                    plot_data <- data.frame()
+                    
+                    for (group in groups) {
+                        pred_data <- data.frame(
+                            time = time_points
+                        )
+                        pred_data[[self$options$explanatory]] <- group
+                        
+                        surv_pred <- summary(model, newdata = pred_data, t = time_points, ci = TRUE)
+                        
+                        group_data <- data.frame(
+                            time = time_points,
+                            survival = surv_pred$surv,
+                            lower = surv_pred$lcl,
+                            upper = surv_pred$ucl,
+                            group = group,
+                            type = "Parametric"
+                        )
+                        plot_data <- rbind(plot_data, group_data)
+                    }
+                    
+                    # Add Kaplan-Meier for comparison
+                    km_fit <- survfit(Surv(CalculatedTime, CalculatedOutcome) ~ get(self$options$explanatory), 
+                                     data = cleanData)
+                    km_summary <- summary(km_fit, times = time_points)
+                    
+                    if (length(groups) > 1) {
+                        for (i in 1:length(groups)) {
+                            group_indices <- km_summary$strata == paste0("get(self$options$explanatory)=", groups[i])
+                            if (any(group_indices)) {
+                                km_data <- data.frame(
+                                    time = km_summary$time[group_indices],
+                                    survival = km_summary$surv[group_indices],
+                                    lower = km_summary$lower[group_indices],
+                                    upper = km_summary$upper[group_indices],
+                                    group = groups[i],
+                                    type = "Kaplan-Meier"
+                                )
+                                plot_data <- rbind(plot_data, km_data)
+                            }
+                        }
+                    }
+                    
+                    # Create plot
+                    p <- ggplot(plot_data, aes(x = time, y = survival, color = group, linetype = type)) +
+                        geom_line(size = 1) +
+                        geom_ribbon(aes(ymin = lower, ymax = upper, fill = group), alpha = 0.2, color = NA) +
+                        labs(
+                            title = paste("Parametric Survival Curves:", private$.parametric_model_name),
+                            x = "Time",
+                            y = "Survival Probability",
+                            color = self$options$explanatory,
+                            linetype = "Method"
+                        ) +
+                        theme_minimal() +
+                        scale_y_continuous(limits = c(0, 1))
+                        
+                } else {
+                    # Single survival curve
+                    surv_pred <- summary(model, t = time_points, ci = TRUE)
+                    
+                    plot_data <- data.frame(
+                        time = time_points,
+                        survival = surv_pred$surv,
+                        lower = surv_pred$lcl,
+                        upper = surv_pred$ucl,
+                        type = "Parametric"
+                    )
+                    
+                    # Add Kaplan-Meier
+                    km_fit <- survfit(Surv(CalculatedTime, CalculatedOutcome) ~ 1, data = cleanData)
+                    km_summary <- summary(km_fit, times = time_points)
+                    
+                    km_data <- data.frame(
+                        time = km_summary$time,
+                        survival = km_summary$surv,
+                        lower = km_summary$lower,
+                        upper = km_summary$upper,
+                        type = "Kaplan-Meier"
+                    )
+                    
+                    plot_data <- rbind(plot_data, km_data)
+                    
+                    p <- ggplot(plot_data, aes(x = time, y = survival, linetype = type)) +
+                        geom_line(size = 1, color = "blue") +
+                        geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2, color = NA, fill = "blue") +
+                        labs(
+                            title = paste("Parametric vs Kaplan-Meier Survival:", private$.parametric_model_name),
+                            x = "Time", 
+                            y = "Survival Probability",
+                            linetype = "Method"
+                        ) +
+                        theme_minimal() +
+                        scale_y_continuous(limits = c(0, 1))
+                }
+                
+                print(p)
+                TRUE
+            }
+            
+            ,
+            .plotHazardFunction = function(image, ...) {
+                
+                if (is.null(private$.parametric_model)) {
+                    return()
+                }
+                
+                model <- private$.parametric_model
+                results <- private$.parametric_results
+                cleanData <- results$cleanData
+                
+                library(ggplot2)
+                
+                max_time <- max(cleanData$CalculatedTime, na.rm = TRUE)
+                time_points <- seq(0.1, max_time, length.out = 100)  # Start from 0.1 to avoid issues at t=0
+                
+                tryCatch({
+                    # Get hazard predictions
+                    if (!is.null(self$options$explanatory) && self$options$parametric_covariates) {
+                        groups <- levels(cleanData[[self$options$explanatory]])
+                        plot_data <- data.frame()
+                        
+                        for (group in groups) {
+                            pred_data <- data.frame(
+                                time = time_points
+                            )
+                            pred_data[[self$options$explanatory]] <- group
+                            
+                            hazard_pred <- summary(model, newdata = pred_data, t = time_points, 
+                                                  type = "hazard", ci = TRUE)
+                            
+                            group_data <- data.frame(
+                                time = time_points,
+                                hazard = hazard_pred$est,
+                                lower = hazard_pred$lcl,
+                                upper = hazard_pred$ucl,
+                                group = group
+                            )
+                            plot_data <- rbind(plot_data, group_data)
+                        }
+                        
+                        p <- ggplot(plot_data, aes(x = time, y = hazard, color = group)) +
+                            geom_line(size = 1) +
+                            geom_ribbon(aes(ymin = lower, ymax = upper, fill = group), alpha = 0.2, color = NA) +
+                            labs(
+                                title = paste("Hazard Function:", private$.parametric_model_name),
+                                x = "Time",
+                                y = "Hazard Rate",
+                                color = self$options$explanatory
+                            ) +
+                            theme_minimal()
+                            
+                    } else {
+                        hazard_pred <- summary(model, t = time_points, type = "hazard", ci = TRUE)
+                        
+                        plot_data <- data.frame(
+                            time = time_points,
+                            hazard = hazard_pred$est,
+                            lower = hazard_pred$lcl,
+                            upper = hazard_pred$ucl
+                        )
+                        
+                        p <- ggplot(plot_data, aes(x = time, y = hazard)) +
+                            geom_line(size = 1, color = "red") +
+                            geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2, color = NA, fill = "red") +
+                            labs(
+                                title = paste("Hazard Function:", private$.parametric_model_name),
+                                x = "Time",
+                                y = "Hazard Rate"
+                            ) +
+                            theme_minimal()
+                    }
+                    
+                    print(p)
+                    
+                }, error = function(e) {
+                    # Fallback simple plot if hazard estimation fails
+                    p <- ggplot() +
+                        annotate("text", x = 0.5, y = 0.5, 
+                                label = paste("Hazard plot unavailable for", private$.parametric_model_name),
+                                size = 4) +
+                        theme_void()
+                    print(p)
+                })
+                
+                TRUE
+            }
+            
+            ,
+            .plotExtrapolation = function(image, ...) {
+                
+                if (is.null(private$.parametric_model)) {
+                    return()
+                }
+                
+                model <- private$.parametric_model
+                results <- private$.parametric_results
+                cleanData <- results$cleanData
+                
+                library(ggplot2)
+                library(survival)
+                
+                max_observed_time <- max(cleanData$CalculatedTime, na.rm = TRUE)
+                
+                # Set extrapolation time horizon
+                if (self$options$extrapolation_time > 0) {
+                    max_extrap_time <- self$options$extrapolation_time
+                } else {
+                    max_extrap_time <- 2 * max_observed_time  # Default: 2x observed time
+                }
+                
+                # Time points for observed period
+                observed_times <- seq(0, max_observed_time, length.out = 50)
+                # Time points for extrapolation period
+                extrap_times <- seq(max_observed_time, max_extrap_time, length.out = 50)
+                all_times <- c(observed_times, extrap_times)
+                
+                if (!is.null(self$options$explanatory) && self$options$parametric_covariates) {
+                    groups <- levels(cleanData[[self$options$explanatory]])
+                    plot_data <- data.frame()
+                    extrap_data <- data.frame()
+                    
+                    for (group in groups) {
+                        # Observed period predictions
+                        pred_data_obs <- data.frame(time = observed_times)
+                        pred_data_obs[[self$options$explanatory]] <- group
+                        surv_pred_obs <- summary(model, newdata = pred_data_obs, t = observed_times, ci = TRUE)
+                        
+                        obs_data <- data.frame(
+                            time = observed_times,
+                            survival = surv_pred_obs$surv,
+                            lower = surv_pred_obs$lcl,
+                            upper = surv_pred_obs$ucl,
+                            group = group,
+                            period = "Observed"
+                        )
+                        
+                        # Extrapolation period predictions
+                        pred_data_ext <- data.frame(time = extrap_times)
+                        pred_data_ext[[self$options$explanatory]] <- group
+                        surv_pred_ext <- summary(model, newdata = pred_data_ext, t = extrap_times, ci = TRUE)
+                        
+                        ext_data <- data.frame(
+                            time = extrap_times,
+                            survival = surv_pred_ext$surv,
+                            lower = surv_pred_ext$lcl,
+                            upper = surv_pred_ext$ucl,
+                            group = group,
+                            period = "Extrapolated"
+                        )
+                        
+                        plot_data <- rbind(plot_data, obs_data, ext_data)
+                        
+                        # Store extrapolation table data
+                        extrap_table_times <- seq(max_observed_time, max_extrap_time, length.out = 10)
+                        pred_data_table <- data.frame(time = extrap_table_times)
+                        pred_data_table[[self$options$explanatory]] <- group
+                        surv_pred_table <- summary(model, newdata = pred_data_table, t = extrap_table_times, ci = TRUE)
+                        
+                        group_extrap <- data.frame(
+                            time = extrap_table_times,
+                            survival = surv_pred_table$surv,
+                            ci_lower = surv_pred_table$lcl,
+                            ci_upper = surv_pred_table$ucl,
+                            group = group
+                        )
+                        extrap_data <- rbind(extrap_data, group_extrap)
+                    }
+                    
+                    p <- ggplot(plot_data, aes(x = time, y = survival, color = group)) +
+                        geom_line(aes(linetype = period), size = 1) +
+                        geom_ribbon(aes(ymin = lower, ymax = upper, fill = group), alpha = 0.2, color = NA) +
+                        geom_vline(xintercept = max_observed_time, linetype = "dashed", color = "gray") +
+                        annotate("text", x = max_observed_time, y = 0.9, 
+                                label = "End of observed data", angle = 90, vjust = -0.5) +
+                        labs(
+                            title = paste("Survival Extrapolation:", private$.parametric_model_name),
+                            x = "Time",
+                            y = "Survival Probability",
+                            color = self$options$explanatory,
+                            linetype = "Period"
+                        ) +
+                        theme_minimal() +
+                        scale_y_continuous(limits = c(0, 1))
+                        
+                } else {
+                    # Single curve extrapolation
+                    surv_pred_obs <- summary(model, t = observed_times, ci = TRUE)
+                    surv_pred_ext <- summary(model, t = extrap_times, ci = TRUE)
+                    
+                    obs_data <- data.frame(
+                        time = observed_times,
+                        survival = surv_pred_obs$surv,
+                        lower = surv_pred_obs$lcl,
+                        upper = surv_pred_obs$ucl,
+                        period = "Observed"
+                    )
+                    
+                    ext_data <- data.frame(
+                        time = extrap_times,
+                        survival = surv_pred_ext$surv,
+                        lower = surv_pred_ext$lcl,
+                        upper = surv_pred_ext$ucl,
+                        period = "Extrapolated"
+                    )
+                    
+                    plot_data <- rbind(obs_data, ext_data)
+                    
+                    p <- ggplot(plot_data, aes(x = time, y = survival, linetype = period)) +
+                        geom_line(size = 1, color = "blue") +
+                        geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2, color = NA, fill = "blue") +
+                        geom_vline(xintercept = max_observed_time, linetype = "dashed", color = "gray") +
+                        annotate("text", x = max_observed_time, y = 0.9, 
+                                label = "End of observed data", angle = 90, vjust = -0.5) +
+                        labs(
+                            title = paste("Survival Extrapolation:", private$.parametric_model_name),
+                            x = "Time",
+                            y = "Survival Probability",
+                            linetype = "Period"
+                        ) +
+                        theme_minimal() +
+                        scale_y_continuous(limits = c(0, 1))
+                        
+                    # Store extrapolation table data for single curve
+                    extrap_table_times <- seq(max_observed_time, max_extrap_time, length.out = 10)
+                    surv_pred_table <- summary(model, t = extrap_table_times, ci = TRUE)
+                    
+                    extrap_data <- data.frame(
+                        time = extrap_table_times,
+                        survival = surv_pred_table$surv,
+                        ci_lower = surv_pred_table$lcl,
+                        ci_upper = surv_pred_table$ucl
+                    )
+                }
+                
+                # Populate extrapolation table
+                extrap_table <- self$results$extrapolationTable
+                for (i in 1:nrow(extrap_data)) {
+                    row_data <- list(
+                        time = extrap_data$time[i],
+                        survival = extrap_data$survival[i],
+                        ci_lower = extrap_data$ci_lower[i],
+                        ci_upper = extrap_data$ci_upper[i]
+                    )
+                    extrap_table$addRow(rowKey = i, values = row_data)
+                }
+                
+                print(p)
+                TRUE
             }
 
         )

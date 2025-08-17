@@ -38,7 +38,7 @@ survival(
   ci95 = FALSE,
   risktable = FALSE,
   censored = FALSE,
-  pplot = TRUE,
+  pplot = FALSE,
   medianline = "none",
   person_time = FALSE,
   time_intervals = "12, 36, 60",
@@ -49,7 +49,19 @@ survival(
   strata_variable,
   residual_diagnostics = FALSE,
   loglog = FALSE,
-  showExplanations = FALSE
+  showExplanations = FALSE,
+  showSummaries = FALSE,
+  use_parametric = FALSE,
+  parametric_distribution = "weibull",
+  parametric_covariates = TRUE,
+  spline_knots = 3,
+  spline_scale = "hazard",
+  parametric_extrapolation = FALSE,
+  extrapolation_time = 0,
+  parametric_diagnostics = TRUE,
+  compare_distributions = FALSE,
+  parametric_survival_plots = FALSE,
+  hazard_plots = FALSE
 )
 }
 \arguments{
@@ -175,45 +187,112 @@ hazards.}
 
 \item{showExplanations}{Display detailed explanations for each analysis
 component to help interpret the statistical methods and results.}
+
+\item{showSummaries}{Display natural language summaries alongside tables
+and plots. These summaries provide plain-language interpretations of the
+statistical results. Turn off to reduce visual clutter when summaries are
+not needed.}
+
+\item{use_parametric}{Enable parametric survival modeling using flexsurv
+package. Provides alternative to Cox regression with explicit hazard
+functions and extrapolation capabilities beyond observed follow-up.}
+
+\item{parametric_distribution}{Choose parametric distribution for survival
+modeling. Weibull is most common, while splines provide flexible hazard
+shapes. Different distributions make different assumptions about hazard
+function shape.}
+
+\item{parametric_covariates}{Include explanatory variables as covariates in
+parametric models, similar to Cox regression but with parametric baseline
+hazard.}
+
+\item{spline_knots}{Number of knots for spline-based models. More knots
+allow more flexible hazard shapes but may lead to overfitting. Used only
+for Royston-Parmar splines.}
+
+\item{spline_scale}{Scale for spline-based models. Hazard scale models log
+hazard function, odds scale models log cumulative odds, normal scale models
+normal scores.}
+
+\item{parametric_extrapolation}{Perform survival extrapolation beyond
+observed follow-up time using fitted parametric models. Useful for health
+economic modeling and long-term prognosis assessment.}
+
+\item{extrapolation_time}{Maximum time for survival extrapolation (in same
+units as survival time). If 0, uses 2x maximum observed time. Use with
+caution as extrapolation relies on distributional assumptions.}
+
+\item{parametric_diagnostics}{Display model diagnostics including AIC/BIC
+for model comparison, residual plots, and goodness-of-fit statistics for
+parametric models.}
+
+\item{compare_distributions}{Fit and compare multiple parametric
+distributions using AIC/BIC criteria. Helps select the best-fitting
+distribution for your data.}
+
+\item{parametric_survival_plots}{Generate survival curves from fitted
+parametric models with confidence intervals. Compare with Kaplan-Meier
+estimates for model validation.}
+
+\item{hazard_plots}{Plot estimated hazard functions from parametric models.
+Shows how instantaneous risk changes over time for different distributions.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
 \code{results$subtitle} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$todo} \tab \tab \tab \tab \tab a html \cr
-\code{results$medianSurvivalExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$medianSurvivalHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$medianSummary} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
-\code{results$coxRegressionExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$medianSurvivalHeading3} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$medianSurvivalExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$coxRegressionHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$coxSummary} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$coxTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$tCoxtext2} \tab \tab \tab \tab \tab a html \cr
+\code{results$coxRegressionHeading3} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$coxRegressionExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
-\code{results$survivalTablesExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$survivalTablesHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$survTableSummary} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$survTable} \tab \tab \tab \tab \tab a table \cr
-\code{results$personTimeExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$survivalTablesHeading3} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$survivalTablesExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$personTimeHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$personTimeTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$personTimeSummary} \tab \tab \tab \tab \tab a html \cr
-\code{results$rmstExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$personTimeExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$rmstHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$rmstTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$rmstSummary} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$rmstExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$residualDiagnosticsExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$residualsTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$survivalExport} \tab \tab \tab \tab \tab an output \cr
 \code{results$survivalExportSummary} \tab \tab \tab \tab \tab a html \cr
-\code{results$pairwiseSummary} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$pairwiseComparisonHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$pairwiseTable} \tab \tab \tab \tab \tab a table \cr
-\code{results$survivalPlotsExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$pairwiseSummary} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot6} \tab \tab \tab \tab \tab an image \cr
+\code{results$survivalPlotsHeading3} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$survivalPlotsExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot7} \tab \tab \tab \tab \tab an image \cr
 \code{results$residualsPlot} \tab \tab \tab \tab \tab an image \cr
 \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
 \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
+\code{results$parametricModelComparison} \tab \tab \tab \tab \tab a table \cr
+\code{results$parametricModelSummary} \tab \tab \tab \tab \tab a table \cr
+\code{results$parametricDiagnostics} \tab \tab \tab \tab \tab a html \cr
+\code{results$parametricSurvivalPlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$hazardFunctionPlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$extrapolationPlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$extrapolationTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$parametricModelsExplanation} \tab \tab \tab \tab \tab a html \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
