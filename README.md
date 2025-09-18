@@ -113,11 +113,11 @@ result$run()
 
 ## 📝 Citation
 
-If you use jsurvival in your research, please cite:
+If you use jsurvival in your research, please cite the main ClinicoPath project:
 
 ```
-Balci, S. (2025). jsurvival: Survival Module of ClinicoPath for jamovi. 
-R package version 0.0.3.90. https://github.com/sbalci/jsurvival
+Serdar Balci (2025). ClinicoPath jamovi Module. doi:10.5281/zenodo.3997188
+[R package]. Retrieved from https://github.com/sbalci/ClinicoPathJamoviModule
 ```
 
 ## 🤝 Contributing
