@@ -73,6 +73,18 @@ items:
 
 
 
+    - name:  clinicalSummary
+      title: 'Clinical Summary (Copy-Ready for Reports)'
+      type:  Html
+      visible: (showSummaries)
+      # visible: (guided_mode || showSummaries)
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - elapsedtime
+          - clinical_preset
+          - guided_mode
+
     - name:  medianSummary
       title: Median Survival Analysis Natural Language Summary
       type:  Preformatted
@@ -586,6 +598,7 @@ refs:
     - ClinicoPathJamoviModule
     - survivaltutorial
     - survivalrwnahhas
+
 
 
 ...
