@@ -23,9 +23,10 @@
 ### Clinical Research Features
 - **Natural Language Summaries**: Automated generation of plain-English interpretations of results
 - **Clinical Trial Metrics**: 1-, 3-, and 5-year survival rates with confidence intervals
-- **Stage Migration Analysis**: Evaluate the Will Rogers phenomenon in cancer staging
+- **Stage Migration Analysis**: Evaluate the Will Rogers phenomenon in cancer staging with advanced TNM staging validation
 - **Treatment Pathway Visualization**: Alluvial plots for treatment sequences over time
 - **Subgroup Forest Plots**: Systematic evaluation of treatment effects across patient subgroups
+- **Educational Explanations**: Built-in HTML explanations for key analysis concepts and methods
 
 ### Advanced Statistical Methods
 - **Restricted Mean Survival Time (RMST)**: Alternative to median survival for skewed distributions
@@ -36,6 +37,8 @@
 
 ### User Experience Enhancements
 - **Intuitive GUI**: Point-and-click interface within jamovi, no coding required
+- **Clinical Analysis Presets**: Pre-configured settings for common study types (overall survival, disease-free survival, treatment effectiveness, post-surgical outcomes)
+- **Guided Setup Mode**: Step-by-step guidance for users new to survival analysis
 - **Smart Defaults**: Evidence-based default settings for common analyses
 - **Educational Tooltips**: Context-sensitive help explaining statistical concepts
 - **Export Options**: Publication-ready tables and figures in multiple formats
@@ -45,14 +48,12 @@
 
 | Module | Description | Key Features |
 |--------|-------------|--------------|
-| **Single Arm Survival** | Analyze survival in a single cohort | Overall survival rates, median survival, person-time calculations |
-| **Survival Analysis** | Compare survival between groups | Log-rank test, Cox regression, stratified analysis |
-| **Continuous Survival** | Analyze continuous predictors | Optimal cut-point detection, tertile/quartile analysis |
-| **Multivariable Survival** | Adjust for multiple factors | Stepwise selection, interaction terms, adjusted curves |
-| **Odds Ratio Analysis** | Binary outcome analysis | 2x2 tables, forest plots, Mantel-Haenszel methods |
-| **Time Interval Calculator** | Data preparation utility | Calculate follow-up times, handle date formats |
-| **Stage Migration** | Will Rogers phenomenon | Stage-specific survival, migration matrices |
-| **Competing Risks** | Multiple event types | Cumulative incidence functions, Fine-Gray models |
+| **Single Arm Survival** | Analyze survival in a single cohort | Clinical presets, guided mode, overall survival rates, median survival, person-time calculations |
+| **Survival Analysis** | Compare survival between groups | Educational explanations, log-rank test, Cox regression, stratified analysis |
+| **Continuous Survival** | Analyze continuous predictors | Educational explanations, optimal cut-point detection, tertile/quartile analysis |
+| **Multivariable Survival** | Adjust for multiple factors | Educational explanations, stepwise selection, interaction terms, adjusted curves |
+| **Odds Ratio Analysis** | Binary outcome analysis | Educational explanations, 2x2 tables, forest plots, Mantel-Haenszel methods |
+| **Stage Migration** | Will Rogers phenomenon | Advanced TNM staging, stage-specific survival, migration matrices, trend analysis |
 
 ## 🚀 Installation
 

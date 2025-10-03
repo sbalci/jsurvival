@@ -1,12 +1,12 @@
 ---
 title: Survival Module of ClinicoPath for jamovi
 name: jsurvival
-version: 0.0.31.72
+version: 0.0.31.84
 jms: '1.0'
 authors:
   - Serdar Balci
 maintainer: Serdar Balci <serdarbalci@serdarbalci.com>
-date: '2025-09-21'
+date: '2025-10-03'
 type: R
 description: >-
   Survival Module of ClinicoPath for jamovi ClinicoPath help researchers to
@@ -86,6 +86,20 @@ analyses:
     menuSubtitle: Odds Ratio for Binary Outcomes
     ribbon: analyses
     category: analyses
+  - title: DateTime Converter
+    name: datetimeconverter
+    ns: jsurvival
+    category: analyses
+    menuGroup: Survival
+    menuSubgroup: Data Preparation
+    menuTitle: DateTime Converter
+    menuSubtitle: Convert datetime and extract components
+    description: >-
+      Convert datetime variables to standardized format and extract datetime
+      components (year, month, day, hour, minute, day name, week number,
+      quarter, etc.). Features automatic format detection, quality assessment,
+      and preview of converted data. Perfect for preparing datetime data for
+      analysis and creating time-based variables.
 datasets:
   - name: histopathology including analysis
     path: histopathologySurvival.omv
