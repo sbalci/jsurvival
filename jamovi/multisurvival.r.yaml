@@ -12,14 +12,14 @@ items:
       clearWith:
           - outcome
           - outcomeLevel
-          - overalltime
+          - elapsedtime
           - explanatory
           - contexpl
           - fudate
           - dxdate
           - tint
           - multievent
-          - use_modelSelection
+          # - use_modelSelection
 
     # - name:  mydataview
     #   title: mydataview
@@ -29,6 +29,11 @@ items:
     #   title: mydataview_cox
     #   type:  Preformatted
 
+    - name:  multivariableCoxHeading
+      title: Multivariable Cox Regression
+      type:  Preformatted
+      
+
     - name:  text
       title: Multivariable Survival
       type:  Html
@@ -36,14 +41,14 @@ items:
       clearWith:
           - outcome
           - outcomeLevel
-          - overalltime
+          - elapsedtime
           - explanatory
           - contexpl
           - fudate
           - dxdate
           - tint
           - multievent
-          - use_modelSelection
+          # - use_modelSelection
       
 
     - name:  text2
@@ -53,14 +58,35 @@ items:
       clearWith:
           - outcome
           - outcomeLevel
-          - overalltime
+          - elapsedtime
           - explanatory
           - contexpl
           - fudate
           - dxdate
           - tint
           - multievent
-          - use_modelSelection
+          # - use_modelSelection
+
+    # Multivariable Cox Summary (right after main analysis)
+    - name: multivariableCoxSummaryHeading
+      title: 'Natural Language Summary'
+      type: Preformatted
+      visible: (showSummaries)
+
+    - name: multivariableCoxSummary
+      title: ''
+      type: Html
+      visible: (showSummaries)
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - elapsedtime
+          - explanatory
+          - contexpl
+          - fudate
+          - dxdate
+          - tint
+          - multievent
       
 
 
@@ -69,6 +95,12 @@ items:
     # - name:  mydataview_personTimeAnalysis
     #   title: mydataview_personTimeAnalysis
     #   type:  Preformatted
+
+    - name:  personTimeHeading
+      title: Person-Time Analysis
+      type:  Preformatted
+      visible: (person_time)
+      
 
     - name: personTimeTable
       title: 'Person-Time Analysis'
@@ -109,18 +141,24 @@ items:
         - person_time
         - outcome
         - outcomeLevel
-        - overalltime
+        - elapsedtime
         - fudate
         - dxdate
         - tint
         - multievent
-        - use_modelSelection
+        # - use_modelSelection
         - person_time
 
+    # Person-Time Summary (right after person-time analysis)
+    - name: personTimeSummaryHeading
+      title: 'Person-Time Natural Language Summary'
+      type: Preformatted
+      visible: (person_time && showSummaries)
+
     - name: personTimeSummary
-      title: 'Person-Time Summary'
+      title: ''
       type: Html
-      visible: (person_time)
+      visible: (person_time && showSummaries)
       clearWith:
         - outcome
         - outcomeLevel
@@ -130,18 +168,24 @@ items:
         - person_time
         - outcome
         - outcomeLevel
-        - overalltime
+        - elapsedtime
         - fudate
         - dxdate
         - tint
         - multievent
-        - use_modelSelection
+        # - use_modelSelection
         - person_time
 
 
 
 
 
+
+    # Survival Plots Section
+    - name: survivalPlotsHeading
+      title: 'Survival Plots'
+      type: Preformatted
+      visible: (hr || km || ac)
 
     - name: plot
       title: Hazards Regression Plot
@@ -157,14 +201,14 @@ items:
           - sty
           - outcome
           - outcomeLevel
-          - overalltime
+          - elapsedtime
           - explanatory
           - contexpl
           - fudate
           - dxdate
           - tint
           - multievent
-          - use_modelSelection
+          # - use_modelSelection
 
 
 
@@ -178,7 +222,7 @@ items:
     #   clearWith:
     #       - explanatory
     #       - outcome
-    #       - overalltime
+    #       - elapsedtime
     #   visible: (sty:t2)
     #   refs: ggstatsplot
       # clearWith:
@@ -200,14 +244,14 @@ items:
           - sty
           - outcome
           - outcomeLevel
-          - overalltime
+          - elapsedtime
           - explanatory
           - contexpl
           - fudate
           - dxdate
           - tint
           - multievent
-          - use_modelSelection
+          # - use_modelSelection
 
 
     - name: cox_ph
@@ -218,13 +262,13 @@ items:
           - explanatory
           - outcome
           - outcomeLevel
-          - overalltime
+          - elapsedtime
           - fudate
           - dxdate
           - tint
           - multievent
           - contexpl
-          - use_modelSelection
+          # - use_modelSelection
 
 
     - name: plot8
@@ -242,13 +286,13 @@ items:
           - explanatory
           - outcome
           - outcomeLevel
-          - overalltime
+          - elapsedtime
           - fudate
           - dxdate
           - tint
           - multievent
           - contexpl
-          - use_modelSelection
+          # - use_modelSelection
 
 
 
@@ -292,7 +336,7 @@ items:
           - risktable
           - outcome
           - outcomeLevel
-          - overalltime
+          - elapsedtime
           - explanatory
           - contexpl
           - fudate
@@ -303,7 +347,7 @@ items:
           - pplot
           - censored
           - medianline
-          - use_modelSelection
+          # - use_modelSelection
 
 
 
@@ -325,7 +369,7 @@ items:
     #       - risktable
     #       - outcome
     #       - outcomeLevel
-    #       - overalltime
+    #       - elapsedtime
     #       - explanatory
     #       - contexpl
     #       - fudate
@@ -348,7 +392,7 @@ items:
           - explanatory
           - contexpl
           - numRiskGroups
-          - use_modelSelection
+          # - use_modelSelection
 
 
     - name: risk_score_analysis2
@@ -362,13 +406,24 @@ items:
           - explanatory
           - contexpl
           - numRiskGroups
-          - use_modelSelection
+          # - use_modelSelection
 
+    - name:  riskScoreHeading
+      title: Risk Score Analysis
+      type:  Preformatted
+      visible: (calculateRiskScore)
+      
+
+    # Risk Score Summary (right after risk score analysis)
+    - name: riskScoreSummaryHeading
+      title: 'Risk Score Natural Language Summary'
+      type: Preformatted
+      visible: (calculateRiskScore && showSummaries)
 
     - name: riskScoreTable
       title: Risk Score Summary
       type: Table
-      visible: (calculateRiskScore)
+      visible: (calculateRiskScore && showSummaries)
       rows: 0
       columns:
         - name: group
@@ -393,7 +448,17 @@ items:
           - explanatory
           - contexpl
           - numRiskGroups
-          - use_modelSelection
+          # - use_modelSelection
+
+    - name: riskScoreSummary
+      title: ''
+      type: Html
+      visible: (calculateRiskScore && showSummaries)
+      clearWith:
+          - calculateRiskScore
+          - outcome
+          - explanatory
+          - contexpl
 
 
     - name: riskScoreMetrics
@@ -407,7 +472,7 @@ items:
           - explanatory
           - contexpl
           - numRiskGroups
-          - use_modelSelection
+          # - use_modelSelection
 
 
 
@@ -426,7 +491,7 @@ items:
           - explanatory
           - contexpl
           - numRiskGroups
-          - use_modelSelection
+          # - use_modelSelection
 
 
 # Startification
@@ -442,7 +507,7 @@ items:
           - explanatory
           - contexpl
           - numRiskGroups
-          - use_modelSelection
+          # - use_modelSelection
 
 
 # Outputs
@@ -480,7 +545,7 @@ items:
           - calculateRiskScore
           - outcome
           - outcomeLevel
-          - overalltime
+          - elapsedtime
           - explanatory
           - contexpl
           - fudate
@@ -500,7 +565,7 @@ items:
           - calculateRiskScore
           - outcome
           - outcomeLevel
-          - overalltime
+          - elapsedtime
           - explanatory
           - contexpl
           - fudate
@@ -519,8 +584,11 @@ items:
     #   title: mydataview_calculateAdjustedStats
     #   type:  Preformatted
 
-
-
+    - name:  adjustedSurvivalHeading
+      title: Adjusted Survival Analysis
+      type:  Preformatted
+      visible: (ac)
+      
 
     - name: plot_adj
       title: Adjusted Survival Plot
@@ -540,7 +608,7 @@ items:
           - byplot
           - outcome
           - outcomeLevel
-          - overalltime
+          - elapsedtime
           - explanatory
           - contexpl
           - fudate
@@ -551,7 +619,22 @@ items:
           - pplot
           - censored
           - medianline
-          - use_modelSelection
+          # - use_modelSelection
+
+    # Adjusted Survival Summary (right after adjusted survival analysis)
+    - name: adjustedSurvivalSummaryHeading
+      title: 'Adjusted Survival Natural Language Summary'
+      type: Preformatted
+      visible: (ac && showSummaries)
+
+    - name: adjustedSurvivalSummary
+      title: ''
+      type: Html
+      visible: (ac && showSummaries)
+      clearWith:
+          - ac
+          - adjexplanatory
+          - outcome
 
 
 # Nomogram
@@ -564,6 +647,11 @@ items:
     #   title: mydataview_nomogram
     #   type:  Preformatted
 
+    - name:  nomogramHeading
+      title: Nomogram Analysis
+      type:  Preformatted
+      visible: (showNomogram)
+      
 
     - name: plot_nomogram
       title: Nomogram
@@ -579,6 +667,21 @@ items:
       type: Html
       visible: (showNomogram)
 
+    # Nomogram Summary (right after nomogram analysis)
+    - name: nomogramSummaryHeading
+      title: 'Nomogram Natural Language Summary'
+      type: Preformatted
+      visible: (showNomogram && showSummaries)
+
+    - name: nomogramSummary
+      title: ''
+      type: Html
+      visible: (showNomogram && showSummaries)
+      clearWith:
+          - showNomogram
+          - explanatory
+          - outcome
+
 # Survival Decision Tree ----
 
 
@@ -587,11 +690,22 @@ items:
       type:  Preformatted
       visible: (FALSE)
 
+    - name:  survivalTreeHeading
+      title: Survival Decision Tree
+      type:  Preformatted
+      visible: (use_tree)
+      
+
+    # Survival Decision Tree Summary (right after tree analysis)
+    - name: treeSummaryHeading
+      title: 'Decision Tree Natural Language Summary'
+      type: Preformatted
+      visible: (use_tree && showSummaries)
 
     - name: tree_summary
-      title: 'Survival Decision Tree Summary'
+      title: ''
       type: Html
-      visible: (use_tree)
+      visible: (use_tree && showSummaries)
       clearWith:
           - use_tree
           - min_node
@@ -649,69 +763,69 @@ items:
     #   type:  Preformatted
 
 
-    - name:  text_model_selection
-      title: Multivariable Survival with Model Selection
-      type:  Html
-      refs: finalfit
-      visible: (use_modelSelection)
-      clearWith:
-          - outcome
-          - outcomeLevel
-          - overalltime
-          - explanatory
-          - contexpl
-          - fudate
-          - dxdate
-          - tint
-          - multievent
-          - use_modelSelection
-          - modelSelection
-          - selectionCriteria
-          - pEntry
-          - pRemoval
+    # - name:  text_model_selection
+    #   title: Multivariable Survival with Model Selection
+    #   type:  Html
+    #   refs: finalfit
+    #   visible: (use_modelSelection)
+    #   clearWith:
+    #       - outcome
+    #       - outcomeLevel
+    #       - elapsedtime
+    #       - explanatory
+    #       - contexpl
+    #       - fudate
+    #       - dxdate
+    #       - tint
+    #       - multievent
+    #       # - use_modelSelection
+    #       - modelSelection
+    #       - selectionCriteria
+    #       - pEntry
+    #       - pRemoval
 
-    - name:  selection_method
-      title: ''
-      type:  Html
-      refs: finalfit
-      visible: (use_modelSelection)          
-      clearWith:
-          - outcome
-          - outcomeLevel
-          - overalltime
-          - explanatory
-          - contexpl
-          - fudate
-          - dxdate
-          - tint
-          - multievent
-          - use_modelSelection
-          - modelSelection
-          - selectionCriteria
-          - pEntry
-          - pRemoval
+    # - name:  selection_method
+    #   title: ''
+    #   type:  Html
+    #   refs: finalfit
+    #   visible: (use_modelSelection)          
+    #   clearWith:
+    #       - outcome
+    #       - outcomeLevel
+    #       - elapsedtime
+    #       - explanatory
+    #       - contexpl
+    #       - fudate
+    #       - dxdate
+    #       - tint
+    #       - multievent
+    #       # - use_modelSelection
+    #       - modelSelection
+    #       - selectionCriteria
+    #       - pEntry
+    #       - pRemoval
 
 
-    - name:  text2_model_selection
-      title: ''
-      type:  Html
-      refs: finalfit
-      visible: (use_modelSelection)
-      clearWith:
-          - outcome
-          - outcomeLevel
-          - overalltime
-          - explanatory
-          - contexpl
-          - fudate
-          - dxdate
-          - tint
-          - multievent
-          - use_modelSelection
-          - modelSelection
-          - selectionCriteria
-          - pEntry
-          - pRemoval
+    # - name:  text2_model_selection
+    #   title: ''
+    #   type:  Html
+    #   refs: finalfit
+    #   visible: (use_modelSelection)
+    #   clearWith:
+    #       - outcome
+    #       - outcomeLevel
+    #       - elapsedtime
+    #       - explanatory
+    #       - contexpl
+    #       - fudate
+    #       - dxdate
+    #       - tint
+    #       - multievent
+    #       # - use_modelSelection
+    #       - modelSelection
+    #       - selectionCriteria
+    #       - pEntry
+    #       - pRemoval
 
 
 
@@ -723,14 +837,14 @@ items:
     #   clearWith:
     #       - outcome
     #       - outcomeLevel
-    #       - overalltime
+    #       - elapsedtime
     #       - explanatory
     #       - contexpl
     #       - fudate
     #       - dxdate
     #       - tint
     #       - multievent
-    #       - use_modelSelection
+    #       # - use_modelSelection
     #       - modelSelection
     #       - selectionCriteria
     #       - pEntry
@@ -988,7 +1102,7 @@ items:
     #   clearWith:
     #       - outcome
     #       - outcomeLevel
-    #       - overalltime
+    #       - elapsedtime
     #       - explanatory
     #       - contexpl
     #       - fudate
@@ -1009,7 +1123,7 @@ items:
     #   clearWith:
     #       - outcome
     #       - outcomeLevel
-    #       - overalltime
+    #       - elapsedtime
     #       - explanatory
     #       - contexpl
     #       - fudate
@@ -1045,7 +1159,7 @@ items:
     #   clearWith:
     #       - outcome
     #       - outcomeLevel
-    #       - overalltime
+    #       - elapsedtime
     #       - explanatory
     #       - contexpl
     #       - fudate
@@ -1066,6 +1180,11 @@ items:
           - explanatory
           - contexpl
           - outcome
+
+    - name:  multivariableCoxHeading3
+      title: Multivariable Cox Explanations
+      type:  Preformatted
+      visible: (showExplanations)
 
     # Adjusted Survival Curves Explanation
     - name: adjustedSurvivalExplanation
@@ -1117,11 +1236,127 @@ items:
           - stratvar
           - outcome
 
+    - name:  survivalPlotsHeading3
+      title: Survival Plots Explanations
+      type:  Preformatted
+      visible: ((ac || hr) && showExplanations)
+
+    # Survival Plots Explanation
+    - name: survivalPlotsExplanation
+      title: Understanding Adjusted Survival Curves and Plots
+      type: Html
+      visible: ((ac || hr) && showExplanations)
+      clearWith:
+          - ac
+          - hr
+          - outcome
+
+    # Machine Learning Results Section
+    - name: ml_variable_importance
+      title: 'Variable Importance (Machine Learning)'
+      type: Table
+      visible: (ml_method != 'cox')
+      rows: 0
+      columns:
+          - name: variable
+            title: 'Variable'
+            type: text
+          - name: importance
+            title: 'Importance'
+            type: number
+          - name: rank
+            title: 'Rank'
+            type: integer
+      clearWith:
+          - ml_method
+          - explanatory
+          - contexpl
+          - outcome
+
+    - name: ml_performance_metrics
+      title: 'Machine Learning Model Performance'
+      type: Html
+      visible: (ml_method != 'cox')
+      clearWith:
+          - ml_method
+          - ml_validation
+          - ml_cv_folds
+          - outcome
+
+    - name: ml_feature_selection_results
+      title: 'Feature Selection Results'
+      type: Table
+      visible: (ml_feature_selection)
+      rows: 0
+      columns:
+          - name: variable
+            title: 'Variable'
+            type: text
+          - name: selected
+            title: 'Selected'
+            type: text
+          - name: selection_frequency
+            title: 'Selection Frequency'
+            type: number
+          - name: importance_score
+            title: 'Importance Score'
+            type: number
+      clearWith:
+          - ml_feature_selection
+          - ml_method
+          - explanatory
+          - contexpl
+
+    - name: ml_ensemble_summary
+      title: 'Ensemble Model Summary'
+      type: Html
+      visible: (ml_method == 'ensemble' && showSummaries)
+      clearWith:
+          - ml_method
+          - ml_ensemble_weights
+          - outcome
+
+    - name: ml_prediction_intervals
+      title: 'Prediction Intervals (Machine Learning)'
+      type: Table
+      visible: (ml_method != 'cox')
+      rows: 0
+      columns:
+          - name: observation
+            title: 'Observation'
+            type: integer
+          - name: prediction
+            title: 'Predicted Risk'
+            type: number
+          - name: lower_ci
+            title: 'Lower 95% CI'
+            type: number
+          - name: upper_ci
+            title: 'Upper 95% CI'
+            type: number
+          - name: risk_group
+            title: 'Risk Group'
+            type: text
+      clearWith:
+          - ml_method
+          - outcome
+
+    - name: ml_cross_validation_summary
+      title: 'Cross-Validation Performance'
+      type: Html
+      visible: (ml_method != 'cox' && ml_validation == 'cv')
+      clearWith:
+          - ml_method
+          - ml_validation
+          - ml_cv_folds
+          - outcome
+
 refs:
     - multivariable
     - survivaltutorial
     - survivalrwnahhas
     - ClinicoPathJamoviModule
+
 
 
 
