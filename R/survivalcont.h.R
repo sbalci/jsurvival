@@ -72,10 +72,22 @@ survivalcontOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                 default=FALSE)
             private$..dxdate <- jmvcore::OptionVariable$new(
                 "dxdate",
-                dxdate)
+                dxdate,
+                suggested=list(
+                    "continuous",
+                    "nominal"),
+                permitted=list(
+                    "numeric",
+                    "factor"))
             private$..fudate <- jmvcore::OptionVariable$new(
                 "fudate",
-                fudate)
+                fudate,
+                suggested=list(
+                    "continuous",
+                    "nominal"),
+                permitted=list(
+                    "numeric",
+                    "factor"))
             private$..calculatedtime <- jmvcore::OptionOutput$new(
                 "calculatedtime")
             private$..contexpl <- jmvcore::OptionVariable$new(
@@ -458,6 +470,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
     inherit = jmvcore::Group,
     active = list(
         todo = function() private$.items[["todo"]],
+        clinicalWarnings = function() private$.items[["clinicalWarnings"]],
         coxRegressionHeading = function() private$.items[["coxRegressionHeading"]],
         coxSummary = function() private$.items[["coxSummary"]],
         coxTable = function() private$.items[["coxTable"]],
@@ -521,6 +534,11 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                 options=options,
                 name="todo",
                 title="To Do"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="clinicalWarnings",
+                title="Clinical Assumptions and Warnings",
+                visible=FALSE))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="coxRegressionHeading",
@@ -538,7 +556,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -579,7 +597,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -599,7 +617,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -850,7 +868,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -888,7 +906,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -912,7 +930,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -932,7 +950,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -988,7 +1006,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -1008,7 +1026,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -1063,7 +1081,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -1087,7 +1105,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -1111,7 +1129,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -1135,7 +1153,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -1225,7 +1243,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -1249,7 +1267,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -1275,7 +1293,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "contexpl",
                     "fudate",
@@ -1309,7 +1327,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "contexpl",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "sc",
                     "endplot",
@@ -1361,7 +1379,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "contexpl",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "sc",
                     "endplot",
@@ -1425,7 +1443,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "contexpl",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "sc",
                     "endplot",
@@ -1453,7 +1471,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "contexpl",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "sc",
                     "endplot",
@@ -1481,7 +1499,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "contexpl",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "findcut",
                     "sc",
                     "endplot",
@@ -1515,7 +1533,7 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                     "risktable",
                     "outcome",
                     "outcomeLevel",
-                    "overalltime",
+                    "elapsedtime",
                     "fudate",
                     "dxdate",
                     "tint",
@@ -1554,10 +1572,15 @@ survivalcontBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   dates in your data. This is useful when you have separate columns for
 #'   diagnosis date and follow-up date and want to calculate the time elapsed
 #'   between them.
-#' @param dxdate The date of diagnosis or study entry for each patient. Should
-#'   be in a consistent date format (e.g., YYYY-MM-DD).
-#' @param fudate The date of last follow-up or event for each patient. Should
-#'   be in a consistent date format (e.g., YYYY-MM-DD).
+#' @param dxdate The date of diagnosis or study entry. Accepts: (1)
+#'   Date/datetime text (e.g., "2024-01-15"), (2) Numeric Unix epoch seconds
+#'   (from DateTime Converter's corrected_datetime_numeric output), (3) Numeric
+#'   datetime values from R. Time intervals calculated as difference from
+#'   follow-up date.
+#' @param fudate The date of last follow-up or event. Accepts: (1)
+#'   Date/datetime text (e.g., "2024-01-15"), (2) Numeric Unix epoch seconds
+#'   (from DateTime Converter's corrected_datetime_numeric output), (3) Numeric
+#'   datetime values from R. Must be in same format as diagnosis date.
 #' @param contexpl The continuous explanatory variable to be used in the
 #'   analysis.
 #' @param outcome The outcome variable to be used in the analysis.
@@ -1671,6 +1694,7 @@ survivalcontBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$clinicalWarnings} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$coxRegressionHeading} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$coxSummary} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$coxTable} \tab \tab \tab \tab \tab a table \cr

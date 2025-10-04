@@ -82,10 +82,22 @@ survivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 default=FALSE)
             private$..dxdate <- jmvcore::OptionVariable$new(
                 "dxdate",
-                dxdate)
+                dxdate,
+                suggested=list(
+                    "continuous",
+                    "nominal"),
+                permitted=list(
+                    "numeric",
+                    "factor"))
             private$..fudate <- jmvcore::OptionVariable$new(
                 "fudate",
-                fudate)
+                fudate,
+                suggested=list(
+                    "continuous",
+                    "nominal"),
+                permitted=list(
+                    "numeric",
+                    "factor"))
             private$..calculatedtime <- jmvcore::OptionOutput$new(
                 "calculatedtime")
             private$..explanatory <- jmvcore::OptionVariable$new(
@@ -603,7 +615,10 @@ survivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         hazardFunctionPlot = function() private$.items[["hazardFunctionPlot"]],
         extrapolationPlot = function() private$.items[["extrapolationPlot"]],
         extrapolationTable = function() private$.items[["extrapolationTable"]],
-        parametricModelsExplanation = function() private$.items[["parametricModelsExplanation"]]),
+        parametricModelsExplanation = function() private$.items[["parametricModelsExplanation"]],
+        clinicalGlossaryExplanation = function() private$.items[["clinicalGlossaryExplanation"]],
+        clinicalInterpretationExplanation = function() private$.items[["clinicalInterpretationExplanation"]],
+        copyReadySentencesExplanation = function() private$.items[["copyReadySentencesExplanation"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -1549,6 +1564,27 @@ survivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "use_parametric",
                     "parametric_distribution",
                     "explanatory",
+                    "outcome")))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="clinicalGlossaryExplanation",
+                title="Clinical Terminology Glossary",
+                visible="(showExplanations)"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="clinicalInterpretationExplanation",
+                title="Enhanced Clinical Interpretation",
+                visible="(showSummaries)",
+                clearWith=list(
+                    "explanatory",
+                    "outcome")))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="copyReadySentencesExplanation",
+                title="Copy-Ready Clinical Report Sentences",
+                visible="(showSummaries)",
+                clearWith=list(
+                    "explanatory",
                     "outcome")))}))
 
 survivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -1593,12 +1629,16 @@ survivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   the event date and the diagnosis date. If the follow-up date is available,
 #'   the time will be  calculated as the difference between the event date and
 #'   the follow-up date.
-#' @param dxdate The date of diagnosis. If the time is in date format, the
-#'   time will be calculated as the difference between the event date and the
-#'   diagnosis date.
-#' @param fudate The date of follow-up. If the time is in date format, the
-#'   time will be calculated as the difference between the event date and the
-#'   follow-up date.
+#' @param dxdate The date of diagnosis. Accepts: (1) Date/datetime text
+#'   formats (e.g., "2024-01-15"), (2) Numeric Unix epoch seconds (from DateTime
+#'   Converter's corrected_datetime_numeric output), (3) Numeric datetime values
+#'   from R. Time intervals will be automatically calculated as the difference
+#'   between follow-up/event date and diagnosis date.
+#' @param fudate The date of follow-up or event. Accepts: (1) Date/datetime
+#'   text formats (e.g., "2024-01-15"), (2) Numeric Unix epoch seconds (from
+#'   DateTime Converter's corrected_datetime_numeric output), (3) Numeric
+#'   datetime values from R. Must be in the same format as diagnosis date. Time
+#'   intervals calculated as difference from diagnosis date.
 #' @param explanatory The explanatory variable that will be used to compare
 #'   the survival times of different groups.
 #' @param outcome The outcome variable that will be used to compare the
@@ -1755,6 +1795,9 @@ survivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$extrapolationPlot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$extrapolationTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$parametricModelsExplanation} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$clinicalGlossaryExplanation} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$clinicalInterpretationExplanation} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$copyReadySentencesExplanation} \tab \tab \tab \tab \tab a html \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
