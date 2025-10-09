@@ -1356,6 +1356,11 @@ refs:
     - survivaltutorial
     - survivalrwnahhas
     - ClinicoPathJamoviModule
+    - survival
+    - lubridate
+    - rms
+    - finalfit
+    - survminer
 
 
 

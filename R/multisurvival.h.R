@@ -815,7 +815,12 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "multivariable",
                     "survivaltutorial",
                     "survivalrwnahhas",
-                    "ClinicoPathJamoviModule"))
+                    "ClinicoPathJamoviModule",
+                    "survival",
+                    "lubridate",
+                    "rms",
+                    "finalfit",
+                    "survminer"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="todo",
