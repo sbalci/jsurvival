@@ -35,7 +35,7 @@ This vignette demonstrates all features of the alluvialSurvival function using r
 ## Loading Required Libraries and Data
 
 ```{r setup}
-library(jsurvival)
+library(ClinicoPath)
 
 # Load the treatment pathways dataset
 data("treatment_pathways")

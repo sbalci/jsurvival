@@ -22,7 +22,7 @@ suppressPackageStartupMessages({
   library(survival)
   library(glmnet)
   if (requireNamespace("ClinicoPath", quietly = TRUE)) {
-    library(jsurvival)
+    library(ClinicoPath)
   }
 })
 ```

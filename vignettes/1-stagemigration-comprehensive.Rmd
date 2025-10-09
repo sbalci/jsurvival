@@ -38,7 +38,7 @@ Proper staging validation is crucial because:
 # install.packages("ClinicoPath")
 
 # Load required libraries
-library(jsurvival)
+library(ClinicoPath)
 library(dplyr)
 library(ggplot2)
 library(survival)

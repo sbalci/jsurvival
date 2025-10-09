@@ -4,7 +4,7 @@
 \name{jsurvival-package}
 \alias{jsurvival-package}
 \alias{jsurvival}
-\title{jsurvival: Analysis for jsurvivalological Research}
+\title{jsurvival: Analysis for survival in ClinicoPathological Research}
 \description{
 \code{jsurvival} jsurvival help researchers to generate natural
 language summaries of their dataset, generate cross tables with statistical

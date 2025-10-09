@@ -94,7 +94,7 @@ Covariates should not be highly correlated with each other.
 
 ```{r load-packages}
 # Load required packages
-library(jsurvival)
+library(ClinicoPath)
 library(survival)
 library(survminer)
 

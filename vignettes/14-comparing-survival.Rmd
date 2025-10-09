@@ -53,7 +53,7 @@ The **comparingsurvival** function provides:
 - **Subgroup Analysis**: Examine specific patient populations
 
 ```{r load-packages}
-library(jsurvival)
+library(ClinicoPath)
 library(survival)
 library(dplyr)
 ```
@@ -102,7 +102,7 @@ Fundamental two-group survival comparison.
 
 ```{r basic-comparison}
 # Basic Survival Comparison Example
-# In jamovi: jsurvival > Comparing Survival
+# In jamovi: jSurvival > Comparing Survival
 
 cat("Basic Survival Comparison: EGFR Mutation Status\n")
 cat("===============================================\n\n")

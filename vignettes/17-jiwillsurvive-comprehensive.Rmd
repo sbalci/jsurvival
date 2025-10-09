@@ -42,7 +42,7 @@ This vignette demonstrates all features of the jiwillsurvive function using comp
 ## Loading Required Libraries and Data
 
 ```{r setup}
-library(jsurvival)
+library(ClinicoPath)
 
 # Load the comprehensive test dataset
 data("jiwillsurvive_test_data")

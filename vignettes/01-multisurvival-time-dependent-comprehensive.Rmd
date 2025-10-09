@@ -97,7 +97,7 @@ print(long_data)
 ## Basic Wide Format Analysis {#basic-wide}
 
 ```{r eval=FALSE}
-library(jsurvival)
+library(ClinicoPath)
 
 # Load example wide format data
 load("test_wide_time_dependent.rda")
