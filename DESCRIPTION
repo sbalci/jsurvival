@@ -1,7 +1,7 @@
 Type: Package
 Package: jsurvival
 Title: Survival Module of ClinicoPath for jamovi
-Version: 0.0.32.60
+Version: 0.0.32.61
 Date: 2025-12-28
 Authors@R: person(given = "Serdar", family = "Balci", role = c("aut",
         "cre"), email = "serdarbalci@serdarbalci.com", comment =
@@ -19,7 +19,7 @@ URL: https://github.com/sbalci/ClinicoPathJamoviModule/,
         https://www.serdarbalci.com/jsurvival/
 BugReports: https://github.com/sbalci/ClinicoPathJamoviModule/issues/
 Depends: R (>= 4.1.0)
-Imports: anytime, boot, checkmate, datefixR, dcurves, dplyr, finalfit,
+Imports: boot, checkmate, dcurves, dplyr, finalfit,
         ggplot2, glmnet, glue, gridExtra, Hmisc, htmltools, janitor,
         jmvcore, KMunicate, knitr, labelled, lubridate, magrittr, mgcv,
         pammtools, pROC, purrr, R6, rlang, rms, scales, survival,

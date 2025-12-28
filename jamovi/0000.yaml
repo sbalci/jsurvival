@@ -1,7 +1,7 @@
 ---
 title: Survival Module of ClinicoPath for jamovi
 name: jsurvival
-version: 0.0.32.60
+version: 0.0.32.61
 jms: '1.0'
 authors:
   - Serdar Balci
@@ -86,23 +86,6 @@ analyses:
     menuSubtitle: Odds Ratio for Binary Outcomes
     ribbon: analyses
     category: analyses
-  - title: Date/DateTime Validator
-    name: datevalidator
-    ns: jsurvival
-    category: analyses
-    menuGroup: Survival
-    menuSubgroup: Data Preparation
-    menuTitle: Date/DateTime Validator
-    menuSubtitle: Validate and diagnose messy date/datetime formats
-    description: >-
-      Comprehensive date and datetime field validation and quality assessment
-      using multiple R packages (datefixR, anytime, lubridate).
-      This module validates and diagnoses messy date/datetime formats commonly
-      found in clinical databases: different separators,
-      month representations, missing components, and ambiguous formats. Provides
-      detailed validation reports and quality assessment.
-      Perfect for clinical research data quality control and database audit
-      workflows.
   - title: DateTime Converter
     name: datetimeconverter
     ns: jsurvival
