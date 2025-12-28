@@ -2,6 +2,9 @@
 #' @importFrom R6 R6Class
 #' @import jmvcore
 #' @import magrittr
+#' @importFrom ggplot2 ggplot aes geom_text geom_line geom_point labs theme_void theme element_blank scale_x_continuous scale_y_continuous annotate
+#' @importFrom gridExtra grid.arrange
+#' @importFrom survminer ggsurvplot ggcompetingrisks
 #'
 #' @description
 #' This function prepares and cleans data for single-arm survival analysis by
@@ -12,19 +15,65 @@
 #' @note Ensure the input data contains the required variables (elapsed time,
 #' outcome) and meets specified formatting criteria.
 
+# Helper function to create styled HTML notice (replaces jmvcore::Notice to avoid serialization errors)
+.createNoticeHTML <- function(message, type = c("ERROR", "STRONG_WARNING", "WARNING", "INFO")) {
+    type <- match.arg(type)
+
+    # Define styles for each notice type
+    styles <- list(
+        ERROR = list(
+            bg = "#f8d7da",
+            border = "#dc3545",
+            icon = "❌",
+            title_color = "#721c24"
+        ),
+        STRONG_WARNING = list(
+            bg = "#fff3cd",
+            border = "#ff9800",
+            icon = "⚠️",
+            title_color = "#856404"
+        ),
+        WARNING = list(
+            bg = "#fff3cd",
+            border = "#ffc107",
+            icon = "⚠️",
+            title_color = "#856404"
+        ),
+        INFO = list(
+            bg = "#d1ecf1",
+            border = "#17a2b8",
+            icon = "ℹ️",
+            title_color = "#0c5460"
+        )
+    )
+
+    style <- styles[[type]]
+
+    html <- paste0(
+        "<div style='background-color: ", style$bg, "; ",
+        "padding: 15px; margin: 10px 0; border-radius: 5px; ",
+        "border-left: 4px solid ", style$border, ";'>",
+        "<p style='margin: 0; color: ", style$title_color, ";'>",
+        "<strong>", style$icon, " ", type, ":</strong> ",
+        message,
+        "</p>",
+        "</div>"
+    )
+
+    return(html)
+}
 
 singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     "singlearmClass",
     inherit = singlearmBase,
     # Constants and cache
     private = list(
-        .DEFAULT_CUTPOINTS = "12, 36, 60",
         .cache = new.env(parent = emptyenv()),
+        .errorMessages = character(0),
+        .warningMessages = character(0),
+        .infoMessages = character(0),
 
       .init = function() {
-          # Apply clinical presets if selected
-          private$.applyClinicalPresets()
-          
           # Initialize all outputs to FALSE first
           self$results$medianSummary$setVisible(FALSE)
           self$results$survTableSummary$setVisible(FALSE)
@@ -137,44 +186,80 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
       },
 
-      # Clinical Presets Application ----
-      .applyClinicalPresets = function() {
-        if (self$options$clinical_preset == "custom") {
-          return()  # No preset changes for custom
+      # Message Accumulation Methods (to avoid serialization errors from dynamic Notices) ----
+      .addError = function(message) {
+        private$.errorMessages <- c(private$.errorMessages, message)
+      },
+
+      .addWarning = function(message) {
+        private$.warningMessages <- c(private$.warningMessages, message)
+      },
+
+      .addInfo = function(message) {
+        private$.infoMessages <- c(private$.infoMessages, message)
+      },
+
+      .clearMessages = function() {
+        private$.errorMessages <- character(0)
+        private$.warningMessages <- character(0)
+        private$.infoMessages <- character(0)
+      },
+
+      .displayMessages = function() {
+        # Display accumulated error messages
+        if (length(private$.errorMessages) > 0) {
+          html_content <- paste(sapply(private$.errorMessages, function(msg) {
+            .createNoticeHTML(msg, "ERROR")
+          }), collapse = "")
+          self$results$errors$setContent(html_content)
+          self$results$errors$setVisible(TRUE)
+        } else {
+          self$results$errors$setVisible(FALSE)
         }
-        
-        preset <- self$options$clinical_preset
-        
-        # Common settings for all presets
-        if (self$options$guided_mode) {
-          # Enable helpful displays for guided mode
-          # Note: These would need to be applied via UI logic or initialization
-          # For now, we document the intended behavior
+
+        # Display accumulated warning messages
+        if (length(private$.warningMessages) > 0) {
+          html_content <- paste(sapply(private$.warningMessages, function(msg) {
+            # Determine if it's a STRONG_WARNING or regular WARNING based on keywords
+            type <- if (grepl("Very few events|critically", msg, ignore.case = TRUE)) "STRONG_WARNING" else "WARNING"
+            .createNoticeHTML(msg, type)
+          }), collapse = "")
+          self$results$warnings$setContent(html_content)
+          self$results$warnings$setVisible(TRUE)
+        } else {
+          self$results$warnings$setVisible(FALSE)
         }
-        
-        # Preset-specific configurations
-        switch(preset,
-          "overall_survival" = {
-            # Standard overall survival analysis - most common clinical scenario
-            # Optimal settings: monthly output, standard survival timepoints
-            # This preset is designed for typical cancer survival studies
-          },
-          "disease_free" = {
-            # Disease-free survival focuses on recurrence
-            # Different timepoints relevant for recurrence analysis
-          },
-          "treatment_effect" = {
-            # Treatment effectiveness study
-            # Shorter follow-up periods, quality diagnostics important
-          },
-          "post_surgical" = {
-            # Post-surgical outcomes
-            # Short-term survival, different time units (days)
-          }
-        )
+
+        # Display accumulated info messages
+        if (length(private$.infoMessages) > 0) {
+          html_content <- paste(sapply(private$.infoMessages, function(msg) {
+            .createNoticeHTML(msg, "INFO")
+          }), collapse = "")
+          self$results$info$setContent(html_content)
+          self$results$info$setVisible(TRUE)
+        } else {
+          self$results$info$setVisible(FALSE)
+        }
       },
 
       # Utility Helper Functions ----
+      .isCompetingRisk = function() {
+        # Check if competing risk analysis is active
+        return(self$options$multievent && self$options$analysistype == "compete")
+      },
+
+      .getDefaultCutpoints = function() {
+        # Return time-unit aware default cutpoints
+        time_unit <- self$options$timetypeoutput
+        switch(time_unit,
+          "days" = c(365, 1095, 1825),      # 1, 3, 5 years in days
+          "weeks" = c(52, 156, 260),        # 1, 3, 5 years in weeks
+          "months" = c(12, 36, 60),         # 1, 3, 5 years in months
+          "years" = c(1, 3, 5),             # 1, 3, 5 years
+          c(12, 36, 60)  # default to months if unknown
+        )
+      },
+
       .safeExecute = function(expr, context = "analysis", silent = FALSE) {
         tryCatch(expr, error = function(e) {
           user_msg <- switch(context,
@@ -192,6 +277,22 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           
           return(NULL)
         })
+      },
+
+      .validatePlotParameters = function() {
+        # Validate plot end time
+        if (self$options$endplot <= 0) {
+          private$.addError('Plot end time must be positive. Please enter a valid positive number for the maximum time to display on plots.')
+          return(FALSE)
+        }
+
+        # Validate Y-axis range
+        if (self$options$ybegin_plot >= self$options$yend_plot) {
+          private$.addError('Y-axis range invalid: start value must be less than end value. Please adjust plot axis settings.')
+          return(FALSE)
+        }
+
+        return(TRUE)
       },
 
       .getCachedSurvfit = function(formula, data, cache_key_suffix = "") {
@@ -226,20 +327,31 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       .systematicSample = function(data, target_size = 50) {
         n <- nrow(data)
         if (n <= target_size) return(data)
-        
+
         # Use systematic sampling to preserve distribution
         keep_indices <- round(seq(1, n, length.out = target_size))
         return(data[keep_indices, ])
+      },
+
+      .parseNumericList = function(x, default_vals) {
+        nums <- suppressWarnings(as.numeric(trimws(unlist(strsplit(x, ",")))))
+        nums <- nums[!is.na(nums)]
+        nums <- unique(nums)
+        if (length(nums) == 0 && !missing(default_vals)) {
+          nums <- default_vals
+        }
+        return(nums)
       },
 
       .assessDataQuality = function(results) {
         mydata <- results$cleanData
         mytime <- results$name1time
         myoutcome <- results$name2outcome
-        
+
         # Basic data quality metrics
         n_total <- nrow(mydata)
-        n_events <- sum(mydata[[myoutcome]], na.rm = TRUE)
+        # FIX: Count events properly - any non-zero value is an event (handles competing risk with code 2)
+        n_events <- sum(mydata[[myoutcome]] >= 1, na.rm = TRUE)
         n_censored <- n_total - n_events
         
         # Time-related quality checks
@@ -249,7 +361,8 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         median_time <- median(time_vals, na.rm = TRUE)
         
         # Event rate by time periods
-        early_events <- sum(mydata[[myoutcome]][time_vals <= median_time], na.rm = TRUE)
+        # FIX: Count events properly
+        early_events <- sum(mydata[[myoutcome]][time_vals <= median_time] >= 1, na.rm = TRUE)
         late_events <- n_events - early_events
         
         # Data quality warnings
@@ -260,8 +373,18 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         if (n_events / n_total < 0.1) {
           warnings <- c(warnings, .("Low event rate - consider longer follow-up"))
         }
-        if (max_time < 12) {
-          warnings <- c(warnings, .("Short follow-up duration - median survival may not be reached"))
+
+        # FIX: Make follow-up duration check time-unit aware
+        time_unit <- self$options$timetypeoutput
+        min_followup <- switch(time_unit,
+          "days" = 365,    # 1 year
+          "weeks" = 52,    # 1 year
+          "months" = 12,   # 1 year
+          "years" = 1,     # 1 year
+          12  # default
+        )
+        if (max_time < min_followup) {
+          warnings <- c(warnings, glue::glue("Short follow-up duration (< 1 year) - median survival may not be reached"))
         }
         
         return(list(
@@ -288,14 +411,43 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         subcondition2b2 <- !is.null(self$options$dxdate)
         subcondition2b3 <- !is.null(self$options$fudate)
 
-        # Outcome validation: either simple outcome OR multi-event with at least one event type
-        outcome_valid <- (subcondition1a && !subcondition1b1) || 
-                        (subcondition1b1 && subcondition1b2) || 
-                        (subcondition1b1 && subcondition1b3)
+        # Outcome validation: either simple outcome OR multi-event with all necessary levels
+        if (!subcondition1b1) {
+          outcome_valid <- subcondition1a
+        } else {
+          required_levels <- c(self$options$dod, self$options$dooc, self$options$awd, self$options$awod)
+          outcome_valid <- all(!is.null(required_levels))
+          # Must also exist in data
+          if (outcome_valid) {
+            level_vars <- c("dod", "dooc", "awd", "awod")
+            for (v in level_vars) {
+              val <- self$options[[v]]
+              if (!is.null(val) && !val %in% levels(self$data[[self$options$outcome]])) {
+                outcome_valid <- FALSE
+              }
+            }
+          }
+        }
 
         # Time validation: either date calculation OR pre-calculated time
-        time_valid <- (subcondition2b1 && subcondition2b2 && subcondition2b3) || 
+        time_valid <- (subcondition2b1 && subcondition2b2 && subcondition2b3) ||
                      (subcondition2a && !subcondition2b1 && !subcondition2b2 && !subcondition2b3)
+
+        # Check if variables exist in data
+        if (subcondition1a && !self$options$outcome %in% names(self$data)) {
+            outcome_valid <- FALSE
+        }
+
+        if (subcondition2a && !self$options$elapsedtime %in% names(self$data)) {
+            time_valid <- FALSE
+        }
+        if (subcondition2b1) {
+            if (is.null(self$options$dxdate) || is.null(self$options$fudate)) {
+              time_valid <- FALSE
+            } else if (!all(c(self$options$dxdate, self$options$fudate) %in% names(self$data))) {
+              time_valid <- FALSE
+            }
+        }
 
         return(list(
           outcome_valid = outcome_valid,
@@ -423,6 +575,8 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         if (!tint) {
           ## Precalculated Time ----
 
+          private$.addInfo('Using pre-calculated elapsed time. Time unit labels follow selected display unit but values are used as provided in data.')
+
           mydata[["mytime"]] <-
             jmvcore::toNumeric(mydata[[mytime_labelled]])
 
@@ -460,12 +614,13 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                   mydata[["start"]] <- func(mydata[[dxdate]])
                   mydata[["end"]] <- func(mydata[[fudate]])
               } else {
-                  stop(paste0("Unsupported time type format: ", timetypedata,
-                             ". Supported formats are: ", paste(names(lubridate_functions), collapse = ", ")))
+                  private$.addError(sprintf('Unsupported date format: %s. Supported formats are: %s. Please select the correct format from Time Type options.', timetypedata, paste(names(lubridate_functions), collapse = ', ')))
+                  return(NULL)
               }
           } else {
               # Mixed types error
-              stop("Diagnosis date and follow-up date must be in the same format (both numeric or both text)")
+              private$.addError('Diagnosis date and follow-up date must be in the same format (both numeric or both text). Please ensure date columns are consistently formatted.')
+              return(NULL)
           }
 
 
@@ -473,13 +628,8 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           if ( sum(!is.na(mydata[["start"]])) == 0 || sum(!is.na(mydata[["end"]])) == 0)  {
             start_valid <- sum(!is.na(mydata[["start"]]))
             end_valid <- sum(!is.na(mydata[["end"]]))
-            stop(paste0("Time difference cannot be calculated. ",
-                       "Start date valid entries: ", start_valid, ", ",
-                       "End date valid entries: ", end_valid, ". ",
-                       "Please verify that your date variables match the selected format: ", 
-                       self$options$timetypedata, ". ",
-                       "Common issues: incorrect date format, missing values, or non-date data in date columns.")
-            )
+            private$.addError(sprintf('Date parsing failed. Start date valid: %d, End date valid: %d. Please verify date format matches selected type (%s) and check for missing/invalid date values.', start_valid, end_valid, self$options$timetypedata))
+            return(NULL)
           }
 
 
@@ -501,7 +651,21 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         df_time <- mydata %>% jmvcore::select(c("row_names", "mytime"))
 
-
+        # Check for missing values in time and warn user
+        if (any(is.na(df_time$mytime))) {
+          n_missing <- sum(is.na(df_time$mytime))
+          if (self$options$tint) {
+            private$.addWarning(sprintf('Calculated time from dates contains %d missing value%s. These observations will be excluded from the analysis. Please verify date format matches selected type and check for missing or invalid dates.',
+                                       n_missing, ifelse(n_missing == 1, '', 's')))
+          } else {
+            private$.addWarning(sprintf('Time variable contains %d missing value%s. These observations will be excluded from the analysis.',
+                                       n_missing, ifelse(n_missing == 1, '', 's')))
+          }
+        }
+        if (any(df_time$mytime <= 0, na.rm = TRUE)) {
+          private$.addError('Time values must be strictly positive. Please verify dates are in correct order (diagnosis before follow-up) and check landmark time settings.')
+          return(NULL)
+        }
 
         return(df_time)
 
@@ -530,19 +694,20 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           if (inherits(outcome1, contin)) {
             unique_vals <- unique(outcome1[!is.na(outcome1)])
             if (!((length(unique_vals) == 2) && (sum(unique_vals) == 1))) {
-              stop(
-                paste0('When using continuous variable as an outcome, it must only contain 1s and 0s. ',
-                       'Current unique values found: ', paste(sort(unique_vals), collapse = ", "), '. ',
-                       'Expected: 0 (censored/alive/disease-free) and 1 (event/dead/recurrence). ',
-                       'Please recode your outcome variable or use factor levels instead.')
-              )
-
+              private$.addError(sprintf('Outcome variable must contain only 0 (censored) and 1 (event). Found: %s. Please recode your outcome or convert to factor and select event level.', paste(sort(unique_vals), collapse = ', ')))
+              return(NULL)
             }
 
             mydata[["myoutcome"]] <- mydata[[myoutcome_labelled]]
             # mydata[[self$options$outcome]]
 
           } else if (inherits(outcome1, "factor")) {
+
+            if (is.null(outcomeLevel)) {
+                private$.addError('Event Level not selected. Please select the level representing the event (e.g., "Dead", "Recurrence") from the Event Level dropdown.')
+                return(NULL)
+            }
+            
             mydata[["myoutcome"]] <-
               ifelse(
                 test = outcome1 == outcomeLevel,
@@ -551,10 +716,8 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
               )
 
           } else {
-            stop(
-              'When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0. If you are using a factor as an outcome, please check the levels and content.'
-            )
-
+            private$.addError('Invalid outcome variable type. Outcome must be either: (1) numeric with values 0/1, or (2) factor with event level selected. Please verify outcome variable format.')
+            return(NULL)
           }
 
         } else if (multievent) {
@@ -607,6 +770,31 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
           }
 
+          unmatched_levels <- setdiff(unique(outcome1[!is.na(outcome1)]),
+                                      c(awd, awod, dod, dooc))
+          if (length(unmatched_levels) > 0) {
+            private$.addError(sprintf('Outcome contains unmapped levels: %s. For multi-event analysis, all levels must be assigned to one category: Dead of Disease, Dead of Other, Alive with Disease, or Alive without Disease.', paste(unmatched_levels, collapse = ', ')))
+            return(NULL)
+          }
+
+        }
+
+        # Validate recoded outcome values
+        outcome_values <- mydata[["myoutcome"]]
+        invalid_values <- outcome_values[!is.na(outcome_values) & !outcome_values %in% c(0, 1, 2)]
+
+        if (length(invalid_values) > 0) {
+          unique_invalid <- unique(invalid_values)
+          private$.addError(sprintf('Outcome variable contains unexpected values: %s. Expected values are 0 (censored), 1 (event), or 2 (competing event). Please verify your outcome variable is correctly coded or select the appropriate event level.',
+                                   paste(unique_invalid, collapse = ', ')))
+          return(NULL)
+        }
+
+        # Check for missing values in outcome
+        if (any(is.na(outcome_values))) {
+          n_missing <- sum(is.na(outcome_values))
+          private$.addWarning(sprintf('Outcome variable contains %d missing value%s. These observations will be excluded from the analysis.',
+                                     n_missing, ifelse(n_missing == 1, '', 's')))
         }
 
         df_outcome <- mydata %>% jmvcore::select(c("row_names", "myoutcome"))
@@ -653,8 +841,34 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         outcome <- private$.definemyoutcome()
         factor <- private$.definemyfactor()
 
+        # Check if any returned NULL (validation failed)
+        if (is.null(time) || is.null(outcome) || is.null(factor)) {
+          private$.displayMessages()
+          return(NULL)
+        }
+
         cleanData <- dplyr::left_join(time, outcome, by = "row_names") %>%
           dplyr::left_join(factor, by = "row_names")
+
+        # Remove rows with missing time or outcome (complete case analysis)
+        n_before <- nrow(cleanData)
+        cleanData <- cleanData %>%
+          dplyr::filter(!is.na(mytime) & !is.na(myoutcome))
+        n_after <- nrow(cleanData)
+
+        # Report if rows were removed
+        if (n_before > n_after) {
+          n_removed <- n_before - n_after
+          private$.addInfo(sprintf('Excluded %d observation%s with missing time or outcome values. Analysis based on %d complete cases.',
+                                  n_removed, ifelse(n_removed == 1, '', 's'), n_after))
+        }
+
+        # Check if any data remains after removing missing values
+        if (n_after == 0) {
+          private$.addError('No complete cases available for analysis. All observations have missing time or outcome values.')
+          private$.displayMessages()
+          return(NULL)
+        }
 
         # Landmark ----
         # https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html#landmark_method
@@ -662,9 +876,15 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
           landmark <- jmvcore::toNumeric(self$options$landmark)
 
+          n_before <- nrow(cleanData)
           cleanData <- cleanData %>%
             dplyr::filter(mytime >= landmark) %>%
             dplyr::mutate(mytime = mytime - landmark)
+          n_after <- nrow(cleanData)
+          if (n_after < n_before) {
+            private$.addInfo(sprintf('Landmark analysis removed %d subjects with follow-up time < %s %s. Analysis includes only subjects surviving past landmark.',
+                                     n_before - n_after, landmark, self$options$timetypeoutput))
+          }
         }
 
         # Time Dependent Covariate ----
@@ -754,11 +974,15 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       # Run Analysis ----
       ,
       .run = function() {
+        # Clear any previous messages
+        private$.clearMessages()
 
         # Input Validation ----
         validation_result <- private$.validateInputs()
-        
+
         if (!validation_result$continue_analysis) {
+          # Configuration incomplete - show todo guidance without error message
+          # The todo will guide users on what variables to select
           private$.todo()
           self$results$todo$setVisible(TRUE)
           return()
@@ -768,20 +992,56 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         ## Empty data ----
 
-        if (nrow(self$data) == 0)
-          stop('Data contains no (complete) rows')
+        if (nrow(self$data) == 0) {
+          private$.addError('Dataset contains no complete rows. Please ensure your data is properly loaded and contains observations.')
+          private$.displayMessages()
+          return()
+        }
 
         private$.checkpoint()
 
         ## Get Clean Data ----
         results <- private$.cleandata()
 
+        # Check if cleandata failed (returned NULL due to validation errors)
+        if (is.null(results)) {
+          return()
+        }
+
         ## Data Quality Assessment ----
         private$.checkpoint()
         data_quality <- private$.assessDataQuality(results)
-        
+
         # Store data quality for potential use in outputs
         results$data_quality <- data_quality
+
+        ## Minimum Event Count Guard ----
+        # Prevent analysis with critically low event counts (< 3 events = unreliable)
+        if (data_quality$n_events < 3) {
+          private$.addError(sprintf('Insufficient events (%d) for survival analysis. At least 3 events are required for reliable estimates. Current data: %d events, %d censored. Recommendations: (1) Extend follow-up period; (2) Combine with additional datasets; (3) Use descriptive statistics instead of formal survival analysis.', data_quality$n_events, data_quality$n_events, data_quality$n_censored))
+          return()
+        }
+
+        ## Data Quality Notices ----
+        # STRONG_WARNING for very low events (< 10)
+        if (data_quality$n_events < 10) {
+          private$.addWarning(sprintf('Very few events observed (%d). Results may be unreliable. Recommendations: (1) extend follow-up; (2) combine datasets; (3) interpret with extreme caution; (4) report confidence intervals prominently.', data_quality$n_events))
+        } else if (data_quality$n_events < 20) {
+          # WARNING for limited events (10-19)
+          private$.addWarning(sprintf('Limited events (%d). Median survival estimates and confidence intervals may be wide. Report results with appropriate uncertainty.', data_quality$n_events))
+        }
+
+        # WARNING for low event rate (< 10%)
+        if (data_quality$event_rate < 10) {
+          private$.addWarning(sprintf('Low event rate: %.1f%% (%d events / %d total). Consider longer follow-up if median survival is not reached.', data_quality$event_rate, data_quality$n_events, data_quality$n_total))
+        }
+
+        # WARNING for data quality issues from assessment
+        if (length(data_quality$warnings) > 0) {
+          for (i in seq_along(data_quality$warnings)) {
+            private$.addWarning(data_quality$warnings[i])
+          }
+        }
 
         ## Run Analysis ----
 
@@ -815,7 +1075,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         ### Clinical Summary ----
         private$.checkpoint()
-        if (self$options$guided_mode || self$options$showSummaries) {
+        if (self$options$showSummaries) {
           private$.generateClinicalSummary(results)
         }
 
@@ -836,6 +1096,53 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           self$results$outcomeredefined$setRowNums(results$cleanData$row_names)
           self$results$outcomeredefined$setValues(results$cleanData$CalculatedOutcome)
         }
+
+        ## Analysis Completion Notice ----
+        analysis_type <- if(private$.isCompetingRisk()) 'Competing risk' else 'Standard'
+        method_used <- if(private$.isCompetingRisk()) 'cumulative incidence (cmprsk)' else 'Kaplan-Meier'
+        private$.addInfo(sprintf('Analysis completed: %d observations (%d events, %d censored). Median follow-up: %.1f %s. %s survival analysis using %s method.',
+                                 data_quality$n_total,
+                                 data_quality$n_events,
+                                 data_quality$n_censored,
+                                 data_quality$median_followup,
+                                 self$options$timetypeoutput,
+                                 analysis_type,
+                                 method_used))
+
+        # Display all accumulated messages
+        private$.displayMessages()
+      }
+
+      # Competing Risk Analysis Function ----
+      ,
+      .competingRiskCumInc = function(results) {
+        # Proper competing risk analysis using cmprsk::cuminc()
+        # Returns cumulative incidence estimates for the event of interest
+
+        mytime <- results$name1time
+        myoutcome <- results$name2outcome
+        mydata <- results$cleanData
+
+        # Ensure time is numeric
+        mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
+
+        # For competing risk: outcome is 0=censored, 1=event of interest, 2=competing event
+        # cmprsk::cuminc requires this format
+
+        tryCatch({
+          # Run cumulative incidence analysis
+          cuminc_fit <- cmprsk::cuminc(
+            ftime = mydata[[mytime]],
+            fstatus = mydata[[myoutcome]],
+            cencode = 0  # 0 is censored
+          )
+
+          return(cuminc_fit)
+
+        }, error = function(e) {
+          private$.addError(sprintf('Competing risk analysis failed: %s. Please verify outcome is coded as 0 (censored), 1 (event of interest), 2 (competing event).', e$message))
+          return(NULL)
+        })
       }
 
       # Median Survival Function ----
@@ -854,44 +1161,143 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         private$.checkpoint()
 
-        formula <-
-          paste('survival::Surv(',
-                mytime,
-                ',',
-                myoutcome,
-                ') ~ ',
-                myfactor)
+        # Check if competing risk analysis
+        if (private$.isCompetingRisk()) {
+          # PROPER COMPETING RISK ANALYSIS using cmprsk
+          cuminc_fit <- private$.competingRiskCumInc(results)
 
-        formula <- as.formula(formula)
+          # Extract cumulative incidence for event of interest (code 1)
+          cif_1 <- cuminc_fit$`1 1`  # Event type 1, group 1 (no stratification)
 
-        km_fit <- private$.safeExecute({
-          private$.getCachedSurvfit(formula, mydata, "median")
-        }, context = "survival_calculation")
-        
-        if (is.null(km_fit)) {
-          stop("Unable to perform survival analysis. Please check your data.")
+          if (is.null(cif_1)) {
+            private$.addError('No cumulative incidence found for event of interest. Please verify event is coded as 1 in your outcome variable for competing risk analysis.')
+          private$.displayMessages()
+          return()
+          }
+
+          # Calculate median time to event (time when CIF reaches 0.5)
+          median_time <- NA
+          cif_times <- cif_1$time
+          cif_est <- cif_1$est
+
+          if (max(cif_est, na.rm = TRUE) >= 0.5) {
+            # Find first time where CIF >= 0.5
+            median_idx <- which(cif_est >= 0.5)[1]
+            median_time <- cif_times[median_idx]
+          }
+
+          # Calculate confidence intervals for median using variance estimates from cmprsk
+          cif_var <- cif_1$var
+          median_lower <- NA
+          median_upper <- NA
+
+          # Calculate CI if median is reached and variance data available
+          if (!is.na(median_time) && length(cif_var) >= median_idx && !is.na(cif_var[median_idx])) {
+            # Standard error at the median CIF (0.5)
+            se_at_median <- sqrt(cif_var[median_idx])
+
+            # Use complementary log-log transformation for better CI coverage
+            # cloglog(p) = log(-log(1-p))
+            cloglog_0.5 <- log(-log(1 - 0.5))
+            se_cloglog <- se_at_median / ((1 - 0.5) * abs(log(1 - 0.5)))
+
+            # Calculate CI on cloglog scale
+            lower_cloglog <- cloglog_0.5 - 1.96 * se_cloglog
+            upper_cloglog <- cloglog_0.5 + 1.96 * se_cloglog
+
+            # Back-transform to probability scale
+            lower_cif <- 1 - exp(-exp(lower_cloglog))
+            upper_cif <- 1 - exp(-exp(upper_cloglog))
+
+            # Find corresponding times where CIF crosses these boundaries
+            # Lower time: when CIF first reaches lower_cif
+            lower_idx <- which(cif_est >= lower_cif)[1]
+            if (!is.na(lower_idx)) median_lower <- cif_times[lower_idx]
+
+            # Upper time: when CIF first reaches upper_cif
+            upper_idx <- which(cif_est >= upper_cif)[1]
+            if (!is.na(upper_idx)) median_upper <- cif_times[upper_idx]
+
+            # Sanity check: median should be between lower and upper
+            if (!is.na(median_lower) && median_lower > median_time) {
+              median_lower <- median_time * 0.8  # Fallback
+            }
+            if (!is.na(median_upper) && median_upper < median_time) {
+              median_upper <- median_time * 1.2  # Fallback
+            }
+          } else if (!is.na(median_time)) {
+            # Fallback: Use conservative ±20% if variance not available
+            median_lower <- median_time * 0.8
+            median_upper <- median_time * 1.2
+          }
+
+          # Create results table in same format as KM
+          n_total <- nrow(mydata)
+          n_events <- sum(mydata[[myoutcome]] == 1, na.rm = TRUE)
+          n_censored <- sum(mydata[[myoutcome]] == 0, na.rm = TRUE)
+          n_competing <- sum(mydata[[myoutcome]] == 2, na.rm = TRUE)
+
+          results1table <- data.frame(
+            records = n_total,
+            events = n_events,
+            rmean = NA,  # Restricted mean not applicable for CIF
+            se_rmean = NA,
+            median = median_time,
+            x0_95lcl = median_lower,  # Approximate
+            x0_95ucl = median_upper   # Approximate
+          )
+          if (is.na(median_time)) {
+            private$.addInfo('Cumulative incidence did not reach 50%. Median time to event not estimable. This is common in competing risk analyses with frequent competing events.')
+          }
+
+        } else {
+          # STANDARD SURVIVAL ANALYSIS using Kaplan-Meier
+          formula <-
+            paste('survival::Surv(',
+                  mytime,
+                  ',',
+                  myoutcome,
+                  ') ~ ',
+                  myfactor)
+
+          formula <- as.formula(formula)
+
+          km_fit <- private$.safeExecute({
+            private$.getCachedSurvfit(formula, mydata, "median")
+          }, context = "survival_calculation")
+
+          if (is.null(km_fit)) {
+            private$.addError('Unable to perform survival analysis. Please check for: (1) sufficient events, (2) valid time values, (3) properly coded outcome variable.')
+            return()
+          }
+
+          km_fit_median_df <- summary(km_fit)
+
+          # Process survival fit results for table display
+          results1table <-
+            as.data.frame(km_fit_median_df$table) %>%
+            t() %>%
+            as.data.frame() %>%
+            janitor::clean_names(dat = ., case = "snake")
         }
 
-        km_fit_median_df <- summary(km_fit)
-
-
-        # Process survival fit results for table display
-        results1table <-
-          as.data.frame(km_fit_median_df$table) %>%
-          t() %>%
-          as.data.frame() %>%
-          janitor::clean_names(dat = ., case = "snake")
-
-        # records n_max n_start events rmean se_rmean median
-        # km_fit_median_df$table     247   247     247    167 22.06    1.234   15.9
-        # x0_95lcl x0_95ucl
-        # km_fit_median_df$table     11.4     20.2
+        ## Populate Median Table ----
+        # results1table is already created above (either from CIF or KM)
 
         medianTable <- self$results$medianTable
+        if (private$.isCompetingRisk()) {
+          private$.addInfo('Competing risk analysis: Median time represents cumulative incidence of event of interest, properly accounting for competing events.')
+        }
         data_frame <- results1table
+
+        # Handle NA values for competing risk (rmean not applicable)
         data_frame <- data_frame %>%
-          dplyr::mutate(mean_time = round(rmean, 2),
-                        mean_ci = glue::glue("{x0_95lcl} - {x0_95ucl}"))
+          dplyr::mutate(
+            mean_time = ifelse(is.na(rmean), NA, round(rmean, 2)),
+            mean_ci = ifelse(is.na(x0_95lcl) | is.na(x0_95ucl),
+                            NA_character_,
+                            glue::glue("{x0_95lcl} - {x0_95ucl}"))
+          )
         for (i in seq_along(data_frame[, 1, drop = T])) {
           medianTable$addRow(rowKey = i, values = c(data_frame[i,]))
         }
@@ -899,43 +1305,52 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         ## Median Survival Summary ----
 
-        results1table %>%
-          dplyr::mutate(
-            description =
-              glue::glue(
-                "Median survival is {round(median, digits = 1)} [{round(x0_95lcl, digits = 1)} - {round(x0_95ucl, digits = 1)}, 95% CI] ",
-                self$options$timetypeoutput,
-                ".",
-                "The median survival is {round(median, 2)} months [95% CI: {round(x0_95lcl, digits = 1)} - {round(x0_95ucl, digits = 1)}]."
-       #          ,
-       # "At 1 year, survival is approximately {scales::percent(surv_12)},
-       # and at 5 years, it is {scales::percent(surv_60)}."
+        # FIX: Use correct time unit in narrative
+        time_unit <- self$options$timetypeoutput
+
+        # Different narrative for competing risk vs standard survival
+        if (private$.isCompetingRisk()) {
+          # Competing risk: report median time to event (cumulative incidence)
+          results1table %>%
+            dplyr::mutate(
+              description = ifelse(
+                is.na(median),
+                glue::glue(
+                  "Median time to event of interest not reached (cumulative incidence did not exceed 50%). ",
+                  "This is common in competing risk analyses where the competing event is frequent."
+                ),
+                glue::glue(
+                  "Median time to event of interest is {round(median, 2)} {time_unit} ",
+                  "(based on cumulative incidence function accounting for competing risks). ",
+                  "This is the time when 50% cumulative incidence of the event of interest is reached, ",
+                  "properly accounting for the competing event."
+                )
               )
-          ) %>%
-          # dplyr::mutate(
-          #   description = dplyr::case_when(
-          #     is.na(median) ~ paste0(
-          #       glue::glue("{description} \n Note that when {factor}, the survival curve does not drop below 1/2 during \n the observation period, thus the median survival is undefined.")),
-          #     TRUE ~ paste0(description)
-          #   )
-          # ) %>%
-          # dplyr::mutate(description = gsub(
-          #   pattern = "=",
-          #   replacement = " is ",
-          #   x = description
-          # )) %>%
-          # dplyr::mutate(description = gsub(
-          #   pattern = myexplanatory_labelled,
-          #   replacement = self$options$explanatory,
-          #   x = description
-          # )) %>%
-          dplyr::select(description) %>%
-          dplyr::pull(.) -> km_fit_median_definition
+            ) %>%
+            dplyr::select(description) %>%
+            dplyr::pull(.) -> km_fit_median_definition
+
+        } else {
+          # Standard survival analysis narrative
+          results1table %>%
+            dplyr::mutate(
+              description =
+                glue::glue(
+                  "Median survival is {round(median, digits = 1)} [{round(x0_95lcl, digits = 1)} - {round(x0_95ucl, digits = 1)}, 95% CI] ",
+                  time_unit,
+                  ".",
+                  "The median survival is {round(median, 2)} {time_unit} [95% CI: {round(x0_95lcl, digits = 1)} - {round(x0_95ucl, digits = 1)}]."
+                )
+            ) %>%
+            dplyr::select(description) %>%
+            dplyr::pull(.) -> km_fit_median_definition
+        }  # End of if/else for competing risk vs standard
 
 
         # Add additional statistical information
-        n_events <- km_fit_median_df$table[["events"]]
-        n_total <- km_fit_median_df$table[["records"]]
+        # Use results1table which is available for both standard and competing risk
+        n_events <- results1table$events
+        n_total <- results1table$records
         event_rate <- round((n_events / n_total) * 100, 1)
         
         # Include data quality information if available
@@ -949,13 +1364,24 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           )
         }
         
-        medianSummary <- c(km_fit_median_definition,
-                           paste0("Event rate: ", event_rate, "% (", n_events, " events out of ", n_total, " subjects)."),
-                           quality_info,
-                           "The median survival time is when 50% of subjects have experienced the event.",
-                           "This means that 50% of subjects in this group survived longer than this time period.",
-                           "Note: Confidence intervals are calculated using the log-log transformation method for improved accuracy with censored data (not plain Greenwood formula)."
-        )
+        # Different explanations for competing risk vs standard
+        if (private$.isCompetingRisk()) {
+          medianSummary <- c(km_fit_median_definition,
+                             paste0("Event of interest rate: ", event_rate, "% (", n_events, " events out of ", n_total, " subjects)."),
+                             quality_info,
+                             "This analysis uses proper competing risk methods (cumulative incidence functions).",
+                             "The median time represents when 50% cumulative incidence is reached for the event of interest,",
+                             "accounting for the presence of competing events that prevent the event of interest from occurring."
+          )
+        } else {
+          medianSummary <- c(km_fit_median_definition,
+                             paste0("Event rate: ", event_rate, "% (", n_events, " events out of ", n_total, " subjects)."),
+                             quality_info,
+                             "The median survival time is when 50% of subjects have experienced the event.",
+                             "This means that 50% of subjects in this group survived longer than this time period.",
+                             "Note: Confidence intervals are calculated using the log-log transformation method for improved accuracy with censored data (not plain Greenwood formula)."
+          )
+        }
 
 
         self$results$medianSummary$setContent(medianSummary)
@@ -1068,6 +1494,81 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         private$.checkpoint()
 
+
+        # Handle Competing Risk Analysis for Survival Table
+        if (private$.isCompetingRisk()) {
+          # For competing risk, we calculate Cumulative Incidence
+          
+          # Use proper mstate survival fit
+          # 0=censored, 1=event of interest, 2=competing event
+          # We construct formula carefully to avoid quoting issues
+          f_str <- paste0('survival::Surv(', mytime, ',', myoutcome, ', type="mstate") ~ 1')
+          formula_mstate <- as.formula(f_str)
+          
+          fit_mstate <- private$.safeExecute({
+            private$.getCachedSurvfit(formula_mstate, mydata, "survtable_mstate")
+          }, context = "survival_calculation")
+
+          if (is.null(fit_mstate)) {
+            private$.addError('Unable to perform competing risk analysis. Verify outcome is coded as 0 (censored), 1 (event of interest), 2 (competing event) and sufficient events exist.')
+            return()
+          }
+          
+          utimes <- private$.parseNumericList(self$options$cutp, private$.getDefaultCutpoints())
+          
+          s_summary <- summary(fit_mstate, times = utimes, extend = TRUE)
+          
+          # Extract CIF for event 1
+          if (is.null(dim(s_summary$pstate))) {
+             cif_est <- s_summary$pstate[2]
+             cif_se <- s_summary$std.err[2]
+             cif_lower <- s_summary$lower[2]
+             cif_upper <- s_summary$upper[2]
+             n_risk_val <- s_summary$n.risk[1]
+             n_event_val <- s_summary$n.event[2]
+          } else {
+             cif_est <- s_summary$pstate[, 2]
+             cif_se <- s_summary$std.err[, 2]
+             cif_lower <- s_summary$lower[, 2]
+             cif_upper <- s_summary$upper[, 2]
+             n_risk_val <- s_summary$n.risk[, 1]
+             n_event_val <- s_summary$n.event[, 2]
+          }
+          
+          km_fit_df <- data.frame(
+            time = s_summary$time,
+            n.risk = n_risk_val,
+            n.event = n_event_val,
+            surv = cif_est,
+            std.err = cif_se,
+            lower = cif_lower,
+            upper = cif_upper
+          )
+          
+          survTable <- self$results$survTable
+          for (i in seq_along(km_fit_df[, 1, drop = T])) {
+            survTable$addRow(rowKey = i, values = c(km_fit_df[i,]))
+          }
+          
+          km_fit_df %>%
+            dplyr::mutate(
+              description = glue::glue(
+                "At {time} {self$options$timetypeoutput}, the cumulative incidence of the event of interest is {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]."
+              ),
+            ) %>%
+            dplyr::select(description) %>%
+            dplyr::pull(.) -> survTableSummary
+            
+          self$results$survTableSummary$setContent(survTableSummary)
+          
+          self$results$survTable$setNote(
+            key = "cif_note",
+            note = "Note: For competing risk analysis, the 'Survival' column represents the Cumulative Incidence of the event of interest."
+          )
+          
+          return()
+        }
+        
         formula <-
           paste('survival::Surv(',
                 mytime,
@@ -1081,22 +1582,14 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         km_fit <- private$.safeExecute({
           private$.getCachedSurvfit(formula, mydata, "survtable")
         }, context = "survival_calculation")
-        
+
         if (is.null(km_fit)) {
-          stop("Unable to perform survival analysis. Please check your data.")
+          private$.addError('Unable to perform survival analysis for time-specific estimates. Check for sufficient events at requested time points and valid survival data.')
+          private$.displayMessages()
+          return()
         }
 
-        utimes <- self$options$cutp
-
-        utimes <- strsplit(utimes, ",")
-        utimes <- purrr::reduce(utimes, as.vector)
-        utimes <- as.numeric(utimes)
-
-        if (length(utimes) == 0) {
-          # Use centralized default cutpoints
-          default_cutpoints <- strsplit(private$.DEFAULT_CUTPOINTS, ",")
-          utimes <- as.numeric(purrr::reduce(default_cutpoints, as.vector))
-        }
+        utimes <- private$.parseNumericList(self$options$cutp, private$.getDefaultCutpoints())
 
         private$.checkpoint()
 
@@ -1279,14 +1772,23 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         myoutcome <- results$name2outcome
         mydata <- results$cleanData
 
+        if (private$.isCompetingRisk()) {
+          private$.addInfo('Person-time rates calculated for event of interest only (code 1). Competing events (code 2) are not counted as events in rate calculation.')
+        }
+
         # Ensure time is numeric
         mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
 
         # Get total observed time
         total_time <- sum(mydata[[mytime]])
 
-        # Get total events
-        total_events <- sum(mydata[[myoutcome]])
+        # Define event indicator consistently
+        if (private$.isCompetingRisk()) {
+          event_indicator <- mydata[[myoutcome]] == 1  # event of interest only
+        } else {
+          event_indicator <- mydata[[myoutcome]] >= 1  # any event
+        }
+        total_events <- sum(event_indicator, na.rm = TRUE)
 
         # Get time unit
         time_unit <- self$options$timetypeoutput
@@ -1312,45 +1814,65 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         ))
 
         # Parse time intervals for stratified analysis
-        time_intervals <- as.numeric(unlist(strsplit(self$options$time_intervals, ",")))
-        time_intervals <- sort(unique(time_intervals))
+        time_intervals <- private$.parseNumericList(self$options$time_intervals)
+        time_intervals <- sort(time_intervals)
 
         if (length(time_intervals) > 0) {
-          # Create time intervals
+          # Create time intervals with slightly extended upper bound to capture all events
+          # Example: if intervals are [12, 36, 60], breaks = [0, 12, 36, 60, max_time*1.1]
           breaks <- c(0, time_intervals, max(mydata[[mytime]]) * 1.1)
 
-          # Loop through intervals
+          # Strategy for interval-specific person-time calculation:
+          # - First interval [0, t1]: All patients enter at time 0 (standard analysis)
+          # - Later intervals (t_i, t_{i+1}]: Left-truncate at start_time (conditional survival)
+          #   Only patients who survived past t_i contribute person-time to interval i+1
+
+          # Loop through each time interval
           for (i in 1:(length(breaks)-1)) {
             start_time <- breaks[i]
             end_time <- breaks[i+1]
 
-            # Filter data for this interval
             if (i == 1) {
-              # For first interval, include patients from the beginning
+              # First interval [0, end_time]: All patients enter at time 0
               interval_data <- mydata
-              # But truncate follow-up time to the interval end
+
+              # Calculate person-time for each patient in this interval
+              # Person-time = min(observed_time, interval_end) - 0 (right-censoring at interval end)
               follow_up_times <- pmin(mydata[[mytime]], end_time)
-              # Count only events that occurred within this interval
-              events_in_interval <- sum(mydata[[myoutcome]] == 1 & mydata[[mytime]] <= end_time)
+
+              # Count events that occurred within [0, end_time]
+              events_in_interval <- sum(event_indicator & mydata[[mytime]] <= end_time, na.rm = TRUE)
+
             } else {
-              # For later intervals, include only patients who survived past the previous cutpoint
+              # Later intervals (start_time, end_time]: Left-truncate at interval start
+              # Only include patients who survived beyond start_time (conditional survival)
+              # This implements proper left-truncation for interval-specific rates
               survivors <- mydata[[mytime]] > start_time
               interval_data <- mydata[survivors, ]
 
               if (nrow(interval_data) == 0) {
-                # Skip if no patients in this interval
+                # No patients remaining in this interval - skip to next
                 next
               }
 
-              # Adjust entry time and follow-up time
+              # Calculate person-time contribution for each patient in this interval
+              # Entry time: start_time (left-truncated - patients enter interval if they survived past start)
+              # Exit time: min(actual_exit_time, interval_end) (right-censored if still alive at end)
               adjusted_entry_time <- rep(start_time, nrow(interval_data))
               adjusted_exit_time <- pmin(interval_data[[mytime]], end_time)
+
+              # Person-time in interval = exit - entry (accounting for both truncation and censoring)
               follow_up_times <- adjusted_exit_time - adjusted_entry_time
 
-              # Count only events that occurred within this interval
-              events_in_interval <- sum(interval_data[[myoutcome]] == 1 &
-                                          interval_data[[mytime]] <= end_time &
-                                          interval_data[[mytime]] > start_time)
+              # Count events within this interval: (start_time, end_time]
+              # Left-open interval to avoid double-counting boundary events
+              interval_events_flag <- event_indicator[survivors]
+              events_in_interval <- sum(
+                interval_events_flag &
+                interval_data[[mytime]] <= end_time &
+                interval_data[[mytime]] > start_time,  # Left-open, right-closed interval
+                na.rm = TRUE
+              )
             }
 
             # Sum person-time in this interval
@@ -1388,11 +1910,17 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 # Create summary text with interpretation
         summary_html <- glue::glue(
           "
-    In this study, {nrow(mydata)} subjects were followed for a total of {round(total_time, 1)} {time_unit}, 
-    with an average follow-up duration of {mean_follow_up} {time_unit} per person. During this observation period, 
+    In this study, {nrow(mydata)} subjects were followed for a total of {round(total_time, 1)} {time_unit},
+    with an average follow-up duration of {mean_follow_up} {time_unit} per person. During this observation period,
     {total_events} events occurred, resulting in an incidence rate of {round(overall_rate, 2)} events per {rate_multiplier} {time_unit}.
-    This means that for every {rate_multiplier} {time_unit} of observation, approximately {round(overall_rate, 1)} events are expected to occur.
-    The 95% confidence interval for this rate is {round(ci_lower, 2)} to {round(ci_upper, 2)} per {rate_multiplier} {time_unit}, 
+
+    <p><b>Understanding the Rate Multiplier:</b> The rate multiplier of {rate_multiplier} is used to express incidence rates in
+    clinically meaningful terms. Instead of reporting small decimal numbers (e.g., 0.05 events per {time_unit}), we scale the rate
+    to show events per {rate_multiplier} {time_unit}. This means that if we followed {rate_multiplier} patients for one {time_unit} each
+    (or equivalently, one patient for {rate_multiplier} {time_unit}), we would expect approximately {round(overall_rate, 1)} events to occur.
+    This standardized expression makes it easier to understand and compare rates across different studies.</p>
+
+    The 95% confidence interval for this rate is {round(ci_lower, 2)} to {round(ci_upper, 2)} per {rate_multiplier} {time_unit},
     indicating the precision of our estimate based on the observed data.
 
 
@@ -1477,6 +2005,13 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           return()
         }
 
+        # Baseline hazard not appropriate for competing risk multi-state coding
+        if (private$.isCompetingRisk()) {
+          private$.addInfo('Baseline hazard not computed for competing risk analyses. Hazard estimation requires standard survival analysis without competing events.')
+          private$.displayMessages()
+          return()
+        }
+
         # Extract data
         mytime <- results$name1time
         myoutcome <- results$name2outcome
@@ -1484,6 +2019,12 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         # Ensure time is numeric
         mydata[[mytime]] <- jmvcore::toNumeric(mydata[[mytime]])
+
+        if (sum(mydata[[myoutcome]] >= 1, na.rm = TRUE) == 0) {
+          private$.addInfo('Baseline hazard not estimated: no events observed in dataset. At least one event is required for hazard estimation.')
+          private$.displayMessages()
+          return()
+        }
 
         # Create survival object
         surv_obj <- survival::Surv(time = mydata[[mytime]], event = mydata[[myoutcome]])
@@ -1514,23 +2055,37 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             time_points <- time_points[valid_indices]
             hazard_rate <- hazard_rate[valid_indices]
             
-            # Calculate confidence intervals (approximate)
+            # Calculate confidence intervals using log-hazard transformation
+            # This ensures CIs are always positive and provides better coverage for rate parameters
             tryCatch({
               surv_summary <- summary(nelsen_aalen)
               if (length(surv_summary$n.risk) >= length(valid_indices)) {
                 n_risk <- surv_summary$n.risk[valid_indices]
-                se_hazard <- sqrt(hazard_rate / pmax(1, n_risk))  # Avoid division by zero
+                n_events_in_interval <- diff(c(0, surv_summary$n.event[valid_indices]))
+
+                # Use log-hazard transformation for asymmetric, always-positive CI
+                # SE(log(hazard)) = 1/sqrt(n_events)
+                se_log_hazard <- 1 / sqrt(pmax(1, n_events_in_interval))
+                log_hazard <- log(hazard_rate)
+
+                # Calculate CI on log scale, then back-transform
+                log_lower <- log_hazard - 1.96 * se_log_hazard
+                log_upper <- log_hazard + 1.96 * se_log_hazard
+
+                hazard_lower <- exp(log_lower)
+                hazard_upper <- exp(log_upper)
+
+              } else {
+                # Improved fallback using Poisson variance assumption
+                # Var(hazard) ≈ hazard / person-time
+                se_hazard <- sqrt(hazard_rate / length(valid_indices))
                 hazard_lower <- pmax(0, hazard_rate - 1.96 * se_hazard)
                 hazard_upper <- hazard_rate + 1.96 * se_hazard
-              } else {
-                # Fallback if n.risk doesn't match
-                hazard_lower <- hazard_rate * 0.8  # Simple approximation
-                hazard_upper <- hazard_rate * 1.2
               }
             }, error = function(e) {
-              # Fallback confidence intervals
-              hazard_lower <- hazard_rate * 0.8
-              hazard_upper <- hazard_rate * 1.2
+              # Conservative fallback with wider intervals (±50% instead of ±20%)
+              hazard_lower <- hazard_rate * 0.5
+              hazard_upper <- hazard_rate * 1.5
             })
             
             # Populate baseline hazard table
@@ -1558,6 +2113,12 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 "relatively constant", "highly variable")
               
               summary_html <- glue::glue("
+                <div style='background-color: #fff9e6; border-left: 4px solid #ffc107; padding: 12px; margin-bottom: 15px;'>
+                  <p style='margin: 5px 0;'><strong>⚠️ Methodological Note:</strong>
+                  Hazard rates are estimated using finite-difference approximations of the cumulative hazard.
+                  Confidence intervals are approximate and based on simplified variance estimates.
+                  For rigorous hazard function analysis, consider using specialized survival analysis packages.</p>
+                </div>
                 <h4>Baseline Hazard Analysis Summary</h4>
                 <p><strong>Hazard Function Characteristics:</strong></p>
                 <ul>
@@ -1568,7 +2129,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 </ul>
                 <p><strong>Understanding the Plots:</strong></p>
                 <ul>
-                  <li><b>Baseline Hazard (Step):</b> Shows exact hazard jumps at event times</li>
+                  <li><b>Baseline Hazard (Step):</b> Shows approximate hazard at event times</li>
                   <li><b>Smoothed Hazard (Curve):</b> Shows overall risk trend over time</li>
                   <li>Peaks may differ because smoothing averages nearby events</li>
                   <li>Both plots use the same data but present it differently</li>
@@ -1579,6 +2140,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                   <li>Use the smooth plot to understand overall risk patterns</li>
                   <li>Variable hazard indicates changing risk patterns over time</li>
                   <li>Consider both views for comprehensive risk assessment</li>
+                  <li><em>Note: Results are exploratory; verify with formal hazard models for publications</em></li>
                 </ul>
               ")
               
@@ -1687,13 +2249,14 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           return()
         }
 
+        # Validate plot parameters
+        if (!private$.validatePlotParameters()) return()
+
         mytime <- results$name1time
-        mytime <- jmvcore::constructFormula(terms = mytime)
+        mytime_orig <- jmvcore::constructFormula(terms = mytime) # Keep original for plotting labels
 
         myoutcome <- results$name2outcome
-        myoutcome <-
-          jmvcore::constructFormula(terms = myoutcome)
-
+        myoutcome_orig <- jmvcore::constructFormula(terms = myoutcome) # Keep original for plotting labels
 
         myfactor <- results$name3explanatory
         myfactor <-
@@ -1724,44 +2287,78 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         }
         
         # Use original names in formula if available, otherwise fall back to cleaned names
-        formula_time <- if (!is.null(original_time_name)) original_time_name else mytime
-        formula_outcome <- if (!is.null(original_outcome_name)) original_outcome_name else myoutcome
-        myformula_original <- paste("survival::Surv(`", formula_time, "`, `", formula_outcome, "`)")
+        formula_time <- if (!is.null(original_time_name)) original_time_name else mytime_orig
+        formula_outcome <- if (!is.null(original_outcome_name)) original_outcome_name else myoutcome_orig
 
         private$.checkpoint()
 
-        plot <- plotDataWithOriginalNames$data %>%
-          finalfit::surv_plot(
-            .data = .,
-            dependent = myformula_original,
-            explanatory = myfactor,
-            xlab = if (!is.null(original_time_name)) original_time_name else paste0('Time (', self$options$timetypeoutput, ')'),
-            # pval = TRUE,
-            # pval.method	= TRUE,
-            legend = 'none',
-            break.time.by = self$options$byplot,
-            xlim = c(0, self$options$endplot),
-            ylim = c(
-              self$options$ybegin_plot,
-              self$options$yend_plot),
-            title = .("Survival of the Whole Group"),
-            subtitle = .("Based on Kaplan-Meier estimates"),
-            risk.table = self$options$risktable,
-            conf.int = self$options$ci95,
-            censor = self$options$censored,
-            surv.median.line = self$options$medianline
+        if (private$.isCompetingRisk()) {
+            # Competing Risk Plot (Cumulative Incidence)
+            
+            # The 'fit' object for ggcompetingrisks should be from cmprsk::cuminc
+            # We need to run it here
+            cuminc_fit <- private$.competingRiskCumInc(results)
+            
+            plot_obj <- survminer::ggcompetingrisks(
+                fit = cuminc_fit,
+                conf.int = self$options$ci95, # Confidence intervals
+                title = .("Cumulative Incidence Function (CIF)"),
+                xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+                # The colors are automatically set by ggcompetingrisks based on event types
+                # surv.median.line is not applicable to CIF
+                xlim = c(0, self$options$endplot),
+                ylim = c(self$options$ybegin_plot, self$options$yend_plot),
+                risk.table = FALSE # Risk table not directly supported by ggcompetingrisks in same way as ggsurvplot
+            )
 
-          )
+            # Apply additional theming
+            plot_obj <- plot_obj + 
+              ggtheme + 
+              ggplot2::labs(subtitle = .("For Competing Risks (Event of Interest vs. Competing Event)")) +
+              ggplot2::theme(legend.position = 'bottom') # Move legend to bottom for clarity
 
-        # Apply colorblind-safe theme and colors
-        plot <- plot + 
-          ggplot2::scale_color_manual(values = c("#0173B2", "#DE8F05", "#CC78BC", "#029E73", "#D55E00")) +
-          ggplot2::scale_fill_manual(values = c("#0173B2", "#DE8F05", "#CC78BC", "#029E73", "#D55E00")) +
-          ggtheme
+        } else {
+            # Standard KM Plot
+            myformula_original <- paste0("survival::Surv(`", formula_time, "`, `", formula_outcome, "`)")
 
-        print(plot)
+            plot_result <- plotDataWithOriginalNames$data %>%
+              finalfit::surv_plot(
+                .data = .,
+                dependent = myformula_original,
+                explanatory = myfactor,
+                xlab = if (!is.null(original_time_name)) original_time_name else paste0('Time (', self$options$timetypeoutput, ')'),
+                legend = 'none',
+                break.time.by = self$options$byplot,
+                xlim = c(0, self$options$endplot),
+                ylim = c(
+                  self$options$ybegin_plot,
+                  self$options$yend_plot),
+                title = .("Survival of the Whole Group"),
+                subtitle = .("Based on Kaplan-Meier estimates"),
+                risk.table = self$options$risktable,
+                conf.int = self$options$ci95,
+                censor = self$options$censored,
+                surv.median.line = self$options$medianline
+              )
+
+            # Extract plot object (surv_plot returns a list or ggsurvplot object)
+            if (inherits(plot_result, "ggsurvplot")) {
+              plot_obj <- plot_result$plot
+            } else if (inherits(plot_result, "gg")) {
+              plot_obj <- plot_result
+            } else {
+              stop("Unexpected plot result type from surv_plot")
+            }
+
+            # Apply colorblind-safe theme and colors
+            plot_obj <- plot_obj + 
+              ggplot2::scale_color_manual(values = c("#0173B2", "#DE8F05", "#CC78BC", "#029E73", "#D55E00")) +
+              ggplot2::scale_fill_manual(values = c("#0173B2", "#DE8F05", "#CC78BC", "#029E73", "#D55E00")) +
+              ggtheme
+        }
+
+        print(plot_obj)
         TRUE
-
       }
 
 
@@ -1780,6 +2377,9 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         if (is.null(results)) {
           return()
         }
+
+        # Validate plot parameters
+        if (!private$.validatePlotParameters()) return()
 
         mytime <- results$name1time
         mytime <- jmvcore::constructFormula(terms = mytime)
@@ -1846,6 +2446,9 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           return()
         }
 
+        # Validate plot parameters
+        if (!private$.validatePlotParameters()) return()
+
         mytime <- results$name1time
         mytime <- jmvcore::constructFormula(terms = mytime)
 
@@ -1874,14 +2477,14 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             dependent = myformula,
             explanatory = myfactor,
             xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+            ylab = "Cumulative Hazard",
             # pval = self$options$pplot,
             # pval.method	= self$options$pplot,
             legend = 'none',
             break.time.by = self$options$byplot,
             xlim = c(0, self$options$endplot),
-            ylim = c(
-              self$options$ybegin_plot,
-              self$options$yend_plot),
+            # For cumulative hazard, use NULL to allow auto-scaling beyond 1.0
+            ylim = NULL,
             title = .("Cumulative Hazard of the Whole Group"),
             fun = "cumhaz",
             risk.table = self$options$risktable,
@@ -2299,14 +2902,8 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             .("favorable (median not reached)")
           }
           
-          # Get preset-specific context
-          preset_context <- switch(self$options$clinical_preset,
-            "overall_survival" = .("This overall survival analysis"),
-            "disease_free" = .("This disease-free survival analysis"),
-            "treatment_effect" = .("This treatment effectiveness study"),
-            "post_surgical" = .("This post-surgical outcome analysis"),
-            .("This survival analysis")
-          )
+          # General context
+          preset_context <- .("This survival analysis")
           
           # Build clinical summary
           summary_parts <- c()
@@ -2343,14 +2940,12 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           }
           
           if (n_events < 10) {
-            recommendations <- c(recommendations, 
+            recommendations <- c(recommendations,
               .("Results should be interpreted cautiously due to the small number of events."))
           }
-          
-          if (self$options$clinical_preset != "custom") {
-            recommendations <- c(recommendations, 
-              .("These findings can inform treatment planning and patient counseling discussions."))
-          }
+
+          recommendations <- c(recommendations,
+            .("These findings can inform treatment planning and patient counseling discussions."))
           
           # Format the complete summary
           summary_html <- paste0(

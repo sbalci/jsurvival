@@ -2,17 +2,48 @@
 name:  oddsratio
 title: Odds Ratio Table and Plot
 menuGroup: Survival
-menuSubgroup: ClinicoPath Survival
+menuSubgroup: General Statistics
 menuSubtitle: 'Odds Ratio for Binary Outcomes'
-version: '0.0.31'
+version: '0.0.32'
 jas: '1.2'
 
 description:
     main: Function for Odds Ratio Table and Plot.
     R:
-        dontrun: true
+        dontrun: false
         usage: |
-            # example will be added
+            # Basic odds ratio analysis with binary outcome
+            library(ClinicoPath)
+            data('histopathology')
+            
+            # Example 1: Simple odds ratio analysis
+            result1 <- oddsratio(
+                data = histopathology,
+                explanatory = c("New Test", "Rater 1"),
+                outcome = "Golden Standart",
+                outcomeLevel = "1"
+            )
+            
+            # Example 2: Comprehensive analysis with nomogram
+            result2 <- oddsratio(
+                data = histopathology,
+                explanatory = c("New Test", "Rater 1", "Rater 2"),
+                outcome = "Golden Standart", 
+                outcomeLevel = "1",
+                showNomogram = TRUE,
+                showSummaries = TRUE,
+                showExplanations = TRUE
+            )
+            
+            # Example 3: Analysis with continuous and categorical predictors
+            # Assuming additional variables in dataset
+            result3 <- oddsratio(
+                data = clinical_data,
+                explanatory = c("age", "gender", "treatment"),
+                outcome = "mortality",
+                outcomeLevel = "Dead",
+                showSummaries = TRUE
+            )
 
 options:
     - name: data
@@ -55,6 +86,19 @@ options:
             Specify which outcome level represents the positive case for likelihood ratio calculations.
             If not specified, the function will use the second level alphabetically.
 
+    - name: diagnosticPredictor
+      title: Diagnostic Predictor (for LRs)
+      type: Variable
+      suggested: [ nominal ]
+      permitted: [ factor ]
+      default: null
+      description:
+          main: >
+              Choose which binary predictor to use for sensitivity/specificity and likelihood ratios in the nomogram.
+              If left empty, the first explanatory variable is used. Ensure it has exactly two levels.
+          R: >
+              Specify the predictor to drive likelihood ratios; must be binary. Defaults to the first explanatory variable.
+
 
 # Nomogram ----
 
@@ -64,17 +108,8 @@ options:
       default: false
       description:
           R: >
-            Display an interactive nomogram for converting pre-test to post-test 
+            Display an interactive nomogram for converting pre-test to post-test
             probabilities using likelihood ratios calculated from the data.
-
-    - name: showSummaries
-      title: "Show Natural Language Summaries"
-      type: Bool
-      default: false
-      description:
-          R: >
-            Display natural language interpretations of the results to help understand
-            the clinical significance of odds ratios, confidence intervals, and diagnostic metrics.
 
     - name: showExplanations
       title: "Show Educational Explanations"

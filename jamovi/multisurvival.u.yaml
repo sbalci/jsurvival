@@ -4,6 +4,9 @@ jus: '3.0'
 stage: 0
 compilerMode: tame
 children:
+
+# Variable Supplier
+
   - type: VariableSupplier
     persistentItems: false
     stretchFactor: 1
@@ -38,6 +41,9 @@ children:
           - type: VariablesListBox
             name: contexpl
             isTarget: true
+
+# Advanced Elapsed Time Options
+
   - type: CollapseBox
     label: Advanced Elapsed Time Options
     collapsed: true
@@ -119,6 +125,10 @@ children:
               - type: Output
                 name: calculatedtime
                 enable: (tint)
+
+
+# Analysis with Multiple Outcomes
+
   - type: CollapseBox
     label: Analysis with Multiple Outcomes
     collapsed: true
@@ -157,6 +167,77 @@ children:
         children:
           - type: Output
             name: outcomeredefined
+
+
+
+
+
+
+# AFT Model Options
+
+  # - type: CollapseBox
+  #   label: AFT Model Options (Accelerated Failure Time)
+  #   collapsed: true
+  #   stretchFactor: 1
+  #   children:
+  #     - type: Label
+  #       label: AFT Model Type
+  #       children:
+  #         - type: LayoutBox
+  #           margin: large
+  #           children:
+  #             - type: CheckBox
+  #               name: use_aft
+  #               label: Use AFT Model (instead of Cox PH)
+  #             - type: ComboBox
+  #               name: aft_distribution
+  #               label: Distribution
+  #               enable: (use_aft)
+  #             - type: CheckBox
+  #               name: aft_show_hr_equivalent
+  #               label: Show Hazard Ratio Equivalents (Weibull only)
+  #               enable: (use_aft)
+  #             - type: CheckBox
+  #               name: aft_show_interpretation
+  #               label: Show Interpretation Column
+  #               enable: (use_aft)
+
+
+# Model Performance Metrics
+
+  # - type: CollapseBox
+  #   label: Model Performance Metrics (SurvMetrics)
+  #   collapsed: true
+  #   stretchFactor: 1
+  #   children:
+  #     - type: Label
+  #       label: Enhanced Metrics
+  #       children:
+  #         - type: LayoutBox
+  #           margin: large
+  #           children:
+  #             - type: CheckBox
+  #               name: show_survmetrics
+  #               label: Show Model Performance Metrics
+  #             - type: TextBox
+  #               name: survmetrics_timepoints
+  #               format: string
+  #               label: Time Points for Brier Score
+  #               suffix: (comma-separated)
+  #               enable: (show_survmetrics)
+  #             - type: TextBox
+  #               name: survmetrics_ibs_points
+  #               format: number
+  #               label: Points for Integrated Brier Score
+  #               enable: (show_survmetrics)
+  #             - type: CheckBox
+  #               name: survmetrics_show_plots
+  #               label: Show Performance Plots
+  #               enable: (show_survmetrics)
+
+
+# Plots
+
   - type: CollapseBox
     label: Plots
     collapsed: true
@@ -195,6 +276,10 @@ children:
             children:
               - type: CheckBox
                 name: km
+
+
+# Plot Options
+
   - type: CollapseBox
     label: Plot Options
     collapsed: true
@@ -234,6 +319,11 @@ children:
               - type: TextBox
                 name: cutp
                 format: string
+                width: large
+
+
+# Risk Score Grouping
+
   - type: CollapseBox
     label: Risk Score Grouping
     collapsed: true
@@ -265,6 +355,39 @@ children:
                       - type: Output
                         name: addRiskGroup
                         enable: (calculateRiskScore)
+
+
+# Model Selection
+
+  # - type: CollapseBox
+  #   label: Model Selection
+  #   collapsed: true
+  #   stretchFactor: 1
+  #   children:
+  #     - type: Label
+  #       label: Model Selection Options
+  #       children:
+  #         - type: ComboBox
+  #           name: modelSelection
+  #           enable: (use_modelSelection)
+  #         - type: ComboBox
+  #           name: selectionCriteria
+  #           enable: (use_modelSelection)
+  #         - type: TextBox
+  #           name: pEntry
+  #           format: number
+  #           enable: >-
+  #             (use_modelSelection && (modelSelection == 'forward' ||
+  #             modelSelection == 'both'))
+  #         - type: TextBox
+  #           name: pRemoval
+  #           format: number
+  #           enable: >-
+  #             (use_modelSelection && (modelSelection == 'backward' ||
+  #             modelSelection == 'both'))
+
+# Adjusted Survival Analysis
+
   - type: CollapseBox
     label: Adjusted Survival Analysis
     collapsed: true
@@ -310,6 +433,10 @@ children:
       - type: Label
         label: Advanced Options
         children: []
+
+
+# Stratification Variables
+
   - type: CollapseBox
     label: Stratification Variables
     collapsed: true
@@ -337,6 +464,10 @@ children:
                         isTarget: true
                         fitToGrid: true
                         stretchFactor: 1
+
+
+# Nomogram
+
   - type: CollapseBox
     label: Nomogram
     collapsed: true
@@ -363,293 +494,10 @@ children:
           - type: TextBox
             name: rate_multiplier
             format: number
-  - type: CollapseBox
-    label: Survival Decision Tree (will be implemented later)
-    collapsed: true
-    children:
-      - type: Label
-        label: >-
-          These features are being tested and will be activated in further
-          releases
-      - type: Label
-        label: Decision Tree Analysis
-        children:
-          - type: CheckBox
-            name: use_tree
-            fitToGrid: true
-            enable: (false)
-          - type: Label
-            label: Tree Parameters
-            children:
-              - type: LayoutBox
-                margin: large
-                children:
-                  - type: TextBox
-                    name: min_node
-                    format: number
-                    enable: (use_tree)
-                  - type: TextBox
-                    name: complexity
-                    format: number
-                    enable: (use_tree)
-                  - type: TextBox
-                    name: max_depth
-                    format: number
-                    enable: (use_tree)
-                  - type: CheckBox
-                    name: show_terminal_nodes
-                    enable: (use_tree)
-  - type: CollapseBox
-    label: Time-Dependent Covariates (will be implemented later)
-    collapsed: true
-    children:
-      - type: Label
-        label: >-
-          These features are being tested and will be activated in further
-          releases
-      - type: Label
-        label: Time-Varying Variables
-        children:
-          - type: CheckBox
-            name: use_time_dependent
-            fitToGrid: true
-            enable: (false)
-          - type: Label
-            label: Specify Variables
-            enable: (use_time_dependent)
-            children:
-              - type: VariableSupplier
-                persistentItems: false
-                stretchFactor: 1
-                children:
-                  - type: TargetLayoutBox
-                    label: Time-Dependent Variables
-                    children:
-                      - type: VariablesListBox
-                        name: time_dep_vars
-                        isTarget: false
-                        enable: (use_time_dependent)
-                  - type: TargetLayoutBox
-                    label: Start Time Variable
-                    children:
-                      - type: VariablesListBox
-                        name: start_time_var
-                        maxItemCount: 1
-                        isTarget: false
-                        enable: (use_time_dependent)
-                  - type: TargetLayoutBox
-                    label: Stop Time Variable
-                    children:
-                      - type: VariablesListBox
-                        name: stop_time_var
-                        maxItemCount: 1
-                        isTarget: false
-                        enable: (use_time_dependent)
-  - type: CollapseBox
-    label: Frailty Models (will be implemented later)
-    collapsed: true
-    children:
-      - type: Label
-        label: >-
-          These features are being tested and will be activated in further
-          releases
-      - type: Label
-        label: Random Effects for Clustering
-        children:
-          - type: CheckBox
-            name: use_frailty
-            fitToGrid: true
-            enable: (false)
-          - type: Label
-            label: Frailty Settings
-            enable: (use_frailty)
-            children:
-              - type: VariableSupplier
-                persistentItems: false
-                stretchFactor: 1
-                children:
-                  - type: TargetLayoutBox
-                    label: Clustering Variable
-                    children:
-                      - type: VariablesListBox
-                        name: frailty_var
-                        maxItemCount: 1
-                        isTarget: false
-                        enable: (false && use_frailty)
-              - type: ComboBox
-                name: frailty_distribution
-                enable: (false && use_frailty)
-  - type: CollapseBox
-    label: Time-Dependent Data Configuration (will be implemented later)
-    collapsed: true
-    children:
-      - type: Label
-        label: >-
-          These features are being tested and will be activated in further
-          releases
-      - type: Label
-        label: Data Format Settings
-        children:
-          - type: LayoutBox
-            margin: large
-            children:
-              - type: ComboBox
-                name: td_format
-                enable: (false && use_time_dependent)
-      - type: Label
-        label: Change Time Configuration
-        children:
-          - type: LayoutBox
-            margin: large
-            children:
-              - type: TextBox
-                name: change_times
-                format: string
-                enable: (FALSE && use_time_dependent)
-      - type: Label
-        label: Variable Naming Pattern
-        children:
-          - type: LayoutBox
-            margin: large
-            children:
-              - type: TextBox
-                name: td_suffix_pattern
-                format: string
-                enable: (FALSE && use_time_dependent)
-  - type: CollapseBox
-    label: Splines for Non-Proportional Hazards (will be implemented later)
-    collapsed: true
-    children:
-      - type: Label
-        label: >-
-          These features are being tested and will be activated in further
-          releases
-      - type: Label
-        label: Time-Varying Effects
-        children:
-          - type: CheckBox
-            name: use_splines
-            fitToGrid: true
-            enable: (false)
-          - type: Label
-            label: Spline Settings
-            enable: (false && use_splines)
-            children:
-              - type: VariableSupplier
-                persistentItems: false
-                stretchFactor: 1
-                children:
-                  - type: TargetLayoutBox
-                    label: Variables with Time-Varying Effects
-                    children:
-                      - type: VariablesListBox
-                        name: spline_vars
-                        isTarget: false
-                        enable: (false && use_splines)
-              - type: LayoutBox
-                margin: large
-                children:
-                  - type: TextBox
-                    name: spline_df
-                    format: number
-                    enable: (false && use_splines)
-                  - type: ComboBox
-                    name: spline_type
-                    enable: (false && use_splines)
-  - type: CollapseBox
-    label: Model Selection and Validation
-    collapsed: true
-    children:
-      - type: Label
-        label: >-
-          These features are being tested and will be activated in further
-          releases
-      - type: LayoutBox
-        margin: large
-        children:
-          - type: Label
-            label: Method Selection
-            children:
-              - type: LayoutBox
-                margin: large
-                children:
-                  - type: ComboBox
-                    name: ml_method
-          - type: Label
-            label: Model Validation
-            children:
-              - type: LayoutBox
-                margin: large
-                children:
-                  - type: ComboBox
-                    name: ml_validation
-                    enable: (ml_method != 'none')
-                  - type: TextBox
-                    name: ml_cv_folds
-                    format: number
-                    enable: (ml_method != 'none' && ml_validation == 'cv')
-          - type: Label
-            label: Feature Analysis
-            children:
-              - type: LayoutBox
-                margin: large
-                children:
-                  - type: CheckBox
-                    name: ml_feature_selection
-                    enable: (ml_method != 'none')
-                  - type: CheckBox
-                    name: ml_importance
-                    enable: (ml_method != 'none')
-          - type: Label
-            label: Model Evaluation
-            children:
-              - type: LayoutBox
-                margin: large
-                children:
-                  - type: CheckBox
-                    name: ml_performance
-                    enable: (ml_method != 'none')
-                  - type: CheckBox
-                    name: ml_calibration
-                    enable: (ml_method != 'none')
-                  - type: CheckBox
-                    name: ml_shap
-                    enable: (ml_method != 'none')
-  - type: CollapseBox
-    label: Advanced Features
-    collapsed: true
-    children:
-      - type: Label
-        label: >-
-          These features are being tested and will be activated in further
-          releases
-      - type: Label
-        label: Advanced Options
-        children:
-          - type: LayoutBox
-            margin: large
-            children:
-              - type: CheckBox
-                name: ml_hyperparameter_tuning
-                enable: (ml_method != 'none')
-              - type: TextBox
-                name: ml_ensemble_weights
-                format: string
-                enable: (ml_method == 'ensemble')
-  - type: CollapseBox
-    label: Model Selection
-    collapsed: true
-    children:
-      - type: Label
-        label: >-
-          These features are being tested and will be activated in further
-          releases
-      - type: Label
-        label: Variable Selection
-        children: []
-      - type: Label
-        label: Selection Parameters
-        children: []
+
+
+# Output and Display Options
+
   - type: CollapseBox
     label: Output and Display Options
     collapsed: true
@@ -664,3 +512,17 @@ children:
                 name: showExplanations
               - type: CheckBox
                 name: showSummaries
+
+  # Debug (disabled)
+  # - type: CollapseBox
+  #   label: Debug
+  #   collapsed: true
+  #   children:
+  #     - type: LayoutBox
+  #       margin: large
+  #       children:
+  #         - type: CheckBox
+  #           name: debug
+  #         - type: CheckBox
+  #           name: debug_dummy_plot
+  #           enable: (debug)

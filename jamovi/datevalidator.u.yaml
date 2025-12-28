@@ -1,0 +1,75 @@
+title: Date/DateTime Validator
+name: datevalidator
+jus: '3.0'
+stage: 0
+compilerMode: aggresive
+children:
+  - type: VariableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: Date/DateTime Variables to Validate
+        children:
+          - type: VariablesListBox
+            name: date_vars
+            isTarget: true
+
+  - type: CollapseBox
+    label: Validation Settings
+    collapsed: false
+    children:
+      - type: Label
+        label: Choose validation method and date/datetime format
+        children:
+          - type: ComboBox
+            name: correction_method
+          - type: ComboBox
+            name: date_format
+
+  - type: CollapseBox
+    label: Missing Value Imputation
+    collapsed: true
+    children:
+      - type: Label
+        label: Configure imputation for missing date components
+        children:
+          - type: TextBox
+            name: day_impute
+            format: number
+          - type: TextBox
+            name: month_impute
+            format: number
+
+  - type: CollapseBox
+    label: Additional Options
+    collapsed: true
+    children:
+      - type: Label
+        label: Method-specific settings
+        children:
+          - type: CheckBox
+            name: handle_excel
+            enable: (correction_method:datefixr || correction_method:consensus)
+          - type: TextBox
+            name: timezone
+            format: string
+            enable: (correction_method:anytime || correction_method:consensus)
+
+  - type: CollapseBox
+    label: Display Options
+    collapsed: true
+    children:
+      - type: Label
+        label: Select which outputs to display
+        children:
+          - type: CheckBox
+            name: show_correction_table
+          - type: CheckBox
+            name: show_quality_assessment
+          - type: CheckBox
+            name: show_format_analysis
+          - type: CheckBox
+            name: show_correction_summary
+          - type: CheckBox
+            name: show_interpretation

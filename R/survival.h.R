@@ -50,18 +50,7 @@ survivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             residual_diagnostics = FALSE,
             loglog = FALSE,
             showExplanations = FALSE,
-            showSummaries = FALSE,
-            use_parametric = FALSE,
-            parametric_distribution = "weibull",
-            parametric_covariates = TRUE,
-            spline_knots = 3,
-            spline_scale = "hazard",
-            parametric_extrapolation = FALSE,
-            extrapolation_time = 0,
-            parametric_diagnostics = TRUE,
-            compare_distributions = FALSE,
-            parametric_survival_plots = FALSE,
-            hazard_plots = FALSE, ...) {
+            showSummaries = FALSE, ...) {
 
             super$initialize(
                 package="jsurvival",
@@ -317,65 +306,6 @@ survivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "showSummaries",
                 showSummaries,
                 default=FALSE)
-            private$..use_parametric <- jmvcore::OptionBool$new(
-                "use_parametric",
-                use_parametric,
-                default=FALSE)
-            private$..parametric_distribution <- jmvcore::OptionList$new(
-                "parametric_distribution",
-                parametric_distribution,
-                options=list(
-                    "exp",
-                    "weibull",
-                    "lnorm",
-                    "llogis",
-                    "gamma",
-                    "gengamma",
-                    "gompertz",
-                    "survspline"),
-                default="weibull")
-            private$..parametric_covariates <- jmvcore::OptionBool$new(
-                "parametric_covariates",
-                parametric_covariates,
-                default=TRUE)
-            private$..spline_knots <- jmvcore::OptionInteger$new(
-                "spline_knots",
-                spline_knots,
-                min=1,
-                max=10,
-                default=3)
-            private$..spline_scale <- jmvcore::OptionList$new(
-                "spline_scale",
-                spline_scale,
-                options=list(
-                    "hazard",
-                    "odds",
-                    "normal"),
-                default="hazard")
-            private$..parametric_extrapolation <- jmvcore::OptionBool$new(
-                "parametric_extrapolation",
-                parametric_extrapolation,
-                default=FALSE)
-            private$..extrapolation_time <- jmvcore::OptionNumber$new(
-                "extrapolation_time",
-                extrapolation_time,
-                default=0)
-            private$..parametric_diagnostics <- jmvcore::OptionBool$new(
-                "parametric_diagnostics",
-                parametric_diagnostics,
-                default=TRUE)
-            private$..compare_distributions <- jmvcore::OptionBool$new(
-                "compare_distributions",
-                compare_distributions,
-                default=FALSE)
-            private$..parametric_survival_plots <- jmvcore::OptionBool$new(
-                "parametric_survival_plots",
-                parametric_survival_plots,
-                default=FALSE)
-            private$..hazard_plots <- jmvcore::OptionBool$new(
-                "hazard_plots",
-                hazard_plots,
-                default=FALSE)
 
             self$.addOption(private$..elapsedtime)
             self$.addOption(private$..tint)
@@ -425,17 +355,6 @@ survivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..loglog)
             self$.addOption(private$..showExplanations)
             self$.addOption(private$..showSummaries)
-            self$.addOption(private$..use_parametric)
-            self$.addOption(private$..parametric_distribution)
-            self$.addOption(private$..parametric_covariates)
-            self$.addOption(private$..spline_knots)
-            self$.addOption(private$..spline_scale)
-            self$.addOption(private$..parametric_extrapolation)
-            self$.addOption(private$..extrapolation_time)
-            self$.addOption(private$..parametric_diagnostics)
-            self$.addOption(private$..compare_distributions)
-            self$.addOption(private$..parametric_survival_plots)
-            self$.addOption(private$..hazard_plots)
         }),
     active = list(
         elapsedtime = function() private$..elapsedtime$value,
@@ -485,18 +404,7 @@ survivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         export_survival_data = function() private$..export_survival_data$value,
         loglog = function() private$..loglog$value,
         showExplanations = function() private$..showExplanations$value,
-        showSummaries = function() private$..showSummaries$value,
-        use_parametric = function() private$..use_parametric$value,
-        parametric_distribution = function() private$..parametric_distribution$value,
-        parametric_covariates = function() private$..parametric_covariates$value,
-        spline_knots = function() private$..spline_knots$value,
-        spline_scale = function() private$..spline_scale$value,
-        parametric_extrapolation = function() private$..parametric_extrapolation$value,
-        extrapolation_time = function() private$..extrapolation_time$value,
-        parametric_diagnostics = function() private$..parametric_diagnostics$value,
-        compare_distributions = function() private$..compare_distributions$value,
-        parametric_survival_plots = function() private$..parametric_survival_plots$value,
-        hazard_plots = function() private$..hazard_plots$value),
+        showSummaries = function() private$..showSummaries$value),
     private = list(
         ..elapsedtime = NA,
         ..tint = NA,
@@ -545,18 +453,7 @@ survivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..export_survival_data = NA,
         ..loglog = NA,
         ..showExplanations = NA,
-        ..showSummaries = NA,
-        ..use_parametric = NA,
-        ..parametric_distribution = NA,
-        ..parametric_covariates = NA,
-        ..spline_knots = NA,
-        ..spline_scale = NA,
-        ..parametric_extrapolation = NA,
-        ..extrapolation_time = NA,
-        ..parametric_diagnostics = NA,
-        ..compare_distributions = NA,
-        ..parametric_survival_plots = NA,
-        ..hazard_plots = NA)
+        ..showSummaries = NA)
 )
 
 survivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -577,6 +474,7 @@ survivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         coxRegressionHeading3 = function() private$.items[["coxRegressionHeading3"]],
         coxRegressionExplanation = function() private$.items[["coxRegressionExplanation"]],
         cox_ph = function() private$.items[["cox_ph"]],
+        phInterpretation = function() private$.items[["phInterpretation"]],
         plot8 = function() private$.items[["plot8"]],
         survivalTablesHeading = function() private$.items[["survivalTablesHeading"]],
         survTableSummary = function() private$.items[["survTableSummary"]],
@@ -814,6 +712,21 @@ survivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="cox_ph",
                 title="Proportional Hazards Assumption",
+                visible="(ph_cox)",
+                clearWith=list(
+                    "explanatory",
+                    "outcome",
+                    "outcomeLevel",
+                    "elapsedtime",
+                    "fudate",
+                    "dxdate",
+                    "tint",
+                    "multievent",
+                    "contexpl")))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="phInterpretation",
+                title="Proportional Hazards Assessment & Recommendations",
                 visible="(ph_cox)",
                 clearWith=list(
                     "explanatory",
@@ -1595,7 +1508,7 @@ survivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 package = "jsurvival",
                 name = "survival",
-                version = c(0,0,31),
+                version = c(0,0,32),
                 options = options,
                 results = survivalResults$new(options=options),
                 data = data,
@@ -1707,39 +1620,6 @@ survivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   and plots. These summaries provide plain-language interpretations of the
 #'   statistical results. Turn off to reduce visual clutter when summaries are
 #'   not needed.
-#' @param use_parametric Enable parametric survival modeling using flexsurv
-#'   package. Provides alternative to Cox regression with explicit hazard
-#'   functions and extrapolation capabilities beyond observed follow-up.
-#' @param parametric_distribution Choose parametric distribution for survival
-#'   modeling. Weibull is most common, while splines provide flexible hazard
-#'   shapes. Different distributions make different assumptions about hazard
-#'   function shape.
-#' @param parametric_covariates Include explanatory variables as covariates in
-#'   parametric models, similar to Cox regression but with parametric baseline
-#'   hazard.
-#' @param spline_knots Number of knots for spline-based models. More knots
-#'   allow more flexible hazard shapes but may lead to overfitting. Used only
-#'   for Royston-Parmar splines.
-#' @param spline_scale Scale for spline-based models. Hazard scale models log
-#'   hazard function, odds scale models log cumulative odds, normal scale models
-#'   normal scores.
-#' @param parametric_extrapolation Perform survival extrapolation beyond
-#'   observed follow-up time using fitted parametric models. Useful for health
-#'   economic modeling and long-term prognosis assessment.
-#' @param extrapolation_time Maximum time for survival extrapolation (in same
-#'   units as survival time). If 0, uses 2x maximum observed time. Use with
-#'   caution as extrapolation relies on distributional assumptions.
-#' @param parametric_diagnostics Display model diagnostics including AIC/BIC
-#'   for model comparison, residual plots, and goodness-of-fit statistics for
-#'   parametric models.
-#' @param compare_distributions Fit and compare multiple parametric
-#'   distributions using AIC/BIC criteria. Helps select the best-fitting
-#'   distribution for your data.
-#' @param parametric_survival_plots Generate survival curves from fitted
-#'   parametric models with confidence intervals. Compare with Kaplan-Meier
-#'   estimates for model validation.
-#' @param hazard_plots Plot estimated hazard functions from parametric models.
-#'   Shows how instantaneous risk changes over time for different distributions.
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$subtitle} \tab \tab \tab \tab \tab a preformatted \cr
@@ -1756,6 +1636,7 @@ survivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$coxRegressionHeading3} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$coxRegressionExplanation} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$phInterpretation} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$survivalTablesHeading} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$survTableSummary} \tab \tab \tab \tab \tab a preformatted \cr
@@ -1853,18 +1734,7 @@ survival <- function(
     residual_diagnostics = FALSE,
     loglog = FALSE,
     showExplanations = FALSE,
-    showSummaries = FALSE,
-    use_parametric = FALSE,
-    parametric_distribution = "weibull",
-    parametric_covariates = TRUE,
-    spline_knots = 3,
-    spline_scale = "hazard",
-    parametric_extrapolation = FALSE,
-    extrapolation_time = 0,
-    parametric_diagnostics = TRUE,
-    compare_distributions = FALSE,
-    parametric_survival_plots = FALSE,
-    hazard_plots = FALSE) {
+    showSummaries = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("survival requires jmvcore to be installed (restart may be required)")
@@ -1933,18 +1803,7 @@ survival <- function(
         residual_diagnostics = residual_diagnostics,
         loglog = loglog,
         showExplanations = showExplanations,
-        showSummaries = showSummaries,
-        use_parametric = use_parametric,
-        parametric_distribution = parametric_distribution,
-        parametric_covariates = parametric_covariates,
-        spline_knots = spline_knots,
-        spline_scale = spline_scale,
-        parametric_extrapolation = parametric_extrapolation,
-        extrapolation_time = extrapolation_time,
-        parametric_diagnostics = parametric_diagnostics,
-        compare_distributions = compare_distributions,
-        parametric_survival_plots = parametric_survival_plots,
-        hazard_plots = hazard_plots)
+        showSummaries = showSummaries)
 
     analysis <- survivalClass$new(
         options = options,

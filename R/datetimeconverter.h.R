@@ -46,6 +46,8 @@ datetimeconverterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R
                 datetime_format,
                 options=list(
                     "auto",
+                    "excel_serial",
+                    "unix_epoch",
                     "ymdhms",
                     "ymd",
                     "dmy",
@@ -59,12 +61,9 @@ datetimeconverterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R
                     "myd",
                     "dym"),
                 default="auto")
-            private$..timezone <- jmvcore::OptionList$new(
+            private$..timezone <- jmvcore::OptionString$new(
                 "timezone",
                 timezone,
-                options=list(
-                    "system",
-                    "utc"),
                 default="system")
             private$..preview_rows <- jmvcore::OptionNumber$new(
                 "preview_rows",
@@ -483,7 +482,7 @@ datetimeconverterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
             super$initialize(
                 package = "jsurvival",
                 name = "datetimeconverter",
-                version = c(0,0,31),
+                version = c(0,0,32),
                 options = options,
                 results = datetimeconverterResults$new(options=options),
                 data = data,
@@ -505,7 +504,7 @@ datetimeconverterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
 #' creating time-based variables.
 #'
 #' @examples
-#' # Basic datetime conversion: '0.0.31'
+#' # Basic datetime conversion: '0.0.32'
 #' datetimeconverter(
 #'   data = study_data,
 #'   datetime_var = "event_date",
@@ -530,10 +529,10 @@ datetimeconverterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
 #' @param datetime_format DateTime format specification. 'Auto-detect'
 #'   attempts to identify the format automatically. Manual selection ensures
 #'   accurate parsing for specific datetime formats.
-#' @param timezone Timezone for datetime parsing. 'System Default' uses your
-#'   computer's timezone. 'UTC' interprets datetimes as Coordinated Universal
-#'   Time. Note: Excel serial and Unix epoch conversions always use UTC
-#'   regardless of this setting.
+#' @param timezone Timezone for datetime parsing. Provide an Olson identifier
+#'   such as "Europe/Istanbul", "America/New_York", "UTC", or "system" to use
+#'   the local machine timezone. Excel serial and Unix epoch conversions always
+#'   use UTC regardless of this setting.
 #' @param preview_rows Number of rows to display in preview tables. Shows
 #'   original values, corrected datetimes, and extracted components for quality
 #'   checking.

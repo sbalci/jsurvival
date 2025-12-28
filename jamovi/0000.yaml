@@ -1,12 +1,12 @@
 ---
 title: Survival Module of ClinicoPath for jamovi
 name: jsurvival
-version: 0.0.32.26
+version: 0.0.32.60
 jms: '1.0'
 authors:
   - Serdar Balci
 maintainer: Serdar Balci <serdarbalci@serdarbalci.com>
-date: '2025-11-16'
+date: '2025-12-28'
 type: R
 description: >-
   Survival Module of ClinicoPath for jamovi ClinicoPath help researchers to
@@ -80,7 +80,7 @@ analyses:
     name: oddsratio
     ns: jsurvival
     menuGroup: Survival
-    menuSubgroup: ClinicoPath Survival
+    menuSubgroup: General Statistics
     menuTitle: Odds Ratio Table and Plot
     description: Function for Odds Ratio Table and Plot.
     menuSubtitle: Odds Ratio for Binary Outcomes
@@ -100,6 +100,53 @@ analyses:
       quarter, etc.). Features automatic format detection, quality assessment,
       and preview of converted data. Perfect for preparing datetime data for
       analysis and creating time-based variables.
+  - title: Date/DateTime Validator
+    name: datevalidator
+    ns: jsurvival
+    category: analyses
+    menuGroup: Survival
+    menuSubgroup: Data Preparation
+    menuTitle: Date/DateTime Validator
+    menuSubtitle: Validate and diagnose messy date/datetime formats
+    description: >-
+      Comprehensive date and datetime field validation and quality assessment
+      using multiple R packages (datefixR, anytime, lubridate).
+
+      This module validates and diagnoses messy date/datetime formats commonly
+      found in clinical databases: different separators,
+
+      month representations, missing components, and ambiguous formats. Provides
+      detailed validation reports and quality assessment.
+
+      Perfect for clinical research data quality control and database audit
+      workflows.
+  - title: Outcome Organizer for Survival Analysis
+    name: outcomeorganizer
+    ns: jsurvival
+    category: analyses
+    menuGroup: Survival
+    menuSubgroup: Data Preparation
+    menuTitle: Outcome Organizer for Survival Analysis
+    menuSubtitle: Comprehensive Outcome Preparation for Survival Analysis
+    description: >-
+      Advanced tool for preparing outcome variables for various types of
+      survival analysis including overall survival, cause-specific, competing
+      risks, progression-free survival, and multistate models.
+  - title: Comprehensive Time Interval Calculator
+    name: timeinterval
+    ns: jsurvival
+    category: analyses
+    menuGroup: Survival
+    menuSubgroup: Data Preparation
+    menuTitle: Comprehensive Time Interval Calculator
+    menuSubtitle: Advanced time interval analysis with quality assessment
+    description: >-
+      Advanced time interval calculator designed for survival analysis,
+      epidemiological studies,  and person-time analysis. Features intelligent
+      date parsing, comprehensive data quality  assessment, landmark analysis,
+      and robust statistical summaries. Time intervals form the  foundation of
+      person-time follow-up calculations, capturing both participant counts and 
+      observation duration for accurate incidence rate calculations.
 datasets:
   - name: histopathology including analysis
     path: histopathologySurvival.omv

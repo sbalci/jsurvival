@@ -1,3 +1,35 @@
+# jsurvival 0.0.32.60 (2025-12-28)
+
+## Major Updates
+
+### New Modules
+- **Date Validator**: Comprehensive date and datetime validation tool.
+  - Validates and diagnoses messy date/datetime formats using multiple methods (datefixR, anytime, lubridate).
+  - Provides detailed audit tables and quality assessment reports.
+
+### Re-introduced and Enhanced Modules
+- **Outcome Organizer**: Re-introduced with significant enhancements.
+  - Improved data cleaning and label handling.
+  - Contextual validation for different survival analysis types (OS, Cause-specific, etc.).
+  - Diagnostic messages and glossary for educational support.
+- **Time Interval**: Re-introduced as a comprehensive calculator.
+  - Robust time interval calculations with landmark analysis support.
+  - Person-time calculation for epidemiological studies.
+  - Data quality assessment for time intervals.
+
+## Enhancements
+
+### Survival Analysis
+- **Parametric Models**: Improved handling of covariates and formula construction.
+- **Plots**: Added logic to skip certain plots (e.g., PH assumption, residuals) for competing risk analysis to avoid errors.
+- **Diagnostics**: Enhanced model summaries and p-value calculations.
+
+### General
+- **Notice System**: Improved notice generation and handling across modules.
+- **Documentation**: Updated documentation for all modules.
+
+---
+
 # jsurvival 0.0.31.84 (2025-10-03)
 
 ## New Features

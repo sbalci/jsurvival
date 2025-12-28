@@ -9,8 +9,8 @@ oddsratio(
   explanatory,
   outcome,
   outcomeLevel,
+  diagnosticPredictor = NULL,
   showNomogram = FALSE,
-  showSummaries = FALSE,
   showExplanations = FALSE
 )
 }
@@ -25,13 +25,12 @@ oddsratio(
 case for likelihood ratio calculations. If not specified, the function will
 use the second level alphabetically.}
 
-\item{showNomogram}{Display an interactive nomogram for converting pre-test
-to post-test  probabilities using likelihood ratios calculated from the
-data.}
+\item{diagnosticPredictor}{Specify the predictor to drive likelihood
+ratios; must be binary. Defaults to the first explanatory variable.}
 
-\item{showSummaries}{Display natural language interpretations of the
-results to help understand the clinical significance of odds ratios,
-confidence intervals, and diagnostic metrics.}
+\item{showNomogram}{Display an interactive nomogram for converting pre-test
+to post-test probabilities using likelihood ratios calculated from the
+data.}
 
 \item{showExplanations}{Display educational explanations for each analysis
 type to help interpret  odds ratios, risk ratios, diagnostic test
@@ -41,23 +40,15 @@ performance, ROC analysis,  and likelihood ratios.}
 A results object containing:
 \tabular{llllll}{
 \code{results$todo} \tab \tab \tab \tab \tab a html \cr
-\code{results$oddsRatioHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$text} \tab \tab \tab \tab \tab a html \cr
 \code{results$text2} \tab \tab \tab \tab \tab a html \cr
-\code{results$oddsRatioSummaryHeading} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$oddsRatioSummary} \tab \tab \tab \tab \tab a html \cr
-\code{results$oddsRatioPlotHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
-\code{results$oddsRatioExplanationHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$oddsRatioExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$riskMeasuresExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$diagnosticTestExplanation} \tab \tab \tab \tab \tab a html \cr
-\code{results$nomogramHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plot_nomogram} \tab \tab \tab \tab \tab an image \cr
+\code{results$diagnosticMetrics} \tab \tab \tab \tab \tab a html \cr
 \code{results$nomogram} \tab \tab \tab \tab \tab a html \cr
-\code{results$nomogramSummaryHeading} \tab \tab \tab \tab \tab a preformatted \cr
-\code{results$nomogramSummary} \tab \tab \tab \tab \tab a html \cr
-\code{results$nomogramExplanationHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$nomogramAnalysisExplanation} \tab \tab \tab \tab \tab a html \cr
 }
 }
@@ -65,7 +56,37 @@ A results object containing:
 Function for Odds Ratio Table and Plot.
 }
 \examples{
-\donttest{
-# example will be added
-}
+# Basic odds ratio analysis with binary outcome
+library(ClinicoPath)
+data('histopathology')
+
+# Example 1: Simple odds ratio analysis
+result1 <- oddsratio(
+    data = histopathology,
+    explanatory = c("New Test", "Rater 1"),
+    outcome = "Golden Standart",
+    outcomeLevel = "1"
+)
+
+# Example 2: Comprehensive analysis with nomogram
+result2 <- oddsratio(
+    data = histopathology,
+    explanatory = c("New Test", "Rater 1", "Rater 2"),
+    outcome = "Golden Standart",
+    outcomeLevel = "1",
+    showNomogram = TRUE,
+    showSummaries = TRUE,
+    showExplanations = TRUE
+)
+
+# Example 3: Analysis with continuous and categorical predictors
+# Assuming additional variables in dataset
+result3 <- oddsratio(
+    data = clinical_data,
+    explanatory = c("age", "gender", "treatment"),
+    outcome = "mortality",
+    outcomeLevel = "Dead",
+    showSummaries = TRUE
+)
+
 }

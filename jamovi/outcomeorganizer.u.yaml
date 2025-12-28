@@ -1,0 +1,161 @@
+title: Outcome Organizer for Survival Analysis
+name: outcomeorganizer
+jus: '3.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: CollapseBox
+    label: Basic Outcome Settings
+    collapsed: false
+    children:
+      - type: VariableSupplier
+        persistentItems: false
+        stretchFactor: 1
+        children:
+          - type: TargetLayoutBox
+            label: Outcome Variable
+            children:
+              - type: VariablesListBox
+                name: outcome
+                maxItemCount: 1
+                isTarget: true
+              - type: LevelSelector
+                name: outcomeLevel
+                enable: (outcome)
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: ComboBox
+            name: analysistype
+  - type: CollapseBox
+    label: Multiple Event Types
+    collapsed: true
+    children:
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: CheckBox
+            name: multievent
+            children:
+              - type: LayoutBox
+                margin: large
+                children:
+                  - type: LevelSelector
+                    name: dod
+                  - type: LevelSelector
+                    name: dooc
+                  - type: LevelSelector
+                    name: awd
+                  - type: LevelSelector
+                    name: awod
+
+  - type: CollapseBox
+    label: Recurrence/Progression
+    collapsed: true
+    children:
+      - type: VariableSupplier
+        persistentItems: false
+        stretchFactor: 1
+        children:
+          - type: TargetLayoutBox
+            label: Recurrence/Progression Variable
+            children:
+              - type: VariablesListBox
+                name: recurrence
+                maxItemCount: 1
+                isTarget: true
+              - type: LevelSelector
+                name: recurrenceLevel
+                enable: (recurrence)
+
+  - type: CollapseBox
+    label: Advanced Options
+    collapsed: true
+    children:
+      - type: VariableSupplier
+        persistentItems: false
+        stretchFactor: 1
+        children:
+          - type: TargetLayoutBox
+            label: Patient ID
+            children:
+              - type: VariablesListBox
+                name: patientID
+                maxItemCount: 1
+                isTarget: true
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: CheckBox
+            name: useHierarchy
+            children:
+              - type: TextBox
+                name: eventPriority
+                format: number
+                enable: (useHierarchy)
+
+  - type: CollapseBox
+    label: Censoring Options
+    collapsed: true
+    children:
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: CheckBox
+            name: intervalCensoring
+            children:
+              - type: VariableSupplier
+                persistentItems: false
+                stretchFactor: 1
+                children:
+                  - type: TargetLayoutBox
+                    label: Interval Start Variable
+                    children:
+                      - type: VariablesListBox
+                        name: intervalStart
+                        maxItemCount: 1
+                        isTarget: true
+                  - type: TargetLayoutBox
+                    label: Interval End Variable
+                    children:
+                      - type: VariablesListBox
+                        name: intervalEnd
+                        maxItemCount: 1
+                        isTarget: true
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: CheckBox
+            name: adminCensoring
+            children:
+              - type: VariableSupplier
+                persistentItems: false
+                stretchFactor: 1
+                children:
+                  - type: TargetLayoutBox
+                    label: Administrative Censoring Date
+                    children:
+                      - type: VariablesListBox
+                        name: adminDate
+                        maxItemCount: 1
+                        isTarget: true
+
+  - type: CollapseBox
+    label: Display Options
+    collapsed: false
+    children:
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: CheckBox
+            name: outputTable
+          - type: CheckBox
+            name: diagnostics
+          - type: CheckBox
+            name: visualization
+          - type: CheckBox
+            name: showNaturalSummary
+          - type: CheckBox
+            name: showGlossary
+          - type: Output
+            name: addOutcome

@@ -1,0 +1,70 @@
+---
+name:  timeinterval
+title: Comprehensive Time Interval Calculator
+jrs:   '1.1'
+
+items:
+    # === MESSAGES HTML (for errors, warnings, info) ===
+    - name: messages
+      type: Html
+
+    # === HTML PANELS ===
+    - name: todo
+      title: 'Getting Started'
+      type: Html
+
+    - name: aboutPanel
+      title: About This Analysis
+      type: Html
+
+    - name: personTimeInfo
+      title: Understanding Person-Time Analysis
+      type: Html
+
+    - name: qualityAssessment
+      title: Data Quality Assessment
+      type: Html
+      visible: (include_quality_metrics)
+
+    - name: caveatsPanel
+      title: Caveats & Assumptions
+      type: Html
+      visible: (include_quality_metrics)
+
+    - name: summary
+      title: Statistical Summary & Person-Time Analysis
+      type: Html
+
+    - name: nlSummary
+      title: Clinical Summary (Copy-Ready)
+      type: Html
+      visible: (show_summary)
+
+    - name: glossaryPanel
+      title: 'Key Terms & Concepts'
+      type: Html
+      visible: (show_glossary)
+
+    - name: calculated_time
+      title: Calculated Time Intervals
+      type: Output
+      measureType: continuous
+      clearWith:
+          - dx_date
+          - fu_date
+          - time_format
+          - output_unit
+          - time_basis
+          - use_landmark
+          - landmark_time
+          - remove_negative
+          - remove_extreme
+
+refs:
+    - ClinicoPathJamoviModule
+    - lubridate
+
+    
+
+    - glue
+...

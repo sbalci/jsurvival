@@ -1,58 +1,30 @@
 Type: Package
 Package: jsurvival
 Title: Survival Module of ClinicoPath for jamovi
-Version: 0.0.32.26
-Date: 2025-11-16
-Authors@R: 
-    person(given = "Serdar",
-           family = "Balci",
-           role = c("aut", "cre"),
-           email = "serdarbalci@serdarbalci.com",
-           comment = c(ORCID = "0000-0002-7852-3851"))
+Version: 0.0.32.60
+Date: 2025-12-28
+Authors@R: person(given = "Serdar", family = "Balci", role = c("aut",
+        "cre"), email = "serdarbalci@serdarbalci.com", comment =
+        c(ORCID = "0000-0002-7852-3851"))
 Maintainer: Serdar Balci <serdarbalci@serdarbalci.com>
-Description: Survival Module of ClinicoPath for jamovi
-    ClinicoPath help researchers to generate natural language summaries
-    of their dataset, generate cross tables with statistical tests,
-    and survival analysis with survival tables,
-    survival plots, and natural language summaries.
+Description: Survival Module of ClinicoPath for jamovi ClinicoPath help
+        researchers to generate natural language summaries of their
+        dataset, generate cross tables with statistical tests, and
+        survival analysis with survival tables, survival plots, and
+        natural language summaries.
 License: GPL (>= 2)
-URL: https://github.com/sbalci/ClinicoPathJamoviModule/, https://github.com/sbalci/jsurvival/, https://sbalci.github.io/ClinicoPathJamoviModule/, https://www.serdarbalci.com/jsurvival/
+URL: https://github.com/sbalci/ClinicoPathJamoviModule/,
+        https://github.com/sbalci/jsurvival/,
+        https://sbalci.github.io/ClinicoPathJamoviModule/,
+        https://www.serdarbalci.com/jsurvival/
 BugReports: https://github.com/sbalci/ClinicoPathJamoviModule/issues/
-Depends:
-    R (>= 4.1.0)
-Imports:
-    dplyr,
-    finalfit,
-    ggplot2,
-    glmnet,
-    glue,
-    janitor,
-    jmvcore,
-    KMunicate,
-    knitr,
-    lubridate,
-    purrr,
-    R6,
-    scales,
-    survival,
-    survminer,
-    tibble,
-    tidyr,
-    magrittr,
-    checkmate,
-    pammtools,
-    xml2,
-    labelled,
-    rms,
-    dcurves,
-    timeROC,
-    boot,
-    pROC,
-    rlang,
-    Hmisc,
-    mgcv
-Suggests:
-    rmarkdown
+Depends: R (>= 4.1.0)
+Imports: anytime, boot, checkmate, datefixR, dcurves, dplyr, finalfit,
+        ggplot2, glmnet, glue, gridExtra, Hmisc, htmltools, janitor,
+        jmvcore, KMunicate, knitr, labelled, lubridate, magrittr, mgcv,
+        pammtools, pROC, purrr, R6, rlang, rms, scales, survival,
+        survminer, tibble, tidyr, timeROC, xml2
+Suggests: rmarkdown
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
