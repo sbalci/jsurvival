@@ -235,14 +235,6 @@ A results object containing:
 \code{results$residualsPlot} \tab \tab \tab \tab \tab an image \cr
 \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
 \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
-\code{results$parametricModelComparison} \tab \tab \tab \tab \tab a table \cr
-\code{results$parametricModelSummary} \tab \tab \tab \tab \tab a table \cr
-\code{results$parametricDiagnostics} \tab \tab \tab \tab \tab a html \cr
-\code{results$parametricSurvivalPlot} \tab \tab \tab \tab \tab an image \cr
-\code{results$hazardFunctionPlot} \tab \tab \tab \tab \tab an image \cr
-\code{results$extrapolationPlot} \tab \tab \tab \tab \tab an image \cr
-\code{results$extrapolationTable} \tab \tab \tab \tab \tab a table \cr
-\code{results$parametricModelsExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$clinicalGlossaryExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$clinicalInterpretationExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$copyReadySentencesExplanation} \tab \tab \tab \tab \tab a html \cr
