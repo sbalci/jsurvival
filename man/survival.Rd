@@ -323,6 +323,7 @@ function, which represents the instantaneous event rate per unit of
 person-time.
 }
 \examples{
+\donttest{
 # example will be added
-
+}
 }

@@ -18,4 +18,6 @@
 #' @docType package
 #' @aliases jsurvival jsurvival-package
 #' @name jsurvival-package
+#' @importFrom stats as.formula binomial complete.cases glm pchisq pnorm predict qbeta qnorm quantile rexp rlnorm runif
+#' @importFrom utils install.packages
 "_PACKAGE"

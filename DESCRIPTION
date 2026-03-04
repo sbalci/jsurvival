@@ -1,8 +1,8 @@
 Type: Package
 Package: jsurvival
 Title: Survival Module of ClinicoPath for jamovi
-Version: 0.0.33.05
-Date: 2026-01-29
+Version: 0.0.37
+Date: 2026-03-04
 Authors@R: person(given = "Serdar", family = "Balci", role = c("aut",
         "cre"), email = "serdarbalci@serdarbalci.com", comment =
         c(ORCID = "0000-0002-7852-3851"))
@@ -19,12 +19,11 @@ URL: https://github.com/sbalci/ClinicoPathJamoviModule/,
         https://www.serdarbalci.com/jsurvival/
 BugReports: https://github.com/sbalci/ClinicoPathJamoviModule/issues/
 Depends: R (>= 4.1.0)
-Imports: boot, checkmate, dcurves, dplyr, finalfit,
-        ggplot2, glmnet, glue, gridExtra, Hmisc, htmltools, janitor,
-        jmvcore, KMunicate, knitr, labelled, lubridate, magrittr, mgcv,
-        pammtools, pROC, purrr, R6, rlang, rms, scales, survival,
-        survminer, tibble, tidyr, timeROC, xml2
-Suggests: rmarkdown
+Imports: dplyr, finalfit, ggplot2, glue, gridExtra,
+        jmvcore, lubridate, magrittr, R6, rlang, survival, survminer
+Suggests: boot, checkmate, dcurves, glmnet, Hmisc, htmltools, janitor,
+        KMunicate, knitr, labelled, mgcv, pammtools, pROC, purrr,
+        rmarkdown, rms, scales, tibble, tidyr, timeROC, xml2
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
