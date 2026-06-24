@@ -1,15 +1,13 @@
-# Ensure internationalization function is available
-if (!exists(".")) {
-  . <- function(x) x  # Fallback identity function for testing
-}
+# Internationalization note:
+# jamovi's translation helper `.()` (jmvcore) resolves `self` from the CALLING
+# frame, so it only works inside R6 analysis methods. The top-level helper
+# functions in this file run without `self` in scope, so they MUST use plain
+# string literals -- calling `.()` there throws "object 'self' not found"
+# (GitHub issue #122). Do not reintroduce `.()` into file-level helpers.
+# (The previous `if (!exists(".")) . <- function(x) x` guard was dead code:
+# jmvcore::`.` is imported into the namespace, so `exists(".")` is always TRUE.)
 
-# Helper function to escape variable names with special characters for formulas
-.escapeVariableNames <- function(var_names) {
-    # Check if variable names contain special characters that need escaping
-    need_escaping <- grepl("[^a-zA-Z0-9._]", var_names)
-    var_names[need_escaping] <- paste0("`", var_names[need_escaping], "`")
-    return(var_names)
-}
+# Note: `.escapeVariableNames` lives in R/utils.R as the canonical definition.
 
 # Helper function to restore original variable names in output tables
 .restoreOriginalNamesInMultiSurvivalTable <- function(table_data, name_mapping) {
@@ -48,10 +46,10 @@ if (!exists(".")) {
       available = FALSE,
       message = paste0("
         <div style='background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 10px 0;'>
-          <h4 style='color: #856404; margin-top: 0;'> ", method_name, " ", .("Package Not Available"), "</h4>
-          <p><strong>", .("Issue:"), "</strong> ", .("The"), " '", package_name, "' ", .("package is required but not installed."), "</p>
-          <p><strong>", .("Solution:"), "</strong> ", .("Install the package using:"), " <code>install.packages('", package_name, "')</code></p>
-          <p><strong>", .("Alternative:"), "</strong> ", .("Automatically switching to"), " ", alternative_method, " ", .("analysis."), "</p>
+          <h4 style='color: #856404; margin-top: 0;'> ", method_name, " ", "Package Not Available", "</h4>
+          <p><strong>", "Issue:", "</strong> ", "The", " '", package_name, "' ", "package is required but not installed.", "</p>
+          <p><strong>", "Solution:", "</strong> ", "Install the package using:", " <code>install.packages('", package_name, "')</code></p>
+          <p><strong>", "Alternative:", "</strong> ", "Automatically switching to", " ", alternative_method, " ", "analysis.", "</p>
         </div>
       ")
     )
@@ -92,13 +90,13 @@ if (!exists(".")) {
 
     negative_times <- sum(time_vec < 0, na.rm = TRUE)
     if (negative_times > 0) {
-      issues <- append(issues, paste(.("Negative survival times detected:"), negative_times, .("observations")))
+      issues <- append(issues, paste("Negative survival times detected:", negative_times, "observations"))
     }
 
     # Check for zero survival times
     zero_times <- sum(time_vec == 0, na.rm = TRUE)
     if (zero_times > 0) {
-      warnings <- append(warnings, paste(.("Zero survival times detected:"), zero_times, .("observations. Consider adding small constant (0.5 days).")))
+      warnings <- append(warnings, paste("Zero survival times detected:", zero_times, "observations. Consider adding small constant (0.5 days)."))
     }
   }
 
@@ -113,17 +111,17 @@ if (!exists(".")) {
     if (is.numeric(outcome_vec) || is.logical(outcome_vec)) {
       unique_outcomes <- unique(outcome_vec[!is.na(outcome_vec)])
       if (!all(unique_outcomes %in% c(0, 1, TRUE, FALSE))) {
-        issues <- append(issues, .("Outcome should be binary (0/1 or TRUE/FALSE)"))
+        issues <- append(issues, "Outcome should be binary (0/1 or TRUE/FALSE)")
       }
     } else if (is.factor(outcome_vec) && length(levels(outcome_vec)) > 2) {
-      warnings <- append(warnings, .("Outcome has multiple levels; analysis will treat non-event levels as censored where applicable."))
+      warnings <- append(warnings, "Outcome has multiple levels; analysis will treat non-event levels as censored where applicable.")
     }
 
     # Check event rate when we have a usable indicator
     if (!is.null(event_indicator) && !all(is.na(event_indicator))) {
       event_rate <- mean(event_indicator, na.rm = TRUE)
       if (!is.na(event_rate) && event_rate < 0.05) {
-        warnings <- append(warnings, paste(.("Low event rate:"), round(event_rate * 100, 1), "%. ", .("Consider longer follow-up or different endpoint.")))
+        warnings <- append(warnings, paste("Low event rate:", round(event_rate * 100, 1), "%. ", "Consider longer follow-up or different endpoint."))
       }
     }
   }
@@ -133,7 +131,7 @@ if (!exists(".")) {
   if (!is.null(event_indicator)) {
     n_events <- sum(event_indicator, na.rm = TRUE)
     if (!is.na(n_events) && n_events < 10) {
-      warnings <- append(warnings, paste(.("Low number of events detected:"), n_events, .("events. Results may be unstable; interpret cautiously.")))
+      warnings <- append(warnings, paste("Low number of events detected:", n_events, "events. Results may be unstable; interpret cautiously."))
     }
   }
 
@@ -158,7 +156,7 @@ if (!exists(".")) {
     }
     # IMPROVEMENT: Throw error instead of silent NA return for unsupported factor levels
     # This prevents misleading results from incorrectly encoded outcomes
-    stop(sprintf(
+    jmvcore::reject(sprintf(
       "Outcome Factor Has Unsupported Levels: The outcome variable has non-numeric levels that cannot be interpreted as events: %s\n\nTo Fix:\n1. For binary outcomes: Recode as numeric (0 = censored, 1 = event) or logical (FALSE/TRUE)\n2. For competing risks: Use factor with exactly 3 levels: 'Censored', 'Event', 'Competing'\n3. In jamovi: Use Transform > Recode to convert to appropriate format\n4. Example numeric coding: 0 = Alive/Censored, 1 = Dead/Event occurred\n\nCurrent levels detected: %s",
       paste(levels(outcome_vec), collapse=", "),
       paste(levels(outcome_vec), collapse=", ")
@@ -170,7 +168,7 @@ if (!exists(".")) {
   }
 
   # IMPROVEMENT: Throw error for unsupported types instead of returning NA
-  stop(sprintf(
+  jmvcore::reject(sprintf(
     "Outcome Variable Type Not Supported: The outcome variable has type '%s' which cannot be used for survival analysis.\n\nSupported Types:\n1. Numeric: 0 (censored) and 1 (event)\n2. Logical: FALSE (censored) and TRUE (event)\n3. Factor: Either numeric levels ('0'/'1') or competing risk levels ('Censored'/'Event'/'Competing')\n\nTo Fix:\n1. Check that you selected the correct outcome variable\n2. In jamovi: Use Data > Setup to verify variable type\n3. Convert text/character variables to numeric or factor format\n4. Use Transform > Compute to create binary outcome: outcome = ifelse(status == 'Dead', 1, 0)\n\nCurrent type: %s",
     class(outcome_vec)[1],
     class(outcome_vec)[1]
@@ -207,7 +205,7 @@ if (!exists(".")) {
                 if (!is.na(hr_val) && abs(log(hr_val)) > abs(log(strongest_hr))) {
                   strongest_hr <- hr_val
                   strongest_var <- results[i, 1]  # First column usually contains variable names
-                  strongest_effect <- if (hr_val > 1) .("increased risk") else .("decreased risk")
+                  strongest_effect <- if (hr_val > 1) "increased risk" else "decreased risk"
                 }
               }
             }
@@ -223,28 +221,28 @@ if (!exists(".")) {
 
     # Analysis overview
     summary_parts$overview <- paste0(
-      .("This multivariable Cox regression analysis examined"), " ", n_vars, " ",
-      .("potential risk factors in"), " ", .("patients with"), " ", n_events, " ",
-      .("events observed during follow-up.")
+      "This multivariable Cox regression analysis examined", " ", n_vars, " ",
+      "potential risk factors in", " ", "patients with", " ", n_events, " ",
+      "events observed during follow-up."
     )
 
     # Key findings
     if (sig_count > 0) {
       summary_parts$findings <- paste0(
-        .("Key Finding:"), " ", sig_count, " ", .("out of"), " ", n_vars, " ",
-        .("factors showed statistically significant associations with the outcome"), " (p < 0.05)."
+        "Key Finding:", " ", sig_count, " ", "out of", " ", n_vars, " ",
+        "factors showed statistically significant associations with the outcome", " (p < 0.05)."
       )
 
       if (!is.null(strongest_var) && !is.null(strongest_effect)) {
         summary_parts$strongest <- paste0(
-          .("Strongest predictor:"), " ", strongest_var, " ", .("was associated with"), " ",
-          strongest_effect, " (", .("hazard ratio"), " = ", round(strongest_hr, 2), ")."
+          "Strongest predictor:", " ", strongest_var, " ", "was associated with", " ",
+          strongest_effect, " (", "hazard ratio", " = ", round(strongest_hr, 2), ")."
         )
       }
     } else {
       summary_parts$findings <- paste0(
-        .("No statistically significant associations were identified among the"), " ",
-        n_vars, " ", .("factors examined"), " (", .("all p-values ≥ 0.05"), ")."
+        "No statistically significant associations were identified among the", " ",
+        n_vars, " ", "factors examined", " (", "all p-values ≥ 0.05", ")."
       )
     }
 
@@ -252,16 +250,16 @@ if (!exists(".")) {
     if (sig_count > 0 && !is.null(strongest_hr)) {
       risk_interpretation <- ""
       if (strongest_hr > 2) {
-        risk_interpretation <- .("This represents a substantial clinical effect.")
+        risk_interpretation <- "This represents a substantial clinical effect."
       } else if (strongest_hr > 1.5 || strongest_hr < 0.67) {
-        risk_interpretation <- .("This represents a moderate clinical effect.")
+        risk_interpretation <- "This represents a moderate clinical effect."
       } else if (strongest_hr != 1) {
-        risk_interpretation <- .("This represents a mild clinical effect.")
+        risk_interpretation <- "This represents a mild clinical effect."
       }
 
       summary_parts$interpretation <- paste0(
-        .("Clinical Significance:"), " ", risk_interpretation, " ",
-        .("Consider this factor in clinical decision-making and patient counseling.")
+        "Clinical Significance:", " ", risk_interpretation, " ",
+        "Consider this factor in clinical decision-making and patient counseling."
       )
     }
 
@@ -278,7 +276,7 @@ if (!exists(".")) {
 
   # Default return for other analysis types
   return(list(
-    summary = .("Analysis completed. Review detailed results below."),
+    summary = "Analysis completed. Review detailed results below.",
     sig_count = 0,
     strongest_var = NULL,
     strongest_hr = 1
@@ -288,19 +286,19 @@ if (!exists(".")) {
 # Helper function to assess clinical significance of hazard ratios
 .assessClinicalSignificance <- function(hr) {
   if (is.null(hr) || !is.numeric(hr) || hr <= 0) {
-    return(.("Unable to assess clinical significance."))
+    return("Unable to assess clinical significance.")
   }
 
   if (hr > 3 || hr < 0.33) {
-    return(.("Large clinical effect - high priority for clinical consideration."))
+    return("Large clinical effect - high priority for clinical consideration.")
   } else if (hr > 2 || hr < 0.5) {
-    return(.("Moderate clinical effect - clinically meaningful."))
+    return("Moderate clinical effect - clinically meaningful.")
   } else if (hr > 1.5 || hr < 0.67) {
-    return(.("Small to moderate clinical effect - may be clinically relevant."))
+    return("Small to moderate clinical effect - may be clinically relevant.")
   } else if (hr != 1) {
-    return(.("Small clinical effect - limited clinical impact."))
+    return("Small clinical effect - limited clinical impact.")
   } else {
-    return(.("No clinical effect detected."))
+    return("No clinical effect detected.")
   }
 }
 
@@ -316,7 +314,7 @@ if (!exists(".")) {
     "standard" = paste0("survival::Surv(", escaped_time, ", ", escaped_outcome, ")"),
     "counting" = {
       if (is.null(start_var) || is.null(stop_var)) {
-        stop("Start and stop variables required for counting process format")
+        jmvcore::reject("Start and stop variables required for counting process format")
       }
       escaped_start <- .escapeVariableNames(start_var)
       escaped_stop <- .escapeVariableNames(stop_var)
@@ -324,12 +322,12 @@ if (!exists(".")) {
     },
     "interval" = {
       if (is.null(stop_var)) {
-        stop("Stop time variable required for interval censoring")
+        jmvcore::reject("Stop time variable required for interval censoring")
       }
       escaped_stop <- .escapeVariableNames(stop_var)
       paste0("survival::Surv(", escaped_time, ", ", escaped_stop, ", ", escaped_outcome, ")")
     },
-    stop("Unknown survival type: ", survival_type)
+    jmvcore::reject("Unknown survival type: ", survival_type)
   )
 
   # Build right-hand side
@@ -348,7 +346,7 @@ if (!exists(".")) {
 
   # Combine and return formula
   formula_string <- paste0(lhs, " ~ ", rhs)
-  return(as.formula(formula_string))
+  return(.asSurvivalFormula(formula_string))
 }
 
 #' @title Multivariable Survival Analysis Implementation
@@ -407,6 +405,76 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
       .debug_enabled = function() FALSE,
       .debug_dummy_plot_enabled = function() FALSE,
       .debug_write = function(lines) invisible(FALSE),
+
+      # Notice collection (single Preformatted plain-text output item; avoids the
+      # jmvcore::Notice serialization error from self$results$insert(999, Notice)).
+      .noticeList = list(),
+
+      .addNotice = function(type, title, content) {
+          private$.noticeList[[length(private$.noticeList) + 1]] <- list(
+              type = type, title = title, content = content
+          )
+          private$.renderNotices()
+      },
+
+      .renderNotices = function() {
+          if (length(private$.noticeList) == 0) {
+              self$results$notices$setContent("")
+              return()
+          }
+          blocks <- vapply(private$.noticeList, function(notice) {
+              prefix <- switch(notice$type,
+                  ERROR = "ERROR: ", STRONG_WARNING = "WARNING: ",
+                  WARNING = "WARNING: ", "")
+              paste0(prefix, notice$title, "\n", notice$content)
+          }, character(1))
+          self$results$notices$setContent(paste(blocks, collapse = "\n\n"))
+      },
+
+      # HTML notice helper (replaces self$results$insert(N, jmvcore::Notice))
+      # See R/survivalcont.b.R:700-743 for canonical pattern.
+      # The protobuf serialization of Notice objects can fail with
+      # "attempt to apply non-function"; rendering to dedicated Html outputs avoids it.
+      .addHtmlMessage = function(type, title, message) {
+          output_name <- switch(type,
+              "error" = "errors",
+              "strongWarning" = "strongWarnings",
+              "warning" = "warnings",
+              "info" = "infoMessages",
+              "warnings"
+          )
+          css_class <- switch(type,
+              "error" = "error-message",
+              "strongWarning" = "strong-warning-message",
+              "warning" = "warning-message",
+              "info" = "info-message",
+              "warning-message"
+          )
+          border_color <- switch(type,
+              "error" = "#d9534f",
+              "strongWarning" = "#e67e22",
+              "warning" = "#f0ad4e",
+              "info" = "#5bc0de",
+              "#f0ad4e"
+          )
+          current_content <- self$results[[output_name]]$content
+          if (is.null(current_content)) current_content <- ""
+          new_message <- sprintf(
+              '<div class="%s" style="margin: 10px 0; padding: 10px; border-left: 4px solid %s; background-color: #f8f9fa;"><strong>%s:</strong> %s</div>',
+              css_class,
+              border_color,
+              htmltools::htmlEscape(title),
+              htmltools::htmlEscape(message)
+          )
+          # Deduplicate notices: the central Cox model (.cox_model) is re-fit by
+          # many downstream consumers within a single run, and each call may emit
+          # the same EPV / event-count / proportional-hazards notice. Append only
+          # if this exact notice is not already shown.
+          if (!grepl(new_message, current_content, fixed = TRUE)) {
+              self$results[[output_name]]$setContent(paste0(current_content, new_message))
+          }
+          self$results[[output_name]]$setVisible(TRUE)
+      },
 
       .setPlotVisibility = function() {
         visible_flags <- list(
@@ -1096,7 +1164,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
       .getData = function() {
         # Check if data exists and has content
         if (is.null(self$data) || nrow(self$data) == 0) {
-          stop('Data contains no (complete) rows')
+          jmvcore::reject('Data contains no (complete) rows')
         }
 
         # Get the data
@@ -1105,7 +1173,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         # Check if data has names
         if (is.null(names(mydata))) {
-          stop('Data must have column names')
+          jmvcore::reject('Data must have column names')
         }
 
         # Add row names if missing
@@ -1120,7 +1188,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         # Check if original names exist
         if (length(original_names) == 0) {
-          stop(paste0(
+          jmvcore::reject(paste0(
             .("Data must have column names."), "\n\n",
             .("Possible solutions:"), "\n",
             "• ", .("Ensure your dataset has proper column headers"), "\n",
@@ -1142,7 +1210,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
         if (inherits(mydata_cleaned, "try-error")) {
-          stop(paste0(
+          jmvcore::reject(paste0(
             .("Error cleaning variable names."), "\n\n",
             .("Possible solutions:"), "\n",
             "• ", .("Check for special characters or spaces in column names"), "\n",
@@ -1168,7 +1236,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
         if (inherits(mydata_labelled, "try-error")) {
-          stop(paste0(
+          jmvcore::reject(paste0(
             .("Error setting variable labels."), "\n\n",
             .("Possible solutions:"), "\n",
             "• ", .("Check that all variables have valid names after cleaning"), "\n",
@@ -1246,7 +1314,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         mystratvar_labelled <- names(all_labels)[match(labels_stratvar, all_labels)]
 
         # Set stratification explanation
-        strat_vars_display <- paste(self$options$stratvar, collapse = ", ")
+        strat_vars_display <- htmltools::htmlEscape(paste(self$options$stratvar, collapse = ", "))
         self$results$stratificationExplanation$setContent(paste0(
           "<p><strong>Stratification Variables:</strong> ", strat_vars_display, "</p>",
           "<p>The Cox model is stratified by these variables, allowing for different baseline hazards ",
@@ -1257,7 +1325,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         # Check if required variables were found with helpful error messages
         if (length(mytime) == 0 && !is.null(self$options$elapsedtime)) {
-          stop(paste0(
+          jmvcore::reject(paste0(
             .("Could not find the elapsed time variable."), "\n\n",
             .("Possible solutions:"), "\n",
             "• ", .("Check that the variable name is correct in your dataset"), "\n",
@@ -1267,7 +1335,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           ))
         }
         if (length(myoutcome) == 0 && !is.null(self$options$outcome)) {
-          stop(paste0(
+          jmvcore::reject(paste0(
             .("Could not find the outcome variable."), "\n\n",
             .("Possible solutions:"), "\n",
             "• ", .("Check that the variable name is correct in your dataset"), "\n",
@@ -1291,7 +1359,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             "<p><strong>", .("Action Required:"), "</strong> ", .("Please correct these issues before proceeding with analysis."), "</p>",
             "</div>"
           )
-          stop(issue_message)
+          jmvcore::reject(issue_message)
         }
 
         # Display warnings if any
@@ -1460,18 +1528,18 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                   mydata[["start"]] <- func(mydata[[dxdate]])
                   mydata[["end"]] <- func(mydata[[fudate]])
               } else {
-                  stop(paste0("Unsupported time type format: ", timetypedata,
+                  jmvcore::reject(paste0("Unsupported time type format: ", timetypedata,
                              ". Supported formats are: ", paste(names(lubridate_functions), collapse = ", ")))
               }
           } else {
               # Mixed types error
-              stop("Diagnosis date and follow-up date must be in the same format (both numeric or both text)")
+              jmvcore::reject("Diagnosis date and follow-up date must be in the same format (both numeric or both text)")
           }
 
 
           if (sum(!is.na(mydata[["start"]])) == 0 ||
               sum(!is.na(mydata[["end"]])) == 0)  {
-            stop(
+            jmvcore::reject(
               paste0(
                 "Time difference cannot be calculated. Make sure that time type in variables are correct. Currently it is: ",
                 self$options$timetypedata
@@ -1545,7 +1613,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           if (inherits(outcome1, contin)) {
             if (!((length(unique(outcome1[!is.na(outcome1)])) == 2) &&
                   (sum(unique(outcome1[!is.na(outcome1)])) == 1))) {
-              stop(
+              jmvcore::reject(
                 'When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0.'
               )
 
@@ -1556,7 +1624,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
           } else if (inherits(outcome1, "factor")) {
             if (is.null(outcomeLevel)) {
-              stop("Please select an event level for the outcome variable.")
+              jmvcore::reject("Please select an event level for the outcome variable.")
             }
             mydata[["myoutcome"]] <-
               ifelse(test = outcome1 == outcomeLevel,
@@ -1564,7 +1632,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                      no = 0)
 
           } else {
-            stop(
+            jmvcore::reject(
               'When using continuous variable as an outcome, it must only contain 1s and 0s. If patient is dead or event (recurrence) occured it is 1. If censored (patient is alive or free of disease) at the last visit it is 0. If you are using a factor as an outcome, please check the levels and content.'
             )
 
@@ -1929,7 +1997,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           # notice <- jmvcore::Notice$new(...)
           
           self$results$todo$setContent(paste0(
-            "<b>Survival Analysis Error:</b> ", e$message, "<br><br>",
+            "<b>Survival Analysis Error:</b> ", htmltools::htmlEscape(conditionMessage(e)), "<br><br>",
             "Recommendations: (1) Check data for missing/invalid values in time and outcome variables, (2) Ensure time variable contains positive numeric values, (3) Verify outcome is binary (0/1 or FALSE/TRUE), (4) Check sufficient events (≥10), (5) Ensure explanatory variables have appropriate types, (6) Try fewer variables, or (7) Check for outliers."
           ))
           self$results$todo$setVisible(TRUE)
@@ -1960,7 +2028,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         # Stop if Empty Data
         if (nrow(self$data) == 0) {
-          stop('Data contains no (complete) rows')
+          jmvcore::reject('Data contains no (complete) rows')
         }
 
         # Fit central Cox model once for downstream plots
@@ -2072,6 +2140,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
       },
 
       .run = function() {
+        private$.noticeList <- list()
         # Modular execution using helper functions
         if (!private$.validateAndPrepare()) {
           return()
@@ -2095,20 +2164,14 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           median_followup <- median(mydata$mytime, na.rm = TRUE)
           time_unit <- self$options$timetypeoutput
 
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'analysisComplete',
-            type = jmvcore::NoticeType$INFO
+          private$.addHtmlMessage(
+            "info",
+            "Analysis complete",
+            sprintf(
+              "Analysis completed successfully using %d observations with %d events (%.1f%% event rate) over %.1f %s median follow-up.",
+              n_obs, n_events, event_rate, median_followup, time_unit
+            )
           )
-          notice$setContent(sprintf(
-            "Analysis completed successfully using %d observations with %d events (%.1f%% event rate) over %.1f %s median follow-up.",
-            n_obs,
-            n_events,
-            event_rate,
-            median_followup,
-            time_unit
-          ))
-          self$results$add(notice)
         }, error = function(e) {
           # Notice Disabled
           # notice <- jmvcore::Notice$new(...)
@@ -2135,30 +2198,24 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # Basic time/outcome validation
         if (any(is.na(mydata$mytime) | is.na(mydata$myoutcome))) {
           dropped <- sum(!complete.cases(mydata[, c("mytime", "myoutcome")]))
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'missingTimeOutcome',
-            type = jmvcore::NoticeType$WARNING
+          private$.addHtmlMessage(
+            "warning",
+            "Missing time/outcome values",
+            sprintf("Missing time/outcome values detected; %d row(s) may be excluded from the Cox model.", dropped)
           )
-          notice$setContent(sprintf("Missing time/outcome values detected; %d row(s) may be excluded from the Cox model.", dropped))
-          self$results$insert(2, notice)
         }
         # Safety check: Negative times should already be caught in .definemytime()
         # This is defensive programming in case time is provided directly (not calculated)
         if (any(mydata$mytime < 0, na.rm = TRUE)) {
           n_negative <- sum(mydata$mytime < 0, na.rm = TRUE)
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'negativeTime',
-            type = jmvcore::NoticeType$ERROR
-          )
-          notice$setContent(
+          private$.addHtmlMessage(
+            "error",
+            "Negative survival times detected",
             sprintf(
-              "Negative Survival Times Detected: %d observation(s) have negative time values.\n\nTo Fix:\n1. If using 'Elapsed Time' variable directly, verify all values are positive\n2. If calculating from dates, check that diagnosis date precedes follow-up date\n3. Review data for entry errors (negative values, incorrect date sequences)\n4. Consider excluding problematic observations",
+              "%d observation(s) have negative time values. To fix: (1) if using 'Elapsed Time' directly, verify all values are positive; (2) if calculating from dates, check diagnosis date precedes follow-up date; (3) review data for entry errors; (4) consider excluding problematic observations.",
               n_negative
             )
           )
-          self$results$insert(2, notice)
           return(NULL)
         }
 
@@ -2172,61 +2229,52 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         # CRITICAL: < 10 events - Analysis cannot proceed reliably
         if (n_events < 10) {
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'criticalLowEvents',
-            type = jmvcore::NoticeType$ERROR
+          private$.addHtmlMessage(
+            "error",
+            "Critically low event count",
+            sprintf(
+              "Only %d events detected. Cox regression requires at least 10 events for reliable estimation. Recommendations: (1) collect more data, (2) extend follow-up period, (3) use descriptive methods (Kaplan-Meier) instead of regression, or (4) pool event types if clinically appropriate.",
+              n_events
+            )
           )
-          notice$setContent(sprintf(
-            "Critical: Only %d events detected. Cox regression requires at least 10 events for reliable estimation. Recommendations: (1) Collect more data, (2) Extend follow-up period, (3) Use descriptive methods (Kaplan-Meier) instead of regression, or (4) Pool event types if clinically appropriate.",
-            n_events
-          ))
-          self$results$insert(999, notice)
           return(NULL)
         }
 
         # STRONG WARNING: 10-19 events - Results may be unreliable
         if (n_events >= 10 && n_events < 20) {
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'lowEvents',
-            type = jmvcore::NoticeType$STRONG_WARNING
+          private$.addHtmlMessage(
+            "strongWarning",
+            "Low event count",
+            sprintf(
+              "Low event count (%d events). Results may be unstable; confidence intervals may be unreliable; small-sample bias likely. Recommendations: (1) interpret results cautiously and report exact p-values, (2) consider Firth's penalized likelihood (coxphf package) for bias reduction, (3) validate findings externally, or (4) collect additional data if feasible.",
+              n_events
+            )
           )
-          notice$setContent(sprintf(
-            "Low event count (%d events). Results may be unstable; confidence intervals may be unreliable; small-sample bias likely. Recommendations: (1) Interpret results cautiously and report exact p-values, (2) Consider Firth's penalized likelihood in R (coxphf package) for bias reduction, (3) Validate findings externally, or (4) Collect additional data if feasible.",
-            n_events
-          ))
-          self$results$insert(999, notice)
         }
 
         # WARNING: 20-49 events - Limited statistical power
         if (n_events >= 20 && n_events < 50) {
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'limitedEvents',
-            type = jmvcore::NoticeType$WARNING
+          private$.addHtmlMessage(
+            "warning",
+            "Moderate event count",
+            sprintf(
+              "Moderate event count (%d events). Statistical power may be limited for detecting small effects. Current EPV (events per variable) ratio: %.1f. Consider limiting model complexity or using variable selection methods.",
+              n_events, epv
+            )
           )
-          notice$setContent(sprintf(
-            "Moderate event count (%d events). Statistical power may be limited for detecting small effects. Current EPV (events per variable) ratio: %.1f. Consider limiting model complexity or using variable selection methods.",
-            n_events,
-            epv
-          ))
-          self$results$insert(2, notice)
         }
 
         # WARNING: EPV < 10 - Overfitting risk
         # Note: Only warn if we have enough events (≥50) but too many variables
         if (epv < 10 && n_events >= 50 && n_vars > 0) {
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'lowEPV',
-            type = jmvcore::NoticeType$WARNING
+          private$.addHtmlMessage(
+            "warning",
+            "Low events-per-variable ratio",
+            sprintf(
+              "Low events-per-variable ratio (EPV = %.1f with %d predictors, %d events). Recommended EPV ≥ 10 to minimize overfitting. Recommendations: (1) reduce number of predictors, (2) use variable selection (backward/forward/stepwise), (3) apply penalized regression (LASSO/Ridge), or (4) use clinical knowledge to prioritize key variables.",
+              epv, n_vars, n_events
+            )
           )
-          notice$setContent(sprintf(
-            "Low events-per-variable ratio (EPV = %.1f with %d predictors, %d events). Recommended EPV ≥ 10 to minimize overfitting and optimism in model performance. Recommendations: (1) Reduce number of predictors, (2) Use variable selection (backward/forward/stepwise), (3) Apply penalized regression (LASSO/Ridge), or (4) Use clinical knowledge to prioritize key variables.",
-            epv, n_vars, n_events
-          ))
-          self$results$insert(2, notice)
         }
 
         mytime_labelled <- cleaneddata$mytime_labelled
@@ -2350,7 +2398,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # EXPERIMENTAL: 
         # EXPERIMENTAL:           formula_parts <- c(formula_parts, frailty_term)
         # EXPERIMENTAL:           RHT <- paste(formula_parts, collapse = " + ")
-        # EXPERIMENTAL:           coxformula <- as.formula(paste0(LHT, " ~ ", RHT))
+        # EXPERIMENTAL:           coxformula <- .asSurvivalFormula(paste0(LHT, " ~ ", RHT))
         # EXPERIMENTAL:         }
         # EXPERIMENTAL: 
         # EXPERIMENTAL:         # Handle Splines for Non-Proportional Hazards
@@ -2371,7 +2419,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # EXPERIMENTAL:           }
         # EXPERIMENTAL: 
         # EXPERIMENTAL:           RHT <- paste(formula_parts, collapse = " + ")
-        # EXPERIMENTAL:           coxformula <- as.formula(paste0(LHT, " ~ ", RHT))
+        # EXPERIMENTAL:           coxformula <- .asSurvivalFormula(paste0(LHT, " ~ ", RHT))
         # EXPERIMENTAL: 
         # EXPERIMENTAL:           # Load splines package if needed
         # EXPERIMENTAL:           if (self$options$spline_type %in% c("ns", "bs")) {
@@ -2384,13 +2432,11 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             # Use Fine-Gray model
             # Create Fine-Gray dataset (outcome is factor from .definemyoutcome)
             if (is.factor(mydata$myoutcome) && !"Event" %in% levels(mydata$myoutcome)) {
-              notice <- jmvcore::Notice$new(
-                options = self$options,
-                name = 'invalidEtype',
-                type = jmvcore::NoticeType$ERROR
+              private$.addHtmlMessage(
+                "error",
+                "Invalid competing-risk coding",
+                "Competing risk mode requires an event level named 'Event' in the outcome variable. Adjust coding before running Fine-Gray."
               )
-              notice$setContent("Competing risk mode requires an event level named 'Event' in the outcome variable. Adjust coding before running Fine-Gray.")
-              self$results$insert(2, notice)
               return(NULL)
             }
 
@@ -2420,13 +2466,35 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         }
 
         if (self$options$multievent && self$options$analysistype == 'compete') {
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'competeNote',
-            type = jmvcore::NoticeType$INFO
+          private$.addHtmlMessage(
+            "info",
+            "Competing-risk model",
+            "Competing-risk mode fits a Fine-Gray subdistribution model; HRs reflect subdistribution hazards and are not directly comparable to cause-specific Cox HRs."
           )
-          notice$setContent("Competing-risk mode fits a Fine-Gray subdistribution model; HRs reflect subdistribution hazards and are not directly comparable to cause-specific Cox HRs.")
-          self$results$insert(3, notice)
+        }
+
+        # Events-per-variable (EPV) check. With fewer than 10 events per
+        # estimated coefficient, Cox HR estimates and their CIs become
+        # unstable; reviewers expect this to be flagged. See
+        # Vittinghoff & McCulloch (2007) Am J Epidemiol 165:710-8.
+        epv_info <- tryCatch({
+          n_events <- if (!is.null(cox_model$nevent)) cox_model$nevent
+                      else if (!is.null(cox_model$y)) sum(cox_model$y[, "status"] == 1)
+                      else NA_integer_
+          n_coef <- length(stats::coef(cox_model))
+          list(events = n_events, coefficients = n_coef,
+               epv = if (n_coef > 0 && !is.na(n_events)) n_events / n_coef else NA_real_)
+        }, error = function(e) list(events = NA, coefficients = NA, epv = NA))
+
+        if (!is.na(epv_info$epv) && epv_info$epv < 10 && epv_info$coefficients > 0) {
+          private$.addHtmlMessage(
+            "warning",
+            "Low events-per-variable (post-fit)",
+            sprintf(
+              "Low events-per-variable: this Cox model fits %d coefficient(s) on %d event(s) (EPV = %.1f, below the conventional minimum of 10). Hazard-ratio estimates and CIs may be unstable. Consider: (i) reducing covariates; (ii) penalised Cox (lassocox / adaptivelasso); (iii) bootstrap-optimism correction (survivalvalidation).",
+              epv_info$coefficients, epv_info$events, epv_info$epv
+            )
+          )
         }
 
         # Proportional hazards diagnostic
@@ -2434,13 +2502,11 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         if (!inherits(ph_diag, "try-error")) {
           ph_p <- ph_diag$table[, "p"]
           if (any(ph_p[!is.na(ph_p)] < 0.05)) {
-            notice <- jmvcore::Notice$new(
-              options = self$options,
-              name = 'phViolation',
-              type = jmvcore::NoticeType$WARNING
+            private$.addHtmlMessage(
+              "warning",
+              "Proportional hazards violation",
+              "Proportional hazards test (cox.zph) indicates potential violations (p < 0.05) for one or more terms. Interpret HRs with caution or consider time-varying effects/stratification."
             )
-            notice$setContent("Proportional hazards test (cox.zph) indicates potential violations (p < 0.05) for one or more terms. Interpret HRs with caution or consider time-varying effects/stratification.")
-            self$results$insert(3, notice)
           }
         }
 
@@ -2476,13 +2542,11 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         # For competing risks, explicitly note the counting strategy
         if (is.factor(mydata[["myoutcome"]]) && "Competing" %in% levels(mydata[["myoutcome"]])) {
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'personTimeCompeteNote',
-            type = jmvcore::NoticeType$INFO
+          private$.addHtmlMessage(
+            "info",
+            "Person-time counting strategy",
+            "Person-time rates count only the event-of-interest level ('Event'); competing events are treated as censored for rate calculations."
           )
-          notice$setContent("Person-time rates count only the event-of-interest level ('Event'); competing events are treated as censored for rate calculations.")
-          self$results$insert(2, notice)
         }
 
         # Replace NA indicators with FALSE to keep counts deterministic
@@ -2697,13 +2761,11 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
         if (self$options$multievent && self$options$analysistype == "compete") {
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'aftCompete',
-            type = jmvcore::NoticeType$INFO
+          private$.addHtmlMessage(
+            "info",
+            "AFT not run under competing risks",
+            "AFT models are not calculated when competing-risk (Fine-Gray) analysis is selected."
           )
-          notice$setContent("AFT models are not calculated when competing-risk (Fine-Gray) analysis is selected.")
-          self$results$insert(2, notice)
           return()
         }
 
@@ -2722,14 +2784,11 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             mydata$myoutcome <- as.numeric(mydata$myoutcome == levels(mydata$myoutcome)[2])
           } else {
 
-            # Convert to Notice for consistent UX
-            notice <- jmvcore::Notice$new(
-              options = self$options,
-              name = 'aftOutcomeError',
-              type = jmvcore::NoticeType$ERROR
+            private$.addHtmlMessage(
+              "error",
+              "AFT outcome error",
+              "Outcome with more than two levels is not supported for AFT models. Please select a binary outcome variable or disable competing risk analysis for AFT."
             )
-            notice$setContent("AFT Model Error: Outcome with more than two levels is not supported for AFT models. Please select a binary outcome variable or disable competing risk analysis for AFT.")
-            self$results$insert(999, notice)
             return()
           }
         }
@@ -2749,7 +2808,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         formula_parts <- c(myexplanatory, mycontexpl)
         aft_formula <- paste("survival::Surv(mytime, myoutcome) ~",
                             paste(formula_parts, collapse = " + "))
-        aft_formula <- as.formula(aft_formula)
+        aft_formula <- .asSurvivalFormula(aft_formula)
 
         # Get distribution
         distribution <- self$options$aft_distribution
@@ -2760,14 +2819,11 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         aft_model <- tryCatch({
           survival::survreg(aft_formula, data = mydata, dist = distribution)
         }, error = function(e) {
-          # Convert to Notice for consistent UX
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'aftFitError',
-            type = jmvcore::NoticeType$ERROR
+          private$.addHtmlMessage(
+            "error",
+            "AFT model fitting error",
+            paste0(e$message, ". Check data quality, ensure adequate events, and verify distribution choice is appropriate for your data.")
           )
-          notice$setContent(paste0("AFT Model Fitting Error: ", e$message, ". Check data quality, ensure adequate events, and verify distribution choice is appropriate for your data."))
-          self$results$insert(999, notice)
           return(NULL)
         })
 
@@ -2921,7 +2977,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           actual_time <- mydata$mytime
           actual_status <- .eventIndicator(mydata$myoutcome)
           if (is.null(actual_status) || all(is.na(actual_status))) {
-            stop("Could not derive event indicator for SurvMetrics calculations.")
+            jmvcore::reject("Could not derive event indicator for SurvMetrics calculations.")
           }
           actual_status[is.na(actual_status)] <- FALSE
 
@@ -2971,7 +3027,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             time_points <- time_points[time_points <= max_time]
 
             if (length(time_points) > 0) {
-              brier_result <- tryCatch({
+              brier_result <- jmvcore::tryNaN({
                 # Note: SurvMetrics::Brier may have different API
                 # Fallback to pec package if available
                 if (requireNamespace('pec', quietly = TRUE)) {
@@ -2986,7 +3042,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 } else {
                   NA
                 }
-              }, error = function(e) NA)
+              })
 
               if (!is.na(brier_result)) {
                 self$results$survMetricsTable$addRow(rowKey = "brier", values = list(
@@ -3012,7 +3068,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           ibs_points <- self$options$survmetrics_ibs_points
           ibs_times <- seq(0, max(actual_time, na.rm = TRUE), length.out = ibs_points)
 
-          ibs_result <- tryCatch({
+          ibs_result <- jmvcore::tryNaN({
             if (requireNamespace('pec', quietly = TRUE)) {
               pec_result <- pec::pec(
                 object = list(model = cox_model),
@@ -3025,7 +3081,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             } else {
               NA
             }
-          }, error = function(e) NA)
+          })
 
           if (!is.na(ibs_result)) {
             self$results$survMetricsTable$addRow(rowKey = "ibs", values = list(
@@ -3277,7 +3333,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # Add checkpoint before creating nomogram
         private$.checkpoint()
 
-        # Create nomogram
+        # Create nomogram (silent: degenerate models are handled below via the
+        # try-error check, so the raw error should not print to the console)
         nom <- try({
           # Use survfit on the cph object f which handles weights
           base_surv <- survival::survfit(f)
@@ -3289,7 +3346,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                         },
                         funlabel = paste("Predicted", pred_times[1], "month risk"),
                         fun.at = seq(0.1, 0.9, by = 0.1))
-        })
+        }, silent = TRUE)
 
 
         # private$.nom_object <- nom
@@ -3631,12 +3688,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         if (inherits(zph, "multisurvival_ph_error")) {
           self$results$cox_ph$setContent(paste0(
             "Unable to compute proportional hazards diagnostics (cox.zph):\n",
-            zph$error
+            htmltools::htmlEscape(zph$error)
           ))
         } else {
           zph_table <- zph$table
 
-          ph_text <- paste(utils::capture.output(print(zph_table)), collapse = "\n")
+          ph_text <- htmltools::htmlEscape(paste(utils::capture.output(print(zph_table)), collapse = "\n"))
 
           suggestion <- ""
           if (!is.null(zph_table) && nrow(zph_table) > 0 && "p" %in% colnames(zph_table)) {
@@ -3645,7 +3702,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             if (length(violating) > 0) {
               suggestion <- paste0(
                 "\n\nNote: The proportional hazards assumption appears to be violated for: ",
-                paste(violating, collapse = ", "),
+                paste(htmltools::htmlEscape(violating), collapse = ", "),
                 ". Consider using these as stratification variables instead of covariates."
               )
             }
@@ -4142,10 +4199,10 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
         # if (length(self$options$explanatory) > 2)
-        #     stop("Kaplan-Meier function allows maximum of 2 explanatory variables")
+        #     jmvcore::reject("Kaplan-Meier function allows maximum of 2 explanatory variables")
         #
         # if (!is.null(self$options$contexpl))
-        #     stop("Kaplan-Meier function does not use continuous explanatory variables.")
+        #     jmvcore::reject("Kaplan-Meier function does not use continuous explanatory variables.")
 
 
 
@@ -4195,7 +4252,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         #           paste(myexplanatory, collapse = " + "))
         #
         #
-        # myformula <- as.formula(myformula)
+        # myformula <- .asSurvivalFormula(myformula)
         #
 
 
@@ -4282,19 +4339,14 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         ### Check variance in risk scores before attempting quantile grouping ----
         risk_variance <- var(mydata$risk_score, na.rm = TRUE)
         if (is.na(risk_variance) || risk_variance < 1e-10) {
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'lowRiskVariance',
-            type = jmvcore::NoticeType$WARNING
-          )
-          notice$setContent(
+          private$.addHtmlMessage(
+            "warning",
+            "Insufficient risk score variation",
             sprintf(
-              "Risk Score Variation Insufficient for Grouping: All patients have nearly identical risk scores (variance = %.2e). This occurs when:\n• Covariate patterns are very similar across patients\n• Model coefficients are very small\n• Limited prognostic information in predictors\n\nRecommendations:\n• Review predictor selection for discriminative variables\n• Consider simpler risk stratification approaches\n• Interpret C-index instead of risk groups",
+              "All patients have nearly identical risk scores (variance = %.2e). This occurs when covariate patterns are very similar across patients, model coefficients are very small, or predictors carry limited prognostic information. Recommendations: review predictor selection for discriminative variables, consider simpler risk stratification approaches, or interpret C-index instead of risk groups.",
               risk_variance
             )
           )
-          self$results$insert(3, notice)
-          # Skip risk grouping but continue with other analyses
           return(NULL)
         }
 
@@ -4320,7 +4372,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
             #### Verify we have at least one observation per group ----
             if(any(table(groups) == 0)) {
-              stop(.("Some groups have zero observations"))
+              jmvcore::reject(.("Some groups have zero observations"))
             }
 
             return(list(success = TRUE, groups = groups))
@@ -4670,13 +4722,11 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
 
         # Require an adjustment variable
         if (is.null(adj_var) || length(adj_var) == 0 || !(adj_var %in% names(data))) {
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'acMissingVar',
-            type = jmvcore::NoticeType$WARNING
+          private$.addHtmlMessage(
+            "warning",
+            "Adjustment variable required",
+            "Adjusted survival curves require selecting an adjustment variable; no curves were produced."
           )
-          notice$setContent("Adjusted survival curves require selecting an adjustment variable; no curves were produced.")
-          self$results$insert(2, notice)
           return(NULL)
         }
 
@@ -4690,25 +4740,21 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
         }
 
         if (self$options$multievent && self$options$analysistype == "compete") {
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'acCompete',
-            type = jmvcore::NoticeType$INFO
+          private$.addHtmlMessage(
+            "info",
+            "Adjusted curves use Fine-Gray",
+            "Adjusted survival curves are based on the Fine-Gray subdistribution model; curves reflect subdistribution survival, not cause-specific survival."
           )
-          notice$setContent("Adjusted survival curves are based on the Fine-Gray subdistribution model; curves reflect subdistribution survival, not cause-specific survival.")
-          self$results$insert(3, notice)
         }
 
         # Get unique levels and validate
         levels <- sort(unique(data[[adj_var]]))
         if (length(levels) < 2) {
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'acNeedLevels',
-            type = jmvcore::NoticeType$WARNING
+          private$.addHtmlMessage(
+            "warning",
+            "Adjustment variable needs ≥2 levels",
+            "Adjustment variable must have at least two levels to compute adjusted survival curves."
           )
-          notice$setContent("Adjustment variable must have at least two levels to compute adjusted survival curves.")
-          self$results$insert(2, notice)
           return(NULL)
         }
 
@@ -4956,7 +5002,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
       #
       #   adj_var <- cleaneddata$adjexplanatory_name
       #   if (is.null(adj_var)) {
-      #     stop('Please select a variable for adjusted curves')
+      #     jmvcore::reject('Please select a variable for adjusted curves')
       #   }
       #
       #   # Fit Cox model
@@ -5082,7 +5128,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
           paste("survival::Surv(mytime, myoutcome) ~ ",
                 paste(formula2, collapse = " + "))
 
-        myformula <- as.formula(myformula)
+        myformula <- .asSurvivalFormula(myformula)
 
         # Fit model
         # Use the central model (handles Fine-Gray if needed)
@@ -5104,7 +5150,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
              
              # Re-construct formula for finegray() call
              fg_formula_str <- paste("survival::Surv(mytime, myoutcome) ~", paste(formula2, collapse = " + "))
-             fg_formula_obj <- as.formula(fg_formula_str)
+             fg_formula_obj <- .asSurvivalFormula(fg_formula_str)
              
              plot_data <- survival::finegray(fg_formula_obj, data = mydata, etype = "Event")
         }
@@ -5159,7 +5205,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
               surv.median.line = self$options$medianline
             )
           } else {
-            stop(paste("Error creating adjusted curves:", e$message))
+            jmvcore::reject(paste("Error creating adjusted curves:", e$message))
           }
         })
 
@@ -5203,7 +5249,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
         #                                 " (average adjustment - marginal failed)")
         #     do.call(survminer::ggadjustedcurves, plot_params)
         #   } else {
-        #     stop(paste("Error creating adjusted curves:", e$message))
+        #     jmvcore::reject(paste("Error creating adjusted curves:", e$message))
         #   }
         # })
         # # Add additional theme elements if needed
@@ -5737,7 +5783,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
       #           censored = self$options$censored
       #         )
       #       } else {
-      #         stop(paste("Error creating adjusted curves:", e$message))
+      #         jmvcore::reject(paste("Error creating adjusted curves:", e$message))
       #       }
       #     }
       #       )
@@ -5870,7 +5916,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
       #
       #   coxformula <- paste0(LHT, " ~ ", RHT)
       #
-      #   coxformula <- as.formula(coxformula)
+      #   coxformula <- .asSurvivalFormula(coxformula)
       #
       #   cox_model <- survival::coxph(coxformula, data = mydata)
       #
@@ -5926,7 +5972,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
       #         censored = self$options$censored
       #       )
       #     } else {
-      #       stop(paste("Error creating adjusted curves:", e$message))
+      #       jmvcore::reject(paste("Error creating adjusted curves:", e$message))
       #     }
       #   }
       #   )
@@ -5956,12 +6002,12 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
 
     # Validation checks
     if (self$options$pEntry >= self$options$pRemoval) {
-      stop(.("Entry significance must be less than removal significance"))
+      jmvcore::reject(.("Entry significance must be less than removal significance"))
     }
 
     if (self$options$modelSelection != "enter" &&
         length(c(self$options$explanatory, self$options$contexpl)) < 2) {
-      stop(.("Variable selection requires at least 2 predictor variables"))
+      jmvcore::reject(.("Variable selection requires at least 2 predictor variables"))
     }
 
     private$.checkpoint()
@@ -5979,7 +6025,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
 
     # Create full and null models
     full_model <- survival::coxph(formula, data = data)
-    null_formula <- as.formula(paste(deparse(surv_part), "~ 1"))
+    null_formula <- .asSurvivalFormula(paste(deparse(surv_part), "~ 1"))
     null_model <- survival::coxph(null_formula, data = data)
 
     # For backward selection
@@ -6042,7 +6088,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
 
               if (length(current_vars) > 0) {
                 # Create new formula without this variable
-                new_formula <- as.formula(paste(deparse(surv_part), "~",
+                new_formula <- .asSurvivalFormula(paste(deparse(surv_part), "~",
                                                 paste(current_vars, collapse = " + ")))
 
                 # This is the most computationally expensive step
@@ -6110,7 +6156,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
 
         for (var in remaining_vars) {
           test_vars <- c(selected_vars, var)
-          test_formula <- as.formula(paste(deparse(surv_part), "~",
+          test_formula <- .asSurvivalFormula(paste(deparse(surv_part), "~",
                                            paste(test_vars, collapse = " + ")))
 
           tryCatch({
@@ -6230,13 +6276,11 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
     } else if (nlevels(mydata$myoutcome) == 2) {
       mydata$myoutcome <- as.numeric(mydata$myoutcome == levels(mydata$myoutcome)[2])
     } else {
-      notice <- jmvcore::Notice$new(
-        options = self$options,
-        name = 'modelSelectionOutcome',
-        type = jmvcore::NoticeType$WARNING
+      private$.addHtmlMessage(
+        "warning",
+        "Model selection requires binary outcome",
+        "Model selection requires a binary outcome; no selection performed. Consider using cause-specific coding for competing risks."
       )
-      notice$setContent("Model selection requires a binary outcome; no selection performed. Consider using cause-specific coding for competing risks.")
-      self$results$insert(2, notice)
       return(NULL)
     }
   }
@@ -6577,7 +6621,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
           # Create formula for rpart using the actual column names from results
           formula_string <- paste("survival::Surv(", mytime, ", ", myoutcome, ") ~ ",
                                    paste(expl_vars, collapse = " + "))
-          formula <- as.formula(formula_string)
+          formula <- .asSurvivalFormula(formula_string)
 
           # Validate minimum parameters (with safe defaults for undefined options)
           # NOTE: These options not defined in .a.yaml - experimental feature
@@ -6679,14 +6723,11 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
           return(tree)
 
         }, error = function(e) {
-          # Convert to Notice for consistent UX
-          notice <- jmvcore::Notice$new(
-            options = self$options,
-            name = 'treeError',
-            type = jmvcore::NoticeType$ERROR
+          private$.addHtmlMessage(
+            "error",
+            "Survival decision tree error",
+            paste0(e$message, ". Recommendations: (1) check sufficient data for tree building, (2) try reducing minimum node size, or (3) ensure variables contain valid data.")
           )
-          notice$setContent(paste0("Survival Decision Tree Error: ", e$message, ". Recommendations: (1) Check sufficient data for tree building, (2) Try reducing minimum node size, or (3) Ensure variables contain valid data."))
-          self$results$insert(999, notice)
           return(NULL)
         })
       }
@@ -6818,7 +6859,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
 
           # Create formula properly
           message("Node survival: creating formula with proper syntax")
-          formula <- as.formula("Surv(mytime, myoutcome) ~ node")
+          formula <- .asSurvivalFormula("Surv(mytime, myoutcome) ~ node")
           message("Node survival: formula created: ", deparse(formula))
 
           message("Node survival: calling survfit")
@@ -6949,17 +6990,22 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
         return(long_data)
       }
 
-      # Educational Explanations ----
       ,
+      # Helper: set explanation content on a (possibly absent) result item.
+      # Defined as a proper private method. Previously this was assigned at run
+      # time via `private$.setExplanationContent <- function(...)`, which threw
+      # "cannot add bindings to a locked environment" on the locked R6 instance
+      # whenever Show Explanations was enabled (GitHub issue #122).
+      .setExplanationContent = function(result_name, content) {
+        tryCatch({
+          self$results[[result_name]]$setContent(content)
+        }, error = function(e) {
+          # Silently ignore if result doesn't exist
+        })
+      },
+
+      # Educational Explanations ----
       .addExplanations = function() {
-        # Helper function to set explanation content
-        private$.setExplanationContent <- function(result_name, content) {
-          tryCatch({
-            self$results[[result_name]]$setContent(content)
-          }, error = function(e) {
-            # Silently ignore if result doesn't exist
-          })
-        }
 
         # Multivariable Cox Regression Explanation
         private$.setExplanationContent("multivariableCoxExplanation", '
@@ -7530,7 +7576,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
             if (requireNamespace("randomForestSRC", quietly = TRUE)) {
               private$.performRandomForest(cleaneddata)
             } else {
-              private$.performCoxRegression(cleaneddata)
+              private$.cox_model()
             }
             return()
           }
@@ -7596,7 +7642,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
             if (requireNamespace("randomForestSRC", quietly = TRUE)) {
               private$.performRandomForest(cleaneddata)
             } else {
-              private$.performCoxRegression(cleaneddata)
+              private$.cox_model()
             }
             return()
           }
@@ -7788,7 +7834,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
 
         # Create survival formula
         formula_str <- paste("Surv(mytime, myoutcome) ~", paste(all_vars, collapse = " + "))
-        formula_obj <- as.formula(formula_str)
+        formula_obj <- .asSurvivalFormula(formula_str)
 
         return(list(
           formula = formula_obj,
@@ -7986,7 +8032,9 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
 
         ,
         .calculate_nomogram = function() {
-            # Nomogram calculation function
+            # Builds the rms nomogram (points table + plot) and a plain-language
+            # summary of the underlying Cox model for the "Natural Language
+            # Summary" output.
             tryCatch({
                 if (!requireNamespace("rms", quietly = TRUE)) {
                     self$results$nomogramSummary$setContent(paste0("
@@ -7998,35 +8046,74 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
                     return()
                 }
 
-                # Get cleaned data
-                cleaneddata <- private$.cleandata()
-                mydata <- cleaneddata$cleanData
+                # Central Cox model (same model the rest of the analysis uses)
+                cox_model <- private$.cox_model()
 
-                # Get Cox model results
-                cox_results <- private$.performCoxRegression(cleaneddata)
-
-                if (!is.null(cox_results)) {
-                    nomogram_html <- paste0("
-                        <h4>", .("Nomogram for Risk Prediction"), "</h4>
-                        <p><strong>", .("Status:"), "</strong> ", .("Nomogram generation requires specialized implementation with the 'rms' package."), "</p>
-                        <p><strong>", .("Purpose:"), "</strong> ", .("Nomograms provide a visual calculator for individual risk prediction based on the multivariable Cox model."), "</p>
-                        <p><strong>", .("Implementation Note:"), "</strong> ", .("Full nomogram generation requires:"), "</p>
-                        <ul>
-                            <li>", .("Model fitting using rms::cph() instead of survival::coxph()"), "</li>
-                            <li>", .("Calibration and validation procedures"), "</li>
-                            <li>", .("Time-specific risk calculations"), "</li>
-                            <li>", .("Graphical nomogram construction"), "</li>
-                        </ul>
-                        <p><strong>", .("Alternative:"), "</strong> ", .("Use the risk score functionality for individual risk stratification."), "</p>
-                    ")
-
-                    self$results$nomogramSummary$setContent(nomogram_html)
-                } else {
-                    self$results$nomogramSummary$setContent(.("Unable to generate nomogram: Cox model results not available."))
+                if (is.null(cox_model)) {
+                    self$results$nomogramSummary$setContent(
+                        .("Unable to generate nomogram: the Cox model could not be fitted. See the warnings above (for example, too few events or invalid survival times)."))
+                    return()
                 }
 
+                # Construct the actual nomogram (populates the scoring guide and
+                # the nomogram plot via private$.nom_object). Degrade gracefully
+                # if rms cannot build a nomogram for this particular model.
+                nomogram_ok <- tryCatch({
+                    private$.nomogram(cox_model)
+                    !is.null(private$.nom_object)
+                }, error = function(e) {
+                    private$.debug_write(list(phase = ".nomogram(error)", message = e$message))
+                    FALSE
+                })
+
+                # Assemble a model-specific natural-language summary. Predictor
+                # display names come from user data labels, so they are HTML-
+                # escaped before being placed into this type:Html output.
+                cleaneddata <- private$.cleandata()
+                predictors <- c(cleaneddata$myexplanatory_labelled,
+                                cleaneddata$mycontexpl_labelled)
+                predictors <- predictors[!is.na(predictors) & nzchar(predictors)]
+                pred_html <- if (length(predictors))
+                    paste0("<li>", htmltools::htmlEscape(predictors), "</li>", collapse = "")
+                else
+                    paste0("<li>", .("(none specified)"), "</li>")
+
+                n_patients <- if (!is.null(cox_model$n)) cox_model$n else NA_integer_
+                n_events   <- if (!is.null(cox_model$nevent)) cox_model$nevent else NA_integer_
+                cidx <- tryCatch(unname(summary(cox_model)$concordance[1]),
+                                 error = function(e) NA_real_)
+                cidx_html <- if (is.na(cidx)) .("not available") else sprintf("%.2f", cidx)
+
+                pred_times <- suppressWarnings(as.numeric(
+                    trimws(unlist(strsplit(self$options$cutp, ",")))))
+                pred_times <- pred_times[!is.na(pred_times)]
+                horizon <- if (length(pred_times)) pred_times[1] else 12
+
+                avail_html <- if (nomogram_ok)
+                    paste0("<p style='color:#2e7d32;'>", .("The point-scoring guide and the nomogram plot are shown below."), "</p>")
+                else
+                    paste0("<p style='color:#b71c1c;'>", .("The nomogram plot could not be constructed for this model; the summary above still describes the fitted model."), "</p>")
+
+                summary_html <- paste0(
+                    "<div style='font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif; line-height: 1.6; max-width: 820px;'>",
+                    "<p>", sprintf(.("This nomogram is a visual calculator derived from a multivariable Cox proportional-hazards model fitted on <b>%s patients</b> with <b>%s events</b>. It turns the model into a point-scoring tool so an individual patient's risk can be read off directly."),
+                                   format(n_patients), format(n_events)), "</p>",
+                    "<p><b>", .("Predictors included:"), "</b></p><ul>", pred_html, "</ul>",
+                    "<p>", sprintf(.("The nomogram estimates the probability of the event within <b>%g months</b> of follow-up. Model discrimination (Harrell's C-index) is <b>%s</b>, where 0.5 is no better than chance and 1.0 is perfect separation."),
+                                   horizon, cidx_html), "</p>",
+                    "<p><b>", .("How to read the nomogram:"), "</b></p><ol>",
+                    "<li>", .("For each predictor, draw a vertical line up to the <i>Points</i> axis to read its score."), "</li>",
+                    "<li>", .("Add the points from all predictors to obtain the <i>Total Points</i>."), "</li>",
+                    "<li>", .("Find the Total Points on the bottom axis and read down to the predicted-risk scale."), "</li></ol>",
+                    avail_html,
+                    "<p style='font-size: 0.9em; color: #555;'><i>", .("Caution: these estimates reflect the development cohort only and require external validation before clinical use. The nomogram assumes proportional hazards and (for continuous predictors) linear effects."), "</i></p>",
+                    "</div>")
+
+                self$results$nomogramSummary$setContent(summary_html)
+
             }, error = function(e) {
-                error_msg <- paste(.("Nomogram calculation error:"), e$message)
+                error_msg <- paste(.("Nomogram calculation error:"),
+                                   htmltools::htmlEscape(conditionMessage(e)))
                 self$results$nomogramSummary$setContent(error_msg)
             })
         }
@@ -8067,7 +8154,7 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
             # Try to get Cox regression results for summary
             cox_results <- NULL
             tryCatch({
-              cox_model <- private$.performCoxRegression(cleaneddata)
+              cox_model <- private$.cox_model()
               if (!is.null(cox_model)) {
                 cox_summary <- summary(cox_model)
                 cox_results <- cox_summary$coefficients

@@ -6,6 +6,16 @@ jrs:   '1.1'
 
 items:
 
+    - name: notices
+      title: Important Information
+      type: Preformatted
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - elapsedtime
+          - explanatory
+          - contexpl
+
     - name:  todo
       title: To Do
       type:  Html
@@ -20,6 +30,26 @@ items:
           - tint
           - multievent
           # - use_modelSelection
+
+    - name:  errors
+      title: Critical Errors
+      type:  Html
+      visible: false
+
+    - name:  strongWarnings
+      title: Strong Warnings
+      type:  Html
+      visible: false
+
+    - name:  warnings
+      title: Warnings
+      type:  Html
+      visible: false
+
+    - name:  infoMessages
+      title: Information
+      type:  Html
+      visible: false
 
     # - name:  mydataview
     #   title: mydataview
