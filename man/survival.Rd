@@ -25,6 +25,8 @@ survival(
   landmark = 3,
   pw = FALSE,
   padjustmethod = "holm",
+  weightedLogRank = FALSE,
+  survivalTestType = "logrank",
   ph_cox = FALSE,
   sc = FALSE,
   kmunicate = FALSE,
@@ -47,6 +49,17 @@ survival(
   rmst_tau = 0,
   stratified_cox = FALSE,
   strata_variable = NULL,
+  age_adjustment = FALSE,
+  age_variable = NULL,
+  age_interaction = FALSE,
+  age_stratified_cox = FALSE,
+  age_group_cutpoints = "50, 65, 75",
+  age_time_scale = FALSE,
+  age_standardization = FALSE,
+  age_standardization_method = "indirect",
+  age_stratified_km = FALSE,
+  adjusted_curves = FALSE,
+  remark_checklist = FALSE,
   residual_diagnostics = FALSE,
   loglog = FALSE,
   showExplanations = FALSE,
@@ -61,7 +74,15 @@ survival(
   parametric_diagnostics = TRUE,
   compare_distributions = FALSE,
   parametric_survival_plots = FALSE,
-  hazard_plots = FALSE
+  hazard_plots = FALSE,
+  calibration_curves = FALSE,
+  calibration_timepoint = 0,
+  calibration_ngroups = 5,
+  rcs_analysis = FALSE,
+  rcs_variable = NULL,
+  rcs_knots = 4,
+  bootstrapValidation = FALSE,
+  bootstrapValN = 200
 )
 }
 \arguments{
@@ -125,6 +146,10 @@ disease.}
 
 \item{padjustmethod}{.}
 
+\item{weightedLogRank}{.}
+
+\item{survivalTestType}{.}
+
 \item{ph_cox}{.}
 
 \item{sc}{.}
@@ -185,6 +210,51 @@ hazard.}
 regression. This variable should represent groups with different baseline
 hazards.}
 
+\item{age_adjustment}{Enable age adjustment in Cox regression. When
+enabled, age is included as a covariate in the Cox model, providing
+age-adjusted hazard ratios. Recommended when comparing groups that may
+differ in age distribution.}
+
+\item{age_variable}{Continuous variable representing patient age at
+diagnosis or study entry. Used as a covariate in Cox regression for age
+adjustment. Must be numeric.}
+
+\item{age_interaction}{Test whether age modifies the effect of the
+explanatory variable on survival (age-group interaction). Reports the
+interaction term p-value.}
+
+\item{age_stratified_cox}{Stratify the Cox model by age groups instead of
+adjusting as a covariate. Allows different baseline hazards for each age
+group without assuming a linear age effect.}
+
+\item{age_group_cutpoints}{Comma-separated age cutpoints for creating age
+groups. For example, 50, 65, 75 creates groups less than 50, 50-64, 65-74,
+75 and above.}
+
+\item{age_time_scale}{Use biological age as the time axis instead of
+follow-up time. The Cox model becomes Surv(age_at_entry, age_at_event,
+event). Most rigorous for cancer epidemiology where age drives risk.}
+
+\item{age_standardization}{Compute age-standardized mortality using direct
+or indirect standardization. Reports Standardized Mortality Ratio comparing
+observed vs expected deaths by age group.}
+
+\item{age_standardization_method}{Indirect standardization computes SMR
+(observed/expected). Direct standardization applies age-specific rates to a
+standard population.}
+
+\item{age_stratified_km}{Show Kaplan-Meier survival curves stratified by
+age groups. Displays separate curves for each age group within the
+explanatory variable.}
+
+\item{adjusted_curves}{Show Kaplan-Meier-style survival curves adjusted for
+age using the Cox model. Displays what the survival curves would look like
+after removing the effect of age differences between groups.}
+
+\item{remark_checklist}{Display a REMARK (REporting recommendations for
+tumor MARKer prognostic studies) checklist showing which reporting items
+are addressed by the current analysis configuration.}
+
 \item{residual_diagnostics}{Calculate and display Cox model residuals for
 diagnostic purposes, including Martingale, deviance, score, and Schoenfeld
 residuals.}
@@ -244,12 +314,53 @@ estimates for model validation.}
 
 \item{hazard_plots}{Plot estimated hazard functions from parametric models.
 Shows how instantaneous risk changes over time for different distributions.}
+
+\item{calibration_curves}{Assess calibration of the Cox model by comparing
+predicted versus observed survival at specified time points. Groups
+patients by predicted risk quintiles and computes Kaplan-Meier survival per
+group. Includes calibration slope, calibration-in-the-large, and
+calibration plot. Requires Cox model to be fitted.}
+
+\item{calibration_timepoint}{Time point for calibration assessment (e.g.,
+60 for 5-year OS in months). If 0, uses the median observed time. The
+calibration plot compares predicted vs observed survival probability at
+this time point.}
+
+\item{calibration_ngroups}{Number of risk groups (quantiles) for
+calibration assessment. Default is 5 (quintiles). More groups provide finer
+resolution but require larger sample sizes. Each group should have at least
+20-30 patients.}
+
+\item{rcs_analysis}{Assess non-linear effects of continuous predictors
+using restricted cubic splines (natural splines). Fits Cox model with
+spline-transformed predictor, tests for non-linearity via likelihood ratio
+test, and plots hazard ratio curve. Important for variables like age and
+tumor size where the relationship with outcome may not be linear.}
+
+\item{rcs_variable}{Select a continuous predictor variable to assess for
+non-linear effects. The variable will be modeled with restricted cubic
+splines and compared to a linear model. Common candidates include age,
+tumor size, biomarker levels, and follow-up duration.}
+
+\item{rcs_knots}{Number of knots for restricted cubic splines. 3 knots = 2
+df (simplest), 4 knots = 3 df (recommended default), 5 knots = 4 df (more
+flexible). Knots are placed at Harrell-recommended percentiles. More knots
+allow detection of complex non-linear patterns but may overfit with small
+samples.}
+
+\item{bootstrapValidation}{.}
+
+\item{bootstrapValN}{.}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
 \code{results$subtitle} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$todo} \tab \tab \tab \tab \tab a html \cr
+\code{results$errors} \tab \tab \tab \tab \tab a html \cr
+\code{results$strongWarnings} \tab \tab \tab \tab \tab a html \cr
+\code{results$warnings} \tab \tab \tab \tab \tab a html \cr
+\code{results$infoMessages} \tab \tab \tab \tab \tab a html \cr
 \code{results$medianSurvivalHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$medianSummary} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$medianTable} \tab \tab \tab \tab \tab a table \cr
@@ -261,6 +372,18 @@ A results object containing:
 \code{results$tCoxtext2} \tab \tab \tab \tab \tab a html \cr
 \code{results$coxRegressionHeading3} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$coxRegressionExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$ageAdjustedCoxHeading} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$ageAdjustedCoxTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$ageInteractionTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$ageAdjustedInterpretation} \tab \tab \tab \tab \tab a html \cr
+\code{results$ageAdjustedExplanation} \tab \tab \tab \tab \tab a html \cr
+\code{results$ageTimeScaleTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$ageTimeScaleInterpretation} \tab \tab \tab \tab \tab a html \cr
+\code{results$ageStandardizationTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$ageStandardizationInterpretation} \tab \tab \tab \tab \tab a html \cr
+\code{results$ageStratifiedKMPlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$adjustedCurvesPlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$remarkChecklist} \tab \tab \tab \tab \tab a html \cr
 \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$phInterpretation} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
@@ -284,6 +407,8 @@ A results object containing:
 \code{results$pairwiseComparisonHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$pairwiseTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$pairwiseSummary} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$weightedLogRankTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$weightedLogRankExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot2} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
@@ -294,6 +419,15 @@ A results object containing:
 \code{results$residualsPlot} \tab \tab \tab \tab \tab an image \cr
 \code{results$calculatedtime} \tab \tab \tab \tab \tab an output \cr
 \code{results$outcomeredefined} \tab \tab \tab \tab \tab an output \cr
+\code{results$calibrationTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$calibrationGroupTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$calibrationPlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$calibrationInterpretation} \tab \tab \tab \tab \tab a html \cr
+\code{results$rcsTestTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$rcsPlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$rcsInterpretation} \tab \tab \tab \tab \tab a html \cr
+\code{results$bootstrapValidationTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$bootstrapValidationExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$parametricModelComparison} \tab \tab \tab \tab \tab a table \cr
 \code{results$parametricModelSummary} \tab \tab \tab \tab \tab a table \cr
 \code{results$parametricDiagnostics} \tab \tab \tab \tab \tab a html \cr

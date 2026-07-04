@@ -302,52 +302,10 @@
   }
 }
 
-# Consolidated function for building survival formulas
-.buildSurvivalFormula <- function(time_var, outcome_var, predictors, survival_type = "standard", start_var = NULL, stop_var = NULL, strata_vars = NULL) {
-  # Escape all variable names for safe formula construction
-  escaped_time <- .escapeVariableNames(time_var)
-  escaped_outcome <- .escapeVariableNames(outcome_var)
-  escaped_predictors <- .escapeVariableNames(predictors)
-
-  # Build left-hand side based on survival type
-  lhs <- switch(survival_type,
-    "standard" = paste0("survival::Surv(", escaped_time, ", ", escaped_outcome, ")"),
-    "counting" = {
-      if (is.null(start_var) || is.null(stop_var)) {
-        jmvcore::reject("Start and stop variables required for counting process format")
-      }
-      escaped_start <- .escapeVariableNames(start_var)
-      escaped_stop <- .escapeVariableNames(stop_var)
-      paste0("survival::Surv(", escaped_start, ", ", escaped_stop, ", ", escaped_outcome, ")")
-    },
-    "interval" = {
-      if (is.null(stop_var)) {
-        jmvcore::reject("Stop time variable required for interval censoring")
-      }
-      escaped_stop <- .escapeVariableNames(stop_var)
-      paste0("survival::Surv(", escaped_time, ", ", escaped_stop, ", ", escaped_outcome, ")")
-    },
-    jmvcore::reject("Unknown survival type: ", survival_type)
-  )
-
-  # Build right-hand side
-  if (length(escaped_predictors) == 0) {
-    rhs <- "1"  # Null model
-  } else {
-    rhs <- paste(escaped_predictors, collapse = " + ")
-
-    # Add stratification if specified
-    if (!is.null(strata_vars) && length(strata_vars) > 0) {
-      escaped_strata <- .escapeVariableNames(strata_vars)
-      strata_term <- paste0("strata(", paste(escaped_strata, collapse = ", "), ")")
-      rhs <- paste(rhs, strata_term, sep = " + ")
-    }
-  }
-
-  # Combine and return formula
-  formula_string <- paste0(lhs, " ~ ", rhs)
-  return(.asSurvivalFormula(formula_string))
-}
+# .buildSurvivalFormula() moved to R/utils.R (alongside its siblings
+# .asSurvivalFormula and .escapeVariableNames) so it is unit-testable via
+# source("R/utils.R") without loading the full jamovi/R6 harness. It is
+# still a package-level function called from this file (below) at runtime.
 
 #' @title Multivariable Survival Analysis Implementation
 #' @description
@@ -474,6 +432,86 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
               self$results[[output_name]]$setContent(paste0(current_content, new_message))
           }
           self$results[[output_name]]$setVisible(TRUE)
+      },
+
+      # Populate the interaction (effect-modification) test table and the
+      # within-subgroup hazard-ratio table from a fitted Cox model. Called from
+      # .run() only when interaction terms are requested. Pure numeric helpers
+      # live in R/multisurvival-interactions.R.
+      .populateInteractionTables = function(cox_model, cox_formula, data,
+                                            real_interactions, conf_level,
+                                            is_finegray) {
+        # --- Interaction (effect-modification) test table ---
+        itab <- tryCatch(
+          .interactionTestTable(cox_model, conf_level = conf_level),
+          error = function(e) NULL
+        )
+        if (!is.null(itab) && nrow(itab) > 0) {
+          itbl <- self$results$interactionTest
+          for (i in seq_len(nrow(itab))) {
+            itbl$addRow(rowKey = i, values = list(
+              term     = itab$term[i],
+              hr       = itab$hr[i],
+              ci_lower = itab$ci_lower[i],
+              ci_upper = itab$ci_upper[i],
+              p        = itab$p[i]
+            ))
+          }
+          itbl$setNote("emkey",
+            "Each row tests whether the focal effect differs across the moderator (effect modification). A significant p indicates the effect is modified.")
+        }
+
+        # --- Within-subgroup hazard ratios ---
+        sg <- self$results$subgroupHR
+        if (isTRUE(is_finegray)) {
+          sg$setNote("fg",
+            "Within-subgroup hazard ratios are disabled in competing-risks (Fine-Gray) mode; interpret the interaction coefficient above instead.")
+          return(invisible(NULL))
+        }
+
+        rowKey <- 0
+        skipped_continuous <- FALSE
+        skipped_highorder <- FALSE
+        nonconverged <- character(0)
+        for (term in real_interactions) {
+          info <- .interactionModeratorInfo(term, data)
+          if (!isTRUE(info$twoway)) { skipped_highorder <- TRUE; next }
+          if (!isTRUE(info$categorical_moderator)) { skipped_continuous <- TRUE; next }
+          sub <- tryCatch(
+            .computeSubgroupHRs(cox_formula, data,
+                                focal = info$focal, moderator = info$moderator,
+                                conf_level = conf_level),
+            error = function(e) NULL
+          )
+          if (is.null(sub)) next
+          for (i in seq_len(nrow(sub))) {
+            rowKey <- rowKey + 1
+            conv <- is.null(sub$converged) || isTRUE(sub$converged[i])
+            sg$addRow(rowKey = rowKey, values = list(
+              interaction     = sub$interaction[i],
+              moderator_level = if (conv) sub$moderator_level[i] else paste0(sub$moderator_level[i], " *"),
+              focal_effect    = sub$focal_effect[i],
+              hr              = sub$hr[i],
+              ci_lower        = sub$ci_lower[i],
+              ci_upper        = sub$ci_upper[i],
+              p               = sub$p[i]
+            ))
+            if (!conv)
+              nonconverged <- c(nonconverged, paste0(sub$interaction[i], " [", sub$moderator_level[i], "]"))
+          }
+        }
+        notes <- character(0)
+        if (length(nonconverged) > 0)
+          notes <- c(notes, paste0("* Model did not converge for: ",
+                                   paste(unique(nonconverged), collapse = "; "),
+                                   " (likely small-sample separation); interpret these HRs with extreme caution."))
+        if (skipped_continuous)
+          notes <- c(notes, "Interactions with a continuous moderator are shown as a coefficient in the table above; per-subgroup HRs require a categorical moderator.")
+        if (skipped_highorder)
+          notes <- c(notes, "Within-subgroup HRs are computed for 2-way interactions only.")
+        if (length(notes) > 0)
+          sg$setNote("sgnote", paste(notes, collapse = " "))
+        invisible(NULL)
       },
 
       .setPlotVisibility = function() {
@@ -2309,8 +2347,18 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           mycontexpl <- as.vector(mycontexpl_labelled)
         }
 
+        # Get all labels for variable name mapping (needed to map interactions
+        # before building the Cox formula).
+        mydata_labelled <- cleaneddata$mydata_labelled
+        all_labels <- labelled::var_label(mydata_labelled)
+
         # Build formula parts (exclude strata from covariates)
         formula_parts <- c(myexplanatory, mycontexpl)
+
+        # Map interaction terms (display labels -> real names) and build the
+        # escaped, colon-joined terms for the Cox formula RHS.
+        real_interactions <- .mapInteractionTerms(self$options$interactions, all_labels)
+        interaction_terms_cox <- .interactionTermsForFormula(real_interactions)
 
         # Build Cox regression formula using consolidated function with proper strata
         coxformula <- .buildSurvivalFormula(
@@ -2318,7 +2366,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           outcome_var = "myoutcome",
           predictors = formula_parts,
           survival_type = "standard",
-          strata_vars = mystratvar
+          strata_vars = mystratvar,
+          interaction_terms = interaction_terms_cox
         )
 
 
@@ -2340,9 +2389,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # Add checkpoint before the expensive Cox model fitting
         private$.checkpoint()
 
-        # Get all labels for variable name mapping
-        mydata_labelled <- cleaneddata$mydata_labelled
-        all_labels <- labelled::var_label(mydata_labelled)
+        # (mydata_labelled / all_labels are defined above, before the formula build)
 
         # Handle Time-Dependent Covariates
         # EXPERIMENTAL:         if (self$options$use_time_dependent && !is.null(self$options$time_dep_vars)) {
@@ -2463,6 +2510,27 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
               y = TRUE,
               model = TRUE
             )
+        }
+
+        # Populate interaction / effect-modification output.
+        # .cox_model() is a shared fitter invoked many times within a single
+        # run (survival analysis, clinical summary, plots, nomogram, risk score).
+        # jmvcore's Table$addRow appends unconditionally, so gate row-writing on
+        # the tables still being empty: jamovi clears result tables at the start
+        # of each run, so only the FIRST .cox_model() call of a run populates
+        # them; later calls see rowCount > 0 and skip (no duplicate rows, no
+        # repeated subgroup refits).
+        if (length(self$options$interactions) > 0 &&
+            self$results$interactionTest$rowCount == 0 &&
+            self$results$subgroupHR$rowCount == 0) {
+          private$.populateInteractionTables(
+            cox_model = cox_model,
+            cox_formula = coxformula,
+            data = mydata,
+            real_interactions = real_interactions,
+            conf_level = 0.95,
+            is_finegray = (self$options$multievent && self$options$analysistype == 'compete')
+          )
         }
 
         if (self$options$multievent && self$options$analysistype == 'compete') {
@@ -3812,6 +3880,16 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         if (self$options$use_stratify && !is.null(self$options$stratvar)) {
           # Remove stratified variables from the display
           formula2 <- formula2[!formula2 %in% mystratvar_labelled]
+        }
+
+        # append interaction terms so the HR forest plot shows them
+        if (length(self$options$interactions) > 0) {
+          .all_labels_hp <- labelled::var_label(plotData$mydata_labelled)
+          formula2 <- c(
+            formula2,
+            .interactionTermsForFinalfit(
+              .mapInteractionTerms(self$options$interactions, .all_labels_hp))
+          )
         }
 
 
@@ -6296,8 +6374,16 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
     mycontexpl <- as.vector(cleaneddata$mycontexpl_labelled)
   }
 
-  # Combine all explanatory variables
+  # Combine all explanatory variables (+ interaction terms)
   explanatory_formula <- c(myexplanatory, mycontexpl)
+  if (length(self$options$interactions) > 0) {
+    .all_labels_ff <- labelled::var_label(cleaneddata$mydata_labelled)
+    explanatory_formula <- c(
+      explanatory_formula,
+      .interactionTermsForFinalfit(
+        .mapInteractionTerms(self$options$interactions, .all_labels_ff))
+    )
+  }
 
   # Prepare the dependent variable formula
   dependent_formula <- "Surv(mytime, myoutcome)"
@@ -8229,50 +8315,62 @@ where 0.5 suggests no discriminative ability and 1.0 indicates perfect discrimin
           })
         }
 
-    ), # End of private list
-    public = list(
+    ) # End of private list
+    
+    # , public = list(
         #' @description
         #' Generate R source code for Multi-Variable Survival analysis
         #' @return Character string with R syntax for reproducible analysis
-        asSource = function() {
-            elapsedtime <- self$options$elapsedtime
-            outcome <- self$options$outcome
-
-            if (is.null(elapsedtime) || is.null(outcome))
-                return('')
-
-            # Escape variable names that contain spaces or special characters
-            elapsedtime_escaped <- if (!is.null(elapsedtime) && !identical(make.names(elapsedtime), elapsedtime)) {
-                paste0('`', elapsedtime, '`')
-            } else {
-                elapsedtime
-            }
-
-            outcome_escaped <- if (!is.null(outcome) && !identical(make.names(outcome), outcome)) {
-                paste0('`', outcome, '`')
-            } else {
-                outcome
-            }
-
-            # Build arguments
-            elapsedtime_arg <- paste0('elapsedtime = "', elapsedtime_escaped, '"')
-            outcome_arg <- paste0('outcome = "', outcome_escaped, '"')
-
-            # Get other arguments using base helper (if available)
-            args <- ''
-            if (!is.null(private$.asArgs)) {
-                args <- private$.asArgs(incData = FALSE)
-            }
-            if (args != '')
-                args <- paste0(',\n    ', args)
-
-            # Get package name dynamically
-            pkg_name <- utils::packageName()
-            if (is.null(pkg_name)) pkg_name <- "ClinicoPath"  # fallback
-
-            # Build complete function call
-            paste0(pkg_name, '::multisurvival(\n    data = data,\n    ',
-                   elapsedtime_arg, ',\n    ', outcome_arg, args, ')')
-        }
-    ) # End of public list
+        # NOTE (2026-07): Custom asSource() commented out. It emitted
+        # `elapsedtime`/`outcome` MANUALLY and then private$.asArgs() emitted
+        # them AGAIN, producing duplicated (non-runnable) arguments in the
+        # generated syntax, e.g.:
+        #     elapsedtime = "elapsedtime",
+        #     outcome = "outcome",
+        #     elapsedtime = elapsedtime,   <- duplicate from .asArgs
+        #     outcome = outcome,
+        # jmvcore's default asSource() renders every option exactly once, so we
+        # rely on it (this override is removed).
+        #
+        # asSource = function() {
+        #     elapsedtime <- self$options$elapsedtime
+        #     outcome <- self$options$outcome
+        #
+        #     if (is.null(elapsedtime) || is.null(outcome))
+        #         return('')
+        #
+        #     # Escape variable names that contain spaces or special characters
+        #     elapsedtime_escaped <- if (!is.null(elapsedtime) && !identical(make.names(elapsedtime), elapsedtime)) {
+        #         paste0('`', elapsedtime, '`')
+        #     } else {
+        #         elapsedtime
+        #     }
+        #
+        #     outcome_escaped <- if (!is.null(outcome) && !identical(make.names(outcome), outcome)) {
+        #         paste0('`', outcome, '`')
+        #     } else {
+        #         outcome
+        #     }
+        #
+        #     # Build arguments
+        #     elapsedtime_arg <- paste0('elapsedtime = "', elapsedtime_escaped, '"')
+        #     outcome_arg <- paste0('outcome = "', outcome_escaped, '"')
+        #
+        #     # Get other arguments using base helper (if available)
+        #     args <- ''
+        #     if (!is.null(private$.asArgs)) {
+        #         args <- private$.asArgs(incData = FALSE)
+        #     }
+        #     if (args != '')
+        #         args <- paste0(',\n    ', args)
+        #
+        #     # Get package name dynamically
+        #     pkg_name <- utils::packageName()
+        #     if (is.null(pkg_name)) pkg_name <- "ClinicoPath"  # fallback
+        #
+        #     # Build complete function call
+        #     paste0(pkg_name, '::multisurvival(\n    data = data,\n    ',
+        #            elapsedtime_arg, ',\n    ', outcome_arg, args, ')')
+        # }
+   # ) # End of public list
 )

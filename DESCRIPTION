@@ -19,11 +19,42 @@ URL: https://github.com/sbalci/ClinicoPathJamoviModule/,
         https://www.serdarbalci.com/jsurvival/
 BugReports: https://github.com/sbalci/ClinicoPathJamoviModule/issues/
 Depends: R (>= 4.1.0)
-Imports: dplyr, finalfit, ggplot2, glue, gridExtra,
-        jmvcore, lubridate, magrittr, R6, rlang, survival, survminer
-Suggests: boot, checkmate, dcurves, glmnet, Hmisc, htmltools, janitor,
-        KMunicate, knitr, labelled, mgcv, pammtools, pROC, purrr,
-        rmarkdown, rms, scales, tibble, tidyr, timeROC, xml2
+Imports:
+    dplyr,
+    finalfit,
+    ggplot2,
+    glue,
+    gridExtra,
+    jmvcore,
+    lubridate,
+    magrittr,
+    R6,
+    rlang,
+    survival,
+    survminer,
+    htmltools,
+    janitor,
+    knitr,
+    labelled,
+    logistf,
+    rms
+Suggests:
+    boot,
+    checkmate,
+    dcurves,
+    glmnet,
+    Hmisc,
+    KMunicate,
+    mgcv,
+    pammtools,
+    pROC,
+    purrr,
+    rmarkdown,
+    scales,
+    tibble,
+    tidyr,
+    timeROC,
+    xml2
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

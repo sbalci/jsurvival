@@ -23,6 +23,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             analysistype = "overall",
             explanatory = NULL,
             contexpl = NULL,
+            interactions = NULL,
             multievent = FALSE,
             hr = FALSE,
             sty = "t1",
@@ -187,6 +188,10 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "continuous"),
                 permitted=list(
                     "numeric"),
+                default=NULL)
+            private$..interactions <- jmvcore::OptionTerms$new(
+                "interactions",
+                interactions,
                 default=NULL)
             private$..multievent <- jmvcore::OptionBool$new(
                 "multievent",
@@ -373,6 +378,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$.addOption(private$..outcomeredefined)
             self$.addOption(private$..explanatory)
             self$.addOption(private$..contexpl)
+            self$.addOption(private$..interactions)
             self$.addOption(private$..multievent)
             self$.addOption(private$..hr)
             self$.addOption(private$..sty)
@@ -428,6 +434,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         outcomeredefined = function() private$..outcomeredefined$value,
         explanatory = function() private$..explanatory$value,
         contexpl = function() private$..contexpl$value,
+        interactions = function() private$..interactions$value,
         multievent = function() private$..multievent$value,
         hr = function() private$..hr$value,
         sty = function() private$..sty$value,
@@ -482,6 +489,7 @@ multisurvivalOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         ..outcomeredefined = NA,
         ..explanatory = NA,
         ..contexpl = NA,
+        ..interactions = NA,
         ..multievent = NA,
         ..hr = NA,
         ..sty = NA,
@@ -531,6 +539,8 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
         multivariableCoxHeading = function() private$.items[["multivariableCoxHeading"]],
         text = function() private$.items[["text"]],
         text2 = function() private$.items[["text2"]],
+        interactionTest = function() private$.items[["interactionTest"]],
+        subgroupHR = function() private$.items[["subgroupHR"]],
         multivariableCoxSummaryHeading = function() private$.items[["multivariableCoxSummaryHeading"]],
         multivariableCoxSummary = function() private$.items[["multivariableCoxSummary"]],
         glossaryPanel = function() private$.items[["glossaryPanel"]],
@@ -671,6 +681,87 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "dxdate",
                     "tint",
                     "multievent")))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="interactionTest",
+                title="Interaction (Effect-Modification) Test",
+                visible="(interactions)",
+                clearWith=list(
+                    "explanatory",
+                    "contexpl",
+                    "interactions",
+                    "outcome",
+                    "elapsedtime",
+                    "outcomeLevel"),
+                columns=list(
+                    list(
+                        `name`="term", 
+                        `title`="Interaction", 
+                        `type`="text"),
+                    list(
+                        `name`="hr", 
+                        `title`="HR", 
+                        `type`="number"),
+                    list(
+                        `name`="ci_lower", 
+                        `title`="Lower", 
+                        `type`="number", 
+                        `superTitle`="95% CI"),
+                    list(
+                        `name`="ci_upper", 
+                        `title`="Upper", 
+                        `type`="number", 
+                        `superTitle`="95% CI"),
+                    list(
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
+                        `format`="zto,pvalue"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="subgroupHR",
+                title="Within-Subgroup Hazard Ratios",
+                visible="(interactions)",
+                clearWith=list(
+                    "explanatory",
+                    "contexpl",
+                    "interactions",
+                    "outcome",
+                    "elapsedtime",
+                    "outcomeLevel"),
+                columns=list(
+                    list(
+                        `name`="interaction", 
+                        `title`="Interaction", 
+                        `type`="text", 
+                        `combineBelow`=TRUE),
+                    list(
+                        `name`="moderator_level", 
+                        `title`="Subgroup", 
+                        `type`="text"),
+                    list(
+                        `name`="focal_effect", 
+                        `title`="Focal level", 
+                        `type`="text"),
+                    list(
+                        `name`="hr", 
+                        `title`="HR", 
+                        `type`="number"),
+                    list(
+                        `name`="ci_lower", 
+                        `title`="Lower", 
+                        `type`="number", 
+                        `superTitle`="95% CI"),
+                    list(
+                        `name`="ci_upper", 
+                        `title`="Upper", 
+                        `type`="number", 
+                        `superTitle`="95% CI"),
+                    list(
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
+                        `format`="zto,pvalue"))))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="multivariableCoxSummaryHeading",
@@ -1250,7 +1341,7 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 package = "jsurvival",
                 name = "multisurvival",
-                version = c(0,0,43),
+                version = c(0,0,46),
                 options = options,
                 results = multisurvivalResults$new(options=options),
                 data = data,
@@ -1412,6 +1503,11 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   in the Cox model.
 #' @param contexpl Continuous explanatory (predictor) variables included in
 #'   the Cox model.
+#' @param interactions Interaction (crossed) terms added to the Cox model,
+#'   built from variables already selected as explanatory or continuous
+#'   explanatory variables. Each term tests effect modification — e.g. Treatment
+#'   x Biomarker for predictive-biomarker analysis. For a 2-way term the first
+#'   variable is the focal effect and the second is the moderator.
 #' @param multievent If true, multiple event levels will be considered for
 #'   competing risks analysis. Requires specifying \code{dod}, \code{dooc}, etc.
 #' @param hr If true, generates a plot of hazard ratios for each explanatory
@@ -1496,6 +1592,8 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$multivariableCoxHeading} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$text} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$text2} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$interactionTest} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$subgroupHR} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$multivariableCoxSummaryHeading} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$multivariableCoxSummary} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$glossaryPanel} \tab \tab \tab \tab \tab a html \cr
@@ -1545,9 +1643,9 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 #'
-#' \code{results$personTimeTable$asDF}
+#' \code{results$interactionTest$asDF}
 #'
-#' \code{as.data.frame(results$personTimeTable)}
+#' \code{as.data.frame(results$interactionTest)}
 #'
 #' @export
 multisurvival <- function(
@@ -1569,6 +1667,7 @@ multisurvival <- function(
     analysistype = "overall",
     explanatory = NULL,
     contexpl = NULL,
+    interactions = NULL,
     multievent = FALSE,
     hr = FALSE,
     sty = "t1",
@@ -1628,6 +1727,7 @@ multisurvival <- function(
     for (v in explanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
     for (v in adjexplanatory) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
     for (v in stratvar) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
+    if (inherits(interactions, "formula")) interactions <- jmvcore::decomposeFormula(interactions)
 
     options <- multisurvivalOptions$new(
         elapsedtime = elapsedtime,
@@ -1647,6 +1747,7 @@ multisurvival <- function(
         analysistype = analysistype,
         explanatory = explanatory,
         contexpl = contexpl,
+        interactions = interactions,
         multievent = multievent,
         hr = hr,
         sty = sty,

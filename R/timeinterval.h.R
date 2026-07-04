@@ -270,7 +270,7 @@ timeintervalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 package = "jsurvival",
                 name = "timeinterval",
-                version = c(0,0,38),
+                version = c(0,0,46),
                 options = options,
                 results = timeintervalResults$new(options=options),
                 data = data,
