@@ -490,7 +490,7 @@ datetimeconverterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
             super$initialize(
                 package = "jsurvival",
                 name = "datetimeconverter",
-                version = c(0,0,46),
+                version = c(0,0,47),
                 options = options,
                 results = datetimeconverterResults$new(options=options),
                 data = data,
@@ -513,7 +513,7 @@ datetimeconverterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
 #'
 #' @examples
 #' \donttest{
-#' # Basic datetime conversion: '0.0.46'
+#' # Basic datetime conversion: '0.0.47'
 #' datetimeconverter(
 #'   data = study_data,
 #'   datetime_var = "event_date",
