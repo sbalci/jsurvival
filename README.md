@@ -13,6 +13,7 @@
 ## 🎯 Key Features
 
 ### Core Survival Analysis Capabilities
+
 - **Kaplan-Meier Analysis**: Generate survival curves with confidence intervals, risk tables, and median survival times
 - **Cox Proportional Hazards Models**: Both univariate and multivariable regression with hazard ratios and forest plots
 - **Person-Time Calculations**: Automated computation of person-years at risk with incidence rate calculations
@@ -21,6 +22,7 @@
 - **Competing Risks**: Handle multiple event types with cause-specific hazard functions
 
 ### Clinical Research Features
+
 - **Natural Language Summaries**: Automated generation of plain-English interpretations of results
 - **Clinical Trial Metrics**: 1-, 3-, and 5-year survival rates with confidence intervals
 - **Stage Migration Analysis**: Evaluate the Will Rogers phenomenon in cancer staging with advanced TNM staging validation
@@ -29,6 +31,7 @@
 - **Educational Explanations**: Built-in HTML explanations for key analysis concepts and methods
 
 ### Advanced Statistical Methods
+
 - **Restricted Mean Survival Time (RMST)**: Alternative to median survival for skewed distributions
 - **Time-Dependent ROC Curves**: Evaluate biomarker performance over time
 - **LASSO-Cox Regression**: Variable selection for high-dimensional survival data
@@ -36,6 +39,7 @@
 - **Schoenfeld Residual Diagnostics**: Test proportional hazards assumptions
 
 ### User Experience Enhancements
+
 - **Intuitive GUI**: Point-and-click interface within jamovi, no coding required
 - **Clinical Analysis Presets**: Pre-configured settings for common study types (overall survival, disease-free survival, treatment effectiveness, post-surgical outcomes)
 - **Guided Setup Mode**: Step-by-step guidance for users new to survival analysis
@@ -58,12 +62,14 @@
 ## 🚀 Installation
 
 ### In jamovi (Recommended)
+
 1. Open jamovi
 2. Click the **+** button → **jamovi library**
 3. Search for "ClinicoPath" or "jsurvival"
 4. Click **Install**
 
 ### As R Package
+
 ```r
 # Install from GitHub
 devtools::install_github("sbalci/jsurvival")
@@ -73,20 +79,22 @@ library(jsurvival)
 ```
 
 ### System Requirements
-- jamovi ≥ 1.8.1
-- R ≥ 4.1.0
+
+- jamovi >= 1.8.1
+- R >= 4.1.0
 - Dependencies: survival, survminer, finalfit, ggplot2, dplyr
 
 ## 📖 Documentation
 
-- **Package Documentation**: https://www.serdarbalci.com/jsurvival/
-- **ClinicoPath Suite**: https://sbalci.github.io/ClinicoPathJamoviModule/
+- **Package Documentation**: <https://www.serdarbalci.com/jsurvival/>
+- **ClinicoPath Suite**: <https://sbalci.github.io/ClinicoPathJamoviModule/>
 - **Tutorials**: Available in the `vignettes/` directory
 - **Example Data**: Included datasets for learning and testing
 
 ## 💡 Quick Example
 
-### In jamovi:
+### In jamovi
+
 1. Load your survival data
 2. Navigate to **Survival** → **ClinicoPath Survival** → **Survival Analysis**
 3. Set variables:
@@ -95,7 +103,8 @@ library(jsurvival)
    - **Explanatory**: Grouping variable
 4. Click **Run**
 
-### In R:
+### In R
+
 ```r
 # Load example data
 data("melanoma", package = "jsurvival")
@@ -127,13 +136,13 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 
 ## 📄 License
 
-This project is licensed under the GPL (≥ 2) License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the GPL (>= 2) License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## 💬 Support
 
 - **Bug Reports**: [GitHub Issues](https://github.com/sbalci/ClinicoPathJamoviModule/issues/)
 - **Questions**: [Discussions](https://github.com/sbalci/jsurvival/discussions)
-- **Email**: serdarbalci@serdarbalci.com
+- **Email**: <serdarbalci@serdarbalci.com>
 - **ORCID**: [0000-0002-7852-3851](https://orcid.org/0000-0002-7852-3851)
 
 ## 🙏 Acknowledgments

@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>jSurvival 14: Comparing Survival Outcomes Between Groups • jsurvival</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="jSurvival 14: Comparing Survival Outcomes Between Groups">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">jsurvival</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.32.01</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.47</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,7 @@
     <li><a class="dropdown-item" href="../articles/legacy/26-jamovi-workflow-legacy.html">Using jsurvival in jamovi: Complete Workflow</a></li>
     <li><a class="dropdown-item" href="../articles/jsurvival-01-oncodatasets-examples.html">jSurvival: Survival Analysis with Oncology Data</a></li>
     <li><a class="dropdown-item" href="../articles/jsurvival-02-comprehensive-survival-power-analysis.html">Comprehensive Survival Power Analysis with ClinicoPath</a></li>
+    <li><a class="dropdown-item" href="../articles/jsurvival-03-multisurvival-interactions.html">Interaction terms in Multivariable Survival Analysis</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -93,7 +94,7 @@
                         <h4 data-toc-skip class="author">ClinicoPath
 Development Team</h4>
             
-            <h4 data-toc-skip class="date">2025-10-09</h4>
+            <h4 data-toc-skip class="date">2026-07-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sbalci/ClinicoPathJamoviModule/blob/HEAD/vignettes/14-comparing-survival.Rmd" class="external-link"><code>vignettes/14-comparing-survival.Rmd</code></a></small>
       <div class="d-none name"><code>14-comparing-survival.Rmd</code></div>
@@ -283,7 +284,7 @@ comparisons across different scenarios.</p>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span><span class="op">(</span><span class="va">p_value</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Interpretation: Significant difference (p &lt; 0.05)\n"</span><span class="op">)</span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Interpretation: No significant difference (p ≥ 0.05)\n"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Interpretation: No significant difference (p &gt;= 0.05)\n"</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span>  </span>
 <span>  <span class="co"># Effect size (hazard ratio approximation)</span></span>
@@ -368,7 +369,7 @@ comparisons across different scenarios.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Range of median survivals:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">max_diff</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"months\n"</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="kw">if</span><span class="op">(</span><span class="va">max_diff</span> <span class="op">&gt;=</span> <span class="fl">12</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Interpretation: Clinically meaningful difference (≥12 months)\n"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Interpretation: Clinically meaningful difference (&gt;=12 months)\n"</span><span class="op">)</span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span><span class="op">(</span><span class="va">max_diff</span> <span class="op">&gt;=</span> <span class="fl">6</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Interpretation: Moderate clinical difference (6-12 months)\n"</span><span class="op">)</span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
@@ -441,7 +442,7 @@ comparisons across different scenarios.</p>
 <span>    <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span><span class="op">(</span><span class="va">p_bio</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Result: Significant prognostic biomarker (p &lt; 0.05)\n"</span><span class="op">)</span></span>
 <span>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Result: Not a significant prognostic biomarker (p ≥ 0.05)\n"</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Result: Not a significant prognostic biomarker (p &gt;= 0.05)\n"</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Insufficient data for analysis\n"</span><span class="op">)</span></span>
@@ -593,7 +594,7 @@ comparisons across different scenarios.</p>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    <span class="co"># Risk groups</span></span>
-<span>    risk_group <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    risk_group <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">risk_score</span> <span class="op">&lt;=</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"Low Risk"</span>,</span>
 <span>      <span class="va">risk_score</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Intermediate Risk"</span>, </span>
 <span>      <span class="va">risk_score</span> <span class="op">&gt;=</span> <span class="fl">2</span> <span class="op">~</span> <span class="st">"High Risk"</span></span>
@@ -648,7 +649,7 @@ comparisons across different scenarios.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Concordance index:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">c_index</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="kw">if</span><span class="op">(</span><span class="va">c_index</span> <span class="op">&gt;=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Risk model performance: Excellent (C-index ≥ 0.7)\n"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Risk model performance: Excellent (C-index &gt;= 0.7)\n"</span><span class="op">)</span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span><span class="op">(</span><span class="va">c_index</span> <span class="op">&gt;=</span> <span class="fl">0.6</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Risk model performance: Good (C-index 0.6-0.7)\n"</span><span class="op">)</span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
@@ -799,8 +800,8 @@ comparisons across different scenarios.</p>
 <span><span class="va">highly_meaningful_months</span> <span class="op">&lt;-</span> <span class="fl">12</span>     <span class="co"># Highly meaningful difference</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Clinical Significance Thresholds:\n"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Meaningful difference: ≥"</span>, <span class="va">clinically_meaningful_months</span>, <span class="st">"months\n"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Highly meaningful difference: ≥"</span>, <span class="va">highly_meaningful_months</span>, <span class="st">"months\n\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Meaningful difference: &gt;="</span>, <span class="va">clinically_meaningful_months</span>, <span class="st">"months\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Highly meaningful difference: &gt;="</span>, <span class="va">highly_meaningful_months</span>, <span class="st">"months\n\n"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Assess each comparison</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Clinical Significance Assessment:\n"</span><span class="op">)</span></span>
@@ -817,7 +818,7 @@ comparisons across different scenarios.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Statistical significance: Yes (p &lt; 0.05)\n"</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="kw">if</span><span class="op">(</span><span class="va">egfr_diff</span> <span class="op">&gt;=</span> <span class="va">highly_meaningful_months</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Clinical significance: Highly meaningful (≥12 months)\n"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Clinical significance: Highly meaningful (&gt;=12 months)\n"</span><span class="op">)</span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span><span class="op">(</span><span class="va">egfr_diff</span> <span class="op">&gt;=</span> <span class="va">clinically_meaningful_months</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Clinical significance: Meaningful (6-12 months)\n"</span><span class="op">)</span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
@@ -1004,7 +1005,7 @@ to your own clinical datasets for robust survival analysis.</em></p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

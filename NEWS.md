@@ -1,3 +1,10 @@
+# jsurvival 0.0.47 (2026-07-05)
+
+## Bug Fixes
+
+* **Fixed a crash in competing-risks analysis on jamovi installs.** `cmprsk::cuminc()` is called by the survival, single-arm, continuous-survival, and multivariable-survival analyses, but `cmprsk` was missing from the package `Imports`. Because jamovi installs only a package's `Imports`, competing-risks analysis failed on a clean install with "there is no package called 'cmprsk'". `cmprsk` is now declared.
+* Declared `digest`, `pec`, and `rpart.plot` (previously used via `::` but undeclared). Moved the optional machine-learning survival backends (`randomForestSRC`, `xgboost`, `survivalsvm`, `SurvMetrics`) to `Suggests` so they degrade gracefully when not installed.
+
 # jsurvival 0.0.46 (2026-07-04)
 
 *This release consolidates versions 0.0.32.62 through 0.0.46 into a single entry. Headline themes: a major expansion of the univariate **Survival** module toward REMARK-compliant prognostic reporting (age-adjusted analysis, a weighted log-rank test family, calibration assessment, non-linearity testing, and bootstrap internal validation); Cox interaction / effect-modification terms in **Multivariable Survival**; Firth penalized logistic regression in **Odds Ratio**; and a unified multi-tier HTML notice system across modules. Minimum jamovi version raised to 2.7.27.*

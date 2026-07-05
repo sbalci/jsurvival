@@ -41,7 +41,7 @@ Lasso-Cox regression combines the Cox proportional hazards model with **L1 regul
 ### Key Advantages
 
 1. **Automatic Variable Selection**: Shrinks coefficients of less important variables to exactly zero
-2. **Handles High-Dimensional Data**: Works even when p ≥ n (more variables than observations)
+2. **Handles High-Dimensional Data**: Works even when p >= n (more variables than observations)
 3. **Prevents Overfitting**: Regularization improves model generalizability
 4. **Clinical Interpretability**: Produces sparse models with selected key variables
 5. **Cross-Validation**: Optimal tuning parameter selection through CV

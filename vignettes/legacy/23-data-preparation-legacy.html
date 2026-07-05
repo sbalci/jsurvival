@@ -653,7 +653,7 @@ analyses</li>
 <span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co"># Create age groups if needed</span></span>
 <span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>clinical_data<span class="sc">$</span>age_group <span class="ot">&lt;-</span> <span class="fu">cut</span>(clinical_data<span class="sc">$</span>age_at_diagnosis,</span>
 <span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>                              <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">65</span>, <span class="dv">80</span>, <span class="cn">Inf</span>),</span>
-<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>                              <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;≤50&quot;</span>, <span class="st">&quot;51-65&quot;</span>, <span class="st">&quot;66-80&quot;</span>, <span class="st">&quot;&gt;80&quot;</span>),</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>                              <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;<=50&quot;</span>, <span class="st">&quot;51-65&quot;</span>, <span class="st">&quot;66-80&quot;</span>, <span class="st">&quot;&gt;80&quot;</span>),</span>
 <span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>                              <span class="at">include.lowest =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a></span>
 <span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co"># Age as decades</span></span>

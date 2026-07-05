@@ -151,8 +151,8 @@ cat("- Clinical events and timelines\n")
 # RECIST response categories explanation
 cat("RECIST Response Categories:\n")
 cat("- Complete Response (CR): Disappearance of all target lesions\n")
-cat("- Partial Response (PR): ≥30% decrease in sum of target lesions\n")
-cat("- Progressive Disease (PD): ≥20% increase in sum of target lesions\n")
+cat("- Partial Response (PR): >=30% decrease in sum of target lesions\n")
+cat("- Progressive Disease (PD): >=20% increase in sum of target lesions\n")
 cat("- Stable Disease (SD): Neither PR nor PD criteria met\n\n")
 
 # Check if RECIST categories are present in data

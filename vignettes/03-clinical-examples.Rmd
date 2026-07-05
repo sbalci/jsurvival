@@ -164,7 +164,7 @@ validation_result <- survival(
 ## Clinical Translation
 
 **If optimal cut-point = 15.2 ng/mL, HR = 2.1 (95% CI: 1.4-3.2)**:
-- Patients with biomarker ≥15.2 ng/mL have 2.1 times higher risk of death
+- Patients with biomarker >=15.2 ng/mL have 2.1 times higher risk of death
 - This threshold could be used for treatment stratification
 - Consider validation in independent cohort
 

@@ -33,8 +33,8 @@ Treatment response analysis is crucial in oncology research for evaluating thera
 Response Evaluation Criteria in Solid Tumors (RECIST) provides standardized guidelines for measuring treatment response:
 
 - **Complete Response (CR)**: Disappearance of all target lesions
-- **Partial Response (PR)**: ≥30% decrease in sum of target lesion diameters
-- **Progressive Disease (PD)**: ≥20% increase in sum of target lesion diameters
+- **Partial Response (PR)**: >=30% decrease in sum of target lesion diameters
+- **Progressive Disease (PD)**: >=20% increase in sum of target lesion diameters
 - **Stable Disease (SD)**: Neither PR nor PD criteria met
 
 ```{r setup}
@@ -269,7 +269,7 @@ response_magnitude <- combined_data %>%
   mutate(
     Age_Group = case_when(
       Age < 50 ~ "< 50 years",
-      Age >= 50 ~ "≥ 50 years"
+      Age >= 50 ~ ">= 50 years"
     ),
     High_Grade = ifelse(Grade == "3", "Grade 3", "Grade 1-2")
   )

@@ -11,12 +11,12 @@ vignette: >
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  echo = TRUE,
-  eval = FALSE,
-  collapse = TRUE,
-  comment = "#>",
-  warning = FALSE,
-  message = FALSE
+    echo = TRUE,
+    eval = FALSE,
+    collapse = TRUE,
+    comment = "#>",
+    warning = FALSE,
+    message = FALSE
 )
 ```
 
@@ -60,7 +60,7 @@ The alluvialSurvival function requires longitudinal data with specific structure
 
 ### Data Structure:
 - **Longitudinal format**: One row per patient per time point
-- **Minimum requirements**: ≥5 patients, ≥2 time points
+- **Minimum requirements**: >=5 patients, >=2 time points
 - **No missing values** in time or patient ID variables
 
 ## Basic Treatment Pathway Visualization
@@ -72,7 +72,7 @@ The alluvialSurvival function requires longitudinal data with specific structure
 alluvialSurvival(
     data = treatment_pathways,
     timeVar = "Time",
-    stageVar = "Disease_Stage", 
+    stageVar = "Disease_Stage",
     treatmentVar = "Treatment",
     patientId = "ID"
 )
@@ -98,7 +98,7 @@ alluvialSurvival(
     data = treatment_pathways,
     timeVar = "Time",
     stageVar = "Disease_Stage",
-    treatmentVar = "Treatment", 
+    treatmentVar = "Treatment",
     patientId = "ID",
     colorScheme = "clinical"
 )
@@ -109,7 +109,7 @@ alluvialSurvival(
     timeVar = "Time",
     stageVar = "Disease_Stage",
     treatmentVar = "Treatment",
-    patientId = "ID", 
+    patientId = "ID",
     colorScheme = "colorblind"
 )
 ```
@@ -140,7 +140,7 @@ When survival data is available, the function provides survival statistics:
 # Add survival variable for statistics
 alluvialSurvival(
     data = treatment_pathways,
-    timeVar = "Time", 
+    timeVar = "Time",
     stageVar = "Disease_Stage",
     treatmentVar = "Treatment",
     patientId = "ID",
@@ -157,7 +157,7 @@ Enable survival curve visualization:
 alluvialSurvival(
     data = treatment_pathways,
     timeVar = "Time",
-    stageVar = "Disease_Stage", 
+    stageVar = "Disease_Stage",
     treatmentVar = "Treatment",
     patientId = "ID",
     survivalVar = "Survival_Status",
@@ -181,7 +181,7 @@ alluvialSurvival(
     data = treatment_pathways,
     timeVar = "Time",
     stageVar = "Disease_Stage",
-    treatmentVar = "Treatment", 
+    treatmentVar = "Treatment",
     patientId = "ID",
     survivalVar = "Survival_Status",
     showRightAxis = TRUE,
@@ -213,7 +213,7 @@ alluvialSurvival(
 # Analyze treatment sequences with outcomes
 alluvialSurvival(
     data = treatment_pathways,
-    timeVar = "Time", 
+    timeVar = "Time",
     stageVar = "Disease_Stage",
     treatmentVar = "Treatment",
     patientId = "ID",
@@ -346,7 +346,7 @@ The function includes comprehensive data validation:
 if ("Center" %in% names(treatment_pathways)) {
     # Subset by center for comparison
     center_data <- treatment_pathways[treatment_pathways$Center == "A", ]
-    
+
     alluvialSurvival(
         data = center_data,
         timeVar = "Time",
@@ -366,18 +366,18 @@ if ("Center" %in% names(treatment_pathways)) {
 if ("Age" %in% names(treatment_pathways)) {
     # Create age groups
     treatment_pathways$AgeGroup <- cut(
-        treatment_pathways$Age, 
-        breaks = c(0, 65, Inf), 
-        labels = c("≤65", ">65")
+        treatment_pathways$Age,
+        breaks = c(0, 65, Inf),
+        labels = c("<=65", ">65")
     )
-    
+
     # Analyze younger patients
-    young_patients <- treatment_pathways[treatment_pathways$AgeGroup == "≤65", ]
-    
+    young_patients <- treatment_pathways[treatment_pathways$AgeGroup == "<=65", ]
+
     alluvialSurvival(
         data = young_patients,
         timeVar = "Time",
-        stageVar = "Disease_Stage", 
+        stageVar = "Disease_Stage",
         treatmentVar = "Treatment",
         patientId = "ID",
         survivalVar = "Survival_Status",

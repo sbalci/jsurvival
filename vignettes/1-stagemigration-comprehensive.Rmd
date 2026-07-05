@@ -164,7 +164,7 @@ print(standard_result$results$clinicalInterpretation)
 The C-index measures discriminative ability:
 
 - **Range**: 0.5 (no discrimination) to 1.0 (perfect discrimination)
-- **Clinical Significance**: Improvement ≥ 0.02 is meaningful
+- **Clinical Significance**: Improvement >= 0.02 is meaningful
 - **Interpretation**: Higher values indicate better prognostic separation
 
 ### Net Reclassification Improvement (NRI) {#nri}
@@ -716,7 +716,7 @@ generate_methods_text <- function(result, cancer_type) {
   cat("decision thresholds. Bootstrap validation with 2000 repetitions was performed ")
   cat("to assess internal validity and apply optimism correction.\n\n")
   
-  cat("Clinical significance was defined as C-index improvement ≥0.02 and NRI >20%. ")
+  cat("Clinical significance was defined as C-index improvement >=0.02 and NRI >20%. ")
   cat("Likelihood ratio tests were used to compare nested models. All statistical ")
   cat("tests were two-sided with significance level α=0.05.\n\n")
   

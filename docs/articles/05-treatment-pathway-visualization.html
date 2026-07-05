@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Treatment Pathway Visualization with alluvialSurvival • jsurvival</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Treatment Pathway Visualization with alluvialSurvival">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">jsurvival</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.32.01</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.47</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,7 @@
     <li><a class="dropdown-item" href="../articles/legacy/26-jamovi-workflow-legacy.html">Using jsurvival in jamovi: Complete Workflow</a></li>
     <li><a class="dropdown-item" href="../articles/jsurvival-01-oncodatasets-examples.html">jSurvival: Survival Analysis with Oncology Data</a></li>
     <li><a class="dropdown-item" href="../articles/jsurvival-02-comprehensive-survival-power-analysis.html">Comprehensive Survival Power Analysis with ClinicoPath</a></li>
+    <li><a class="dropdown-item" href="../articles/jsurvival-03-multisurvival-interactions.html">Interaction terms in Multivariable Survival Analysis</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -93,7 +94,7 @@
                         <h4 data-toc-skip class="author">ClinicoPath
 Development Team</h4>
             
-            <h4 data-toc-skip class="date">2025-10-09</h4>
+            <h4 data-toc-skip class="date">2026-07-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sbalci/ClinicoPathJamoviModule/blob/HEAD/vignettes/05-treatment-pathway-visualization.Rmd" class="external-link"><code>vignettes/05-treatment-pathway-visualization.Rmd</code></a></small>
       <div class="d-none name"><code>05-treatment-pathway-visualization.Rmd</code></div>
@@ -171,7 +172,7 @@ alive, 1 = dead)</li>
 <strong>Longitudinal format</strong>: One row per patient per time
 point</li>
 <li>
-<strong>Minimum requirements</strong>: ≥5 patients, ≥2 time
+<strong>Minimum requirements</strong>: &gt;=5 patients, &gt;=2 time
 points</li>
 <li>
 <strong>No missing values</strong> in time or patient ID
@@ -190,7 +191,7 @@ variables</li>
 <span><span class="fu">alluvialSurvival</span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">treatment_pathways</span>,</span>
 <span>    timeVar <span class="op">=</span> <span class="st">"Time"</span>,</span>
-<span>    stageVar <span class="op">=</span> <span class="st">"Disease_Stage"</span>, </span>
+<span>    stageVar <span class="op">=</span> <span class="st">"Disease_Stage"</span>,</span>
 <span>    treatmentVar <span class="op">=</span> <span class="st">"Treatment"</span>,</span>
 <span>    patientId <span class="op">=</span> <span class="st">"ID"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -218,7 +219,7 @@ default</p>
 <span>    data <span class="op">=</span> <span class="va">treatment_pathways</span>,</span>
 <span>    timeVar <span class="op">=</span> <span class="st">"Time"</span>,</span>
 <span>    stageVar <span class="op">=</span> <span class="st">"Disease_Stage"</span>,</span>
-<span>    treatmentVar <span class="op">=</span> <span class="st">"Treatment"</span>, </span>
+<span>    treatmentVar <span class="op">=</span> <span class="st">"Treatment"</span>,</span>
 <span>    patientId <span class="op">=</span> <span class="st">"ID"</span>,</span>
 <span>    colorScheme <span class="op">=</span> <span class="st">"clinical"</span></span>
 <span><span class="op">)</span></span>
@@ -229,7 +230,7 @@ default</p>
 <span>    timeVar <span class="op">=</span> <span class="st">"Time"</span>,</span>
 <span>    stageVar <span class="op">=</span> <span class="st">"Disease_Stage"</span>,</span>
 <span>    treatmentVar <span class="op">=</span> <span class="st">"Treatment"</span>,</span>
-<span>    patientId <span class="op">=</span> <span class="st">"ID"</span>, </span>
+<span>    patientId <span class="op">=</span> <span class="st">"ID"</span>,</span>
 <span>    colorScheme <span class="op">=</span> <span class="st">"colorblind"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -261,7 +262,7 @@ statistics:</p>
 <code class="sourceCode R"><span><span class="co"># Add survival variable for statistics</span></span>
 <span><span class="fu">alluvialSurvival</span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">treatment_pathways</span>,</span>
-<span>    timeVar <span class="op">=</span> <span class="st">"Time"</span>, </span>
+<span>    timeVar <span class="op">=</span> <span class="st">"Time"</span>,</span>
 <span>    stageVar <span class="op">=</span> <span class="st">"Disease_Stage"</span>,</span>
 <span>    treatmentVar <span class="op">=</span> <span class="st">"Treatment"</span>,</span>
 <span>    patientId <span class="op">=</span> <span class="st">"ID"</span>,</span>
@@ -277,7 +278,7 @@ statistics:</p>
 <span><span class="fu">alluvialSurvival</span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">treatment_pathways</span>,</span>
 <span>    timeVar <span class="op">=</span> <span class="st">"Time"</span>,</span>
-<span>    stageVar <span class="op">=</span> <span class="st">"Disease_Stage"</span>, </span>
+<span>    stageVar <span class="op">=</span> <span class="st">"Disease_Stage"</span>,</span>
 <span>    treatmentVar <span class="op">=</span> <span class="st">"Treatment"</span>,</span>
 <span>    patientId <span class="op">=</span> <span class="st">"ID"</span>,</span>
 <span>    survivalVar <span class="op">=</span> <span class="st">"Survival_Status"</span>,</span>
@@ -301,7 +302,7 @@ risk - <strong>P-values</strong> for comparing survival curves -
 <span>    data <span class="op">=</span> <span class="va">treatment_pathways</span>,</span>
 <span>    timeVar <span class="op">=</span> <span class="st">"Time"</span>,</span>
 <span>    stageVar <span class="op">=</span> <span class="st">"Disease_Stage"</span>,</span>
-<span>    treatmentVar <span class="op">=</span> <span class="st">"Treatment"</span>, </span>
+<span>    treatmentVar <span class="op">=</span> <span class="st">"Treatment"</span>,</span>
 <span>    patientId <span class="op">=</span> <span class="st">"ID"</span>,</span>
 <span>    survivalVar <span class="op">=</span> <span class="st">"Survival_Status"</span>,</span>
 <span>    showRightAxis <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -335,7 +336,7 @@ risk - <strong>P-values</strong> for comparing survival curves -
 <code class="sourceCode R"><span><span class="co"># Analyze treatment sequences with outcomes</span></span>
 <span><span class="fu">alluvialSurvival</span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">treatment_pathways</span>,</span>
-<span>    timeVar <span class="op">=</span> <span class="st">"Time"</span>, </span>
+<span>    timeVar <span class="op">=</span> <span class="st">"Time"</span>,</span>
 <span>    stageVar <span class="op">=</span> <span class="st">"Disease_Stage"</span>,</span>
 <span>    treatmentVar <span class="op">=</span> <span class="st">"Treatment"</span>,</span>
 <span>    patientId <span class="op">=</span> <span class="st">"ID"</span>,</span>
@@ -651,7 +652,7 @@ sequences</li>
 <span><span class="kw">if</span> <span class="op">(</span><span class="st">"Center"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">treatment_pathways</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="co"># Subset by center for comparison</span></span>
 <span>    <span class="va">center_data</span> <span class="op">&lt;-</span> <span class="va">treatment_pathways</span><span class="op">[</span><span class="va">treatment_pathways</span><span class="op">$</span><span class="va">Center</span> <span class="op">==</span> <span class="st">"A"</span>, <span class="op">]</span></span>
-<span>    </span>
+<span></span>
 <span>    <span class="fu">alluvialSurvival</span><span class="op">(</span></span>
 <span>        data <span class="op">=</span> <span class="va">center_data</span>,</span>
 <span>        timeVar <span class="op">=</span> <span class="st">"Time"</span>,</span>
@@ -671,18 +672,18 @@ sequences</li>
 <span><span class="kw">if</span> <span class="op">(</span><span class="st">"Age"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">treatment_pathways</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="co"># Create age groups</span></span>
 <span>    <span class="va">treatment_pathways</span><span class="op">$</span><span class="va">AgeGroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span></span>
-<span>        <span class="va">treatment_pathways</span><span class="op">$</span><span class="va">Age</span>, </span>
-<span>        breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">65</span>, <span class="cn">Inf</span><span class="op">)</span>, </span>
-<span>        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"≤65"</span>, <span class="st">"&gt;65"</span><span class="op">)</span></span>
+<span>        <span class="va">treatment_pathways</span><span class="op">$</span><span class="va">Age</span>,</span>
+<span>        breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">65</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
+<span>        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"&lt;=65"</span>, <span class="st">"&gt;65"</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
-<span>    </span>
+<span></span>
 <span>    <span class="co"># Analyze younger patients</span></span>
-<span>    <span class="va">young_patients</span> <span class="op">&lt;-</span> <span class="va">treatment_pathways</span><span class="op">[</span><span class="va">treatment_pathways</span><span class="op">$</span><span class="va">AgeGroup</span> <span class="op">==</span> <span class="st">"≤65"</span>, <span class="op">]</span></span>
-<span>    </span>
+<span>    <span class="va">young_patients</span> <span class="op">&lt;-</span> <span class="va">treatment_pathways</span><span class="op">[</span><span class="va">treatment_pathways</span><span class="op">$</span><span class="va">AgeGroup</span> <span class="op">==</span> <span class="st">"&lt;=65"</span>, <span class="op">]</span></span>
+<span></span>
 <span>    <span class="fu">alluvialSurvival</span><span class="op">(</span></span>
 <span>        data <span class="op">=</span> <span class="va">young_patients</span>,</span>
 <span>        timeVar <span class="op">=</span> <span class="st">"Time"</span>,</span>
-<span>        stageVar <span class="op">=</span> <span class="st">"Disease_Stage"</span>, </span>
+<span>        stageVar <span class="op">=</span> <span class="st">"Disease_Stage"</span>,</span>
 <span>        treatmentVar <span class="op">=</span> <span class="st">"Treatment"</span>,</span>
 <span>        patientId <span class="op">=</span> <span class="st">"ID"</span>,</span>
 <span>        survivalVar <span class="op">=</span> <span class="st">"Survival_Status"</span>,</span>
@@ -792,7 +793,7 @@ and clinical outcomes.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

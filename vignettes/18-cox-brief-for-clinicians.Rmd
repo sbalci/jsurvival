@@ -36,7 +36,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
 
 - Coding: Ensure event = 1 and time > 0 with consistent units (months/days).
 - Collinearity: Avoid highly correlated predictors; use VIF checks.
-- Sample size: Aim for ≥10 events per covariate for stable estimates.
+- Sample size: Aim for >=10 events per covariate for stable estimates.
 
 # Reporting Checklist
 

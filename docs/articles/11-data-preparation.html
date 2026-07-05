@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Data Preparation for Survival Analysis • jsurvival</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Data Preparation for Survival Analysis">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">jsurvival</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.32.01</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.47</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,7 @@
     <li><a class="dropdown-item" href="../articles/legacy/26-jamovi-workflow-legacy.html">Using jsurvival in jamovi: Complete Workflow</a></li>
     <li><a class="dropdown-item" href="../articles/jsurvival-01-oncodatasets-examples.html">jSurvival: Survival Analysis with Oncology Data</a></li>
     <li><a class="dropdown-item" href="../articles/jsurvival-02-comprehensive-survival-power-analysis.html">Comprehensive Survival Power Analysis with ClinicoPath</a></li>
+    <li><a class="dropdown-item" href="../articles/jsurvival-03-multisurvival-interactions.html">Interaction terms in Multivariable Survival Analysis</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -175,19 +176,20 @@ analyses</li>
 <span><span class="co"># Calculate time to death or censoring</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_occurred</span> <span class="op">&lt;-</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_date</span><span class="op">)</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">event_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_occurred</span>,</span>
-<span>                                   <span class="va">clinical_data</span><span class="op">$</span><span class="va">death_date</span>,</span>
-<span>                                   <span class="va">clinical_data</span><span class="op">$</span><span class="va">last_followup_date</span><span class="op">)</span></span>
+<span>  <span class="va">clinical_data</span><span class="op">$</span><span class="va">death_date</span>,</span>
+<span>  <span class="va">clinical_data</span><span class="op">$</span><span class="va">last_followup_date</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">event_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">event_date</span>, origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Time in months</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">time_months</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/difftime.html" class="external-link">difftime</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">event_date</span>, <span class="va">clinical_data</span><span class="op">$</span><span class="va">diagnosis_date</span>, units <span class="op">=</span> <span class="st">"days"</span><span class="op">)</span></span>
-<span><span class="op">)</span> <span class="op">/</span> <span class="fl">30.44</span>  <span class="co"># Average days per month</span></span>
+<span><span class="op">)</span> <span class="op">/</span> <span class="fl">30.44</span> <span class="co"># Average days per month</span></span>
 <span></span>
 <span><span class="co"># Time in years</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">time_years</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/difftime.html" class="external-link">difftime</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">event_date</span>, <span class="va">clinical_data</span><span class="op">$</span><span class="va">diagnosis_date</span>, units <span class="op">=</span> <span class="st">"days"</span><span class="op">)</span></span>
-<span><span class="op">)</span> <span class="op">/</span> <span class="fl">365.25</span>  <span class="co"># Accounting for leap years</span></span></code></pre></div>
+<span><span class="op">)</span> <span class="op">/</span> <span class="fl">365.25</span> <span class="co"># Accounting for leap years</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -201,7 +203,7 @@ analyses</li>
 <span><span class="co"># Example: analyzing from landmark time (e.g., 3 months post-diagnosis)</span></span>
 <span></span>
 <span><span class="co"># Include only patients who survived to landmark</span></span>
-<span><span class="va">landmark_time</span> <span class="op">&lt;-</span> <span class="fl">3</span>  <span class="co"># months</span></span>
+<span><span class="va">landmark_time</span> <span class="op">&lt;-</span> <span class="fl">3</span> <span class="co"># months</span></span>
 <span><span class="va">eligible_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">clinical_data</span>, <span class="va">time_months</span> <span class="op">&gt;=</span> <span class="va">landmark_time</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Adjust time origin to landmark</span></span>
@@ -213,16 +215,16 @@ analyses</li>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check for and handle negative times</span></span>
 <span><span class="va">negative_times</span> <span class="op">&lt;-</span> <span class="va">clinical_data</span><span class="op">$</span><span class="va">time_months</span> <span class="op">&lt;</span> <span class="fl">0</span></span>
-<span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="va">negative_times</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="va">negative_times</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Found"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">negative_times</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="st">"negative time values"</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># Options:</span></span>
 <span>  <span class="co"># 1. Exclude these patients</span></span>
 <span>  <span class="va">clinical_data</span> <span class="op">&lt;-</span> <span class="va">clinical_data</span><span class="op">[</span><span class="op">!</span><span class="va">negative_times</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">negative_times</span><span class="op">)</span>, <span class="op">]</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># 2. Set to small positive value</span></span>
 <span>  <span class="co"># clinical_data$time_months[negative_times] &lt;- 0.001</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># 3. Investigate data entry errors</span></span>
 <span>  <span class="co"># View(clinical_data[negative_times, ])</span></span>
 <span><span class="op">}</span></span></code></pre></div>
@@ -259,9 +261,10 @@ analyses</li>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">recurrence</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">recurrence_date</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Composite endpoint (death or progression, whichever comes first)</span></span>
-<span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_or_progression</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_binary</span>, </span>
-<span>                                          <span class="va">clinical_data</span><span class="op">$</span><span class="va">progression</span>, </span>
-<span>                                          na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_or_progression</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_binary</span>,</span>
+<span>  <span class="va">clinical_data</span><span class="op">$</span><span class="va">progression</span>,</span>
+<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -273,8 +276,8 @@ analyses</li>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create separate indicators for different event types</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_cancer</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_cause</span> <span class="op">==</span> <span class="st">"Cancer"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
-<span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_other</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_cause</span> <span class="op">==</span> <span class="st">"Other"</span> <span class="op">|</span> </span>
-<span>                                   <span class="va">clinical_data</span><span class="op">$</span><span class="va">death_cause</span> <span class="op">==</span> <span class="st">"Cardiovascular"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_other</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_cause</span> <span class="op">==</span> <span class="st">"Other"</span> <span class="op">|</span></span>
+<span>  <span class="va">clinical_data</span><span class="op">$</span><span class="va">death_cause</span> <span class="op">==</span> <span class="st">"Cardiovascular"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># For patients still alive, both should be 0</span></span>
 <span><span class="va">alive_patients</span> <span class="op">&lt;-</span> <span class="va">clinical_data</span><span class="op">$</span><span class="va">vital_status</span> <span class="op">==</span> <span class="st">"Alive"</span></span>
@@ -282,8 +285,10 @@ analyses</li>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_other</span><span class="op">[</span><span class="va">alive_patients</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
 <span></span>
 <span><span class="co"># Verify: sum should equal total deaths</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_cancer</span> <span class="op">+</span> <span class="va">clinical_data</span><span class="op">$</span><span class="va">death_other</span>, </span>
-<span>      <span class="va">clinical_data</span><span class="op">$</span><span class="va">vital_status</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span></span>
+<span>  <span class="va">clinical_data</span><span class="op">$</span><span class="va">death_cancer</span> <span class="op">+</span> <span class="va">clinical_data</span><span class="op">$</span><span class="va">death_other</span>,</span>
+<span>  <span class="va">clinical_data</span><span class="op">$</span><span class="va">vital_status</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -296,31 +301,30 @@ analyses</li>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Function to perform comprehensive data quality checks</span></span>
 <span><span class="va">check_survival_data</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">time_var</span>, <span class="va">event_var</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  </span>
 <span>  <span class="va">checks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># 1. Missing values</span></span>
 <span>  <span class="va">checks</span><span class="op">$</span><span class="va">missing_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">time_var</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">checks</span><span class="op">$</span><span class="va">missing_event</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">event_var</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># 2. Negative or zero times</span></span>
 <span>  <span class="va">checks</span><span class="op">$</span><span class="va">negative_times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">time_var</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;=</span> <span class="fl">0</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># 3. Event indicator values</span></span>
 <span>  <span class="va">event_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">event_var</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="va">checks</span><span class="op">$</span><span class="va">valid_events</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">event_values</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">checks</span><span class="op">$</span><span class="va">event_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">event_var</span><span class="op">]</span><span class="op">]</span>, useNA <span class="op">=</span> <span class="st">"always"</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># 4. Extreme values</span></span>
 <span>  <span class="va">checks</span><span class="op">$</span><span class="va">extreme_times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    max_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">time_var</span><span class="op">]</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    min_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">time_var</span><span class="op">]</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    outliers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">time_var</span><span class="op">]</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">time_var</span><span class="op">]</span><span class="op">]</span>, <span class="fl">0.99</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># 5. Event rate</span></span>
 <span>  <span class="va">checks</span><span class="op">$</span><span class="va">event_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">event_var</span><span class="op">]</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">checks</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
@@ -345,9 +349,11 @@ analyses</li>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Found"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">outliers</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="st">"potential outliers"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Review outliers</span></span>
-<span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">outliers</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">outlier_data</span> <span class="op">&lt;-</span> <span class="va">clinical_data</span><span class="op">[</span><span class="va">outliers</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">outliers</span><span class="op">)</span>, </span>
-<span>                               <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"patient_id"</span>, <span class="st">"time_months"</span>, <span class="st">"death_binary"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">outliers</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">outlier_data</span> <span class="op">&lt;-</span> <span class="va">clinical_data</span><span class="op">[</span></span>
+<span>    <span class="va">outliers</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">outliers</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"patient_id"</span>, <span class="st">"time_months"</span>, <span class="st">"death_binary"</span><span class="op">)</span></span>
+<span>  <span class="op">]</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">outlier_data</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -360,7 +366,7 @@ analyses</li>
 </h3>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Assess missing data patterns</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/statistikat/VIM" class="external-link">VIM</a></span><span class="op">)</span>  <span class="co"># Visualization and Imputation of Missing values</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/statistikat/VIM" class="external-link">VIM</a></span><span class="op">)</span> <span class="co"># Visualization and Imputation of Missing values</span></span>
 <span></span>
 <span><span class="co"># Create missingness indicator</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">time_missing</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">time_months</span><span class="op">)</span></span>
@@ -386,8 +392,8 @@ analyses</li>
 </h4>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Use only patients with complete survival data</span></span>
-<span><span class="va">complete_data</span> <span class="op">&lt;-</span> <span class="va">clinical_data</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">time_months</span><span class="op">)</span> <span class="op">&amp;</span> </span>
-<span>                              <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_binary</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="va">complete_data</span> <span class="op">&lt;-</span> <span class="va">clinical_data</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">time_months</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>  <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_binary</span><span class="op">)</span>, <span class="op">]</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Complete cases:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">complete_data</span><span class="op">)</span>, <span class="st">"of"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -401,12 +407,13 @@ analyses</li>
 <span></span>
 <span><span class="co"># If death status missing but last follow-up available, assume alive</span></span>
 <span><span class="va">missing_death</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_binary</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">last_followup_date</span><span class="op">)</span></span>
-<span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="va">missing_death</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="va">missing_death</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">clinical_data</span><span class="op">$</span><span class="va">death_binary_imputed</span><span class="op">[</span><span class="va">missing_death</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
-<span>  <span class="va">clinical_data</span><span class="op">$</span><span class="va">time_months_imputed</span><span class="op">[</span><span class="va">missing_death</span><span class="op">]</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">clinical_data</span><span class="op">$</span><span class="va">time_months_imputed</span><span class="op">[</span><span class="va">missing_death</span><span class="op">]</span> <span class="op">&lt;-</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html" class="external-link">difftime</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">last_followup_date</span><span class="op">[</span><span class="va">missing_death</span><span class="op">]</span>,</span>
-<span>                       <span class="va">clinical_data</span><span class="op">$</span><span class="va">diagnosis_date</span><span class="op">[</span><span class="va">missing_death</span><span class="op">]</span>, </span>
-<span>                       units <span class="op">=</span> <span class="st">"days"</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">30.44</span></span>
+<span>      <span class="va">clinical_data</span><span class="op">$</span><span class="va">diagnosis_date</span><span class="op">[</span><span class="va">missing_death</span><span class="op">]</span>,</span>
+<span>      units <span class="op">=</span> <span class="st">"days"</span></span>
+<span>    <span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">30.44</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
@@ -422,13 +429,15 @@ analyses</li>
 </h4>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Ensure proper ordering for categorical variables</span></span>
-<span><span class="va">clinical_data</span><span class="op">$</span><span class="va">tumor_grade</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">tumor_grade</span>, </span>
-<span>                                   levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Grade 1"</span>, <span class="st">"Grade 2"</span>, <span class="st">"Grade 3"</span>, <span class="st">"Grade 4"</span><span class="op">)</span>,</span>
-<span>                                   ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">clinical_data</span><span class="op">$</span><span class="va">tumor_grade</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">tumor_grade</span>,</span>
+<span>  levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Grade 1"</span>, <span class="st">"Grade 2"</span>, <span class="st">"Grade 3"</span>, <span class="st">"Grade 4"</span><span class="op">)</span>,</span>
+<span>  ordered <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">stage</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">stage</span>,</span>
-<span>                             levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Stage I"</span>, <span class="st">"Stage II"</span>, <span class="st">"Stage III"</span>, <span class="st">"Stage IV"</span><span class="op">)</span>,</span>
-<span>                             ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Stage I"</span>, <span class="st">"Stage II"</span>, <span class="st">"Stage III"</span>, <span class="st">"Stage IV"</span><span class="op">)</span>,</span>
+<span>  ordered <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># For unordered factors, set reference level</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">treatment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">treatment</span><span class="op">)</span></span>
@@ -462,9 +471,10 @@ analyses</li>
 <span></span>
 <span><span class="co"># Create age groups if needed</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">age_group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">age_at_diagnosis</span>,</span>
-<span>                              breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span>, <span class="fl">65</span>, <span class="fl">80</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
-<span>                              labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"≤50"</span>, <span class="st">"51-65"</span>, <span class="st">"66-80"</span>, <span class="st">"&gt;80"</span><span class="op">)</span>,</span>
-<span>                              include.lowest <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span>, <span class="fl">65</span>, <span class="fl">80</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"&lt;=50"</span>, <span class="st">"51-65"</span>, <span class="st">"66-80"</span>, <span class="st">"&gt;80"</span><span class="op">)</span>,</span>
+<span>  include.lowest <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Age as decades</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">age_decades</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">age_at_diagnosis</span> <span class="op">/</span> <span class="fl">10</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span></span></code></pre></div>
@@ -477,7 +487,7 @@ analyses</li>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">log_biomarker</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">biomarker_value</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Standardization (z-score)</span></span>
-<span><span class="va">clinical_data</span><span class="op">$</span><span class="va">biomarker_zscore</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">biomarker_value</span><span class="op">)</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">clinical_data</span><span class="op">$</span><span class="va">biomarker_zscore</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">biomarker_value</span><span class="op">)</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># Handle extreme values</span></span>
 <span><span class="va">biomarker_99th</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">biomarker_value</span>, <span class="fl">0.99</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -495,20 +505,20 @@ analyses</li>
 <code class="sourceCode R"><span><span class="co"># Compare calculated times with expected ranges</span></span>
 <span><span class="va">validation_checks</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># Check if all events occurred before end of study</span></span>
 <span>  <span class="va">study_end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2023-12-31"</span><span class="op">)</span></span>
 <span>  <span class="va">late_events</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">event_date</span> <span class="op">&gt;</span> <span class="va">study_end</span> <span class="op">&amp;</span> <span class="va">data</span><span class="op">$</span><span class="va">death_binary</span> <span class="op">==</span> <span class="fl">1</span></span>
 <span>  <span class="va">issues</span><span class="op">$</span><span class="va">late_events</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">late_events</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># Check if follow-up times are reasonable</span></span>
-<span>  <span class="va">unreasonable_followup</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">time_months</span> <span class="op">&gt;</span> <span class="fl">240</span>  <span class="co"># &gt; 20 years</span></span>
+<span>  <span class="va">unreasonable_followup</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">time_months</span> <span class="op">&gt;</span> <span class="fl">240</span> <span class="co"># &gt; 20 years</span></span>
 <span>  <span class="va">issues</span><span class="op">$</span><span class="va">long_followup</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">unreasonable_followup</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># Check for impossible age at events</span></span>
 <span>  <span class="va">impossible_age</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">age_at_diagnosis</span> <span class="op">&lt;</span> <span class="fl">0</span> <span class="op">|</span> <span class="va">data</span><span class="op">$</span><span class="va">age_at_diagnosis</span> <span class="op">&gt;</span> <span class="fl">120</span></span>
 <span>  <span class="va">issues</span><span class="op">$</span><span class="va">impossible_age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">impossible_age</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">issues</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
@@ -580,7 +590,7 @@ analyses</li>
 <span>    <span class="st">"Identifier"</span>,</span>
 <span>    <span class="st">"Continuous"</span>,</span>
 <span>    <span class="st">"Binary"</span>,</span>
-<span>    <span class="st">"Continuous"</span>, </span>
+<span>    <span class="st">"Continuous"</span>,</span>
 <span>    <span class="st">"Categorical"</span>,</span>
 <span>    <span class="st">"Categorical"</span>,</span>
 <span>    <span class="st">"Ordinal"</span>,</span>
@@ -681,7 +691,7 @@ and interpretable survival analysis results in jSurvival.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

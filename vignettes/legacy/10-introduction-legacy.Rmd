@@ -325,7 +325,7 @@ ihc_with_quartiles <- ihc_molecular_comprehensive %>%
     PD_L1_Clinical = case_when(
       PD_L1_TPS < 1 ~ "Negative (<1%)",
       PD_L1_TPS < 50 ~ "Low Positive (1-49%)",
-      TRUE ~ "High Positive (≥50%)"
+      TRUE ~ "High Positive (>=50%)"
     )
   )
 

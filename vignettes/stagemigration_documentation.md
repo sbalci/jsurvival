@@ -37,26 +37,30 @@ The `stagemigration` function provides state-of-the-art statistical analysis for
 The multivariable analysis has been significantly expanded with state-of-the-art methods:
 
 #### 1. Bootstrap Model Selection Stability
+
 - **Method**: 500 bootstrap samples with stepwise selection
 - **Output**: Selection frequencies, stability metrics, AIC impact assessment
 - **Clinical Value**: Identifies most stable prognostic factors
 - **Threshold**: Variables selected in >80% of samples considered highly stable
 
 #### 2. Advanced Interaction Detection
+
 - **Method**: Formal likelihood ratio tests for stage-covariate interactions
 - **Statistics**: Chi-square, degrees of freedom, p-values
 - **Clinical Assessment**: Automatic interpretation of clinical significance
 - **Subgroup Analysis**: Identifies patient populations with differential staging benefit
 
 #### 3. Comprehensive Model Diagnostics
+
 - **Validation Metrics**: C-index, calibration, discrimination
 - **Residual Analysis**: Martingale and deviance residuals
 - **Assumption Testing**: Proportional hazards assumption
 - **Performance Assessment**: Cross-validated metrics
 
 #### 4. Adjusted NRI Analysis
+
 - **Innovation**: NRI calculations adjusted for baseline covariates
-- **Models Compared**: 
+- **Models Compared**:
   - Baseline (covariates only)
   - Old staging + covariates
   - New staging + covariates
@@ -64,14 +68,16 @@ The multivariable analysis has been significantly expanded with state-of-the-art
 - **Output**: Event-specific and overall NRI with confidence intervals
 
 #### 5. Multivariable Decision Curve Analysis
+
 - **Models**: Compares clinical utility of multiple model combinations
 - **Thresholds**: Net benefit across 0.01-0.99 probability thresholds
-- **Comparisons**: 
+- **Comparisons**:
   - Treat all vs. treat none strategies
   - Model superiority ranges
   - Optimal threshold identification
 
 #### 6. Personalized Risk Predictions
+
 - **Individual Assessment**: Patient-level risk predictions at multiple time points
 - **Risk Categories**: Low/Moderate/High/Very High classifications
 - **Clinical Recommendations**: Automated treatment intensity guidance
@@ -99,17 +105,20 @@ When multifactorial analysis is enabled:
 ## Clinical Significance Thresholds
 
 ### Statistical Significance
+
 - **p-values**: < 0.05 unless otherwise specified
 - **Confidence Intervals**: 95% (customizable to 80-99%)
 
 ### Clinical Significance
-- **C-index improvement**: ≥ 0.02 (2% improvement considered clinically meaningful)
-- **NRI improvement**: ≥ 20% (substantial reclassification improvement)
+
+- **C-index improvement**: >= 0.02 (2% improvement considered clinically meaningful)
+- **NRI improvement**: >= 20% (substantial reclassification improvement)
 - **Bootstrap selection frequency**: > 80% (high stability variables)
 - **Individual risk difference**: > 10% (significant patient-level impact)
 
 ### Evidence Strength
-- **Strong Evidence**: ≥3/4 positive criteria met across different analyses
+
+- **Strong Evidence**: >=3/4 positive criteria met across different analyses
 - **Model Preference**: Lower AIC/BIC indicates better fit
 - **Clinical Utility**: Positive net benefit over treat-all/treat-none strategies
 
@@ -118,6 +127,7 @@ When multifactorial analysis is enabled:
 For detailed guidance on selecting the appropriate analysis configuration based on your research context, see the comprehensive **[Stage Migration Analysis Configuration Guide](stagemigration_analysis_guide.md)**.
 
 This guide covers:
+
 - **Analysis scope selection** (Basic/Standard/Comprehensive/Publication)
 - **Cancer type optimization** (Lung/Breast/Colorectal/Prostate/etc.)
 - **Multifactorial comparison strategies** (Adjusted C-index/Nested models/Stepwise/Comprehensive)
@@ -128,6 +138,7 @@ This guide covers:
 ## Usage Examples
 
 ### Basic Usage
+
 ```r
 # Minimal setup
 jsurvival::stagemigration(
@@ -141,6 +152,7 @@ jsurvival::stagemigration(
 ```
 
 ### Comprehensive Analysis
+
 ```r
 # Full analysis with multifactorial assessment
 jsurvival::stagemigration(
@@ -189,21 +201,25 @@ jsurvival::stagemigration(
 ## Advanced Features
 
 ### Bootstrap Validation
+
 - **Optimism Correction**: Adjusts for overfitting
 - **Stable Estimates**: 1000 bootstrap replications (customizable)
 - **Confidence Intervals**: Bootstrap-based CIs for all metrics
 
 ### Cross-Validation
+
 - **K-fold CV**: Default 5-fold (customizable 3-10)
 - **Internal-External CV**: For multi-institutional studies
 - **Performance Metrics**: Cross-validated C-index, NRI, calibration
 
 ### Multi-Institutional Support
+
 - **Institution Variable**: Enables center-specific analysis
 - **External Validation**: Leave-one-center-out validation
 - **Heterogeneity Assessment**: Center-to-center variability
 
 ### Will Rogers Phenomenon Analysis
+
 - **Detection**: Identifies paradoxical survival improvements
 - **Quantification**: Measures magnitude of effect
 - **Visualization**: Before/after survival curve comparisons
@@ -211,18 +227,21 @@ jsurvival::stagemigration(
 ## Best Practices
 
 ### Study Design
+
 1. **Adequate Sample Size**: Minimum 100 events for stable estimates
 2. **Balanced Covariates**: Include relevant prognostic factors
 3. **Validation Strategy**: Use bootstrap + cross-validation
 4. **Time Points**: Choose clinically relevant survival timepoints
 
 ### Interpretation Guidelines
+
 1. **Multiple Criteria**: Don't rely on single metric
 2. **Clinical Context**: Consider practical significance
 3. **Validation Results**: Trust cross-validated performance
 4. **Subgroup Analysis**: Examine interaction results
 
 ### Reporting Standards
+
 1. **TRIPOD Guidelines**: Follow prediction model reporting standards
 2. **Statistical Methods**: Document all analysis choices
 3. **Validation**: Report internal and external validation
@@ -231,12 +250,14 @@ jsurvival::stagemigration(
 ## Technical Requirements
 
 ### Data Format
+
 - **Staging Variables**: Ordered factors recommended
 - **Survival Time**: Numeric (months preferred)
 - **Event Variable**: Binary or factor
 - **Covariates**: Mixed types supported
 
 ### Computational Considerations
+
 - **Memory**: Large datasets may require substantial RAM
 - **Processing Time**: Comprehensive analysis can take 5-15 minutes
 - **Parallel Processing**: Available for bootstrap operations
@@ -261,6 +282,7 @@ jsurvival::stagemigration(
    - Use basic analysis type for large datasets
 
 ### Error Messages
+
 - **"Insufficient events"**: Increase sample size or reduce complexity
 - **"Model convergence failed"**: Check covariate definitions
 - **"Cross-validation failed"**: Reduce CV folds or check institution variable
@@ -268,17 +290,20 @@ jsurvival::stagemigration(
 ## Version History
 
 ### v0.0.3.64 (Latest)
+
 - **Major Enhancement**: Complete multivariable analysis overhaul
 - **New Features**: Bootstrap model selection, personalized predictions, adjusted NRI
 - **Performance**: Optimized algorithms for large datasets
 - **Documentation**: Comprehensive explanatory outputs
 
 ### v0.0.3.63
+
 - **Bug Fixes**: Interaction tests table population
 - **Improvements**: Enhanced error handling
 - **Validation**: Cross-validation performance optimization
 
 ### v0.0.3.62
+
 - **New Features**: Advanced interaction detection
 - **Enhancements**: Model diagnostics
 - **Fixes**: Bootstrap validation improvements
@@ -286,6 +311,7 @@ jsurvival::stagemigration(
 ## References
 
 ### Key Literature
+
 1. Pencina MJ, et al. "Evaluating the added predictive ability of a new marker." Stat Med. 2008
 2. Vickers AJ, et al. "Decision curve analysis: a novel method for evaluating prediction models." Med Decis Making. 2006
 3. Harrell FE Jr. "Regression Modeling Strategies" 2nd Edition. Springer 2015
@@ -293,6 +319,7 @@ jsurvival::stagemigration(
 5. Collins GS, et al. "Transparent Reporting of a multivariable prediction model for Individual Prognosis or Diagnosis (TRIPOD)." Ann Intern Med. 2015
 
 ### Statistical Methods
+
 - **C-index**: Harrell's concordance index for survival data
 - **NRI/IDI**: Pencina et al. methodology with survival extensions
 - **Bootstrap**: Efron & Tibshirani resampling methods
@@ -302,13 +329,16 @@ jsurvival::stagemigration(
 ## Support and Citation
 
 ### Citation
+
 When using this function, please cite:
+
 ```
 ClinicoPath: Advanced TNM Stage Migration Analysis [R package]. 
 Author: [Your Name]. Year: 2024.
 ```
 
 ### Support
+
 - **Documentation**: This file and function help
 - **Issues**: GitHub repository issues page
 - **Updates**: Check NEWS.md for version changes

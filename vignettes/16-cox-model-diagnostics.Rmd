@@ -152,7 +152,7 @@ coxdiagnostics(
 
 - **VIF < 2.5**: No multicollinearity concern
 - **VIF 2.5-5**: Moderate multicollinearity (monitor)
-- **VIF ≥ 5**: High multicollinearity (problematic)
+- **VIF >= 5**: High multicollinearity (problematic)
 
 # Advanced Diagnostic Analysis
 
@@ -349,7 +349,7 @@ coxdiagnostics(
 **Interpretation:**
 - **VIF < 2.5**: No concern
 - **VIF 2.5-5**: Moderate concern, monitor
-- **VIF ≥ 5**: High concern, take action
+- **VIF >= 5**: High concern, take action
 
 **Actions for High VIF:**
 - Remove highly correlated variables
@@ -418,9 +418,9 @@ results <- coxdiagnostics(
 ```{r sample-size-check}
 # Check sample size adequacy
 cat("Sample size guidelines:\n")
-cat("- Events per covariate: ≥ 10\n")
-cat("- Total events: ≥ 50 for stable estimates\n")
-cat("- Follow-up completeness: ≥ 80%\n")
+cat("- Events per covariate: >= 10\n")
+cat("- Total events: >= 50 for stable estimates\n")
+cat("- Follow-up completeness: >= 80%\n")
 ```
 
 ## Model Selection Strategy
@@ -469,7 +469,7 @@ cat("- Follow-up completeness: ≥ 80%\n")
 ## Issue 4: Multicollinearity
 
 **Detection:**
-- High VIF values (≥ 5)
+- High VIF values (>= 5)
 - Unstable coefficient estimates
 
 **Solutions:**

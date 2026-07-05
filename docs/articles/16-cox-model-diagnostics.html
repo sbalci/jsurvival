@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>jSurvival 16: Cox Proportional Hazards Model Diagnostics • jsurvival</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="jSurvival 16: Cox Proportional Hazards Model Diagnostics">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">jsurvival</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.32.01</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.47</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,7 @@
     <li><a class="dropdown-item" href="../articles/legacy/26-jamovi-workflow-legacy.html">Using jsurvival in jamovi: Complete Workflow</a></li>
     <li><a class="dropdown-item" href="../articles/jsurvival-01-oncodatasets-examples.html">jSurvival: Survival Analysis with Oncology Data</a></li>
     <li><a class="dropdown-item" href="../articles/jsurvival-02-comprehensive-survival-power-analysis.html">Comprehensive Survival Power Analysis with ClinicoPath</a></li>
+    <li><a class="dropdown-item" href="../articles/jsurvival-03-multisurvival-interactions.html">Interaction terms in Multivariable Survival Analysis</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -93,7 +94,7 @@
                         <h4 data-toc-skip class="author">ClinicoPath
 Development Team</h4>
             
-            <h4 data-toc-skip class="date">2025-10-09</h4>
+            <h4 data-toc-skip class="date">2026-07-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sbalci/ClinicoPathJamoviModule/blob/HEAD/vignettes/16-cox-model-diagnostics.Rmd" class="external-link"><code>vignettes/16-cox-model-diagnostics.Rmd</code></a></small>
       <div class="d-none name"><code>16-cox-model-diagnostics.Rmd</code></div>
@@ -321,7 +322,8 @@ observations</li>
 <strong>VIF 2.5-5</strong>: Moderate multicollinearity
 (monitor)</li>
 <li>
-<strong>VIF ≥ 5</strong>: High multicollinearity (problematic)</li>
+<strong>VIF &gt;= 5</strong>: High multicollinearity
+(problematic)</li>
 </ul>
 </div>
 </div>
@@ -558,7 +560,7 @@ Systematic trends over time - Non-random patterns</p>
 </h3>
 <p><strong>Interpretation:</strong> - <strong>VIF &lt; 2.5</strong>: No
 concern - <strong>VIF 2.5-5</strong>: Moderate concern, monitor -
-<strong>VIF ≥ 5</strong>: High concern, take action</p>
+<strong>VIF &gt;= 5</strong>: High concern, take action</p>
 <p><strong>Actions for High VIF:</strong> - Remove highly correlated
 variables - Use principal component analysis - Apply regularization
 (ridge/lasso) - Create composite scores</p>
@@ -638,9 +640,9 @@ clinical context</li>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check sample size adequacy</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Sample size guidelines:\n"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"- Events per covariate: ≥ 10\n"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"- Total events: ≥ 50 for stable estimates\n"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"- Follow-up completeness: ≥ 80%\n"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"- Events per covariate: &gt;= 10\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"- Total events: &gt;= 50 for stable estimates\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"- Follow-up completeness: &gt;= 80%\n"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="model-selection-strategy">Model Selection Strategy<a class="anchor" aria-label="anchor" href="#model-selection-strategy"></a>
@@ -693,7 +695,7 @@ robust methods - Sensitivity analysis</p>
 <div class="section level3">
 <h3 id="issue-4-multicollinearity">Issue 4: Multicollinearity<a class="anchor" aria-label="anchor" href="#issue-4-multicollinearity"></a>
 </h3>
-<p><strong>Detection:</strong> - High VIF values (≥ 5) - Unstable
+<p><strong>Detection:</strong> - High VIF values (&gt;= 5) - Unstable
 coefficient estimates</p>
 <p><strong>Solutions:</strong> - Remove correlated variables - Use
 regularization methods - Create composite scores</p>
@@ -901,7 +903,7 @@ clinical research and publication.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

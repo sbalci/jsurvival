@@ -1,18 +1,26 @@
 ---
 title: "Comprehensive Survival Power Analysis with ClinicoPath"
 description: "A complete guide to sample size and power calculations for survival studies using the enhanced survivalPowerComprehensive function"
-categories: [survival, power analysis, sample size, clinical trials]
 author: "ClinicoPath Module"
 date: "`r Sys.Date()`"
-execute:
-  warning: false
-  message: false
-format:
-  html:
+output:
+  rmarkdown::html_vignette:
     toc: true
-    toc-depth: 3
-    embed-resources: true
+    toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{Comprehensive Survival Power Analysis with ClinicoPath}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
+)
+```
 
 ## Introduction
 

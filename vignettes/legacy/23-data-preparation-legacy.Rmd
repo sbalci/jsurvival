@@ -69,19 +69,20 @@ clinical_data <- data.frame(
 # Calculate time to death or censoring
 clinical_data$death_occurred <- !is.na(clinical_data$death_date)
 clinical_data$event_date <- ifelse(clinical_data$death_occurred,
-                                   clinical_data$death_date,
-                                   clinical_data$last_followup_date)
+  clinical_data$death_date,
+  clinical_data$last_followup_date
+)
 clinical_data$event_date <- as.Date(clinical_data$event_date, origin = "1970-01-01")
 
 # Time in months
 clinical_data$time_months <- as.numeric(
   difftime(clinical_data$event_date, clinical_data$diagnosis_date, units = "days")
-) / 30.44  # Average days per month
+) / 30.44 # Average days per month
 
 # Time in years
 clinical_data$time_years <- as.numeric(
   difftime(clinical_data$event_date, clinical_data$diagnosis_date, units = "days")
-) / 365.25  # Accounting for leap years
+) / 365.25 # Accounting for leap years
 ```
 
 ## Handling Time Zero Issues
@@ -93,7 +94,7 @@ clinical_data$time_years <- as.numeric(
 # Example: analyzing from landmark time (e.g., 3 months post-diagnosis)
 
 # Include only patients who survived to landmark
-landmark_time <- 3  # months
+landmark_time <- 3 # months
 eligible_data <- subset(clinical_data, time_months >= landmark_time)
 
 # Adjust time origin to landmark
@@ -105,16 +106,16 @@ eligible_data$time_from_landmark <- eligible_data$time_months - landmark_time
 ```{r negative-times}
 # Check for and handle negative times
 negative_times <- clinical_data$time_months < 0
-if(any(negative_times, na.rm = TRUE)) {
+if (any(negative_times, na.rm = TRUE)) {
   print(paste("Found", sum(negative_times, na.rm = TRUE), "negative time values"))
-  
+
   # Options:
   # 1. Exclude these patients
   clinical_data <- clinical_data[!negative_times | is.na(negative_times), ]
-  
+
   # 2. Set to small positive value
   # clinical_data$time_months[negative_times] <- 0.001
-  
+
   # 3. Investigate data entry errors
   # View(clinical_data[negative_times, ])
 }
@@ -147,9 +148,10 @@ clinical_data$progression <- ifelse(clinical_data$progression_status == "Progres
 clinical_data$recurrence <- ifelse(!is.na(clinical_data$recurrence_date), 1, 0)
 
 # Composite endpoint (death or progression, whichever comes first)
-clinical_data$death_or_progression <- pmax(clinical_data$death_binary, 
-                                          clinical_data$progression, 
-                                          na.rm = TRUE)
+clinical_data$death_or_progression <- pmax(clinical_data$death_binary,
+  clinical_data$progression,
+  na.rm = TRUE
+)
 ```
 
 ## Multiple Event Types
@@ -159,8 +161,8 @@ clinical_data$death_or_progression <- pmax(clinical_data$death_binary,
 ```{r competing-risks-setup}
 # Create separate indicators for different event types
 clinical_data$death_cancer <- ifelse(clinical_data$death_cause == "Cancer", 1, 0)
-clinical_data$death_other <- ifelse(clinical_data$death_cause == "Other" | 
-                                   clinical_data$death_cause == "Cardiovascular", 1, 0)
+clinical_data$death_other <- ifelse(clinical_data$death_cause == "Other" |
+  clinical_data$death_cause == "Cardiovascular", 1, 0)
 
 # For patients still alive, both should be 0
 alive_patients <- clinical_data$vital_status == "Alive"
@@ -168,8 +170,10 @@ clinical_data$death_cancer[alive_patients] <- 0
 clinical_data$death_other[alive_patients] <- 0
 
 # Verify: sum should equal total deaths
-table(clinical_data$death_cancer + clinical_data$death_other, 
-      clinical_data$vital_status)
+table(
+  clinical_data$death_cancer + clinical_data$death_other,
+  clinical_data$vital_status
+)
 ```
 
 # Data Quality Checks
@@ -179,31 +183,30 @@ table(clinical_data$death_cancer + clinical_data$death_other,
 ```{r consistency-checks}
 # Function to perform comprehensive data quality checks
 check_survival_data <- function(data, time_var, event_var) {
-  
   checks <- list()
-  
+
   # 1. Missing values
   checks$missing_time <- sum(is.na(data[[time_var]]))
   checks$missing_event <- sum(is.na(data[[event_var]]))
-  
+
   # 2. Negative or zero times
   checks$negative_times <- sum(data[[time_var]] <= 0, na.rm = TRUE)
-  
+
   # 3. Event indicator values
   event_values <- unique(data[[event_var]])
   checks$valid_events <- all(event_values %in% c(0, 1, NA))
   checks$event_table <- table(data[[event_var]], useNA = "always")
-  
+
   # 4. Extreme values
   checks$extreme_times <- list(
     max_time = max(data[[time_var]], na.rm = TRUE),
     min_time = min(data[[time_var]], na.rm = TRUE),
     outliers = sum(data[[time_var]] > quantile(data[[time_var]], 0.99, na.rm = TRUE), na.rm = TRUE)
   )
-  
+
   # 5. Event rate
   checks$event_rate <- mean(data[[event_var]], na.rm = TRUE)
-  
+
   return(checks)
 }
 
@@ -228,9 +231,11 @@ outliers <- clinical_data$time_months < lower_bound | clinical_data$time_months 
 print(paste("Found", sum(outliers, na.rm = TRUE), "potential outliers"))
 
 # Review outliers
-if(sum(outliers, na.rm = TRUE) > 0) {
-  outlier_data <- clinical_data[outliers & !is.na(outliers), 
-                               c("patient_id", "time_months", "death_binary")]
+if (sum(outliers, na.rm = TRUE) > 0) {
+  outlier_data <- clinical_data[
+    outliers & !is.na(outliers),
+    c("patient_id", "time_months", "death_binary")
+  ]
   print(outlier_data)
 }
 ```
@@ -241,7 +246,7 @@ if(sum(outliers, na.rm = TRUE) > 0) {
 
 ```{r missing-patterns}
 # Assess missing data patterns
-library(VIM)  # Visualization and Imputation of Missing values
+library(VIM) # Visualization and Imputation of Missing values
 
 # Create missingness indicator
 clinical_data$time_missing <- is.na(clinical_data$time_months)
@@ -266,8 +271,8 @@ print(missing_summary)
 
 ```{r complete-case}
 # Use only patients with complete survival data
-complete_data <- clinical_data[!is.na(clinical_data$time_months) & 
-                              !is.na(clinical_data$death_binary), ]
+complete_data <- clinical_data[!is.na(clinical_data$time_months) &
+  !is.na(clinical_data$death_binary), ]
 
 print(paste("Complete cases:", nrow(complete_data), "of", nrow(clinical_data)))
 ```
@@ -281,12 +286,13 @@ clinical_data$death_binary_imputed <- clinical_data$death_binary
 
 # If death status missing but last follow-up available, assume alive
 missing_death <- is.na(clinical_data$death_binary) & !is.na(clinical_data$last_followup_date)
-if(any(missing_death)) {
+if (any(missing_death)) {
   clinical_data$death_binary_imputed[missing_death] <- 0
-  clinical_data$time_months_imputed[missing_death] <- 
+  clinical_data$time_months_imputed[missing_death] <-
     as.numeric(difftime(clinical_data$last_followup_date[missing_death],
-                       clinical_data$diagnosis_date[missing_death], 
-                       units = "days")) / 30.44
+      clinical_data$diagnosis_date[missing_death],
+      units = "days"
+    )) / 30.44
 }
 ```
 
@@ -298,13 +304,15 @@ if(any(missing_death)) {
 
 ```{r factor-ordering}
 # Ensure proper ordering for categorical variables
-clinical_data$tumor_grade <- factor(clinical_data$tumor_grade, 
-                                   levels = c("Grade 1", "Grade 2", "Grade 3", "Grade 4"),
-                                   ordered = TRUE)
+clinical_data$tumor_grade <- factor(clinical_data$tumor_grade,
+  levels = c("Grade 1", "Grade 2", "Grade 3", "Grade 4"),
+  ordered = TRUE
+)
 
 clinical_data$stage <- factor(clinical_data$stage,
-                             levels = c("Stage I", "Stage II", "Stage III", "Stage IV"),
-                             ordered = TRUE)
+  levels = c("Stage I", "Stage II", "Stage III", "Stage IV"),
+  ordered = TRUE
+)
 
 # For unordered factors, set reference level
 clinical_data$treatment <- factor(clinical_data$treatment)
@@ -336,9 +344,10 @@ summary(clinical_data$age_at_diagnosis)
 
 # Create age groups if needed
 clinical_data$age_group <- cut(clinical_data$age_at_diagnosis,
-                              breaks = c(0, 50, 65, 80, Inf),
-                              labels = c("≤50", "51-65", "66-80", ">80"),
-                              include.lowest = TRUE)
+  breaks = c(0, 50, 65, 80, Inf),
+  labels = c("<=50", "51-65", "66-80", ">80"),
+  include.lowest = TRUE
+)
 
 # Age as decades
 clinical_data$age_decades <- floor(clinical_data$age_at_diagnosis / 10) * 10
@@ -351,7 +360,7 @@ clinical_data$age_decades <- floor(clinical_data$age_at_diagnosis / 10) * 10
 clinical_data$log_biomarker <- log10(clinical_data$biomarker_value + 1)
 
 # Standardization (z-score)
-clinical_data$biomarker_zscore <- scale(clinical_data$biomarker_value)[,1]
+clinical_data$biomarker_zscore <- scale(clinical_data$biomarker_value)[, 1]
 
 # Handle extreme values
 biomarker_99th <- quantile(clinical_data$biomarker_value, 0.99, na.rm = TRUE)
@@ -366,20 +375,20 @@ clinical_data$biomarker_winsorized <- pmin(clinical_data$biomarker_value, biomar
 # Compare calculated times with expected ranges
 validation_checks <- function(data) {
   issues <- list()
-  
+
   # Check if all events occurred before end of study
   study_end <- as.Date("2023-12-31")
   late_events <- data$event_date > study_end & data$death_binary == 1
   issues$late_events <- sum(late_events, na.rm = TRUE)
-  
+
   # Check if follow-up times are reasonable
-  unreasonable_followup <- data$time_months > 240  # > 20 years
+  unreasonable_followup <- data$time_months > 240 # > 20 years
   issues$long_followup <- sum(unreasonable_followup, na.rm = TRUE)
-  
+
   # Check for impossible age at events
   impossible_age <- data$age_at_diagnosis < 0 | data$age_at_diagnosis > 120
   issues$impossible_age <- sum(impossible_age, na.rm = TRUE)
-  
+
   return(issues)
 }
 
@@ -449,7 +458,7 @@ data_dictionary <- data.frame(
     "Identifier",
     "Continuous",
     "Binary",
-    "Continuous", 
+    "Continuous",
     "Categorical",
     "Categorical",
     "Ordinal",

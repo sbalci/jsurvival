@@ -40,8 +40,12 @@ Imports:
     rms,
     boot,
     checkmate,
+    cmprsk,
     dcurves,
+    digest,
     glmnet,
+    pec,
+    rpart.plot,
     Hmisc,
     KMunicate,
     mgcv,
@@ -54,6 +58,11 @@ Imports:
     tidyr,
     timeROC,
     xml2
+Suggests:
+    randomForestSRC,
+    SurvMetrics,
+    survivalsvm,
+    xgboost
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

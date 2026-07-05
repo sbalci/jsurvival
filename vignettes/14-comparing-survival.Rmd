@@ -152,7 +152,7 @@ if(requireNamespace("survival", quietly = TRUE)) {
   } else if(p_value < 0.05) {
     cat("Interpretation: Significant difference (p < 0.05)\n")
   } else {
-    cat("Interpretation: No significant difference (p ≥ 0.05)\n")
+    cat("Interpretation: No significant difference (p >= 0.05)\n")
   }
   
   # Effect size (hazard ratio approximation)
@@ -238,7 +238,7 @@ if(requireNamespace("survival", quietly = TRUE)) {
   cat("Range of median survivals:", round(max_diff, 1), "months\n")
   
   if(max_diff >= 12) {
-    cat("Interpretation: Clinically meaningful difference (≥12 months)\n")
+    cat("Interpretation: Clinically meaningful difference (>=12 months)\n")
   } else if(max_diff >= 6) {
     cat("Interpretation: Moderate clinical difference (6-12 months)\n")
   } else {
@@ -312,7 +312,7 @@ for(biomarker in names(biomarkers)) {
     } else if(p_bio < 0.05) {
       cat("Result: Significant prognostic biomarker (p < 0.05)\n")
     } else {
-      cat("Result: Not a significant prognostic biomarker (p ≥ 0.05)\n")
+      cat("Result: Not a significant prognostic biomarker (p >= 0.05)\n")
     }
   } else {
     cat("Insufficient data for analysis\n")
@@ -520,7 +520,7 @@ if(requireNamespace("survival", quietly = TRUE)) {
   cat("Concordance index:", round(c_index, 3), "\n")
   
   if(c_index >= 0.7) {
-    cat("Risk model performance: Excellent (C-index ≥ 0.7)\n")
+    cat("Risk model performance: Excellent (C-index >= 0.7)\n")
   } else if(c_index >= 0.6) {
     cat("Risk model performance: Good (C-index 0.6-0.7)\n")
   } else {
@@ -670,8 +670,8 @@ clinically_meaningful_months <- 6  # Minimum meaningful difference
 highly_meaningful_months <- 12     # Highly meaningful difference
 
 cat("Clinical Significance Thresholds:\n")
-cat("Meaningful difference: ≥", clinically_meaningful_months, "months\n")
-cat("Highly meaningful difference: ≥", highly_meaningful_months, "months\n\n")
+cat("Meaningful difference: >=", clinically_meaningful_months, "months\n")
+cat("Highly meaningful difference: >=", highly_meaningful_months, "months\n\n")
 
 # Assess each comparison
 cat("Clinical Significance Assessment:\n")
@@ -688,7 +688,7 @@ if("EGFR_Mutation" %in% names(biomarker_results) && biomarker_results[["EGFR_Mut
   cat("Statistical significance: Yes (p < 0.05)\n")
   
   if(egfr_diff >= highly_meaningful_months) {
-    cat("Clinical significance: Highly meaningful (≥12 months)\n")
+    cat("Clinical significance: Highly meaningful (>=12 months)\n")
   } else if(egfr_diff >= clinically_meaningful_months) {
     cat("Clinical significance: Meaningful (6-12 months)\n")
   } else {
