@@ -37,8 +37,7 @@ Imports:
     knitr,
     labelled,
     logistf,
-    rms
-Suggests:
+    rms,
     boot,
     checkmate,
     dcurves,
