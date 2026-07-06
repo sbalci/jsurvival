@@ -352,17 +352,3 @@ example:
 `results$medianTable$asDF`
 
 `as.data.frame(results$medianTable)`
-
-## Examples
-
-``` r
-# \donttest{
-# Example analyzing overall survival for a patient cohort:
-# singlearm(
-#   data = patient_data,
-#   elapsedtime = "months_survival",
-#   outcome = "death_status",
-#   outcomeLevel = "Dead"
-# )
-# }
-```

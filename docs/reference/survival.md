@@ -599,11 +599,3 @@ example:
 `results$medianTable$asDF`
 
 `as.data.frame(results$medianTable)`
-
-## Examples
-
-``` r
-# \donttest{
-# example will be added
-# }
-```
