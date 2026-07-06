@@ -11,6 +11,7 @@ vignette: >
   %\VignetteIndexEntry{Comprehensive Survival Power Analysis with ClinicoPath}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteKeepMd{true}
 ---
 
 ```{r setup, include = FALSE}
