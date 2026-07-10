@@ -1,18 +1,21 @@
 ---
 title: Survival Module of ClinicoPath for jamovi
 name: jsurvival
-version: 0.0.47
+version: 0.0.5
 jms: '1.0'
 authors:
   - Serdar Balci
 maintainer: Serdar Balci <serdarbalci@serdarbalci.com>
-date: '2026-07-05'
+date: '2026-07-10'
 type: R
 description: >-
   Survival Module of ClinicoPath for jamovi ClinicoPath help researchers to
   generate natural language summaries of their dataset, generate cross tables
   with statistical tests, and survival analysis with survival tables, survival
-  plots, and natural language summaries.
+  plots, and natural language summaries. For comments, suggestions, feature
+  requests or reporting bugs, please open an issue <a
+  href="https://github.com/sbalci/ClinicoPathJamoviModule/issues/"
+  target="_blank">here</a>. 
 analyses:
   - title: Single Arm Survival
     name: singlearm
