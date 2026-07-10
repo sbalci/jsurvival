@@ -49,6 +49,8 @@ multisurvival(
   calculateRiskScore = FALSE,
   numRiskGroups = "four",
   plotRiskGroups = FALSE,
+  ci_optimism = FALSE,
+  ci_optimism_boot = 150,
   ac = FALSE,
   adjexplanatory = NULL,
   ac_method = "average",
@@ -262,6 +264,19 @@ multisurvival(
   If true, stratifies individuals into risk groups based on their
   calculated risk scores and plots their survival curves.
 
+- ci_optimism:
+
+  If true, computes a bootstrap optimism-corrected Harrell's C-index
+  (apparent, optimism, and corrected) to quantify overfitting of the Cox
+  model's discrimination. Not available for competing-risks (Fine-Gray)
+  models.
+
+- ci_optimism_boot:
+
+  Number of bootstrap resamples used for optimism correction of the
+  C-index. Larger values give more stable estimates but take longer to
+  compute.
+
 - ac:
 
   .
@@ -362,6 +377,7 @@ A results object containing:
 | `results$multivariableCoxHeading`        |     |     |     |     | a preformatted |
 | `results$text`                           |     |     |     |     | a html         |
 | `results$text2`                          |     |     |     |     | a html         |
+| `results$interactionExplanation`         |     |     |     |     | a html         |
 | `results$interactionTest`                |     |     |     |     | a table        |
 | `results$subgroupHR`                     |     |     |     |     | a table        |
 | `results$multivariableCoxSummaryHeading` |     |     |     |     | a preformatted |
@@ -386,6 +402,7 @@ A results object containing:
 | `results$riskScoreSummary`               |     |     |     |     | a html         |
 | `results$riskScoreMetrics`               |     |     |     |     | a html         |
 | `results$riskGroupPlot`                  |     |     |     |     | an image       |
+| `results$cindexValidation`               |     |     |     |     | a table        |
 | `results$stratificationExplanation`      |     |     |     |     | a html         |
 | `results$calculatedtime`                 |     |     |     |     | an output      |
 | `results$outcomeredefined`               |     |     |     |     | an output      |
