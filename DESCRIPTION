@@ -32,6 +32,7 @@ Imports:
     rlang,
     survival,
     survminer,
+    withr,
     htmltools,
     janitor,
     knitr,
