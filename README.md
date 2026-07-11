@@ -136,7 +136,7 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 
 ## 📄 License
 
-This project is licensed under the GPL (>= 2) License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the GPL (>= 2) License - see the [LICENSE.md](https://github.com/sbalci/jsurvival/blob/master/LICENSE.md) file for details.
 
 ## 💬 Support
 
