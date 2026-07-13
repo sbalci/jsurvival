@@ -20,3 +20,5 @@ CITATION.cff
 CLAUDE.md
 README_badges.md
 .claude
+^data/.*\.omv$
+^inst/extdata/.*\.omv$
