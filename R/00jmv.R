@@ -71,6 +71,7 @@
         `url`="https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.2331"), 
     `padjust`=list(
         `type`="website", 
+        `author`="R Core Team", 
         `year`=2020, 
         `title`="p.adjust {stats} Adjust P-values for Multiple Comparisons", 
         `publisher`="[R package]. Retrieved from https://stat.ethz.ch/R-manual/R-devel/library/stats/html/p.adjust.html", 
