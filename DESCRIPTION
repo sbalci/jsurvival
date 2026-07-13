@@ -60,6 +60,7 @@ Imports:
     timeROC,
     xml2
 Suggests:
+    patchwork,
     randomForestSRC,
     SurvMetrics,
     survivalsvm,
