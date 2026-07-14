@@ -2,19 +2,28 @@
 # 'Namespaces in Imports field not imported from' NOTE for pkg::-used packages.
 #' @importFrom cmprsk cuminc
 #' @importFrom digest digest
+#' @importFrom dplyr mutate
+#' @importFrom finalfit finalfit
 #' @importFrom glmnet cv.glmnet
+#' @importFrom glue glue
 #' @importFrom janitor clean_names
 #' @importFrom KMunicate KMunicate
 #' @importFrom knitr kable
 #' @importFrom labelled set_variable_labels
 #' @importFrom logistf logistf
+#' @importFrom lubridate ymd
+#' @importFrom MASS stepAIC
 #' @importFrom pec pec
 #' @importFrom purrr reduce
 #' @importFrom rms datadist
+#' @importFrom randomForestSRC rfsrc
+#' @importFrom rpart rpart
 #' @importFrom rpart.plot rpart.plot
 #' @importFrom scales percent
 #' @importFrom tibble rownames_to_column
 #' @importFrom tidyr pivot_longer
+#' @importFrom survivalsvm survivalsvm
+#' @importFrom SurvMetrics Cindex
 #' @importFrom withr local_seed
+#' @importFrom xgboost xgb.train
 NULL
-

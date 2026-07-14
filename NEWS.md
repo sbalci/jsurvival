@@ -1,3 +1,18 @@
+# jsurvival 1.0.0 (2026-07-13)
+
+## First stable release
+
+- Fixed both odds-ratio validation paths so empty or invalid data produce clear
+  analysis-level errors instead of an R6 method failure.
+- Replaced non-structural named HTML entities with Unicode and converted fragmented
+  translated output to complete placeholder-based sentences.
+- Normalized checkbox labels to noun phrases, removed stale `sas` invalidation keys,
+  and hid unfinished survival-tree controls until the feature is wired end to end.
+- Trimmed `00refs.yaml` to the 22 citations used by the eight analyses and replaced
+  broad package imports with selective imports.
+- Synchronized `DESCRIPTION`, jamovi metadata, and `CITATION.cff`; removed the orphaned
+  survival-power event handler.
+
 # jsurvival 0.0.47 (2026-07-05)
 
 ## Bug Fixes
