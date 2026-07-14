@@ -4,7 +4,7 @@
 [![pkgdown](https://github.com/sbalci/jsurvival/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/sbalci/jsurvival/actions/workflows/pkgdown.yaml)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![jamovi](https://img.shields.io/badge/jamovi-module-blue)](https://www.jamovi.org)
-[![ClinicoPath](https://img.shields.io/badge/ClinicoPath-survival-orange)](https://sbalci.github.io/ClinicoPathJamoviModule/)
+[![ClinicoPath](https://img.shields.io/badge/ClinicoPath-survival-orange)](https://www.serdarbalci.com/ClinicoPathJamoviModule/)
 
 ## Abstract
 
@@ -87,7 +87,7 @@ library(jsurvival)
 ## 📖 Documentation
 
 - **Package Documentation**: <https://www.serdarbalci.com/jsurvival/>
-- **ClinicoPath Suite**: <https://sbalci.github.io/ClinicoPathJamoviModule/>
+- **ClinicoPath Suite**: <https://www.serdarbalci.com/ClinicoPathJamoviModule/>
 - **Tutorials**: Available in the `vignettes/` directory
 - **Example Data**: Included datasets for learning and testing
 
@@ -141,7 +141,7 @@ This project is licensed under the GPL (>= 2) License - see the [LICENSE.md](htt
 ## 💬 Support
 
 - **Bug Reports**: [GitHub Issues](https://github.com/sbalci/ClinicoPathJamoviModule/issues/)
-- **Questions**: [Discussions](https://github.com/sbalci/jsurvival/discussions)
+- **Questions**: [Discussions](https://github.com/sbalci/jsurvival/issues)
 - **Email**: <serdarbalci@serdarbalci.com>
 - **ORCID**: [0000-0002-7852-3851](https://orcid.org/0000-0002-7852-3851)
 
@@ -151,4 +151,4 @@ This project builds upon the excellent work of the R survival analysis community
 
 ---
 
-Part of the [ClinicoPath](https://sbalci.github.io/ClinicoPathJamoviModule/) suite of statistical modules for biomedical research.
+Part of the [ClinicoPath](https://www.serdarbalci.com/ClinicoPathJamoviModule/) suite of statistical modules for biomedical research.

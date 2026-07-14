@@ -13,7 +13,7 @@
 #  }
 #'
 #' For more documentation, see the
-#' \href{https://sbalci.github.io/ClinicoPathJamoviModule/}{Website}.
+#' \href{https://www.serdarbalci.com/ClinicoPathJamoviModule/}{Website}.
 #'
 #' @docType package
 #' @aliases jsurvival jsurvival-package
