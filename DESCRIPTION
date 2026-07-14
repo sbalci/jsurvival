@@ -64,6 +64,7 @@ Suggests:
     randomForestSRC,
     SurvMetrics,
     survivalsvm,
+    testthat,
     xgboost
 Encoding: UTF-8
 LazyData: true
