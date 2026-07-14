@@ -502,7 +502,6 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
     "multisurvivalResults",
     inherit = jmvcore::Group,
     active = list(
-        notices = function() private$.items[["notices"]],
         todo = function() private$.items[["todo"]],
         errors = function() private$.items[["errors"]],
         strongWarnings = function() private$.items[["strongWarnings"]],
@@ -577,16 +576,6 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "rms",
                     "finalfit",
                     "survminer"))
-            self$add(jmvcore::Preformatted$new(
-                options=options,
-                name="notices",
-                title="Important Information",
-                clearWith=list(
-                    "outcome",
-                    "outcomeLevel",
-                    "elapsedtime",
-                    "explanatory",
-                    "contexpl")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="todo",
@@ -676,7 +665,11 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "interactions",
                     "outcome",
                     "elapsedtime",
-                    "outcomeLevel"),
+                    "outcomeLevel",
+                    "multievent",
+                    "tint",
+                    "dxdate",
+                    "fudate"),
                 columns=list(
                     list(
                         `name`="term", 
@@ -712,7 +705,11 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "interactions",
                     "outcome",
                     "elapsedtime",
-                    "outcomeLevel"),
+                    "outcomeLevel",
+                    "multievent",
+                    "tint",
+                    "dxdate",
+                    "fudate"),
                 columns=list(
                     list(
                         `name`="interaction", 
@@ -1050,7 +1047,10 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "calculateRiskScore",
                     "outcome",
                     "explanatory",
-                    "contexpl")))
+                    "contexpl",
+                    "numRiskGroups",
+                    "outcomeLevel",
+                    "elapsedtime")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="riskScoreMetrics",
@@ -1235,7 +1235,10 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 clearWith=list(
                     "ac",
                     "adjexplanatory",
-                    "outcome")))
+                    "outcome",
+                    "ac_method",
+                    "explanatory",
+                    "contexpl")))
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="nomogramHeading",
@@ -1510,7 +1513,6 @@ multisurvivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   visual clutter when summaries are not needed.
 #' @return A results object containing:
 #' \tabular{llllll}{
-#'   \code{results$notices} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$todo} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$errors} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$strongWarnings} \tab \tab \tab \tab \tab a html \cr
