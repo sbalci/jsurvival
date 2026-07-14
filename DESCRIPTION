@@ -21,8 +21,8 @@ BugReports: https://github.com/sbalci/ClinicoPathJamoviModule/issues/
 Depends: R (>= 4.1.0)
 Imports: boot, checkmate, cmprsk, dcurves, digest, dplyr, finalfit, ggplot2,
         glmnet, glue, gridExtra, Hmisc, htmltools, janitor, jmvcore, KMunicate,
-        knitr, labelled, logistf, lubridate, magrittr, mgcv, pammtools,
-        patchwork, pec, pROC, purrr, R6, randomForestSRC, rlang, rms,
+        knitr, labelled, logistf, lubridate, magrittr, MASS, mgcv, pammtools,
+        patchwork, pec, pROC, purrr, R6, randomForestSRC, rlang, rms, rpart,
         rpart.plot, scales, survival, survivalsvm, SurvMetrics, survminer,
         tibble, tidyr, timeROC, withr, xgboost, xml2
 Suggests: rmarkdown, testthat
