@@ -52,7 +52,8 @@ survivalcont(
   strata_variable,
   loglog = FALSE,
   showExplanations = FALSE,
-  showSummaries = FALSE
+  showSummaries = FALSE,
+  seed = 12345
 )
 ```
 
@@ -324,6 +325,12 @@ survivalcont(
   summaries provide plain-language interpretations of the statistical
   results. Turn off to reduce visual clutter when summaries are not
   needed.
+
+- seed:
+
+  Random seed for the reproducible optimal cut-point search. Change this
+  value to obtain a different search; the default (12345) reproduces the
+  previous fixed behaviour.
 
 ## Value
 

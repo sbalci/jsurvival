@@ -6,6 +6,11 @@ forest plots, and optional nomogram generation for clinical prediction.
 It supports both categorical and continuous explanatory variables and
 includes diagnostic metrics for binary predictors.
 
+## Value
+
+An `R6` class generator object for the `oddsratioClass` backend; used
+internally by the jamovi analysis wrapper and not called directly.
+
 ## Details
 
 The function performs the following analyses:

@@ -6,7 +6,7 @@ tests, and survival analysis with survival tables, survival plots, and
 natural language summaries.
 
 For more documentation, see the
-[Website](https://sbalci.github.io/ClinicoPathJamoviModule/).
+[Website](https://www.serdarbalci.com/ClinicoPathJamoviModule/).
 
 ## Details
 
@@ -20,7 +20,7 @@ Useful links:
 
 - <https://github.com/sbalci/jsurvival/>
 
-- <https://sbalci.github.io/ClinicoPathJamoviModule/>
+- <https://www.serdarbalci.com/ClinicoPathJamoviModule/>
 
 - <https://www.serdarbalci.com/jsurvival/>
 
@@ -30,9 +30,9 @@ Useful links:
 ## Author
 
 **Maintainer**: Serdar Balci <serdarbalci@serdarbalci.com>
-([ORCID](https://orcid.org/0000-0002-7852-3851))
+([ORCID](https://orcid.org/0000-0002-7852-3851)) \[copyright holder\]
 
 Authors:
 
 - Serdar Balci <serdarbalci@serdarbalci.com>
-  ([ORCID](https://orcid.org/0000-0002-7852-3851))
+  ([ORCID](https://orcid.org/0000-0002-7852-3851)) \[copyright holder\]

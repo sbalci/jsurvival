@@ -4,6 +4,11 @@ Comprehensive survival analysis for continuous explanatory variables
 with optimal cut-off determination, multiple cut-offs analysis, RMST
 analysis, residual diagnostics, and advanced visualization options.
 
+## Value
+
+An `R6` class generator object for the `survivalcontClass` backend; used
+internally by the jamovi analysis wrapper and not called directly.
+
 ## Details
 
 This function provides advanced survival analysis specifically designed

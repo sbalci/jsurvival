@@ -1,4 +1,4 @@
-# combined_data: example dataset for the jsurvival module
+# breast: example dataset for the jsurvival module
 
 Example dataset distributed with the jsurvival jamovi module for
 demonstration and testing.
@@ -6,12 +6,12 @@ demonstration and testing.
 ## Usage
 
 ``` r
-combined_data
+breast
 ```
 
 ## Format
 
-A data frame with 2100 rows and 8 variables:
+A data frame with 700 rows and 8 variables:
 
 - patient_id:
 

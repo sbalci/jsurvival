@@ -1,6 +1,7 @@
-# Small sample stage migration data
+# small_sample_data: example dataset for the jsurvival module
 
-Small sample stage migration test case.
+Example dataset distributed with the jsurvival jamovi module for
+demonstration and testing.
 
 ## Usage
 
@@ -10,4 +11,36 @@ small_sample_data
 
 ## Format
 
-A data frame
+A data frame with 50 rows and 8 variables:
+
+- patient_id:
+
+  integer variable
+
+- age:
+
+  numeric variable
+
+- sex:
+
+  factor variable
+
+- old_stage:
+
+  ordered/factor variable
+
+- new_stage:
+
+  ordered/factor variable
+
+- survival_time:
+
+  numeric variable
+
+- event:
+
+  integer variable
+
+- cancer_type:
+
+  factor variable

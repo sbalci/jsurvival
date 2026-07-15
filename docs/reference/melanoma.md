@@ -1,6 +1,7 @@
-# Melanoma survival dataset
+# melanoma: example dataset for the jsurvival module
 
-Melanoma survival dataset for testing and demonstration.
+Example dataset distributed with the jsurvival jamovi module for
+demonstration and testing.
 
 ## Usage
 
@@ -10,4 +11,32 @@ melanoma
 
 ## Format
 
-A data frame
+A data frame with 205 rows and 7 variables:
+
+- time:
+
+  numeric variable
+
+- status:
+
+  numeric variable
+
+- sex:
+
+  numeric variable
+
+- age:
+
+  numeric variable
+
+- year:
+
+  numeric variable
+
+- thickness:
+
+  numeric variable
+
+- ulcer:
+
+  numeric variable

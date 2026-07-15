@@ -19,7 +19,7 @@ person-time."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">jsurvival</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -173,7 +173,8 @@ person-time.</p>
 <span>  rcs_variable <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  rcs_knots <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  bootstrapValidation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  bootstrapValN <span class="op">=</span> <span class="fl">200</span></span>
+<span>  bootstrapValN <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">42</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -601,6 +602,12 @@ samples.</p></dd>
 
 <dt id="arg-bootstrapvaln">bootstrapValN<a class="anchor" aria-label="anchor" href="#arg-bootstrapvaln"></a></dt>
 <dd><p>.</p></dd>
+
+
+<dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
+<dd><p>Random seed for the reproducible bootstrap internal validation.
+Change this value to obtain a different bootstrap draw; the default (42)
+reproduces the previous fixed behaviour.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -1,6 +1,7 @@
-# Summary statistics stage migration data
+# summary_stats: example dataset for the jsurvival module
 
-Summary statistics for stage migration analysis.
+Example dataset distributed with the jsurvival jamovi module for
+demonstration and testing.
 
 ## Usage
 
@@ -10,4 +11,4 @@ summary_stats
 
 ## Format
 
-A data frame
+An object of class list of length 6.

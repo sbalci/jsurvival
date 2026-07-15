@@ -35,8 +35,8 @@ oddsratio(
 - outcomeLevel:
 
   Specify which outcome level represents the positive case for
-  likelihood ratio calculations. If not specified, the function will use
-  the second level alphabetically.
+  likelihood ratio calculations. A positive outcome level is required;
+  the analysis stops with an error if it is not specified.
 
 - diagnosticPredictor:
 
