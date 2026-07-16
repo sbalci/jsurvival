@@ -45,6 +45,7 @@ multisurvival(
   ac = FALSE,
   adjexplanatory = NULL,
   ac_method = "average",
+  ac_summary = FALSE,
   showNomogram = FALSE,
   use_stratify = FALSE,
   stratvar = NULL,
@@ -196,6 +197,11 @@ take longer to compute.}
 
 \item{ac_method}{Method for computing adjusted survival curves}
 
+\item{ac_summary}{Display numeric adjusted-survival outputs (survival at
+the cutpoint timepoints with 95\\% CI, adjusted median survival, and the
+adjusted Cox hazard-ratio table) in addition to the adjusted-survival
+curve.}
+
 \item{showNomogram}{.}
 
 \item{use_stratify}{If true, uses stratification to handle variables that
@@ -277,6 +283,14 @@ A results object containing:
 \code{results$nomogram_display} \tab \tab \tab \tab \tab a html \cr
 \code{results$nomogramSummaryHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$nomogramSummary} \tab \tab \tab \tab \tab a html \cr
+\code{results$adjustedSurvTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$adjustedSurvTableSummary} \tab \tab \tab \tab \tab a html \cr
+\code{results$adjustedMedianTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$adjustedMedianSummary} \tab \tab \tab \tab \tab a html \cr
+\code{results$adjustedCoxTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$adjustedCoxText} \tab \tab \tab \tab \tab a html \cr
+\code{results$adjustedCoxSummary} \tab \tab \tab \tab \tab a html \cr
+\code{results$adjustedCoxPH} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$multivariableCoxExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$multivariableCoxHeading3} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$adjustedSurvivalExplanation} \tab \tab \tab \tab \tab a html \cr
