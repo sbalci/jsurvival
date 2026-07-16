@@ -19,9 +19,10 @@ URL: https://github.com/sbalci/ClinicoPathJamoviModule/,
         https://www.serdarbalci.com/jsurvival/
 BugReports: https://github.com/sbalci/ClinicoPathJamoviModule/issues/
 Depends: R (>= 4.1.0)
-Imports: cmprsk, digest, dplyr, finalfit, ggplot2, glmnet, glue, gridExtra,
+Imports: cmprsk, digest, dplyr, finalfit, flexsurv, ggplot2, glmnet, glue, gridExtra,
         htmltools, janitor, jmvcore, KMunicate, knitr, labelled, logistf,
-        lubridate, magrittr, MASS, pec, purrr, R6, randomForestSRC, rlang, rms, rpart,
+        lubridate, magrittr, MASS, pec, purrr, R6, randomForestSRC, riskRegression,
+        rlang, rms, rpart,
         rpart.plot, scales, survival, survivalsvm, SurvMetrics, survminer,
         tibble, tidyr, withr, xgboost
 Suggests: rmarkdown, testthat, yaml

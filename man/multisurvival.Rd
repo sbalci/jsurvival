@@ -47,11 +47,15 @@ multisurvival(
   ac_method = "average",
   ac_summary = FALSE,
   showNomogram = FALSE,
+  compare_models = FALSE,
   use_stratify = FALSE,
   stratvar = NULL,
   person_time = FALSE,
   time_intervals = "12, 36, 60",
   rate_multiplier = 100,
+  show_survmetrics = FALSE,
+  survmetrics_timepoints = "12, 24, 36, 60",
+  survmetrics_show_plots = FALSE,
   showExplanations = FALSE,
   showSummaries = TRUE
 )
@@ -204,6 +208,10 @@ curve.}
 
 \item{showNomogram}{.}
 
+\item{compare_models}{If true, reports a likelihood-ratio test and AIC for
+dropping each covariate from the full model (base R drop1). Shows which
+covariates significantly improve model fit.}
+
 \item{use_stratify}{If true, uses stratification to handle variables that
 violate the proportional hazards assumption. Stratification creates
 separate baseline hazard functions for different groups.}
@@ -223,6 +231,19 @@ For example,  "12, 36, 60" will create intervals 0-12, 12-36, 36-60, and
 
 \item{rate_multiplier}{Specify the multiplier for incidence rates (e.g.,
 100 for rates per 100 person-years, 1000 for rates per 1000 person-years).}
+
+\item{show_survmetrics}{Report model performance metrics for the Cox model:
+Harrell's concordance (C-index), inverse-probability-of-censoring-weighted
+(IPCW) Brier score and time-dependent AUC at the chosen timepoints, and the
+Integrated Brier Score. Computed with the riskRegression package.}
+
+\item{survmetrics_timepoints}{Comma-separated timepoints at which to report
+the Brier score and time-dependent AUC. Timepoints beyond the observed
+follow-up are ignored. Should correspond to clinically meaningful follow-up
+times.}
+
+\item{survmetrics_show_plots}{Display a plot of the IPCW Brier score across
+follow-up time.}
 
 \item{showExplanations}{Display detailed explanations for each analysis
 component to help interpret the statistical methods and results.}
@@ -250,6 +271,9 @@ A results object containing:
 \code{results$multivariableCoxSummary} \tab \tab \tab \tab \tab a html \cr
 \code{results$glossaryPanel} \tab \tab \tab \tab \tab a html \cr
 \code{results$assumptionsPanel} \tab \tab \tab \tab \tab a html \cr
+\code{results$survMetricsTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$survMetricsSummary} \tab \tab \tab \tab \tab a html \cr
+\code{results$survMetricsPlot} \tab \tab \tab \tab \tab an image \cr
 \code{results$personTimeHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$personTimeTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$personTimeSummaryHeading} \tab \tab \tab \tab \tab a preformatted \cr
@@ -291,6 +315,8 @@ A results object containing:
 \code{results$adjustedCoxText} \tab \tab \tab \tab \tab a html \cr
 \code{results$adjustedCoxSummary} \tab \tab \tab \tab \tab a html \cr
 \code{results$adjustedCoxPH} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$modelContributionTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$modelContributionSummary} \tab \tab \tab \tab \tab a html \cr
 \code{results$multivariableCoxExplanation} \tab \tab \tab \tab \tab a html \cr
 \code{results$multivariableCoxHeading3} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$adjustedSurvivalExplanation} \tab \tab \tab \tab \tab a html \cr
