@@ -256,6 +256,7 @@ visual clutter when summaries are not needed.}
 \value{
 A results object containing:
 \tabular{llllll}{
+\code{results$eventRecodeInfo} \tab \tab \tab \tab \tab a html \cr
 \code{results$todo} \tab \tab \tab \tab \tab a html \cr
 \code{results$errors} \tab \tab \tab \tab \tab a html \cr
 \code{results$strongWarnings} \tab \tab \tab \tab \tab a html \cr
@@ -281,6 +282,7 @@ A results object containing:
 \code{results$survivalPlotsHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 \code{results$plot3} \tab \tab \tab \tab \tab an image \cr
+\code{results$cox_phTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$plot8} \tab \tab \tab \tab \tab an image \cr
 \code{results$plotKM} \tab \tab \tab \tab \tab an image \cr

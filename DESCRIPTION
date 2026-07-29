@@ -2,7 +2,7 @@ Type: Package
 Package: jsurvival
 Title: Survival Module of 'ClinicoPath' for 'jamovi'
 Version: 1.0.1
-Date: 2026-07-16
+Date: 2026-07-28
 Authors@R: person(given = "Serdar", family = "Balci", role = c("aut",
  "cre", "cph"), email = "serdarbalci@serdarbalci.com", comment =
  c(ORCID = "0000-0002-7852-3851"))
@@ -21,7 +21,7 @@ BugReports: https://github.com/sbalci/ClinicoPathJamoviModule/issues/
 Depends: R (>= 4.1.0)
 Imports: cmprsk, digest, dplyr, finalfit, flexsurv, ggplot2, glmnet, glue, gridExtra,
         htmltools, janitor, jmvcore, KMunicate, knitr, labelled, logistf,
-        lubridate, magrittr, MASS, pec, purrr, R6, randomForestSRC, riskRegression,
+        lubridate, magrittr, MASS, maxstat, pec, purrr, R6, randomForestSRC, riskRegression,
         rlang, rms, rpart,
         rpart.plot, scales, survival, survivalsvm, SurvMetrics, survminer,
         tibble, tidyr, withr, xgboost

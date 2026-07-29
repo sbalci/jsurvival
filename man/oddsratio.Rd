@@ -6,8 +6,8 @@
 \usage{
 oddsratio(
   data,
-  explanatory,
-  outcome,
+  explanatory = NULL,
+  outcome = NULL,
   outcomeLevel,
   diagnosticPredictor = NULL,
   predictorLevel,

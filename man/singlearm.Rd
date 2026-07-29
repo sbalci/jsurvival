@@ -6,11 +6,11 @@
 \usage{
 singlearm(
   data,
-  elapsedtime,
+  elapsedtime = NULL,
   tint = FALSE,
-  dxdate,
-  fudate,
-  outcome,
+  dxdate = NULL,
+  fudate = NULL,
+  outcome = NULL,
   outcomeLevel,
   dod,
   dooc,
@@ -218,6 +218,7 @@ reliability and  analysis quality without affecting core results.}
 \value{
 A results object containing:
 \tabular{llllll}{
+\code{results$eventRecodeInfo} \tab \tab \tab \tab \tab a html \cr
 \code{results$todo} \tab \tab \tab \tab \tab a html \cr
 \code{results$errors} \tab \tab \tab \tab \tab a html \cr
 \code{results$warnings} \tab \tab \tab \tab \tab a html \cr

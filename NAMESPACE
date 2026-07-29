@@ -3,6 +3,7 @@
 export("%>%")
 export("%||%")
 export(bootstrapIDI)
+export(bootstrapNRI)
 export(clinicopath_startup_message)
 export(datetimeconverter)
 export(multisurvival)
