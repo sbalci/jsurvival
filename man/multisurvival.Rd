@@ -27,7 +27,7 @@ multisurvival(
   multievent = FALSE,
   hr = FALSE,
   sty = "t1",
-  ph_cox = TRUE,
+  ph_cox = FALSE,
   km = FALSE,
   endplot = 60,
   byplot = 12,
@@ -199,7 +199,13 @@ take longer to compute.}
 
 \item{adjexplanatory}{.}
 
-\item{ac_method}{Method for computing adjusted survival curves}
+\item{ac_method}{Estimand for the adjusted survival curves. "Standardised
+over cohort" sets every observed patient to each level in turn and averages
+the model-predicted curves (g-computation), so the curves differ only by
+the adjustment variable. "At reference covariate profile" predicts a single
+curve per level at the mean/mode of the other covariates. "Whole-cohort
+expected survival" returns one curve for the cohort at its observed
+covariates and does not contrast the levels at all.}
 
 \item{ac_summary}{Display numeric adjusted-survival outputs (survival at
 the cutpoint timepoints with 95\\% CI, adjusted median survival, and the
@@ -301,6 +307,7 @@ A results object containing:
 \code{results$addRiskScore} \tab \tab \tab \tab \tab an output \cr
 \code{results$addRiskGroup} \tab \tab \tab \tab \tab an output \cr
 \code{results$adjustedSurvivalHeading} \tab \tab \tab \tab \tab a preformatted \cr
+\code{results$adjustedEstimandPanel} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot_adj} \tab \tab \tab \tab \tab an image \cr
 \code{results$adjustedSurvivalSummaryHeading} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$adjustedSurvivalSummary} \tab \tab \tab \tab \tab a html \cr

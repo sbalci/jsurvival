@@ -60,15 +60,17 @@ diagnosis date and follow-up date and want to calculate the time elapsed
 between them.}
 
 \item{dxdate}{The date of diagnosis or study entry. Accepts: (1)
-Date/datetime text (e.g., "2024-01-15"), (2) Numeric Unix epoch seconds
-(from DateTime Converter's corrected_datetime_numeric output), (3) Numeric
-datetime values from R. Time intervals calculated as difference from
-follow-up date.}
+Date/datetime text (e.g., "2024-01-15"), (2) Numeric values. Numeric
+columns are interpreted by magnitude: values below 100000 are read as DAYS
+since 1970-01-01 (the R Date encoding), larger values as Unix epoch SECONDS
+(the DateTime Converter's corrected_datetime_numeric output). Time
+intervals are calculated as the difference from the follow-up date.}
 
 \item{fudate}{The date of last follow-up or event. Accepts: (1)
-Date/datetime text (e.g., "2024-01-15"), (2) Numeric Unix epoch seconds
-(from DateTime Converter's corrected_datetime_numeric output), (3) Numeric
-datetime values from R. Must be in same format as diagnosis date.}
+Date/datetime text (e.g., "2024-01-15"), (2) Numeric values, interpreted by
+magnitude exactly as for the diagnosis date (below 100000 = days since
+1970-01-01; larger = Unix epoch seconds). Must be in the same format as the
+diagnosis date.}
 
 \item{outcome}{The outcome or event of interest for each patient. Should be
 a factor or numeric variable indicating whether the patient experienced the
@@ -101,17 +103,25 @@ there are multiple event types.}
 death due to disease). "Competing Risk" analyzes the survival for multiple
 event types simultaneously.}
 
-\item{cutp}{Specify the time points at which to calculate survival
-probabilities. Enter a comma-separated list of time points in consistent
-units (e.g., months or years). For example, "12, 36, 60" calculates
-survival probabilities at 1, 3, and 5 years.}
+\item{cutp}{Time points at which to report survival probabilities, as a
+comma-separated list in the selected Time Unit. The default "12, 36, 60" is
+written in MONTHS; if it is left untouched while another time unit is
+selected it is rescaled to the equivalent 1, 3 and 5 years (e.g. 1, 3, 5
+for years) and a note says so. Any values you type yourself are used
+exactly as entered. Time points beyond the longest observed follow-up are
+omitted, because no subject remains at risk there.}
 
 \item{timetypedata}{select the time type in data (e.g., YYYY-MM-DD)}
 
-\item{timetypeoutput}{Select the time unit for displaying survival results.
-Months is most common  in clinical oncology studies. Choose the unit that
-best matches your clinical  practice and makes results most interpretable
-for your audience.}
+\item{timetypeoutput}{The time unit used throughout the analysis. When
+survival time is calculated from dates, dates are CONVERTED to this unit.
+When a pre-calculated elapsed-time variable is supplied, no conversion is
+possible (the column carries no unit), so this option DECLARES the unit
+that variable is already recorded in. Either way it determines how default
+cutpoints are scaled (12, 36, 60 months become 1, 3, 5 years), which
+follow-up thresholds are applied, and how axes are labelled - so selecting
+the wrong unit for pre-calculated time changes the reported results, not
+just the labels.}
 
 \item{uselandmark}{Enables landmark analysis, which addresses immortal time
 bias by analyzing survival only for patients who survive to a specified
@@ -119,11 +129,11 @@ timepoint (the landmark). Use this when you want to eliminate the effect of
 early deaths or when comparing treatments that can only be given to
 patients who survive long enough to receive them.}
 
-\item{landmark}{Enables landmark analysis, which addresses immortal time
-bias by analyzing survival only for patients who survive to a specified
-timepoint (the landmark). Use this when you want to eliminate the effect of
-early deaths or when comparing treatments that can only be given to
-patients who survive long enough to receive them.}
+\item{landmark}{The landmark time point, in the selected Time Unit. Must be
+zero or positive and must fall inside the observed follow-up range.
+Subjects whose follow-up ended at or before the landmark are excluded, and
+time is then measured from the landmark, so all estimates are conditional
+on surviving to it.}
 
 \item{sc}{Enable this option to generate a Kaplan-Meier survival plot with
 confidence intervals. This plot shows the estimated survival probability
@@ -134,10 +144,11 @@ survival plot in the style of KMunicate. This plot shows the estimated
 survival probability over time with confidence intervals and is suitable
 for publication or presentation.}
 
-\item{ce}{Enable this option to calculate and plot the cumulative number of
-events over time. This plot shows the total number of events (e.g., deaths)
-that have occurred at each time point and is useful for visualizing event
-rates in your data.}
+\item{ce}{Plot the cumulative probability of the event over time, 1 - S(t),
+estimated by Kaplan-Meier. This is a probability on a 0-1 scale, not a
+running count of events: a raw count ignores censoring and is not
+comparable between cohorts of different size or follow-up. Read it as "the
+estimated proportion of the cohort that had had the event by time t".}
 
 \item{ch}{Enable this option to calculate and plot the cumulative hazard
 function over time. This plot shows the cumulative risk of experiencing the
@@ -186,10 +197,11 @@ time on the survival plot.}
 metrics, including total follow-up time and incidence rates. These metrics
 help quantify the rate of events per unit of time in your study population.}
 
-\item{time_intervals}{Specify time intervals for stratified person-time
-analysis. Enter a  comma-separated list of time points to create intervals.
-For example,  "12, 36, 60" will create intervals 0-12, 12-36, 36-60, and
-60+.}
+\item{time_intervals}{Time intervals for stratified person-time analysis,
+as a comma-separated list in the selected Time Unit. For example "12, 36,
+60" creates the intervals 0-12, 12-36, 36-60 and 60+. The default is
+written in MONTHS and is rescaled to the equivalent 1, 3 and 5 years if
+another time unit is selected and the field is left untouched.}
 
 \item{rate_multiplier}{Specify the multiplier for incidence rates (e.g.,
 100 for rates per 100 person-years, 1000 for rates per 1000 person-years).}
@@ -199,8 +211,9 @@ assess how the instantaneous risk of events changes over time in your study
 population.}
 
 \item{hazard_smoothing}{Generate smoothed hazard rate estimates to better
-visualize patterns in event risk over time and assess proportional hazards
-assumptions.}
+visualize patterns in event risk over time. (There is no
+proportional-hazards assumption to assess here: a single-arm analysis has
+no groups to compare.)}
 
 \item{showExplanations}{Display detailed explanations for each analysis
 component to help interpret the statistical methods and results.}
