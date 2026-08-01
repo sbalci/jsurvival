@@ -29,6 +29,13 @@ for (.p in c("ClinicoPath", "jsurvival")) {
 if (is.null(.sa_ns))
     stop("singlearm namespace not found: cannot reach internal singlearmOptions/singlearmClass")
 
+# Bind the two internal generators ONCE, here, so every helper below can name
+# them plainly. Resolving them at each call site is what let run_with_outputs()
+# keep a bare `singlearmOptions` reference long after render_km() was fixed --
+# the file then failed only in the two tests that happened to use that helper.
+singlearmOptions <- get("singlearmOptions", envir = .sa_ns)
+singlearmClass   <- get("singlearmClass",   envir = .sa_ns)
+
 run_singlearm <- function(...) {
     args <- list(...)
     # Keep this helper compatible with installed versions whose generated
@@ -135,7 +142,7 @@ test_that("negative person-time interval boundaries cannot invent person-time", 
                          person_time = TRUE, time_intervals = "-5, 5")
 
     expect_match(strip_html(res$warnings$content),
-                 "Person-time intervals must be finite and greater than zero: -5 ignored")
+                 "Person-time intervals must be finite and zero or positive: -5 ignored")
 
     intervals <- col_of(res$personTimeTable, "interval")
     # "0-5" legitimately contains "-5"; what must not appear is a boundary that
@@ -267,8 +274,8 @@ render_km <- function(...) {
     args <- list(...)
     data <- args$data
     args$data <- NULL
-    opts <- do.call(get("singlearmOptions", envir = .sa_ns)$new, args)
-    analysis <- get("singlearmClass", envir = .sa_ns)$new(options = opts, data = data)
+    opts <- do.call(singlearmOptions$new, args)
+    analysis <- singlearmClass$new(options = opts, data = data)
     analysis$run()
     drawn_text(analysis$.__enclos_env__$private$.plot(
         analysis$results$plot, ggplot2::theme_bw(), NULL))
@@ -441,6 +448,16 @@ test_that("the observed event proportion is reported but not graded", {
     expect_equal(grades[rate_row], "not graded")
     # The number itself is still reported.
     expect_equal(col_of(res$dataQualityTable, "value")[rate_row], "50%")
+})
+
+test_that("descriptive diagnostics assign no arbitrary adequacy grades", {
+    res <- run_singlearm(data = ten_subjects(), elapsedtime = "time",
+                         outcome = "status", outcomeLevel = "Dead",
+                         advancedDiagnostics = TRUE)
+
+    grades <- col_of(res$dataQualityTable, "assessment")
+    expect_true(length(grades) >= 6)
+    expect_true(all(grades == "not graded"))
 })
 
 test_that("event scarcity produces exactly one warning, not four", {

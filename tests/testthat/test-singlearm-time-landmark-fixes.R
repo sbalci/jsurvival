@@ -19,10 +19,9 @@ test_that("event-level mappings are required wrapper arguments, and NULL is acce
     # and tried to add `default:` to the Level options to make that true -- the
     # compiler rejects it. Lock the real behaviour down in both directions so
     # nobody re-litigates it.
-    empty <- quote(expr = )
     for (lvl in c("outcomeLevel", "dod", "dooc", "awd", "awod"))
-        expect_identical(formals(singlearm)[[lvl]], empty,
-                         info = paste(lvl, "must stay a no-default argument"))
+        expect_true(rlang::is_missing(formals(singlearm)[[lvl]]),
+                    info = paste(lvl, "must stay a no-default argument"))
 
     # ...and passing NULL explicitly is what makes the call work.
     d <- data.frame(time = 1:6, status = c(1L, 0L, 1L, 0L, 1L, 0L))
@@ -49,6 +48,20 @@ test_that("events at time zero are retained instead of rejecting the analysis", 
     expect_false(grepl("strictly positive", strip_html(res$errors$content),
                        fixed = TRUE))
     expect_match(strip_html(res$warnings$content), "follow-up time zero")
+})
+
+test_that("Kaplan-Meier boundary intervals are not displayed as exact certainty", {
+    d <- data.frame(
+        time = 1:6,
+        status = factor(rep("Alive", 6), levels = c("Alive", "Dead")))
+    res <- run_singlearm(data = d, elapsedtime = "time", outcome = "status",
+                         outcomeLevel = "Dead", cutp = "1, 3, 6")
+
+    for (i in seq_len(res$survTable$rowCount)) {
+        expect_equal(res$survTable$getCell(rowNo = i, "surv")$value, 1)
+        expect_true(is.na(res$survTable$getCell(rowNo = i, "lower")$value))
+        expect_true(is.na(res$survTable$getCell(rowNo = i, "upper")$value))
+    }
 })
 
 test_that("inactive retained date selections do not invalidate elapsed-time analysis", {

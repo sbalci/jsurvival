@@ -404,7 +404,52 @@ items:
       width:  600
       height: 450
       renderFun: .plot
-      visible: (sc)
+      # Kaplan-Meier only. Under competing risks plot_cif below takes over, so
+      # the heading never contradicts what is drawn. .run() re-asserts both
+      # visibilities from the recode, which also catches a 0/1/2 outcome
+      # arriving with multievent = FALSE (outcomeorganizer hand-off).
+      visible: (sc && (!multievent || analysistype:overall || analysistype:cause || analysistype:dfs))
+      requiresData: true
+      clearWith:
+          - sc
+          - endplot
+          - byplot
+          - ybegin_plot
+          - yend_plot
+          - ci95
+          - risktable
+          - censored
+          - outcome
+          - outcomeLevel
+          - elapsedtime
+          - fudate
+          - dxdate
+          - tint
+          - multievent
+          - analysistype
+          - dod
+          - dooc
+          - awd
+          - awod
+          - uselandmark
+          - landmark
+          - timetypeoutput
+          - timetypedata
+          - medianline
+
+
+    # Competing-risks counterpart of `plot`. Same option set, same state; only
+    # one of the two is ever visible. NOTE: a visible: expression must start
+    # with "(" followed by a letter -- jmvcore's Options$eval() routes on
+    # ^\([\$A-Za-z].*\)$ and a leading "!" silently falls through, leaving the
+    # item permanently visible.
+    - name: plot_cif
+      title: 'Cumulative Incidence Function'
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .plotCIF
+      visible: (sc && multievent && analysistype:compete)
       requiresData: true
       clearWith:
           - sc
@@ -538,7 +583,7 @@ items:
 
 
     - name:  survivalPlotsHeading3
-      title: Survival Plots Explanations
+      title: Plots Explanations
       type:  Preformatted
       visible: ((sc || ce || ch || kmunicate) && showExplanations)
 
@@ -691,12 +736,12 @@ items:
 
     # Advanced Diagnostics Outputs
     - name:  dataQualityHeading
-      title: Data Quality Assessment
+      title: Descriptive Data Diagnostics
       type:  Preformatted
       visible: (advancedDiagnostics)
 
     - name: dataQualityTable
-      title: 'Data Quality Metrics'
+      title: 'Descriptive Data Metrics'
       type: Table
       visible: (advancedDiagnostics)
       rows: 0
@@ -724,7 +769,7 @@ items:
         - timetypeoutput
 
     - name: dataQualitySummary
-      title: 'Data Quality Assessment Summary'
+      title: 'Descriptive Data Diagnostics Summary'
       type: Html
       visible: (advancedDiagnostics && showSummaries)
       clearWith:

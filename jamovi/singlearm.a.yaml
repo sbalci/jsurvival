@@ -437,9 +437,12 @@ options:
       default: false
       description: >-
         Estimate exploratory interval event rates as events divided by exact person-time
-        in adaptive intervals. These are piecewise occurrence/exposure rates, not exact
+        in equal-width intervals. The number of intervals is limited according to the total
+        event count to reduce sparsity. These are piecewise occurrence/exposure rates, not exact
         instantaneous hazards or Cox-model coefficients, and should not be used alone to
-        choose treatment or surveillance timing.
+        choose treatment or surveillance timing. The rate output is not estimated when an
+        event occurs at time zero, because such an event is a probability mass at the origin
+        rather than a finite continuous hazard.
 
     - name: hazard_smoothing
       title: "Smoothed hazard function"
@@ -448,7 +451,8 @@ options:
       description: >-
         Generate smoothed hazard rate estimates to better visualize patterns
         in event risk over time. (There is no proportional-hazards assumption
-        to assess here: a single-arm analysis has no groups to compare.)
+        to assess here: a single-arm analysis has no groups to compare.) No
+        curve is estimated with zero observed events or an event at time zero.
 
 
 
@@ -472,7 +476,7 @@ options:
         results. Turn off to reduce visual clutter when summaries are not needed.
 
     - name: advancedDiagnostics
-      title: "Advanced diagnostics & quality assessment"
+      title: "Descriptive data diagnostics"
       type: Bool
       default: false
       description: >-

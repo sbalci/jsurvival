@@ -286,12 +286,10 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       },
 
       .yearInUnits = function() {
-        # One year expressed in the selected display unit. Every clinical
-        # threshold in this file (default cutpoints, the "short follow-up"
-        # warning, the follow-up-duration assessment) used to hard-code MONTH
-        # numbers, so selecting days or years silently changed what the
-        # threshold meant -- "< 12" stopped being "< 1 year" and became
-        # "< 12 days" or "< 12 years".
+        # One year expressed in the selected display unit, used for default
+        # cutpoints and time-scale plausibility checks. These used to hard-code
+        # month values, so selecting days or years silently changed their
+        # meaning.
         switch(self$options$timetypeoutput,
           "days"   = 365.25,
           "weeks"  = 52.18,
@@ -336,14 +334,25 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         # recorded at the origin: survival::survfit() reports the post-event
         # estimate there. A zero-width PERSON-TIME boundary is not useful, so
         # that caller opts out explicitly with allow_zero = FALSE.
-        keep <- is.finite(nums) & if (allow_zero) nums >= 0 else nums > 0
-        if (any(!keep)) {
+        # Separate REDUNDANT from INVALID.
+        #
+        # For person-time (allow_zero = FALSE) a leading 0 is not an error: the
+        # caller prepends 0 to `breaks` itself, so the first interval is 0-t1
+        # either way. Lumping it in with negatives produced a warning reading
+        # "0 ignored" on the entirely ordinary input "0, 12, 24" -- while the
+        # table was byte-identical to "12, 24" and its first row WAS 0-12. The
+        # warning was simply false, and false warnings on valid input teach
+        # users to ignore all of them.
+        invalid <- !is.finite(nums) | nums < 0
+        if (any(invalid)) {
           private$.addWarning(sprintf(
-            '%s must be finite and %s: %s ignored. Time is measured forward from the start of follow-up, so a negative or infinite time point is not valid.',
-            what, if (allow_zero) 'zero or positive' else 'greater than zero',
-            paste(format(nums[!keep], trim = TRUE), collapse = ", ")))
-          nums <- nums[keep]
+            '%s must be finite and zero or positive: %s ignored. Time is measured forward from the start of follow-up, so a negative or infinite time point is not valid.',
+            what, paste(format(nums[invalid], trim = TRUE), collapse = ", ")))
+          nums <- nums[!invalid]
         }
+        # Drop a redundant zero SILENTLY for callers that supply their own
+        # origin. Nothing is lost and nothing needs saying.
+        if (!allow_zero) nums <- nums[nums > 0]
         if (length(nums) == 0) {
           nums <- private$.getDefaultCutpoints()
           private$.addWarning(sprintf(
@@ -543,12 +552,21 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                                   max_bins = 10L) {
         # Nonparametric data do not identify an "instantaneous" hazard at each
         # observed event time. Estimate descriptive piecewise rates instead,
-        # using intervals with roughly equal event counts and the exact
-        # person-time accrued by every subject inside each interval.
+        # using equal-width intervals and the exact person-time accrued by every
+        # subject inside each interval.
         keep <- is.finite(time) & !is.na(status) & time >= 0
         time <- as.numeric(time[keep])
         status <- as.integer(status[keep] == 1)
         if (length(time) == 0 || sum(status) == 0)
+          return(data.frame())
+
+        # An event at the time origin is an atom in the event-time
+        # distribution, not an occurrence generated over a positive amount of
+        # person-time. Putting it in the first positive-width interval would
+        # manufacture a finite rate by dividing that mass by other subjects'
+        # later exposure. KM/CIF can retain such events, but this continuous-
+        # time rate summary cannot represent them faithfully.
+        if (any(status == 1 & time == 0))
           return(data.frame())
 
         max_fu <- max(time)
@@ -560,13 +578,13 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         n_bins <- max(1L, min(as.integer(max_bins),
                               floor(n_events / as.integer(target_events))))
-        positive_event_times <- sort(time[status == 1 & time > 0])
-        internal <- if (n_bins > 1L && length(positive_event_times) > 0L)
-          as.numeric(stats::quantile(
-            positive_event_times,
-            probs = seq_len(n_bins - 1L) / n_bins,
-            names = FALSE, type = 1)) else numeric(0)
-        breaks <- sort(unique(c(0, internal, max_fu)))
+
+        # Boundaries must not be chosen from the observed event quantiles and
+        # then fed to a Poisson interval as though the bins had been fixed.
+        # That post-selection forces similar event counts into every row and
+        # invalidates the stated interval model. Equal-width boundaries depend
+        # on the follow-up scale, not on where target events happened.
+        breaks <- seq(0, max_fu, length.out = n_bins + 1L)
         if (length(breaks) < 2L) return(data.frame())
 
         rows <- lapply(seq_len(length(breaks) - 1L), function(i) {
@@ -650,10 +668,10 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         # not of the quality of the data.
         warnings <- character()
 
-        # Follow-up duration check, in the selected display unit.
-        if (max_time < private$.yearInUnits()) {
-          warnings <- c(warnings, glue::glue("Short follow-up duration (< 1 year) - median survival may not be reached"))
-        }
+        # No universal follow-up-duration threshold is clinically defensible.
+        # A 90-day window may be complete for an acute endpoint and inadequate
+        # for an indolent cancer. Estimability, risk sets, and confidence
+        # intervals are reported directly instead of grading against one year.
 
         return(list(
           n_total = n_total,
@@ -1308,16 +1326,25 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         # .load() restored results from disk without .run(), and private$
         # .eventRecode is empty in that instance. Without it the plots fall back
         # to the options and render inverted competing-risk curves.
+        #
+        # The event labels travel with it for the same reason: the CIF legend
+        # would otherwise read the raw cmprsk codes 1 and 2, which no clinician
+        # can map back onto their own outcome levels.
         plotData <- list(
           "name1time" = name1time,
           "name2outcome" = name2outcome,
           "name3explanatory" = name3explanatory,
           "cleanData" = cleanData,
-          "has_competing" = private$.isCompetingRisk()
+          "has_competing" = private$.isCompetingRisk(),
+          "event_label" = private$.eventRecode$event_label,
+          "competing_labels" = private$.eventRecode$competing_labels
         )
 
         image <- self$results$plot
         image$setState(plotData)
+
+        imageCIF <- self$results$plot_cif
+        imageCIF$setState(plotData)
 
         image2 <- self$results$plot2
         image2$setState(plotData)
@@ -1404,6 +1431,39 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           return()
         }
 
+        # Show exactly one of the two "sc" plots.
+        #
+        # jamovi/singlearm.r.yaml already splits them on the options, but a
+        # visible: expression can only see options, and competing risks can
+        # also arrive in the DATA: an outcomeorganizer hand-off delivers a
+        # 0/1/2 outcome with multievent = FALSE. Re-asserting from the recode
+        # here means those users still get the CIF instead of a refusal panel
+        # under a "Survival Plot" heading.
+        cr <- private$.isCompetingRisk()
+        self$results$plot$setVisible(isTRUE(self$options$sc) && !cr)
+        self$results$plot_cif$setVisible(isTRUE(self$options$sc) && cr)
+
+        # The piecewise-hazard section is not computed under competing risks
+        # (the renderers refuse and .baselineHazardAnalysis() returns early),
+        # but .init() had already made the whole section visible from
+        # `baseline_hazard` alone. The result was a heading, a table showing
+        # column headers over NO ROWS, and an empty explanations panel -- bare
+        # scaffolding announcing an analysis that was deliberately not run.
+        # .init() cannot decide this: private$.eventRecode does not exist yet,
+        # so the outcomeorganizer hand-off (0/1/2 outcome, multievent = FALSE)
+        # looks like ordinary survival there. Same blind spot as the CIF plot
+        # above, which is why both are re-asserted here.
+        if (cr) {
+          for (nm in c("baselineHazardHeading", "baselineHazardTable",
+                       "baselineHazardPlot", "smoothedHazardPlot",
+                       "baselineHazardSummary", "baselineHazardHeading3",
+                       "baselineHazardExplanation")) {
+            it <- try(self$results[[nm]], silent = TRUE)
+            if (!inherits(it, "try-error") && !is.null(it))
+              try(it$setVisible(FALSE), silent = TRUE)
+          }
+        }
+
         ## Data Quality Assessment ----
         private$.checkpoint()
         data_quality <- private$.assessDataQuality(results)
@@ -1434,7 +1494,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             n_ev, rate_txt))
         } else if (n_ev < 10) {
           private$.addWarning(sprintf(
-            'Very few events observed: %d%s. Results may be unreliable. Recommendations: (1) extend follow-up; (2) combine datasets; (3) interpret with extreme caution; (4) report confidence intervals prominently.',
+            'Very few events observed: %d%s. Sampling uncertainty is substantial. Report confidence intervals and late risk sets prominently; additional comparable observations may improve precision, but combining clinically different cohorts does not repair sparse data.',
             n_ev, rate_txt))
         } else if (n_ev < 20) {
           private$.addWarning(sprintf(
@@ -1788,6 +1848,8 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           # Interval" an empty cell is otherwise indistinguishable from the KM
           # "not estimable" case, and a reader may assume the interval was simply
           # too wide to print rather than never computed.
+          # Clear the KM-only note: a competing-risk table has no RMST.
+          medianTable$setNote("rmst", NULL)
           medianTable$setNote(
             "cr_ci",
             .("No confidence interval is computed for the cumulative-incidence median. Restricted-mean survival columns are not applicable to this cumulative-incidence quantile and are left empty."))
@@ -1797,6 +1859,10 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           medianTable$getColumn("median")$setTitle(.("Median"))
           medianTable$getColumn("rmean")$setTitle(.("Restricted mean survival time"))
           medianTable$getColumn("se_rmean")$setTitle(.("SE of restricted mean"))
+          # Clear the competing-risk note: this IS a KM table and it does
+          # show a confidence interval, so cr_ci would contradict the column
+          # beside it.
+          medianTable$setNote("cr_ci", NULL)
           medianTable$setNote(
             "rmst",
             sprintf(.("Restricted mean survival time is the area under the Kaplan-Meier curve from time 0 to the largest observed time in this analysis (%s %s). It is therefore horizon-dependent and should only be compared when the same restriction time is used."),
@@ -1855,8 +1921,9 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                      "This is common in competing risk analyses where the competing event is frequent."),
               paste0("Median time to event of interest is ", round(.med, 2), " ", time_unit,
                      " (based on the cumulative incidence function, accounting for competing risks). ",
-                     "This is the time when 50% cumulative incidence of the event of interest is ",
-                     "reached. No confidence interval is computed for this quantile.")))
+                     "This is the first time the estimated cumulative incidence of the event ",
+                     "of interest reaches 50% or greater; the step curve need not equal 50% ",
+                     "exactly. No confidence interval is computed for this quantile.")))
 
         } else {
           # Standard survival analysis narrative
@@ -1922,7 +1989,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                              paste0("Observed proportion with the event of interest: ", event_rate, "% (", n_events, " of ", n_total, " subjects)."),
                              quality_info,
                              "This analysis uses proper competing risk methods (cumulative incidence functions).",
-                             "The median time represents when 50% cumulative incidence is reached for the event of interest,",
+                             "The median time is the first time estimated cumulative incidence reaches 50% or greater for the event of interest; the step curve need not equal exactly 50% there,",
                              "accounting for the presence of competing events that prevent the event of interest from occurring."
           )
         } else {
@@ -1948,7 +2015,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             self$results$medianSurvivalExplanation$setContent(paste0(
               '<div class="explanation-box" style="background-color: #f0f8ff; padding: 15px; border-radius: 8px; margin: 10px 0;">',
               '<h3 style="color: #2c5282; margin-top: 0;">', .("Understanding the Median Time to the Event of Interest"), '</h3>',
-              '<p>', .("This is not median survival. It is the time at which the cumulative incidence of the event of interest first reaches 50%, estimated with competing risks accounted for. Half the cohort has had the event of interest by this time; the rest are either still event-free or have had the competing event."), '</p>',
+              '<p>', .("This is not median survival. It is the first time at which the estimated cumulative incidence of the event of interest reaches 50% or greater, with competing risks accounted for. Because the curve changes in steps, it need not equal exactly 50% at that time; the estimate indicates that at least half the cohort has had the event of interest by then."), '</p>',
               '<ul>',
               '<li>', .("<b>Not reached</b> is common and expected here: whenever competing events are frequent, the cumulative incidence of the event of interest can plateau below 50%, so no such time exists no matter how long follow-up continues."), '</li>',
               '<li>', .("<b>No confidence interval is reported.</b> A valid interval for this quantile requires inverting a confidence band for the cumulative incidence curve, or bootstrapping; a pointwise variance at the median does not give one. The cells are left empty rather than filled with an approximation."), '</li>',
@@ -2174,6 +2241,14 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           cif_upper <- pick(s_summary$upper, ev_col)
           n_event_val <- pick(s_summary$n.event, ev_col)
 
+          # Standard large-sample transformations degenerate at the probability
+          # boundaries: before the first target event they can print 0%-0%, and
+          # at a terminal boundary 100%-100%. Those are zero estimated-variance
+          # artefacts, not proof that the population probability is known.
+          cif_boundary <- is.finite(cif_est) & (cif_est <= 0 | cif_est >= 1)
+          cif_lower[cif_boundary] <- NA_real_
+          cif_upper[cif_boundary] <- NA_real_
+
           # A genuine zero is decided from the DATA, never from a lookup result.
           n_event_of_interest <- sum(mydata[[myoutcome]] == 1, na.rm = TRUE)
           if (n_event_of_interest == 0) {
@@ -2218,12 +2293,13 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           # The footnote used to make this claim unconditionally, which is how
           # a table of competing-event incidence passed for the event of
           # interest. Key it on the observed data, not on a lookup result.
+          self$results$survTable$setNote("boundary_ci", NULL)
           self$results$survTable$setNote(
             key = "cif_note",
             note = if (n_event_of_interest == 0)
               "Note: this table reports the Cumulative Incidence of the event of interest (outcome code 1), not survival. No such event was observed, so the point estimate is 0 throughout. The asymptotic Aalen-Johansen interval degenerates to 0%-0% at this boundary and is therefore left blank; absence of observed events does not prove zero population risk."
             else
-              "Note: this table reports the Cumulative Incidence of the event of interest (outcome code 1), not survival. It is not 1 minus a Kaplan-Meier estimate. Competing events (code 2) are not counted as events; they remove subjects from the population still able to have the event of interest."
+              "Note: this table reports the Cumulative Incidence of the event of interest (outcome code 1), not survival. It is not 1 minus a Kaplan-Meier estimate. Competing events (code 2) are not counted as events; they remove subjects from the population still able to have the event of interest. Confidence limits are left blank where the point estimate is exactly 0% or 100%, because the usual large-sample interval degenerates at those boundaries."
           )
 
           # This branch used to return here, leaving the "Understanding Survival
@@ -2299,6 +2375,24 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         for (col in c("std.err", "lower", "upper"))
           km_fit_df[[col]][!is.finite(km_fit_df[[col]])] <- NA_real_
 
+        # Greenwood/log intervals have zero estimated variance while the curve
+        # is exactly 1 (and can degenerate at 0). A displayed 100%-100% interval
+        # before any event, especially in an all-censored cohort, is easily read
+        # as certainty about population survival. Leave boundary limits blank;
+        # the point estimate and risk set remain reportable.
+        km_boundary <- is.finite(km_fit_df$surv) &
+          (km_fit_df$surv <= 0 | km_fit_df$surv >= 1)
+        if (any(km_boundary)) {
+          km_fit_df$lower[km_boundary] <- NA_real_
+          km_fit_df$upper[km_boundary] <- NA_real_
+          # This is a survival table; the cumulative-incidence note must not
+          # survive a switch back from competing-risks mode.
+          self$results$survTable$setNote("cif_note", NULL)
+          self$results$survTable$setNote(
+            "boundary_ci",
+            .("Confidence limits are left blank where estimated survival is exactly 0% or 100%. The usual Greenwood-based large-sample interval degenerates at a probability boundary; the absence of observed events does not establish zero population risk."))
+        }
+
         survTable <- self$results$survTable
 
         data_frame <- km_fit_df
@@ -2350,7 +2444,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 
                 <div style="background-color: white; padding: 12px; border-radius: 5px; margin: 10px 0;">
                     <h4 style="color: #2d3748; margin-top: 0;">What are Time-Specific Survival Probabilities?</h4>
-                    <p style="margin: 8px 0;">These show the <strong>estimated percentage of the cohort remaining event-free</strong> at specific milestone time points. 
+                    <p style="margin: 8px 0;">These show the <strong>estimated percentage of the cohort remaining event-free</strong> at specific milestone time points.
                     Common time points are 1, 3, and 5 years (corresponding to the default intervals).</p>
                     
                     <div style="background-color: #e6f7ff; padding: 10px; border-radius: 5px; margin: 10px 0;">
@@ -2673,7 +2767,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     contribute {rate_multiplier} person-{time_unit}; the observed aggregate rate corresponds to {round(overall_rate, 1)} events per that amount of person-time.
     This standardized expression makes it easier to understand and compare rates across different studies.</p>
 
-    The 95% confidence interval for this rate is {round(ci_lower, 2)} to {round(ci_upper, 2)} per {rate_multiplier} {time_unit},
+    The 95% confidence interval for this rate is {round(ci_lower, 2)} to {round(ci_upper, 2)} per {rate_multiplier} person-{time_unit},
     indicating the precision of our estimate based on the observed data.
 
 
@@ -2789,7 +2883,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         usable <- nrow(hz) > 0 && any(is.finite(hz$rate))
         if (!usable) {
           private$.addInfo(
-            'Piecewise hazard rates were not estimated because all observed events occurred at time zero and no positive person-time was accrued before them.')
+            'Piecewise hazard rates were not estimated because one or more events occurred at time zero, or because no positive person-time was available. A time-zero event is a probability mass at the origin rather than a finite continuous hazard; report it with the survival or cumulative-incidence output.')
           return()
         }
         hz <- hz[is.finite(hz$rate), , drop = FALSE]
@@ -2798,8 +2892,9 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           "method",
           paste0(
             "Each row is a piecewise occurrence/exposure rate for (previous endpoint, Time], ",
-            "with the first interval including time zero. Intervals are chosen to contain ",
-            "roughly 10 events (maximum 10 intervals); person-time is calculated exactly ",
+            "with the first interval including time zero. Equal-width intervals span the ",
+            "observed follow-up; their number is limited to about one interval per 10 total ",
+            "events (maximum 10) to reduce sparsity. Person-time is calculated exactly ",
             "from individual follow-up. Limits are Garwood Poisson 95% intervals conditional ",
             "on the observed exposure. These are interval rates, not pointwise instantaneous ",
             "hazards or Cox-model coefficients."))
@@ -2814,15 +2909,13 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         n_bins <- nrow(hz)
         pooled_rate <- sum(hz$events) / sum(hz$person_time)
         if (n_bins >= 3L) {
-          cv <- stats::sd(hz$rate) / mean(hz$rate)
           peak_text <- sprintf(
-            '<b>%.4f</b> in the interval ending at %.1f %s (highest of %d adaptive intervals)',
+            '<b>%.4f</b> in the interval ending at %.1f %s (highest of %d equal-width intervals)',
             max(hz$rate), hz$end[which.max(hz$rate)],
             self$options$timetypeoutput, n_bins)
           variation_text <- sprintf(
-            '<b>%s</b> between adaptive intervals (CV = %.3f over %d intervals); descriptive scatter only, not a test of a constant-hazard, exponential, or proportional-hazards model',
-            if (is.finite(cv) && cv < 0.5) 'little variation' else 'substantial variation',
-            cv, n_bins)
+            '<b>%.4f to %.4f</b> across %d equal-width intervals; this descriptive range is not a test of a constant-hazard, exponential, or proportional-hazards model',
+            min(hz$rate), max(hz$rate), n_bins)
         } else {
           peak_text <- sprintf(
             'not separable from the pooled rate - %d event(s) support only %d interval(s)',
@@ -2837,7 +2930,8 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             <div style='background-color:#fff9e6;border-left:4px solid #ffc107;padding:12px;margin-bottom:15px;'>
               <p style='margin:5px 0;'><strong>Methodological note:</strong>
               This output reports piecewise event rates, computed as events divided by exact
-              person-time within adaptive intervals containing roughly 10 events. It does not
+              person-time within equal-width intervals. The number of intervals is limited to
+              about one per 10 total events (maximum 10) to reduce sparse-bin artefacts. It does not
               estimate an exact instantaneous hazard at each event time. Garwood Poisson
               intervals are conditional on the count/exposure model.</p>
             </div>
@@ -2857,7 +2951,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             '<div class="explanation-box" style="background-color:#f0f8ff;padding:15px;border-radius:8px;margin:10px 0;">',
             '<h3 style="color:#2c5282;margin-top:0;">Understanding Piecewise Hazard-Rate Estimates</h3>',
             '<p>A hazard is an event rate among subjects still at risk, expressed per unit of person-time. ',
-            'It is not an event probability and can exceed 1 per time unit. This table groups follow-up into adaptive intervals and divides events by the exact person-time accrued in each interval.</p>',
+            'It is not an event probability and can exceed 1 per time unit. This table groups follow-up into equal-width intervals and divides events by the exact person-time accrued in each interval.</p>',
             '<ul><li><strong>Time:</strong> upper endpoint of the interval; the row covers the preceding endpoint up to and including this time.</li>',
             '<li><strong>Rate:</strong> events/person-time within that interval.</li>',
             '<li><strong>95% CI:</strong> Garwood Poisson interval conditional on the observed exposure.</li>',
@@ -2936,52 +3030,17 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         # `results` is image$state -- see .isCompetingRisk(): a renderer can run
         # without .run() in this instance, so the flag comes off the state.
+        #
+        # This item is Kaplan-Meier only; the cumulative-incidence curve moved
+        # to .plotCIF() so that the "Survival Plot" heading stops contradicting
+        # its own contents. The refusal below is a SAFETY NET, not the gate:
+        # jamovi/singlearm.r.yaml hides this item under competing risks and
+        # .run() re-asserts that from the recode, but a stale .omv or an
+        # R-syntax call can still reach this renderer with sc = TRUE, and a
+        # blank panel is indistinguishable from a plot that failed to render.
         if (private$.isCompetingRisk(results)) {
-            # Competing Risk Plot (Cumulative Incidence)
-
-            status <- plotData[[myoutcome]]
-            cr_subtitle <- .("For Competing Risks (Event of Interest vs. Competing Event)")
-            if (!any(status != 0, na.rm = TRUE)) {
-              # cmprsk::cuminc() has no curve to return when every observation
-              # is censored, but the estimand is still defined: every CIF point
-              # estimate is zero. Draw that valid boundary result explicitly.
-              flat <- data.frame(time = c(0, max(plotData[[mytime]], na.rm = TRUE)),
-                                 incidence = c(0, 0))
-              plot_obj <- ggplot2::ggplot(flat,
-                                          ggplot2::aes(x = time, y = incidence)) +
-                ggplot2::geom_step(color = "#0173B2", linewidth = 1.2) +
-                ggplot2::labs(
-                  title = .("Cumulative Incidence Function (CIF)"),
-                  subtitle = .("No terminal event observed; point estimate remains 0"),
-                  x = paste0('Time (', self$options$timetypeoutput, ')'),
-                  y = .("Cumulative incidence")) +
-                ggplot2::coord_cartesian(
-                  xlim = c(0, self$options$endplot),
-                  ylim = c(self$options$ybegin_plot, self$options$yend_plot))
-              cr_subtitle <- .("No terminal event observed; point estimate remains 0")
-            } else {
-              cuminc_fit <- private$.competingRiskCumInc(results)
-              if (is.null(cuminc_fit))
-                return(private$.competingRiskPlotRefusal(
-                  .("The cumulative-incidence plot could not be estimated")))
-
-              plot_obj <- survminer::ggcompetingrisks(
-                  fit = cuminc_fit,
-                  conf.int = self$options$ci95,
-                  title = .("Cumulative Incidence Function (CIF)"),
-                  xlab = paste0('Time (', self$options$timetypeoutput, ')'),
-                  xlim = c(0, self$options$endplot),
-                  ylim = c(self$options$ybegin_plot, self$options$yend_plot),
-                  risk.table = FALSE)
-            }
-
-            # Apply additional theming
-            plot_obj <- plot_obj + 
-              ggtheme + 
-              ggplot2::labs(subtitle = cr_subtitle) +
-              ggplot2::scale_x_continuous(
-                breaks = seq(0, self$options$endplot, by = self$options$byplot)) +
-              ggplot2::theme(legend.position = 'bottom') # Move legend to bottom for clarity
+            return(private$.competingRiskPlotRefusal(
+              .("The Kaplan-Meier survival plot")))
 
         } else {
             # Standard KM Plot
@@ -3042,6 +3101,124 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
               return(TRUE)
             }
         }
+
+        print(plot_obj)
+        TRUE
+      }
+
+
+      # Cumulative Incidence Function ----
+      ,
+      # The competing-risks counterpart of .plot(). It used to live inside
+      # .plot() as a branch, which meant a cumulative-incidence curve was drawn
+      # under a heading that read "Survival Plot" -- the one number a reader of
+      # a competing-risks analysis must not confuse with 1 - S(t).
+      .plotCIF = function(image, ggtheme, theme, ...) {
+        if (!self$options$sc)
+          return()
+
+        results <- image$state
+
+        if (is.null(results))
+          return()
+
+        # Same safety-net reasoning as .plot(): the r.yaml visible: expression
+        # and .run()'s setVisible() keep this item off screen outside
+        # competing-risk mode, but a stale .omv or an R-syntax call can still
+        # reach the renderer, and cmprsk::cuminc() on a plain 0/1 status would
+        # draw a curve that looks plausible and answers the wrong question.
+        if (!private$.isCompetingRisk(results))
+          return()
+
+        if (!private$.validatePlotParameters()) return()
+
+        mytime <- results$name1time
+        myoutcome <- results$name2outcome
+
+        plotData <- results$cleanData
+        plotData[[mytime]] <- jmvcore::toNumeric(plotData[[mytime]])
+
+        private$.checkpoint()
+
+        status <- plotData[[myoutcome]]
+        cr_subtitle <- .("For Competing Risks (Event of Interest vs. Competing Event)")
+
+        if (!any(status != 0, na.rm = TRUE)) {
+          # cmprsk::cuminc() has no curve to return when every observation
+          # is censored, but the estimand is still defined: every CIF point
+          # estimate is zero. Draw that valid boundary result explicitly.
+          flat <- data.frame(time = c(0, max(plotData[[mytime]], na.rm = TRUE)),
+                             incidence = c(0, 0))
+          plot_obj <- ggplot2::ggplot(flat,
+                                      ggplot2::aes(x = time, y = incidence)) +
+            ggplot2::geom_step(color = "#0173B2", linewidth = 1.2) +
+            ggplot2::labs(
+              title = .("Cumulative Incidence Function (CIF)"),
+              x = paste0('Time (', self$options$timetypeoutput, ')')) +
+            ggplot2::coord_cartesian(
+              xlim = c(0, self$options$endplot),
+              ylim = c(self$options$ybegin_plot, self$options$yend_plot))
+          cr_subtitle <- .("No terminal event observed; point estimate remains 0")
+        } else {
+          cuminc_fit <- private$.competingRiskCumInc(results)
+          if (is.null(cuminc_fit))
+            return(private$.competingRiskPlotRefusal(
+              .("The cumulative-incidence plot could not be estimated")))
+
+          plot_obj <- survminer::ggcompetingrisks(
+              fit = cuminc_fit,
+              conf.int = self$options$ci95,
+              title = .("Cumulative Incidence Function (CIF)"),
+              xlab = paste0('Time (', self$options$timetypeoutput, ')'),
+              xlim = c(0, self$options$endplot),
+              ylim = c(self$options$ybegin_plot, self$options$yend_plot),
+              risk.table = FALSE)
+
+          # Name the curves.
+          #
+          # survminer maps cmprsk's raw failure codes onto the colour scale, so
+          # the legend read "event  1  2". Those are the internal codes from
+          # .defineEventIndicator(), and nothing on the panel told the clinician
+          # which of their own outcome levels each curve stood for. Relabelling
+          # the data (rather than the scale) also fixes the confidence-band
+          # fill, which is mapped to the same variable.
+          ev_lab <- if (length(results$event_label) > 0 &&
+                        nzchar(results$event_label[1]))
+            results$event_label[1] else .("Event of interest")
+          cr_lab <- if (length(results$competing_labels) > 0)
+            paste(results$competing_labels, collapse = ", ") else
+            .("Competing event")
+
+          if (!is.null(plot_obj$data) && !is.null(plot_obj$data$event)) {
+            lab <- as.character(plot_obj$data$event)
+            lab[lab == "1"] <- ev_lab
+            lab[lab == "2"] <- cr_lab
+            plot_obj$data$event <- factor(lab, levels = unique(lab))
+          }
+
+          # Only name aesthetics that exist. ggplot2 prints "Ignoring unknown
+          # labels" for the others, and the flat all-censored branch below maps
+          # neither colour nor fill.
+          plot_obj <- plot_obj + ggplot2::labs(color = .("Event type"))
+          if (isTRUE(self$options$ci95))
+            plot_obj <- plot_obj + ggplot2::labs(fill = .("Event type"))
+        }
+
+        plot_obj <- plot_obj +
+          # ggcompetingrisks facets by group; a single-arm cohort is one group
+          # called "1", so the panel carried a strip labelled "1" that meant
+          # nothing to the reader.
+          ggplot2::facet_null() +
+          ggtheme +
+          ggplot2::labs(
+            subtitle = cr_subtitle,
+            # survminer's default y label is "Probability of an event", which
+            # is exactly the reading a competing-risks plot must not invite:
+            # this is the cumulative incidence, not 1 - S(t).
+            y = .("Cumulative incidence")) +
+          ggplot2::scale_x_continuous(
+            breaks = seq(0, self$options$endplot, by = self$options$byplot)) +
+          ggplot2::theme(legend.position = 'bottom')
 
         print(plot_obj)
         TRUE
@@ -3377,7 +3554,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
               color = "#0173B2", size = 2) +
             ggplot2::labs(
               title = .("Piecewise Hazard-Rate Estimates"),
-              subtitle = .("Adaptive intervals; events divided by exact person-time"),
+              subtitle = .("Equal-width intervals; events divided by exact person-time"),
               x = paste0("Time (", self$options$timetypeoutput, ")"),
               y = paste0("Events per person-", self$options$timetypeoutput)) +
             ggplot2::theme_minimal()
@@ -3422,6 +3599,28 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         }
 
         plotData[[mytime]] <- jmvcore::toNumeric(plotData[[mytime]])
+
+        # A continuous smoothed hazard is not identified by an all-censored
+        # cohort, and an event mass at the time origin cannot be represented by
+        # a finite continuous hazard. Draw the reason instead of a misleading
+        # flat-zero curve or a blank panel.
+        hazard_refusal <- function(message) {
+          p <- ggplot2::ggplot() +
+            ggplot2::annotate(
+              "text", x = 0, y = 0, hjust = 0.5, vjust = 0.5,
+              size = 4, lineheight = 1.2,
+              label = paste(strwrap(message, width = 62), collapse = "\n")) +
+            ggplot2::theme_void()
+          print(p)
+          TRUE
+        }
+        event_mask <- plotData[[myoutcome]] == 1
+        if (!any(event_mask, na.rm = TRUE))
+          return(hazard_refusal(
+            .("A smoothed hazard was not estimated because no events were observed. A flat zero line would be a boundary point estimate, not evidence that the population hazard is exactly zero.")))
+        if (any(event_mask & plotData[[mytime]] == 0, na.rm = TRUE))
+          return(hazard_refusal(
+            .("A smoothed continuous hazard was not estimated because one or more events occurred at time zero. Such events create a probability mass at the origin rather than a finite continuous hazard; use the survival or cumulative-incidence output to report them.")))
 
         result <- private$.safeExecute({
           # Create survival object
@@ -3523,23 +3722,14 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         # Populate data quality table
         quality_table <- self$results$dataQualityTable
         
-        # Every grade below names a STATISTICAL PRECISION property of the data
-        # set. Rows that report a property of the disease or of the cohort
-        # instead are reported ungraded: a grade on those is an opinion dressed
-        # as a diagnostic, and the reader cannot act on it.
+        # Report measurements without categorical grades. Cutoffs such as 30
+        # events or 95% completeness are not validated universal thresholds for
+        # a survival analysis; adequacy depends on the estimand, target time,
+        # risk set, censoring, missingness mechanism, and intended decision.
         not_graded <- .("not graded")
         quality_table$setNote(
           "grading",
-          .("Grades describe how much precision the data can support, not how good the study is. The event rate and the follow-up range are reported without a grade: the proportion of a cohort that has had the event is a property of the disease and of when the data were censused, and the range is a pair of extremes rather than a summary."))
-
-        # Events, not subjects, drive the precision of every Kaplan-Meier
-        # estimate (the Greenwood standard error scales with 1/sqrt(events)),
-        # so they get their own scale rather than borrowing the sample-size one:
-        # 30 events is a usable series and 30 subjects is not.
-        assess_events <- function(n) {
-          if (n >= 100) "more information" else if (n >= 30) "moderate information"
-          else "limited precision"
-        }
+          .("Automated adequacy grades are not assigned. Interpret event counts, completeness, follow-up, confidence intervals, and time-specific risk sets in the context of the endpoint and intended use."))
 
         # Add rows to table
         quality_table$addRow(rowKey = 1, values = list(
@@ -3551,7 +3741,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         quality_table$addRow(rowKey = 2, values = list(
           metric = .("Number of Events"),
           value = paste(dq$n_events, .("events")),
-          assessment = assess_events(dq$n_events)
+          assessment = not_graded
         ))
 
         # Event rate: reported, not graded. "20% or more = Good" said that a
@@ -3620,23 +3810,18 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             if (!is.null(self$options$outcome) && self$options$outcome %in% names(raw))
               self$options$outcome else character(0))
 
-          completeness_assessment <- function(pct) {
-            if (is.na(pct)) "Unknown"
-            else if (pct >= 95) "Excellent" else if (pct >= 90) "Good"
-            else if (pct >= 80) "Adequate" else "Poor"
-          }
           fmt <- function(pct) if (is.na(pct)) .("n/a") else paste0(round(pct, 1), "%")
 
           quality_table$addRow(rowKey = 7, values = list(
             metric = .("Time Variable Completeness (before exclusions)"),
             value = fmt(time_complete),
-            assessment = completeness_assessment(time_complete)
+            assessment = not_graded
           ))
 
           quality_table$addRow(rowKey = 8, values = list(
             metric = .("Outcome Variable Completeness (before exclusions)"),
             value = fmt(outcome_complete),
-            assessment = completeness_assessment(outcome_complete)
+            assessment = not_graded
           ))
         }
 
@@ -3654,7 +3839,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
           summary_html <- paste0(
             "<div style='background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0;'>",
-            "<h4 style='color: #2c3e50; margin-top: 0;'> Data Quality Assessment</h4>",
+            "<h4 style='color: #2c3e50; margin-top: 0;'> Descriptive Data Diagnostics</h4>",
             "<p>This analysis includes <strong>", dq$n_total, " subjects</strong> with <strong>", 
             dq$n_events, " events</strong> (", dq$event_rate, "% observed event proportion) over a follow-up period of ",
             dq$min_time, " to ", dq$max_time, " ", self$options$timetypeoutput, ".</p>",

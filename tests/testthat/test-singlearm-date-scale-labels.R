@@ -218,14 +218,16 @@ test_that("no constant-hazard verdict when there are too few events", {
     expect_true(grepl("not separable from the pooled rate", out$html, fixed = TRUE))
 })
 
-test_that("with enough events the verdict is reported as exploratory scatter", {
+test_that("with enough events the interval range remains descriptive", {
     skip_if_not_installed("survival")
 
     out <- run_hazard_summary(n = 200)
     expect_gte(out$n_events, 30)
     expect_false(grepl("not assessable", out$html, fixed = TRUE))
-    expect_true(grepl("CV = ", out$html, fixed = TRUE))
+    expect_true(grepl("equal-width intervals", out$html, fixed = TRUE))
+    expect_true(grepl("descriptive range", out$html, fixed = TRUE))
     expect_true(grepl("not a test of a constant-hazard", out$html, fixed = TRUE))
+    expect_false(grepl("little variation|substantial variation", out$html))
 })
 
 

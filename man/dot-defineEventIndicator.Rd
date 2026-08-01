@@ -35,7 +35,8 @@ Causes, Alive with Disease, Alive without Disease.}
 A list with \code{status} (0/1 or 0/1/2, \code{NA} preserved), \code{status_factor}
 (Censored/Event/Competing, only when competing), the counts \code{n_event},
 \code{n_censored}, \code{n_competing}, \code{n_missing}, the labels \code{event_label} and
-\code{censored_labels}, \code{n_levels}, \code{has_competing}, \code{estimand}, and \code{error}
+\code{censored_labels}, \code{competing_labels}, \code{n_levels}, \code{has_competing},
+\code{estimand}, and \code{error}
 (\code{NULL}, or a ready-to-display message the caller should reject with).
 }
 \description{
@@ -48,10 +49,11 @@ apart in their validation.
 Semantics, stated explicitly because they are easy to get wrong:
 \itemize{
 \item On the single-event-level path every level that is \emph{not} the selected
-event level becomes 0 (censored). With three or more levels this is
-cause-specific censoring: Cox hazard ratios stay valid, but Kaplan-Meier
-survival, median survival and x-year survival are biased upward. The
-caller is expected to surface \code{estimand} and \code{censored_labels} to the user.
+event level becomes 0 (right-censored). Labels alone cannot establish
+whether this is ordinary censoring or a competing terminal event. In the
+latter case Kaplan-Meier outputs describe net/cause-specific survival,
+not absolute event risk. The caller is expected to surface \code{estimand} and
+\code{censored_labels} to the user.
 \item \code{NA} is never converted to a value. It stays \code{NA} and the row is
 dropped downstream by \code{jmvcore::naOmit()} (complete-case analysis).
 Coding it 0 would fabricate censoring.
