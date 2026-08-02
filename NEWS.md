@@ -1,3 +1,18 @@
+# jsurvival 1.0.2 (2026-08-02)
+
+## Added
+
+- **Automated GitHub release (`.github/workflows/release.yaml`).** A push to the default branch
+  touching `DESCRIPTION` or `jamovi/0000.yaml` cross-checks the two version strings, refuses to
+  proceed if they disagree, and — if the tag does not already exist — tags `v<version>` and
+  publishes a release whose notes are the matching section of this file.
+
+## Note
+
+- The R-callable argument pass carried out across the umbrella package this release did not
+  change any analysis shipped here — every `jsurvival` option that needed a default already had
+  one.
+
 # jsurvival 1.0.0 (2026-07-13)
 
 ## First stable release
