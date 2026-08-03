@@ -81,7 +81,9 @@ analyses:
     menuGroup: Survival
     menuSubgroup: General Statistics
     menuTitle: Odds Ratio Table and Plot
-    description: Function for Odds Ratio Table and Plot.
+    description: >-
+      Logistic regression odds-ratio table, forest plot, prediction nomogram,
+      and optional binary diagnostic metrics.
     menuSubtitle: Odds Ratio for Binary Outcomes
     ribbon: analyses
     category: analyses
