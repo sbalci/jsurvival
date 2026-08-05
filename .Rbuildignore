@@ -22,3 +22,8 @@ README_badges.md
 .claude
 ^data/.*\.omv$
 ^inst/extdata/.*\.omv$
+^temp$
+^temp/
+^temp.*$
+^backups$
+^backups/

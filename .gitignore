@@ -36,3 +36,8 @@ build
 *.log
 *.jmo
 # docs
+
+# local scratch copies - never commit (see main repo .gitignore)
+temp/
+temp*/
+backups/
