@@ -1,3 +1,24 @@
+# jsurvival 1.0.4 (2026-08-07)
+
+No analysis changes. This release exists to keep the module version in step with the ClinicoPath
+suite, which moved to 1.0.4 across all of its modules.
+
+Every survival analysis this module ships — `datetimeconverter`, `multisurvival`, `oddsratio`,
+`outcomeorganizer`, `singlearm`, `survival`, `survivalcont` and `timeinterval` — is unchanged since
+1.0.2. The diff against that release touches only version strings, the `date:` field, and two
+ignore files (`.gitignore`, `.Rbuildignore`, for local scratch directories); filtering those out of
+`R/` and `jamovi/` leaves no lines of behavioural change. The release-review work done elsewhere in
+the suite during this window landed in `meddecide` and `OncoPath` and is documented in those
+modules' NEWS files.
+
+`DESCRIPTION` (Version 1.0.4, Date 2026-08-06) and `jamovi/0000.yaml` (version 1.0.4) agree, which
+is a prerequisite for the release workflow added in 1.0.2 — it refuses to tag when the two disagree.
+
+# jsurvival 1.0.3 (2026-08-04)
+
+An intermediate suite-wide version bump with no jsurvival content. No analysis, option, output or
+test in this module changed; the commit propagated the 1.0.3 version string and the package date.
+
 # jsurvival 1.0.2 (2026-08-03)
 
 All eight analyses were reviewed for this release. Six had a final pre-release pass checking every
