@@ -24,6 +24,13 @@ knitr::opts_chunk$set(
 )
 ```
 
+> **Not yet released.** The `jiwillsurvive` analysis is not part of jsurvival 1.0.4. It is on a
+> development or test menu route in the umbrella ClinicoPath module and does not appear
+> in any jamovi menu yet. It is documented here ahead of a future release, so its
+> options, defaults and output may still change. For the analyses jsurvival ships today
+> see the [jsurvival articles index](https://www.serdarbalci.com/jsurvival/articles/).
+
+
 ## Introduction
 
 The `jiwillsurvive()` function in ClinicoPath provides an intuitive and comprehensive approach to survival analysis. This function combines ease of use with powerful features, making survival analysis accessible to clinicians while providing advanced options for researchers.

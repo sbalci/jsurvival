@@ -5,6 +5,24 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
+> **Not yet released.** Time-dependent covariates are **not available in jsurvival 1.0.4**.
+> The options this article describes — `use_time_dependent`, `td_format`, `time_dep_vars`,
+> `change_times`, `start_time_var`, `stop_time_var` and `td_suffix_pattern` — are present in
+> `jamovi/multisurvival.a.yaml` but commented out, under a heading that reads
+> *"Time-Dependent Covariates (EXPERIMENTAL - will be implemented later)"*. They are therefore
+> absent from the compiled analysis and from the `multisurvival()` R function, and passing any of
+> them raises `unused argument`. The same applies to the frailty and spline options this article
+> also uses (`use_frailty`, `frailty_var`, `frailty_distribution`, `use_splines`, `spline_vars`,
+> `spline_df`, `spline_type`) and to the model-selection options (`use_modelSelection`,
+> `modelSelection`, `selectionCriteria`) — 17 of the options shown below in total.
+>
+> This article is kept as the design specification for that future release. The statistical
+> background in it is sound and worth reading; the code is not yet runnable. Every code chunk is
+> set to `eval = FALSE`, so nothing here is executed when the article is built. For what
+> `multisurvival` can do today — including stratification, adjusted survival curves, risk scores,
+> nomograms and person-time analysis — see `?multisurvival` and the other multisurvival articles.
+
+
 # Introduction {#introduction}
 
 Time-dependent covariates are variables that change their values over the course of follow-up time. In clinical research, many important variables can change during the study period, such as:

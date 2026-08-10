@@ -1,7 +1,7 @@
 # jsurvival 1.0.4 (2026-08-07)
 
-No analysis changes. This release exists to keep the module version in step with the ClinicoPath
-suite, which moved to 1.0.4 across all of its modules.
+No analysis changes; the documentation was overhauled. This release keeps the module version in
+step with the ClinicoPath suite, which moved to 1.0.4 across all of its modules.
 
 Every survival analysis this module ships — `datetimeconverter`, `multisurvival`, `oddsratio`,
 `outcomeorganizer`, `singlearm`, `survival`, `survivalcont` and `timeinterval` — is unchanged since
@@ -13,6 +13,60 @@ modules' NEWS files.
 
 `DESCRIPTION` (Version 1.0.4, Date 2026-08-06) and `jamovi/0000.yaml` (version 1.0.4) agree, which
 is a prerequisite for the release workflow added in 1.0.2 — it refuses to tag when the two disagree.
+
+## Documentation
+
+All 53 files under `vignettes/` were audited against `jamovi/0000.yaml` and the generated wrapper
+signatures. These articles are published to <https://www.serdarbalci.com/jsurvival/articles/>;
+`vignettes/` is excluded by `.Rbuildignore` and there is no `VignetteBuilder`, so none of this
+affects `R CMD check`.
+
+- **Option coverage went from 78% to 95%.** Of the 304 options across the eight shipped analyses,
+  67 were not mentioned anywhere in the documentation; 16 remain. Every example added below was
+  executed against the bundled `histopathology` data before being written down.
+- **`survival()` had 28 undocumented options, several of them substantial features added between
+  February and July 2026.** `08-advanced-topics.Rmd` now covers them: weighted log-rank tests
+  (`weightedLogRank`, `survivalTestType`, with the Fleming-Harrington family reported alongside the
+  standard test); the seven age-correction options (`age_adjustment`, `age_variable`,
+  `age_interaction`, `age_stratified_cox`, `age_group_cutpoints`, `age_time_scale`,
+  `age_standardization` with `age_standardization_method`, `age_stratified_km`); parametric
+  survival models across eight distributions including flexible splines; calibration curves;
+  restricted cubic splines for non-linearity; bootstrap internal validation; adjusted survival
+  curves; and the REMARK reporting checklist.
+- **`datetimeconverter` was shipped with no documentation at all** - 30 of its 32 options went
+  unmentioned. `11-data-preparation.Rmd` now covers it as the step before interval calculation:
+  the nine input formats, why naming the format beats `auto` when a dataset mixes `dmy` and `mdy`,
+  the eleven component extractors, and the quality report that names rows which failed to parse
+  rather than letting them become silent `NA`s. The worked example reports 5 of 6 rows parsed
+  (83.33%) with the failure listed by row number.
+- **`multisurvival`'s model-performance options are documented**: optimism-corrected C-index by
+  bootstrap (`ci_optimism`, `ci_optimism_boot`), covariate contribution by single-term deletion
+  (`compare_models`), Brier score and time-dependent AUC (`show_survmetrics`,
+  `survmetrics_timepoints`), and adjusted probability summaries (`ac_summary`).
+- **A whole article documented a feature that does not exist.**
+  `01-multisurvival-time-dependent-comprehensive.Rmd` describes time-dependent covariates in
+  `multisurvival`, using 17 options that are commented out in `jamovi/multisurvival.a.yaml` under
+  headings reading *"EXPERIMENTAL - will be implemented later"* - the time-dependent, frailty and
+  spline groups. Sixty options are commented out there in total. The article is kept as the design
+  specification for that future release and now opens by saying the code is not yet runnable; its
+  chunks were already `eval = FALSE`. `multisurvival_documentation.md` tabulates 19 such options
+  and now names them.
+- **`survivalcont` was shown with a `padjustmethod` argument.** No such option exists, or ever has.
+  The passage now says so and documents the options that do control multiple cut-points
+  (`multiple_cutoffs`, `num_cutoffs`, `cutoff_method`). The same article claimed restricted cubic
+  splines "would require additional implementation beyond basic jSurvival"; `survival()` has had
+  `rcs_analysis` for some time, and the passage now shows it.
+- **Twenty-three articles document analyses jsurvival does not ship, and now say so.**
+  `alluvialSurvival`, `comparingSurvival`, `competingsurvival`, `coxdiagnostics`, `datecorrection`,
+  `groupedforest`, `jvisr`, `oneSurvival`, `powersurvival`, `simonmakuch`, `stagemigration`,
+  `subgroupforest`, `survivalPower`, `timeroc`, `lassocox` and `jiwillsurvive` are all on
+  development or test menu routes in the umbrella ClinicoPath module and reach no user today.
+  Separately, `03-treatment-response.Rmd` uses `crosstable` and `summarydata` (which ship in
+  **ClinicoPathDescriptives**) and `waterfall` (**OncoPath**), and now names the module to install
+  for those steps. Nothing was deleted.
+- All 48 calls to jsurvival's own analyses across the 53 files were checked against the generated
+  wrapper signatures; the eight failures were the `padjustmethod` call and the seven
+  time-dependent-covariate calls described above.
 
 # jsurvival 1.0.3 (2026-08-04)
 

@@ -1,5 +1,12 @@
 # Advanced TNM Stage Migration Analysis Documentation
 
+> **Not yet released.** The `stagemigration` analysis is not part of jsurvival 1.0.4. It is on a
+> development or test menu route in the umbrella ClinicoPath module and does not appear
+> in any jamovi menu yet. It is documented here ahead of a future release, so its
+> options, defaults and output may still change. For the analyses jsurvival ships today
+> see the [jsurvival articles index](https://www.serdarbalci.com/jsurvival/articles/).
+
+
 ## Overview
 
 The `stagemigration` function provides state-of-the-art statistical analysis for validating TNM staging system improvements. This comprehensive analysis suite evaluates whether a new staging system provides superior prognostic discrimination compared to existing systems, incorporating advanced multivariable methods and clinical decision support.

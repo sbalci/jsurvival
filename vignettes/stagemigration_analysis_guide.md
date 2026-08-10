@@ -1,5 +1,12 @@
 # Stage Migration Analysis Configuration Guide
 
+> **Not yet released.** The `stagemigration` analysis is not part of jsurvival 1.0.4. It is on a
+> development or test menu route in the umbrella ClinicoPath module and does not appear
+> in any jamovi menu yet. It is documented here ahead of a future release, so its
+> options, defaults and output may still change. For the analyses jsurvival ships today
+> see the [jsurvival articles index](https://www.serdarbalci.com/jsurvival/articles/).
+
+
 ## Overview
 
 The `stagemigration` function provides flexible analysis configurations to match different research scenarios, study designs, and clinical contexts. This guide explains when and how to use each configuration option for optimal results.

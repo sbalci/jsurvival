@@ -37,6 +37,62 @@ Every survival analysis requires at minimum:
 
 # Time Variable Preparation
 
+## Cleaning Date Columns First: the DateTime Converter
+
+Before any interval can be calculated the dates have to parse, and in real clinical exports they
+often do not: Excel serial numbers, `dd/mm/yyyy` mixed with `mm/dd/yyyy`, free-text entries, and
+stray blanks. `datetimeconverter` (**Survival → Data Preparation → DateTime Converter**) exists for
+this step and reports what it could and could not parse rather than silently dropping rows.
+
+```{r datetime-converter}
+visits <- data.frame(
+  id = 1:6,
+  visit = c("2024-01-15 09:30:00", "2024-03-02 14:05:10", "2024-06-30 23:59:59",
+            "2024-11-05 08:00:00", "2025-02-28 12:15:00", "not a date")
+)
+
+converted <- datetimeconverter(
+  data            = visits,
+  datetime_var    = "visit",
+  datetime_format = "ymdhms",   # or "auto" to let it detect
+  extract_year    = TRUE,
+  extract_month   = TRUE,
+  extract_quarter = TRUE,
+  extract_dayname = TRUE,
+  show_quality_metrics = TRUE
+)
+```
+
+The Quality Assessment panel on that example reports **6 observations, 5 successfully parsed
+(83.33%), 1 failed**, with the range 2024-01-15 to 2025-02-28 (410.1 days). The failing row is
+listed by row number in the preview table rather than quietly becoming `NA` — which matters,
+because a date that fails to parse becomes a dropped case in every downstream survival model.
+
+### Formats
+
+`datetime_format` accepts `auto`, `excel_serial`, `unix_epoch`, `ymdhms`, `ymd`, `dmy`, `mdy`,
+`dmyhms` and `mdyhms`. Prefer naming the format explicitly over `auto` when your data mixes
+conventions: `03/04/2024` is a different date under `dmy` than under `mdy`, and nothing in the
+value itself says which was intended. `timezone` defaults to the system zone — the analysis states
+which zone it used, so check that line if your times matter to the hour.
+
+### Extracting Components
+
+Each `extract_*` switch adds a calendar component: `extract_year`, `extract_month`,
+`extract_monthname`, `extract_day`, `extract_hour`, `extract_minute`, `extract_second`,
+`extract_dayname`, `extract_weeknum`, `extract_quarter` and `extract_dayofyear`. These are useful
+for checking accrual patterns and for spotting data-entry artefacts, such as every visit falling on
+the first of the month.
+
+### Writing Results Back to the Spreadsheet
+
+The thirteen `*_out` options — `corrected_datetime_char`, `corrected_datetime_numeric`,
+`year_out`, `month_out`, `monthname_out`, `day_out`, `hour_out`, `minute_out`, `second_out`,
+`dayname_out`, `weeknum_out`, `quarter_out` and `dayofyear_out` — are `type: Output` options. They
+add columns to the jamovi spreadsheet, and jamovi's compiler does not turn Output options into
+arguments of the generated R function, so they are available **from the jamovi interface only**.
+From R, read the values off the results object instead.
+
 ## Calculating Time from Dates
 
 ### Using Built-in Time Interval Calculator

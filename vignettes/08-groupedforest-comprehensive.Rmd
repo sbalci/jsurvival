@@ -5,6 +5,13 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
+> **Not yet released.** The `groupedforest` analysis is not part of jsurvival 1.0.4. It is on a
+> development or test menu route in the umbrella ClinicoPath module and does not appear
+> in any jamovi menu yet. It is documented here ahead of a future release, so its
+> options, defaults and output may still change. For the analyses jsurvival ships today
+> see the [jsurvival articles index](https://www.serdarbalci.com/jsurvival/articles/).
+
+
 # Introduction to Grouped Forest Plots
 
 The Grouped Hazard Forest Plot module provides a powerful visualization method for comparing treatment effects across different patient subgroups. This analysis addresses a critical need in precision medicine and clinical research by performing separate Cox proportional hazards regression analyses for each subgroup and presenting the results in a unified forest plot.

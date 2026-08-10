@@ -22,20 +22,24 @@ importFrom(cmprsk,cuminc)
 importFrom(digest,digest)
 importFrom(dplyr,mutate)
 importFrom(finalfit,finalfit)
-importFrom(flexsurv,flexsurvreg)
-importFrom(flexsurv,flexsurvspline)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,annotate)
-importFrom(ggplot2,element_blank)
-importFrom(ggplot2,geom_line)
-importFrom(ggplot2,geom_point)
-importFrom(ggplot2,geom_text)
-importFrom(ggplot2,ggplot)
-importFrom(ggplot2,labs)
-importFrom(ggplot2,scale_x_continuous)
-importFrom(ggplot2,scale_y_continuous)
-importFrom(ggplot2,theme)
-importFrom(ggplot2,theme_void)
+importFrom(flexsurv,
+  flexsurvreg,
+  flexsurvspline
+)
+importFrom(ggplot2,
+  aes,
+  annotate,
+  element_blank,
+  geom_line,
+  geom_point,
+  geom_text,
+  ggplot,
+  labs,
+  scale_x_continuous,
+  scale_y_continuous,
+  theme,
+  theme_void
+)
 importFrom(glmnet,cv.glmnet)
 importFrom(glue,glue)
 importFrom(gridExtra,grid.arrange)
@@ -55,29 +59,35 @@ importFrom(rms,datadist)
 importFrom(rpart,rpart)
 importFrom(rpart.plot,rpart.plot)
 importFrom(scales,percent)
-importFrom(stats,as.formula)
-importFrom(stats,binomial)
-importFrom(stats,complete.cases)
-importFrom(stats,cov)
-importFrom(stats,glm)
-importFrom(stats,pchisq)
-importFrom(stats,pnorm)
-importFrom(stats,predict)
-importFrom(stats,qbeta)
-importFrom(stats,qnorm)
-importFrom(stats,quantile)
-importFrom(stats,rexp)
-importFrom(stats,rlnorm)
-importFrom(stats,runif)
-importFrom(stats,var)
+importFrom(stats,
+  as.formula,
+  binomial,
+  complete.cases,
+  cov,
+  glm,
+  pchisq,
+  pnorm,
+  predict,
+  qbeta,
+  qnorm,
+  quantile,
+  rexp,
+  rlnorm,
+  runif,
+  var
+)
 importFrom(survival,Surv)
 importFrom(survivalsvm,survivalsvm)
-importFrom(survminer,ggcompetingrisks)
-importFrom(survminer,ggsurvplot)
+importFrom(survminer,
+  ggcompetingrisks,
+  ggsurvplot
+)
 importFrom(tibble,rownames_to_column)
 importFrom(tidyr,pivot_longer)
-importFrom(utils,install.packages)
-importFrom(utils,sessionInfo)
-importFrom(utils,tail)
+importFrom(utils,
+  install.packages,
+  sessionInfo,
+  tail
+)
 importFrom(withr,local_seed)
 importFrom(xgboost,xgb.train)

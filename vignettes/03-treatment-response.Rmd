@@ -18,6 +18,11 @@ knitr::opts_chunk$set(
 )
 ```
 
+> **Ships in a different module.** This article also uses `crosstable` (**ClinicoPathDescriptives**), `summarydata` (**ClinicoPathDescriptives**), `waterfall` (**OncoPath**), which
+> jsurvival does not provide. Install the module named beside each analysis, or the
+> umbrella ClinicoPath module, to follow those steps.
+
+
 ## Introduction
 
 This vignette demonstrates treatment response analysis for oncology studies using ClinicoPath functions. Treatment response evaluation is crucial for assessing therapy effectiveness and making clinical decisions.

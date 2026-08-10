@@ -1,5 +1,13 @@
 # Multivariable Survival Analysis Documentation
 
+> **Not yet released.** 19 of the options tabulated below are commented out in
+> `jamovi/multisurvival.a.yaml`, under headings that read *"EXPERIMENTAL - will be
+> implemented later"*, and are therefore absent from the compiled analysis and from the
+> `multisurvival()` R function in jsurvival 1.0.4. They are the time-dependent covariate,
+> frailty and spline groups: `change_times`, `frailty_distribution`, `frailty_var`, `modelSelection`, `pEntry`, `pRemoval`, `selectionCriteria`, `spline_df`, `spline_type`, `spline_vars`, `start_time_var`, `stop_time_var`, `td_format`, `td_suffix_pattern`, `time_dep_vars`, `use_frailty`, `use_modelSelection`, `use_splines`, `use_time_dependent`.
+> They are documented here as the specification for a future release.
+
+
 This document provides a comprehensive overview of the Multivariable Survival Analysis module, detailing its features, user interface elements, and the underlying R functions.
 
 ## Feature Summary
