@@ -27,3 +27,4 @@ README_badges.md
 ^temp.*$
 ^backups$
 ^backups/
+^data/.*\.csv$
