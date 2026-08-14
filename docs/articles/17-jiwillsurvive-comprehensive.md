@@ -1,5 +1,13 @@
 # Intuitive Survival Analysis with jiwillsurvive
 
+> **Not yet released.** The `jiwillsurvive` analysis is not part of
+> jsurvival 1.0.4. It is on a development or test menu route in the
+> umbrella ClinicoPath module and does not appear in any jamovi menu
+> yet. It is documented here ahead of a future release, so its options,
+> defaults and output may still change. For the analyses jsurvival ships
+> today see the [jsurvival articles
+> index](https://www.serdarbalci.com/jsurvival/articles/).
+
 ## Introduction
 
 The `jiwillsurvive()` function in ClinicoPath provides an intuitive and
@@ -579,7 +587,7 @@ for(var in grouping_vars) {
 ### Data Preparation Recommendations
 
 1.  **Data Quality**: Ensure no negative survival times
-2.  **Missing Values**: Handle missing data appropriately  
+2.  **Missing Values**: Handle missing data appropriately\
 3.  **Date Formats**: Use consistent date formats
 4.  **Event Coding**: Use clear event coding (0/1, FALSE/TRUE, or
     descriptive factors)

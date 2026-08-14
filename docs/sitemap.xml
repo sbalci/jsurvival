@@ -42,7 +42,10 @@
 <url><loc>https://www.serdarbalci.com/jsurvival/authors.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/index.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/news/index.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/reference/%!in%.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/reference/%notin%.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/bootstrapIDI.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/reference/bootstrapNRI.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/breast.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/breast_cancer_data.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/calculate_auc.html</loc></url>
@@ -56,6 +59,7 @@
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/colorectal.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/colorectal_cancer_data.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/combined_data.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/reference/computeNRI.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/data_longitudinal.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/datetimeconverter.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/datetimeconverterClass.html</loc></url>
@@ -74,7 +78,11 @@
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/dot-calculateSpecificity.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/dot-calculateYouden.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/dot-calculate_weibull_events.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/reference/dot-competingRiskUnavailable.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/reference/dot-defineEventIndicator.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/reference/dot-describeEventIndicator.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/dot-escapeVariableNames.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/reference/dot-fmtTimeLabel.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/dot-formatDiagnosticTable.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/dot-get_lognormal_parameters.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/dot-get_piecewise_exponential_parameters.html</loc></url>
@@ -120,6 +128,9 @@
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/small_sample_data.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/stagemigration.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/stagemigrationClass.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/reference/stagemigration_large_performance.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/reference/stagemigration_problematic.html</loc></url>
+<url><loc>https://www.serdarbalci.com/jsurvival/reference/stagemigration_small_sample.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/summary_stats.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/survival.html</loc></url>
 <url><loc>https://www.serdarbalci.com/jsurvival/reference/survivalClass.html</loc></url>

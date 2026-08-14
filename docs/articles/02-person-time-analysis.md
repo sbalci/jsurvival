@@ -19,7 +19,7 @@ denominators for rate calculations.
 #### Key Concepts
 
 - **Total Person-Time**: Sum of all individual follow-up periods
-- **Incidence Rate**: Number of events ÷ Total person-time  
+- **Incidence Rate**: Number of events ÷ Total person-time\
 - **Time Units**: Typically expressed as person-days, person-months, or
   person-years
 - **Censoring**: Properly accounts for participants leaving the study
@@ -196,7 +196,7 @@ analysis
 
 **Scenario**: Disease incidence in exposed vs. unexposed populations
 
-**Analysis Setup**: - Module: Survival Analysis  
+**Analysis Setup**: - Module: Survival Analysis\
 - Variables: exposure_status, followup_years, disease_onset - Enable:
 Person-time metrics
 
@@ -343,8 +343,7 @@ survival analysis. The jSurvival module provides comprehensive
 person-time functionality that:
 
 1.  **Educates users** about person-time concepts
-2.  **Calculates accurate rates** with appropriate confidence
-    intervals  
+2.  **Calculates accurate rates** with appropriate confidence intervals\
 3.  **Enables group comparisons** with rate ratios and differences
 4.  **Supports time-stratified analysis** for detecting temporal
     patterns

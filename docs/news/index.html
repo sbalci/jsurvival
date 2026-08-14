@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">jsurvival</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.52</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,6 +70,118 @@
       <small>Source: <a href="https://github.com/sbalci/ClinicoPathJamoviModule/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.4" id="jsurvival-104-2026-08-07">jsurvival 1.0.4 (2026-08-07)<a class="anchor" aria-label="anchor" href="#jsurvival-104-2026-08-07"></a></h2>
+<p>No analysis changes; the documentation was overhauled. This release keeps the module version in step with the ClinicoPath suite, which moved to 1.0.4 across all of its modules.</p>
+<p>Every survival analysis this module ships — <code>datetimeconverter</code>, <code>multisurvival</code>, <code>oddsratio</code>, <code>outcomeorganizer</code>, <code>singlearm</code>, <code>survival</code>, <code>survivalcont</code> and <code>timeinterval</code> — is unchanged since 1.0.2. The diff against that release touches only version strings, the <code>date:</code> field, and two ignore files (<code>.gitignore</code>, <code>.Rbuildignore</code>, for local scratch directories); filtering those out of <code>R/</code> and <code>jamovi/</code> leaves no lines of behavioural change. The release-review work done elsewhere in the suite during this window landed in <code>meddecide</code> and <code>OncoPath</code> and is documented in those modules’ NEWS files.</p>
+<p><code>DESCRIPTION</code> (Version 1.0.4, Date 2026-08-06) and <code>jamovi/0000.yaml</code> (version 1.0.4) agree, which is a prerequisite for the release workflow added in 1.0.2 — it refuses to tag when the two disagree.</p>
+<div class="section level3">
+<h3 id="documentation-1-0-4">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-0-4"></a></h3>
+<p>All 53 files under <code>vignettes/</code> were audited against <code>jamovi/0000.yaml</code> and the generated wrapper signatures. These articles are published to <a href="https://www.serdarbalci.com/jsurvival/articles/" class="uri">https://www.serdarbalci.com/jsurvival/articles/</a>; <code>vignettes/</code> is excluded by <code>.Rbuildignore</code> and there is no <code>VignetteBuilder</code>, so none of this affects <code>R CMD check</code>.</p>
+<ul><li>
+<strong>Option coverage went from 78% to 95%.</strong> Of the 304 options across the eight shipped analyses, 67 were not mentioned anywhere in the documentation; 16 remain. Every example added below was executed against the bundled <code>histopathology</code> data before being written down.</li>
+<li>
+<strong><code><a href="../reference/survival.html">survival()</a></code> had 28 undocumented options, several of them substantial features added between February and July 2026.</strong> <code>08-advanced-topics.Rmd</code> now covers them: weighted log-rank tests (<code>weightedLogRank</code>, <code>survivalTestType</code>, with the Fleming-Harrington family reported alongside the standard test); the seven age-correction options (<code>age_adjustment</code>, <code>age_variable</code>, <code>age_interaction</code>, <code>age_stratified_cox</code>, <code>age_group_cutpoints</code>, <code>age_time_scale</code>, <code>age_standardization</code> with <code>age_standardization_method</code>, <code>age_stratified_km</code>); parametric survival models across eight distributions including flexible splines; calibration curves; restricted cubic splines for non-linearity; bootstrap internal validation; adjusted survival curves; and the REMARK reporting checklist.</li>
+<li>
+<strong><code>datetimeconverter</code> was shipped with no documentation at all</strong> - 30 of its 32 options went unmentioned. <code>11-data-preparation.Rmd</code> now covers it as the step before interval calculation: the nine input formats, why naming the format beats <code>auto</code> when a dataset mixes <code>dmy</code> and <code>mdy</code>, the eleven component extractors, and the quality report that names rows which failed to parse rather than letting them become silent <code>NA</code>s. The worked example reports 5 of 6 rows parsed (83.33%) with the failure listed by row number.</li>
+<li>
+<strong><code>multisurvival</code>’s model-performance options are documented</strong>: optimism-corrected C-index by bootstrap (<code>ci_optimism</code>, <code>ci_optimism_boot</code>), covariate contribution by single-term deletion (<code>compare_models</code>), Brier score and time-dependent AUC (<code>show_survmetrics</code>, <code>survmetrics_timepoints</code>), and adjusted probability summaries (<code>ac_summary</code>).</li>
+<li>
+<strong>A whole article documented a feature that does not exist.</strong> <code>01-multisurvival-time-dependent-comprehensive.Rmd</code> describes time-dependent covariates in <code>multisurvival</code>, using 17 options that are commented out in <code>jamovi/multisurvival.a.yaml</code> under headings reading <em>“EXPERIMENTAL - will be implemented later”</em> - the time-dependent, frailty and spline groups. Sixty options are commented out there in total. The article is kept as the design specification for that future release and now opens by saying the code is not yet runnable; its chunks were already <code>eval = FALSE</code>. <code>multisurvival_documentation.md</code> tabulates 19 such options and now names them.</li>
+<li>
+<strong><code>survivalcont</code> was shown with a <code>padjustmethod</code> argument.</strong> No such option exists, or ever has. The passage now says so and documents the options that do control multiple cut-points (<code>multiple_cutoffs</code>, <code>num_cutoffs</code>, <code>cutoff_method</code>). The same article claimed restricted cubic splines “would require additional implementation beyond basic jSurvival”; <code><a href="../reference/survival.html">survival()</a></code> has had <code>rcs_analysis</code> for some time, and the passage now shows it.</li>
+<li>
+<strong>Twenty-three articles document analyses jsurvival does not ship, and now say so.</strong> <code>alluvialSurvival</code>, <code>comparingSurvival</code>, <code>competingsurvival</code>, <code>coxdiagnostics</code>, <code>datecorrection</code>, <code>groupedforest</code>, <code>jvisr</code>, <code>oneSurvival</code>, <code>powersurvival</code>, <code>simonmakuch</code>, <code>stagemigration</code>, <code>subgroupforest</code>, <code>survivalPower</code>, <code>timeroc</code>, <code>lassocox</code> and <code>jiwillsurvive</code> are all on development or test menu routes in the umbrella ClinicoPath module and reach no user today. Separately, <code>03-treatment-response.Rmd</code> uses <code>crosstable</code> and <code>summarydata</code> (which ship in <strong>ClinicoPathDescriptives</strong>) and <code>waterfall</code> (<strong>OncoPath</strong>), and now names the module to install for those steps. Nothing was deleted.</li>
+<li>All 48 calls to jsurvival’s own analyses across the 53 files were checked against the generated wrapper signatures; the eight failures were the <code>padjustmethod</code> call and the seven time-dependent-covariate calls described above.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.3" id="jsurvival-103-2026-08-04">jsurvival 1.0.3 (2026-08-04)<a class="anchor" aria-label="anchor" href="#jsurvival-103-2026-08-04"></a></h2>
+<p>An intermediate suite-wide version bump with no jsurvival content. No analysis, option, output or test in this module changed; the commit propagated the 1.0.3 version string and the package date.</p>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.2" id="jsurvival-102-2026-08-03">jsurvival 1.0.2 (2026-08-03)<a class="anchor" aria-label="anchor" href="#jsurvival-102-2026-08-03"></a></h2>
+<p>All eight analyses were reviewed for this release. Six had a final pre-release pass checking every reported quantity against an independent reference (<code>survival</code>, <code>survRM2</code>, <code>riskRegression</code>, <code>epiR</code>, <code>logistf</code>, <code>lubridate</code>); <code>singlearm</code> and <code>survivalcont</code> were audited earlier in the cycle, and the adjusted-estimation work below spans <code>multisurvival</code> and <code>singlearm</code> together.</p>
+<p>The estimators were already correct — Cox hazard ratios, Kaplan-Meier medians, RMST, C-index, Brier scores and adjusted survival curves all reproduce their references exactly. What needed fixing was the boundary between <em>estimated</em> and <em>not estimable</em>, cases where two parts of one report answered the same question differently, and several statements the output made about itself.</p>
+<div class="section level3">
+<h3 id="fixed-1-0-2">Fixed<a class="anchor" aria-label="anchor" href="#fixed-1-0-2"></a></h3>
+<div class="section level4">
+<h4 id="one-estimator-behind-every-panel-1-0-2">One estimator behind every panel<a class="anchor" aria-label="anchor" href="#one-estimator-behind-every-panel-1-0-2"></a></h4>
+<ul><li>
+<strong>Changing the adjustment method moved the plot but not the tables.</strong> <code>ac_method</code> was read in exactly one place — the call to <code><a href="https://rdrr.io/pkg/survminer/man/ggadjustedcurves.html" class="external-link">survminer::ggadjustedcurves()</a></code> inside the plot. The adjusted survival table, the adjusted median table and the accompanying narrative each built their own prediction instead, from a single mean/mode covariate profile. So <code>average</code> and <code>conditional</code> produced <strong>byte-identical tables</strong> while the plot changed, and nothing said so; <code>survminer</code> documents those as distinct estimands, not display variants. Plot and table could therefore disagree inside one report. All consumers now read a single shared estimator, <code>.adjustedCurveData()</code>. (<code>multisurvival</code>, <code>singlearm</code>)</li>
+<li>
+<strong>“Observed at risk” and “observed events” in the adjusted tables were whole-cohort numbers wearing a group label.</strong> They came from the model’s common risk set, so they were identical for every level of the adjustment variable while the narrative described them as group-specific. The columns are now titled for what they are, and the estimand is stated above the table.</li>
+<li>
+<strong>“Adjusted Cox Model Results” was a different model from the main table.</strong> In one real run the main multivariable table showed <code>performance_status</code> as a factor with two rows and 13 likelihood-ratio degrees of freedom, while the adjusted table showed it as one continuous row with 12 df — two models fitted, both displayed, nothing saying so. One code path honoured the column’s factor type and the other coerced it to a score. Both now derive from the same fitted object. (<code>multisurvival</code>)</li>
+<li>
+<strong>Competing-risk detection ignored a recoded outcome column.</strong> The guard read <code>multievent &amp;&amp; analysistype == "compete"</code>, which is blind to the <code>outcomeorganizer</code> hand-off — a recoded <code>Censored</code>/<code>Event</code>/<code>Competing</code> column arrives already coded 0/1/2 with <code>multievent</code> left off, which is the entire point of that column. The 0/1/2 vector then flowed into code that assumes a 0/1 indicator. Detection is now driven by the status vector itself. (<code>survivalcont</code>, and the same fix across the family)</li>
+</ul></div>
+<div class="section level4">
+<h4 id="singlearm-and-survivalcont-1-0-2">
+<code>singlearm</code> and <code>survivalcont</code>
+<a class="anchor" aria-label="anchor" href="#singlearm-and-survivalcont-1-0-2"></a></h4>
+<ul><li>
+<strong><code>singlearm</code> results did not invalidate when the outcome recoding, landmark or time units changed.</strong> <code>analysistype</code>, the four event-level mappings, <code>uselandmark</code>, <code>landmark</code>, <code>timetypeoutput</code> and <code>timetypedata</code> were missing from the <code>clearWith</code> of the median table, survival table, person-time table, baseline-hazard table and every plot.</li>
+<li>
+<strong><code>singlearm</code> multi-event level validation missed unset levels.</strong> The check collected the four level options with <code><a href="https://rdrr.io/r/base/c.html" class="external-link">c()</a></code>, which silently drops <code>NULL</code>s, so a missing assignment went undetected instead of being reported. Each level is now checked individually.</li>
+<li>
+<strong><code>singlearm</code> named the wrong confidence-interval method for the median.</strong> The note said <code>conf.type = 'log-log'</code>; <code><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit()</a></code>’s default is <code>'log'</code> — Greenwood’s variance on the log scale. No interval changed, only the label.</li>
+<li>
+<strong><code>singlearm</code> described its survival table’s event rate inaccurately.</strong> “Event rate by this timepoint” is events <em>within the interval</em> expressed as a proportion of the initial cohort, and now says so.</li>
+<li>
+<strong><code>singlearm</code> cutpoints are now parsed and support-checked.</strong> <code>.resolveCutpoints()</code> handles malformed input and <code>.supportedCutpoints()</code> refuses time points the data cannot support — including a zero-width person-time boundary, which yields no useful rate. Y-axis limits outside 0–1, or inverted, now produce an actionable message instead of a broken plot.</li>
+<li>
+<strong><code>survivalcont</code> stranded its outputs when cut-point search ran.</strong> <code>.run()</code> was restructured so results are populated regardless of the <code>findcut</code> path, with <code>deleteRows()</code> guards against double-population, notice reset between runs, an explicit error below ten events, and a validation halt that stops rather than continuing on invalid input.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="estimated-vs-not-estimable-and-output-that-overstated-itself-1-0-2">Estimated vs. not estimable, and output that overstated itself<a class="anchor" aria-label="anchor" href="#estimated-vs-not-estimable-and-output-that-overstated-itself-1-0-2"></a></h4>
+<ul><li>
+<strong><code>survival</code> reported survival probabilities beyond the observed follow-up.</strong> The 1/3/5-year table is built with <code>summary(fit, times =, extend = TRUE)</code>, which carries the last Kaplan-Meier estimate forward indefinitely. With the default cutpoints (12, 36, 60) and a cohort followed for two years it printed a “60-month survival” — with a confidence interval — computed from <strong>zero patients at risk</strong>: 0.0% in one group and 4.5% (0.8–25.7%) in the other. Cutpoints past a group’s last observation are now omitted, with a note naming them and each group’s longest follow-up. This is the same rule <code>.calculateRMST()</code> already applied; it is now applied here too.</li>
+<li>
+<strong><code>survival</code> aborted entirely when a cutpoint was mistyped.</strong> <code>as.numeric("abc")</code> is <code>NA</code>, and <code>summary.survfit()</code> then stops with <code>times contains missing values</code> — taking the median table, the Cox output and every plot down with it, for one typo in a free-text box. Non-numeric and negative cutpoints are now ignored with a note, duplicates are dropped, and an empty box falls back to the documented default.</li>
+<li>
+<strong><code>survival</code> tables did not always refresh when the option driving them changed.</strong> <code>cutp</code> was missing from the 1/3/5-year table’s <code>clearWith</code>, and <code>analysistype</code>, the four event-level mappings and the landmark options were missing from four tables. <code>jmvcore</code>’s <code>Table$addRow()</code> appends with no duplicate-key check, so an uncleared table keeps the old rows alongside the new.</li>
+<li>
+<strong><code>survival</code> told users to judge significance by eye from two confidence intervals.</strong> The interpretation panel stated “Non-overlapping confidence intervals suggest significant differences” as a decision rule, alongside “Use for patient stratification and treatment decisions”. Overlapping intervals do not imply the absence of a difference; the text now points to the log-rank test and drops the treatment-decision claim.</li>
+<li>
+<strong><code>multisurvival</code> reported no joint test for a multi-degree-of-freedom interaction.</strong> The interaction table gives one row per coefficient, each a 1-df Wald test. For a 3-level × 2-level interaction that is two rows — p = 0.077 and p = 0.726 — and neither answers “is the effect modified by this variable at all?” The joint 2-df test over the same model is p = 0.154. It is now reported alongside the rows (Wald, agreeing with the likelihood-ratio test to three decimals: χ² = 3.7426 / 2 df / p = 0.1539 against 3.7466 / 2 / 0.1536).</li>
+<li>
+<strong><code>multisurvival</code> person-time could show figures from a previous covariate set.</strong> Person-time is computed on the complete-case set across <em>all</em> selected variables, so adding one continuous covariate with missing values moved the overall row from 134 events / 8235.5 person-time to 94 / 6005.47 — but <code>contexpl</code> was absent from that table’s <code>clearWith</code> and the table never cleared its rows. Both are fixed.</li>
+<li>
+<strong><code>oddsratio</code> printed a non-estimable odds ratio as a precise number.</strong> Under (quasi-)separation <code>glm</code>’s IRLS halts wherever the iteration limit leaves it, and the table rendered <code>118848049086800030859264.00 (0.00-Inf, p=1.000)</code> — an odds ratio of 1.19 × 10²³ shown to two decimal places. The cell now reads <code>not estimable</code>, with a strong warning naming the variable and pointing to Firth penalized regression. The rule keys on the confidence interval being unbounded, so a large but genuinely estimable odds ratio is untouched.</li>
+<li>
+<strong><code>oddsratio</code> reported diagnostic metrics with no uncertainty.</strong> Sensitivity, specificity and the likelihood ratios were bare point estimates: 63.8% from 20 patients and from 2000 read identically. They now carry Clopper-Pearson exact intervals for the proportions and the log method (Simel et al. 1991) for the likelihood ratios — reproducing <code><a href="https://rdrr.io/pkg/epiR/man/epi.tests.html" class="external-link">epiR::epi.tests()</a></code> bit-identically (maximum absolute difference 0 across 4,156 two-by-two tables). The arithmetic is adapted from epiR (GPL ≥ 2, credited in the source) rather than imported, so <code>jsurvival</code> does not gain an epidemiology package as a dependency for one call.</li>
+<li>
+<strong><code>oddsratio</code> named the wrong confidence-interval method.</strong> The footnote said “Wilson score”; <code>epi.tests()</code> defaults to <code>method = "exact"</code>, which is Clopper-Pearson. Wilson differs in the third decimal.</li>
+<li>
+<strong><code>datetimeconverter</code> warned “Implausible Dates Detected” on every successful conversion.</strong> A bare <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code> inside the package resolves to <code><a href="https://rdrr.io/pkg/jmvcore/man/format.html" class="external-link">jmvcore::format</a></code>, which ignores the <code>"%Y"</code> format string; <code><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer()</a></code> of the whole datetime string then yielded the epoch seconds (1710498030 for 2024-03-15) against an upper bound that had become 21033, so every ordinary date compared as out of range. A warning that fires on 100%-successful conversions is worse than none — it trains users to ignore the one signal that a wrong format has mis-parsed their dates. The check now discriminates correctly: silent on 2022–2024, firing on 1850 and 2100.</li>
+<li>
+<strong><code>datetimeconverter</code> showed large numbers in scientific notation — and parsed them that way.</strong> The same masking made <code>scientific = FALSE</code> a no-op, so a Unix epoch appeared in the preview’s “Original Value” column as <code>1.7e+09</code>. In the numeric fallback branch that string is also what gets handed to the date parser, turning a valid number into an unparseable date.</li>
+<li>
+<strong><code>datetimeconverter</code> documentation contradicted the tool.</strong> The glossary gave Excel serial 45000 as “May 18, 2023”; it is <strong>15 March 2023</strong>, which is what the converter itself returns. The Excel entry now also explains the 1899-12-30 origin and the 1900 leap-year quirk.</li>
+<li>
+<strong><code>datetimeconverter</code> claimed its numeric output was timezone-independent.</strong> A date with no time is midnight <em>in the selected zone</em>, so <code>2024-01-15</code> becomes 1705276800 under UTC and 1705266000 under Europe/Istanbul. With the default (“system”) two collaborators on different machines get different numbers from the same file. The option text now says so and tells you to select UTC when the value must be reproducible.</li>
+<li>
+<strong><code>timeinterval</code> could write the calculated column back with no row mapping.</strong> <code>self$data</code> holds only the columns the analysis asked for, so it has one column whenever the same variable is chosen as both start and end date; subsetting without <code>drop = FALSE</code> collapsed it to a vector, <code><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames()</a></code> returned <code>NULL</code>, and <code>setRowNums(NULL)</code> then misaligned the written column.</li>
+<li>
+<strong><code>timeinterval</code> extreme-value filtering deleted genuine follow-up.</strong> The rule is “&gt; multiplier × 99th percentile”, which only orders correctly for a positive 99th percentile. In a cohort where 99% of patients enter and exit on the same day the threshold is 0, so every non-zero interval counted as extreme and the handful of real follow-ups were dropped. The filter is now skipped in that case, with the reason stated under “Filters applied”.</li>
+<li>
+<strong><code>outcomeorganizer</code> lost the competing-risk flag when no competing event was observed.</strong> The recoded column was exported as a character vector, and <code>jmvcore</code> derives a column’s levels from the values present — so a competing-risks run on a cohort without other-cause deaths shipped a column declaring only <code>Censored</code>/<code>Event</code>. Downstream, <code>survival</code> and <code>multisurvival</code> identify this interchange format by requiring all three declared levels, so the hand-off was not recognised: the analysis stopped with “Event Level is not selected”, or ran as plain Kaplan-Meier if the user picked “Event” to get past it. The column is now exported as a factor declaring <code>Censored</code>/<code>Event</code>/<code>Competing</code> whether or not all three occur, which also puts the levels in the order the 0/1/2 codes imply rather than alphabetically.</li>
+</ul></div>
+</div>
+<div class="section level3">
+<h3 id="changed-1-0-2">Changed<a class="anchor" aria-label="anchor" href="#changed-1-0-2"></a></h3>
+<ul><li>
+<strong>Numerical verification tests now verify numbers.</strong> The six <code>test-*-verification.R</code> files computed reference fits — and in one case wrote the right answer in a comment — then asserted only that an object came back or that a table had rows. They now compare the rendered values against <code>survival</code>, <code>survRM2</code>, <code>riskRegression</code>, <code>epiR</code>, <code>logistf</code>, <code><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">stats::t.test</a></code>, <code>poisson.test</code> and <code>lubridate</code>, and pin every fix above with a regression test.</li>
+<li>
+<strong><code>survival</code>: four options that did nothing were removed.</strong> <code>hazard_plots</code>, <code>parametric_extrapolation</code>, <code>extrapolation_time</code> and <code>parametric_diagnostics</code> had stub backends and permanently hidden results, but the jamovi UI compiler adds a control for every declared option — so they appeared as live checkboxes, one of them ticked by default. Saved <code>.omv</code> files referencing them still load.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="added-1-0-2">Added<a class="anchor" aria-label="anchor" href="#added-1-0-2"></a></h3>
+<ul><li>
+<strong>Automated GitHub release (<code>.github/workflows/release.yaml</code>).</strong> A push to the default branch touching <code>DESCRIPTION</code> or <code>jamovi/0000.yaml</code> cross-checks the two version strings, refuses to proceed if they disagree, and — if the tag does not already exist — tags <code>v&lt;version&gt;</code> and publishes a release whose notes are the matching section of this file.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="jsurvival-100-2026-07-13">jsurvival 1.0.0 (2026-07-13)<a class="anchor" aria-label="anchor" href="#jsurvival-100-2026-07-13"></a></h2>
 <div class="section level3">
@@ -321,7 +433,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

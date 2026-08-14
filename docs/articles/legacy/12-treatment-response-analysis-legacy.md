@@ -408,7 +408,7 @@ Based on this comprehensive treatment response analysis:
 - **Waterfall Plots**: Excellent for visualizing individual patient
   responses and overall treatment effect
 - **Swimmer Plots**: Essential for understanding treatment duration and
-  timeline relationships  
+  timeline relationships\
 - **Combined Analysis**: Integration with pathological and biomarker
   data enhances clinical relevance
 

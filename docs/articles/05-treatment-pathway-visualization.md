@@ -1,5 +1,13 @@
 # Treatment Pathway Visualization with alluvialSurvival
 
+> **Not yet released.** The `alluvialSurvival` analysis is not part of
+> jsurvival 1.0.4. It is on a development or test menu route in the
+> umbrella ClinicoPath module and does not appear in any jamovi menu
+> yet. It is documented here ahead of a future release, so its options,
+> defaults and output may still change. For the analyses jsurvival ships
+> today see the [jsurvival articles
+> index](https://www.serdarbalci.com/jsurvival/articles/).
+
 ## Introduction
 
 The `alluvialSurvival()` function in ClinicoPath provides specialized
@@ -474,7 +482,7 @@ and clinical outcomes.
 ## References
 
 - Alluvial Diagrams in Medical Research
-- Survival Analysis Methods in Clinical Studies  
+- Survival Analysis Methods in Clinical Studies\
 - Treatment Pathway Visualization Best Practices
 - ClinicoPath Package Documentation
 

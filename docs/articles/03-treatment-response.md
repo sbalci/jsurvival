@@ -1,5 +1,11 @@
 # Treatment Response Analysis in Oncology
 
+> **Ships in a different module.** This article also uses `crosstable`
+> (**ClinicoPathDescriptives**), `summarydata`
+> (**ClinicoPathDescriptives**), `waterfall` (**OncoPath**), which
+> jsurvival does not provide. Install the module named beside each
+> analysis, or the umbrella ClinicoPath module, to follow those steps.
+
 ## Introduction
 
 This vignette demonstrates treatment response analysis for oncology
@@ -195,7 +201,7 @@ researchers without programming experience.
 - **Clinical Workflow Vignette**: For integrating response analysis into
   complete study workflows
 - **Visualization Gallery**: For advanced customization of oncology
-  plots  
+  plots\
 - **Getting Started Guide**: For basic ClinicoPathDescriptives
   functionality
 - **Individual Function Vignettes**: For detailed parameter usage and

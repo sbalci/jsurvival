@@ -159,18 +159,24 @@ pooled_se <- sqrt(mean(sapply(imputed_results, function(x) x$se^2)) +
 
 #### Multiple Cut-point Testing
 
+There is **no p-value adjustment option** on `survivalcont`.
+`padjustmethod` does not exist and never has; passing it raises
+`unused argument`. What the analysis does offer is control over how the
+cut-offs themselves are derived, via `multiple_cutoffs`, `num_cutoffs`
+and `cutoff_method`:
+
 ``` r
 
-# When testing multiple cut-points, adjust for multiple comparisons
 cutpoint_analysis <- survivalcont(
   data = biomarker_data,
   elapsedtime = time_months,
   outcome = death,
   outcomeLevel = "1",
   contexpl = biomarker_value,
-  findcut = TRUE,
-  # Consider correction for multiple testing
-  padjustmethod = "holm"
+  findcut = TRUE,           # single cut-off, maximally selected rank statistic
+  multiple_cutoffs = TRUE,  # or several candidate cut-offs
+  num_cutoffs = "two",      # "two" (3 groups), "three" (4), "four" (5)
+  cutoff_method = "quantile" # "quantile", "recursive", "tree", "minpval"
 )
 ```
 
@@ -232,12 +238,29 @@ tertile_analysis <- survival(
 
 #### Spline Analysis
 
+Restricted cubic splines are built in —
+[`survival()`](https://www.serdarbalci.com/jsurvival/reference/survival.md)
+gained `rcs_analysis` for exactly this, so there is no need to leave
+jsurvival to avoid dichotomising a continuous predictor:
+
 ``` r
 
-# For truly continuous relationships
-# Consider restricted cubic splines or other flexible approaches
-# This would require additional implementation beyond basic jSurvival
+spline_analysis <- survival(
+  data = histopathology,
+  elapsedtime = "OverallTime", outcome = "Outcome", outcomeLevel = "1",
+  explanatory = "Group",
+  dod = "", dooc = "", awd = "", awod = "",
+  rcs_analysis = TRUE,
+  rcs_variable = "Age",   # the continuous predictor to model flexibly
+  rcs_knots    = 4        # 3 knots for a modest cohort, 5 when data allow
+)
 ```
+
+This tests whether the log-hazard really is linear in the predictor. If
+it is not, a dichotomisation chosen from the same data will look better
+than it is. See [Features Added Since the Earlier
+Releases](#features-added-since-the-earlier-releases) for the
+calibration and internal-validation options that pair with it.
 
 ## Time-Dependent Covariates
 
@@ -499,6 +522,186 @@ Key principles for advanced analysis:
 - **Consider clinical context** in statistical decisions
 - **Report limitations** and assumptions clearly
 - **Collaborate with statisticians** for complex analyses
+
+## Features Added Since the Earlier Releases
+
+These options are all live in
+[`survival()`](https://www.serdarbalci.com/jsurvival/reference/survival.md)
+but were not covered anywhere in this guide until now. Every call below
+was run against the bundled `histopathology` data before being written
+down.
+
+### Weighted Log-Rank Tests
+
+The standard log-rank test weights every event equally, which makes it
+least sensitive exactly where survival curves often separate first.
+`weightedLogRank = TRUE` adds the Fleming-Harrington family alongside
+it, so you can see whether a conclusion depends on the weighting.
+
+``` r
+
+res <- survival(
+  data = histopathology,
+  elapsedtime = "OverallTime", outcome = "Outcome", outcomeLevel = "1",
+  explanatory = "Group",
+  dod = "", dooc = "", awd = "", awod = "",
+  weightedLogRank  = TRUE,
+  survivalTestType = "fh_rho1"   # "logrank", "fh_rho0_5", "fh_rho1"
+)
+res$weightedLogRankTable$asDF
+#>                                   test rho    chisq df   pvalue
+#> 1                  Log-Rank (standard) 0.0 0.220312  1 0.638802
+#> 2         Fleming-Harrington (rho=0.5) 0.5 0.128574  1 0.719915
+#> 3 Peto-Peto (Fleming-Harrington rho=1) 1.0 0.066619  1 0.796325
+```
+
+All three tests are reported whichever `survivalTestType` you pick, each
+with the weighting it applies: `rho = 0` weights all time points
+equally, `rho = 0.5` gives moderate emphasis to early differences, and
+`rho = 1` weights by S(t) and emphasises early events. Choose the test
+**before** looking at the results — picking the smallest p-value from
+three tests is not a test.
+
+### Age-Adjusted Analysis
+
+Age is the dominant prognostic variable in most clinical cohorts, and an
+unadjusted group comparison can be reporting age rather than treatment.
+Seven options cover this:
+
+``` r
+
+res_age <- survival(
+  data = histopathology,
+  elapsedtime = "OverallTime", outcome = "Outcome", outcomeLevel = "1",
+  explanatory = "Group",
+  dod = "", dooc = "", awd = "", awod = "",
+  age_adjustment = TRUE,
+  age_variable   = "Age"
+)
+res_age$ageAdjustedCoxTable$asDF
+#>   variable            levels   n  hr_unadjusted hr_age_adjusted
+#> 1    group         Treatment 245 0.94 (0.69-1.27) 0.94 (0.69-1.28)
+#> 2      Age per unit (p=0.11)  NA                - 0.99 (0.98-1.00)
+```
+
+The table puts the unadjusted and age-adjusted hazard ratios side by
+side, which is the comparison that actually answers “is this confounded
+by age?”. The remaining options address different questions and can be
+combined with the above:
+
+| Option | Question it answers |
+|----|----|
+| `age_interaction = TRUE` | Does the treatment effect differ by age? |
+| `age_stratified_cox = TRUE` | Adjust for age without assuming proportional hazards across age |
+| `age_group_cutpoints` | Age bands for stratification (default `"50, 65, 75"`) |
+| `age_time_scale = TRUE` | Use age, not time-on-study, as the time scale |
+| `age_standardization = TRUE` | Standardised mortality ratio; `age_standardization_method` is `"indirect"` or `"direct"` |
+| `age_stratified_km = TRUE` | Kaplan-Meier curves per age band |
+
+### Parametric Survival Models
+
+Kaplan-Meier and Cox are non-parametric and semi-parametric
+respectively; neither extrapolates beyond the observed follow-up. When
+you need to, `use_parametric = TRUE` fits a parametric model.
+
+``` r
+
+res_par <- survival(
+  data = histopathology,
+  elapsedtime = "OverallTime", outcome = "Outcome", outcomeLevel = "1",
+  explanatory = "Group",
+  dod = "", dooc = "", awd = "", awod = "",
+  use_parametric          = TRUE,
+  parametric_distribution = "weibull",   # exp, weibull, lnorm, llogis, gamma,
+                                         # gengamma, gompertz, survspline
+  parametric_covariates   = TRUE,
+  compare_distributions   = TRUE         # fit several and compare by information criterion
+)
+```
+
+With `parametric_distribution = "survspline"`, `spline_knots` (default
+3) and `spline_scale` (`"hazard"`, `"odds"` or `"normal"`) control the
+flexible-parametric fit. Extrapolation beyond the follow-up window is a
+modelling assumption, not a measurement — say so when you report it.
+
+### Calibration, Non-Linearity and Internal Validation
+
+``` r
+
+res_val <- survival(
+  data = histopathology,
+  elapsedtime = "OverallTime", outcome = "Outcome", outcomeLevel = "1",
+  explanatory = "Group",
+  dod = "", dooc = "", awd = "", awod = "",
+  calibration_curves    = TRUE,   # predicted vs observed survival
+  calibration_timepoint = 12,     # in the analysis time unit
+  calibration_ngroups   = 5,      # risk groups on the calibration plot
+  rcs_analysis          = TRUE,   # restricted cubic splines: is the effect linear?
+  rcs_variable          = "Age",
+  rcs_knots             = 4,
+  bootstrapValN         = 200     # bootstrap resamples for internal validation
+)
+```
+
+`rcs_analysis` answers a question that is easy to skip: a continuous
+predictor entered linearly assumes the log-hazard is linear in it, and
+that is frequently false for age and for biomarkers. Bootstrap
+validation here is *internal* — it corrects for optimism, it does not
+substitute for an independent cohort.
+
+### Model Performance in `multisurvival`
+
+Four
+[`multisurvival()`](https://www.serdarbalci.com/jsurvival/reference/multisurvival.md)
+options address the question a Cox table cannot answer on its own — how
+well does this model actually predict? All four ran against the bundled
+`histopathology` data.
+
+``` r
+
+res_ms <- multisurvival(
+  data = histopathology,
+  elapsedtime = "OverallTime", outcome = "Outcome", outcomeLevel = "1",
+  explanatory = c("Group", "LVI"), contexpl = "Age",
+  dod = "", dooc = "", awd = "", awod = "",
+  ci_optimism      = TRUE,   # optimism-corrected C-index by bootstrap
+  ci_optimism_boot = 200,    # resamples (default 150)
+  compare_models   = TRUE,   # covariate contribution by single-term deletion
+  show_survmetrics = TRUE,   # Brier score and time-dependent AUC
+  survmetrics_timepoints = "12, 36, 60",
+  survmetrics_show_plots = TRUE
+)
+```
+
+| Option | What it gives you |
+|----|----|
+| `ci_optimism` | The apparent C-index of a model fitted and evaluated on the same rows is optimistic. This bootstraps the whole fitting procedure to estimate that optimism and subtracts it. Report the corrected figure. |
+| `compare_models` | Drops each term in turn and reports the change in fit, which answers “what is this covariate contributing?” more honestly than reading its p-value. |
+| `show_survmetrics` | Brier score (calibration and discrimination together, lower is better) and time-dependent AUC at the timepoints you name in `survmetrics_timepoints`. |
+| `ac_summary` | With `ac = TRUE` and `adjexplanatory` set, adds adjusted probability summary tables to the adjusted survival curves. |
+
+Optimism correction is still *internal* validation. It tells you how
+much this modelling procedure overfits these data; it cannot tell you
+how the model behaves in another hospital’s cohort.
+
+### Reporting Aids
+
+``` r
+
+res_report <- survival(
+  data = histopathology,
+  elapsedtime = "OverallTime", outcome = "Outcome", outcomeLevel = "1",
+  explanatory = "Group",
+  dod = "", dooc = "", awd = "", awod = "",
+  adjusted_curves  = TRUE,   # covariate-adjusted survival curves
+  remark_checklist = TRUE,   # REMARK reporting checklist for prognostic marker studies
+  showSummaries    = TRUE    # natural-language summaries alongside the tables
+)
+```
+
+`remark_checklist` is worth running on any prognostic-marker analysis
+you intend to publish; it lists the REMARK items and is quicker than
+reconstructing them from the paper afterwards.
 
 For complex analyses beyond the scope of basic jSurvival functions,
 consider: - Specialized R packages (survival, survminer, rms, cmprsk) -

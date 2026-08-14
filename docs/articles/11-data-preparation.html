@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">jsurvival</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.52</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -144,13 +144,90 @@ analyses</li>
 <h2 id="time-variable-preparation">Time Variable Preparation<a class="anchor" aria-label="anchor" href="#time-variable-preparation"></a>
 </h2>
 <div class="section level3">
+<h3 id="cleaning-date-columns-first-the-datetime-converter">Cleaning Date Columns First: the DateTime Converter<a class="anchor" aria-label="anchor" href="#cleaning-date-columns-first-the-datetime-converter"></a>
+</h3>
+<p>Before any interval can be calculated the dates have to parse, and in
+real clinical exports they often do not: Excel serial numbers,
+<code>dd/mm/yyyy</code> mixed with <code>mm/dd/yyyy</code>, free-text
+entries, and stray blanks. <code>datetimeconverter</code>
+(<strong>Survival → Data Preparation → DateTime Converter</strong>)
+exists for this step and reports what it could and could not parse
+rather than silently dropping rows.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">visits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>,</span>
+<span>  visit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2024-01-15 09:30:00"</span>, <span class="st">"2024-03-02 14:05:10"</span>, <span class="st">"2024-06-30 23:59:59"</span>,</span>
+<span>            <span class="st">"2024-11-05 08:00:00"</span>, <span class="st">"2025-02-28 12:15:00"</span>, <span class="st">"not a date"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">converted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/datetimeconverter.html">datetimeconverter</a></span><span class="op">(</span></span>
+<span>  data            <span class="op">=</span> <span class="va">visits</span>,</span>
+<span>  datetime_var    <span class="op">=</span> <span class="st">"visit"</span>,</span>
+<span>  datetime_format <span class="op">=</span> <span class="st">"ymdhms"</span>,   <span class="co"># or "auto" to let it detect</span></span>
+<span>  extract_year    <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  extract_month   <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  extract_quarter <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  extract_dayname <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  show_quality_metrics <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The Quality Assessment panel on that example reports <strong>6
+observations, 5 successfully parsed (83.33%), 1 failed</strong>, with
+the range 2024-01-15 to 2025-02-28 (410.1 days). The failing row is
+listed by row number in the preview table rather than quietly becoming
+<code>NA</code> — which matters, because a date that fails to parse
+becomes a dropped case in every downstream survival model.</p>
+<div class="section level4">
+<h4 id="formats">Formats<a class="anchor" aria-label="anchor" href="#formats"></a>
+</h4>
+<p><code>datetime_format</code> accepts <code>auto</code>,
+<code>excel_serial</code>, <code>unix_epoch</code>, <code>ymdhms</code>,
+<code>ymd</code>, <code>dmy</code>, <code>mdy</code>,
+<code>dmyhms</code> and <code>mdyhms</code>. Prefer naming the format
+explicitly over <code>auto</code> when your data mixes conventions:
+<code>03/04/2024</code> is a different date under <code>dmy</code> than
+under <code>mdy</code>, and nothing in the value itself says which was
+intended. <code>timezone</code> defaults to the system zone — the
+analysis states which zone it used, so check that line if your times
+matter to the hour.</p>
+</div>
+<div class="section level4">
+<h4 id="extracting-components">Extracting Components<a class="anchor" aria-label="anchor" href="#extracting-components"></a>
+</h4>
+<p>Each <code>extract_*</code> switch adds a calendar component:
+<code>extract_year</code>, <code>extract_month</code>,
+<code>extract_monthname</code>, <code>extract_day</code>,
+<code>extract_hour</code>, <code>extract_minute</code>,
+<code>extract_second</code>, <code>extract_dayname</code>,
+<code>extract_weeknum</code>, <code>extract_quarter</code> and
+<code>extract_dayofyear</code>. These are useful for checking accrual
+patterns and for spotting data-entry artefacts, such as every visit
+falling on the first of the month.</p>
+</div>
+<div class="section level4">
+<h4 id="writing-results-back-to-the-spreadsheet">Writing Results Back to the Spreadsheet<a class="anchor" aria-label="anchor" href="#writing-results-back-to-the-spreadsheet"></a>
+</h4>
+<p>The thirteen <code>*_out</code> options —
+<code>corrected_datetime_char</code>,
+<code>corrected_datetime_numeric</code>, <code>year_out</code>,
+<code>month_out</code>, <code>monthname_out</code>,
+<code>day_out</code>, <code>hour_out</code>, <code>minute_out</code>,
+<code>second_out</code>, <code>dayname_out</code>,
+<code>weeknum_out</code>, <code>quarter_out</code> and
+<code>dayofyear_out</code> — are <code>type: Output</code> options. They
+add columns to the jamovi spreadsheet, and jamovi’s compiler does not
+turn Output options into arguments of the generated R function, so they
+are available <strong>from the jamovi interface only</strong>. From R,
+read the values off the results object instead.</p>
+</div>
+</div>
+<div class="section level3">
 <h3 id="calculating-time-from-dates">Calculating Time from Dates<a class="anchor" aria-label="anchor" href="#calculating-time-from-dates"></a>
 </h3>
 <div class="section level4">
 <h4 id="using-built-in-time-interval-calculator">Using Built-in Time Interval Calculator<a class="anchor" aria-label="anchor" href="#using-built-in-time-interval-calculator"></a>
 </h4>
 <p>The jSurvival module includes a time interval calculator:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># In jamovi: Survival → Data Preparation → Time Interval Calculator</span></span>
 <span><span class="co"># Assign:</span></span>
 <span><span class="co"># - Start Date: Study entry date (e.g., diagnosis_date)</span></span>
@@ -162,7 +239,7 @@ analyses</li>
 <div class="section level4">
 <h4 id="manual-calculation-in-r">Manual Calculation in R<a class="anchor" aria-label="anchor" href="#manual-calculation-in-r"></a>
 </h4>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Example data with dates</span></span>
@@ -198,7 +275,7 @@ analyses</li>
 <div class="section level4">
 <h4 id="left-truncation">Left Truncation<a class="anchor" aria-label="anchor" href="#left-truncation"></a>
 </h4>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Patients entering study at different times</span></span>
 <span><span class="co"># Example: analyzing from landmark time (e.g., 3 months post-diagnosis)</span></span>
 <span></span>
@@ -212,7 +289,7 @@ analyses</li>
 <div class="section level4">
 <h4 id="negative-time-values">Negative Time Values<a class="anchor" aria-label="anchor" href="#negative-time-values"></a>
 </h4>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check for and handle negative times</span></span>
 <span><span class="va">negative_times</span> <span class="op">&lt;-</span> <span class="va">clinical_data</span><span class="op">$</span><span class="va">time_months</span> <span class="op">&lt;</span> <span class="fl">0</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="va">negative_times</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -240,7 +317,7 @@ analyses</li>
 <div class="section level4">
 <h4 id="death-as-event">Death as Event<a class="anchor" aria-label="anchor" href="#death-as-event"></a>
 </h4>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># From death status variable</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_binary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">vital_status</span> <span class="op">==</span> <span class="st">"Dead"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
@@ -253,7 +330,7 @@ analyses</li>
 <div class="section level4">
 <h4 id="other-events">Other Events<a class="anchor" aria-label="anchor" href="#other-events"></a>
 </h4>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Disease progression</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">progression</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">progression_status</span> <span class="op">==</span> <span class="st">"Progressive Disease"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
@@ -273,7 +350,7 @@ analyses</li>
 <div class="section level4">
 <h4 id="competing-risks-setup">Competing Risks Setup<a class="anchor" aria-label="anchor" href="#competing-risks-setup"></a>
 </h4>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create separate indicators for different event types</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_cancer</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_cause</span> <span class="op">==</span> <span class="st">"Cancer"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_other</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_cause</span> <span class="op">==</span> <span class="st">"Other"</span> <span class="op">|</span></span>
@@ -298,7 +375,7 @@ analyses</li>
 <div class="section level3">
 <h3 id="consistency-checks">Consistency Checks<a class="anchor" aria-label="anchor" href="#consistency-checks"></a>
 </h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Function to perform comprehensive data quality checks</span></span>
 <span><span class="va">check_survival_data</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">time_var</span>, <span class="va">event_var</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">checks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -335,7 +412,7 @@ analyses</li>
 <div class="section level3">
 <h3 id="outlier-detection">Outlier Detection<a class="anchor" aria-label="anchor" href="#outlier-detection"></a>
 </h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Identify potential outliers in survival times</span></span>
 <span><span class="va">Q1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">time_months</span>, <span class="fl">0.25</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">Q3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">time_months</span>, <span class="fl">0.75</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -364,7 +441,7 @@ analyses</li>
 <div class="section level3">
 <h3 id="missing-data-patterns">Missing Data Patterns<a class="anchor" aria-label="anchor" href="#missing-data-patterns"></a>
 </h3>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Assess missing data patterns</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/statistikat/VIM" class="external-link">VIM</a></span><span class="op">)</span> <span class="co"># Visualization and Imputation of Missing values</span></span>
 <span></span>
@@ -390,7 +467,7 @@ analyses</li>
 <div class="section level4">
 <h4 id="complete-case-analysis">Complete Case Analysis<a class="anchor" aria-label="anchor" href="#complete-case-analysis"></a>
 </h4>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Use only patients with complete survival data</span></span>
 <span><span class="va">complete_data</span> <span class="op">&lt;-</span> <span class="va">clinical_data</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">time_months</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>  <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_binary</span><span class="op">)</span>, <span class="op">]</span></span>
@@ -400,7 +477,7 @@ analyses</li>
 <div class="section level4">
 <h4 id="administrative-censoring">Administrative Censoring<a class="anchor" aria-label="anchor" href="#administrative-censoring"></a>
 </h4>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># For missing death dates, censor at last known follow-up</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">time_months_imputed</span> <span class="op">&lt;-</span> <span class="va">clinical_data</span><span class="op">$</span><span class="va">time_months</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">death_binary_imputed</span> <span class="op">&lt;-</span> <span class="va">clinical_data</span><span class="op">$</span><span class="va">death_binary</span></span>
@@ -427,7 +504,7 @@ analyses</li>
 <div class="section level4">
 <h4 id="factor-ordering">Factor Ordering<a class="anchor" aria-label="anchor" href="#factor-ordering"></a>
 </h4>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Ensure proper ordering for categorical variables</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">tumor_grade</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">tumor_grade</span>,</span>
 <span>  levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Grade 1"</span>, <span class="st">"Grade 2"</span>, <span class="st">"Grade 3"</span>, <span class="st">"Grade 4"</span><span class="op">)</span>,</span>
@@ -446,7 +523,7 @@ analyses</li>
 <div class="section level4">
 <h4 id="handling-rare-categories">Handling Rare Categories<a class="anchor" aria-label="anchor" href="#handling-rare-categories"></a>
 </h4>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Combine rare categories to ensure adequate sample sizes</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">histology</span><span class="op">)</span></span>
 <span></span>
@@ -465,7 +542,7 @@ analyses</li>
 <div class="section level4">
 <h4 id="age-preparation">Age Preparation<a class="anchor" aria-label="anchor" href="#age-preparation"></a>
 </h4>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check age distribution</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">age_at_diagnosis</span><span class="op">)</span></span>
 <span></span>
@@ -482,7 +559,7 @@ analyses</li>
 <div class="section level4">
 <h4 id="biomarker-preparation">Biomarker Preparation<a class="anchor" aria-label="anchor" href="#biomarker-preparation"></a>
 </h4>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Log transformation for skewed biomarkers</span></span>
 <span><span class="va">clinical_data</span><span class="op">$</span><span class="va">log_biomarker</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">clinical_data</span><span class="op">$</span><span class="va">biomarker_value</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
@@ -501,7 +578,7 @@ analyses</li>
 <div class="section level3">
 <h3 id="cross-validation-with-source-data">Cross-Validation with Source Data<a class="anchor" aria-label="anchor" href="#cross-validation-with-source-data"></a>
 </h3>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compare calculated times with expected ranges</span></span>
 <span><span class="va">validation_checks</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">issues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -528,7 +605,7 @@ analyses</li>
 <div class="section level3">
 <h3 id="final-dataset-preparation">Final Dataset Preparation<a class="anchor" aria-label="anchor" href="#final-dataset-preparation"></a>
 </h3>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create final analysis dataset</span></span>
 <span><span class="va">analysis_data</span> <span class="op">&lt;-</span> <span class="va">clinical_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># Include only complete cases for primary analysis</span></span>
@@ -566,7 +643,7 @@ analyses</li>
 <div class="section level3">
 <h3 id="csv-export">CSV Export<a class="anchor" aria-label="anchor" href="#csv-export"></a>
 </h3>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Export cleaned data for use in jamovi</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">analysis_data</span>, <span class="st">"survival_analysis_data.csv"</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
@@ -691,7 +768,7 @@ and interpretable survival analysis results in jSurvival.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

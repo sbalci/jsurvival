@@ -1,5 +1,13 @@
 # jSurvival 16: Cox Proportional Hazards Model Diagnostics
 
+> **Not yet released.** The `coxdiagnostics` analysis is not part of
+> jsurvival 1.0.4. It is on a development or test menu route in the
+> umbrella ClinicoPath module and does not appear in any jamovi menu
+> yet. It is documented here ahead of a future release, so its options,
+> defaults and output may still change. For the analyses jsurvival ships
+> today see the [jsurvival articles
+> index](https://www.serdarbalci.com/jsurvival/articles/).
+
 ## Introduction
 
 The Cox proportional hazards model is one of the most widely used

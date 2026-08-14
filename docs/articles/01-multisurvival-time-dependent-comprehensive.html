@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">jsurvival</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.52</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,7 +94,7 @@
                         <h4 data-toc-skip class="author">ClinicoPath
 Team</h4>
             
-            <h4 data-toc-skip class="date">2026-07-15</h4>
+            <h4 data-toc-skip class="date">2026-08-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sbalci/ClinicoPathJamoviModule/blob/HEAD/vignettes/01-multisurvival-time-dependent-comprehensive.Rmd" class="external-link"><code>vignettes/01-multisurvival-time-dependent-comprehensive.Rmd</code></a></small>
       <div class="d-none name"><code>01-multisurvival-time-dependent-comprehensive.Rmd</code></div>
@@ -102,6 +102,35 @@ Team</h4>
 
     
     
+<blockquote>
+<p><strong>Not yet released.</strong> Time-dependent covariates are
+<strong>not available in jsurvival 1.0.4</strong>. The options this
+article describes — <code>use_time_dependent</code>,
+<code>td_format</code>, <code>time_dep_vars</code>,
+<code>change_times</code>, <code>start_time_var</code>,
+<code>stop_time_var</code> and <code>td_suffix_pattern</code> — are
+present in <code>jamovi/multisurvival.a.yaml</code> but commented out,
+under a heading that reads <em>“Time-Dependent Covariates (EXPERIMENTAL
+- will be implemented later)”</em>. They are therefore absent from the
+compiled analysis and from the <code><a href="../reference/multisurvival.html">multisurvival()</a></code> R function,
+and passing any of them raises <code>unused argument</code>. The same
+applies to the frailty and spline options this article also uses
+(<code>use_frailty</code>, <code>frailty_var</code>,
+<code>frailty_distribution</code>, <code>use_splines</code>,
+<code>spline_vars</code>, <code>spline_df</code>,
+<code>spline_type</code>) and to the model-selection options
+(<code>use_modelSelection</code>, <code>modelSelection</code>,
+<code>selectionCriteria</code>) — 17 of the options shown below in
+total.</p>
+<p>This article is kept as the design specification for that future
+release. The statistical background in it is sound and worth reading;
+the code is not yet runnable. Every code chunk is set to
+<code>eval = FALSE</code>, so nothing here is executed when the article
+is built. For what <code>multisurvival</code> can do today — including
+stratification, adjusted survival curves, risk scores, nomograms and
+person-time analysis — see <code><a href="../reference/multisurvival.html">?multisurvival</a></code> and the other
+multisurvival articles.</p>
+</blockquote>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -632,7 +661,7 @@ Self-Learning Text</em>. Springer.</li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

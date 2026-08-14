@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">jsurvival</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.52</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,7 +94,7 @@
                         <h4 data-toc-skip class="author">ClinicoPath
 Development Team</h4>
             
-            <h4 data-toc-skip class="date">2026-07-15</h4>
+            <h4 data-toc-skip class="date">2026-08-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sbalci/ClinicoPathJamoviModule/blob/HEAD/vignettes/08-advanced-topics.Rmd" class="external-link"><code>vignettes/08-advanced-topics.Rmd</code></a></small>
       <div class="d-none name"><code>08-advanced-topics.Rmd</code></div>
@@ -269,17 +269,23 @@ Flexible parametric models</p>
 <div class="section level4">
 <h4 id="multiple-cut-point-testing">Multiple Cut-point Testing<a class="anchor" aria-label="anchor" href="#multiple-cut-point-testing"></a>
 </h4>
+<p>There is <strong>no p-value adjustment option</strong> on
+<code>survivalcont</code>. <code>padjustmethod</code> does not exist and
+never has; passing it raises <code>unused argument</code>. What the
+analysis does offer is control over how the cut-offs themselves are
+derived, via <code>multiple_cutoffs</code>, <code>num_cutoffs</code> and
+<code>cutoff_method</code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># When testing multiple cut-points, adjust for multiple comparisons</span></span>
-<span><span class="va">cutpoint_analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/survivalcont.html">survivalcont</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">cutpoint_analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/survivalcont.html">survivalcont</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">biomarker_data</span>,</span>
 <span>  elapsedtime <span class="op">=</span> <span class="va">time_months</span>,</span>
 <span>  outcome <span class="op">=</span> <span class="va">death</span>,</span>
 <span>  outcomeLevel <span class="op">=</span> <span class="st">"1"</span>,</span>
 <span>  contexpl <span class="op">=</span> <span class="va">biomarker_value</span>,</span>
-<span>  findcut <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  <span class="co"># Consider correction for multiple testing</span></span>
-<span>  padjustmethod <span class="op">=</span> <span class="st">"holm"</span></span>
+<span>  findcut <span class="op">=</span> <span class="cn">TRUE</span>,           <span class="co"># single cut-off, maximally selected rank statistic</span></span>
+<span>  multiple_cutoffs <span class="op">=</span> <span class="cn">TRUE</span>,  <span class="co"># or several candidate cut-offs</span></span>
+<span>  num_cutoffs <span class="op">=</span> <span class="st">"two"</span>,      <span class="co"># "two" (3 groups), "three" (4), "four" (5)</span></span>
+<span>  cutoff_method <span class="op">=</span> <span class="st">"quantile"</span> <span class="co"># "quantile", "recursive", "tree", "minpval"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
@@ -341,10 +347,24 @@ Flexible parametric models</p>
 <div class="section level4">
 <h4 id="spline-analysis">Spline Analysis<a class="anchor" aria-label="anchor" href="#spline-analysis"></a>
 </h4>
+<p>Restricted cubic splines are built in — <code><a href="../reference/survival.html">survival()</a></code>
+gained <code>rcs_analysis</code> for exactly this, so there is no need
+to leave jsurvival to avoid dichotomising a continuous predictor:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># For truly continuous relationships</span></span>
-<span><span class="co"># Consider restricted cubic splines or other flexible approaches</span></span>
-<span><span class="co"># This would require additional implementation beyond basic jSurvival</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">spline_analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/survival.html">survival</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">histopathology</span>,</span>
+<span>  elapsedtime <span class="op">=</span> <span class="st">"OverallTime"</span>, outcome <span class="op">=</span> <span class="st">"Outcome"</span>, outcomeLevel <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>  explanatory <span class="op">=</span> <span class="st">"Group"</span>,</span>
+<span>  dod <span class="op">=</span> <span class="st">""</span>, dooc <span class="op">=</span> <span class="st">""</span>, awd <span class="op">=</span> <span class="st">""</span>, awod <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  rcs_analysis <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rcs_variable <span class="op">=</span> <span class="st">"Age"</span>,   <span class="co"># the continuous predictor to model flexibly</span></span>
+<span>  rcs_knots    <span class="op">=</span> <span class="fl">4</span>        <span class="co"># 3 knots for a modest cohort, 5 when data allow</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>This tests whether the log-hazard really is linear in the predictor.
+If it is not, a dichotomisation chosen from the same data will look
+better than it is. See <a href="#features-added-since-the-earlier-releases">Features Added Since
+the Earlier Releases</a> for the calibration and internal-validation
+options that pair with it.</p>
 </div>
 </div>
 </div>
@@ -627,6 +647,235 @@ decisions</li>
 <strong>Collaborate with statisticians</strong> for complex
 analyses</li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="features-added-since-the-earlier-releases">Features Added Since the Earlier Releases<a class="anchor" aria-label="anchor" href="#features-added-since-the-earlier-releases"></a>
+</h2>
+<p>These options are all live in <code><a href="../reference/survival.html">survival()</a></code> but were not
+covered anywhere in this guide until now. Every call below was run
+against the bundled <code>histopathology</code> data before being
+written down.</p>
+<div class="section level3">
+<h3 id="weighted-log-rank-tests">Weighted Log-Rank Tests<a class="anchor" aria-label="anchor" href="#weighted-log-rank-tests"></a>
+</h3>
+<p>The standard log-rank test weights every event equally, which makes
+it least sensitive exactly where survival curves often separate first.
+<code>weightedLogRank = TRUE</code> adds the Fleming-Harrington family
+alongside it, so you can see whether a conclusion depends on the
+weighting.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/survival.html">survival</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">histopathology</span>,</span>
+<span>  elapsedtime <span class="op">=</span> <span class="st">"OverallTime"</span>, outcome <span class="op">=</span> <span class="st">"Outcome"</span>, outcomeLevel <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>  explanatory <span class="op">=</span> <span class="st">"Group"</span>,</span>
+<span>  dod <span class="op">=</span> <span class="st">""</span>, dooc <span class="op">=</span> <span class="st">""</span>, awd <span class="op">=</span> <span class="st">""</span>, awod <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  weightedLogRank  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  survivalTestType <span class="op">=</span> <span class="st">"fh_rho1"</span>   <span class="co"># "logrank", "fh_rho0_5", "fh_rho1"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">res</span><span class="op">$</span><span class="va">weightedLogRankTable</span><span class="op">$</span><span class="va">asDF</span></span>
+<span><span class="co">#&gt;                                   test rho    chisq df   pvalue</span></span>
+<span><span class="co">#&gt; 1                  Log-Rank (standard) 0.0 0.220312  1 0.638802</span></span>
+<span><span class="co">#&gt; 2         Fleming-Harrington (rho=0.5) 0.5 0.128574  1 0.719915</span></span>
+<span><span class="co">#&gt; 3 Peto-Peto (Fleming-Harrington rho=1) 1.0 0.066619  1 0.796325</span></span></code></pre></div>
+<p>All three tests are reported whichever <code>survivalTestType</code>
+you pick, each with the weighting it applies: <code>rho = 0</code>
+weights all time points equally, <code>rho = 0.5</code> gives moderate
+emphasis to early differences, and <code>rho = 1</code> weights by S(t)
+and emphasises early events. Choose the test <strong>before</strong>
+looking at the results — picking the smallest p-value from three tests
+is not a test.</p>
+</div>
+<div class="section level3">
+<h3 id="age-adjusted-analysis">Age-Adjusted Analysis<a class="anchor" aria-label="anchor" href="#age-adjusted-analysis"></a>
+</h3>
+<p>Age is the dominant prognostic variable in most clinical cohorts, and
+an unadjusted group comparison can be reporting age rather than
+treatment. Seven options cover this:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res_age</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/survival.html">survival</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">histopathology</span>,</span>
+<span>  elapsedtime <span class="op">=</span> <span class="st">"OverallTime"</span>, outcome <span class="op">=</span> <span class="st">"Outcome"</span>, outcomeLevel <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>  explanatory <span class="op">=</span> <span class="st">"Group"</span>,</span>
+<span>  dod <span class="op">=</span> <span class="st">""</span>, dooc <span class="op">=</span> <span class="st">""</span>, awd <span class="op">=</span> <span class="st">""</span>, awod <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  age_adjustment <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  age_variable   <span class="op">=</span> <span class="st">"Age"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">res_age</span><span class="op">$</span><span class="va">ageAdjustedCoxTable</span><span class="op">$</span><span class="va">asDF</span></span>
+<span><span class="co">#&gt;   variable            levels   n  hr_unadjusted hr_age_adjusted</span></span>
+<span><span class="co">#&gt; 1    group         Treatment 245 0.94 (0.69-1.27) 0.94 (0.69-1.28)</span></span>
+<span><span class="co">#&gt; 2      Age per unit (p=0.11)  NA                - 0.99 (0.98-1.00)</span></span></code></pre></div>
+<p>The table puts the unadjusted and age-adjusted hazard ratios side by
+side, which is the comparison that actually answers “is this confounded
+by age?”. The remaining options address different questions and can be
+combined with the above:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th>Option</th>
+<th>Question it answers</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>age_interaction = TRUE</code></td>
+<td>Does the treatment effect differ by age?</td>
+</tr>
+<tr class="even">
+<td><code>age_stratified_cox = TRUE</code></td>
+<td>Adjust for age without assuming proportional hazards across age</td>
+</tr>
+<tr class="odd">
+<td><code>age_group_cutpoints</code></td>
+<td>Age bands for stratification (default
+<code>"50, 65, 75"</code>)</td>
+</tr>
+<tr class="even">
+<td><code>age_time_scale = TRUE</code></td>
+<td>Use age, not time-on-study, as the time scale</td>
+</tr>
+<tr class="odd">
+<td><code>age_standardization = TRUE</code></td>
+<td>Standardised mortality ratio;
+<code>age_standardization_method</code> is <code>"indirect"</code> or
+<code>"direct"</code>
+</td>
+</tr>
+<tr class="even">
+<td><code>age_stratified_km = TRUE</code></td>
+<td>Kaplan-Meier curves per age band</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="parametric-survival-models">Parametric Survival Models<a class="anchor" aria-label="anchor" href="#parametric-survival-models"></a>
+</h3>
+<p>Kaplan-Meier and Cox are non-parametric and semi-parametric
+respectively; neither extrapolates beyond the observed follow-up. When
+you need to, <code>use_parametric = TRUE</code> fits a parametric
+model.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res_par</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/survival.html">survival</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">histopathology</span>,</span>
+<span>  elapsedtime <span class="op">=</span> <span class="st">"OverallTime"</span>, outcome <span class="op">=</span> <span class="st">"Outcome"</span>, outcomeLevel <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>  explanatory <span class="op">=</span> <span class="st">"Group"</span>,</span>
+<span>  dod <span class="op">=</span> <span class="st">""</span>, dooc <span class="op">=</span> <span class="st">""</span>, awd <span class="op">=</span> <span class="st">""</span>, awod <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  use_parametric          <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  parametric_distribution <span class="op">=</span> <span class="st">"weibull"</span>,   <span class="co"># exp, weibull, lnorm, llogis, gamma,</span></span>
+<span>                                         <span class="co"># gengamma, gompertz, survspline</span></span>
+<span>  parametric_covariates   <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  compare_distributions   <span class="op">=</span> <span class="cn">TRUE</span>         <span class="co"># fit several and compare by information criterion</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>With <code>parametric_distribution = "survspline"</code>,
+<code>spline_knots</code> (default 3) and <code>spline_scale</code>
+(<code>"hazard"</code>, <code>"odds"</code> or <code>"normal"</code>)
+control the flexible-parametric fit. Extrapolation beyond the follow-up
+window is a modelling assumption, not a measurement — say so when you
+report it.</p>
+</div>
+<div class="section level3">
+<h3 id="calibration-non-linearity-and-internal-validation">Calibration, Non-Linearity and Internal Validation<a class="anchor" aria-label="anchor" href="#calibration-non-linearity-and-internal-validation"></a>
+</h3>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res_val</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/survival.html">survival</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">histopathology</span>,</span>
+<span>  elapsedtime <span class="op">=</span> <span class="st">"OverallTime"</span>, outcome <span class="op">=</span> <span class="st">"Outcome"</span>, outcomeLevel <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>  explanatory <span class="op">=</span> <span class="st">"Group"</span>,</span>
+<span>  dod <span class="op">=</span> <span class="st">""</span>, dooc <span class="op">=</span> <span class="st">""</span>, awd <span class="op">=</span> <span class="st">""</span>, awod <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  calibration_curves    <span class="op">=</span> <span class="cn">TRUE</span>,   <span class="co"># predicted vs observed survival</span></span>
+<span>  calibration_timepoint <span class="op">=</span> <span class="fl">12</span>,     <span class="co"># in the analysis time unit</span></span>
+<span>  calibration_ngroups   <span class="op">=</span> <span class="fl">5</span>,      <span class="co"># risk groups on the calibration plot</span></span>
+<span>  rcs_analysis          <span class="op">=</span> <span class="cn">TRUE</span>,   <span class="co"># restricted cubic splines: is the effect linear?</span></span>
+<span>  rcs_variable          <span class="op">=</span> <span class="st">"Age"</span>,</span>
+<span>  rcs_knots             <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  bootstrapValN         <span class="op">=</span> <span class="fl">200</span>     <span class="co"># bootstrap resamples for internal validation</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><code>rcs_analysis</code> answers a question that is easy to skip: a
+continuous predictor entered linearly assumes the log-hazard is linear
+in it, and that is frequently false for age and for biomarkers.
+Bootstrap validation here is <em>internal</em> — it corrects for
+optimism, it does not substitute for an independent cohort.</p>
+</div>
+<div class="section level3">
+<h3 id="model-performance-in-multisurvival">Model Performance in <code>multisurvival</code><a class="anchor" aria-label="anchor" href="#model-performance-in-multisurvival"></a>
+</h3>
+<p>Four <code><a href="../reference/multisurvival.html">multisurvival()</a></code> options address the question a Cox
+table cannot answer on its own — how well does this model actually
+predict? All four ran against the bundled <code>histopathology</code>
+data.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res_ms</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/multisurvival.html">multisurvival</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">histopathology</span>,</span>
+<span>  elapsedtime <span class="op">=</span> <span class="st">"OverallTime"</span>, outcome <span class="op">=</span> <span class="st">"Outcome"</span>, outcomeLevel <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>  explanatory <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Group"</span>, <span class="st">"LVI"</span><span class="op">)</span>, contexpl <span class="op">=</span> <span class="st">"Age"</span>,</span>
+<span>  dod <span class="op">=</span> <span class="st">""</span>, dooc <span class="op">=</span> <span class="st">""</span>, awd <span class="op">=</span> <span class="st">""</span>, awod <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  ci_optimism      <span class="op">=</span> <span class="cn">TRUE</span>,   <span class="co"># optimism-corrected C-index by bootstrap</span></span>
+<span>  ci_optimism_boot <span class="op">=</span> <span class="fl">200</span>,    <span class="co"># resamples (default 150)</span></span>
+<span>  compare_models   <span class="op">=</span> <span class="cn">TRUE</span>,   <span class="co"># covariate contribution by single-term deletion</span></span>
+<span>  show_survmetrics <span class="op">=</span> <span class="cn">TRUE</span>,   <span class="co"># Brier score and time-dependent AUC</span></span>
+<span>  survmetrics_timepoints <span class="op">=</span> <span class="st">"12, 36, 60"</span>,</span>
+<span>  survmetrics_show_plots <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th>Option</th>
+<th>What it gives you</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>ci_optimism</code></td>
+<td>The apparent C-index of a model fitted and evaluated on the same
+rows is optimistic. This bootstraps the whole fitting procedure to
+estimate that optimism and subtracts it. Report the corrected
+figure.</td>
+</tr>
+<tr class="even">
+<td><code>compare_models</code></td>
+<td>Drops each term in turn and reports the change in fit, which answers
+“what is this covariate contributing?” more honestly than reading its
+p-value.</td>
+</tr>
+<tr class="odd">
+<td><code>show_survmetrics</code></td>
+<td>Brier score (calibration and discrimination together, lower is
+better) and time-dependent AUC at the timepoints you name in
+<code>survmetrics_timepoints</code>.</td>
+</tr>
+<tr class="even">
+<td><code>ac_summary</code></td>
+<td>With <code>ac = TRUE</code> and <code>adjexplanatory</code> set,
+adds adjusted probability summary tables to the adjusted survival
+curves.</td>
+</tr>
+</tbody>
+</table>
+<p>Optimism correction is still <em>internal</em> validation. It tells
+you how much this modelling procedure overfits these data; it cannot
+tell you how the model behaves in another hospital’s cohort.</p>
+</div>
+<div class="section level3">
+<h3 id="reporting-aids">Reporting Aids<a class="anchor" aria-label="anchor" href="#reporting-aids"></a>
+</h3>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res_report</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/survival.html">survival</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">histopathology</span>,</span>
+<span>  elapsedtime <span class="op">=</span> <span class="st">"OverallTime"</span>, outcome <span class="op">=</span> <span class="st">"Outcome"</span>, outcomeLevel <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>  explanatory <span class="op">=</span> <span class="st">"Group"</span>,</span>
+<span>  dod <span class="op">=</span> <span class="st">""</span>, dooc <span class="op">=</span> <span class="st">""</span>, awd <span class="op">=</span> <span class="st">""</span>, awod <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  adjusted_curves  <span class="op">=</span> <span class="cn">TRUE</span>,   <span class="co"># covariate-adjusted survival curves</span></span>
+<span>  remark_checklist <span class="op">=</span> <span class="cn">TRUE</span>,   <span class="co"># REMARK reporting checklist for prognostic marker studies</span></span>
+<span>  showSummaries    <span class="op">=</span> <span class="cn">TRUE</span>    <span class="co"># natural-language summaries alongside the tables</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><code>remark_checklist</code> is worth running on any
+prognostic-marker analysis you intend to publish; it lists the REMARK
+items and is quicker than reconstructing them from the paper
+afterwards.</p>
 <p>For complex analyses beyond the scope of basic jSurvival functions,
 consider: - Specialized R packages (survival, survminer, rms, cmprsk) -
 Statistical software with advanced survival capabilities - Consultation
@@ -635,6 +884,7 @@ with biostatisticians</p>
 Analysis Handbook</a> - <a href="https://www.clinicalpredictionmodels.org/" class="external-link">Clinical Prediction
 Models</a> - <a href="https://www.strobe-statement.org/" class="external-link">STROBE
 Guidelines</a> for observational studies</p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -647,7 +897,7 @@ Guidelines</a> for observational studies</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
