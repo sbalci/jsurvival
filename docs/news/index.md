@@ -169,8 +169,7 @@ the output made about itself.
   so a missing assignment went undetected instead of being reported.
   Each level is now checked individually.
 - **`singlearm` named the wrong confidence-interval method for the
-  median.** The note said `conf.type = 'log-log'`;
-  [`survfit()`](https://rdrr.io/pkg/survival/man/survfit.html)’s default
+  median.** The note said `conf.type = 'log-log'`; `survfit()`’s default
   is `'log'` — Greenwood’s variance on the log scale. No interval
   changed, only the label.
 - **`singlearm` described its survival table’s event rate

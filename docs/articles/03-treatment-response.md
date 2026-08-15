@@ -201,7 +201,7 @@ researchers without programming experience.
 - **Clinical Workflow Vignette**: For integrating response analysis into
   complete study workflows
 - **Visualization Gallery**: For advanced customization of oncology
-  plots\
+  plots  
 - **Getting Started Guide**: For basic ClinicoPathDescriptives
   functionality
 - **Individual Function Vignettes**: For detailed parameter usage and

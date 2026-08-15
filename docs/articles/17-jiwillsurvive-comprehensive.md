@@ -587,7 +587,7 @@ for(var in grouping_vars) {
 ### Data Preparation Recommendations
 
 1.  **Data Quality**: Ensure no negative survival times
-2.  **Missing Values**: Handle missing data appropriately\
+2.  **Missing Values**: Handle missing data appropriately  
 3.  **Date Formats**: Use consistent date formats
 4.  **Event Coding**: Use clear event coding (0/1, FALSE/TRUE, or
     descriptive factors)

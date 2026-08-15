@@ -500,7 +500,7 @@ Key benefits include:
 
 - **Realistic modeling** of clinical scenarios where treatments and
   patient status change
-- **Flexible data input** supporting both wide and long formats\
+- **Flexible data input** supporting both wide and long formats  
 - **Integration** with other advanced survival analysis features
 - **Comprehensive output** including plots, tables, and model
   diagnostics

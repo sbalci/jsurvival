@@ -482,7 +482,7 @@ and clinical outcomes.
 ## References
 
 - Alluvial Diagrams in Medical Research
-- Survival Analysis Methods in Clinical Studies\
+- Survival Analysis Methods in Clinical Studies  
 - Treatment Pathway Visualization Best Practices
 - ClinicoPath Package Documentation
 

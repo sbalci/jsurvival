@@ -103,7 +103,7 @@ Your data should look like this:
     - Example: `tnm_7th_edition`, `old_stage`
 2.  **New Stage**: Select the variable representing the new staging
     system
-    - Must be a factor variable\
+    - Must be a factor variable  
     - Example: `tnm_8th_edition`, `new_stage`
 3.  **Survival Time**: Select the time-to-event variable
     - Must be numeric
@@ -163,7 +163,7 @@ Shows how patient distribution changes between staging systems:
 
 **Columns:** - **Stage**: Individual stage categories - **Original
 Count/%)**: Distribution in original system - **New Count/(%)**:
-Distribution in new system\
+Distribution in new system  
 - **Change**: Percentage point change
 
 **Interpretation:** - Large changes indicate major revision impact -
@@ -240,7 +240,7 @@ Similar overall survival confirms unchanged patient outcomes
 Bar chart comparing discriminative performance:
 
 **Elements:** - **Original System**: C-index for original staging -
-**New System**: C-index for new staging\
+**New System**: C-index for new staging  
 - **Improvement**: Absolute and percentage change
 
 **Interpretation:** - Higher bars indicate better discrimination -

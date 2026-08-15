@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">jsurvival</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.53.01</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -125,7 +125,7 @@
 <li>
 <strong><code>singlearm</code> multi-event level validation missed unset levels.</strong> The check collected the four level options with <code><a href="https://rdrr.io/r/base/c.html" class="external-link">c()</a></code>, which silently drops <code>NULL</code>s, so a missing assignment went undetected instead of being reported. Each level is now checked individually.</li>
 <li>
-<strong><code>singlearm</code> named the wrong confidence-interval method for the median.</strong> The note said <code>conf.type = 'log-log'</code>; <code><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit()</a></code>’s default is <code>'log'</code> — Greenwood’s variance on the log scale. No interval changed, only the label.</li>
+<strong><code>singlearm</code> named the wrong confidence-interval method for the median.</strong> The note said <code>conf.type = 'log-log'</code>; <code>survfit()</code>’s default is <code>'log'</code> — Greenwood’s variance on the log scale. No interval changed, only the label.</li>
 <li>
 <strong><code>singlearm</code> described its survival table’s event rate inaccurately.</strong> “Event rate by this timepoint” is events <em>within the interval</em> expressed as a proportion of the initial cohort, and now says so.</li>
 <li>
