@@ -309,7 +309,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                 }
 
                 tooltip_html <- glue::glue(
-                    '<div style="background-color: #e3f2fd; padding: 12px; border-radius: 6px; margin: 10px 0; border-left: 4px solid #1976d2;">
+                    '<div style="background-color: rgba(33, 152, 239, 0.13); padding: 12px; border-radius: 6px; margin: 10px 0; border-left: 4px solid #1976d2; color: inherit;">
                         <h4 style="margin: 0 0 8px 0; color: #1565c0;">{term}</h4>
                         <p style="margin: 0;">{definition}</p>
                         {example_text}
@@ -375,7 +375,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         if (identical(hr_val, "N/A")) {
                             glue::glue(.('Analysis of {variable} could not determine hazard ratio.'), variable = variable_name)
                         } else {
-                            glue::glue(.('When {variable} increases by 1 unit, the hazard (risk) of the event changes by a factor of {hr}.'),
+                            glue::glue(.('When {variable} increases by 1 unit, the instantaneous hazard rate of the event is multiplied by {hr} (a hazard ratio, not a risk ratio).'),
                                      variable = variable_name, hr = hr_val)
                         }
                     },
@@ -879,7 +879,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 # Create HTML for the new message
                 new_message <- sprintf(
-                    '<div class="%s" style="margin: 10px 0; padding: 10px; border-left: 4px solid; background-color: #f8f9fa;">
+                    '<div class="%s" style="margin: 10px 0; padding: 10px; border-left: 4px solid; background-color: rgba(138, 155, 172, 0.06); color: inherit;">
                         <strong>%s:</strong> %s
                     </div>',
                     css_class,
@@ -899,7 +899,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
             ,
             .todo = function() {
                 todo <- glue::glue('
-                <div style="padding: 15px; background-color: #f8f9fa; border-left: 4px solid #007bff;">
+                <div style="padding: 15px; background-color: rgba(138, 155, 172, 0.06); border-left: 4px solid #007bff; color: inherit;">
                     <h3 style="margin-top: 0; color: #007bff;">Welcome to ClinicoPath - Survival Analysis for Continuous Variables</h3>
 
                     <p><strong>Purpose:</strong> This tool helps you calculate an optimal cut-off for a continuous variable based on survival outcomes.</p>
@@ -1000,7 +1000,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                                 "Numeric dates are not epoch seconds",
                                 paste0(
                                     "The numeric date columns hold values too small to be Unix epoch seconds ",
-                                    "(the largest is ", format(max(abs(epoch_vals)), big.mark = ","),
+                                    "(the largest is ", base::format(max(abs(epoch_vals)), big.mark = ","),
                                     ", which is January 1970). They look like day counts, as produced by an R ",
                                     "Date column or an Excel serial date. Numeric dates must be seconds since ",
                                     "1970-01-01 -- use the DateTime Converter's corrected_datetime_numeric ",
@@ -2943,10 +2943,10 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                 myformula <- .asSurvivalFormula(formula)
 
 
-                fit <- survminer::surv_fit(
+                fit <- .quietly(survminer::surv_fit(
                     formula = myformula,
                     data = res.cat
-                )
+                ))
 
                 # The "Plot Customization" panel advertises these controls for the
                 # survival curves, but this plot -- the primary Kaplan-Meier output --
@@ -2955,7 +2955,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                 # silently did nothing here, while .plot2/.plot3 already honoured
                 # them. Applying them makes the panel mean what it says (and does
                 # bound the x-axis at Plot End Time, as it already did elsewhere).
-                plot5 <- survminer::ggsurvplot(
+                plot5 <- .quietly(survminer::ggsurvplot(
                     fit,
                     data = res.cat,
                     xlab = private$.timeAxisLabel(),
@@ -2966,8 +2966,8 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                     conf.int = self$options$ci95,
                     censor = self$options$censored,
                     surv.median.line = self$options$medianline
-                )
-                print(plot5)
+                ))
+                .quietly(print(plot5))
                 TRUE
             }
 
@@ -3398,13 +3398,13 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 for (i in 1:num_cuts) {
                     fit_err <- tryCatch({
-                        res.cut <- survminer::surv_cutpoint(
+                        res.cut <- .quietly(survminer::surv_cutpoint(
                             current_data,
                             time = mytime,
                             event = myoutcome,
                             variables = mycontexpl,
                             minprop = self$options$min_group_size / 100
-                        )
+                        ))
 
                         cutoffs[i] <- summary(res.cut)$cutpoint
 
@@ -4032,7 +4032,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                     fit <- survival::survfit(surv_formula, data = plot_data)
 
                     # Create survival plot
-                    surv_plot <- survminer::ggsurvplot(
+                    surv_plot <- .quietly(survminer::ggsurvplot(
                         fit,
                         data = plot_data,
                         title = paste0("Survival Curves - Multiple Cut-offs for ", self$options$contexpl),
@@ -4049,9 +4049,9 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         ylim = c(self$options$ybegin_plot, self$options$yend_plot),
                         palette = "jco",
                         ggtheme = ggplot2::theme_minimal()
-                    )
+                    ))
 
-                    print(surv_plot)
+                    .quietly(print(surv_plot))
                 }, error = function(e) {
                     # Fallback plot
                     plot <- ggplot2::ggplot() +
@@ -4535,7 +4535,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 tryCatch({
                     # Create log-log plot using survminer
-                    loglog_plot <- survminer::ggsurvplot(
+                    loglog_plot <- .quietly(survminer::ggsurvplot(
                         fit,
                         data = res.cat,
                         fun = "cloglog",
@@ -4545,9 +4545,9 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         legend.title = self$options$contexpl,
                         risk.table = FALSE,
                         conf.int = FALSE
-                    )
+                    ))
 
-                    print(loglog_plot)
+                    .quietly(print(loglog_plot))
                 }, error = function(e) {
                     # Fallback: create simple log-log plot with ggplot2
                     surv_data <- data.frame(
@@ -4675,22 +4675,22 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
             .addExplanations = function() {
                 # Cox Regression Explanation
                 private$.setExplanationContent("coxRegressionExplanation", '
-                <div class="explanation-box" style="background-color: #f0f8ff; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                <div class="explanation-box" style="background-color: rgba(33, 152, 255, 0.07); padding: 15px; border-radius: 8px; margin: 10px 0; color: inherit;">
                     <h3 style="color: #2c5282; margin-top: 0;"> Understanding Cox Regression for Continuous Variables</h3>
 
                     <div style="background-color: white; padding: 12px; border-radius: 5px; margin: 10px 0;">
                         <h4 style="color: #2d3748; margin-top: 0;">What is Cox Regression with Continuous Variables?</h4>
                         <p style="margin: 8px 0;">Cox regression with continuous variables analyzes how <strong>each unit increase</strong> in a continuous predictor (e.g., age, biomarker level) affects survival risk.</p>
 
-                        <div style="background-color: #e6f7ff; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        <div style="background-color: rgba(33, 184, 255, 0.11); padding: 10px; border-radius: 5px; margin: 10px 0; color: inherit;">
                             <strong> Key Concept:</strong> The reported HR assumes a linear change in log hazard for each unit increase. This is a model assumption, not proof of a biological dose-response relationship.
                         </div>
                     </div>
 
-                    <div style="background-color: #fef5e7; padding: 12px; border-radius: 5px; margin: 10px 0;">
+                    <div style="background-color: rgba(246, 163, 33, 0.11); padding: 12px; border-radius: 5px; margin: 10px 0; color: inherit;">
                         <h4 style="color: #d68910; margin-top: 0;"> Interpreting Hazard Ratios (HR)</h4>
                         <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
-                            <tr style="background-color: #fff3cd;">
+                            <tr style="background-color: rgba(255, 202, 33, 0.23); color: inherit;">
                                 <th style="padding: 8px; text-align: left; border: 1px solid #ffc107;">HR Value</th>
                                 <th style="padding: 8px; text-align: left; border: 1px solid #ffc107;">Meaning</th>
                                 <th style="padding: 8px; text-align: left; border: 1px solid #ffc107;">Clinical Example</th>
@@ -4700,7 +4700,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                                 <td style="padding: 8px; border: 1px solid #ffc107;">No effect</td>
                                 <td style="padding: 8px; border: 1px solid #ffc107;">Variable does not affect survival</td>
                             </tr>
-                            <tr style="background-color: #fffbf0;">
+                            <tr style="background-color: rgba(255, 196, 33, 0.07); color: inherit;">
                                 <td style="padding: 8px; border: 1px solid #ffc107;"><strong>HR > 1.0</strong></td>
                                 <td style="padding: 8px; border: 1px solid #ffc107;">Increased risk</td>
                                 <td style="padding: 8px; border: 1px solid #ffc107;">HR = 1.05: 5% higher hazard per unit</td>
@@ -4713,7 +4713,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         </table>
                     </div>
 
-                    <div style="background-color: #e8f5e9; padding: 12px; border-radius: 5px; margin: 10px 0;">
+                    <div style="background-color: rgba(33, 159, 43, 0.1); padding: 12px; border-radius: 5px; margin: 10px 0; color: inherit;">
                         <h4 style="color: #2e7d32; margin-top: 0;"> Clinical Examples</h4>
 
                         <div style="background-color: white; padding: 10px; border-radius: 5px; margin: 10px 0;">
@@ -4726,7 +4726,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                             </ul>
                         </div>
 
-                        <div style="background-color: #f3e5f5; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        <div style="background-color: rgba(153, 33, 170, 0.12); padding: 10px; border-radius: 5px; margin: 10px 0; color: inherit;">
                             <strong>Example 2: Biomarker Level</strong>
                             <p style="margin: 5px 0;">Protein X HR = 0.98 (95% CI: 0.96-0.99, p=0.02)</p>
                             <ul style="margin: 5px 0; padding-left: 20px;">
@@ -4736,7 +4736,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         </div>
                     </div>
 
-                    <div style="background-color: #fff3e0; padding: 10px; border-radius: 5px; margin-top: 10px; border-left: 4px solid #ff9800;">
+                    <div style="background-color: rgba(255, 169, 33, 0.14); padding: 10px; border-radius: 5px; margin-top: 10px; border-left: 4px solid #ff9800; color: inherit;">
                         <strong> Important Assumptions:</strong>
                         <ul style="margin: 5px 0; padding-left: 20px;">
                             <li><strong>Linear relationship:</strong> Effect is constant across all values (may not always be true)</li>
@@ -4749,19 +4749,19 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 # Cut-off Point Analysis Explanation
                 private$.setExplanationContent("cutoffAnalysisExplanation", '
-                <div class="explanation-box" style="background-color: #f0f8ff; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                <div class="explanation-box" style="background-color: rgba(33, 152, 255, 0.07); padding: 15px; border-radius: 8px; margin: 10px 0; color: inherit;">
                     <h3 style="color: #2c5282; margin-top: 0;"> Understanding Cut-off Point Analysis</h3>
 
                     <div style="background-color: white; padding: 12px; border-radius: 5px; margin: 10px 0;">
                         <h4 style="color: #2d3748; margin-top: 0;">What is Cut-off Point Analysis?</h4>
                         <p style="margin: 8px 0;">Cut-off analysis transforms a <strong>continuous variable into lower- and higher-value groups</strong> using a data-derived threshold. The direction of risk must be read from the survival estimates; higher marker values are not automatically higher risk.</p>
 
-                        <div style="background-color: #e6f7ff; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        <div style="background-color: rgba(33, 184, 255, 0.11); padding: 10px; border-radius: 5px; margin: 10px 0; color: inherit;">
                             <strong> Goal:</strong> Find the value that creates two groups with the <strong>maximum survival difference</strong>
                         </div>
                     </div>
 
-                    <div style="background-color: #fef5e7; padding: 12px; border-radius: 5px; margin: 10px 0;">
+                    <div style="background-color: rgba(246, 163, 33, 0.11); padding: 12px; border-radius: 5px; margin: 10px 0; color: inherit;">
                         <h4 style="color: #d68910; margin-top: 0;"> How It Works</h4>
 
                         <div style="background-color: white; padding: 10px; border-radius: 5px; margin: 10px 0;">
@@ -4775,7 +4775,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         </div>
 
                         <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
-                            <tr style="background-color: #fff3cd;">
+                            <tr style="background-color: rgba(255, 202, 33, 0.23); color: inherit;">
                                 <th style="padding: 8px; text-align: left; border: 1px solid #ffc107;">Step</th>
                                 <th style="padding: 8px; text-align: left; border: 1px solid #ffc107;">Process</th>
                                 <th style="padding: 8px; text-align: left; border: 1px solid #ffc107;">Output</th>
@@ -4785,7 +4785,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                                 <td style="padding: 8px; border: 1px solid #ffc107;">Try multiple cut-offs</td>
                                 <td style="padding: 8px; border: 1px solid #ffc107;">Range of p-values</td>
                             </tr>
-                            <tr style="background-color: #fffbf0;">
+                            <tr style="background-color: rgba(255, 196, 33, 0.07); color: inherit;">
                                 <td style="padding: 8px; border: 1px solid #ffc107;"><strong>2. Selection</strong></td>
                                 <td style="padding: 8px; border: 1px solid #ffc107;">Find minimum p-value</td>
                                 <td style="padding: 8px; border: 1px solid #ffc107;">Optimal cut-off value</td>
@@ -4798,7 +4798,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         </table>
                     </div>
 
-                    <div style="background-color: #e8f5e9; padding: 12px; border-radius: 5px; margin: 10px 0;">
+                    <div style="background-color: rgba(33, 159, 43, 0.1); padding: 12px; border-radius: 5px; margin: 10px 0; color: inherit;">
                         <h4 style="color: #2e7d32; margin-top: 0;"> Clinical Benefits</h4>
 
                         <div style="background-color: white; padding: 10px; border-radius: 5px; margin: 10px 0;">
@@ -4811,7 +4811,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                             </ul>
                         </div>
 
-                        <div style="background-color: #f3e5f5; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        <div style="background-color: rgba(153, 33, 170, 0.12); padding: 10px; border-radius: 5px; margin: 10px 0; color: inherit;">
                             <strong> Clinical Example:</strong>
                             <p style="margin: 5px 0;">Biomarker X data-derived cut-off = 25.3 ng/mL</p>
                             <ul style="margin: 5px 0; padding-left: 20px;">
@@ -4822,7 +4822,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         </div>
                     </div>
 
-                    <div style="background-color: #ffebee; padding: 12px; border-radius: 5px; margin: 10px 0;">
+                    <div style="background-color: rgba(255, 33, 67, 0.09); padding: 12px; border-radius: 5px; margin: 10px 0; color: inherit;">
                         <h4 style="color: #c62828; margin-top: 0;"> Important Limitations</h4>
                         <ul style="margin: 5px 0; padding-left: 20px;">
                             <li><strong>Data-dependent:</strong> Optimal cut-off may vary between studies</li>
@@ -4832,7 +4832,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         </ul>
                     </div>
 
-                    <div style="background-color: #fff3e0; padding: 10px; border-radius: 5px; margin-top: 10px; border-left: 4px solid #ff9800;">
+                    <div style="background-color: rgba(255, 169, 33, 0.14); padding: 10px; border-radius: 5px; margin-top: 10px; border-left: 4px solid #ff9800; color: inherit;">
                         <strong> Best Practices:</strong>
                         <ul style="margin: 5px 0; padding-left: 20px;">
                             <li>Validate cut-off in independent cohort when possible</li>
@@ -4846,7 +4846,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 # Multiple Cutoffs Explanation
                 private$.setExplanationContent("multipleCutoffsExplanation", '
-                <div style="margin-bottom: 20px; padding: 15px; background-color: #fff3cd; border-left: 4px solid #ffc107;">
+                <div style="margin-bottom: 20px; padding: 15px; background-color: rgba(255, 202, 33, 0.23); border-left: 4px solid #ffc107; color: inherit;">
                     <h4 style="margin-top: 0; color: #2c3e50;">Understanding Multiple Cut-offs Analysis</h4>
                     <p><strong>Marker-value grouping:</strong> Creates ordered groups from a continuous variable; the survival ordering is estimated from the data rather than assumed by the labels.</p>
                     <ul>
@@ -4861,7 +4861,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 # Person-Time Analysis Explanation
                 private$.setExplanationContent("personTimeExplanation", '
-                <div style="margin-bottom: 20px; padding: 15px; background-color: #d4edda; border-left: 4px solid #28a745;">
+                <div style="margin-bottom: 20px; padding: 15px; background-color: rgba(33, 162, 64, 0.19); border-left: 4px solid #28a745; color: inherit;">
                     <h4 style="margin-top: 0; color: #2c3e50;">Understanding Person-Time Analysis</h4>
                     <p><strong>Person-Time:</strong> Accounts for both number of participants and their observation duration.</p>
                     <ul>
@@ -4876,7 +4876,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 # RMST Analysis Explanation
                 private$.setExplanationContent("rmstExplanation", '
-                <div style="margin-bottom: 20px; padding: 15px; background-color: #e2e3e5; border-left: 4px solid #6c757d;">
+                <div style="margin-bottom: 20px; padding: 15px; background-color: rgba(33, 41, 56, 0.13); border-left: 4px solid #6c757d; color: inherit;">
                     <h4 style="margin-top: 0; color: #2c3e50;">Understanding Restricted Mean Survival Time (RMST)</h4>
                     <p><strong>RMST:</strong> Average survival time up to a specified time horizon (\u03c4).</p>
                     <ul>
@@ -4891,7 +4891,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 # Residual Diagnostics Explanation
                 private$.setExplanationContent("residualDiagnosticsExplanation", '
-                <div style="margin-bottom: 20px; padding: 15px; background-color: #ffeaa7; border-left: 4px solid #fdcb6e;">
+                <div style="margin-bottom: 20px; padding: 15px; background-color: rgba(255, 202, 33, 0.4); border-left: 4px solid #fdcb6e; color: inherit;">
                     <h4 style="margin-top: 0; color: #2c3e50;">Understanding Cox Model Residual Diagnostics</h4>
                     <p><strong>Model Residuals:</strong> Assess Cox model fit and identify potential issues.</p>
                     <ul>
@@ -4906,7 +4906,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 # Log-Log Plot Explanation
                 private$.setExplanationContent("loglogPlotExplanation", '
-                <div style="margin-bottom: 20px; padding: 15px; background-color: #eaf4ff; border-left: 4px solid #3182ce;">
+                <div style="margin-bottom: 20px; padding: 15px; background-color: rgba(33, 139, 255, 0.09); border-left: 4px solid #3182ce; color: inherit;">
                     <h4 style="margin-top: 0; color: #2c3e50;">Understanding Log-Log Plots for the Proportional Hazards Assumption</h4>
                     <p><strong>Purpose:</strong> The complementary log-log plot displays log(-log(S(t))) against log(time) for each group and is a visual check of the proportional hazards (PH) assumption underlying Cox regression.</p>
                     <ul>
@@ -4920,14 +4920,14 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 # Survival Plots Explanation
                 private$.setExplanationContent("survivalPlotsExplanation", '
-                <div class="explanation-box" style="background-color: #f0f8ff; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                <div class="explanation-box" style="background-color: rgba(33, 152, 255, 0.07); padding: 15px; border-radius: 8px; margin: 10px 0; color: inherit;">
                     <h3 style="color: #2c5282; margin-top: 0;"> Understanding Survival Curves for Continuous Variables</h3>
 
                     <div style="background-color: white; padding: 12px; border-radius: 5px; margin: 10px 0;">
                         <h4 style="color: #2d3748; margin-top: 0;"> Survival Curves with Cut-offs</h4>
                         <p style="margin: 8px 0;">When analyzing continuous variables, survival plots show <strong>separate curves for lower and higher marker-value groups</strong> based on a data-derived cut-off.</p>
 
-                        <div style="background-color: #e6f7ff; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        <div style="background-color: rgba(33, 184, 255, 0.11); padding: 10px; border-radius: 5px; margin: 10px 0; color: inherit;">
                             <strong> How to Read the Plot:</strong>
                             <ul style="margin: 5px 0; padding-left: 20px;">
                                 <li><strong>Two curves:</strong> Higher marker values (above cut-off) vs lower marker values (below cut-off)</li>
@@ -4938,10 +4938,10 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         </div>
                     </div>
 
-                    <div style="background-color: #fef5e7; padding: 12px; border-radius: 5px; margin: 10px 0;">
+                    <div style="background-color: rgba(246, 163, 33, 0.11); padding: 12px; border-radius: 5px; margin: 10px 0; color: inherit;">
                         <h4 style="color: #d68910; margin-top: 0;"> Curve Interpretation Patterns</h4>
                         <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
-                            <tr style="background-color: #fff3cd;">
+                            <tr style="background-color: rgba(255, 202, 33, 0.23); color: inherit;">
                                 <th style="padding: 8px; text-align: left; border: 1px solid #ffc107;">Pattern</th>
                                 <th style="padding: 8px; text-align: left; border: 1px solid #ffc107;">Clinical Meaning</th>
                             </tr>
@@ -4949,7 +4949,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                                 <td style="padding: 8px; border: 1px solid #ffc107;"><strong> Wide separation early</strong></td>
                                 <td style="padding: 8px; border: 1px solid #ffc107;">Strong early prognostic effect</td>
                             </tr>
-                            <tr style="background-color: #fffbf0;">
+                            <tr style="background-color: rgba(255, 196, 33, 0.07); color: inherit;">
                                 <td style="padding: 8px; border: 1px solid #ffc107;"><strong> Curves converge later</strong></td>
                                 <td style="padding: 8px; border: 1px solid #ffc107;">Effect diminishes over time</td>
                             </tr>
@@ -4957,14 +4957,14 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                                 <td style="padding: 8px; border: 1px solid #ffc107;"><strong> Parallel curves</strong></td>
                                 <td style="padding: 8px; border: 1px solid #ffc107;">Consistent proportional hazards</td>
                             </tr>
-                            <tr style="background-color: #fffbf0;">
+                            <tr style="background-color: rgba(255, 196, 33, 0.07); color: inherit;">
                                 <td style="padding: 8px; border: 1px solid #ffc107;"><strong> Crossing curves</strong></td>
                                 <td style="padding: 8px; border: 1px solid #ffc107;">Time-dependent effects (complex interpretation)</td>
                             </tr>
                         </table>
                     </div>
 
-                    <div style="background-color: #e8f5e9; padding: 12px; border-radius: 5px; margin: 10px 0;">
+                    <div style="background-color: rgba(33, 159, 43, 0.1); padding: 12px; border-radius: 5px; margin: 10px 0; color: inherit;">
                         <h4 style="color: #2e7d32; margin-top: 0;"> Clinical Application Tips</h4>
 
                         <div style="background-color: white; padding: 10px; border-radius: 5px; margin: 10px 0;">
@@ -4976,7 +4976,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                             </ul>
                         </div>
 
-                        <div style="background-color: #f3e5f5; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        <div style="background-color: rgba(153, 33, 170, 0.12); padding: 10px; border-radius: 5px; margin: 10px 0; color: inherit;">
                             <strong> Biomarker Validation:</strong>
                             <p style="margin: 5px 0;">Strong separation, even with a small p-value, is exploratory after data-driven cut-off selection and does not establish clinical utility. Before clinical use, evaluate:</p>
                             <ul style="margin: 5px 0; padding-left: 20px;">
@@ -4987,7 +4987,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         </div>
                     </div>
 
-                    <div style="background-color: #fff3e0; padding: 10px; border-radius: 5px; margin-top: 10px; border-left: 4px solid #ff9800;">
+                    <div style="background-color: rgba(255, 169, 33, 0.14); padding: 10px; border-radius: 5px; margin-top: 10px; border-left: 4px solid #ff9800; color: inherit;">
                         <strong> Important Considerations:</strong>
                         <ul style="margin: 5px 0; padding-left: 20px;">
                             <li><strong>Cut-off validation:</strong> Confirm cut-off value in independent dataset</li>
