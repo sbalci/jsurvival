@@ -28,3 +28,4 @@ README_badges.md
 ^backups$
 ^backups/
 ^data/.*\.csv$
+^.*\.tar\.gz$
