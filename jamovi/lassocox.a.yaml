@@ -1,0 +1,272 @@
+---
+name: lassocox
+title: Lasso-Cox Regression
+menuGroup: Survival
+menuSubgroup: Penalized Cox Regression
+menuTitle: LASSO Cox
+menuSubtitle: Sparse Cox model development with cross-validated L1 penalization.
+version: '1.0.8'
+jas: '1.2'
+
+description:
+    main: >
+        Fits a cross-validated LASSO-penalized Cox model for exploratory model
+        development. Apparent performance requires internal and external validation
+        before clinical use.
+    # R:
+    #     dontrun: true
+    #     usage: |
+    #         lassocox(data = data, elapsedtime = "Time", outcome = "Status",
+    #             outcomeLevel = "1", censorLevel = "0",
+    #             explanatory = vars(age, stage, grade))
+
+options:
+    - name: data
+      type: Data
+      description:
+          R: The data as a data frame.
+
+    - name: elapsedtime
+      title: Follow-up time
+      type: Variable
+      suggested: [ continuous ]
+      permitted: [ numeric ]
+      default: NULL
+      description:
+        R: >
+          The strictly positive numeric follow-up time until the event or last observation.
+          Zero or negative times must be resolved from the time origin and measurement
+          resolution; they are not automatically adjusted.
+
+    - name: outcome
+      title: 'Outcome'
+      type: Variable
+      suggested: [ ordinal, nominal ]
+      permitted: [ factor, numeric ]
+      default: NULL
+      description:
+        R: >
+          Binary event indicator variable (event vs censored). Can be factor or
+          numeric with exactly two observed values.
+
+    - name: outcomeLevel
+      title: Event level
+      type: Level
+      variable: (outcome)
+      description:
+        R: >
+          Level of `outcome` considered as the event. For binary factor outcomes,
+          if left empty the second observed level is used; for numeric binary
+          outcomes, the larger observed value is used (or 1 for 0/1 coding).
+
+    - name: censorLevel
+      title: Censored level
+      type: Level
+      variable: (outcome)
+      description:
+        R: >
+          Level of `outcome` considered as censored (no event). Together with
+          `outcomeLevel`, this must identify the exactly two observed nonmissing
+          outcome values. Rows with an actually missing outcome are excluded;
+          additional observed event types cause the analysis to stop and must be
+          recoded explicitly for a cause-specific analysis.
+
+    - name: explanatory
+      title: Candidate predictors
+      type: Variables
+      suggested: [ nominal, ordinal, continuous ]
+      permitted: [ factor, numeric ]
+      default: NULL
+      description:
+        R: >
+          Variables to be considered for selection in the Lasso-Cox regression.
+          Time and outcome cannot also be predictors. Infinite values and
+          entirely missing predictors are rejected.
+          Constant variables are removed before fitting. Categorical predictors are
+          expanded into treatment indicator columns, including ordered factors;
+          the first observed factor level is the reference. Global/custom contrasts
+          are not used. LASSO selects columns individually rather than as a grouped factor.
+      
+    - name: lambda
+      title: Lambda selection rule
+      type: List
+      options:
+        - title: Minimum CV error
+          name: lambda.min
+        - title: 1-SE rule
+          name: lambda.1se
+      default: lambda.1se
+      description:
+        R: >
+          Cross-validation rule used to select lambda. A valid empty model selected
+          by the 1-SE rule is preserved and is not replaced by lambda.min.
+
+    - name: nfolds
+      title: Number of CV folds
+      type: Integer
+      default: 10
+      min: 3
+      description:
+        R: >
+          Requested number of cross-validation folds. The count is reduced when
+          necessary so every fold contains event and censored observations; at least
+          three of each outcome state are required.
+
+    - name: random_seed
+      title: Random seed
+      type: Integer
+      default: 123456
+      min: 1
+      max: 999999
+      description:
+        R: >
+          Random seed for reproducible cross-validation fold assignment.
+      
+    - name: standardize
+      title: Internal standardization
+      type: Bool
+      default: true
+      description:
+        R: >
+          Whether glmnet should standardize predictors internally during each model fit.
+          Cross-validation training fits therefore do not reuse full-cohort means and
+          standard deviations. Displayed coefficients are back-transformed by glmnet to
+          the original design-column scale. Factor indicators are still penalized and
+          selected separately rather than as a grouped factor.
+
+    - name: suitabilityCheck
+      title: Data suitability assessment
+      type: Bool
+      default: true
+      description:
+        R: >
+          Display an advisory assessment of outcome information, model dimension,
+          missingness, collinearity, and an exploratory proportional-hazards
+          diagnostic for an unpenalized refit of the selected encoded columns.
+
+    - name: cv_plot
+      title: Cross-validation plot
+      type: Bool
+      default: true
+      description:
+        R: >
+          Whether to show the cross-validation plot.
+
+    - name: coef_plot
+      title: Coefficient summary
+      type: Bool
+      default: true
+      description:
+        R: >
+          Whether to show a bar plot of selected-variable coefficients at the
+          chosen lambda value.
+
+    - name: survival_plot
+      title: Development risk-group curves
+      type: Bool
+      default: true
+      description:
+        R: >
+          Whether to show exploratory survival curves after splitting the development
+          sample at its median fitted score. The split is not a validated clinical
+          cutoff and no group-comparison p-value is reported.
+
+    - name: path_plot
+      title: Coefficient paths
+      type: Bool
+      default: false
+      description:
+        R: >
+          Plot coefficients across the fitted log-lambda path with both CV choices
+          and counts of nonzero columns. For readability, at most 30 paths are
+          displayed, ranked by their summed absolute coefficients across the path.
+
+    - name: showEncoding
+      title: Predictor encoding
+      type: Bool
+      default: false
+      description:
+        R: Display the original predictor, design column, coding, reference level, and selection status.
+
+    - name: showReproducibility
+      title: Reproducibility details
+      type: Bool
+      default: false
+      description:
+        R: Display exact lambda choices, seed, event/censor fold counts, and software versions.
+
+    - name: showRCode
+      title: Reproducible R code
+      type: Bool
+      default: false
+      description:
+        R: >
+          Generate upstream glmnet R code to refit the same development data with
+          the recorded encoding and stratified CV seed. This is not external validation.
+
+    - name: riskScore
+      title: Development risk score
+      type: Output
+      description:
+        R: >
+          Adds calculated risk scores to the dataset (complete cases only;
+          excluded rows receive missing values).
+
+    # Explanatory Output Options
+    - name: showSummary
+      title: Results summary
+      type: Bool
+      default: false
+      description:
+        R: >
+          Display a natural-language development summary that labels discrimination
+          as apparent and states the required validation.
+
+    - name: showExplanations
+      title: Method explanations
+      type: Bool
+      default: false
+      description:
+        R: >
+          Display detailed explanations of LASSO Cox regression methodology,
+          including regularization concepts and interpretation guidance.
+
+    - name: showMethodologyNotes
+      title: Methodology notes
+      type: Bool
+      default: false
+      description:
+        R: >
+          Show comprehensive technical notes about LASSO regularization,
+          cross-validation, and variable selection process.
+
+    - name: includeClinicalGuidance
+      title: Clinical guidance
+      type: Bool
+      default: false
+      description:
+        R: >
+          Include guidance for clinical interpretation of LASSO Cox regression
+          results, emphasizing that this development analysis alone cannot support
+          patient-level decisions.
+
+    - name: showVariableImportance
+      title: Variable importance
+      type: Bool
+      default: false
+      description:
+        R: >
+          Display absolute penalized coefficients and path-inclusion proportions.
+          Path inclusion is not a bootstrap selection frequency or stability measure.
+
+    - name: showModelComparison
+      title: Exploratory Cox comparisons
+      type: Bool
+      default: false
+      description:
+        R: >
+          Descriptively compare an unpenalized Cox refit after LASSO selection with
+          an unpenalized Cox model using all encoded predictors. All statistics are
+          apparent and selection-biased; AIC is not a formal comparison here.
+
+...

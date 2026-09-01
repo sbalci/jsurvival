@@ -1,0 +1,392 @@
+---
+name: lassocox
+title: Lasso-Cox Regression
+jrs: '1.1'
+
+items:
+    - name: todo
+      title: To Do
+      type: Html
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - censorLevel
+          - elapsedtime
+          - explanatory
+          - lambda
+          - nfolds
+          - standardize
+          - random_seed
+
+    - name: suitabilityReport
+      title: Data Suitability Assessment
+      type: Html
+      visible: (suitabilityCheck)
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - censorLevel
+          - elapsedtime
+          - explanatory
+          - suitabilityCheck
+          - lambda
+          - nfolds
+          - standardize
+          - random_seed
+
+    - name: modelSummary
+      title: Model Summary
+      type: Table
+      visible: (length(elapsedtime) > 0 && length(outcome) > 0 && length(explanatory) > 0)
+      rows: 0
+      columns:
+        - name: statistic
+          title: "Statistic"
+          type: text
+        - name: value
+          title: "Value"
+          type: text
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - censorLevel
+          - elapsedtime
+          - explanatory
+          - lambda
+          - nfolds
+          - standardize
+          - random_seed
+
+    - name: coefficients
+      title: Penalized Coefficients at Selected Lambda
+      type: Table
+      visible: (length(elapsedtime) > 0 && length(outcome) > 0 && length(explanatory) > 0)
+      rows: 0
+      columns:
+        - name: variable
+          title: "Variable"
+          type: text
+        - name: coefficient
+          title: "Penalized Coefficient"
+          type: number
+          format: zto
+        - name: hazardRatio
+          title: "Penalized Hazard Ratio"
+          type: number
+          format: zto
+        - name: importance
+          title: "Scale-Adjusted Magnitude |beta| x SD"
+          type: number
+          format: zto
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - censorLevel
+          - elapsedtime
+          - explanatory
+          - lambda
+          - nfolds
+          - standardize
+          - random_seed
+
+    - name: performance
+      title: Apparent Development Performance
+      type: Table
+      visible: (length(elapsedtime) > 0 && length(outcome) > 0 && length(explanatory) > 0)
+      rows: 0
+      columns:
+        - name: metric
+          title: "Metric"
+          type: text
+        - name: value
+          title: "Value"
+          type: text
+        - name: interpretation
+          title: "Interpretation"
+          type: text
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - censorLevel
+          - elapsedtime
+          - explanatory
+          - lambda
+          - nfolds
+          - standardize
+          - random_seed
+
+    - name: cv_plot
+      title: Cross-validation Plot
+      type: Image
+      renderFun: .cvPlot
+      width: 600
+      height: 400
+      requiresData: true
+      visible: (cv_plot && length(elapsedtime) > 0 && length(outcome) > 0 && length(explanatory) > 0)
+      refs: glmnet
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - censorLevel
+          - elapsedtime
+          - explanatory
+          - lambda
+          - nfolds
+          - standardize
+          - random_seed
+
+    - name: coef_plot
+      title: Coefficient Plot
+      type: Image
+      renderFun: .coefPlot
+      width: 600
+      height: 400
+      requiresData: true
+      visible: (coef_plot && length(elapsedtime) > 0 && length(outcome) > 0 && length(explanatory) > 0)
+      refs: glmnet
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - censorLevel
+          - elapsedtime
+          - explanatory
+          - lambda
+          - nfolds
+          - standardize
+          - random_seed
+
+    - name: survival_plot
+      title: Exploratory Development-Sample Risk-Group Curves
+      type: Image
+      renderFun: .survivalPlot
+      width: 600
+      height: 400
+      requiresData: true
+      visible: (survival_plot && length(elapsedtime) > 0 && length(outcome) > 0 && length(explanatory) > 0)
+      refs: survminer
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - censorLevel
+          - elapsedtime
+          - explanatory
+          - lambda
+          - nfolds
+          - standardize
+          - random_seed
+
+    - name: riskScore
+      title: Add Risk Score to Data
+      type: Output
+      measureType: continuous
+      varTitle: 'Development-Sample Linear Predictor from LASSO Cox'
+      varDescription: Apparent linear predictor from the fitted development model; not validated for clinical use
+      clearWith:
+          - outcome
+          - outcomeLevel
+          - censorLevel
+          - elapsedtime
+          - explanatory
+          - lambda
+          - nfolds
+          - standardize
+          - random_seed
+
+    - name: path_plot
+      title: Coefficient Paths
+      type: Image
+      renderFun: .pathPlot
+      width: 750
+      height: 500
+      requiresData: true
+      visible: (path_plot && length(elapsedtime) > 0 && length(outcome) > 0 && length(explanatory) > 0)
+      refs: glmnet
+      clearWith: [outcome, outcomeLevel, censorLevel, elapsedtime, explanatory, lambda, nfolds, standardize, random_seed, path_plot]
+
+    - name: encoding
+      title: Predictor Encoding
+      type: Table
+      rows: 0
+      visible: (showEncoding)
+      columns:
+        - name: variable
+          title: Original Predictor
+          type: text
+        - name: column
+          title: Encoded Column
+          type: text
+        - name: coding
+          title: Coding
+          type: text
+        - name: reference
+          title: Reference Level
+          type: text
+        - name: level
+          title: Comparison Level
+          type: text
+        - name: selected
+          title: Selected
+          type: text
+      clearWith: [outcome, outcomeLevel, censorLevel, elapsedtime, explanatory, lambda, nfolds, standardize, random_seed, showEncoding]
+
+    - name: reproducibility
+      title: Reproducibility Details
+      type: Table
+      rows: 0
+      visible: (showReproducibility)
+      columns:
+        - name: item
+          title: Item
+          type: text
+        - name: value
+          title: Value
+          type: text
+      clearWith: [outcome, outcomeLevel, censorLevel, elapsedtime, explanatory, lambda, nfolds, standardize, random_seed, showReproducibility]
+
+    - name: rCode
+      title: Reproducible R Code
+      type: Html
+      visible: (showRCode)
+      clearWith: [outcome, outcomeLevel, censorLevel, elapsedtime, explanatory, lambda, nfolds, standardize, random_seed, showRCode]
+
+    # Natural-language Summary
+    - name: summaryText
+      title: Results Summary
+      type: Html
+      visible: (showSummary)
+      clearWith:
+          - showSummary
+          - outcome
+          - outcomeLevel
+          - censorLevel
+          - elapsedtime
+          - explanatory
+          - lambda
+          - nfolds
+          - standardize
+          - random_seed
+
+    # Explanatory Output Items
+    - name: lassoExplanation
+      title: Understanding LASSO Cox Regression
+      type: Html
+      visible: (showExplanations)
+      clearWith:
+          - showExplanations
+
+    - name: methodologyNotes
+      title: LASSO Cox Methodology Notes
+      type: Html
+      visible: (showMethodologyNotes)
+      clearWith:
+          - showMethodologyNotes
+
+    - name: clinicalGuidance
+      title: Clinical Interpretation Guidance
+      type: Html
+      visible: (includeClinicalGuidance)
+      clearWith:
+          - includeClinicalGuidance
+
+    - name: variableImportance
+      title: Variable Importance Analysis
+      type: Table
+      visible: (showVariableImportance)
+      rows: 0
+      columns:
+        - name: variable
+          title: "Variable"
+          type: text
+        - name: importance_score
+          title: "Scale-Adjusted Magnitude |beta| x SD"
+          type: number
+          format: zto
+        - name: selection_frequency
+          title: "Path Inclusion Proportion"
+          type: number
+          format: pc
+        - name: stability_rank
+          title: "Magnitude Rank"
+          type: integer
+      clearWith:
+          - showVariableImportance
+          - outcome
+          - outcomeLevel
+          - censorLevel
+          - elapsedtime
+          - explanatory
+          - lambda
+          - nfolds
+          - standardize
+          - random_seed
+
+    - name: modelComparison
+      title: Exploratory Unpenalized Refit Comparison
+      type: Table
+      visible: (showModelComparison)
+      rows: 0
+      columns:
+        - name: model_type
+          title: "Model Type"
+          type: text
+        - name: n_variables
+          title: "N Variables"
+          type: integer
+        - name: cindex
+          title: "Apparent C-index"
+          type: number
+          format: zto
+        - name: aic
+          title: "Apparent AIC"
+          type: number
+          format: zto
+        - name: log_likelihood
+          title: "Apparent Log-Likelihood"
+          type: number
+          format: zto
+      clearWith:
+          - showModelComparison
+          - outcome
+          - outcomeLevel
+          - censorLevel
+          - elapsedtime
+          - explanatory
+          - lambda
+          - nfolds
+          - standardize
+          - random_seed
+
+    - name: regularizationPathExplanation
+      title: Understanding the Coefficient Summary Plot
+      type: Html
+      visible: (showExplanations && coef_plot)
+      clearWith:
+          - showExplanations
+          - coef_plot
+
+    - name: crossValidationExplanation
+      title: Understanding Cross-Validation Plot
+      type: Html
+      visible: (showExplanations && cv_plot)
+      clearWith:
+          - showExplanations
+          - cv_plot
+
+    - name: riskScoreExplanation
+      title: Understanding Risk Scores and Survival Curves
+      type: Html
+      visible: (showExplanations && survival_plot)
+      clearWith:
+          - showExplanations
+          - survival_plot
+
+refs:
+    - ClinicoPathJamoviModule
+    - glmnet
+    - survival
+    - survminer
+    - Simon2011Coxnet
+    - Taylor2018PostSelection
+    - Steyerberg2003Validation
+    - tripod
+...

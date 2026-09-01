@@ -4,7 +4,7 @@ title: Comprehensive Time Interval Calculator
 menuGroup: Survival
 menuSubgroup: Data Preparation
 menuSubtitle: Advanced time interval analysis with quality assessment
-version: '1.0.7'
+version: '1.0.8'
 jas: '1.2'
 
 description:
@@ -60,7 +60,10 @@ options:
       description:
           R: >
             Column containing start dates (e.g., diagnosis date, study entry, treatment start).
-            Supports various date formats including text and numeric representations.
+            Accepts text dates and numeric packed dates (YYYYMMDD, YYMMDD). Spreadsheet
+            day-count serial numbers (Excel day counts such as 42370) are not dates and are
+            rejected, because parsing them gives follow-up times wrong by decades; re-export
+            that column as text in YYYY-MM-DD form.
 
     - name: fu_date
       title: End Date Variable  
@@ -75,11 +78,12 @@ options:
       description:
           R: >
             Column containing end dates (e.g., follow-up date, event date, study exit).
-            Must be in the same format as the start date variable.
+            Must be in the same format as the start date variable. Spreadsheet day-count
+            serial numbers are rejected for the same reason as the start date column.
 
     # === DATE FORMAT CONFIGURATION ===
     - name: time_format
-      title: Date Format
+      title: Date format
       type: List
       options:
         - name: auto
@@ -105,7 +109,7 @@ options:
             Manual selection ensures accurate parsing for specific date formats.
 
     - name: output_unit
-      title: Time Unit for Results
+      title: Time unit for results
       type: List
       options:
         - name: days
@@ -123,17 +127,17 @@ options:
             statistical summaries. Choose based on study duration and event frequency.
 
     - name: time_basis
-      title: Time Basis
+      title: Time basis
       type: List
       options:
         - name: standardized
-          title: Standardized (30.44-day months, 365.25-day years)
+          title: Standardized (30.4375-day months, 365.25-day years)
         - name: calendar
           title: Calendar-aware (actual month lengths)
       default: standardized
       description:
           R: >
-            Controls how months/years are computed. Standardized uses fixed lengths (30.44 days per
+            Controls how months/years are computed. Standardized uses fixed lengths (30.4375 days per
             month, 365.25 days per year) suited for person-time denominators. Calendar-aware respects
             actual month lengths (28 - 31 days) when converting intervals to months/years.
 
@@ -145,17 +149,21 @@ options:
       description:
           R: >
             Enables conditional analysis from a specific time point. Useful for 
-            studying outcomes after a landmark time (e.g., 6-month survivors only).
+            studying outcomes conditional on having been followed to a landmark time (for
+            example, only participants with at least 6 months of follow-up).
 
     - name: landmark_time
-      title: Landmark Time Point
+      title: Landmark time point
       type: Number
       default: 6
       min: 0
       description:
           R: >
             Time point for landmark analysis in the specified output units. 
-            Only participants surviving past this time are included in analysis.
+            Only participants whose follow-up reaches this time are included. This analysis has
+            no event indicator, so it selects on LENGTH OF FOLLOW-UP, not on survival: a
+            participant excluded here may have died early or may simply have been enrolled
+            recently, and this analysis cannot tell the two apart.
 
     # === DATA QUALITY OPTIONS ===
     - name: remove_negative
@@ -168,16 +176,18 @@ options:
             Recommended for data quality assurance.
 
     - name: remove_extreme
-      title: Flag extreme values
+      title: Remove extreme values
       type: Bool
       default: false
       description:
           R: >
-            Identify and flag potentially extreme time intervals for quality review.
-            Uses statistical outlier detection methods.
+            Exclude time intervals above (multiplier x 99th percentile) from the analysis.
+            These rows are dropped from every statistic, including the mean and the total
+            person-time, not merely flagged. The Data Quality Assessment panel reports how
+            many were removed. Leave off to keep all intervals and only see the count.
 
     - name: extreme_multiplier
-      title: Extreme Threshold Multiplier
+      title: Extreme threshold multiplier
       type: Number
       default: 2.0
       min: 1.5
@@ -185,21 +195,30 @@ options:
       description:
           R: >
             Multiplier for 99th percentile to define extreme values.
-            Default 2.0 means values >2x the 99th percentile are flagged.
-            Higher values are more conservative (fewer flagged values).
+            Default 2.0 means intervals longer than 2x the 99th percentile are removed
+            when 'Remove extreme values' is on. Higher values are more conservative
+            (fewer intervals removed). Has no effect when the 99th percentile is zero.
 
     # === OUTPUT OPTIONS ===
-    - name: add_times
+    # type: Output, not Bool. jmvcore's Output result item resolves its gating
+    # option by the RESULT ITEM'S OWN NAME (Output$enabled reads
+    # options$get(private$.name)), and Output$asProtoBuf() emits nothing when that
+    # is FALSE. A Bool called something else therefore left the column computed and
+    # silently discarded. The name must stay equal to the .r.yaml item name.
+    # No `default:` -- the compiler's optionify() emits only the bare name for an
+    # Output option and discards every other property, so a default would be inert.
+    - name: calculated_time
       title: Add calculated times to dataset
-      type: Bool
-      default: false
+      type: Output
       description:
           R: >
-            Appends calculated time intervals as a new variable for downstream analysis.
-            Useful for subsequent survival analysis or person-time calculations.
+            Appends the calculated time intervals to the dataset as a new variable for
+            downstream analysis (for example a subsequent survival analysis or a
+            person-time calculation). This is a jamovi output variable driven by the
+            Output control in the analysis panel; it is not an argument of the R function.
 
     - name: include_quality_metrics
-      title: Include data quality assessment
+      title: Data quality assessment
       type: Bool
       default: false
       description:
@@ -208,7 +227,7 @@ options:
             negative intervals, and distribution statistics.
 
     - name: confidence_level
-      title: Confidence Level ( percent)
+      title: Confidence level (%)
       type: Number
       default: 95
       min: 90
@@ -249,8 +268,13 @@ options:
       description:
           R: >
             Timezone for datetime parsing. 'System Default' uses your computer's timezone.
-            'UTC' interprets datetimes as Coordinated Universal Time. Ensures consistent
-            time interval calculations across different systems and time zones.
+            'UTC' interprets datetimes as Coordinated Universal Time. This applies only to the
+            'YYYY-MM-DD HH:MM:SS' format, the only one that carries a time of day; date-only
+            formats produce calendar dates that have no timezone, so the setting has no effect
+            on them. Note that it changes the reported DURATIONS as well as the parsing: a zone
+            with daylight saving gains or loses an hour at each transition, so an interval
+            spanning one comes out an hour short under 'System Default' and exact under 'UTC'.
+            Choose UTC if you need durations unaffected by daylight saving.
 
 
 ...

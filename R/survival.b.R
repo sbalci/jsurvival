@@ -244,6 +244,9 @@ survivalClass <- if (requireNamespace('jmvcore'))
             .eventRecode = NULL,
             # TRUE below 10 events: descriptive output runs, models suppressed.
             .lowEventCount = FALSE,
+            # Number of distinct values when .cleandata() had to coerce a numeric
+            # explanatory to a factor (finalfit's own < 5 rule); NULL otherwise.
+            .explanatoryCoercedLevels = NULL,
 
             # HTML notice helper (avoids the protobuf serialization error caused by
             # passing jmvcore::Notice objects to self$results$insert / $add).
@@ -718,7 +721,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     }
                 }, error = function(e) {
                     # Log error but don't break the analysis
-                    warning(jmvcore::format(
+                    warning(.fmt(
                         .("Table population failed: {message}"),
                         message = conditionMessage(e)
                     ))
@@ -860,8 +863,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                         if (timetypedata %in% names(lubridate_functions)) {
                             date_parser <- lubridate_functions[[timetypedata]]
-                            mydata[["start"]] <- date_parser(mydata[[dxdate]])
-                            mydata[["end"]] <- date_parser(mydata[[fudate]])
+                            mydata[["start"]] <- suppressWarnings(date_parser(mydata[[dxdate]]))
+                            mydata[["end"]] <- suppressWarnings(date_parser(mydata[[fudate]]))
                         } else {
                             # ERROR for invalid date format
                             jmvcore::reject(sprintf(
@@ -1084,6 +1087,43 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 # naOmit ----
 
                 cleanData <- jmvcore::naOmit(cleanData)
+
+                # One coding of the explanatory variable for EVERY engine ----
+                #
+                # finalfit's default is cont_cut = 5: on its own copy of the data
+                # it silently mutate_at's any NUMERIC explanatory with fewer than
+                # 5 distinct values to a FACTOR before fitting, so the Cox table
+                # came back level-wise (Grade 2 vs 1, Grade 3 vs 1). Nothing else
+                # in this analysis applies that rule -- survival::coxph for the
+                # convergence probe and for the stratified re-fit, survival::cox.zph
+                # for the proportional-hazards test, and the age-adjusted models all
+                # saw the untouched numeric column and fitted a single per-one-unit
+                # linear trend. One user selection therefore produced two different
+                # estimands in the same report: 1.02 / 1.12 per level in the Cox
+                # table beside 1.06 per unit in the age-adjusted table, and a
+                # cox.zph line with df = 1 testing a model the table never showed.
+                # Worse, the stratified overwrite matches finalfit's rows by
+                # <term name minus variable name>, which is "" for a numeric term,
+                # so it never fired: a Sex-stratified request printed the
+                # UNSTRATIFIED hazard ratios under a "NOT stratified" disclaimer.
+                #
+                # Apply finalfit's own rule ONCE, here, on the same data finalfit
+                # would see (post-naOmit), so every engine fits the same column.
+                # The test is deliberately identical to finalfit's -- strictly
+                # fewer than 5 distinct values -- so a genuinely continuous
+                # explanatory is left untouched and behaves exactly as before.
+                # The finalfit call in .cox() then passes cont_cut = 0 so it can
+                # never re-derive a coding of its own.
+                private$.explanatoryCoercedLevels <- NULL
+                if (!is.null(name3explanatory) &&
+                    name3explanatory %in% names(cleanData) &&
+                    is.numeric(cleanData[[name3explanatory]]) &&
+                    dplyr::n_distinct(cleanData[[name3explanatory]]) < 5) {
+                    private$.explanatoryCoercedLevels <-
+                        dplyr::n_distinct(cleanData[[name3explanatory]])
+                    cleanData[[name3explanatory]] <-
+                        as.factor(cleanData[[name3explanatory]])
+                }
 
 
                 # Prepare Data For Plots ----
@@ -1904,7 +1944,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                             return()
                         }
                     } else {
-                        warning(jmvcore::format(
+                        warning(.fmt(
                             .("Stratification variable {variable} not found. Using standard Cox regression."),
                             variable = strata_var
                         ))
@@ -1939,17 +1979,34 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 # Always use unstratified factors for finalfit to prevent 'not found' or C-stack errors
                 explanatory_formula <- myfactor
 
-                finalfit::finalfit(
+                # cont_cut = 0 is load-bearing: it stops finalfit re-deriving a
+                # coding of its own. .cleandata() has already applied finalfit's
+                # own < 5 distinct values rule to the shared column, so every
+                # engine below (the convergence probe, the stratified re-fit,
+                # cox.zph, the age-adjusted models) fits exactly this coding.
+                tCox <- suppressWarnings(finalfit::finalfit(
                     .data = mydata,
                     dependent = myformula,
                     explanatory = explanatory_formula,
-                    metrics = TRUE
-                ) -> tCox
+                    metrics = TRUE,
+                    cont_cut = 0
+                ))
+
+                # setNote unconditionally (NULL clears) so the note cannot survive
+                # a switch to a different explanatory variable.
+                self$results$coxTable$setNote(
+                    "coerced_to_factor",
+                    if (is.null(private$.explanatoryCoercedLevels)) NULL else sprintf(
+                        "%s was supplied as a numeric column with only %d distinct values, so it is analysed as a categorical variable throughout: every hazard ratio compares one level with the reference level, not a one-unit increase. To model it as a linear trend instead, use Survival Analysis for Continuous Variable.",
+                        self$options$explanatory,
+                        private$.explanatoryCoercedLevels
+                    )
+                )
 
                 # Cox model convergence check
                 tryCatch({
                     cox_check_formula <- .asSurvivalFormula(paste(myformula, "~", explanatory_formula))
-                    cox_check_model <- survival::coxph(cox_check_formula, data = mydata)
+                    cox_check_model <- suppressWarnings(survival::coxph(cox_check_formula, data = mydata))
                     if (!is.null(cox_check_model$iter) && cox_check_model$iter >= 20) {
                         self$results$coxTable$setNote("convergence",
                             sprintf("Cox model used %d iterations (maximum reached). Model may not have converged; results should be interpreted with caution.", cox_check_model$iter))
@@ -2083,7 +2140,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 # Extreme HR detection
                 tryCatch({
                     hr_strings <- data_frame$HR_univariable[data_frame$HR_univariable != "-"]
-                    hr_numeric <- as.numeric(gsub("^([0-9.]+).*", "\\1", hr_strings))
+                    hr_numeric <- suppressWarnings(as.numeric(gsub("^([0-9.]+).*", "\\1", hr_strings)))
                     hr_numeric <- hr_numeric[!is.na(hr_numeric)]
                     if (length(hr_numeric) > 0) {
                         if (any(hr_numeric > 10 | hr_numeric < 0.1)) {
@@ -2283,7 +2340,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     return(residuals_df)
                     
                 }, error = function(e) {
-                    warning(jmvcore::format(
+                    warning(.fmt(
                         .("Error calculating residuals: {message}"),
                         message = conditionMessage(e)
                     ))
@@ -2388,7 +2445,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
             ,
             .exportSurvivalData = function(results) {
                 # Export Kaplan-Meier estimates for external analysis
-                if (!self$options$export_survival_data || !self$results$survivalExport$isNotFilled()) {
+                if (!self$options$export_survival_data || !self$results$export_survival_data$isNotFilled()) {
                     return()
                 }
                 
@@ -2406,42 +2463,87 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                     km_fit <- survival::survfit(formula, data = mydata)
 
-                    # Generate time points for export (every unit from 0 to max time)
-                    max_time <- max(mydata[[mytime]], na.rm = TRUE)
-                    export_times <- seq(0, max_time, by = max(1, floor(max_time/100)))
-                    
-                    # Get survival estimates at specified times
-                    km_export <- summary(km_fit, times = export_times, extend = TRUE)
-                    # For each patient in cleanData, extract estimated KM survival probability at their observation time
-                    times <- mydata[[mytime]]
-                    surv_vals <- numeric(nrow(mydata))
-                    for (i in seq_len(nrow(mydata))) {
-                        s_sum <- tryCatch(summary(km_fit, times = times[i], extend = TRUE), error = function(e) NULL)
-                        if (is.null(s_sum) || is.null(s_sum$surv) || length(s_sum$surv) == 0) {
-                            surv_vals[i] <- NA_real_
+                    # Each patient gets the KM probability from THEIR OWN curve at
+                    # THEIR OWN follow-up time.
+                    #
+                    # The previous version called summary() once per row and took
+                    # $surv[1]. For a stratified fit that is wrong: with an
+                    # explanatory variable, summary(km_fit, times = t)$surv returns
+                    # ONE VALUE PER STRATUM in stratum order, so [1] handed every
+                    # patient the FIRST group's probability regardless of the group
+                    # they are actually in. Measured on a two-group fixture, 28 of 30
+                    # second-group rows carried the wrong number. The column was dead
+                    # (see the result-item/option name mismatch fixed alongside this),
+                    # so no user ever saw it -- but wiring the column up without
+                    # fixing this would have shipped a plausible wrong value into the
+                    # user's dataset. It was also O(n) survfit summaries; one call now.
+                    times  <- mydata[[mytime]]
+                    utimes <- sort(unique(times[!is.na(times)]))
+                    surv_vals <- rep(NA_real_, nrow(mydata))
+
+                    if (length(utimes) > 0) {
+                        s_all <- summary(km_fit, times = utimes, extend = TRUE)
+
+                        if (is.null(km_fit$strata) || is.null(s_all$strata)) {
+                            # Single curve: match on follow-up time alone.
+                            surv_vals <- s_all$surv[match(times, s_all$time)]
                         } else {
-                            surv_vals[i] <- round(s_sum$surv[1], 4)
+                            # Stratified: match on (stratum, time). The stratum is
+                            # identified by POSITION rather than by rebuilding the
+                            # "<term>=<level>" label, because the formula term has been
+                            # through .escapeVariableNames() and may be backtick-quoted.
+                            # survfit orders strata by the grouping factor's levels, so
+                            # level i corresponds to names(km_fit$strata)[i].
+                            grp  <- factor(mydata[[myfactor]])
+                            snam <- names(km_fit$strata)
+                            if (nlevels(grp) == length(snam)) {
+                                key_tab <- paste(as.character(s_all$strata), s_all$time, sep = "\r")
+                                key_pat <- paste(snam[as.integer(grp)], times, sep = "\r")
+                                surv_vals <- s_all$surv[match(key_pat, key_tab)]
+                            }
+                            # If the strata do not line up with the factor levels we
+                            # cannot say which curve belongs to which patient, so the
+                            # column stays NA. A blank cell is recoverable; a
+                            # confidently mislabelled survival probability is not.
                         }
                     }
+                    surv_vals <- round(as.numeric(surv_vals), 4)
 
                     # Add to data sheet as exportable Output column
-                    self$results$survivalExport$setRowNums(results$cleanData$row_names)
-                    self$results$survivalExport$setValues(surv_vals)
+                    self$results$export_survival_data$setRowNums(results$cleanData$row_names)
+                    self$results$export_survival_data$setValues(surv_vals)
+                    # No setTitle() here: unlike timeinterval's unit-dependent column,
+                    # this one has no dynamic part, so the static varTitle in the
+                    # .r.yaml is the single source of the column name.
 
-                    # Create summary for user
+                    # Create summary for user. Report how many rows actually carry a
+                    # value: a stratum that could not be matched leaves NA, and the
+                    # old wording claimed every observation was exported regardless.
+                    n_written <- sum(!is.na(surv_vals))
                     export_summary <- paste0(
                         "<h4>Survival Data Export Summary</h4>",
-                        "<p>Exported estimated Kaplan-Meier survival probabilities for ", nrow(mydata), " observations to the data sheet.</p>",
+                        "<p>Added the Kaplan-Meier survival probability at each case's own follow-up time",
+                        if (!is.null(myfactor)) ", taken from that case's own group curve" else "",
+                        " as a new column, for ", n_written, " of ", nrow(mydata), " observations.</p>",
+                        if (n_written < nrow(mydata))
+                            paste0("<p>", nrow(mydata) - n_written,
+                                   " row(s) are blank because no curve could be matched to them.</p>")
+                        else "",
                         "<p>Time range: ", round(min(times, na.rm=TRUE), 1), " to ", round(max(times, na.rm=TRUE), 1), " ", self$options$timetypeoutput, "</p>"
                     )
-                    
+
                     self$results$survivalExportSummary$setContent(export_summary)
-                    
+
                 }, error = function(e) {
-                    warning(jmvcore::format(
-                        .("Error exporting survival data: {message}"),
-                        message = conditionMessage(e)
-                    ))
+                    # NOT warning(): jamovi shows R warnings only in the
+                    # undifferentiated Analysis Notes panel, mixed in with package
+                    # chatter, so a failed export used to look identical to a
+                    # successful one -- the checkbox stayed ticked and no column
+                    # appeared. This element is already visible: (export_survival_data).
+                    self$results$survivalExportSummary$setContent(paste0(
+                        "<h4>Survival Data Export Summary</h4>",
+                        "<p>The survival probabilities could not be exported, so no column was added: ",
+                        htmltools::htmlEscape(conditionMessage(e)), "</p>"))
                 })
             }
 
@@ -2724,7 +2826,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 original_names_mapping <- labelled_data$original_names_mapping
                 title2 <- .survivalDisplayName(self$options$explanatory, original_names_mapping)
 
-                pairwiseTable$setTitle(jmvcore::format(
+                pairwiseTable$setTitle(.fmt(
                     .("Pairwise comparisons: {factor}"),
                     factor = title2
                 ))
@@ -3493,7 +3595,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         ylim = c(
                             self$options$ybegin_plot,
                             self$options$yend_plot),
-                        title = jmvcore::format(
+                        title = .fmt(
                             .("Survival curves for {group}"),
                             group = title2
                         ),
@@ -3572,7 +3674,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         ylim = c(
                             self$options$ybegin_plot,
                             self$options$yend_plot),
-                        title = jmvcore::format(
+                        title = .fmt(
                             .("Cumulative events for {group}"),
                             group = title2
                         ),
@@ -3649,7 +3751,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         xlim = c(0, self$options$endplot),
                         # For cumulative hazard, use NULL to allow auto-scaling beyond 1.0
                         ylim = NULL,
-                        title = jmvcore::format(
+                        title = .fmt(
                             .("Cumulative hazard for {group}"),
                             group = title2
                         ),
@@ -3720,7 +3822,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                             explanatory = myfactor,
                             xlab = paste0('log(Time) (', self$options$timetypeoutput, ')'),
                             ylab = 'log(-log(Survival))',
-                            title = jmvcore::format(
+                            title = .fmt(
                                 .("Log-log plot for {group}"),
                                 group = title2
                             ),
@@ -3757,7 +3859,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         ggplot2::labs(
                             x = paste0('log(Time) (', self$options$timetypeoutput, ')'),
                             y = 'log(-log(Survival))',
-                            title = jmvcore::format(
+                            title = .fmt(
                                 .("Log-log plot for {group}"),
                                 group = title2
                             ),
@@ -3877,7 +3979,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     TRUE
                     
                 }, error = function(e) {
-                    warning(jmvcore::format(
+                    warning(.fmt(
                         .("Error creating residuals plot: {message}"),
                         message = conditionMessage(e)
                     ))
@@ -4391,12 +4493,12 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         time_unit <- self$options$timetypeoutput
 
                         if (is.na(median_val) || median_val == "NR") {
-                            clinical_meaning <- jmvcore::format(
+                            clinical_meaning <- .fmt(
                                 .("In the {group} group the median was not reached: fewer than half of the patients had the event during the observed follow-up. This may reflect genuinely long survival, but short follow-up or heavy censoring produces the same result, so it should be read together with the number at risk over time."),
                                 group = group_name
                             )
                         } else {
-                            clinical_meaning <- jmvcore::format(
+                            clinical_meaning <- .fmt(
                                 .("In the {group} group, half of the patients had the event by {median} {unit} (95% CI {lower} to {upper})."),
                                 group = group_name,
                                 median = median_val,
@@ -4491,13 +4593,13 @@ survivalClass <- if (requireNamespace('jmvcore'))
                             } else if (p_val < 0.001) {
                                 .("p < 0.001")
                             } else {
-                                jmvcore::format(.("p = {p}"), p = base::format(round(p_val, 3), nsmall = 3))
+                                .fmt(.("p = {p}"), p = base::format(round(p_val, 3), nsmall = 3))
                             }
 
                             crosses_one <- !is.na(ci_lower) && !is.na(ci_upper) &&
                                            ci_lower < 1 && ci_upper > 1
 
-                            clinical_meaning <- jmvcore::format(
+                            clinical_meaning <- .fmt(
                                 .("{comparison}: hazard ratio {hr} (95% CI {lower} to {upper}, {stats}) - {direction} in the compared group relative to the reference. The hazard ratio is a relative rate, not a cumulative risk difference; the absolute benefit or harm depends on the baseline risk, the endpoint and the length of follow-up.{cinote}"),
                                 comparison = comparison,
                                 hr = round(hr, 2),
@@ -4623,14 +4725,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
                             # "Not reached" is a statement about the observed
                             # follow-up, not a favourable prognosis -- short
                             # follow-up produces the same result.
-                            sentence <- jmvcore::format(
+                            sentence <- .fmt(
                                 .("Median survival was not reached for the {group} group: fewer than half of the patients had the event during the observed follow-up."),
                                 group = group_name
                             )
                         } else {
                             # The unit is user-selectable; this sentence used to
                             # say "months" whatever the user had chosen.
-                            sentence <- jmvcore::format(
+                            sentence <- .fmt(
                                 .("Median survival for the {group} group was {median} {unit} (95% CI: {lower} to {upper} {unit})."),
                                 group = group_name,
                                 median = median_val,
@@ -4716,7 +4818,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                                            ci_lower < 1 && ci_upper > 1
 
                             sentence <- if (crosses_one) {
-                                jmvcore::format(
+                                .fmt(
                                     .("Cox regression estimated a hazard ratio of {hr} for {comparison} (95% CI: {lower} to {upper}, p = {p}); the interval includes 1, so these data are compatible with both a lower and a higher hazard."),
                                     comparison = comparison,
                                     hr = round(hr, 2),
@@ -4725,7 +4827,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                                     p = round(p_val, 3)
                                 )
                             } else {
-                                jmvcore::format(
+                                .fmt(
                                     .("Cox regression estimated {direction} for {comparison}, with a hazard ratio of {hr} (95% CI: {lower} to {upper}, p = {p}), which was {significance}."),
                                     direction = direction,
                                     comparison = comparison,
@@ -4768,7 +4870,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                                 ci_lower <- round(surv_at_time[[j, "lower"]] * 100, 1)
                                 ci_upper <- round(surv_at_time[[j, "upper"]] * 100, 1)
                                 
-                                sentence <- jmvcore::format(
+                                sentence <- .fmt(
                                     .("Survival at {time} {unit} for the {group} group was {survival}% (95% CI: {lower}% to {upper}%)."),
                                     time = time_point,
                                     unit = time_unit,
@@ -4806,7 +4908,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     }
                 }, error = function(e) {
                     # Log warning but continue
-                    warning(jmvcore::format(
+                    warning(.fmt(
                         .("Could not access median survival data: {message}"),
                         message = conditionMessage(e)
                     ))
@@ -4822,7 +4924,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     }
                 }, error = function(e) {
                     # Log warning but continue
-                    warning(jmvcore::format(
+                    warning(.fmt(
                         .("Could not access Cox regression data: {message}"),
                         message = conditionMessage(e)
                     ))
@@ -4838,7 +4940,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     }
                 }, error = function(e) {
                     # Log warning but continue
-                    warning(jmvcore::format(
+                    warning(.fmt(
                         .("Could not access survival probability data: {message}"),
                         message = conditionMessage(e)
                     ))
@@ -5888,7 +5990,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 }, error = function(e) {
                     self$results$ageAdjustedCoxTable$setNote("error",
-                        jmvcore::format(
+                        .fmt(
                             .("Age-adjusted Cox regression failed: {message}"),
                             message = conditionMessage(e)
                         ))
@@ -5939,7 +6041,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                     }, error = function(e) {
                         self$results$ageInteractionTable$setNote("error",
-                            jmvcore::format(
+                            .fmt(
                                 .("Age interaction test failed: {message}"),
                                 message = conditionMessage(e)
                             ))
@@ -6113,7 +6215,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 }, error = function(e) {
                     self$results$ageTimeScaleTable$setNote("error",
-                        jmvcore::format(
+                        .fmt(
                             .("Age-as-time-scale analysis failed: {message}"),
                             message = conditionMessage(e)
                         ))
@@ -6353,7 +6455,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 }, error = function(e) {
                     self$results$ageStandardizationTable$setNote("error",
-                        jmvcore::format(
+                        .fmt(
                             .("Age standardization failed: {message}"),
                             message = conditionMessage(e)
                         ))

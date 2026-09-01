@@ -1,0 +1,119 @@
+title: Lasso-Cox Regression
+name: lassocox
+jus: '3.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: Follow-up time
+        children:
+          - type: VariablesListBox
+            name: elapsedtime
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Outcome
+        children:
+          - type: VariablesListBox
+            name: outcome
+            maxItemCount: 1
+            isTarget: true
+          - type: LevelSelector
+            name: outcomeLevel
+            enable: (outcome)
+          - type: LevelSelector
+            name: censorLevel
+            enable: (outcome)
+      - type: TargetLayoutBox
+        label: Candidate predictors
+        children:
+          - type: VariablesListBox
+            name: explanatory
+            isTarget: true
+  - type: CollapseBox
+    label: Data suitability
+    collapsed: false
+    stretchFactor: 1
+    children:
+      - type: CheckBox
+        name: suitabilityCheck
+  - type: CollapseBox
+    label: Model options
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: Label
+        label: Lambda selection
+        children:
+          - type: ComboBox
+            name: lambda
+      - type: Label
+        label: Cross-validation
+        children:
+          - type: TextBox
+            name: nfolds
+            format: number
+      - type: CheckBox
+        name: standardize
+  - type: CollapseBox
+    label: Plots
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: CheckBox
+        name: cv_plot
+      - type: CheckBox
+        name: coef_plot
+      - type: CheckBox
+        name: path_plot
+      - type: CheckBox
+        name: survival_plot
+  - type: CollapseBox
+    label: Output options
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: CheckBox
+        name: showEncoding
+      - type: CheckBox
+        name: showReproducibility
+      - type: CheckBox
+        name: showRCode
+      - type: Label
+        label: Save variables
+        children:
+          - type: Output
+            name: riskScore
+  - type: CollapseBox
+    label: Explanatory output
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: CheckBox
+        name: showSummary
+      - type: CheckBox
+        name: showExplanations
+      - type: CheckBox
+        name: showMethodologyNotes
+      - type: CheckBox
+        name: includeClinicalGuidance
+      - type: CheckBox
+        name: showVariableImportance
+      - type: CheckBox
+        name: showModelComparison
+  - type: CollapseBox
+    label: Seed
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: Label
+        label: Random seed
+        children:
+          - type: TextBox
+            name: random_seed
+            format: number
+            width: large

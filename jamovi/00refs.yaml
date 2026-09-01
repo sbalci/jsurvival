@@ -17,6 +17,21 @@ refs:
         url: https://CRAN.R-project.org/package=survminer
 
 
+    epiR:
+        type: 'software'
+        author: >-
+            Mark Stevenson with contributions from Telmo Nunes,
+            Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron
+            Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola
+            Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones,
+            Sarah Pirikahu, Simon Firestone, Ryan Kyle, Johann
+            Popp, Mathew Jay and Charles Reynard.
+        year: 2020
+        title: "epiR: Tools for the Analysis of Epidemiological Data."
+        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=epiR'
+        url: https://CRAN.R-project.org/package=epiR
+
+
     KMunicate:
         type: 'software'
         author: Alessandro Gasparini
@@ -237,6 +252,14 @@ refs:
         publisher: 'R Views, An R community blog edited by RStudio'
         url: https://rviews.rstudio.com/2017/09/25/survival-analysis-with-r/
 
+    glmnet:
+        type: 'software'
+        author: Jerome Friedman, Trevor Hastie, Rob Tibshirani, Balasubramanian Narasimhan, Kenneth Tay, Noah Simon, James Yang, Jonathan Taylor
+        year: 2026
+        title: "glmnet: Lasso and Elastic-Net Regularized Generalized Linear Models"
+        publisher: '[R package version 5.0]. Retrieved from https://CRAN.R-project.org/package=glmnet'
+        url: https://CRAN.R-project.org/package=glmnet
+
     labelled:
         type: 'software'
         author: "Joseph Larmarange"
@@ -293,12 +316,56 @@ refs:
         publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=mstate'
         url: https://CRAN.R-project.org/package=mstate
 
-    Hmisc:
+    logistf:
         type: 'software'
-        author: "Frank E Harrell Jr"
-        year: 2026
-        title: "Hmisc: R package"
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=Hmisc'
-        url: https://CRAN.R-project.org/package=Hmisc
+        author: "Heinze G, Ploner M, Jiricka L"
+        year: "2024"
+        title: "logistf: Firth's Bias-Reduced Logistic Regression"
+        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=logistf'
+        url: https://CRAN.R-project.org/package=logistf
 
+    Simon2011Coxnet:
+        type: 'article'
+        author: "Simon, N., Friedman, J., Hastie, T., & Tibshirani, R."
+        year: 2011
+        title: "Regularization paths for Cox's proportional hazards model via coordinate descent"
+        publisher: "Journal of Statistical Software"
+        volume: 39
+        issue: 5
+        pages: "1-13"
+        doi: 10.18637/jss.v039.i05
+        url: https://doi.org/10.18637/jss.v039.i05
+    Taylor2018PostSelection:
+        type: 'article'
+        author: "Taylor, J., & Tibshirani, R."
+        year: 2018
+        title: "Post-selection inference for l1-penalized likelihood models"
+        publisher: "The Canadian Journal of Statistics"
+        volume: 46
+        issue: 1
+        pages: "41-61"
+        doi: 10.1002/cjs.11313
+        url: https://doi.org/10.1002/cjs.11313
+    Steyerberg2003Validation:
+        type: 'article'
+        author: "Steyerberg, E. W., Bleeker, S. E., Moll, H. A., Grobbee, D. E., & Moons, K. G. M."
+        year: 2003
+        title: "Internal and external validation of predictive models: a simulation study of bias and precision in small samples"
+        publisher: "Journal of Clinical Epidemiology"
+        volume: 56
+        issue: 5
+        pages: "441-447"
+        doi: 10.1016/S0895-4356(03)00047-7
+        url: https://doi.org/10.1016/S0895-4356(03)00047-7
+    tripod:
+        type: 'article'
+        author: "Collins, G. S., Reitsma, J. B., Altman, D. G., & Moons, K. G. M."
+        year: 2015
+        title: "Transparent Reporting of a multivariable prediction model for Individual Prognosis Or Diagnosis (TRIPOD): the TRIPOD statement"
+        publisher: "Annals of Internal Medicine"
+        volume: 162
+        issue: 1
+        pages: "55-63"
+        doi: 10.7326/M14-0697
+        url: https://doi.org/10.7326/M14-0697
 ...
