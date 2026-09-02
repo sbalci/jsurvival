@@ -230,6 +230,14 @@ NULL
     return(unname(name_mapping[var_name] %||% as.character(var_name)))
 }
 
+#' Survival Analysis backend
+#'
+#' Backend R6 class for the jamovi `survival` analysis: Kaplan-Meier estimates,
+#' median survival, Cox regression, restricted mean survival time, person-time
+#' incidence rates, age adjustment and parametric survival models.
+#'
+#' @importFrom R6 R6Class
+#' @return An \code{R6} class generator object for the \code{survivalClass} backend; used internally by the jamovi analysis wrapper and not called directly.
 survivalClass <- if (requireNamespace('jmvcore'))
     R6::R6Class(
         "survivalClass",
@@ -253,7 +261,6 @@ survivalClass <- if (requireNamespace('jmvcore'))
             # See R/survivalcont.b.R:700-743 for the reference implementation.
             .addHtmlMessage = function(type, title, message) {
                 output_name <- switch(type,
-                    "error" = "errors",
                     "strongWarning" = "strongWarnings",
                     "warning" = "warnings",
                     "info" = "infoMessages",
@@ -284,9 +291,6 @@ survivalClass <- if (requireNamespace('jmvcore'))
             # notice on every option/interaction cycle (e.g. the "Missing outcome
             # values excluded" warning appearing many times). See survivalcont.b.R.
             .initializeMessageOutputs = function() {
-                self$results$errors$setContent("")
-                self$results$errors$setVisible(FALSE)
-
                 self$results$strongWarnings$setContent("")
                 self$results$strongWarnings$setVisible(FALSE)
 
@@ -327,237 +331,22 @@ survivalClass <- if (requireNamespace('jmvcore'))
             },
 
             .init = function() {
-                # Hide all outputs first - this ensures they're hidden even if we return early
-                # Hide all heading/explanation outputs
-                self$results$medianSurvivalHeading$setVisible(FALSE)
-                self$results$medianSurvivalExplanation$setVisible(FALSE)
-                self$results$medianSurvivalHeading3$setVisible(FALSE)
-                self$results$coxRegressionHeading$setVisible(FALSE)
-                self$results$coxRegressionExplanation$setVisible(FALSE)
-                self$results$coxRegressionHeading3$setVisible(FALSE)
-                self$results$survivalTablesHeading$setVisible(FALSE)
-                self$results$survivalTablesExplanation$setVisible(FALSE)
-                self$results$survivalTablesHeading3$setVisible(FALSE)
-                self$results$survivalPlotsHeading3$setVisible(FALSE)
-                self$results$survivalPlotsExplanation$setVisible(FALSE)
-                
-                # Early validation check - if essential variables are missing, show todo and return
-                if (is.null(self$options$outcome) || 
-                    is.null(self$options$explanatory) || 
-                    (is.null(self$options$elapsedtime) && 
-                     (!self$options$tint || is.null(self$options$dxdate) || is.null(self$options$fudate)))) {
-                    
-                    # Show todo message (other outputs already hidden above)
+                # Result visibility is declared in survival.r.yaml. The only
+                # imperative visibility here is the dynamic onboarding panel.
+                missing_required_input <-
+                    is.null(self$options$outcome) ||
+                    is.null(self$options$explanatory) ||
+                    (is.null(self$options$elapsedtime) &&
+                        (!self$options$tint ||
+                            is.null(self$options$dxdate) ||
+                            is.null(self$options$fudate)))
+
+                if (missing_required_input) {
                     self$results$todo$setVisible(TRUE)
                     private$.todo()
-                    return()
+                } else {
+                    self$results$todo$setVisible(FALSE)
                 }
-                
-                # Initialize all outputs to FALSE first (following singlearm pattern)
-                # Core survival analysis outputs
-                self$results$medianSurvivalHeading$setVisible(FALSE)
-                self$results$medianSurvivalExplanation$setVisible(FALSE)
-                self$results$medianSurvivalHeading3$setVisible(FALSE)
-                self$results$medianSummary$setVisible(FALSE)
-                self$results$medianTable$setVisible(FALSE)
-                
-                # Cox regression outputs
-                self$results$coxRegressionHeading$setVisible(FALSE)
-                self$results$coxRegressionExplanation$setVisible(FALSE)
-                self$results$coxRegressionHeading3$setVisible(FALSE)
-                self$results$coxSummary$setVisible(FALSE)
-                self$results$coxTable$setVisible(FALSE)
-                self$results$tCoxtext2$setVisible(FALSE)
-                self$results$cox_ph$setVisible(FALSE)
-                self$results$plot8$setVisible(FALSE)
-                
-                # Survival tables outputs
-                self$results$survivalTablesHeading$setVisible(FALSE)
-                self$results$survivalTablesExplanation$setVisible(FALSE)
-                self$results$survivalTablesHeading3$setVisible(FALSE)
-                self$results$survTableSummary$setVisible(FALSE)
-                self$results$survTable$setVisible(FALSE)
-                
-                # Survival plots outputs (only reference existing plots)
-                self$results$plot$setVisible(FALSE)
-                self$results$plot2$setVisible(FALSE)
-                self$results$plot3$setVisible(FALSE)
-                self$results$plot6$setVisible(FALSE)
-                self$results$plot7$setVisible(FALSE)
-                self$results$plot8$setVisible(FALSE)
-                self$results$survivalPlotsHeading3$setVisible(FALSE)
-                self$results$survivalPlotsExplanation$setVisible(FALSE)
-                
-                # Person-time analysis outputs
-                self$results$personTimeHeading$setVisible(FALSE)
-                self$results$personTimeTable$setVisible(FALSE)
-                self$results$personTimeSummary$setVisible(FALSE)
-                self$results$personTimeExplanation$setVisible(FALSE)
-                
-                # RMST analysis outputs
-                self$results$rmstHeading$setVisible(FALSE)
-                self$results$rmstTable$setVisible(FALSE)
-                self$results$rmstSummary$setVisible(FALSE)
-                self$results$rmstExplanation$setVisible(FALSE)
-                
-                # Residuals analysis outputs
-                self$results$residualsTable$setVisible(FALSE)
-                self$results$residualsPlot$setVisible(FALSE)
-                self$results$residualDiagnosticsExplanation$setVisible(FALSE)
-                
-                # Pairwise comparison outputs
-                self$results$pairwiseComparisonHeading$setVisible(FALSE)
-                self$results$pairwiseSummary$setVisible(FALSE)
-                self$results$pairwiseTable$setVisible(FALSE)
-                
-                # Parametric models (core: comparison, summary, fitted-vs-KM plot,
-                # explanation) are controlled by their .r.yaml `visible:` gates on
-                # use_parametric. The extended outputs below are not implemented in
-                # this release, so keep them force-hidden regardless of their options.
-                
-                # Always show core survival analysis elements when data is present
-                self$results$medianSurvivalHeading$setVisible(TRUE)
-                self$results$medianTable$setVisible(TRUE)
-                self$results$coxRegressionHeading$setVisible(TRUE)
-                self$results$coxTable$setVisible(TRUE)
-                self$results$tCoxtext2$setVisible(TRUE)
-                self$results$survivalTablesHeading$setVisible(TRUE)
-                self$results$survTable$setVisible(TRUE)
-                
-                # Handle showSummaries visibility
-                if (self$options$showSummaries) {
-                    self$results$medianSummary$setVisible(TRUE)
-                    self$results$coxSummary$setVisible(TRUE)
-                    self$results$survTableSummary$setVisible(TRUE)
-                    
-                    # Conditional summaries - require both showSummaries AND their specific option
-                    if (self$options$person_time) {
-                        self$results$personTimeSummary$setVisible(TRUE)
-                    }
-                    if (self$options$rmst_analysis) {
-                        self$results$rmstSummary$setVisible(TRUE)
-                    }
-                    if (self$options$pw) {
-                        self$results$pairwiseComparisonHeading$setVisible(TRUE)
-                        self$results$pairwiseSummary$setVisible(TRUE)
-                    }
-                }
-
-                # Handle showExplanations visibility  
-                if (self$options$showExplanations) {
-                    # Core explanations and headings
-                    self$results$medianSurvivalHeading3$setVisible(TRUE)
-                    self$results$medianSurvivalExplanation$setVisible(TRUE)
-                    self$results$coxRegressionHeading3$setVisible(TRUE)
-                    self$results$coxRegressionExplanation$setVisible(TRUE)
-                    self$results$survivalTablesHeading3$setVisible(TRUE)
-                    self$results$survivalTablesExplanation$setVisible(TRUE)
-                    
-                    # Conditional explanations - require both showExplanations AND their specific option
-                    if (self$options$person_time) {
-                        self$results$personTimeExplanation$setVisible(TRUE)
-                    }
-                    if (self$options$rmst_analysis) {
-                        self$results$rmstExplanation$setVisible(TRUE)
-                    }
-                    if (self$options$residual_diagnostics) {
-                        self$results$residualDiagnosticsExplanation$setVisible(TRUE)
-                    }
-                    # Parametric features temporarily disabled for next release
-                    # if (self$options$use_parametric) {
-                    #     self$results$parametricModelsExplanation$setVisible(TRUE)
-                    # }
-                    
-                    # Survival plots explanation requires showExplanations AND at least one plot
-                    if (self$options$sc || self$options$ce || self$options$ch || 
-                        self$options$kmunicate || self$options$loglog) {
-                        self$results$survivalPlotsHeading3$setVisible(TRUE)
-                        self$results$survivalPlotsExplanation$setVisible(TRUE)
-                    }
-                }
-                
-                # Handle person_time visibility
-                if (self$options$person_time) {
-                    self$results$personTimeHeading$setVisible(TRUE)
-                    self$results$personTimeTable$setVisible(TRUE)
-                }
-                
-                # Handle RMST analysis visibility
-                if (self$options$rmst_analysis) {
-                    self$results$rmstHeading$setVisible(TRUE)
-                    self$results$rmstTable$setVisible(TRUE)
-                }
-                
-                # Handle residual diagnostics visibility
-                if (self$options$residual_diagnostics) {
-                    self$results$residualsTable$setVisible(TRUE)
-                    self$results$residualsPlot$setVisible(TRUE)
-                }
-                
-                # Handle pairwise comparison visibility
-                if (self$options$pw) {
-                    self$results$pairwiseComparisonHeading$setVisible(TRUE)
-                    self$results$pairwiseSummary$setVisible(TRUE)
-                    self$results$pairwiseTable$setVisible(TRUE)
-                }
-                
-                # Parametric models visibility - DISABLED for this release
-                # if (self$options$use_parametric) {
-                #     self$results$parametricModelSummary$setVisible(TRUE)
-                #     if (self$options$compare_distributions) {
-                #         self$results$parametricModelComparison$setVisible(TRUE)
-                #     }
-                #     if (self$options$parametric_diagnostics) {
-                #         self$results$parametricDiagnostics$setVisible(TRUE)
-                #     }
-                #     if (self$options$parametric_survival_plots) {
-                #         self$results$parametricSurvivalPlot$setVisible(TRUE)
-                #     }
-                #     if (self$options$hazard_plots) {
-                #         self$results$hazardFunctionPlot$setVisible(TRUE)
-                #     }
-                #     if (self$options$parametric_extrapolation) {
-                #         self$results$extrapolationPlot$setVisible(TRUE)
-                #         self$results$extrapolationTable$setVisible(TRUE)
-                #     }
-                #     if (self$options$showExplanations) {
-                #         self$results$parametricModelsExplanation$setVisible(TRUE)
-                #     }
-                # }
-                
-                # Handle Cox PH visibility
-                if (self$options$ph_cox) {
-                    self$results$cox_ph$setVisible(TRUE)
-                    self$results$plot8$setVisible(TRUE)
-                }
-                
-                # Handle plot visibility based on their options
-                if (self$options$sc) {
-                    self$results$plot$setVisible(TRUE)
-                }
-                if (self$options$ce) {
-                    self$results$plot2$setVisible(TRUE)
-                }
-                if (self$options$ch) {
-                    self$results$plot3$setVisible(TRUE)
-                }
-                if (self$options$kmunicate) {
-                    self$results$plot6$setVisible(TRUE)
-                }
-                if (self$options$loglog) {
-                    self$results$plot7$setVisible(TRUE)
-                }
-                if (self$options$residual_diagnostics) {
-                    self$results$residualsPlot$setVisible(TRUE)
-                }
-                # Parametric plots - DISABLED for this release
-                # if (self$options$use_parametric) {
-                #     # Parametric plots handled in parametric section
-                #     self$results$parametricSurvivalPlot$setVisible(TRUE)
-                #     if (self$options$hazard_plots) {
-                #         self$results$hazardFunctionPlot$setVisible(TRUE)
-                #     }
-                # }
             }
             ,
 
@@ -720,11 +509,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         }
                     }
                 }, error = function(e) {
-                    # Log error but don't break the analysis
-                    warning(.fmt(
-                        .("Table population failed: {message}"),
-                        message = conditionMessage(e)
-                    ))
+                    private$.addHtmlMessage(
+                        "warning",
+                        .("The result table was incomplete."),
+                        .fmt(
+                            .("A result table could not be populated completely: {message}"),
+                            message = conditionMessage(e)
+                        )
+                    )
                 })
             },
             
@@ -827,9 +619,9 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     # Validate: no negative survival times
                     n_negative <- sum(mydata[["mytime"]] < 0, na.rm = TRUE)
                     if (n_negative > 0) {
-                        jmvcore::reject(sprintf(
-                            .("Invalid data: %d observation(s) have negative survival times. Check that follow-up dates are after diagnosis dates and that time values are correct."),
-                            n_negative
+                        jmvcore::reject(.fmt(
+                            .("Invalid data: {count} observation(s) have negative survival times. Check that follow-up dates are after diagnosis dates and that time values are correct."),
+                            count = n_negative
                         ))
                     }
 
@@ -867,23 +659,23 @@ survivalClass <- if (requireNamespace('jmvcore'))
                             mydata[["end"]] <- suppressWarnings(date_parser(mydata[[fudate]]))
                         } else {
                             # ERROR for invalid date format
-                            jmvcore::reject(sprintf(
-                                .('Unknown date format: %s\nSupported formats: %s\nPlease select correct format in Date Type options'),
-                                self$options$timetypedata,
-                                paste(names(lubridate_functions), collapse = ", ")
+                            jmvcore::reject(.fmt(
+                                .("Unknown date format: {format}. Supported formats: {supported}. Select the matching format in Date Type options."),
+                                format = self$options$timetypedata,
+                                supported = paste(names(lubridate_functions), collapse = ", ")
                             ))
                         }
                     } else {
                         # ERROR for mixed date types
-                        jmvcore::reject(.('Diagnosis date and follow-up date must be in the same format (both numeric or both text)\nPlease check your date variables and ensure consistent formatting'))
+                        jmvcore::reject(.("Diagnosis date and follow-up date must use the same format (both numeric or both text). Check both date variables and select consistent inputs."))
                     }
 
 
                     if ( sum(!is.na(mydata[["start"]])) == 0 || sum(!is.na(mydata[["end"]])) == 0)  {
                         # ERROR for time calculation failure
-                        jmvcore::reject(sprintf(
-                            .('Time difference cannot be calculated\nDate parsing produced no valid dates\nCurrent date type setting: %s\nPlease verify date format matches your data'),
-                            self$options$timetypedata
+                        jmvcore::reject(.fmt(
+                            .("Time difference cannot be calculated because date parsing produced no valid dates with the {format} setting. Verify that the selected format matches the data."),
+                            format = self$options$timetypedata
                         ))
                     }
 
@@ -902,9 +694,9 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     # Validate: no negative survival times from date calculation
                     n_negative <- sum(mydata[["mytime"]] < 0, na.rm = TRUE)
                     if (n_negative > 0) {
-                        jmvcore::reject(sprintf(
-                            .("Invalid data: %d observation(s) have negative survival times (follow-up date before diagnosis date). Please check your date variables."),
-                            n_negative
+                        jmvcore::reject(.fmt(
+                            .("Invalid data: {count} observation(s) have negative survival times because follow-up precedes diagnosis. Check the date variables."),
+                            count = n_negative
                         ))
                     }
 
@@ -955,8 +747,11 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 if (res$n_missing > 0) {
                     private$.addHtmlMessage(
                         "warning",
-                        "Missing outcome values excluded",
-                        sprintf("%d row(s) with missing outcome were excluded by jmvcore::naOmit() before model fitting.", res$n_missing)
+                        .("Missing outcome values excluded"),
+                        .fmt(
+                            .("{count} row(s) with missing outcome were excluded before model fitting."),
+                            count = res$n_missing
+                        )
                     )
                 }
 
@@ -1033,9 +828,9 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     dplyr::mutate(mytime = mytime - landmark)
 
                   if (nrow(cleanData) == 0) {
-                      jmvcore::reject(sprintf(
-                          .("Landmark time %.2f is beyond all observed follow-up times; no patients remain at risk."),
-                          landmark
+                      jmvcore::reject(.fmt(
+                          .("Landmark time {landmark} is beyond all observed follow-up times; no patients remain at risk."),
+                          landmark = sprintf("%.2f", landmark)
                       ))
                   }
 
@@ -1184,37 +979,26 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 # Reset notice outputs so notices don't accumulate across runs
                 private$.initializeMessageOutputs()
 
-                # Input Validation ----
-                validation_result <- tryCatch({
-                    private$.validateInputs()
-                    self$results$todo$setVisible(FALSE)
-                    TRUE
-                }, error = function(e) {
-                    # If validation fails, show todo and hide results
+                # Keep the onboarding panel for the initial no-variable state.
+                # Once variables have been supplied, let jmvcore::reject()
+                # propagate so jamovi can show its standard analysis-level error
+                # without collapsing or imperatively hiding the results pane.
+                missing_required_input <-
+                    is.null(self$options$outcome) ||
+                    is.null(self$options$explanatory) ||
+                    (is.null(self$options$elapsedtime) &&
+                        (!self$options$tint ||
+                            is.null(self$options$dxdate) ||
+                            is.null(self$options$fudate)))
+
+                if (missing_required_input) {
                     private$.todo()
-                    self$results$medianSummary$setVisible(FALSE)
-                    self$results$medianTable$setVisible(FALSE)
-                    self$results$coxSummary$setVisible(FALSE)
-                    self$results$coxTable$setVisible(FALSE)
-                    self$results$tCoxtext2$setVisible(FALSE)
-                    self$results$cox_ph$setVisible(FALSE)
-                    self$results$plot8$setVisible(FALSE)
-                    self$results$survTableSummary$setVisible(FALSE)
-                    self$results$survTable$setVisible(FALSE)
-                    self$results$pairwiseSummary$setVisible(FALSE)
-                    self$results$pairwiseTable$setVisible(FALSE)
-                    self$results$plot$setVisible(FALSE)
-                    self$results$plot2$setVisible(FALSE)
-                    self$results$plot3$setVisible(FALSE)
-                    self$results$plot6$setVisible(FALSE)
                     self$results$todo$setVisible(TRUE)
-                    FALSE
-                })
-                
-                # Return early if validation failed
-                if (validation_result != TRUE) {
                     return()
                 }
+
+                private$.validateInputs()
+                self$results$todo$setVisible(FALSE)
 
                 # Populate subtitle with explanatory variable
                 if (!is.null(self$options$explanatory)) {
@@ -1255,18 +1039,33 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 private$.lowEventCount <- n_events < 10
                 if (private$.lowEventCount) {
                     private$.addHtmlMessage(
-                        "warning",
-                        sprintf("Only %d event(s) observed", n_events),
-                        paste0("Descriptive results (Kaplan-Meier, median, counts) are shown, but with ",
-                               n_events, " event(s) they are unstable and confidence intervals will be ",
-                               "very wide. Hazard ratios and other model-based output are suppressed."))
+                        "strongWarning",
+                        .fmt(.("Only {count} event(s) observed"), count = n_events),
+                        .fmt(
+                            .("Descriptive results (Kaplan-Meier, median, counts) are shown, but with {count} event(s) they are unstable and confidence intervals will be very wide. Hazard ratios and other model-based output are suppressed."),
+                            count = n_events
+                        ))
                 }
 
-                # Low event count warnings via table notes (safe from serialization issues)
+                # Low event count warnings via prominent messages and table notes.
                 if (n_events >= 10 && n_events < 20) {
+                    private$.addHtmlMessage(
+                        "strongWarning",
+                        .fmt(.("Only {count} events observed"), count = n_events),
+                        .fmt(
+                            .("Model estimates may be unstable with {count} events. Simplify the model, combine sparse categories, or increase the sample size."),
+                            count = n_events
+                        ))
                     self$results$medianTable$setNote("lowevents",
                         paste0("Caution: Only ", n_events, " events detected. Results may be unreliable. Consider increasing sample size or simplifying the model."))
                 } else if (n_events >= 20 && n_events < 50) {
+                    private$.addHtmlMessage(
+                        "warning",
+                        .fmt(.("Limited event count: {count}"), count = n_events),
+                        .fmt(
+                            .("Basic Kaplan-Meier and Cox analyses are available, but {count} events may be insufficient for complex calibration, spline, or bootstrap models."),
+                            count = n_events
+                        ))
                     self$results$medianTable$setNote("moderateevents",
                         paste0("Note: ", n_events, " events detected. Adequate for basic KM/Cox but limited for complex models (calibration, RCS, bootstrap)."))
                 }
@@ -1343,8 +1142,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     self$results$coxTable$setNote("cr", .competingRiskUnavailable("Cox regression"))
                     private$.addHtmlMessage(
                         "info",
-                        "Cox regression skipped (competing risks)",
-                        "Competing-risk mode is selected; standard Cox regression is skipped because cause-specific hazards require a different model (e.g., Fine-Gray subdistribution)."
+                        .("Cox regression skipped (competing risks)"),
+                        .("Competing-risk mode is selected; standard Cox regression is skipped because cause-specific hazards require a different model (e.g., Fine-Gray subdistribution).")
                     )
                 } else if (private$.lowEventCount) {
                     self$results$coxTable$setNote("lowevents",
@@ -1387,6 +1186,15 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 }
                 private$.checkpoint()
 
+                ## Age-based plots ----
+                # Give them the cleaned frame instead of letting each renderer
+                # rebuild one from self$data -- see .setAgePlotState().
+                if (self$options$age_adjustment &&
+                    (self$options$age_stratified_km || self$options$adjusted_curves)) {
+                    private$.setAgePlotState(results)
+                }
+                private$.checkpoint()
+
                 ## Survival Table ----
                     private$.survTable(results)
                 private$.checkpoint()  # Add checkpoint here
@@ -1398,7 +1206,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 if (private$.isCompetingRisk()) {
                     private$.addHtmlMessage(
                         "warning",
-                        "Survival data export skipped (competing risks)",
+                        .("Survival data export skipped (competing risks)"),
                         .competingRiskUnavailable("Exported survival estimates")
                     )
                 } else {
@@ -1420,6 +1228,10 @@ survivalClass <- if (requireNamespace('jmvcore'))
                             "cr", .competingRiskUnavailable("Calibration curves"))
                     } else if (!private$.lowEventCount) {
                         private$.calculateCalibration(results)
+                    } else {
+                        self$results$calibrationTable$setNote(
+                            "lowevents",
+                            .("Calibration curves suppressed: fewer than 10 events."))
                     }
                 }
                 private$.checkpoint()
@@ -1463,6 +1275,10 @@ survivalClass <- if (requireNamespace('jmvcore'))
                             "cr", .competingRiskUnavailable("Bootstrap internal validation"))
                     } else if (!private$.lowEventCount) {
                         private$.calculateBootstrapValidation(results)
+                    } else {
+                        self$results$bootstrapValidationTable$setNote(
+                            "lowevents",
+                            .("Bootstrap validation suppressed: fewer than 10 events."))
                     }
                 }
                 private$.checkpoint()
@@ -1524,10 +1340,12 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     event_rate <- if (n_obs > 0) (n_events / n_obs) * 100 else NA_real_
                     private$.addHtmlMessage(
                         "info",
-                        "Analysis complete",
-                        sprintf(
-                            "Survival analysis completed on %d observations with %d events (%.1f%% event rate).",
-                            n_obs, n_events, event_rate
+                        .("Analysis complete"),
+                        .fmt(
+                            .("Survival analysis completed on {observations} observations with {events} events ({rate}% event rate)."),
+                            observations = n_obs,
+                            events = n_events,
+                            rate = sprintf("%.1f", event_rate)
                         )
                     )
                 }, error = function(e) invisible(NULL))
@@ -1944,10 +1762,13 @@ survivalClass <- if (requireNamespace('jmvcore'))
                             return()
                         }
                     } else {
-                        warning(.fmt(
-                            .("Stratification variable {variable} not found. Using standard Cox regression."),
-                            variable = strata_var
-                        ))
+                        self$results$coxTable$setNote(
+                            "strata_not_found",
+                            .fmt(
+                                .("Stratification variable {variable} was not found. Standard Cox regression was used."),
+                                variable = strata_var
+                            )
+                        )
                         strata_var <- NULL
                     }
                 }
@@ -2180,7 +2001,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     dplyr::mutate(firstlevel = dplyr::first(Levels)) %>%
                     dplyr::mutate(
                         coxdescription = glue::glue(
-                            "For {Explanatory}, the {Levels} group had an estimated hazard ratio of {HR_univariable} relative to the reference group ({firstlevel}). \n A hazard ratio is a ratio of instantaneous event rates among those still at risk, not a ratio of cumulative risks, and it assumes the ratio stays constant over follow-up. If the confidence interval includes 1, the data are compatible with no difference in hazard."
+                            "For {Explanatory}, the {Levels} group had an estimated hazard ratio of {HR_univariable} relative to the reference group ({firstlevel}). A hazard ratio is a ratio of instantaneous event rates among those still at risk, not a ratio of cumulative risks, and it assumes the ratio stays constant over follow-up. If the confidence interval includes 1, the data are compatible with no difference in hazard."
 
                         )
                     ) %>%
@@ -2257,8 +2078,8 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         if (length(ph_p) > 0 && any(ph_p < 0.05)) {
                             private$.addHtmlMessage(
                                 "warning",
-                                "Proportional hazards assumption may be violated",
-                                "cox.zph p-values below 0.05 indicate potential violation of the proportional hazards assumption for one or more terms. Consider time-varying effects, stratification, or splitting follow-up; see the PH interpretation section for details."
+                                .("Proportional hazards assumption may be violated"),
+                                .("cox.zph p-values below 0.05 indicate potential violation of the proportional hazards assumption for one or more terms. Consider time-varying effects, stratification, or splitting follow-up; see the PH interpretation section for details.")
                             )
                         }
                     }, error = function(e) invisible(NULL))
@@ -2340,10 +2161,13 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     return(residuals_df)
                     
                 }, error = function(e) {
-                    warning(.fmt(
-                        .("Error calculating residuals: {message}"),
-                        message = conditionMessage(e)
-                    ))
+                    self$results$residualsTable$setNote(
+                        "calculation_error",
+                        .fmt(
+                            .("Residual diagnostics could not be calculated: {message}"),
+                            message = conditionMessage(e)
+                        )
+                    )
                     return(NULL)
                 })
             }
@@ -2725,7 +2549,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     dplyr::mutate(
                         description =
                             glue::glue(
-                                "When {strata}, {time} {time_unit_label} survival is {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]. \n For the {strata} group, the estimated probability of surviving beyond {time} {time_unit_label}s was {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]. \n At this time point, there were {n.risk} subjects still at risk and {n.event} events had occurred in this group."
+                                "When {strata}, {time} {time_unit_label} survival is {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]. For the {strata} group, the estimated probability of surviving beyond {time} {time_unit_label}s was {scales::percent(surv)} [{scales::percent(lower)}-{scales::percent(upper)}, 95% CI]. At this time point, there were {n.risk} subjects still at risk and {n.event} events had occurred in this group."
 
                             )
                     ) %>%
@@ -2770,17 +2594,15 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 private$.checkpoint()
 
-                # Determine rho for weighted log-rank (0 = standard log-rank)
+                # Determine rho for the selected pairwise test (0 = standard log-rank).
                 pw_rho <- 0
-                if (self$options$weightedLogRank) {
-                    test_type <- self$options$survivalTestType
-                    # Keys encode the Fleming-Harrington rho passed to survdiff;
-                    # rho=1 is exactly the Peto-Peto test. "logrank" leaves pw_rho = 0.
-                    if (test_type == "fh_rho0_5") {
-                        pw_rho <- 0.5
-                    } else if (test_type == "fh_rho1") {
-                        pw_rho <- 1
-                    }
+                test_type <- self$options$survivalTestType
+                # Keys encode the Fleming-Harrington rho passed to survdiff;
+                # rho=1 is exactly the Peto-Peto test. "logrank" leaves pw_rho = 0.
+                if (test_type == "fh_rho0_5") {
+                    pw_rho <- 0.5
+                } else if (test_type == "fh_rho1") {
+                    pw_rho <- 1
                 }
 
                 results_pairwise <- .quietly(
@@ -2928,7 +2750,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         df_val <- length(sd_result$n) - 1
                         p_val <- stats::pchisq(chisq_val, df = df_val, lower.tail = FALSE)
 
-                        table$addRow(rowKey = i, values = list(
+                        table$setRow(rowNo = i, values = list(
                             test = test_info$name,
                             rho = test_info$rho,
                             chisq = chisq_val,
@@ -2937,7 +2759,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                             weighting = test_info$weighting
                         ))
                     }, error = function(e) {
-                        table$addRow(rowKey = i, values = list(
+                        table$setRow(rowNo = i, values = list(
                             test = test_info$name,
                             rho = test_info$rho,
                             weighting = paste("Error:", e$message)
@@ -2978,21 +2800,21 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     "<p>The Fleming-Harrington family of weighted log-rank tests ",
                     "generalizes the standard log-rank test by applying different ",
                     "weights to events at different time points. The weighting is ",
-                    "controlled by the parameter <b>rho (&#961;)</b>:</p>",
+                    "controlled by the parameter <b>rho (\u{03c1})</b>:</p>",
                     "<table border='1' cellpadding='5' style='border-collapse:collapse;'>",
-                    "<tr><th>Test</th><th>&#961;</th><th>Weighting</th><th>Best For</th></tr>",
+                    "<tr><th>Test</th><th>\u{03c1}</th><th>Weighting</th><th>Best For</th></tr>",
                     "<tr><td>Log-Rank (standard)</td><td>0</td>",
                     "<td>Equal weight at all time points</td>",
                     "<td>General use; optimal under proportional hazards</td></tr>",
-                    "<tr><td>Fleming-Harrington (&#961;=0.5)</td><td>0.5</td>",
+                    "<tr><td>Fleming-Harrington (\u{03c1}=0.5)</td><td>0.5</td>",
                     "<td>Weights = S(t)<sup>0.5</sup> (moderate early emphasis)</td>",
                     "<td>Compromise between log-rank and Peto-Peto</td></tr>",
-                    "<tr><td>Peto-Peto (Fleming-Harrington &#961;=1)</td><td>1</td>",
+                    "<tr><td>Peto-Peto (Fleming-Harrington \u{03c1}=1)</td><td>1</td>",
                     "<td>Weights = S(t), the Kaplan-Meier estimate (early emphasis)</td>",
                     "<td>Detecting early differences; robust to late censoring</td></tr>",
                     "</table>",
                     "<p><i>Note: survival::survdiff() implements only the ",
-                    "Fleming-Harrington G-&#961; family. The Gehan-Breslow (weights = ",
+                    "Fleming-Harrington G-\u{03c1} family. The Gehan-Breslow (weights = ",
                     "number at risk) and Tarone-Ware (weights = sqrt of number at risk) ",
                     "tests use different weights and are not available via survdiff().</i></p>",
                     "<h4>When to Use Weighted Tests</h4>",
@@ -3001,14 +2823,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     "differences when survival curves cross. Weighted tests can detect ",
                     "early or late divergence that the standard test misses.</li>",
                     "<li><b>If early events matter more:</b> Use Peto-Peto ",
-                    "(&#961;=1) when early mortality is of primary clinical interest ",
+                    "(\u{03c1}=1) when early mortality is of primary clinical interest ",
                     "(e.g., perioperative outcomes, acute treatment toxicity).</li>",
                     "<li><b>Sensitivity analysis:</b> Running multiple weighted tests ",
                     "can reveal whether conclusions depend on the time horizon of interest.</li>",
                     "</ul>",
                     "<h4>Interpreting Discordant Results</h4>",
                     "<p>If the standard log-rank test is significant but ",
-                    "the Peto-Peto (&#961;=1) test is not (or vice versa), this suggests ",
+                    "the Peto-Peto (\u{03c1}=1) test is not (or vice versa), this suggests ",
                     "the survival difference is concentrated in a specific part of the ",
                     "curve. Reporting both tests provides a more complete picture of ",
                     "the survival comparison.</p>",
@@ -3163,7 +2985,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     dxy_optimism <- dxy_apparent - dxy_corrected
 
                     # Populate table
-                    table$addRow(rowKey = 1, values = list(
+                    table$setRow(rowNo = 1, values = list(
                         metric = "C-index (Harrell's concordance)",
                         apparent = round(c_apparent, 4),
                         optimism = round(mean_optimism, 4),
@@ -3171,7 +2993,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         n_bootstrap = as.integer(length(valid_optimism))
                     ))
 
-                    table$addRow(rowKey = 2, values = list(
+                    table$setRow(rowNo = 2, values = list(
                         metric = "Somers' Dxy",
                         apparent = round(dxy_apparent, 4),
                         optimism = round(dxy_optimism, 4),
@@ -3179,7 +3001,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         n_bootstrap = as.integer(length(valid_optimism))
                     ))
 
-                    table$addRow(rowKey = 3, values = list(
+                    table$setRow(rowNo = 3, values = list(
                         metric = "Calibration slope",
                         apparent = 1.0000,
                         optimism = round(1 - mean_slope, 4),
@@ -3979,7 +3801,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     TRUE
                     
                 }, error = function(e) {
-                    warning(.fmt(
+                    image9$setError(.fmt(
                         .("Error creating residuals plot: {message}"),
                         message = conditionMessage(e)
                     ))
@@ -4059,7 +3881,10 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     }
                     TRUE
                 }, error = function(e) {
-                    warning(paste("Error creating PH test plot:", e$message))
+                    image8$setError(.fmt(
+                        .("The proportional-hazards test plot could not be created: {message}"),
+                        message = conditionMessage(e)
+                    ))
                     FALSE
                 })
 
@@ -4907,11 +4732,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         }
                     }
                 }, error = function(e) {
-                    # Log warning but continue
-                    warning(.fmt(
-                        .("Could not access median survival data: {message}"),
-                        message = conditionMessage(e)
-                    ))
+                    private$.addHtmlMessage(
+                        "warning",
+                        .("Some clinical summary data were unavailable."),
+                        .fmt(
+                            .("Median survival data could not be added to the clinical summary: {message}"),
+                            message = conditionMessage(e)
+                        )
+                    )
                 })
                 
                 tryCatch({
@@ -4923,11 +4751,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         }
                     }
                 }, error = function(e) {
-                    # Log warning but continue
-                    warning(.fmt(
-                        .("Could not access Cox regression data: {message}"),
-                        message = conditionMessage(e)
-                    ))
+                    private$.addHtmlMessage(
+                        "warning",
+                        .("Some clinical summary data were unavailable."),
+                        .fmt(
+                            .("Cox regression data could not be added to the clinical summary: {message}"),
+                            message = conditionMessage(e)
+                        )
+                    )
                 })
                 
                 tryCatch({
@@ -4939,11 +4770,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         }
                     }
                 }, error = function(e) {
-                    # Log warning but continue
-                    warning(.fmt(
-                        .("Could not access survival probability data: {message}"),
-                        message = conditionMessage(e)
-                    ))
+                    private$.addHtmlMessage(
+                        "warning",
+                        .("Some clinical summary data were unavailable."),
+                        .fmt(
+                            .("Survival probability data could not be added to the clinical summary: {message}"),
+                            message = conditionMessage(e)
+                        )
+                    )
                 })
                 
                 # Generate clinical interpretations
@@ -5091,6 +4925,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                     # Observed survival per group via KM
                     group_table <- self$results$calibrationGroupTable
+                    group_table$deleteRows()
                     group_pred <- c()
                     group_obs <- c()
 
@@ -5150,6 +4985,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     #     the calibration time minus mean predicted survival.
                     #     Kaplan-Meier handles censoring, which the OLS did not.
                     cal_table <- self$results$calibrationTable
+                    cal_table$deleteRows()
 
                     # --- calibration slope --------------------------------------
                     slope_fit <- tryCatch(
@@ -5389,7 +5225,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     # Populate test table
                     table <- self$results$rcsTestTable
 
-                    table$addRow(rowKey = "linear", values = list(
+                    table$setRow(rowNo = 1, values = list(
                         model = paste0("Linear (", rcs_var, ")"),
                         df = as.integer(df_linear),
                         loglik = loglik_linear,
@@ -5408,7 +5244,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                                "). Linear term adequate.")
                     }
 
-                    table$addRow(rowKey = "spline", values = list(
+                    table$setRow(rowNo = 2, values = list(
                         model = paste0("Spline (", rcs_var, ", ", n_knots, " knots)"),
                         df = as.integer(df_spline),
                         loglik = loglik_spline,
@@ -5772,6 +5608,51 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 return(list(mydata = mydata, age_col_name = age_var))
             }
             ,
+            # State for the two age-based plots.
+            #
+            # Both renderers used to rebuild their own frame from self$data and
+            # self$options -- raw elapsedtime, raw outcome, no landmark shift --
+            # which silently disagreed with every other output in the report:
+            #   * tint (dates) mode: self$options$elapsedtime is NULL, so the
+            #     renderer returned FALSE and drew a BLANK panel with no message.
+            #   * multievent: outcomeLevel is unset by design, so the event
+            #     indicator fell back to as.numeric(as.character(outcome)) -- all
+            #     NA for text levels -- and the panel went blank as well.
+            #   * uselandmark: the renderer never applied the landmark shift, so
+            #     the curves beside a landmarked median table were the
+            #     UN-landmarked ones (medians 28.1/37.6/44.4 next to a table
+            #     reporting 26.8/28.1/37.4 on 158 of 200 patients).
+            # Feed them the same cleaned frame the rest of the analysis uses.
+            .setAgePlotState = function(results) {
+                age_var <- self$options$age_variable
+                if (is.null(age_var) || !(age_var %in% names(self$data)))
+                    return()
+
+                mydata <- results$cleanData
+                age_col <- jmvcore::toNumeric(self$data[[age_var]])[
+                    private$.originalRowIndex(mydata)]
+
+                plot_data <- data.frame(
+                    time  = jmvcore::toNumeric(mydata[[results$name1time]]),
+                    event = mydata[[results$name2outcome]],
+                    group = as.factor(mydata[[results$name3explanatory]]),
+                    age   = age_col,
+                    stringsAsFactors = FALSE
+                )
+                plot_data <- plot_data[stats::complete.cases(plot_data), , drop = FALSE]
+
+                state <- list(
+                    plot_data     = plot_data,
+                    group_label   = self$options$explanatory,
+                    age_label     = age_var,
+                    # Travels with the state for the same reason as in
+                    # .cleandata(): .load() can render without calling .run().
+                    has_competing = private$.isCompetingRisk()
+                )
+                self$results$ageStratifiedKMPlot$setState(state)
+                self$results$adjustedCurvesPlot$setState(state)
+            }
+            ,
             .ageAdjustedCox = function(results) {
                 # Skip if competing risk analysis
                 if (private$.isCompetingRisk()) {
@@ -5843,7 +5724,12 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         # Build formula with age strata
                         rhs <- paste0(myfactor, " + strata(age_group)")
                         if (!is.null(existing_strata_var)) {
-                            rhs <- paste0(rhs, " + strata(", existing_strata_var, ")")
+                            rhs <- paste0(
+                                rhs,
+                                " + strata(",
+                                jmvcore::composeTerm(existing_strata_var),
+                                ")"
+                            )
                             # Warn about cross-stratification
                             n_cross <- length(unique(interaction(mydata$age_group, mydata[[existing_strata_var]])))
                             n_events <- sum(mydata[[myoutcome]] == 1, na.rm = TRUE)
@@ -5866,7 +5752,14 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         safe_age_name <- jmvcore::composeTerm(age_col_name)
                         rhs_adjusted <- c(myfactor, safe_age_name)
                         if (!is.null(existing_strata_var)) {
-                            rhs_adjusted <- c(rhs_adjusted, paste0("strata(", existing_strata_var, ")"))
+                            rhs_adjusted <- c(
+                                rhs_adjusted,
+                                paste0(
+                                    "strata(",
+                                    jmvcore::composeTerm(existing_strata_var),
+                                    ")"
+                                )
+                            )
                         }
 
                         heading_text <- paste0(
@@ -5885,7 +5778,12 @@ survivalClass <- if (requireNamespace('jmvcore'))
                     } else {
                         rhs_adj <- paste0(myfactor, " + ", jmvcore::composeTerm(age_col_name))
                         if (!is.null(existing_strata_var)) {
-                            rhs_adj <- paste0(rhs_adj, " + strata(", existing_strata_var, ")")
+                            rhs_adj <- paste0(
+                                rhs_adj,
+                                " + strata(",
+                                jmvcore::composeTerm(existing_strata_var),
+                                ")"
+                            )
                         }
                         formula_adj_str <- paste(surv_lhs, "~", rhs_adj)
                     }
@@ -6470,49 +6368,23 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 if (!self$options$age_adjustment || !self$options$age_stratified_km) {
                     return(FALSE)
                 }
-                # This renderer rebuilds its own 0/1 indicator from self$data
-                # rather than the recoded status, so it is not inverted -- but
-                # the age-adjusted TABLES it belongs with are refused under
-                # competing risks, and a lone surviving curve there reads as a
-                # result the analysis is standing behind.
-                if (private$.isCompetingRisk())
+                # The age-adjusted TABLES this curve belongs with are refused
+                # under competing risks, and a lone surviving curve there reads
+                # as a result the analysis is standing behind.
+                if (private$.isCompetingRisk(image$state))
                     return(private$.competingRiskPlotRefusal(
                         "Age-stratified Kaplan-Meier curves", ggtheme))
-                if (is.null(self$options$age_variable)) {
+
+                state <- image$state
+                if (is.null(state) || is.null(state$plot_data)) {
                     return(FALSE)
                 }
 
                 tryCatch({
-                    mytime <- self$options$elapsedtime
-                    myoutcome <- self$options$outcome
-                    myfactor <- self$options$explanatory
-
-                    if (is.null(mytime) || is.null(myoutcome) || is.null(myfactor)) {
-                        return(FALSE)
-                    }
-
-                    # Build data from self$data
-                    mydata <- self$data
-                    time_col <- jmvcore::toNumeric(mydata[[mytime]])
-                    outcome_col <- as.numeric(as.character(mydata[[myoutcome]]))
-                    group_col <- as.factor(mydata[[myfactor]])
-                    age_col <- jmvcore::toNumeric(mydata[[self$options$age_variable]])
-
-                    # Handle outcomeLevel
-                    if (!is.null(self$options$outcomeLevel) && self$options$outcomeLevel != "") {
-                        outcome_level <- self$options$outcomeLevel
-                        original_outcome <- mydata[[myoutcome]]
-                        outcome_col <- as.integer(original_outcome == outcome_level)
-                    }
-
-                    plot_data <- data.frame(
-                        time = time_col,
-                        event = outcome_col,
-                        group = group_col,
-                        age = age_col,
-                        stringsAsFactors = FALSE
-                    )
-                    plot_data <- plot_data[complete.cases(plot_data), ]
+                    # The cleaned frame from .setAgePlotState(): same time scale,
+                    # same event coding and same landmark shift as every other
+                    # output in the report.
+                    plot_data <- state$plot_data
 
                     if (nrow(plot_data) < 10) return(FALSE)
 
@@ -6527,29 +6399,70 @@ survivalClass <- if (requireNamespace('jmvcore'))
                         breaks = c(-Inf, cutpoints, Inf),
                         include.lowest = TRUE)
 
-                    # Create combined factor for coloring
-                    plot_data$strata <- interaction(plot_data$group, plot_data$age_group,
-                        sep = " | Age: ")
-
-                    # Fit survfit
                     fit <- survival::survfit(
                         survival::Surv(time, event) ~ age_group + group,
                         data = plot_data)
 
-                    # Plot using survminer
-                    p <- .quietly(survminer::ggsurvplot(
-                        fit,
-                        data = plot_data,
-                        conf.int = self$options$ci95,
-                        risk.table = self$options$risktable,
-                        pval = FALSE,
-                        legend.title = "Age Group + Group",
-                        ggtheme = ggtheme,
-                        title = "Age-Stratified Kaplan-Meier Curves",
-                        facet.by = "age_group"
-                    ))
+                    # Draw the facets directly rather than through
+                    # survminer::ggsurvplot(facet.by = ). With the installed
+                    # survminer/ggplot2 pair, surv_summary() returns only a
+                    # combined `strata` column -- no `age_group` -- so the facet
+                    # spec died in ggplot2's combine_vars() with "At least one
+                    # layer must contain all faceting variables". The error
+                    # surfaced at PRINT time, inside the plot device, so this
+                    # renderer returned TRUE and jamovi drew a blank white panel:
+                    # the option produced an empty result area in every
+                    # configuration, and had never produced a curve.
+                    #
+                    # survfit() pads multi-term strata labels to equal width
+                    # ("group=Control    "), hence the trimws(); and an age band
+                    # from cut() legitimately contains a comma ("(75, Inf]"),
+                    # so the split is on the literal ", group=" separator, never
+                    # on ", ".
+                    sep <- ", group="
+                    lbl <- names(fit$strata)
+                    at <- regexpr(sep, lbl, fixed = TRUE)
+                    if (any(at < 0)) return(FALSE)
+                    age_lab <- trimws(substring(lbl, nchar("age_group=") + 1L, at - 1L))
+                    grp_lab <- trimws(substring(lbl, at + nchar(sep)))
+                    idx <- rep(seq_along(fit$strata), fit$strata)
 
-                    .quietly(print(p))
+                    km <- data.frame(
+                        time = fit$time, surv = fit$surv,
+                        lower = fit$lower, upper = fit$upper,
+                        age_group = age_lab[idx], group = grp_lab[idx],
+                        stringsAsFactors = FALSE)
+                    # Anchor every curve at t = 0, S = 1 so the steps start at
+                    # the origin rather than at each group's first event.
+                    km <- rbind(km, data.frame(
+                        time = 0, surv = 1, lower = 1, upper = 1,
+                        age_group = age_lab, group = grp_lab,
+                        stringsAsFactors = FALSE))
+                    km$age_group <- factor(km$age_group,
+                                           levels = levels(plot_data$age_group))
+                    km$group <- factor(km$group, levels = levels(plot_data$group))
+                    km <- km[order(km$age_group, km$group, km$time), , drop = FALSE]
+
+                    p <- ggplot2::ggplot(
+                            km, ggplot2::aes(x = time, y = surv, colour = group))
+                    if (isTRUE(self$options$ci95))
+                        p <- p + ggplot2::geom_ribbon(
+                            ggplot2::aes(ymin = lower, ymax = upper, fill = group),
+                            alpha = 0.12, colour = NA)
+                    p <- p +
+                        ggplot2::geom_step(linewidth = 0.7) +
+                        ggplot2::facet_wrap(~ age_group) +
+                        ggplot2::coord_cartesian(ylim = c(0, 1)) +
+                        ggplot2::labs(
+                            x = paste0("Time (", self$options$timetypeoutput, ")"),
+                            y = "Survival probability",
+                            colour = state$group_label, fill = state$group_label,
+                            title = "Age-Stratified Kaplan-Meier Curves",
+                            subtitle = paste0("Age bands from ", state$age_label,
+                                              "; N = ", nrow(plot_data))) +
+                        ggtheme
+
+                    print(p)
                     return(TRUE)
 
                 }, error = function(e) {
@@ -6569,46 +6482,23 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 if (!self$options$age_adjustment || !self$options$adjusted_curves) {
                     return(FALSE)
                 }
-                # Same as .plotAgeStratifiedKM: rebuilt from self$data, so not
-                # inverted, but it belongs to an age-adjusted block that is
-                # refused under competing risks.
-                if (private$.isCompetingRisk())
+                # Belongs to an age-adjusted block that is refused under
+                # competing risks.
+                if (private$.isCompetingRisk(image$state))
                     return(private$.competingRiskPlotRefusal(
                         "Age-adjusted survival curves", ggtheme))
-                if (is.null(self$options$age_variable) || is.null(self$options$explanatory)) {
+
+                state <- image$state
+                if (is.null(state) || is.null(state$plot_data)) {
                     return(FALSE)
                 }
 
                 tryCatch({
-                    mytime <- self$options$elapsedtime
-                    myoutcome <- self$options$outcome
-                    myfactor <- self$options$explanatory
-                    age_var <- self$options$age_variable
-
-                    if (is.null(mytime) || is.null(myoutcome)) return(FALSE)
-
-                    # Build data
-                    mydata <- self$data
-                    time_col <- jmvcore::toNumeric(mydata[[mytime]])
-                    age_col <- jmvcore::toNumeric(mydata[[age_var]])
-                    group_col <- as.factor(mydata[[myfactor]])
-
-                    # Handle outcome level
-                    outcome_raw <- mydata[[myoutcome]]
-                    if (!is.null(self$options$outcomeLevel) && self$options$outcomeLevel != "") {
-                        outcome_col <- as.integer(outcome_raw == self$options$outcomeLevel)
-                    } else {
-                        outcome_col <- as.numeric(as.character(outcome_raw))
-                    }
-
-                    plot_data <- data.frame(
-                        time = time_col,
-                        event = outcome_col,
-                        group = group_col,
-                        age = age_col,
-                        stringsAsFactors = FALSE
-                    )
-                    plot_data <- plot_data[complete.cases(plot_data), ]
+                    # See .setAgePlotState(): shared cleaned frame, so these
+                    # curves cannot disagree with the tables beside them.
+                    plot_data <- state$plot_data
+                    myfactor <- state$group_label
+                    age_var <- state$age_label
 
                     if (nrow(plot_data) < 10) return(FALSE)
 
@@ -6808,10 +6698,10 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 for (item in items) {
                     icon <- switch(item$status,
-                        "addressed" = "&#9989;",          # green check
-                        "partially_addressed" = "&#9888;", # warning
-                        "not_addressed" = "&#10060;",      # red X
-                        "user_action" = "&#9998;"          # pencil
+                        "addressed" = "\u{2705}",          # green check
+                        "partially_addressed" = "\u{26a0}", # warning
+                        "not_addressed" = "\u{274c}",      # red X
+                        "user_action" = "\u{270e}"          # pencil
                     )
                     bg <- switch(item$status,
                         "addressed" = "#e8f5e9",
@@ -6830,10 +6720,10 @@ survivalClass <- if (requireNamespace('jmvcore'))
 
                 html_parts <- c(html_parts, "</table>")
                 html_parts <- c(html_parts, "<p><small>",
-                    "&#9989; = Addressed by current analysis | ",
-                    "&#9888; = Partially addressed | ",
-                    "&#10060; = Not yet addressed | ",
-                    "&#9998; = Requires user action in manuscript",
+                    "\u{2705} = Addressed by current analysis | ",
+                    "\u{26a0} = Partially addressed | ",
+                    "\u{274c} = Not yet addressed | ",
+                    "\u{270e} = Requires user action in manuscript",
                     "</small></p>")
 
                 self$results$remarkChecklist$setContent(paste(html_parts, collapse = "\n"))

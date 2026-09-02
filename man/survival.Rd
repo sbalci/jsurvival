@@ -127,56 +127,69 @@ disease.}
 \item{awod}{The level of the outcome variable that indicates alive without
 disease.}
 
-\item{analysistype}{.}
+\item{analysistype}{Defines how outcome levels are combined into event and
+censoring categories. Competing-risk mode reports cumulative incidence and
+suppresses methods that assume a single event type.}
 
-\item{cutp}{.}
+\item{cutp}{Comma-separated follow-up times at which survival probabilities
+are reported.}
 
 \item{timetypedata}{select the time type in data}
 
 \item{timetypeoutput}{select the time type in output}
 
-\item{uselandmark}{.}
+\item{uselandmark}{Restricts the analysis to participants still at risk at
+the landmark time and resets their follow-up clock to zero at that point.}
 
-\item{landmark}{.}
+\item{landmark}{Landmark time in the selected survival-time units.}
 
-\item{pw}{.}
+\item{pw}{Performs pairwise survival-distribution comparisons between
+explanatory-variable levels.}
 
-\item{padjustmethod}{.}
+\item{padjustmethod}{Multiple-comparison adjustment applied to pairwise
+survival-test p-values.}
 
-\item{weightedLogRank}{.}
+\item{weightedLogRank}{Reports standard log-rank and Fleming-Harrington
+weighted tests together.}
 
-\item{survivalTestType}{.}
+\item{survivalTestType}{Selects the log-rank or Fleming-Harrington
+weighting used for pairwise comparisons.}
 
-\item{ph_cox}{.}
+\item{ph_cox}{Tests the Cox proportional-hazards assumption using
+Schoenfeld residuals.}
 
-\item{sc}{.}
+\item{sc}{Displays the Kaplan-Meier survival curve.}
 
-\item{kmunicate}{.}
+\item{kmunicate}{Displays a KMunicate-style Kaplan-Meier plot with
+communication-focused formatting.}
 
-\item{ce}{.}
+\item{ce}{Displays cumulative event probability over follow-up.}
 
-\item{ch}{.}
+\item{ch}{Displays cumulative hazard over follow-up.}
 
-\item{endplot}{.}
+\item{endplot}{Upper limit of the time axis for survival plots.}
 
-\item{ybegin_plot}{.}
+\item{ybegin_plot}{Lower limit of the probability axis for survival plots.}
 
-\item{yend_plot}{.}
+\item{yend_plot}{Upper limit of the probability axis for survival plots.}
 
-\item{byplot}{.}
+\item{byplot}{Spacing between labeled time-axis ticks.}
 
-\item{multievent}{.}
+\item{multievent}{Enables explicit assignment of multiple outcome levels to
+event and censoring categories.}
 
-\item{ci95}{.}
+\item{ci95}{Displays 95 percent confidence intervals on supported survival
+plots.}
 
-\item{risktable}{.}
+\item{risktable}{Displays numbers at risk beneath supported survival plots.}
 
-\item{censored}{.}
+\item{censored}{Displays censoring marks on supported survival plots.}
 
-\item{pplot}{.}
+\item{pplot}{Displays the survival-distribution test p-value on supported
+plots.}
 
-\item{medianline}{If true, displays a line indicating the median survival
-time on the survival plot.}
+\item{medianline}{Selects horizontal, vertical, or both median-survival
+reference lines on the survival plot.}
 
 \item{person_time}{Enable this option to calculate and display person-time
 metrics, including total follow-up time and incidence rates. These metrics
@@ -331,9 +344,11 @@ flexible). Knots are placed at Harrell-recommended percentiles. More knots
 allow detection of complex non-linear patterns but may overfit with small
 samples.}
 
-\item{bootstrapValidation}{.}
+\item{bootstrapValidation}{Performs bootstrap internal validation of
+discrimination and calibration slope.}
 
-\item{bootstrapValN}{.}
+\item{bootstrapValN}{Number of bootstrap resamples used for internal
+validation.}
 
 \item{seed}{Random seed for the reproducible bootstrap internal validation.
 Change this value to obtain a different bootstrap draw; the default (42)
@@ -345,7 +360,6 @@ A results object containing:
 \code{results$eventRecodeInfo} \tab \tab \tab \tab \tab a html \cr
 \code{results$subtitle} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$todo} \tab \tab \tab \tab \tab a html \cr
-\code{results$errors} \tab \tab \tab \tab \tab a html \cr
 \code{results$strongWarnings} \tab \tab \tab \tab \tab a html \cr
 \code{results$warnings} \tab \tab \tab \tab \tab a html \cr
 \code{results$infoMessages} \tab \tab \tab \tab \tab a html \cr
