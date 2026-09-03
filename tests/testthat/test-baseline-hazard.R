@@ -136,3 +136,13 @@ test_that("hazard interval boundaries are not selected from event quantiles", {
                  tolerance = 1e-12)
     expect_equal(sum(hz$events), sum(status))
 })
+
+test_that("piecewise rates do not spread time-zero event mass over follow-up", {
+    gen <- get("singlearmClass", envir = .bh_ns)
+    f <- gen$private_methods$.hazardIntervals
+
+    # Later subjects accrue person-time, but that does not turn an event at the
+    # origin into a finite continuous-time occurrence/exposure rate.
+    hz <- f(time = c(0, 1, 2, 3), status = c(1L, 0L, 1L, 0L))
+    expect_equal(nrow(hz), 0L)
+})

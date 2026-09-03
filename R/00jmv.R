@@ -268,6 +268,13 @@
         `title`="mstate: R package", 
         `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=mstate", 
         `url`="https://CRAN.R-project.org/package=mstate"), 
+    `maxstat`=list(
+        `type`="software", 
+        `author`="Torsten Hothorn", 
+        `year`=2025, 
+        `title`="maxstat: R package", 
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=maxstat", 
+        `url`="https://CRAN.R-project.org/package=maxstat"), 
     `logistf`=list(
         `type`="software", 
         `author`="Heinze G, Ploner M, Jiricka L", 

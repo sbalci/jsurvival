@@ -127,8 +127,12 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         private$.errorMessages <- c(private$.errorMessages, message)
       },
 
-      .addWarning = function(message) {
-        private$.warningMessages <- c(private$.warningMessages, message)
+      .addWarning = function(message, strong = FALSE) {
+        # The severity travels as the element name, so .displayMessages()
+        # never has to guess it from the wording.
+        private$.warningMessages <- c(
+          private$.warningMessages,
+          stats::setNames(message, if (isTRUE(strong)) "STRONG_WARNING" else "WARNING"))
       },
 
       .addInfo = function(message) {
@@ -208,11 +212,13 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         # Display accumulated warning messages
         if (length(private$.warningMessages) > 0) {
-          html_content <- paste(sapply(private$.warningMessages, function(msg) {
-            # Determine if it's a STRONG_WARNING or regular WARNING based on keywords
-            type <- if (grepl("Very few events|critically", msg, ignore.case = TRUE)) "STRONG_WARNING" else "WARNING"
-            .singlearmNoticeHTML(msg, type)
-          }), collapse = "")
+          msgs <- private$.warningMessages
+          types <- names(msgs)
+          if (is.null(types)) types <- rep("", length(msgs))
+          html_content <- paste(vapply(seq_along(msgs), function(i) {
+            type <- if (identical(types[i], "STRONG_WARNING")) "STRONG_WARNING" else "WARNING"
+            .singlearmNoticeHTML(unname(msgs[i]), type)
+          }, character(1)), collapse = "")
           self$results$warnings$setContent(html_content)
           self$results$warnings$setVisible(TRUE)
         } else {
@@ -229,6 +235,54 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         } else {
           self$results$info$setVisible(FALSE)
         }
+      },
+
+      .hazardSectionVisibility = function(cr) {
+        # The option expressions mirror the `visible:` bindings in
+        # singlearm.r.yaml; `cr` is the data-driven competing-risk flag that a
+        # .r.yaml expression cannot see.
+        hz <- isTRUE(self$options$baseline_hazard)
+        hazard_visible <- list(
+          baselineHazardHeading     = hz,
+          baselineHazardTable       = hz,
+          baselineHazardPlot        = hz,
+          smoothedHazardPlot        = isTRUE(self$options$hazard_smoothing),
+          baselineHazardSummary     = hz && isTRUE(self$options$showSummaries),
+          baselineHazardHeading3    = hz && isTRUE(self$options$showExplanations),
+          baselineHazardExplanation = hz && isTRUE(self$options$showExplanations))
+        for (nm in names(hazard_visible))
+          self$results[[nm]]$setVisible(!isTRUE(cr) && hazard_visible[[nm]])
+        invisible(NULL)
+      },
+
+      .eventCountNotice = function(dq) {
+        # One assessment of event scarcity, in one place (see the note in
+        # .assessDataQuality()). Zero events of interest most often means the
+        # wrong event level was selected: the KM table then shows an NA median
+        # and every probability is 100%, which is easily read as excellent
+        # survival. The recode disclosure in eventRecodeInfo is hidden by
+        # default, so this notice carries the check itself.
+        n_events <- dq$n_events
+        if (is.null(n_events) || is.na(n_events)) return(invisible(NULL))
+        cr <- private$.isCompetingRisk()
+        ev_lab <- private$.eventRecode$event_label
+        ev_lab <- if (length(ev_lab) > 0 && nzchar(ev_lab[1])) ev_lab[1] else .("(not set)")
+        if (n_events == 0) {
+          counts <- if (isTRUE(dq$n_competing > 0))
+            jmvcore::format(.("{censored} censored, {k} competing"),
+                            censored = dq$n_censored, k = dq$n_competing)
+          else
+            jmvcore::format(.("{censored} censored"), censored = dq$n_censored)
+          private$.addWarning(jmvcore::format(
+            .("No events of interest were observed among {n} subjects ({counts}). Every survival or cumulative-incidence estimate is therefore a boundary value and the median is not estimable. The event level currently mapped to the event of interest is \"{level}\"; check that it is the intended level before interpreting these results as low risk."),
+            n = dq$n_total, counts = counts, level = ev_lab), strong = TRUE)
+        } else if (n_events < 10) {
+          private$.addWarning(jmvcore::format(
+            .("Only {n} event(s) of interest among {total} subjects. Estimates with fewer than 10 events are imprecise: confidence intervals will be wide and the {median} may not be reached. Report the number at risk alongside every estimate and treat this as a descriptive result."),
+            n = n_events, total = dq$n_total,
+            median = if (cr) .("median cumulative-incidence time") else .("median")), strong = TRUE)
+        }
+        invisible(NULL)
       },
 
       # Utility Helper Functions ----
@@ -538,20 +592,27 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         return(TRUE)
       },
 
-      .getCachedSurvfit = function(formula, data, cache_key_suffix = "") {
+      .getCachedSurvfit = function(formula, data, cache_key_suffix = "",
+                                   conf.type = "log-log") {
+        # Complementary log-log (Kalbfleisch-Prentice) pointwise band for every
+        # survfit in this analysis: it never leaves (0, 1), unlike survfit's
+        # default "log" band whose upper limit is clipped at 1. The KM median CI
+        # is the Brookmeyer-Crowley inversion of this same band, and the
+        # multi-state (CIF) fit gets the log(-log) transformation recommended
+        # for cumulative-incidence intervals (Choudhury 2002).
         if (!requireNamespace('digest', quietly = TRUE)) {
           # Fallback if digest not available
-          return(survival::survfit(formula, data = data))
+          return(survival::survfit(formula, data = data, conf.type = conf.type))
         }
         
         cache_key <- paste0("survfit_", 
-                           digest::digest(list(as.character(formula), data, cache_key_suffix)))
+                           digest::digest(list(as.character(formula), data, cache_key_suffix, conf.type)))
         
         if (exists(cache_key, envir = private$.cache)) {
           return(get(cache_key, envir = private$.cache))
         }
         
-        result <- survival::survfit(formula, data = data)
+        result <- survival::survfit(formula, data = data, conf.type = conf.type)
         assign(cache_key, result, envir = private$.cache)
         return(result)
       },
@@ -565,15 +626,6 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         # For larger datasets, use logarithmic scaling
         base_span <- 0.75 / log10(n_points + 1)
         return(pmax(0.1, pmin(0.8, base_span)))
-      },
-
-      .systematicSample = function(data, target_size = 50) {
-        n <- nrow(data)
-        if (n <= target_size) return(data)
-
-        # Use systematic sampling to preserve distribution
-        keep_indices <- round(seq(1, n, length.out = target_size))
-        return(data[keep_indices, ])
       },
 
       .hazardIntervals = function(time, status, target_events = 10L,
@@ -1112,8 +1164,11 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                                     n_nonfinite, ifelse(n_nonfinite == 1, ' is', 's are')))
           return(NULL)
         }
-        if (any(df_time$mytime < 0, na.rm = TRUE)) {
-          private$.addError(.('Time values must be zero or positive. Negative follow-up means the event/follow-up date precedes study entry; verify the date order and the elapsed-time variable.'))
+        n_negative <- sum(df_time$mytime < 0, na.rm = TRUE)
+        if (n_negative > 0) {
+          private$.addError(.fmt(.('{n} time value(s) are negative (smallest {min}). Time values must be zero or positive: negative follow-up means the event/follow-up date precedes study entry; verify the date order and the elapsed-time variable.'),
+                                 n = n_negative,
+                                 min = base::format(round(min(df_time$mytime, na.rm = TRUE), 2))))
           return(NULL)
         }
         n_zero <- sum(df_time$mytime == 0, na.rm = TRUE)
@@ -1340,7 +1395,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           }
 
           if (n_after < n_before) {
-            private$.addInfo(sprintf(.('Landmark analysis removed %d subject(s) whose follow-up ended at or before %s %s; %d remain. Time is measured from the landmark, and estimates are conditional on surviving to it.'),
+            private$.addWarning(sprintf(.('Landmark analysis removed %d subject(s) whose follow-up ended at or before %s %s; %d remain. Time is measured from the landmark, and estimates are conditional on surviving to it.'),
                                      n_before - n_after, landmark, self$options$timetypeoutput, n_after))
           }
         }
@@ -1572,16 +1627,12 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         # so the outcomeorganizer hand-off (0/1/2 outcome, multievent = FALSE)
         # looks like ordinary survival there. Same blind spot as the CIF plot
         # above, which is why both are re-asserted here.
-        if (cr) {
-          for (nm in c("baselineHazardHeading", "baselineHazardTable",
-                       "baselineHazardPlot", "smoothedHazardPlot",
-                       "baselineHazardSummary", "baselineHazardHeading3",
-                       "baselineHazardExplanation")) {
-            it <- try(self$results[[nm]], silent = TRUE)
-            if (!inherits(it, "try-error") && !is.null(it))
-              try(it$setVisible(FALSE), silent = TRUE)
-          }
-        }
+        #
+        # Re-asserted symmetrically: setVisible() replaces the declarative
+        # `visible:` binding from singlearm.r.yaml with a literal, so a one-way
+        # setVisible(FALSE) kept the populated hazard table hidden for the rest
+        # of the session after the user switched back to ordinary survival.
+        private$.hazardSectionVisibility(cr)
 
         ## Data Quality Assessment ----
         private$.checkpoint()
@@ -1589,6 +1640,10 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         # Store data quality for potential use in outputs
         results$data_quality <- data_quality
+
+        # Event-count notice: always visible, quantified, never gated behind
+        # showExplanations (where the eventRecodeInfo disclosure lives).
+        private$.eventCountNotice(data_quality)
 
         # WARNING for data quality issues from assessment
         # `.assessDataQuality()` deliberately assigns no warnings of its own --
@@ -1916,6 +1971,9 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           formula <- jmvcore::asFormula(formula, additional_allowed_functions = c("Surv"))
 
           km_fit <- private$.safeExecute({
+            # log-log band (see .getCachedSurvfit); the median CI is the
+            # Brookmeyer-Crowley inversion of the same band the time-specific
+            # table reports.
             private$.getCachedSurvfit(formula, mydata, "median")
           }, context = "survival_calculation")
 
@@ -2081,8 +2139,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           dq <- results$data_quality
           quality_info <- paste0(
             "Descriptive follow-up: range ", dq$min_time, "-", dq$max_time, " ",
-            self$options$timetypeoutput, ". ",
-            if (length(dq$warnings) > 0) paste("Considerations:", paste(dq$warnings, collapse = "; "), ".") else ""
+            self$options$timetypeoutput, ". "
           )
         }
         
@@ -2125,7 +2182,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                              paste0("Observed event proportion: ", event_rate, "% (", n_events, " of ", n_total, " subjects). This is a crude proportion, not an incidence rate."),
                              quality_info,
                              .median_meaning,
-                             "Note: Confidence intervals use survfit's default log-transformation method (conf.type='log'), based on Greenwood's variance estimate."
+                             "Note: Confidence intervals use the complementary log-log (Kalbfleisch-Prentice) transformation (conf.type='log-log'), based on Greenwood's variance estimate; the median CI is the Brookmeyer-Crowley inversion of that pointwise band."
           )
         }
 
@@ -2142,7 +2199,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         if (self$options$showExplanations && private$.isCompetingRisk()) {
             self$results$medianSurvivalExplanation$setContent(paste0(
               '<div class="explanation-box" style="background-color: rgba(33, 152, 255, 0.07); padding: 15px; border-radius: 8px; margin: 10px 0; color: inherit;">',
-              '<h3 style="color: #2c5282; margin-top: 0;">', .("Understanding the Median Time to the Event of Interest"), '</h3>',
+              '<h3 style="color: inherit; margin-top: 0;">', .("Understanding the Median Time to the Event of Interest"), '</h3>',
               '<p>', .("This is not median survival. It is the first time at which the estimated cumulative incidence of the event of interest reaches 50% or greater, with competing risks accounted for. Because the curve changes in steps, it need not equal exactly 50% at that time; the estimate indicates that at least half the cohort has had the event of interest by then."), '</p>',
               '<ul>',
               '<li>', .("<b>Not reached</b> is common and expected here: whenever competing events are frequent, the cumulative incidence of the event of interest can plateau below 50%, so no such time exists no matter how long follow-up continues."), '</li>',
@@ -2154,10 +2211,10 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         } else if (self$options$showExplanations) {
             median_explanation_html <- '
             <div class="explanation-box" style="background-color: rgba(33, 152, 255, 0.07); padding: 15px; border-radius: 8px; margin: 10px 0; color: inherit;">
-                <h3 style="color: #2c5282; margin-top: 0;"> Understanding the Kaplan-Meier Median</h3>
+                <h3 style="color: inherit; margin-top: 0;"> Understanding the Kaplan-Meier Median</h3>
                 
-                <div style="background-color: white; padding: 12px; border-radius: 5px; margin: 10px 0;">
-                    <h4 style="color: #2d3748; margin-top: 0;">What is the Kaplan-Meier Median?</h4>
+                <div style="background-color: rgba(255, 255, 255, 0.08); padding: 12px; border-radius: 5px; margin: 10px 0; color: inherit;">
+                    <h4 style="color: inherit; margin-top: 0;">What is the Kaplan-Meier Median?</h4>
                     <p style="margin: 8px 0;">It is the <strong>first time at which the estimated event-free probability is 50% or lower</strong>. Because the curve changes in steps, the estimate need not equal exactly 50% at that time. Its clinical name depends on the selected endpoint.</p>
                     
                     <div style="background-color: rgba(33, 184, 255, 0.11); padding: 10px; border-radius: 5px; margin: 10px 0; color: inherit;">
@@ -2171,7 +2228,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 </div>
                 
                 <div style="background-color: rgba(246, 163, 33, 0.11); padding: 12px; border-radius: 5px; margin: 10px 0; color: inherit;">
-                    <h4 style="color: #d68910; margin-top: 0;"> Understanding the Results Table</h4>
+                    <h4 style="color: inherit; margin-top: 0;"> Understanding the Results Table</h4>
                     <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
                         <tr style="background-color: rgba(255, 202, 33, 0.23); color: inherit;">
                             <th style="padding: 8px; text-align: left; border: 1px solid #ffc107;">Measure</th>
@@ -2197,9 +2254,9 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 </div>
                 
                 <div style="background-color: rgba(33, 159, 43, 0.1); padding: 12px; border-radius: 5px; margin: 10px 0; color: inherit;">
-                    <h4 style="color: #2e7d32; margin-top: 0;"> Clinical Interpretation Guide</h4>
+                    <h4 style="color: inherit; margin-top: 0;"> Clinical Interpretation Guide</h4>
                     
-                    <div style="background-color: white; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                    <div style="background-color: rgba(255, 255, 255, 0.08); padding: 10px; border-radius: 5px; margin: 10px 0; color: inherit;">
                         <strong> When Median is Reached:</strong>
                         <p style="margin: 5px 0;">"The median time-to-event is 36 months (95% CI: 28-45 months)"</p>
                         <ul style="margin: 5px 0; padding-left: 20px;">
@@ -2404,8 +2461,10 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           )
 
           survTable <- self$results$survTable
+          # std.err stays in km_fit_df for the narrative; it is not a column of
+          # the table and Table$setRow would drop it silently.
           for (i in seq_along(km_fit_df[, 1, drop = TRUE])) {
-            survTable$addRow(rowKey = i, values = c(km_fit_df[i,]))
+            survTable$addRow(rowKey = i, values = c(km_fit_df[i, names(km_fit_df) != "std.err"]))
           }
           
           km_fit_df$ci <- private$.ciText(km_fit_df$lower, km_fit_df$upper)
@@ -2441,7 +2500,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           if (self$options$showExplanations) {
             self$results$survivalProbabilityExplanation$setContent(paste0(
               '<div class="explanation-box" style="background-color: rgba(33, 152, 255, 0.07); padding: 15px; border-radius: 8px; margin: 10px 0; color: inherit;">',
-              '<h3 style="color: #2c5282; margin-top: 0;">', .("Understanding Cumulative Incidence at Selected Time Points"), '</h3>',
+              '<h3 style="color: inherit; margin-top: 0;">', .("Understanding Cumulative Incidence at Selected Time Points"), '</h3>',
               '<p>', .("Each row gives the estimated probability that the event of interest has occurred by that time, accounting for the competing event. It is a cumulative incidence function (CIF), not a survival probability, and it is not 1 minus a Kaplan-Meier estimate: subjects who have the competing event can no longer experience the event of interest, and a Kaplan-Meier analysis that censored them would over-state the risk."), '</p>',
               '<ul>',
               '<li>', .("<b>Number at Risk</b> - subjects still under follow-up and still free of both events at that time."), '</li>',
@@ -2469,6 +2528,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         formula <- jmvcore::asFormula(formula, additional_allowed_functions = c("Surv"))
 
         km_fit <- private$.safeExecute({
+          # Same fit and the same log-log band as the median section.
           private$.getCachedSurvfit(formula, mydata, "survtable")
         }, context = "survival_calculation")
 
@@ -2506,7 +2566,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         for (col in c("std.err", "lower", "upper"))
           km_fit_df[[col]][!is.finite(km_fit_df[[col]])] <- NA_real_
 
-        # Greenwood/log intervals have zero estimated variance while the curve
+        # Greenwood-based (log-log) intervals have zero estimated variance while the curve
         # is exactly 1 (and can degenerate at 0). A displayed 100%-100% interval
         # before any event, especially in an all-censored cohort, is easily read
         # as certainty about population survival. Leave boundary limits blank;
@@ -2521,12 +2581,12 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           self$results$survTable$setNote("cif_note", NULL)
           self$results$survTable$setNote(
             "boundary_ci",
-            .("Confidence limits are left blank where the Kaplan-Meier event-free estimate is exactly 0% or 100%. The usual Greenwood-based large-sample interval degenerates at a probability boundary; the absence of observed events does not establish zero population risk."))
+            .("Confidence limits are left blank where the Kaplan-Meier event-free estimate is exactly 0% or 100%. The Greenwood-based complementary log-log interval degenerates at a probability boundary; the absence of observed events does not establish zero population risk."))
         }
 
         survTable <- self$results$survTable
 
-        data_frame <- km_fit_df
+        data_frame <- km_fit_df[, names(km_fit_df) != "std.err", drop = FALSE]
         for (i in seq_along(data_frame[, 1, drop = TRUE])) {
           survTable$addRow(rowKey = i, values = c(data_frame[i,]))
         }
@@ -2571,10 +2631,10 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         if (self$options$showExplanations) {
             survival_probability_explanation_html <- '
             <div class="explanation-box" style="background-color: rgba(33, 152, 255, 0.07); padding: 15px; border-radius: 8px; margin: 10px 0; color: inherit;">
-                <h3 style="color: #2c5282; margin-top: 0;"> Understanding Kaplan-Meier Time-Specific Estimates</h3>
+                <h3 style="color: inherit; margin-top: 0;"> Understanding Kaplan-Meier Time-Specific Estimates</h3>
                 
-                <div style="background-color: white; padding: 12px; border-radius: 5px; margin: 10px 0;">
-                    <h4 style="color: #2d3748; margin-top: 0;">What are Time-Specific Event-Free Probabilities?</h4>
+                <div style="background-color: rgba(255, 255, 255, 0.08); padding: 12px; border-radius: 5px; margin: 10px 0; color: inherit;">
+                    <h4 style="color: inherit; margin-top: 0;">What are Time-Specific Event-Free Probabilities?</h4>
                     <p style="margin: 8px 0;">These show the <strong>estimated percentage of the cohort remaining event-free</strong> at specific milestone time points.
                     The displayed time points are exactly those selected for this analysis, in the declared output unit.</p>
                     
@@ -2590,7 +2650,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 </div>
                 
                 <div style="background-color: rgba(246, 163, 33, 0.11); padding: 12px; border-radius: 5px; margin: 10px 0; color: inherit;">
-                    <h4 style="color: #d68910; margin-top: 0;"> Understanding Each Column</h4>
+                    <h4 style="color: inherit; margin-top: 0;"> Understanding Each Column</h4>
                     <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
                         <tr style="background-color: rgba(255, 202, 33, 0.23); color: inherit;">
                             <th style="padding: 8px; text-align: left; border: 1px solid #ffc107;">Column</th>
@@ -2626,9 +2686,9 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 </div>
                 
                 <div style="background-color: rgba(33, 159, 43, 0.1); padding: 12px; border-radius: 5px; margin: 10px 0; color: inherit;">
-                    <h4 style="color: #2e7d32; margin-top: 0;"> Descriptive Clinical Context</h4>
+                    <h4 style="color: inherit; margin-top: 0;"> Descriptive Clinical Context</h4>
                     
-                    <div style="background-color: white; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                    <div style="background-color: rgba(255, 255, 255, 0.08); padding: 10px; border-radius: 5px; margin: 10px 0; color: inherit;">
                         <strong> Cohort description:</strong>
                         <p style="margin: 5px 0;">"In this cohort, about 8 out of 10 patients were event-free at 3 years"</p>
                     </div>
@@ -2933,7 +2993,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         if (self$options$showExplanations) {
             person_time_explanation_html <- '
             <div style="margin-bottom: 20px; padding: 15px; background-color: rgba(33, 152, 255, 0.07); border-left: 4px solid #4169e1; color: inherit;">
-                <h4 style="margin-top: 0; color: #2c3e50;">Understanding Person-Time Analysis</h4>
+                <h4 style="margin-top: 0; color: inherit;">Understanding Person-Time Analysis</h4>
                 <p style="margin-bottom: 10px;">Person-time analysis calculates incidence rates by accounting for the total time each patient was at risk:</p>
                 <ul style="margin-left: 20px;">
                     <li><strong>Person-Time:</strong> Sum of individual follow-up periods for all patients</li>
@@ -2975,7 +3035,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         if (private$.isCompetingRisk()) {
           txt <- paste0(
             '<div class="explanation-box" style="background-color: rgba(33, 152, 255, 0.07);padding:15px;border-radius:8px;margin:10px 0; color: inherit;">',
-            '<h3 style="color:#2c5282;margin-top:0;">Understanding the Cumulative-Incidence Plot</h3>',
+            '<h3 style="color: inherit;margin-top:0;">Understanding the Cumulative-Incidence Plot</h3>',
             '<p>The plot shows the cumulative incidence of each terminal event state. ',
             'For the event of interest, this is the estimated probability that it has occurred by time <i>t</i>, ',
             'with competing events accounted for. It is not 1 minus a Kaplan-Meier curve.</p>',
@@ -2989,7 +3049,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         } else {
           txt <- paste0(
             '<div class="explanation-box" style="background-color: rgba(33, 152, 255, 0.07);padding:15px;border-radius:8px;margin:10px 0; color: inherit;">',
-            '<h3 style="color:#2c5282;margin-top:0;">Understanding Survival Curves and Plots</h3>',
+            '<h3 style="color: inherit;margin-top:0;">Understanding Survival Curves and Plots</h3>',
             '<p>The Kaplan-Meier curve estimates the probability of remaining event-free over time. ',
             'It steps down at event times; censoring changes the risk set but does not make the curve step down.</p>',
             '<ul><li><strong>X-axis:</strong> time in ', unit, '.</li>',
@@ -3108,7 +3168,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         if (self$options$showExplanations) {
           self$results$baselineHazardExplanation$setContent(paste0(
             '<div class="explanation-box" style="background-color: rgba(33, 152, 255, 0.07);padding:15px;border-radius:8px;margin:10px 0; color: inherit;">',
-            '<h3 style="color:#2c5282;margin-top:0;">Understanding Piecewise Hazard-Rate Estimates</h3>',
+            '<h3 style="color: inherit;margin-top:0;">Understanding Piecewise Hazard-Rate Estimates</h3>',
             '<p>A hazard is an event rate among subjects still at risk, expressed per unit of person-time. ',
             'It is not an event probability and can exceed 1 per time unit. This table groups follow-up into equal-width intervals and divides events by the exact person-time accrued in each interval.</p>',
             '<ul><li><strong>Time:</strong> upper endpoint of the interval; the row covers the preceding endpoint up to and including this time.</li>',
@@ -3151,8 +3211,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         myoutcome <- results$name2outcome
 
         myfactor <- results$name3explanatory
-        myfactor <-
-        jmvcore::constructFormula(terms = myfactor)
+        myfactor <- jmvcore::composeTerm(myfactor)
 
         plotData <- results$cleanData
 
@@ -3480,16 +3539,13 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         if (!private$.validatePlotParameters()) return()
 
         mytime <- results$name1time
-        mytime <- jmvcore::constructFormula(terms = mytime)
+        mytime <- jmvcore::composeTerm(mytime)
 
         myoutcome <- results$name2outcome
-        myoutcome <-
-          jmvcore::constructFormula(terms = myoutcome)
-
+        myoutcome <- jmvcore::composeTerm(myoutcome)
 
         myfactor <- results$name3explanatory
-        myfactor <-
-        jmvcore::constructFormula(terms = myfactor)
+        myfactor <- jmvcore::composeTerm(myfactor)
 
         plotData <- results$cleanData
 
@@ -3497,7 +3553,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           jmvcore::toNumeric(plotData[[mytime]])
 
         # Unqualified `Surv` (globally allow-listed); mytime/myoutcome already
-        # backtick-escaped via jmvcore::constructFormula above.
+        # backtick-escaped via jmvcore::composeTerm above.
         myformula <-
           paste0("Surv(", mytime, ", ", myoutcome, ")")
 
@@ -3509,8 +3565,6 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             dependent = myformula,
             explanatory = myfactor,
             xlab = paste0('Time (', self$options$timetypeoutput, ')'),
-            # pval = self$options$pplot,
-            # pval.method	= self$options$pplot,
             legend = 'none',
             break.time.by = self$options$byplot,
             xlim = c(0, self$options$endplot),
@@ -3570,16 +3624,13 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         if (!private$.validatePlotParameters(check_y = FALSE)) return()
 
         mytime <- results$name1time
-        mytime <- jmvcore::constructFormula(terms = mytime)
+        mytime <- jmvcore::composeTerm(mytime)
 
         myoutcome <- results$name2outcome
-        myoutcome <-
-          jmvcore::constructFormula(terms = myoutcome)
-
+        myoutcome <- jmvcore::composeTerm(myoutcome)
 
         myfactor <- results$name3explanatory
-        myfactor <-
-        jmvcore::constructFormula(terms = myfactor)
+        myfactor <- jmvcore::composeTerm(myfactor)
 
         plotData <- results$cleanData
 
@@ -3587,7 +3638,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           jmvcore::toNumeric(plotData[[mytime]])
 
         # Unqualified `Surv` (globally allow-listed); mytime/myoutcome already
-        # backtick-escaped via jmvcore::constructFormula above.
+        # backtick-escaped via jmvcore::composeTerm above.
         myformula <-
           paste0("Surv(", mytime, ", ", myoutcome, ")")
 
@@ -3600,8 +3651,6 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             explanatory = myfactor,
             xlab = paste0('Time (', self$options$timetypeoutput, ')'),
             ylab = "Cumulative Hazard",
-            # pval = self$options$pplot,
-            # pval.method	= self$options$pplot,
             legend = 'none',
             break.time.by = self$options$byplot,
             xlim = c(0, self$options$endplot),
@@ -3672,16 +3721,13 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         }
 
         mytime <- results$name1time
-        mytime <- jmvcore::constructFormula(terms = mytime)
+        mytime <- jmvcore::composeTerm(mytime)
 
         myoutcome <- results$name2outcome
-        myoutcome <-
-          jmvcore::constructFormula(terms = myoutcome)
-
+        myoutcome <- jmvcore::composeTerm(myoutcome)
 
         myfactor <- results$name3explanatory
-        myfactor <-
-          jmvcore::constructFormula(terms = myfactor)
+        myfactor <- jmvcore::composeTerm(myfactor)
 
         plotData <- results$cleanData
 
@@ -3690,7 +3736,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
 
         # mytime/myoutcome/myfactor are already backtick-escaped via
-        # jmvcore::constructFormula above. Switch to unqualified `Surv`
+        # jmvcore::composeTerm above. Switch to unqualified `Surv`
         # (allow-listed) and asFormula for parse-tree validation.
         myformula <-
           paste0('Surv(', mytime, ', ', myoutcome, ') ~ ', myfactor)
@@ -4078,15 +4124,10 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         # Generate data quality summary
         if (self$options$showSummaries) {
-          warning_text <- if (length(dq$warnings) > 0) {
-            paste("<div style='background-color: rgba(255, 202, 33, 0.23); padding: 10px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #ffc107; color: inherit;'>",
-                  "<strong> Data Quality Considerations:</strong><ul>",
-                  paste0("<li>", dq$warnings, "</li>", collapse = ""),
-                  "</ul></div>")
-          } else {
-            paste0("<div style='background-color: rgba(33, 152, 239, 0.13);padding:10px;border-radius:5px;margin:10px 0;border-left:4px solid #2196f3; color: inherit;'>",
+          # .assessDataQuality() grades nothing; event scarcity is reported
+          # by .eventCountNotice() in .run().
+          warning_text <- paste0("<div style='background-color: rgba(33, 152, 239, 0.13);padding:10px;border-radius:5px;margin:10px 0;border-left:4px solid #2196f3; color: inherit;'>",
                    "<strong>Automated grading:</strong> No universal adequacy grade is assigned. Review the event counts, risk sets, confidence intervals, follow-up, missingness, and endpoint context directly.</div>")
-          }
 
           count_text <- if (dq$n_competing > 0)
             paste0(dq$n_events, " event(s) of interest, ", dq$n_competing,
@@ -4095,7 +4136,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
           summary_html <- paste0(
             "<div style='background-color: rgba(138, 155, 172, 0.06); padding: 15px; border-radius: 8px; margin: 10px 0; color: inherit;'>",
-            "<h4 style='color: #2c3e50; margin-top: 0;'> Descriptive Data Diagnostics</h4>",
+            "<h4 style='color: inherit; margin-top: 0;'> Descriptive Data Diagnostics</h4>",
             "<p>This analysis includes <strong>", dq$n_total, " subjects</strong>: <strong>",
             count_text, "</strong> (", dq$event_rate, "% observed target-event proportion) over an observed-time range of ",
             dq$min_time, " to ", dq$max_time, " ", self$options$timetypeoutput, ".</p>",
@@ -4226,7 +4267,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           # Format the complete summary
           summary_html <- paste0(
             "<div style='background-color: rgba(138, 155, 172, 0.06); padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff; color: inherit;'>",
-            "<h4 style='color: #2c3e50; margin-top: 0; margin-bottom: 15px;'> ", .("Descriptive Cohort Summary"), "</h4>",
+            "<h4 style='color: inherit; margin-top: 0; margin-bottom: 15px;'> ", .("Descriptive Cohort Summary"), "</h4>",
             "<p style='margin-bottom: 15px; font-size: 16px; line-height: 1.6;'>",
             "<strong>", preset_context, ":</strong> ", paste(summary_parts, collapse = " "), "</p>"
           )
@@ -4234,7 +4275,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           if (length(recommendations) > 0) {
             summary_html <- paste0(summary_html,
               "<div style='background-color: rgba(33, 152, 239, 0.13); padding: 15px; border-radius: 5px; margin-top: 15px; color: inherit;'>",
-              "<h5 style='color: #1976d2; margin-top: 0; margin-bottom: 10px;'> ", .("Clinical Considerations"), "</h5>",
+              "<h5 style='color: inherit; margin-top: 0; margin-bottom: 10px;'> ", .("Clinical Considerations"), "</h5>",
               "<ul style='margin: 0; padding-left: 20px;'>",
               paste0("<li>", recommendations, "</li>", collapse = ""),
               "</ul></div>"
@@ -4244,7 +4285,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           # Add copy button functionality
           summary_html <- paste0(summary_html,
             "<div style='text-align: right; margin-top: 15px;'>",
-            "<small style='color: #6c757d;'>", .("Copy-ready descriptive cohort summary"), "</small>",
+            "<small style='color: inherit; opacity: 0.8;'>", .("Copy-ready descriptive cohort summary"), "</small>",
             "</div></div>"
           )
           

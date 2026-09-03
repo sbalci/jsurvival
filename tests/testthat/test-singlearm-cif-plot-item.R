@@ -126,3 +126,33 @@ test_that("the CIF legend names the events and the stray facet strip is gone", {
     # Was: "Probability of an event".
     expect_identical(p$labels$y, "Cumulative incidence")
 })
+
+test_that("a zero target-event CIF remains visible as a flat zero curve", {
+    skip_if_not_installed("cmprsk")
+    d <- data.frame(
+        time = seq(2, 40, by = 2),
+        oc = factor(
+            rep(c("Dead of other cause", "Alive with disease"), each = 10),
+            levels = c("Alive with disease", "Alive without disease",
+                       "Dead of disease", "Dead of other cause")))
+    a <- run_sa(d, cr_opts)
+    priv <- a$.__enclos_env__$private
+
+    grDevices::pdf(NULL)
+    on.exit(grDevices::dev.off(), add = TRUE)
+    expect_true(priv$.plotCIF(a$results$plot_cif, ggplot2::theme_bw(), NULL))
+
+    p <- ggplot2::last_plot()
+    expect_setequal(unique(as.character(p$data$event)),
+                    c("Dead of disease", "Dead of other cause"))
+    target <- p$data[p$data$event == "Dead of disease", , drop = FALSE]
+    expect_gt(nrow(target), 0)
+    expect_true(all(target$est == 0))
+    uncertainty <- intersect(
+        c("var", "std", "lower", "upper", "conf.low", "conf.high"),
+        names(target))
+    for (column in uncertainty)
+        expect_true(all(is.na(target[[column]]) | target[[column]] == 0),
+                    info = paste("flat-zero CIF must not inherit", column,
+                                 "from another event curve"))
+})

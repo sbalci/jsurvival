@@ -153,3 +153,25 @@ test_that("administrative censoring truncates follow-up only when a time variabl
     expect_match(txt, "truncated for 10")   # the 10 patients with fu = 30 > cut = 20
     expect_match(txt, "5 event")            # of which 5 were events
 })
+
+# --- Regression: NRI must not manufacture a zero from a fitting failure ------
+test_that("computeNRI returns NA, not 0, when predicted probabilities are unavailable", {
+    cn <- tryCatch(get("computeNRI", envir = .rd_ns, inherits = TRUE), error = function(e) NULL)
+    skip_if(is.null(cn), "computeNRI not available in this distribution")
+
+    set.seed(1); n <- 120
+    actual <- rbinom(n, 1, 0.4)
+    newv <- rnorm(n) + actual
+    refv <- rnorm(n) + actual * 0.5
+
+    # Sane input still produces a number.
+    expect_false(is.na(suppressWarnings(cn(newv, refv, actual))$nri))
+
+    # Every count inside computeNRI is taken with na.rm = TRUE, so all-NA
+    # probabilities used to yield exactly 0 -- reading as "reclassifies nobody",
+    # a substantive negative result invented from a failed logistic fit.
+    env <- new.env(parent = environment(cn))
+    assign("raw_to_prob", function(values, actual, direction = ">=") rep(NA_real_, length(values)), envir = env)
+    cn_stub <- cn; environment(cn_stub) <- env
+    expect_true(is.na(suppressWarnings(cn_stub(newv, refv, actual))$nri))
+})

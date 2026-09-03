@@ -53,6 +53,40 @@ test_that("an ordinary two-level outcome is not mislabeled as overall survival",
                       describe(res, "outcome"), fixed = TRUE))
 })
 
+test_that("the censoring assumption is disclosed for explicit overall survival", {
+    define   <- get_util(".defineEventIndicator")
+    describe <- get_util(".describeEventIndicator")
+    skip_if(is.null(define) || is.null(describe), "survival_utils not available")
+
+    oc <- factor(c("DOD", "DOOC", "AWD", "AWOD"))
+    res <- define(outcome = oc, multievent = TRUE, analysistype = "overall",
+                  dod = "DOD", dooc = "DOOC", awd = "AWD", awod = "AWOD")
+    expect_null(res$error)
+    expect_match(describe(res), "Censoring assumption")
+    expect_match(describe(res), "independent/non-informative")
+})
+
+test_that("an invalid logical event level is rejected", {
+    define <- get_util(".defineEventIndicator")
+    skip_if(is.null(define), "survival_utils not available")
+
+    res <- define(c(TRUE, FALSE, TRUE), outcomeLevel = "Dead",
+                  outcome_name = "logical_status")
+    expect_match(res$error, "Select TRUE or FALSE")
+})
+
+test_that("a factor with extra declared levels is not hijacked as a hand-off", {
+    define <- get_util(".defineEventIndicator")
+    skip_if(is.null(define), "survival_utils not available")
+
+    oc <- factor(c("Censored", "Event", "Competing"),
+                 levels = c("Censored", "Event", "Competing", "Unknown"))
+    res <- define(oc, outcomeLevel = "Event", outcome_name = "status")
+    expect_null(res$error)
+    expect_false(res$has_competing)
+    expect_equal(res$estimand, "Kaplan-Meier survival for the selected event")
+})
+
 test_that("the outcomeorganizer hand-off keeps its competing-risk labels", {
     define <- get_util(".defineEventIndicator")
     skip_if(is.null(define), "survival_utils not available")
