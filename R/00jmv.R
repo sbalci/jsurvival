@@ -156,6 +156,14 @@
         `title`="finalfit: Quickly Create Elegant Regression Results Tables and Plots when Modelling", 
         `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=finalfit", 
         `url`="https://CRAN.R-project.org/package=finalfit"), 
+    `ggstatsplot`=list(
+        `type`="software", 
+        `author`="Patil, I.", 
+        `year`=2018, 
+        `title`="ggstatsplot: 'ggplot2' Based Plots with Statistical Details", 
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=ggstatsplot", 
+        `url`="https://CRAN.R-project.org/package=ggstatsplot", 
+        `doi`="10.5281/zenodo.2074621"), 
     `janitor`=list(
         `type`="software", 
         `author`="Firke, S.", 
@@ -170,9 +178,7 @@
         `author`="Royston, P., Altman, D.G. and Sauerbrei, W.", 
         `publisher`="Statist. Med.", 
         `volume`=25, 
-        `pages`="127-141", 
-        `doi`="10.1002/sim.2331", 
-        `url`="https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.2331"), 
+        `pages`="127-141"), 
     `padjust`=list(
         `type`="website", 
         `author`="R Core Team", 
@@ -275,6 +281,13 @@
         `title`="maxstat: R package", 
         `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=maxstat", 
         `url`="https://CRAN.R-project.org/package=maxstat"), 
+    `riskRegression`=list(
+        `type`="software", 
+        `author`="Thomas Alexander Gerds, Johan Sebastian Ohlendorff, Brice Ozenne", 
+        `year`=2026, 
+        `title`="riskRegression: R package", 
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=riskRegression", 
+        `url`="https://CRAN.R-project.org/package=riskRegression"), 
     `logistf`=list(
         `type`="software", 
         `author`="Heinze G, Ploner M, Jiricka L", 
