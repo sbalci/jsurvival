@@ -12,6 +12,7 @@ export(survival)
 export(survivalcont)
 export(timeinterval)
 importFrom(KMunicate,KMunicate)
+importFrom(Matrix,rowSums)
 importFrom(R6,R6Class)
 importFrom(cmprsk,cuminc)
 importFrom(digest,digest)
@@ -37,6 +38,8 @@ importFrom(ggplot2,
 )
 importFrom(glmnet,cv.glmnet)
 importFrom(glue,glue)
+importFrom(graphics,par)
+importFrom(grid,gpar)
 importFrom(gridExtra,grid.arrange)
 importFrom(janitor,clean_names)
 importFrom(jmvcore,.)
@@ -45,10 +48,12 @@ importFrom(labelled,set_variable_labels)
 importFrom(logistf,logistf)
 importFrom(lubridate,ymd)
 importFrom(magrittr,"%>%")
+importFrom(patchwork,wrap_plots)
 importFrom(riskRegression,Score)
 importFrom(rms,datadist)
 importFrom(rpart,rpart)
 importFrom(scales,percent)
+importFrom(splines,ns)
 importFrom(stats,
   as.formula,
   binomial,
@@ -73,6 +78,7 @@ importFrom(survminer,
 )
 importFrom(tibble,rownames_to_column)
 importFrom(tidyr,pivot_longer)
+importFrom(tools,toTitleCase)
 importFrom(utils,
   install.packages,
   sessionInfo,

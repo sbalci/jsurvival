@@ -29,3 +29,4 @@ README_badges.md
 ^backups/
 ^data/.*\.csv$
 ^.*\.tar\.gz$
+i18n-plans

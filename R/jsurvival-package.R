@@ -19,6 +19,12 @@
 #' @aliases jsurvival jsurvival-package
 #' @name jsurvival-package
 #' @importFrom jmvcore .
+#' @importFrom Matrix rowSums
+#' @importFrom graphics par
+#' @importFrom grid gpar
+#' @importFrom patchwork wrap_plots
+#' @importFrom splines ns
+#' @importFrom tools toTitleCase
 #' @importFrom stats as.formula binomial complete.cases glm pchisq pnorm predict qbeta qnorm quantile rexp rlnorm runif
 #' @importFrom utils install.packages
 "_PACKAGE"
