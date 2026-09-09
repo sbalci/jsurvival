@@ -578,7 +578,7 @@ outcomeorganizerBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             super$initialize(
                 package = "jsurvival",
                 name = "outcomeorganizer",
-                version = c(1,0,8),
+                version = c(1,0,81),
                 options = options,
                 results = outcomeorganizerResults$new(options=options),
                 data = data,
