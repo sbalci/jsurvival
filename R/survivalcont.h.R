@@ -550,14 +550,18 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                 name="",
                 title="Survival Analysis for Continuous Explanatory Variable",
                 refs=list(
+                    "ClinicoPathJamoviModule",
                     "finalfit",
                     "survival",
                     "survminer",
                     "dichotomizing",
                     "survivaltutorial",
                     "survivalrwnahhas",
-                    "ClinicoPathJamoviModule",
-                    "SchemperSmith1996"))
+                    "SchemperSmith1996",
+                    "KMunicate",
+                    "lubridate",
+                    "patchwork",
+                    "rpart"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="eventRecodeInfo",
@@ -1181,7 +1185,6 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                 height=450,
                 renderFun=".plot4",
                 visible="(findcut)",
-                requiresData=TRUE,
                 clearWith=list(
                     "sc",
                     "endplot",
@@ -1217,7 +1220,6 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                 height=450,
                 renderFun=".plot5",
                 visible="(findcut && sc)",
-                requiresData=TRUE,
                 clearWith=list(
                     "sc",
                     "endplot",
@@ -1456,7 +1458,6 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                 height=450,
                 renderFun=".plot2",
                 visible="(findcut && ce)",
-                requiresData=TRUE,
                 clearWith=list(
                     "ce",
                     "endplot",
@@ -1496,7 +1497,6 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                 height=450,
                 renderFun=".plot3",
                 visible="(findcut && ch)",
-                requiresData=TRUE,
                 clearWith=list(
                     "ch",
                     "endplot",
@@ -1536,7 +1536,6 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                 height=450,
                 renderFun=".plot6",
                 visible="(findcut && kmunicate)",
-                requiresData=TRUE,
                 clearWith=list(
                     "kmunicate",
                     "endplot",
@@ -1598,7 +1597,6 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                 height=450,
                 renderFun=".plot7",
                 visible="(findcut && loglog)",
-                requiresData=TRUE,
                 clearWith=list(
                     "loglog",
                     "endplot",
@@ -1643,7 +1641,6 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                 height=600,
                 renderFun=".plot9",
                 visible="(residual_diagnostics)",
-                requiresData=TRUE,
                 clearWith=list(
                     "residual_diagnostics",
                     "contexpl",
@@ -1977,7 +1974,6 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                 height=600,
                 renderFun=".plotMultipleCutoffs",
                 visible="(multiple_cutoffs)",
-                requiresData=TRUE,
                 clearWith=list(
                     "multiple_cutoffs",
                     "num_cutoffs",
@@ -2018,7 +2014,6 @@ survivalcontResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
                 height=600,
                 renderFun=".plotMultipleSurvival",
                 visible="(multiple_cutoffs && sc)",
-                requiresData=TRUE,
                 clearWith=list(
                     "multiple_cutoffs",
                     "num_cutoffs",

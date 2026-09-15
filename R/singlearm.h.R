@@ -438,7 +438,9 @@ singlearmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "KMunicate",
                     "Dafni2011",
                     "survivaltutorial",
-                    "survivalrwnahhas"))
+                    "survivalrwnahhas",
+                    "digest",
+                    "lubridate"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="eventRecodeInfo",
@@ -990,7 +992,6 @@ singlearmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "AalenJohansen1978",
                     "AustinLeeFine2016"),
                 visible="(sc && multievent && analysistype:compete)",
-                requiresData=TRUE,
                 clearWith=list(
                     "sc",
                     "endplot",
@@ -1025,7 +1026,6 @@ singlearmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 height=450,
                 renderFun=".plot6",
                 visible="(kmunicate)",
-                requiresData=TRUE,
                 clearWith=list(
                     "kmunicate",
                     "endplot",
@@ -1062,7 +1062,6 @@ singlearmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs=list(
                     "KaplanMeier1958"),
                 visible="(ce)",
-                requiresData=TRUE,
                 clearWith=list(
                     "ce",
                     "endplot",
@@ -1099,7 +1098,6 @@ singlearmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs=list(
                     "KaplanMeier1958"),
                 visible="(ch)",
-                requiresData=TRUE,
                 clearWith=list(
                     "ch",
                     "endplot",
@@ -1218,7 +1216,6 @@ singlearmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 height=450,
                 renderFun=".baselineHazardPlot",
                 visible="(baseline_hazard)",
-                requiresData=TRUE,
                 clearWith=list(
                     "outcome",
                     "outcomeLevel",
@@ -1247,7 +1244,6 @@ singlearmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs=list(
                     "Cleveland1979"),
                 visible="(hazard_smoothing)",
-                requiresData=TRUE,
                 clearWith=list(
                     "outcome",
                     "outcomeLevel",

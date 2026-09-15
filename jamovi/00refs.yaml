@@ -1,393 +1,438 @@
 ---
 refs:
-    survival:
-        type: 'software'
-        author: Terry M Therneau
-        year: 2026
-        title: "survival: Survival Analysis"
-        publisher: '[R package version 3.8-9]. Retrieved from https://CRAN.R-project.org/package=survival'
-        url: https://CRAN.R-project.org/package=survival
-
-    survminer:
-        type: 'software'
-        author: Alboukadel Kassambara and Marcin Kosinski and Przemyslaw Biecek
-        year: 2026
-        title: "survminer: Drawing Survival Curves using 'ggplot2'"
-        publisher: '[R package version 0.5.2]. Retrieved from https://CRAN.R-project.org/package=survminer'
-        url: https://CRAN.R-project.org/package=survminer
-
-
-    epiR:
-        type: 'software'
-        author: >-
-            Mark Stevenson with contributions from Telmo Nunes,
-            Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron
-            Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola
-            Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones,
-            Sarah Pirikahu, Simon Firestone, Ryan Kyle, Johann
-            Popp, Mathew Jay and Charles Reynard.
-        year: 2020
-        title: "epiR: Tools for the Analysis of Epidemiological Data."
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=epiR'
-        url: https://CRAN.R-project.org/package=epiR
-
-
-    KMunicate:
-        type: 'software'
-        author: Alessandro Gasparini
-        year: 2020
-        title: "KMunicate: KMunicate-Style Kaplan-Meier Plots"
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=KMunicate'
-        url: https://CRAN.R-project.org/package=KMunicate
-
-
-    KMunicate2:
-        type: 'article'
-        author: Morris TP, Jarvis CI, Cragg W, et al
-        title: "Proposals on Kaplan-Meier plots in medical research and a survey of stakeholder views: KMunicate"
-        year: 2019
-        publisher: 'BMJ Open 2019;9:e030215.'
-        doi: 10.1136/bmjopen-2019-030215
-        url: https://bmjopen.bmj.com/content/9/9/e030215
-
-
-    KaplanMeier1958:
-        type: 'article'
-        author: "Kaplan, E. L., & Meier, P."
-        year: 1958
-        title: "Nonparametric Estimation from Incomplete Observations"
-        publisher: 'Journal of the American Statistical Association'
-        volume: 53
-        issue: 282
-        pages: "457-481"
-        doi: 10.1080/01621459.1958.10501452
-        url: https://doi.org/10.1080/01621459.1958.10501452
-
-    BrookmeyerCrowley1982:
-        type: 'article'
-        author: "Brookmeyer, R., & Crowley, J."
-        year: 1982
-        title: "A Confidence Interval for the Median Survival Time"
-        publisher: 'Biometrics'
-        volume: 38
-        issue: 1
-        pages: "29-41"
-        doi: 10.2307/2530286
-        url: https://doi.org/10.2307/2530286
-
     AalenJohansen1978:
-        type: 'article'
+        type: article
         author: "Aalen, O. O., & Johansen, S."
         year: 1978
-        title: "An Empirical Transition Matrix for Non-Homogeneous Markov Chains Based on Censored Observations"
-        publisher: 'Scandinavian Journal of Statistics'
+        title: An Empirical Transition Matrix for Non-Homogeneous Markov Chains Based on Censored Observations
+        publisher: Scandinavian Journal of Statistics
         volume: 5
         issue: 3
-        pages: "141-150"
-        url: https://www.jstor.org/stable/4615704
+        pages: 141-150
+        url: "https://www.jstor.org/stable/4615704"
 
     AustinLeeFine2016:
-        type: 'article'
+        type: article
         author: "Austin, P. C., Lee, D. S., & Fine, J. P."
         year: 2016
-        title: "Introduction to the Analysis of Survival Data in the Presence of Competing Risks"
-        publisher: 'Circulation'
+        title: Introduction to the Analysis of Survival Data in the Presence of Competing Risks
+        publisher: Circulation
         volume: 133
         issue: 6
-        pages: "601-609"
+        pages: 601-609
         doi: 10.1161/CIRCULATIONAHA.115.017719
-        url: https://doi.org/10.1161/CIRCULATIONAHA.115.017719
+        url: "https://doi.org/10.1161/CIRCULATIONAHA.115.017719"
 
-    RoystonParmar2013:
-        type: 'article'
-        author: "Royston, P., & Parmar, M. K. B."
-        year: 2013
-        title: "Restricted Mean Survival Time: An Alternative to the Hazard Ratio for the Design and Analysis of Randomized Trials with a Time-to-Event Outcome"
-        publisher: 'BMC Medical Research Methodology'
-        volume: 13
-        pages: "152"
-        doi: 10.1186/1471-2288-13-152
-        url: https://doi.org/10.1186/1471-2288-13-152
-
-    SchemperSmith1996:
-        type: 'article'
-        author: "Schemper, M., & Smith, T. L."
-        year: 1996
-        title: "A Note on Quantifying Follow-up in Studies of Failure Time"
-        publisher: 'Controlled Clinical Trials'
-        volume: 17
-        issue: 4
-        pages: "343-346"
-        doi: 10.1016/0197-2456(96)00075-X
-        url: https://doi.org/10.1016/0197-2456(96)00075-X
-
-    Garwood1936:
-        type: 'article'
-        author: "Garwood, F."
-        year: 1936
-        title: "Fiducial Limits for the Poisson Distribution"
-        publisher: 'Biometrika'
-        volume: 28
-        issue: "3-4"
-        pages: "437-442"
-        doi: 10.1093/biomet/28.3-4.437
-        url: https://doi.org/10.1093/biomet/28.3-4.437
+    BrookmeyerCrowley1982:
+        type: article
+        author: "Brookmeyer, R., & Crowley, J."
+        year: 1982
+        title: A Confidence Interval for the Median Survival Time
+        publisher: Biometrics
+        volume: 38
+        issue: 1
+        pages: 29-41
+        doi: 10.2307/2530286
+        url: "https://doi.org/10.2307/2530286"
 
     Cleveland1979:
-        type: 'article'
-        author: "Cleveland, W. S."
+        type: article
+        author: Cleveland, W. S.
         year: 1979
-        title: "Robust Locally Weighted Regression and Smoothing Scatterplots"
-        publisher: 'Journal of the American Statistical Association'
+        title: Robust Locally Weighted Regression and Smoothing Scatterplots
+        publisher: Journal of the American Statistical Association
         volume: 74
         issue: 368
-        pages: "829-836"
+        pages: 829-836
         doi: 10.1080/01621459.1979.10481038
-        url: https://doi.org/10.1080/01621459.1979.10481038
-
-    Dafni2011:
-        type: 'article'
-        author: "Dafni, U."
-        year: 2011
-        title: "Landmark Analysis at the 25-Year Landmark Point"
-        publisher: 'Circulation: Cardiovascular Quality and Outcomes'
-        volume: 4
-        issue: 3
-        pages: "363-371"
-        doi: 10.1161/CIRCOUTCOMES.110.957951
-        url: https://doi.org/10.1161/CIRCOUTCOMES.110.957951
-
-
-    appliedsurvivalanalysisR:
-        type: 'book'
-        author: Dirk F. Moore
-        year: 2016
-        title: "Applied Survival Analysis Using R"
-        publisher: 'Springer Cham'
-        doi: 10.1007/978-3-319-31245-3
-        url: https://link.springer.com/book/10.1007/978-3-319-31245-3
-
-    survivalrwnahhas:
-        type: 'book chapter'
-        author: Ramzi W. Nahhas
-        year: 2023
-        title: "Chapter 7 Survival Analysis. Introduction to Regression Methods for Public Health Using R."
-        url: https://bookdown.org/rwnahhas/RMPH/survival.html
-
-    finalfit:
-        type: 'software'
-        author: Ewen Harrison and Tom Drake and Riinu Ots
-        year: 2019
-        title: "finalfit: Quickly Create Elegant Regression Results Tables and Plots when Modelling"
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=finalfit'
-        url: https://CRAN.R-project.org/package=finalfit
-
-
-    ggstatsplot:
-        type: 'software'
-        author: Patil, I.
-        year: 2018
-        title: "ggstatsplot: 'ggplot2' Based Plots with Statistical Details"
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=ggstatsplot'
-        url: https://CRAN.R-project.org/package=ggstatsplot
-        doi: '10.5281/zenodo.2074621'
-
-
-    janitor:
-        type: 'software'
-        author: Firke, S.
-        year: 2019
-        title: "janitor: Simple Tools for Examining and Cleaning Dirty Data."
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=janitor'
-        url: https://CRAN.R-project.org/package=janitor
-
-
-
-    dichotomizing:
-        type: 'article'
-        title: 'Dichotomizing continuous predictors in multiple regression: a bad idea.'
-        year: 2006
-        author: Royston, P., Altman, D.G. and Sauerbrei, W.
-        publisher:  Statist. Med.
-        volume: 25
-        pages: 127-141
-
-    padjust:
-        type: 'website'
-        author: R Core Team
-        year: 2020
-        title: "p.adjust {stats} Adjust P-values for Multiple Comparisons"
-        publisher: '[R package]. Retrieved from https://stat.ethz.ch/R-manual/R-devel/library/stats/html/p.adjust.html'
-        url: https://stat.ethz.ch/R-manual/R-devel/library/stats/html/p.adjust.html
-
-
-    multivariable:
-        type: 'article'
-        title: 'Multivariate or Multivariable Regression?'
-        year: 2013
-        author: Hidalgo B, Goodman M.
-        publisher:  Am J Public Health.
-        volume: 103
-        pages: 39-40
-        doi: 10.2105/AJPH.2012.300897
-        url: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518362/
+        url: "https://doi.org/10.1080/01621459.1979.10481038"
 
     ClinicoPathJamoviModule:
-        type: 'software'
+        type: software
         author: Serdar Balci
         year: 2022
         title: "ClinicoPath jamovi Module doi:10.5281/zenodo.3997188"
-        publisher: '[R package]. Retrieved from https://github.com/sbalci/ClinicoPathJamoviModule'
+        publisher: "[R package]. Retrieved from https://github.com/sbalci/ClinicoPathJamoviModule"
         doi: 10.17605/OSF.IO/9SZUD
-        url: https://www.serdarbalci.com/ClinicoPathJamoviModule/
+        url: "https://www.serdarbalci.com/ClinicoPathJamoviModule/"
 
-
-    survivaltutorial:
-        type: 'article'
-        author: Emily C. Zabor
-        year: 2025
-        title: "Survival analysis in R: A detailed tutorial on conducting survival analyses in R, including an introduction to the basics of survival analysis, landmark analyses and time-dependent covariates, competing risks, and a selection of advanced topics."
-        publisher: '[GitHub Repository]. Retrieved from https://github.com/zabore/tutorials'
-        url: https://www.emilyzabor.com/survival-analysis-in-r.html
-
-    survivalrviews:
-        type: 'article'
-        author: Joseph Rickert
-        year: 2017
-        title: "Survival Analysis with R"
-        publisher: 'R Views, An R community blog edited by RStudio'
-        url: https://rviews.rstudio.com/2017/09/25/survival-analysis-with-r/
-
-    glmnet:
-        type: 'software'
-        author: Jerome Friedman, Trevor Hastie, Rob Tibshirani, Balasubramanian Narasimhan, Kenneth Tay, Noah Simon, James Yang, Jonathan Taylor
-        year: 2026
-        title: "glmnet: Lasso and Elastic-Net Regularized Generalized Linear Models"
-        publisher: '[R package version 5.0]. Retrieved from https://CRAN.R-project.org/package=glmnet'
-        url: https://CRAN.R-project.org/package=glmnet
-
-    labelled:
-        type: 'software'
-        author: "Joseph Larmarange"
-        year: 2025
-        title: "labelled: R package"
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=labelled'
-        url: https://CRAN.R-project.org/package=labelled
-
-    glue:
-        type: 'software'
-        author: "Jim Hester, Jennifer Bryan"
-        year: 2026
-        title: "glue: R package"
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=glue'
-        url: https://CRAN.R-project.org/package=glue
-
-    cmprsk:
-        type: 'software'
-        author: "Bob Gray"
-        year: 2024
-        title: "cmprsk: R package"
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=cmprsk'
-        url: https://CRAN.R-project.org/package=cmprsk
-
-    rms:
-        type: 'software'
-        author: Frank E Harrell Jr
-        year: 2023
-        title: "rms: Regression Modeling Strategies"
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=rms'
-        url: https://CRAN.R-project.org/package=rms
-
-    flexsurv:
-        type: 'software'
-        author: "Christopher Jackson"
-        year: 2024
-        title: "flexsurv: R package"
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=flexsurv'
-        url: https://CRAN.R-project.org/package=flexsurv
-
-    lubridate:
-        type: 'software'
-        author: Garrett Grolemund and Hadley Wickham
+    Dafni2011:
+        type: article
+        author: Dafni, U.
         year: 2011
-        title: "lubridate: Make Dealing with Dates a Little Easier"
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=lubridate'
-        url: https://CRAN.R-project.org/package=lubridate
+        title: Landmark Analysis at the 25-Year Landmark Point
+        publisher: "Circulation: Cardiovascular Quality and Outcomes"
+        volume: 4
+        issue: 3
+        pages: 363-371
+        doi: 10.1161/CIRCOUTCOMES.110.957951
+        url: "https://doi.org/10.1161/CIRCOUTCOMES.110.957951"
 
-    mstate:
-        type: 'software'
-        author: "Hein Putter, Liesbeth C. de Wreede, Marta Fiocco, Edouard F. Bonneville"
-        year: 2024
-        title: "mstate: R package"
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=mstate'
-        url: https://CRAN.R-project.org/package=mstate
+    Garwood1936:
+        type: article
+        author: Garwood, F.
+        year: 1936
+        title: Fiducial Limits for the Poisson Distribution
+        publisher: Biometrika
+        volume: 28
+        issue: 3-4
+        pages: 437-442
+        doi: 10.1093/biomet/28.3-4.437
+        url: "https://doi.org/10.1093/biomet/28.3-4.437"
 
-    maxstat:
-        type: 'software'
-        author: "Torsten Hothorn"
-        year: 2025
-        title: "maxstat: R package"
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=maxstat'
-        url: https://CRAN.R-project.org/package=maxstat
+    KMunicate:
+        type: software
+        author: Alessandro Gasparini
+        year: 2020
+        title: "KMunicate: KMunicate-Style Kaplan-Meier Plots"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=KMunicate"
+        url: "https://CRAN.R-project.org/package=KMunicate"
 
-    riskRegression:
-        type: 'software'
-        author: "Thomas Alexander Gerds, Johan Sebastian Ohlendorff, Brice Ozenne"
+    KMunicate2:
+        type: article
+        author: Morris TP, Jarvis CI, Cragg W, et al
+        year: 2019
+        title: "Proposals on Kaplan-Meier plots in medical research and a survey of stakeholder views: KMunicate"
+        publisher: "BMJ Open 2019;9:e030215."
+        doi: 10.1136/bmjopen-2019-030215
+        url: "https://bmjopen.bmj.com/content/9/9/e030215"
+
+    KaplanMeier1958:
+        type: article
+        author: "Kaplan, E. L., & Meier, P."
+        year: 1958
+        title: Nonparametric Estimation from Incomplete Observations
+        publisher: Journal of the American Statistical Association
+        volume: 53
+        issue: 282
+        pages: 457-481
+        doi: 10.1080/01621459.1958.10501452
+        url: "https://doi.org/10.1080/01621459.1958.10501452"
+
+    Matrix:
+        type: software
+        author: Douglas Bates, Martin Maechler, Mikael Jagan
         year: 2026
-        title: "riskRegression: R package"
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=riskRegression'
-        url: https://CRAN.R-project.org/package=riskRegression
+        title: "Matrix: R package"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=Matrix"
+        url: "https://CRAN.R-project.org/package=Matrix"
 
-    logistf:
-        type: 'software'
-        author: "Heinze G, Ploner M, Jiricka L"
-        year: "2024"
-        title: "logistf: Firth's Bias-Reduced Logistic Regression"
-        publisher: '[R package]. Retrieved from https://CRAN.R-project.org/package=logistf'
-        url: https://CRAN.R-project.org/package=logistf
+    RoystonParmar2013:
+        type: article
+        author: "Royston, P., & Parmar, M. K. B."
+        year: 2013
+        title: "Restricted Mean Survival Time: An Alternative to the Hazard Ratio for the Design and Analysis of Randomized Trials with a Time-to-Event Outcome"
+        publisher: BMC Medical Research Methodology
+        volume: 13
+        pages: 152
+        doi: 10.1186/1471-2288-13-152
+        url: "https://doi.org/10.1186/1471-2288-13-152"
+
+    SchemperSmith1996:
+        type: article
+        author: "Schemper, M., & Smith, T. L."
+        year: 1996
+        title: A Note on Quantifying Follow-up in Studies of Failure Time
+        publisher: Controlled Clinical Trials
+        volume: 17
+        issue: 4
+        pages: 343-346
+        doi: 10.1016/0197-2456(96)00075-X
+        url: "https://doi.org/10.1016/0197-2456(96)00075-X"
 
     Simon2011Coxnet:
-        type: 'article'
+        type: article
         author: "Simon, N., Friedman, J., Hastie, T., & Tibshirani, R."
         year: 2011
-        title: "Regularization paths for Cox's proportional hazards model via coordinate descent"
-        publisher: "Journal of Statistical Software"
+        title: Regularization paths for Cox's proportional hazards model via coordinate descent
+        publisher: Journal of Statistical Software
         volume: 39
         issue: 5
-        pages: "1-13"
+        pages: 1-13
         doi: 10.18637/jss.v039.i05
-        url: https://doi.org/10.18637/jss.v039.i05
-    Taylor2018PostSelection:
-        type: 'article'
-        author: "Taylor, J., & Tibshirani, R."
-        year: 2018
-        title: "Post-selection inference for l1-penalized likelihood models"
-        publisher: "The Canadian Journal of Statistics"
-        volume: 46
-        issue: 1
-        pages: "41-61"
-        doi: 10.1002/cjs.11313
-        url: https://doi.org/10.1002/cjs.11313
+        url: "https://doi.org/10.18637/jss.v039.i05"
+
     Steyerberg2003Validation:
-        type: 'article'
+        type: article
         author: "Steyerberg, E. W., Bleeker, S. E., Moll, H. A., Grobbee, D. E., & Moons, K. G. M."
         year: 2003
         title: "Internal and external validation of predictive models: a simulation study of bias and precision in small samples"
-        publisher: "Journal of Clinical Epidemiology"
+        publisher: Journal of Clinical Epidemiology
         volume: 56
         issue: 5
-        pages: "441-447"
+        pages: 441-447
         doi: 10.1016/S0895-4356(03)00047-7
-        url: https://doi.org/10.1016/S0895-4356(03)00047-7
+        url: "https://doi.org/10.1016/S0895-4356(03)00047-7"
+
+    Taylor2018PostSelection:
+        type: article
+        author: "Taylor, J., & Tibshirani, R."
+        year: 2018
+        title: Post-selection inference for l1-penalized likelihood models
+        publisher: The Canadian Journal of Statistics
+        volume: 46
+        issue: 1
+        pages: 41-61
+        doi: 10.1002/cjs.11313
+        url: "https://doi.org/10.1002/cjs.11313"
+
+    appliedsurvivalanalysisR:
+        type: book
+        author: Dirk F. Moore
+        year: 2016
+        title: Applied Survival Analysis Using R
+        publisher: Springer Cham
+        doi: 10.1007/978-3-319-31245-3
+        url: "https://link.springer.com/book/10.1007/978-3-319-31245-3"
+
+    cmprsk:
+        type: software
+        author: Bob Gray
+        year: 2024
+        title: "cmprsk: R package"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=cmprsk"
+        url: "https://CRAN.R-project.org/package=cmprsk"
+
+    dichotomizing:
+        type: article
+        author: "Royston, P., Altman, D. G., & Sauerbrei, W."
+        year: 2006
+        title: "Dichotomizing continuous predictors in multiple regression: a bad idea"
+        publisher: Statistics in Medicine
+        volume: 25
+        issue: 1
+        pages: 127-141
+        doi: 10.1002/sim.2331
+        url: "https://doi.org/10.1002/sim.2331"
+
+    digest:
+        type: software
+        author: Dirk Eddelbuettel
+        year: 2025
+        title: "digest: R package"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=digest"
+        url: "https://CRAN.R-project.org/package=digest"
+
+    epiR:
+        type: software
+        author: Mark Stevenson with contributions from Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones, Sarah Pirikahu, Simon Firestone, Ryan Kyle, Johann Popp, Mathew Jay and Charles Reynard.
+        year: 2020
+        title: "epiR: Tools for the Analysis of Epidemiological Data."
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=epiR"
+        url: "https://CRAN.R-project.org/package=epiR"
+
+    finalfit:
+        type: software
+        author: Ewen Harrison and Tom Drake and Riinu Ots
+        year: 2019
+        title: "finalfit: Quickly Create Elegant Regression Results Tables and Plots when Modelling"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=finalfit"
+        url: "https://CRAN.R-project.org/package=finalfit"
+
+    flexsurv:
+        type: software
+        author: Christopher Jackson
+        year: 2024
+        title: "flexsurv: R package"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=flexsurv"
+        url: "https://CRAN.R-project.org/package=flexsurv"
+
+    glmnet:
+        type: software
+        author: Jerome Friedman, Trevor Hastie, Rob Tibshirani, Balasubramanian Narasimhan, Kenneth Tay, Noah Simon, James Yang, Jonathan Taylor
+        year: 2026
+        title: "glmnet: Lasso and Elastic-Net Regularized Generalized Linear Models"
+        publisher: "[R package version 5.0]. Retrieved from https://CRAN.R-project.org/package=glmnet"
+        url: "https://CRAN.R-project.org/package=glmnet"
+
+    glue:
+        type: software
+        author: Jim Hester, Jennifer Bryan
+        year: 2026
+        title: "glue: R package"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=glue"
+        url: "https://CRAN.R-project.org/package=glue"
+
+    graphics:
+        type: software
+        author: R Core Team and contributors worldwide
+        year: 2026
+        title: The R Graphics Package
+        publisher: "[R package version 4.6.0]. Retrieved from https://CRAN.R-project.org/package=graphics"
+        url: "https://CRAN.R-project.org/package=graphics"
+
+    janitor:
+        type: software
+        author: Firke, S.
+        year: 2019
+        title: "janitor: Simple Tools for Examining and Cleaning Dirty Data."
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=janitor"
+        url: "https://CRAN.R-project.org/package=janitor"
+
+    knitr:
+        type: software
+        author: Yihui Xie
+        year: 2025
+        title: "knitr: R package"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=knitr"
+        url: "https://CRAN.R-project.org/package=knitr"
+
+    labelled:
+        type: software
+        author: Joseph Larmarange
+        year: 2025
+        title: "labelled: R package"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=labelled"
+        url: "https://CRAN.R-project.org/package=labelled"
+
+    logistf:
+        type: software
+        author: Heinze G, Ploner M, Jiricka L
+        year: 2024
+        title: "logistf: Firth's Bias-Reduced Logistic Regression"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=logistf"
+        url: "https://CRAN.R-project.org/package=logistf"
+
+    lubridate:
+        type: software
+        author: Garrett Grolemund and Hadley Wickham
+        year: 2011
+        title: "lubridate: Make Dealing with Dates a Little Easier"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=lubridate"
+        url: "https://CRAN.R-project.org/package=lubridate"
+
+    maxstat:
+        type: software
+        author: Torsten Hothorn
+        year: 2025
+        title: "maxstat: R package"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=maxstat"
+        url: "https://CRAN.R-project.org/package=maxstat"
+
+    mstate:
+        type: software
+        author: Hein Putter, Liesbeth C. de Wreede, Marta Fiocco, Edouard F. Bonneville
+        year: 2024
+        title: "mstate: R package"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=mstate"
+        url: "https://CRAN.R-project.org/package=mstate"
+
+    multivariable:
+        type: article
+        author: Hidalgo B, Goodman M.
+        year: 2013
+        title: Multivariate or Multivariable Regression?
+        publisher: Am J Public Health.
+        volume: 103
+        pages: 39-40
+        doi: 10.2105/AJPH.2012.300897
+        url: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518362/"
+
+    padjust:
+        type: website
+        author: R Core Team
+        year: 2020
+        title: "p.adjust {stats} Adjust P-values for Multiple Comparisons"
+        publisher: "[R package]. Retrieved from https://stat.ethz.ch/R-manual/R-devel/library/stats/html/p.adjust.html"
+        url: "https://stat.ethz.ch/R-manual/R-devel/library/stats/html/p.adjust.html"
+
+    patchwork:
+        type: software
+        author: Thomas Lin Pedersen
+        year: 2025
+        title: "patchwork: R package"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=patchwork"
+        url: "https://CRAN.R-project.org/package=patchwork"
+
+    riskRegression:
+        type: software
+        author: Thomas Alexander Gerds, Johan Sebastian Ohlendorff, Brice Ozenne
+        year: 2026
+        title: "riskRegression: R package"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=riskRegression"
+        url: "https://CRAN.R-project.org/package=riskRegression"
+
+    rms:
+        type: software
+        author: Frank E Harrell Jr
+        year: 2023
+        title: "rms: Regression Modeling Strategies"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=rms"
+        url: "https://CRAN.R-project.org/package=rms"
+
+    rpart:
+        type: software
+        author: Terry Therneau and Beth Atkinson
+        year: 2019
+        title: "rpart: Recursive Partitioning and Regression Trees."
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=rpart"
+        url: "https://CRAN.R-project.org/package=rpart"
+
+    splines:
+        type: software
+        author: Douglas M. Bates and William N. Venables
+        year: 2026
+        title: "splines: R package"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=splines"
+        url: "https://CRAN.R-project.org/package=splines"
+
+    survival:
+        type: software
+        author: Terry M Therneau
+        year: 2026
+        title: "survival: Survival Analysis"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=survival"
+        url: "https://CRAN.R-project.org/package=survival"
+
+    survivalrviews:
+        type: article
+        author: Rickert, J.
+        year: 2017
+        title: Survival Analysis with R
+        publisher: R Views, Posit Community Blog
+        url: "https://rviews.rstudio.com/2017/09/25/survival-analysis-with-r/"
+
+    survivalrwnahhas:
+        type: book chapter
+        author: Ramzi W. Nahhas
+        year: 2023
+        title: Chapter 7 Survival Analysis. Introduction to Regression Methods for Public Health Using R.
+        url: "https://bookdown.org/rwnahhas/RMPH/survival.html"
+
+    survivaltutorial:
+        type: article
+        author: Zabor, E. C.
+        year: 2025
+        title: "Survival analysis in R: A detailed tutorial on conducting survival analyses in R"
+        publisher: Memorial Sloan Kettering Cancer Center
+        url: "https://www.emilyzabor.com/survival-analysis-in-r.html"
+
+    survminer:
+        type: software
+        author: Alboukadel Kassambara and Marcin Kosinski and Przemyslaw Biecek
+        year: 2026
+        title: "survminer: Drawing Survival Curves using 'ggplot2'"
+        publisher: "[R package version 0.5.2]. Retrieved from https://CRAN.R-project.org/package=survminer"
+        url: "https://CRAN.R-project.org/package=survminer"
+
+    tools:
+        type: software
+        author: R Core Team
+        year: 2026
+        title: "tools: R package"
+        publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=tools"
+        url: "https://CRAN.R-project.org/package=tools"
+
     tripod:
-        type: 'article'
+        type: article
         author: "Collins, G. S., Reitsma, J. B., Altman, D. G., & Moons, K. G. M."
         year: 2015
         title: "Transparent Reporting of a multivariable prediction model for Individual Prognosis Or Diagnosis (TRIPOD): the TRIPOD statement"
-        publisher: "Annals of Internal Medicine"
+        publisher: Annals of Internal Medicine
         volume: 162
         issue: 1
-        pages: "55-63"
+        pages: 55-63
         doi: 10.7326/M14-0697
-        url: https://doi.org/10.7326/M14-0697
+        url: "https://doi.org/10.7326/M14-0697"
+
 ...

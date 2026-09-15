@@ -713,7 +713,6 @@ items:
       height: 450
       renderFun: .plot8
       visible: (ph_cox)
-      requiresData: true
       clearWith:
           - ph_cox
           - endplot
@@ -992,7 +991,6 @@ items:
       width: 600
       height: 450
       renderFun: .plotRiskGroups
-      requiresData: true
       visible: (calculateRiskScore && plotRiskGroups)
       clearWith:
           - calculateRiskScore
@@ -1955,14 +1953,17 @@ items:
           - outcome
 
 refs:
+    - ClinicoPathJamoviModule
     - multivariable
     - survivaltutorial
     - survivalrwnahhas
-    - ClinicoPathJamoviModule
     - survival
     - lubridate
     - rms
     - finalfit
     - survminer
     - SchemperSmith1996
+    - graphics
+    - knitr
+    - riskRegression
 ...

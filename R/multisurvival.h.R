@@ -635,16 +635,19 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 name="",
                 title="Multivariable Survival Analysis",
                 refs=list(
+                    "ClinicoPathJamoviModule",
                     "multivariable",
                     "survivaltutorial",
                     "survivalrwnahhas",
-                    "ClinicoPathJamoviModule",
                     "survival",
                     "lubridate",
                     "rms",
                     "finalfit",
                     "survminer",
-                    "SchemperSmith1996"))
+                    "SchemperSmith1996",
+                    "graphics",
+                    "knitr",
+                    "riskRegression"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="eventRecodeInfo",
@@ -1317,7 +1320,6 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 height=450,
                 renderFun=".plot8",
                 visible="(ph_cox)",
-                requiresData=TRUE,
                 clearWith=list(
                     "ph_cox",
                     "endplot",
@@ -1539,7 +1541,6 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 width=600,
                 height=450,
                 renderFun=".plotRiskGroups",
-                requiresData=TRUE,
                 visible="(calculateRiskScore && plotRiskGroups)",
                 clearWith=list(
                     "calculateRiskScore",

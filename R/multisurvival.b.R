@@ -3,7 +3,8 @@
 # frame, so it only works inside R6 analysis methods. The top-level helper
 # functions in this file run without `self` in scope, so they MUST use plain
 # string literals - calling `.()` there throws "object 'self' not found"
-# (GitHub issue #122). Do not reintroduce `.()` into file-level helpers.
+# (GitHub issue #122). Do not call jmvcore's `.()` from file-level helpers; the one
+# exception, .eventIndicator(), shadows `.` with a caller-frame lookup of `self`.
 # (The previous `if (!exists(".")) . <- function(x) x` guard was dead code:
 # jmvcore::`.` is imported into the namespace, so `exists(".")` is always TRUE.)
 
@@ -126,6 +127,17 @@
 # handle. It is reached from .validateSurvivalData() and ten other call sites,
 # so the rejection was not a corner case.
 .eventIndicator <- function(outcome_vec, event_level = NULL) {
+  # Translate the reject() messages below when called from an analysis method,
+  # where `self` is visible in the caller's frame. jmvcore's own `.()` looks for
+  # `self` in THIS frame and throws "object 'self' not found" from a file-level
+  # helper (issue #122), so it is shadowed here; file-level callers get English.
+  # get0(), not eval(): the module keeps no code-execution calls (library audit).
+  caller <- parent.frame()
+  . <- function(text) {
+    translate <- tryCatch(get0("self", envir = caller)$options$translate,
+                          error = function(e) NULL)
+    if (is.function(translate)) translate(text) else text
+  }
   if (is.null(outcome_vec)) {
     return(NULL)
   }
@@ -145,10 +157,11 @@
     if (!all(is.na(num_levels))) {
       return(num_levels >= 1)
     }
-    jmvcore::reject(sprintf(
-      "Outcome Factor Has Unsupported Levels: the outcome variable has non-numeric levels that cannot be interpreted as events: %s\n\nTo Fix:\n1. Select which level represents the event using the Event Level option.\n2. Or recode as numeric (0 = censored, 1 = event) or logical (FALSE/TRUE).\n3. For competing risks, use a factor with levels 'Censored', 'Event', 'Competing'.",
-      paste(levels(outcome_vec), collapse=", ")
-    ))
+    jmvcore::reject(paste(
+      jmvcore::format(.("Outcome Factor Has Unsupported Levels: the outcome variable has non-numeric levels that cannot be interpreted as events: {levels}."),
+                      levels = paste(levels(outcome_vec), collapse = ", ")),
+      .("To fix: select the level that represents the event with the Event Level option, or recode the outcome as numeric (0 = censored, 1 = event) or logical (FALSE/TRUE). For competing risks, use a factor with the levels 'Censored', 'Event' and 'Competing'."),
+      sep = "\n\n"))
   }
 
   if (is.logical(outcome_vec) || is.numeric(outcome_vec)) {
@@ -156,11 +169,12 @@
   }
 
   # IMPROVEMENT: Throw error for unsupported types instead of returning NA
-  jmvcore::reject(sprintf(
-    "Outcome Variable Type Not Supported: The outcome variable has type '%s' which cannot be used for survival analysis.\n\nSupported Types:\n1. Numeric: 0 (censored) and 1 (event)\n2. Logical: FALSE (censored) and TRUE (event)\n3. Factor: Either numeric levels ('0'/'1') or competing risk levels ('Censored'/'Event'/'Competing')\n\nTo Fix:\n1. Check that you selected the correct outcome variable\n2. In jamovi: Use Data > Setup to verify variable type\n3. Convert text/character variables to numeric or factor format\n4. Use Transform > Compute to create binary outcome: outcome = ifelse(status == 'Dead', 1, 0)\n\nCurrent type: %s",
-    class(outcome_vec)[1],
-    class(outcome_vec)[1]
-  ))
+  jmvcore::reject(paste(
+    jmvcore::format(.("Outcome Variable Type Not Supported: the outcome variable has type '{type}', which cannot be used for survival analysis."),
+                    type = class(outcome_vec)[1]),
+    .("Supported types: numeric 0 (censored) and 1 (event); logical FALSE (censored) and TRUE (event); or a factor with numeric levels ('0'/'1') or competing-risk levels ('Censored'/'Event'/'Competing')."),
+    .("To fix: check that the correct outcome variable is selected, verify its type under Data > Setup, and convert a text variable to a numeric or factor outcome, for example with Transform > Compute."),
+    sep = "\n\n"))
 }
 
 # Helper function for generating clinical interpretation summaries
@@ -1742,16 +1756,22 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           return(NULL)
         }
 
-        # Pass cleaned data to plot renderers so state is available when jamovi requests images
+        # Image state is serialised into the .omv, so it carries only what a
+        # renderer cannot rebuild -- never the cleaned dataset or the coxph fit
+        # (2026-09-15 library audit). plot/plot3/plotKM declare requiresData and
+        # rebuild data and model from self$data; they keep only the competing-risk
+        # flag, which .isCompetingRisk(state) needs when jmvcore's .load() re-renders
+        # without .run(). plot_adj has no requiresData, so it stores its curve frame.
+        plot_flag <- list(has_competing = private$.isCompetingRisk(cleaneddata))
         if (self$options$hr) {
-          self$results$plot$setState(c(cleaneddata, list(cox_model = cox_model)))
-          self$results$plot3$setState(c(cleaneddata, list(cox_model = cox_model)))
+          self$results$plot$setState(plot_flag)
+          self$results$plot3$setState(plot_flag)
         }
         if (self$options$km) {
-          self$results$plotKM$setState(cleaneddata)
+          self$results$plotKM$setState(plot_flag)
         }
         if (self$options$ac) {
-          self$results$plot_adj$setState(cleaneddata)
+          self$results$plot_adj$setState(private$.plotAdjState(cleaneddata, cox_model))
         }
 
         # A plot horizon shorter than the follow-up silently truncates the
@@ -2610,6 +2630,13 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         cleaneddata <- private$.cleandata()
         mydata <- cleaneddata$cleanData
 
+        # Brier curves for survMetricsPlot are computed here, in .run(): the image
+        # has no requiresData, so its renderer cannot refit from self$data.
+        if (isTRUE(self$options$survmetrics_show_plots)) {
+          private$.checkpoint()
+          self$results$survMetricsPlot$setState(private$.survMetricsPlotData(cox_model, mydata))
+        }
+
         tryCatch({
           tbl <- self$results$survMetricsTable
           tbl$deleteRows()
@@ -2827,72 +2854,64 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
       }
 
       ,
-      # DISABLED: Options commented out in .a.yaml and .u.yaml
-      .plotSurvMetrics = function(image, ggtheme, theme, ...) {
-        if (!self$options$show_survmetrics || !self$options$survmetrics_show_plots) {
-          return(FALSE)
-        }
-        # Standard survival models only (see .calculate_survmetrics)
-        if (private$.isCompetingRisk(image$state)) {
-          return(FALSE)
-        }
-        if (!requireNamespace("riskRegression", quietly = TRUE)) {
-          return(FALSE)
-        }
-
-        cox_model <- private$.cox_model()
-        if (is.null(cox_model)) return(FALSE)
-        mydata <- private$.cleandata()$cleanData
-
-        p <- tryCatch({
+      # Brier-score curves for survMetricsPlot (live: see multisurvival.r.yaml)
+      .survMetricsPlotData = function(cox_model, mydata) {
+        tryCatch({
           max_time <- max(mydata$mytime, na.rm = TRUE)
           # Grid of timepoints strictly inside the observed follow-up
           grid <- seq(max_time / 50, max_time * 0.98, length.out = 40)
           # Same limitation as the metrics table: no Brier curve for a
-          # stratified model. The table above explains why; returning FALSE
-          # here leaves the plot area empty rather than drawing a broken curve.
+          # stratified model; the table explains why.
           .tl <- attr(stats::terms(stats::formula(cox_model)), "term.labels")
-          if (length(.tl) > 0 && any(grepl("^strata\\(", .tl))) return(FALSE)
+          if (length(.tl) > 0 && any(grepl("^strata\\(", .tl))) return(NULL)
 
           .refit <- private$.coxRefitForScore(cox_model, mydata)
-          if (inherits(.refit, "multisurvival_refit_error")) return(FALSE)
-          cox_local <- .refit$fit
-          mydata    <- .refit$data
+          if (inherits(.refit, "multisurvival_refit_error")) return(NULL)
           sc <- riskRegression::Score(
-            list(Cox = cox_local),
+            list(Cox = .refit$fit),
             # Bare Surv(): riskRegression's response parser rejects a
             # namespace-qualified survival::Surv() with "Cannot assign response
             # type". null.model = TRUE supplies the real reference curve.
             formula = .asSurvivalFormula("Surv(mytime, myoutcome) ~ 1"),
-            data = mydata, times = grid, metrics = "brier",
+            data = .refit$data, times = grid, metrics = "brier",
             se.fit = FALSE, conf.int = FALSE, null.model = TRUE
           )
           br_all <- as.data.frame(sc$Brier$score)
           br  <- br_all[br_all$model == "Cox" & !is.na(br_all$Brier), c("times", "Brier")]
           ref <- br_all[br_all$model != "Cox" & !is.na(br_all$Brier), c("times", "Brier")]
-          if (nrow(br) == 0) return(FALSE)
-
-          # The old flat line at 0.25 was labelled the "random-prediction
-          # reference". That is only true when the event probability is 50%; at
-          # any other prevalence it is meaningless, and it was drawn even though
-          # null.model was FALSE so no reference had been computed at all. The
-          # honest reference is the Kaplan-Meier (covariate-free) Brier curve,
-          # which varies with time.
-          g <- ggplot2::ggplot(br, ggplot2::aes(x = times, y = Brier)) +
-            ggplot2::geom_line(linewidth = 1.1, colour = "#2E8B57")
-          if (nrow(ref) > 0)
-            g <- g + ggplot2::geom_line(data = ref, linetype = "dashed",
-                                        colour = "#B22222", alpha = 0.8)
-          g + ggplot2::labs(
-              title = .("Brier Score Over Time"),
-              x = .fmt(.("Time ({unit})"), unit = self$options$timetypeoutput),
-              y = .("Brier score (IPCW)"),
-              caption = .("Lower is better. Solid = model; dashed = Kaplan-Meier (no covariates). Apparent, in-sample estimates.")
-            ) +
-            ggtheme
+          if (nrow(br) == 0) return(NULL)
+          list(br = as.data.frame(br), ref = as.data.frame(ref))
         }, error = function(e) NULL)
+      },
 
-        if (is.null(p)) return(FALSE)
+      .plotSurvMetrics = function(image, ggtheme, theme, ...) {
+        if (!self$options$show_survmetrics || !self$options$survmetrics_show_plots) {
+          return(FALSE)
+        }
+        # Draw only. The curves come from .survMetricsPlotData() during .run(); this
+        # image has no requiresData, so refitting here from self$data failed on
+        # resize, .omv reopen and export (2026-09-15 library audit).
+        st <- image$state
+        if (is.null(st) || is.null(st$br) || nrow(st$br) == 0) return(FALSE)
+        br  <- st$br
+        ref <- st$ref
+
+        # The old flat line at 0.25 was labelled the "random-prediction
+        # reference". That is only true when the event probability is 50%; at
+        # any other prevalence it is meaningless. The honest reference is the
+        # Kaplan-Meier (covariate-free) Brier curve, which varies with time.
+        g <- ggplot2::ggplot(br, ggplot2::aes(x = times, y = Brier)) +
+          ggplot2::geom_line(linewidth = 1.1, colour = "#2E8B57")
+        if (!is.null(ref) && nrow(ref) > 0)
+          g <- g + ggplot2::geom_line(data = ref, linetype = "dashed",
+                                      colour = "#B22222", alpha = 0.8)
+        p <- g + ggplot2::labs(
+            title = .("Brier Score Over Time"),
+            x = .fmt(.("Time ({unit})"), unit = self$options$timetypeoutput),
+            y = .("Brier score (IPCW)"),
+            caption = .("Lower is better. Solid = model; dashed = Kaplan-Meier (no covariates). Apparent, in-sample estimates.")
+          ) +
+          ggtheme
         print(p)
         TRUE
       }
@@ -3714,19 +3733,10 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         }
         if (!private$.validateSurvivalInputs()$valid) return(FALSE)
 
-        plotData <- image$state
-
-        if (is.null(plotData)) {
-          if (isTRUE(getOption("multisurvival.debug"))) {
-            message("[multisurvival.debug] .plot: state is NULL, recomputing...")
-          }
-          plotData <- private$.cleandata()
-          if (is.null(plotData$cleanData)) return(FALSE)
-        } else {
-          if (isTRUE(getOption("multisurvival.debug"))) {
-            message("[multisurvival.debug] .plot: state found.")
-          }
-        }
+        # State holds only the competing-risk flag; data comes from self$data
+        # (requiresData: true), not from a copy serialised into the .omv.
+        plotData <- private$.cleandata()
+        if (is.null(plotData$cleanData)) return(FALSE)
 
         name1time <- plotData$name1time
         name2outcome <- plotData$name2outcome
@@ -3787,16 +3797,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # hr_plot ----
         # https://finalfit.org/reference/hr_plot.html
 
-        # Prefer cached model from state (avoids recomputation)
-        cox_model <- NULL
-        if (!is.null(image$state$cox_model)) {
-          cox_model <- image$state$cox_model
-        }
-
-        # Fall back to recomputing if needed
-        if (is.null(cox_model)) {
-          cox_model <- private$.cox_model()
-        }
+        # Same memoised fit as the tables (.cox_model() fits once per run).
+        cox_model <- private$.cox_model()
 
         if (length(formula2) == 0 || is.null(cox_model)) {
           grid::grid.newpage()
@@ -3895,19 +3897,10 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         }
         if (!private$.validateSurvivalInputs()$valid) return(FALSE)
 
-        plotData <- image3$state
-
-        if (is.null(plotData)) {
-          if (isTRUE(getOption("multisurvival.debug"))) {
-            message("[multisurvival.debug] .plot3: state is NULL, recomputing...")
-          }
-          plotData <- private$.cleandata()
-          if (is.null(plotData$cleanData)) return(FALSE)
-        } else {
-          if (isTRUE(getOption("multisurvival.debug"))) {
-            message("[multisurvival.debug] .plot3: state found.")
-          }
-        }
+        # State holds only the competing-risk flag; data comes from self$data
+        # (requiresData: true), not from a copy serialised into the .omv.
+        plotData <- private$.cleandata()
+        if (is.null(plotData$cleanData)) return(FALSE)
 
         name1time <- plotData$name1time
         name2outcome <- plotData$name2outcome
@@ -3949,11 +3942,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         # ggforest ----
 
-        # Use cached Cox model when available to match table output
-        cox_model <- image3$state$cox_model
-        if (is.null(cox_model)) {
-          cox_model <- private$.cox_model()
-        }
+        # Same memoised fit as the tables (.cox_model() fits once per run).
+        cox_model <- private$.cox_model()
 
         if (is.null(cox_model)) {
           grid::grid.newpage()
@@ -4151,15 +4141,10 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
 
-        plotData <- imageKM$state
-        
-        if (is.null(plotData)) {
-          if (isTRUE(getOption("multisurvival.debug"))) {
-            message("[multisurvival.debug] .plotKM: state is NULL, recomputing...")
-          }
-          plotData <- private$.cleandata()
-          if (is.null(plotData$cleanData)) return(FALSE)
-        }
+        # State holds only the competing-risk flag; data comes from self$data
+        # (requiresData: true), not from a copy serialised into the .omv.
+        plotData <- private$.cleandata()
+        if (is.null(plotData$cleanData)) return(FALSE)
 
         name1time <- plotData$name1time
         name2outcome <- plotData$name2outcome
@@ -5129,49 +5114,52 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
       ,
     ## Adjusted Survival Plot ----
+      .plotAdjState = function(cleaneddata, cox_model) {
+        # Everything .plot_adj() draws is computed here, during .run(). The image
+        # has no requiresData: jmvcore nulls self$data once .run() returns, and the
+        # renderer used to refit the Cox model there, failing with "Data contains
+        # no (complete) rows" on resize, .omv reopen and export (2026-09-15 library
+        # audit). Only the small curve frame is serialised.
+        adj_name <- cleaneddata$adjexplanatory_name
+        if (is.null(adj_name)) return(list(message = "no_variable"))
+        model_vars <- unique(c(cleaneddata$myexplanatory_labelled,
+                               cleaneddata$mystratvar_labelled))
+        if (!(adj_name %in% model_vars)) return(list(message = "not_in_model"))
+
+        is_finegray <- !is.null(cox_model$weights) &&
+          private$.isCompetingRisk(cleaneddata)
+        # The SAME estimator object the adjusted tables use, so the curve moves with
+        # ac_method; for Fine-Gray the renderer turns it into cumulative incidence.
+        curves <- private$.adjustedCurveData(cox_model, cleaneddata$cleanData,
+                                             adj_name, self$options$ac_method)
+        if (is.null(curves) || nrow(curves) == 0) {
+          if (is_finegray)
+            private$.addHtmlMessage(
+              "warning",
+              .("Adjusted competing-risks curve unavailable"),
+              .("The adjusted cumulative-incidence curve could not be computed from the Fine-Gray model."))
+          return(NULL)   # standard branch: refused, notice already emitted
+        }
+        list(curves = as.data.frame(curves), finegray = is_finegray)
+      },
+
       .plot_adj = function(image_plot_adj, ggtheme, theme, ...) {
 
         if (!self$options$ac) return(FALSE)
-
-
         if (!private$.validateSurvivalInputs()$valid) return(FALSE)
+
+        # Draw only: the curves were computed in .run() by .plotAdjState().
         plotData <- image_plot_adj$state
-        
-        if (is.null(plotData)) {
-          if (isTRUE(getOption("multisurvival.debug"))) {
-            message("[multisurvival.debug] .plot_adj: state is NULL, recomputing...")
-          }
-          plotData <- private$.cleandata()
-          if (is.null(plotData$cleanData)) return(FALSE)
-        }
+        if (is.null(plotData)) return(FALSE)
 
-        name1time <- plotData$name1time
-        name2outcome <- plotData$name2outcome
-        name3contexpl <- plotData$name3contexpl
-        name3expl <- plotData$name3expl
-        adjexplanatory_name <- plotData$adjexplanatory_name
-
-        mydata <- cleanData <- plotData$cleanData
-
-        mytime_labelled <- plotData$mytime_labelled
-        myoutcome_labelled <- plotData$myoutcome_labelled
-        mydxdate_labelled <- plotData$mydxdate_labelled
-        myfudate_labelled <- plotData$myfudate_labelled
-        myexplanatory_labelled <- plotData$myexplanatory_labelled
-        mycontexpl_labelled <- plotData$mycontexpl_labelled
-        adjexplanatory_labelled <- plotData$adjexplanatory_labelled
-
-
-        if (is.null(plotData$adjexplanatory_name)) {
+        if (identical(plotData$message, "no_variable")) {
           text_warning <- "Please select a variable for adjusted curves."
           grid::grid.newpage()
           grid::grid.text(text_warning, 0.5, 0.5)
           return(TRUE)
         }
 
-        model_vars <- unique(c(plotData$myexplanatory_labelled,
-                               plotData$mystratvar_labelled))
-        if (!(plotData$adjexplanatory_name %in% model_vars)) {
+        if (identical(plotData$message, "not_in_model")) {
           grid::grid.newpage()
           grid::grid.text(
             paste0("Adjusted curves require the selected variable to be part of ",
@@ -5181,37 +5169,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           return(TRUE)
         }
 
-
-
-        # Fit model
-        # Use the central model (handles Fine-Gray if needed)
-        cox_model <- private$.cox_model()
-        
-        if (is.null(cox_model)) {
-            return()
-        }
-
-        # Check if it is a Fine-Gray model
-        is_finegray <- !is.null(cox_model$weights) && private$.isCompetingRisk(plotData)
-        
-        # Use correct data for plotting
-        plot_data <- mydata
-
-        if (is_finegray) {
-          # Use the same estimator object as the numeric tables, then transform
-          # Fine-Gray subdistribution survival to cumulative incidence. This
-          # also honours average/conditional/single consistently; the previous
-          # branch silently drew g-computation for every selected method.
-          cif_df <- private$.adjustedCurveData(
-            cox_model, mydata, adjexplanatory_name, self$options$ac_method)
-
-          if (is.null(cif_df) || nrow(cif_df) == 0) {
-            private$.addHtmlMessage(
-              "warning",
-              .("Adjusted competing-risks curve unavailable"),
-              .("The adjusted cumulative-incidence curve could not be computed from the Fine-Gray model."))
-            return(FALSE)
-          }
+        if (isTRUE(plotData$finegray)) {
+          cif_df <- plotData$curves
 
           cif_df$cif <- 1 - cif_df$surv
           cif_df$cif_lower <- 1 - cif_df$upper
@@ -5260,9 +5219,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # their own curve and never moved when the method changed. It also fell
         # back from "marginal" to "average" on error while keeping the requested
         # name in the title, so a failed run looked like a successful one.
-        curves <- private$.adjustedCurveData(cox_model, plot_data,
-                                             adjexplanatory_name, method)
-        if (is.null(curves)) return(FALSE)   # refused; notice already emitted
+        curves <- plotData$curves
 
         if (!is.null(self$options$endplot) && is.finite(self$options$endplot))
           curves <- curves[curves$time <= self$options$endplot, , drop = FALSE]
