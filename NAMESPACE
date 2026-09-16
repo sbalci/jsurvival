@@ -3,6 +3,7 @@
 export("%>%")
 export("%||%")
 export(datetimeconverter)
+export(lassocox)
 export(multisurvival)
 export(oddsratio)
 export(outcomeorganizer)
