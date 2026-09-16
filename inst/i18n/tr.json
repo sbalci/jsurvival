@@ -7,35 +7,35 @@
                 "lang": "tr",
                 "plural_forms": "nplurals=2; plural=(n!=1);"
             },
-            " , measured from the {adj} landmark": [
-                " , {adj} sınır noktasından (landmark) itibaren ölçüldü"
+            "measured from the {adj} landmark": [
+                "{adj} sınır noktasından (landmark) itibaren ölçüldü"
             ],
-            " , plus %d with missing follow-up time": [
-                " , artı eksik takip süresine sahip %d kişi"
+            "plus %d with missing follow-up time": [
+                "artı eksik takip süresine sahip %d kişi"
             ],
-            " %d patient(s) were left untouched because they have no follow-up time or no cut-off value; they keep their full follow-up and their original event status, so the cut-off applies to only part of the cohort. Supply the missing values, or exclude those rows, before comparing groups.": [
-                " Takip süresi veya kesme noktası değeri olmadığı için %d hasta olduğu gibi bırakıldı; tam takip sürelerini ve orijinal olay durumlarını korurlar, dolayısıyla kesme noktası kohortun yalnızca bir kısmı için geçerlidir. Grupları karşılaştırmadan önce eksik değerleri sağlayın veya bu satırları hariç tutun."
+            "%d patient(s) were left untouched because they have no follow-up time or no cut-off value; they keep their full follow-up and their original event status, so the cut-off applies to only part of the cohort. Supply the missing values, or exclude those rows, before comparing groups.": [
+                "Takip süresi veya kesme noktası değeri olmadığı için %d hasta olduğu gibi bırakıldı; tam takip sürelerini ve orijinal olay durumlarını korurlar, dolayısıyla kesme noktası kohortun yalnızca bir kısmı için geçerlidir. Grupları karşılaştırmadan önce eksik değerleri sağlayın veya bu satırları hariç tutun."
             ],
-            " All times reported here are measured FROM the landmark, not from study entry, and all estimates are conditional on being event-free at the landmark. They are not comparable with unlandmarked survival times.": [
-                " Burada bildirilen tüm süreler çalışmaya girişten değil, kerterizden (landmark) İTİBAREN ölçülür ve tüm tahminler kerterizde olaysız olma koşuluna bağlıdır. Kerteriz uygulanmamış sağkalım süreleriyle karşılaştırılamazlar."
+            "All times reported here are measured FROM the landmark, not from study entry, and all estimates are conditional on being event-free at the landmark. They are not comparable with unlandmarked survival times.": [
+                "Burada bildirilen tüm süreler çalışmaya girişten değil, landmark (referans) zamanından itibaren ölçülür ve tüm tahminler landmark anında olaysız olma koşuluna bağlıdır. Landmark uygulanmamış sağkalım süreleriyle karşılaştırılamazlar."
             ],
-            " Calibration slope < 0.8 suggests the model predictions are too extreme (overfitting).": [
-                " Kalibrasyon eğiminin < 0.8 olması, model tahminlerinin çok uç olduğunu (aşırı uyum / overfitting) gösterir."
+            "Calibration slope < 0.8 suggests the model predictions are too extreme (overfitting).": [
+                "Kalibrasyon eğiminin < 0.8 olması, model tahminlerinin çok uç olduğunu (aşırı uyum / overfitting) gösterir."
             ],
-            " Calibration slope near 1 indicates good calibration.": [
-                " Kalibrasyon eğiminin 1'e yakın olması iyi kalibrasyonu gösterir."
+            "Calibration slope near 1 indicates good calibration.": [
+                "Kalibrasyon eğiminin 1'e yakın olması iyi kalibrasyonu gösterir."
             ],
-            " Calibration slope slightly below 1 indicates mild overfitting.": [
-                " Kalibrasyon eğiminin 1'in biraz altında olması hafif düzeyde aşırı uyumu gösterir."
+            "Calibration slope slightly below 1 indicates mild overfitting.": [
+                "Kalibrasyon eğiminin 1'in biraz altında olması hafif düzeyde aşırı uyumu gösterir."
             ],
-            " Excluding this share of the cohort can introduce selection bias; the landmark should be prespecified.": [
-                " Kohortun bu oranının hariç tutulması seçim yanlılığına (selection bias) yol açabilir; sınır noktası (landmark) önceden belirlenmelidir."
+            "Excluding this share of the cohort can introduce selection bias; the landmark should be prespecified.": [
+                "Kohortun bu oranının hariç tutulması seçim yanlılığına (selection bias) yol açabilir; sınır noktası (landmark) önceden belirlenmelidir."
             ],
-            " Full state breakdown (of {total} coded records): {states}.": [
-                " Tam durum dökümü ({total} kodlanmış kayıt içinde): {states}."
+            "Full state breakdown (of {total} coded records): {states}.": [
+                "Tam durum dökümü ({total} kodlanmış kayıt içinde): {states}."
             ],
-            " The cut-off reads %s while follow-up reaches only %s - that is what a date looks like once it has been imported as a plain number, and it is almost certainly not in the same units as the follow-up time.": [
-                " Kesme noktası %s olarak okunurken takip süresi yalnızca %s düzeyine ulaşıyor - bu, bir tarihin düz bir sayı olarak içe aktarıldığında aldığı görünümdür ve neredeyse kesinlikle takip süresiyle aynı birimde değildir."
+            "The cut-off reads %s while follow-up reaches only %s - that is what a date looks like once it has been imported as a plain number, and it is almost certainly not in the same units as the follow-up time.": [
+                "Kesme noktası %s olarak okunurken takip süresi yalnızca %s düzeyine ulaşıyor - bu, bir tarihin düz bir sayı olarak içe aktarıldığında aldığı görünümdür ve neredeyse kesinlikle takip süresiyle aynı birimde değildir."
             ],
             "- A per-patient state code (0 = disease-free, 1 = disease, 2 = death from disease, 3 = death from other causes)": [
                 "- Hasta başına durum kodu (0 = hastalıksız, 1 = hastalık, 2 = hastalıktan ölüm, 3 = diğer nedenlerden ölüm)"
@@ -85,11 +85,11 @@
             "- Standard survival analysis with death as censoring": [
                 "- Ölümün sansürleme olarak alındığı standart sağkalım analizi"
             ],
-            "; {missing} of the {total} rows were missing": [
-                "; {total} satırın {missing} tanesi kayıptı"
+            "{missing} of the {total} rows were missing": [
+                "{total} satırın {missing} tanesi kayıptı"
             ],
-            ". Check variability, group-size constraints, and event counts, or use the continuous Cox model.": [
-                ". Değişkenliği, grup büyüklüğü kısıtlamalarını ve olay sayılarını kontrol edin veya sürekli Cox modelini kullanın."
+            "Check variability, group-size constraints, and event counts, or use the continuous Cox model.": [
+                "Değişkenliği, grup büyüklüğü kısıtlamalarını ve olay sayılarını kontrol edin veya sürekli Cox modelini kullanın."
             ],
             "'{analysis}' is not available with Multiple Event Levels enabled. Recurrence-based endpoints (RFS, PFS, DFS, TTP) are built from the Recurrence/Progression variable together with the outcome, not from the four vital-status categories. Turn Multiple Event Levels off and select a Recurrence/Progression variable, or choose Overall Survival, Cause-Specific, Competing Risks or Multistate.": [
                 "Çoklu Olay Düzeyleri etkinken '{analysis}' kullanılamaz. Nükse dayalı sonlanım noktaları (RFS, PFS, DFS, TTP), dört yaşamsal durum kategorisinden değil, sonuçla birlikte Nüks/İlerleme değişkeninden oluşturulur. Çoklu Olay Düzeylerini kapatın ve bir Nüks/İlerleme değişkeni seçin ya da Genel Sağkalım, Nedene Özgü, Yarışan Riskler veya Çok Durumlu seçeneğini belirleyin."
@@ -265,11 +265,11 @@
             "%d of the %d requested cut-off(s) produced a group smaller than the %g%% minimum (%d patients) and were removed. %d cut-off(s) defining %d group(s) are reported. Lower the minimum group size, request fewer cut-offs, or use the continuous Cox model.": [
                 "%d / %d istenen kesme noktası, %g%% asgari sınırından (%d hasta) daha küçük bir grup oluşturdu ve kaldırıldı. Bildirilen %d kesme noktası %d grup tanımlamaktadır. Asgari grup büyüklüğünü düşürün, daha az kesme noktası isteyin veya sürekli Cox modelini kullanın."
             ],
-            "%d patient(s) have a follow-up time of zero, which contributes no person-time; check whether a missing date was read as the origin. ": [
-                "%d hasta sıfır takip süresine sahiptir ve bu durum kişi-zamanına katkıda bulunmaz; eksik bir tarihin başlangıç noktası olarak okunup okunmadığını kontrol edin. "
+            "%d patient(s) have a follow-up time of zero, which contributes no person-time; check whether a missing date was read as the origin.": [
+                "%d hasta sıfır takip süresine sahiptir ve bu durum kişi-zamanına katkıda bulunmaz; eksik bir tarihin başlangıç noktası olarak okunup okunmadığını kontrol edin."
             ],
-            "%d patient(s) have a NEGATIVE follow-up time, which cannot be a duration - survival functions reject it. This usually means the start and end dates are the wrong way round. ": [
-                "%d hasta NEGATİF takip süresine sahiptir ve bu bir süre olamaz - sağkalım fonksiyonları bunu reddeder. Bu durum genellikle başlangıç ve bitiş tarihlerinin ters sırada olduğu anlamına gelir. "
+            "%d patient(s) have a NEGATIVE follow-up time, which cannot be a duration - survival functions reject it. This usually means the start and end dates are the wrong way round.": [
+                "%d hasta NEGATİF takip süresine sahiptir ve bu bir süre olamaz - sağkalım fonksiyonları bunu reddeder. Bu durum genellikle başlangıç ve bitiş tarihlerinin ters sırada olduğu anlamına gelir."
             ],
             "%d patient(s) have more than one row. For each of them the priority outcome (%s) has been written to EVERY one of their rows. Because this analysis has no follow-up-time variable it cannot order those rows, so if they are successive time points a later event is copied back onto the earlier ones - which in a survival model would place the event earlier than it happened, and count it once per row. Reduce your data to one row per patient (keeping the earliest priority event and its date) before using this option.": [
                 "%d hasta birden fazla satıra sahiptir. Bunların her biri için öncelikli sonuç (%s) HER BİR satırlarına yazılmıştır. Bu analiz takip süresi değişkenine sahip olmadığından bu satırları sıralayamaz; bu nedenle ardışık zaman noktaları söz konusuysa daha sonraki bir olay daha öncekilerin üzerine kopyalanır - bu da bir sağkalım modelinde olayı gerçekleştiğinden daha erkene yerleştirir ve her satır için bir kez sayar. Bu seçeneği kullanmadan önce verilerinizi (en erken öncelikli olayı ve tarihini koruyarak) hasta başına bir satıra indirgeyin."
@@ -918,9 +918,6 @@
             ],
             "All tests compare survival distributions across levels of {title}. These are members of the Fleming-Harrington G-rho family (survival::survdiff): rho=0 is the standard log-rank test (equal weight at all time points); larger rho weights early events more heavily (weights = S(t)^rho). When survival curves cross or the proportional hazards assumption is violated, different rho values may yield different conclusions.": [
                 "Tüm testler {title} düzeyleri arasındaki sağkalım dağılımlarını karşılaştırır. Bunlar Fleming-Harrington G-rho ailesinin (survival::survdiff) üyeleridir: rho=0 standart log-rank testidir (tüm zaman noktalarında eşit ağırlık); daha büyük rho değerleri erken olaylara daha fazla ağırlık verir (ağırlıklar = S(t)^rho). Sağkalım eğrileri kesiştiğinde veya orantılı tehlikeler varsayımı ihlal edildiğinde, farklı rho değerleri farklı sonuçlar verebilir."
-            ],
-            "All times reported here are measured FROM the landmark, not from study entry, and all estimates are conditional on being event-free at the landmark. They are not comparable with unlandmarked survival times.": [
-                "Burada bildirilen tüm süreler çalışmaya girişten değil, landmark (referans) zamanından itibaren ölçülür ve tüm tahminler landmark anında olaysız olma koşuluna bağlıdır. Landmark uygulanmamış sağkalım süreleriyle karşılaştırılamazlar."
             ],
             "All values in {name} are missing (NA). • Please select a column with valid datetime entries before proceeding.": [
                 "{name} içindeki tüm değerler kayıptır (NA). • Lütfen devam etmeden önce geçerli tarih-saat girişleri olan bir sütun seçin."

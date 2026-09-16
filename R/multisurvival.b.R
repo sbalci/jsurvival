@@ -84,16 +84,24 @@
       event_indicator <- if (is.null(res$error)) res$status == 1 else NULL
 
     } else {
-      # Build an event indicator safely (handles factors, logicals, numeric)
-      event_indicator <- .eventIndicator(outcome_vec, event_level)
-
-      # Only enforce binary check when the underlying values are numeric/logical
-      if (is.numeric(outcome_vec) || is.logical(outcome_vec)) {
-        unique_outcomes <- unique(outcome_vec[!is.na(outcome_vec)])
-        if (!all(unique_outcomes %in% c(0, 1, TRUE, FALSE))) {
-          issues <- append(issues, "Outcome should be binary (0/1 or TRUE/FALSE)")
-        }
-      } else if (is.factor(outcome_vec) && length(levels(outcome_vec)) > 2) {
+      # Validate with the SAME coder the analysis uses (.definemyoutcome() calls
+      # .defineEventIndicator() with these arguments), so this check can never
+      # refuse an outcome the analysis would accept. The old rule rejected every
+      # numeric outcome outside 0/1 even when the Event Level named the event
+      # value (a 1/2 registry column such as survival::lung), and its `>= 1`
+      # counter read every row of a 1/2 column as an event. The coder accepts
+      # numeric 0/1 as-is and any other coding only once the event value is
+      # chosen: it never guesses, because 1/2 means "2 = event" in some datasets
+      # and "1 = event" in others.
+      res <- .defineEventIndicator(outcome_vec, outcomeLevel = event_level,
+                                   multievent = FALSE, analysistype = analysistype,
+                                   outcome_name = outcome_var)
+      if (!is.null(res$error)) {
+        issues <- append(issues, res$error)
+      } else {
+        event_indicator <- res$status == 1
+      }
+      if (is.factor(outcome_vec) && length(levels(outcome_vec)) > 2) {
         warnings <- append(warnings, "Outcome has multiple levels; analysis will treat non-event levels as censored where applicable.")
       }
     }
@@ -107,13 +115,9 @@
     }
   }
 
-  # Check sample size adequacy
-  if (!is.null(event_indicator)) {
-    n_events <- sum(event_indicator, na.rm = TRUE)
-    if (!is.na(n_events) && n_events < 10) {
-      warnings <- append(warnings, paste("Low number of events detected:", n_events, "events. Results may be unstable; interpret cautiously."))
-    }
-  }
+  # Event-count adequacy is reported once, after the fit, by the graded
+  # events-per-variable notice in .cox_model_impl(); a second pre-fit warning
+  # here duplicated it for every dataset with fewer than 10 events.
 
   return(list(issues = issues, warnings = warnings))
 }
@@ -159,7 +163,10 @@
     }
     jmvcore::reject(paste(
       jmvcore::format(.("Outcome Factor Has Unsupported Levels: the outcome variable has non-numeric levels that cannot be interpreted as events: {levels}."),
-                      levels = paste(levels(outcome_vec), collapse = ", ")),
+                      # levels() is NULL for a character outcome, which printed "events: ."
+                      levels = paste(if (is.factor(outcome_vec)) levels(outcome_vec)
+                                     else sort(unique(stats::na.omit(as.character(outcome_vec)))),
+                                     collapse = ", ")),
       .("To fix: select the level that represents the event with the Event Level option, or recode the outcome as numeric (0 = censored, 1 = event) or logical (FALSE/TRUE). For competing risks, use a factor with the levels 'Censored', 'Event' and 'Competing'."),
       sep = "\n\n"))
   }
@@ -409,7 +416,6 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
       # Timepoints the nomogram actually used (after validation), so the
       # summary text describes the axes that were drawn.
       .nom_times = NULL,
-      .validation_warnings = NULL,
       .validation_time = NULL,
       .analysis_times = NULL,
 
@@ -628,6 +634,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
               nonconverged <- c(nonconverged, paste0(sub$interaction[i], " [", sub$moderator_level[i], "]"))
           }
         }
+        # Subgroup HRs invite the classic misreading "significant in one subgroup,
+        # not in the other, so the effect differs" -- say what they are, on the
+        # table itself, whenever subgroup rows are shown.
+        if (rowKey > 0)
+          sg$setNote("exploratory",
+            .("Within-subgroup hazard ratios are exploratory: their p-values are not adjusted for multiple comparisons, and a significant result in one subgroup but not in another is not evidence that the effect differs. Use the interaction test above to judge effect modification."))
         # Explain WHY the within-subgroup table is empty, in the explanation
         # panel, ONLY when it actually came out empty (rowKey == 0) for a known
         # structural reason (continuous moderator or higher-order term). When
@@ -818,7 +830,6 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # Initialize mutable private fields
         private$.nom_object <- NULL
         private$.perf_timers <- NULL
-        private$.validation_warnings <- NULL
         private$.validation_time <- NULL
         private$.analysis_times <- NULL
 
@@ -1166,17 +1177,6 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         # Display warnings if any
         if (length(validation_results$warnings) > 0) {
-          warning_message <- paste0(
-            "<div style='background-color: rgba(255, 202, 33, 0.23); border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 10px 0; color: inherit;'>",
-            "<h4 style='color: inherit; margin-top: 0;'> ", .("Data Validation Warnings"), "</h4>",
-            "<ul style='margin: 5px 0; padding-left: 20px;'>",
-            paste(lapply(validation_results$warnings, function(x) paste0("<li>", x, "</li>")), collapse = ""),
-            "</ul>",
-            "<p><strong>", .("Note:"), "</strong> ", .("Analysis will proceed, but consider these recommendations for optimal results."), "</p>",
-            "</div>"
-          )
-          # Store warning to display later
-          private$.validation_warnings <- warning_message
           private$.addHtmlMessage(
             "warning",
             .("Data validation warnings"),
@@ -1195,8 +1195,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             "mycontexpl_labelled" = mycontexpl,
             "myexplanatory_labelled" = myexplanatory,
             "adjexplanatory_labelled" = adjexplanatory,
-            "mystratvar_labelled" = mystratvar_labelled,
-            "validation_warnings" = private$.validation_warnings
+            "mystratvar_labelled" = mystratvar_labelled
 
           )
         )
@@ -1213,6 +1212,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           .("This tool will help you perform a multivariable survival analysis."), "<br><br>",
           .("Explanatory variables can be categorical (ordinal or nominal) or continuous."), "<br><br>",
           .("Select the event level from the Outcome variable: the level meaning that the patient died or that the event (for example recurrence) occurred. Advanced outcome options are available for outcomes with several event levels."), "<br><br>",
+          .("Numeric outcomes: a column coded 0/1 is read as 0 = censored and 1 = event. Any other coding, such as 1/2, is never guessed: choose the event value in Event Level (set the column to Nominal in Data > Setup if its values are not listed). Every other value is treated as censored."), "<br><br>",
           .("Survival time should be numeric and continuous in one consistent unit (days, weeks, months or years; select it under Time Type in Output). You may also use dates to calculate survival time in the advanced elapsed-time options."), "<br><br>",
           .("Stratification variables: use these when the proportional hazards assumption is violated for certain variables. The model creates a separate baseline hazard for each level of the stratification variables but does not estimate their direct effects."), "<br><br>",
           .("Consider stratification when a variable fails the proportional hazards test, when you need to control for a variable without estimating its hazard ratio, or when baseline risk differs naturally across groups."), "<br><br>",
@@ -1660,11 +1660,11 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
       # Executes the complete survival analysis with performance monitoring.
       # Orchestrates data preparation, survival modeling, and timing collection.
       #
-      # Returns: TRUE if analysis completes successfully, NULL on error
+      # Returns: the survival-analysis results, or NULL when the Cox model could
+      # not be fitted. Validation failures raise jmvcore::reject() and reach jamovi.
       #
       # Features:
       # - Performance monitoring for each analysis phase
-      # - Error handling with detailed logging
       # - Data preparation and validation
       # - Main survival analysis execution
       # - Timing collection for optimization
@@ -1672,50 +1672,59 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # Start performance timer for main analysis
         private$.startPerformanceTimer("analysis")
 
-        tryCatch({
-          # Data preparation
-          private$.startPerformanceTimer("data_prep")
-          cleaneddata <- private$.cleandata()
-          data_prep_time <- private$.stopPerformanceTimer("data_prep")
+        # No tryCatch here. A catch-all used to turn every jmvcore::reject() raised
+        # while preparing the data (14 of them: no complete rows, time and outcome
+        # coding, ...) into a generic "Survival Analysis Error" box and return early,
+        # so jamovi never showed its own error state -- the defect the 2026-09-15
+        # library audit raised against lassocox (library review guide section 16).
+        # Optional sub-analyses guard their own third-party calls.
 
-          # Main survival analysis
-          private$.startPerformanceTimer("survival_analysis")
-          analysis_results <- private$.performSurvivalAnalysis(cleaneddata)
-          survival_time <- private$.stopPerformanceTimer("survival_analysis")
+        # Data preparation
+        private$.startPerformanceTimer("data_prep")
+        cleaneddata <- private$.cleandata()
+        data_prep_time <- private$.stopPerformanceTimer("data_prep")
 
-          ml_time <- 0
+        # A one-valued explanatory variable used to reach coxph()/finalfit and fail
+        # there as "contrasts can be applied only to factors with 2 or more levels".
+        for (v in cleaneddata$name3expl) {
+          x <- cleaneddata$cleanData[[v]]
+          if (!is.null(x) && length(unique(stats::na.omit(x))) < 2) {
+            label <- labelled::var_label(x)
+            jmvcore::reject(trimws(paste(
+              jmvcore::format(
+                .("The explanatory variable '{var}' has only one value in the analysed rows, so no effect can be estimated for it. Remove it, or check the data filter and missing values."),
+                var = if (is.null(label)) v else label),
+              if (isTRUE(self$options$uselandmark))
+                .("Landmark analysis is on: rows with follow-up shorter than the landmark time were excluded before this check.")
+              else "")))
+          }
+        }
 
-          # Optimism-corrected discrimination (bootstrap C-index), if requested
-          private$.calculateOptimismCIndex()
+        # Main survival analysis
+        private$.startPerformanceTimer("survival_analysis")
+        analysis_results <- private$.performSurvivalAnalysis(cleaneddata)
+        survival_time <- private$.stopPerformanceTimer("survival_analysis")
 
-          # Generate clinical interpretation summary
-          # Honour the option. This ran unconditionally, so unticking
-          # "Show summaries" left the Clinical Summary panel on the page.
-          if (isTRUE(self$options$showSummaries))
-            private$.generateAndDisplayClinicalSummary(cleaneddata)
+        ml_time <- 0
 
-          # Store timing information
-          private$.analysis_times <- list(
-            data_prep = data_prep_time,
-            survival_analysis = survival_time,
-            ml_analysis = ml_time,
-            validation = private$.validation_time
-          )
+        # Optimism-corrected discrimination (bootstrap C-index), if requested
+        private$.calculateOptimismCIndex()
 
-          return(analysis_results)
+        # Generate clinical interpretation summary
+        # Honour the option. This ran unconditionally, so unticking
+        # "Show summaries" left the Clinical Summary panel on the page.
+        if (isTRUE(self$options$showSummaries))
+          private$.generateAndDisplayClinicalSummary(cleaneddata)
 
-        }, error = function(e) {
-          # Notice Disabled
-          # notice <- jmvcore::Notice$new(...)
-          
-          self$results$todo$setContent(paste0(
-            "<b>Survival Analysis Error:</b> ",
-            gsub("\n", "<br>", htmltools::htmlEscape(conditionMessage(e)), fixed = TRUE), "<br><br>",
-            "Recommendations: (1) Check data for missing/invalid values in time and outcome variables, (2) Ensure the time origin and units are correct, (3) Verify outcome coding and the selected event level, (4) Review the number of events relative to model complexity, (5) Ensure explanatory variables have appropriate types and variation, (6) Try fewer variables if the model is unstable, or (7) check influential observations."
-          ))
-          self$results$todo$setVisible(TRUE)
-          return(NULL)
-        })
+        # Store timing information
+        private$.analysis_times <- list(
+          data_prep = data_prep_time,
+          survival_analysis = survival_time,
+          ml_analysis = ml_time,
+          validation = private$.validation_time
+        )
+
+        return(analysis_results)
       },
 
       # Core Survival Analysis Implementation
@@ -1873,9 +1882,21 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # clinical-safety hazard: the reader of a survival curve cannot otherwise
         # see which levels were collapsed into "censored", nor which estimand
         # the probability-scale outputs actually correspond to.
-        if (!is.null(private$.eventRecode))
-          self$results$eventRecodeInfo$setContent(
-              .describeEventIndicator(private$.eventRecode, self$options$outcome))
+        if (!is.null(private$.eventRecode)) {
+          recode_html <- .describeEventIndicator(private$.eventRecode, self$options$outcome)
+          raw_outcome <- self$data[[self$options$outcome]]
+          # A numeric outcome is the easiest to misread: 1/2 means "2 = event" in
+          # some exports and "1 = event" in others. Say exactly how it was read.
+          if (is.numeric(raw_outcome) && !isTRUE(self$options$multievent) &&
+              nzchar(recode_html)) {
+            recode_html <- paste0(recode_html, "<p style='margin-top:8px'>", jmvcore::format(
+              .("How this numeric outcome was read: the value {event} is the event and every other value ({censored}) is treated as censored. Values are matched exactly, not by size, so for a column coded 1/2 the Event Level decides which value is the event."),
+              event = htmltools::htmlEscape(private$.eventRecode$event_label),
+              censored = htmltools::htmlEscape(paste(private$.eventRecode$censored_labels, collapse = ", "))),
+              "</p>")
+          }
+          self$results$eventRecodeInfo$setContent(recode_html)
+        }
 
         # Generate analysis completion summary notice
         # This provides confidence that analysis completed and summarizes key metrics
@@ -3048,6 +3069,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             ))
           }
 
+          # The explanatory paragraph below appears only with Show Summaries on;
+          # the table itself must say what its p-values are.
+          if (rk > 0L)
+            tbl$setNote("multiplicity",
+              .("Each row is a separate likelihood-ratio test for that covariate given all the others; the p-values are not adjusted for multiple comparisons."))
+
           if (self$options$showSummaries) {
             self$results$modelContributionSummary$setContent(paste0(
               "<p>", .("Each row is a likelihood-ratio test comparing the full model against the model with that single covariate removed (all others retained)."), " ",
@@ -3549,6 +3576,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         if (!isTRUE(self$options$ci_optimism)) return()
 
         tbl <- self$results$cindexValidation
+        # Rows are added by literal rowKey below; clear first so a re-run cannot
+        # append a second apparent/optimism/corrected set.
+        tbl$deleteRows()
 
         is_cr <- private$.isCompetingRisk()
         if (is_cr) {
@@ -6303,7 +6333,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                 "<div style='margin-top: 15px; padding: 10px; background-color: rgba(138, 155, 172, 0.06); border-radius: 5px; color: inherit;'>",
                 "<p style='margin: 5px 0; font-size: 14px;'><strong>", .("Study Details:"), "</strong></p>",
                 "<ul style='margin: 5px 0; padding-left: 20px; font-size: 14px;'>",
-                "<li>", .("Total patients:"), " ", n_total, "</li>",
+                # n_total is the complete-case analysis set, not the dataset size:
+                # rows with a missing time or covariate were already excluded.
+                "<li>", .("Patients in the model:"), " ", n_total, "</li>",
                 "<li>", .("Events observed:"), " ", n_events, " (", round(n_events/n_total*100, 1), "%)</li>",
                 "<li>", .("Variables analyzed:"), " ", n_vars, "</li>",
                 "</ul>",
