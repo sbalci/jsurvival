@@ -7,36 +7,6 @@
                 "lang": "en",
                 "plural_forms": "nplurals=2; plural=(n!=1);"
             },
-            "measured from the {adj} landmark": [
-                ""
-            ],
-            "plus %d with missing follow-up time": [
-                ""
-            ],
-            "%d patient(s) were left untouched because they have no follow-up time or no cut-off value; they keep their full follow-up and their original event status, so the cut-off applies to only part of the cohort. Supply the missing values, or exclude those rows, before comparing groups.": [
-                ""
-            ],
-            "All times reported here are measured FROM the landmark, not from study entry, and all estimates are conditional on being event-free at the landmark. They are not comparable with unlandmarked survival times.": [
-                ""
-            ],
-            "Calibration slope < 0.8 suggests the model predictions are too extreme (overfitting).": [
-                ""
-            ],
-            "Calibration slope near 1 indicates good calibration.": [
-                ""
-            ],
-            "Calibration slope slightly below 1 indicates mild overfitting.": [
-                ""
-            ],
-            "Excluding this share of the cohort can introduce selection bias; the landmark should be prespecified.": [
-                ""
-            ],
-            "Full state breakdown (of {total} coded records): {states}.": [
-                ""
-            ],
-            "The cut-off reads %s while follow-up reaches only %s - that is what a date looks like once it has been imported as a plain number, and it is almost certainly not in the same units as the follow-up time.": [
-                ""
-            ],
             "- A per-patient state code (0 = disease-free, 1 = disease, 2 = death from disease, 3 = death from other causes)": [
                 ""
             ],
@@ -83,12 +53,6 @@
                 ""
             ],
             "- Standard survival analysis with death as censoring": [
-                ""
-            ],
-            "{missing} of the {total} rows were missing": [
-                ""
-            ],
-            "Check variability, group-size constraints, and event counts, or use the continuous Cox model.": [
                 ""
             ],
             "'{analysis}' is not available with Multiple Event Levels enabled. Recurrence-based endpoints (RFS, PFS, DFS, TTP) are built from the Recurrence/Progression variable together with the outcome, not from the four vital-status categories. Turn Multiple Event Levels off and select a Recurrence/Progression variable, or choose Overall Survival, Cause-Specific, Competing Risks or Multistate.": [
@@ -184,6 +148,9 @@
             "{median}: Natural Language Summary": [
                 ""
             ],
+            "{missing} of the {total} rows were missing": [
+                ""
+            ],
             "{n} missing time intervals due to missing dates": [
                 ""
             ],
@@ -275,6 +242,9 @@
                 ""
             ],
             "%d patient(s) have more than one row. For each, the EARLIEST record carrying the priority outcome (%s) was kept as the event and their later rows were censored, so the event is not moved earlier in time.": [
+                ""
+            ],
+            "%d patient(s) were left untouched because they have no follow-up time or no cut-off value; they keep their full follow-up and their original event status, so the cut-off applies to only part of the cohort. Supply the missing values, or exclude those rows, before comparing groups.": [
                 ""
             ],
             "%d row(s) have an interval start later than their interval end. An interval must run forwards - Surv(type='interval2') requires start <= end - so these rows cannot be used as they stand. Check that the Interval Start and Interval End variables are not swapped.": [
@@ -667,9 +637,6 @@
             "Adjusted Probability Curves": [
                 ""
             ],
-            "Adjusted Probability Natural Language Summary": [
-                ""
-            ],
             "Adjusted Probability Plot": [
                 ""
             ],
@@ -919,6 +886,9 @@
             "All tests compare survival distributions across levels of {title}. These are members of the Fleming-Harrington G-rho family (survival::survdiff): rho=0 is the standard log-rank test (equal weight at all time points); larger rho weights early events more heavily (weights = S(t)^rho). When survival curves cross or the proportional hazards assumption is violated, different rho values may yield different conclusions.": [
                 ""
             ],
+            "All times reported here are measured FROM the landmark, not from study entry, and all estimates are conditional on being event-free at the landmark. They are not comparable with unlandmarked survival times.": [
+                ""
+            ],
             "All values in {name} are missing (NA). • Please select a column with valid datetime entries before proceeding.": [
                 ""
             ],
@@ -1004,9 +974,6 @@
                 ""
             ],
             "Analysis warning": [
-                ""
-            ],
-            "Analysis will proceed, but consider these recommendations for optimal results.": [
                 ""
             ],
             "Analysis with Multiple Outcomes": [
@@ -1303,6 +1270,15 @@
             "Calibration slope": [
                 ""
             ],
+            "Calibration slope < 0.8 suggests the model predictions are too extreme (overfitting).": [
+                ""
+            ],
+            "Calibration slope near 1 indicates good calibration.": [
+                ""
+            ],
+            "Calibration slope slightly below 1 indicates mild overfitting.": [
+                ""
+            ],
             "Calibration Time Point": [
                 ""
             ],
@@ -1408,6 +1384,12 @@
             "Check that the variable name is correct in your dataset": [
                 ""
             ],
+            "Check the selected variables and the model options.": [
+                ""
+            ],
+            "Check variability, group-size constraints, and event counts, or use the continuous Cox model.": [
+                ""
+            ],
             "Chi-square": [
                 ""
             ],
@@ -1415,6 +1397,9 @@
                 ""
             ],
             "Choose parametric distribution for survival modeling. Weibull is most common, while splines provide flexible hazard shapes. Different distributions make different assumptions about hazard function shape.": [
+                ""
+            ],
+            "Choose the Event Level: the outcome value that means the event happened. Values found: {levels}. The analysis does not pick one from the level order, because the order does not say which value is the event.": [
                 ""
             ],
             "Choose which binary predictor to use for the separate, unadjusted sensitivity, specificity, and likelihood-ratio calculations. If left empty, the first explanatory variable is used when it is binary.": [
@@ -2035,7 +2020,7 @@
             "Data Quality Assessment": [
                 ""
             ],
-            "Data suitability": [
+            "Data Suitability": [
                 ""
             ],
             "Data suitability assessment": [
@@ -2045,9 +2030,6 @@
                 ""
             ],
             "Data Validation Issues": [
-                ""
-            ],
-            "Data Validation Warnings": [
                 ""
             ],
             "Data validation warnings": [
@@ -2416,6 +2398,9 @@
             "Each row is a piecewise occurrence/exposure rate for (previous endpoint, Time], with the first interval including time zero. Equal-width intervals span the observed follow-up; their number is limited to about one interval per 10 total events (maximum 10) to reduce sparsity. Person-time is calculated exactly from individual follow-up. Limits are Garwood Poisson 95% intervals conditional on the observed exposure. These are interval rates, not pointwise instantaneous hazards or Cox-model coefficients.": [
                 ""
             ],
+            "Each row is a separate likelihood-ratio test for that covariate given all the others; the p-values are not adjusted for multiple comparisons.": [
+                ""
+            ],
             "Each row tests whether the focal effect differs across the moderator (effect modification). A significant p indicates the effect is modified.": [
                 ""
             ],
@@ -2584,9 +2569,6 @@
             "Error creating residuals plot: {message}": [
                 ""
             ],
-            "Error creating survival plot:\n{msg}\n\nPlease check your data and model parameters.": [
-                ""
-            ],
             "Error fitting Firth model: {message}": [
                 ""
             ],
@@ -2603,9 +2585,6 @@
                 ""
             ],
             "Error setting variable labels.": [
-                ""
-            ],
-            "Error:": [
                 ""
             ],
             "Error: Data could not be cleaned for analysis.": [
@@ -2707,6 +2686,12 @@
             "Event Rate": [
                 ""
             ],
+            "Event status with exactly two observed values. A numeric column coded 0/1 is read as 0 = censored, 1 = event. Any other coding (for example 1/2, or Alive/Dead) is never guessed: choose the event value in Event level.": [
+                ""
+            ],
+            "Event status. A numeric column coded 0/1 is read as 0 = censored, 1 = event. Any other coding (for example 1/2, or text such as Alive/Dead) is never guessed: choose the event value in Event Level.": [
+                ""
+            ],
             "Event Time": [
                 ""
             ],
@@ -2788,6 +2773,9 @@
             "Excluded %d observation%s with missing time or outcome values. Analysis based on %d complete cases.": [
                 ""
             ],
+            "Excluding this share of the cohort can introduce selection bias; the landmark should be prespecified.": [
+                ""
+            ],
             "Expected Deaths": [
                 ""
             ],
@@ -2800,7 +2788,7 @@
             "Explanatory notes": [
                 ""
             ],
-            "Explanatory output": [
+            "Explanatory Output": [
                 ""
             ],
             "Explanatory Variable": [
@@ -3070,6 +3058,9 @@
             "Four Groups": [
                 ""
             ],
+            "Full state breakdown (of {total} coded records): {states}.": [
+                ""
+            ],
             "Gamma": [
                 ""
             ],
@@ -3242,6 +3233,9 @@
                 ""
             ],
             "How It Works:": [
+                ""
+            ],
+            "How this numeric outcome was read: the value {event} is the event and every other value ({censored}) is treated as censored. Values are matched exactly, not by size, so for a column coded 1/2 the Event Level decides which value is the event.": [
                 ""
             ],
             "How to read the nomogram:": [
@@ -3631,6 +3625,9 @@
             "Landmark analysis excluded every participant: none of the {n} observations reached the {amount} landmark. Lower the landmark time or switch landmark analysis off.": [
                 ""
             ],
+            "Landmark analysis is on: rows with follow-up shorter than the landmark time were excluded before this check.": [
+                ""
+            ],
             "Landmark analysis removed %d subject(s) whose follow-up ended at or before %s %s; %d remain. Time is measured from the landmark, and estimates are conditional on surviving to it.": [
                 ""
             ],
@@ -3862,6 +3859,9 @@
             "Meaning": [
                 ""
             ],
+            "measured from the {adj} landmark": [
+                ""
+            ],
             "Measures rank discrimination among comparable patient pairs. 0.5 indicates chance ordering and 1.0 perfect ordering. There are no universal clinical cut-offs; adequacy depends on the intended use, outcome, case mix, and external validation.": [
                 ""
             ],
@@ -4078,7 +4078,7 @@
             "Model Metrics:": [
                 ""
             ],
-            "Model options": [
+            "Model Options": [
                 ""
             ],
             "Model performance metrics": [
@@ -4330,9 +4330,6 @@
             "No complete records remain after applying the selected variables and landmark restriction.": [
                 ""
             ],
-            "No complete survival data available.\n\nThis can occur when:\n• There are missing values in time or outcome variables\n• Risk score calculation failed\n• Data filtering removed all observations": [
-                ""
-            ],
             "No concern was identified by these limited checks; formal sample-size planning and validation are still required.": [
                 ""
             ],
@@ -4483,7 +4480,7 @@
             "No valid time intervals could be calculated. Check that the date format setting matches the data and that both date columns contain readable dates.": [
                 ""
             ],
-            "No variable-based risk scores are available because the selected rule retained no predictors.\n\nThe empty model is a valid result. Choose another lambda rule only as a prespecified modeling decision and report that choice transparently.": [
+            "No variable-based risk scores are available because the selected rule retained no predictors.": [
                 ""
             ],
             "No variables selected": [
@@ -4687,7 +4684,13 @@
             "Numeric Format Selected For A Text Column": [
                 ""
             ],
+            "Numeric outcome is not coded 0/1. Values found: {values}. The analysis does not guess which value is the event, because a coding such as 1/2 means 2 = event in some datasets and 1 = event in others. Either recode it as 0 = censored / 1 = event, or choose the value that represents the event in Event Level (in jamovi, first set the column's measure type to Nominal in Data > Setup so its values are listed).": [
+                ""
+            ],
             "Numeric outcome must have exactly 2 observed values. Found {n} value(s): {values}. For competing events, construct an explicit binary cause-specific status in which the event of interest is 1 and every non-event observation is 0; do not omit other event types.": [
+                ""
+            ],
+            "Numeric outcomes: a column coded 0/1 is read as 0 = censored and 1 = event. Any other coding, such as 1/2, is never guessed: choose the event value in Event Level (set the column to Nominal in Data > Setup if its values are not listed). Every other value is treated as censored.": [
                 ""
             ],
             "Numeric: one-unit increase": [
@@ -4876,6 +4879,9 @@
             "Outcome Distribution": [
                 ""
             ],
+            "Outcome Factor Has Unsupported Levels: the outcome variable has non-numeric levels that cannot be interpreted as events: {levels}.": [
+                ""
+            ],
             "Outcome imbalance may make folds and performance estimates unstable; inspect absolute event and censoring counts.": [
                 ""
             ],
@@ -4954,6 +4960,9 @@
             "Outcome variable summary: {counts}": [
                 ""
             ],
+            "Outcome Variable Type Not Supported: the outcome variable has type '{type}', which cannot be used for survival analysis.": [
+                ""
+            ],
             "Outcome/event indicator contains %d missing (NA) value(s) after data cleaning. Every observation must be classified as an event or as censored. Analysis was halted. Check the outcome variable and the selected event level.": [
                 ""
             ],
@@ -4961,9 +4970,6 @@
                 ""
             ],
             "Output Options": [
-                ""
-            ],
-            "Output options": [
                 ""
             ],
             "Output table": [
@@ -5096,6 +5102,9 @@
                 ""
             ],
             "patients in the disease state": [
+                ""
+            ],
+            "Patients in the model:": [
                 ""
             ],
             "Patients were then divided at empirical quantile cutpoints into {groups} groups based on these scores (ties can make group sizes unequal):": [
@@ -5359,6 +5368,9 @@
             "Plots Explanations": [
                 ""
             ],
+            "plus %d with missing follow-up time": [
+                ""
+            ],
             "Points to Risk Conversion": [
                 ""
             ],
@@ -5555,6 +5567,9 @@
                 ""
             ],
             "Random seed used to select candidate combinations when the minimum-P-value search space is too large for exhaustive evaluation.": [
+                ""
+            ],
+            "Random seed: {seed}": [
                 ""
             ],
             "Rank discrimination at this horizon; 0.5 = chance, 1.0 = perfect ordering": [
@@ -5992,9 +6007,6 @@
             "Second (0-59)": [
                 ""
             ],
-            "Seed": [
-                ""
-            ],
             "Select a continuous predictor variable to assess for non-linear effects. The variable will be modeled with restricted cubic splines and compared to a linear model. Common candidates include age, tumor size, biomarker levels, and follow-up duration.": [
                 ""
             ],
@@ -6094,7 +6106,10 @@
             "Shaded area:": [
                 ""
             ],
-            "Short median follow-up ({time} {units}). May be insufficient for meaningful survival analysis.": [
+            "Short median follow-up ({time} {units}, reverse Kaplan-Meier). May be insufficient for meaningful survival analysis.": [
+                ""
+            ],
+            "Short median observed time ({time} {units}). Median follow-up could not be estimated by reverse Kaplan-Meier, so this is the median time to event-or-censoring, which understates how long the cohort was observed. Interpret the adequacy of follow-up with that in mind.": [
                 ""
             ],
             "Show Kaplan-Meier survival curves stratified by age groups. Displays separate curves for each age group within the explanatory variable.": [
@@ -6433,6 +6448,9 @@
             "Summary of Outcome Recoding": [
                 ""
             ],
+            "Supported types: numeric 0 (censored) and 1 (event); logical FALSE (censored) and TRUE (event); or a factor with numeric levels ('0'/'1') or competing-risk levels ('Censored'/'Event'/'Competing').": [
+                ""
+            ],
             "Survival": [
                 ""
             ],
@@ -6488,9 +6506,6 @@
                 ""
             ],
             "Survival data export skipped (competing risks)": [
-                ""
-            ],
-            "Survival data not available.\n\nPlease check that:\n• Time and outcome variables are properly selected\n• Data contains valid survival information": [
                 ""
             ],
             "Survival estimate time points": [
@@ -6634,10 +6649,10 @@
             "The 'rms' package is required for nomogram generation but is not available.": [
                 ""
             ],
-            "The {landmark} landmark excluded no participants, because it is only {share}% of the median follow-up in these data ({median} {unit}). It still subtracted {amount} from every interval, so every duration and the total person-time below are that much smaller than the follow-up observed. Check that the landmark is expressed in the same unit as the results ({unit}): entering a value meant as months while the output unit is days is the usual cause.": [
+            "The {landmark} landmark excluded no participants, because it is only {share}% of the median observed interval in these data ({median} {unit}). It still subtracted {amount} from every interval, so every duration and the total person-time below are that much smaller than the follow-up observed. Check that the landmark is expressed in the same unit as the results ({unit}): entering a value meant as months while the output unit is days is the usual cause.": [
                 ""
             ],
-            "The {landmark} landmark is later than the median follow-up in these data ({median} {unit}), so more than half the cohort could not reach it and {excluded} of {total} observations were excluded. What remains is a subgroup defined by having been followed to the landmark, and the total person-time above is the denominator for that subgroup only: a rate computed from it answers \"among those still under observation at {amount}, how often did events occur\", not the same question for the cohort you enrolled. This analysis has no event indicator, so it cannot tell you whether the excluded participants had short follow-up because they died early or simply because they were enrolled recently - check that before interpreting the selection. Report the landmark, the number excluded and the reason alongside any rate taken from this analysis.": [
+            "The {landmark} landmark is later than the median observed interval in these data ({median} {unit}), so more than half the cohort could not reach it and {excluded} of {total} observations were excluded. What remains is a subgroup defined by having been followed to the landmark, and the total person-time above is the denominator for that subgroup only: a rate computed from it answers \"among those still under observation at {amount}, how often did events occur\", not the same question for the cohort you enrolled. This analysis has no event indicator, so it cannot tell you whether the excluded participants had short follow-up because they died early or simply because they were enrolled recently - check that before interpreting the selection. Report the landmark, the number excluded and the reason alongside any rate taken from this analysis.": [
                 ""
             ],
             "The {rule} rule retained no predictor columns. The valid empty model has been preserved; choose a different lambda rule only as a prespecified modeling decision, not because the empty result is inconvenient.": [
@@ -6730,6 +6745,9 @@
             "The cut-off is the value that maximises the standardised log-rank statistic (maximally selected rank statistic, survminer::surv_cutpoint / maxstat). No multiplicity-adjusted p-value is computed or reported for the selected cut-off; the group comparison p-values shown after the split are exploratory because the split was chosen from these same data. Report the continuous Cox model as the primary analysis and validate the cut-off in independent data. When publishing, cite survminer and maxstat.": [
                 ""
             ],
+            "The cut-off reads %s while follow-up reaches only %s - that is what a date looks like once it has been imported as a plain number, and it is almost certainly not in the same units as the follow-up time.": [
+                ""
+            ],
             "The data-derived cut-off point for {variable_name} is {cutoff_value}; it separates lower and higher marker values in this dataset.": [
                 ""
             ],
@@ -6760,7 +6778,13 @@
             "The displayed score is the Fine-Gray relative subdistribution-hazard score, exp(centered linear predictor), calculated from all model coefficients. It is a ranking score, not an absolute event probability; a higher score indicates a higher fitted subdistribution hazard for the event of interest.": [
                 ""
             ],
+            "The empty model is a valid result. Choose another lambda rule only as a prespecified modeling decision and report that choice transparently.": [
+                ""
+            ],
             "the event of interest (coded 1); this outcome also carries competing states, listed below": [
+                ""
+            ],
+            "The explanatory variable '{var}' has only one value in the analysed rows, so no effect can be estimated for it. Remove it, or check the data filter and missing values.": [
                 ""
             ],
             "The explanatory variable has only two levels, so there is a single comparison and no multiplicity adjustment is applied; it is equivalent to the overall log-rank test above.": [
@@ -6910,6 +6934,15 @@
             "The outcome should indicate whether the event of interest occurred": [
                 ""
             ],
+            "The outcome value for patients without the event. If left empty, the other of the two observed values is used.": [
+                ""
+            ],
+            "The outcome value that means the event happened (for example Dead, or 2 in a column coded 1/2). Every other value is treated as censored. Required unless the outcome is numeric 0/1; if a numeric column lists no values here, set its measure type to Nominal in Data > Setup.": [
+                ""
+            ],
+            "The outcome value that means the event happened (for example Dead, or 2 in a column coded 1/2). Required unless the outcome is numeric 0/1. Values are matched exactly; the event is never taken from level order or numeric size.": [
+                ""
+            ],
             "the outcome variable": [
                 ""
             ],
@@ -7018,6 +7051,9 @@
             "The selected positive predictor level '{level}' is not present among paired complete observations. Available levels: {levels}.": [
                 ""
             ],
+            "The selected rule retained no predictor columns, so there are no coefficients to plot.": [
+                ""
+            ],
             "The selected rule retained no predictor columns; this valid empty model was preserved.": [
                 ""
             ],
@@ -7049,6 +7085,9 @@
                 ""
             ],
             "The stratification variable has fewer than two levels in the analysed rows.": [
+                ""
+            ],
+            "The survival plot could not be drawn: {msg}": [
                 ""
             ],
             "The survival tree produced no usable split for '{var}'. Quantile cut-points are shown instead. This usually means the tree found no split meeting the complexity and minimum group-size criteria.": [
@@ -7408,6 +7447,12 @@
             "To fix:": [
                 ""
             ],
+            "To fix: check that the correct outcome variable is selected, verify its type under Data > Setup, and convert a text variable to a numeric or factor outcome, for example with Transform > Compute.": [
+                ""
+            ],
+            "To fix: select the level that represents the event with the Event Level option, or recode the outcome as numeric (0 = censored, 1 = event) or logical (FALSE/TRUE). For competing risks, use a factor with the levels 'Censored', 'Event' and 'Competing'.": [
+                ""
+            ],
             "Too few complete cases for analysis ({n}). Need at least 10 complete observations.": [
                 ""
             ],
@@ -7421,9 +7466,6 @@
                 ""
             ],
             "Total observed follow-up is zero, so an incidence rate cannot be calculated. Check the time variable and its units.": [
-                ""
-            ],
-            "Total patients:": [
                 ""
             ],
             "Total person-time": [
@@ -7931,6 +7973,9 @@
                 ""
             ],
             "Within-subgroup hazard ratios are disabled in competing-risks (Fine-Gray) mode; interpret the interaction coefficient above instead.": [
+                ""
+            ],
+            "Within-subgroup hazard ratios are exploratory: their p-values are not adjusted for multiple comparisons, and a significant result in one subgroup but not in another is not evidence that the effect differs. Use the interaction test above to judge effect modification.": [
                 ""
             ],
             "Within-Subgroup Hazard Ratios.": [

@@ -11,46 +11,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: R/timeinterval.b.R
-msgid "measured from the {adj} landmark"
-msgstr ""
-
-#: R/survivalcont.b.R
-msgid "plus %d with missing follow-up time"
-msgstr ""
-
-#: R/outcomeorganizer.b.R
-msgid "%d patient(s) were left untouched because they have no follow-up time or no cut-off value; they keep their full follow-up and their original event status, so the cut-off applies to only part of the cohort. Supply the missing values, or exclude those rows, before comparing groups."
-msgstr ""
-
-#: R/survival.b.R
-msgid "All times reported here are measured FROM the landmark, not from study entry, and all estimates are conditional on being event-free at the landmark. They are not comparable with unlandmarked survival times."
-msgstr ""
-
-#: R/survival.b.R
-msgid "Calibration slope < 0.8 suggests the model predictions are too extreme (overfitting)."
-msgstr ""
-
-#: R/survival.b.R
-msgid "Calibration slope near 1 indicates good calibration."
-msgstr ""
-
-#: R/survival.b.R
-msgid "Calibration slope slightly below 1 indicates mild overfitting."
-msgstr ""
-
-#: R/survivalcont.b.R
-msgid "Excluding this share of the cohort can introduce selection bias; the landmark should be prespecified."
-msgstr ""
-
-#: R/outcomeorganizer.b.R
-msgid "Full state breakdown (of {total} coded records): {states}."
-msgstr ""
-
-#: R/outcomeorganizer.b.R
-msgid "The cut-off reads %s while follow-up reaches only %s - that is what a date looks like once it has been imported as a plain number, and it is almost certainly not in the same units as the follow-up time."
-msgstr ""
-
 #: R/outcomeorganizer.b.R
 msgid ""
 "- A per-patient state code (0 = disease-free, 1 = disease, 2 = death from "
@@ -128,14 +88,6 @@ msgstr ""
 
 #: R/outcomeorganizer.b.R
 msgid "- Standard survival analysis with death as censoring"
-msgstr ""
-
-#: R/datetimeconverter.b.R
-msgid "{missing} of the {total} rows were missing"
-msgstr ""
-
-#: R/survivalcont.b.R
-msgid "Check variability, group-size constraints, and event counts, or use the continuous Cox model."
 msgstr ""
 
 #: R/outcomeorganizer.b.R
@@ -264,7 +216,7 @@ msgstr ""
 msgid "{dist} model - AIC {aic}, BIC {bic}, log-likelihood {loglik}{cov}"
 msgstr ""
 
-#: R/survival_utils.R
+#: R/survival-competingrisks.R
 msgid ""
 "{feature} is not available for competing-risks analysis. It assumes a single "
 "event type, and the competing-risk outcome is coded 0/1/2. Use the "
@@ -307,6 +259,10 @@ msgstr ""
 
 #: R/singlearm.b.R
 msgid "{median}: Natural Language Summary"
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid "{missing} of the {total} rows were missing"
 msgstr ""
 
 #: R/timeinterval.b.R
@@ -471,11 +427,16 @@ msgid ""
 msgstr ""
 
 #: R/outcomeorganizer.b.R
-msgid "%d patient(s) have a follow-up time of zero, which contributes no person-time; check whether a missing date was read as the origin."
+msgid ""
+"%d patient(s) have a follow-up time of zero, which contributes no "
+"person-time; check whether a missing date was read as the origin."
 msgstr ""
 
 #: R/outcomeorganizer.b.R
-msgid "%d patient(s) have a NEGATIVE follow-up time, which cannot be a duration - survival functions reject it. This usually means the start and end dates are the wrong way round."
+msgid ""
+"%d patient(s) have a NEGATIVE follow-up time, which cannot be a duration - "
+"survival functions reject it. This usually means the start and end dates are "
+"the wrong way round."
 msgstr ""
 
 #: R/outcomeorganizer.b.R
@@ -494,6 +455,14 @@ msgid ""
 "%d patient(s) have more than one row. For each, the EARLIEST record carrying "
 "the priority outcome (%s) was kept as the event and their later rows were "
 "censored, so the event is not moved earlier in time."
+msgstr ""
+
+#: R/outcomeorganizer.b.R
+msgid ""
+"%d patient(s) were left untouched because they have no follow-up time or no "
+"cut-off value; they keep their full follow-up and their original event "
+"status, so the cut-off applies to only part of the cohort. Supply the "
+"missing values, or exclude those rows, before comparing groups."
 msgstr ""
 
 #: R/outcomeorganizer.b.R
@@ -1190,10 +1159,6 @@ msgstr ""
 msgid "Adjusted Probability Curves"
 msgstr ""
 
-#: multisurvival/results/adjustedSurvivalSummaryHeading.title
-msgid "Adjusted Probability Natural Language Summary"
-msgstr ""
-
 #: multisurvival/results/plot_adj.title
 msgid "Adjusted Probability Plot"
 msgstr ""
@@ -1629,6 +1594,7 @@ msgid ""
 msgstr ""
 
 #: R/multisurvival.b.R
+#: R/survival.b.R
 msgid ""
 "All times reported here are measured FROM the landmark, not from study "
 "entry, and all estimates are conditional on being event-free at the "
@@ -1740,7 +1706,6 @@ msgstr ""
 msgid "Analysis completed. Review detailed results below."
 msgstr ""
 
-#: R/lassocox.b.R
 #: R/survivalcont.b.R
 msgid "Analysis Error"
 msgstr ""
@@ -1785,12 +1750,6 @@ msgstr ""
 
 #: R/survivalcont.b.R
 msgid "Analysis warning"
-msgstr ""
-
-#: R/multisurvival.b.R
-msgid ""
-"Analysis will proceed, but consider these recommendations for optimal "
-"results."
 msgstr ""
 
 #: multisurvival/ui[2].label
@@ -2287,6 +2246,20 @@ msgstr ""
 msgid "Calibration slope"
 msgstr ""
 
+#: R/survival.b.R
+msgid ""
+"Calibration slope < 0.8 suggests the model predictions are too extreme "
+"(overfitting)."
+msgstr ""
+
+#: R/survival.b.R
+msgid "Calibration slope near 1 indicates good calibration."
+msgstr ""
+
+#: R/survival.b.R
+msgid "Calibration slope slightly below 1 indicates mild overfitting."
+msgstr ""
+
 #: survival/options/calibration_timepoint.title
 msgid "Calibration Time Point"
 msgstr ""
@@ -2462,6 +2435,16 @@ msgstr ""
 msgid "Check that the variable name is correct in your dataset"
 msgstr ""
 
+#: R/lassocox.b.R
+msgid "Check the selected variables and the model options."
+msgstr ""
+
+#: R/survivalcont.b.R
+msgid ""
+"Check variability, group-size constraints, and event counts, or use the "
+"continuous Cox model."
+msgstr ""
+
 #: multisurvival/results/cox_phTable.columns.title
 msgid "Chi-square"
 msgstr ""
@@ -2475,6 +2458,13 @@ msgid ""
 "Choose parametric distribution for survival modeling. Weibull is most "
 "common, while splines provide flexible hazard shapes. Different "
 "distributions make different assumptions about hazard function shape."
+msgstr ""
+
+#: R/lassocox.b.R
+msgid ""
+"Choose the Event Level: the outcome value that means the event happened. "
+"Values found: {levels}. The analysis does not pick one from the level order, "
+"because the order does not say which value is the event."
 msgstr ""
 
 #: oddsratio/options/diagnosticPredictor.description.main
@@ -3496,7 +3486,7 @@ msgid "Data Quality Assessment"
 msgstr ""
 
 #: lassocox/ui[1].label
-msgid "Data suitability"
+msgid "Data Suitability"
 msgstr ""
 
 #: lassocox/options/suitabilityCheck.title
@@ -3509,10 +3499,6 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "Data Validation Issues"
-msgstr ""
-
-#: R/multisurvival.b.R
-msgid "Data Validation Warnings"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -4173,6 +4159,12 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid ""
+"Each row is a separate likelihood-ratio test for that covariate given all "
+"the others; the p-values are not adjusted for multiple comparisons."
+msgstr ""
+
+#: R/multisurvival.b.R
+msgid ""
 "Each row tests whether the focal effect differs across the moderator (effect "
 "modification). A significant p indicates the effect is modified."
 msgstr ""
@@ -4474,14 +4466,6 @@ msgstr ""
 msgid "Error creating residuals plot: {message}"
 msgstr ""
 
-#: R/lassocox.b.R
-msgid ""
-"Error creating survival plot:\n"
-"{msg}\n"
-"\n"
-"Please check your data and model parameters."
-msgstr ""
-
 #: R/oddsratio.b.R
 msgid "Error fitting Firth model: {message}"
 msgstr ""
@@ -4507,10 +4491,6 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "Error setting variable labels."
-msgstr ""
-
-#: R/lassocox.b.R
-msgid "Error:"
 msgstr ""
 
 #: R/survival.b.R
@@ -4688,6 +4668,20 @@ msgstr ""
 msgid "Event Rate"
 msgstr ""
 
+#: lassocox/options/outcome.description.ui
+msgid ""
+"Event status with exactly two observed values. A numeric column coded 0/1 is "
+"read as 0 = censored, 1 = event. Any other coding (for example 1/2, or "
+"Alive/Dead) is never guessed: choose the event value in Event level."
+msgstr ""
+
+#: multisurvival/options/outcome.description.ui
+msgid ""
+"Event status. A numeric column coded 0/1 is read as 0 = censored, 1 = event. "
+"Any other coding (for example 1/2, or text such as Alive/Dead) is never "
+"guessed: choose the event value in Event Level."
+msgstr ""
+
 #: survivalcont/results/schoenfeldResidualsTable.columns.title
 msgid "Event Time"
 msgstr ""
@@ -4841,6 +4835,12 @@ msgid ""
 "based on %d complete cases."
 msgstr ""
 
+#: R/survivalcont.b.R
+msgid ""
+"Excluding this share of the cohort can introduce selection bias; the "
+"landmark should be prespecified."
+msgstr ""
+
 #: survival/results/ageStandardizationTable.columns.title
 msgid "Expected Deaths"
 msgstr ""
@@ -4862,7 +4862,7 @@ msgid "Explanatory notes"
 msgstr ""
 
 #: lassocox/ui[5].label
-msgid "Explanatory output"
+msgid "Explanatory Output"
 msgstr ""
 
 #: survival/options/explanatory.title
@@ -5312,6 +5312,10 @@ msgstr ""
 msgid "Four Groups"
 msgstr ""
 
+#: R/outcomeorganizer.b.R
+msgid "Full state breakdown (of {total} coded records): {states}."
+msgstr ""
+
 #: survival/options/parametric_distribution/gamma.title
 msgid "Gamma"
 msgstr ""
@@ -5604,6 +5608,14 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "How It Works:"
+msgstr ""
+
+#: R/multisurvival.b.R
+msgid ""
+"How this numeric outcome was read: the value {event} is the event and every "
+"other value ({censored}) is treated as censored. Values are matched exactly, "
+"not by size, so for a column coded 1/2 the Event Level decides which value "
+"is the event."
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -6262,6 +6274,12 @@ msgid ""
 "analysis off."
 msgstr ""
 
+#: R/multisurvival.b.R
+msgid ""
+"Landmark analysis is on: rows with follow-up shorter than the landmark time "
+"were excluded before this check."
+msgstr ""
+
 #: R/singlearm.b.R
 msgid ""
 "Landmark analysis removed %d subject(s) whose follow-up ended at or before "
@@ -6672,6 +6690,10 @@ msgstr ""
 msgid "Meaning"
 msgstr ""
 
+#: R/timeinterval.b.R
+msgid "measured from the {adj} landmark"
+msgstr ""
+
 #: R/multisurvival.b.R
 msgid ""
 "Measures rank discrimination among comparable patient pairs. 0.5 indicates "
@@ -7015,7 +7037,7 @@ msgid "Model Metrics:"
 msgstr ""
 
 #: lassocox/ui[2].label
-msgid "Model options"
+msgid "Model Options"
 msgstr ""
 
 #: multisurvival/options/show_survmetrics.title
@@ -7421,16 +7443,6 @@ msgstr ""
 
 #: R/lassocox.b.R
 msgid ""
-"No complete survival data available.\n"
-"\n"
-"This can occur when:\n"
-"• There are missing values in time or outcome variables\n"
-"• Risk score calculation failed\n"
-"• Data filtering removed all observations"
-msgstr ""
-
-#: R/lassocox.b.R
-msgid ""
 "No concern was identified by these limited checks; formal sample-size "
 "planning and validation are still required."
 msgstr ""
@@ -7711,10 +7723,7 @@ msgstr ""
 #: R/lassocox.b.R
 msgid ""
 "No variable-based risk scores are available because the selected rule "
-"retained no predictors.\n"
-"\n"
-"The empty model is a valid result. Choose another lambda rule only as a "
-"prespecified modeling decision and report that choice transparently."
+"retained no predictors."
 msgstr ""
 
 #: R/lassocox.b.R
@@ -8057,10 +8066,28 @@ msgstr ""
 
 #: R/lassocox.b.R
 msgid ""
+"Numeric outcome is not coded 0/1. Values found: {values}. The analysis does "
+"not guess which value is the event, because a coding such as 1/2 means 2 = "
+"event in some datasets and 1 = event in others. Either recode it as 0 = "
+"censored / 1 = event, or choose the value that represents the event in Event "
+"Level (in jamovi, first set the column's measure type to Nominal in Data > "
+"Setup so its values are listed)."
+msgstr ""
+
+#: R/lassocox.b.R
+msgid ""
 "Numeric outcome must have exactly 2 observed values. Found {n} value(s): "
 "{values}. For competing events, construct an explicit binary cause-specific "
 "status in which the event of interest is 1 and every non-event observation "
 "is 0; do not omit other event types."
+msgstr ""
+
+#: R/multisurvival.b.R
+msgid ""
+"Numeric outcomes: a column coded 0/1 is read as 0 = censored and 1 = event. "
+"Any other coding, such as 1/2, is never guessed: choose the event value in "
+"Event Level (set the column to Nominal in Data > Setup if its values are not "
+"listed). Every other value is treated as censored."
 msgstr ""
 
 #: R/lassocox.b.R
@@ -8375,6 +8402,12 @@ msgstr ""
 msgid "Outcome Distribution"
 msgstr ""
 
+#: R/multisurvival.b.R
+msgid ""
+"Outcome Factor Has Unsupported Levels: the outcome variable has non-numeric "
+"levels that cannot be interpreted as events: {levels}."
+msgstr ""
+
 #: R/lassocox.b.R
 msgid ""
 "Outcome imbalance may make folds and performance estimates unstable; inspect "
@@ -8525,6 +8558,12 @@ msgstr ""
 msgid "Outcome variable summary: {counts}"
 msgstr ""
 
+#: R/multisurvival.b.R
+msgid ""
+"Outcome Variable Type Not Supported: the outcome variable has type '{type}', "
+"which cannot be used for survival analysis."
+msgstr ""
+
 #: R/survivalcont.b.R
 msgid ""
 "Outcome/event indicator contains %d missing (NA) value(s) after data "
@@ -8537,12 +8576,9 @@ msgid "Output and Display Options"
 msgstr ""
 
 #: datetimeconverter/ui[8].label
+#: lassocox/ui[4].label
 #: timeinterval/ui[4].label
 msgid "Output Options"
-msgstr ""
-
-#: lassocox/ui[4].label
-msgid "Output options"
 msgstr ""
 
 #: outcomeorganizer/options/outputTable.title
@@ -8743,6 +8779,10 @@ msgstr ""
 
 #: R/outcomeorganizer.b.R
 msgid "patients in the disease state"
+msgstr ""
+
+#: R/multisurvival.b.R
+msgid "Patients in the model:"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -9106,7 +9146,6 @@ msgstr ""
 msgid "Piecewise Hazard-Rate Estimates"
 msgstr ""
 
-#: R/lassocox.b.R
 #: R/multisurvival.b.R
 msgid "Please check your data and variable selections."
 msgstr ""
@@ -9231,6 +9270,10 @@ msgstr ""
 
 #: singlearm/results/survivalPlotsHeading3.title
 msgid "Plots Explanations"
+msgstr ""
+
+#: R/survivalcont.b.R
+msgid "plus %d with missing follow-up time"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -9537,7 +9580,6 @@ msgstr ""
 
 #: R/lassocox.b.R
 #: lassocox/options/random_seed.title
-#: lassocox/ui[6][0].label
 #: survivalcont/options/seed.title
 msgid "Random seed"
 msgstr ""
@@ -9552,6 +9594,12 @@ msgstr ""
 msgid ""
 "Random seed used to select candidate combinations when the minimum-P-value "
 "search space is too large for exhaustive evaluation."
+msgstr ""
+
+#: R/lassocox.b.R
+#: R/multisurvival.b.R
+#: R/survival.b.R
+msgid "Random seed: {seed}"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -10283,10 +10331,6 @@ msgstr ""
 msgid "Second (0-59)"
 msgstr ""
 
-#: lassocox/ui[6].label
-msgid "Seed"
-msgstr ""
-
 #: survival/options/rcs_variable.description
 msgid ""
 "Select a continuous predictor variable to assess for non-linear effects. The "
@@ -10475,8 +10519,16 @@ msgstr ""
 
 #: R/survivalcont.b.R
 msgid ""
-"Short median follow-up ({time} {units}). May be insufficient for meaningful "
-"survival analysis."
+"Short median follow-up ({time} {units}, reverse Kaplan-Meier). May be "
+"insufficient for meaningful survival analysis."
+msgstr ""
+
+#: R/survivalcont.b.R
+msgid ""
+"Short median observed time ({time} {units}). Median follow-up could not be "
+"estimated by reverse Kaplan-Meier, so this is the median time to "
+"event-or-censoring, which understates how long the cohort was observed. "
+"Interpret the adequacy of follow-up with that in mind."
 msgstr ""
 
 #: survival/options/age_stratified_km.description
@@ -11087,6 +11139,13 @@ msgstr ""
 msgid "Summary of Outcome Recoding"
 msgstr ""
 
+#: R/multisurvival.b.R
+msgid ""
+"Supported types: numeric 0 (censored) and 1 (event); logical FALSE "
+"(censored) and TRUE (event); or a factor with numeric levels ('0'/'1') or "
+"competing-risk levels ('Censored'/'Event'/'Competing')."
+msgstr ""
+
 #: package/analyses/singlearm.menuGroup
 #: package/analyses/survival.menuGroup
 #: package/analyses/survivalcont.menuGroup
@@ -11199,15 +11258,6 @@ msgstr ""
 
 #: R/survival.b.R
 msgid "Survival data export skipped (competing risks)"
-msgstr ""
-
-#: R/lassocox.b.R
-msgid ""
-"Survival data not available.\n"
-"\n"
-"Please check that:\n"
-"• Time and outcome variables are properly selected\n"
-"• Data contains valid survival information"
 msgstr ""
 
 #: survivalcont/options/cutp.title
@@ -11449,18 +11499,18 @@ msgstr ""
 #: R/timeinterval.b.R
 msgid ""
 "The {landmark} landmark excluded no participants, because it is only "
-"{share}% of the median follow-up in these data ({median} {unit}). It still "
-"subtracted {amount} from every interval, so every duration and the total "
-"person-time below are that much smaller than the follow-up observed. Check "
-"that the landmark is expressed in the same unit as the results ({unit}): "
-"entering a value meant as months while the output unit is days is the usual "
-"cause."
+"{share}% of the median observed interval in these data ({median} {unit}). It "
+"still subtracted {amount} from every interval, so every duration and the "
+"total person-time below are that much smaller than the follow-up observed. "
+"Check that the landmark is expressed in the same unit as the results "
+"({unit}): entering a value meant as months while the output unit is days is "
+"the usual cause."
 msgstr ""
 
 #: R/timeinterval.b.R
 msgid ""
-"The {landmark} landmark is later than the median follow-up in these data "
-"({median} {unit}), so more than half the cohort could not reach it and "
+"The {landmark} landmark is later than the median observed interval in these "
+"data ({median} {unit}), so more than half the cohort could not reach it and "
 "{excluded} of {total} observations were excluded. What remains is a subgroup "
 "defined by having been followed to the landmark, and the total person-time "
 "above is the denominator for that subgroup only: a rate computed from it "
@@ -11659,6 +11709,13 @@ msgid ""
 "When publishing, cite survminer and maxstat."
 msgstr ""
 
+#: R/outcomeorganizer.b.R
+msgid ""
+"The cut-off reads %s while follow-up reaches only %s - that is what a date "
+"looks like once it has been imported as a plain number, and it is almost "
+"certainly not in the same units as the follow-up time."
+msgstr ""
+
 #: R/survivalcont.b.R
 msgid ""
 "The data-derived cut-off point for {variable_name} is {cutoff_value}; it "
@@ -11737,10 +11794,23 @@ msgid ""
 "indicates a higher fitted subdistribution hazard for the event of interest."
 msgstr ""
 
+#: R/lassocox.b.R
+msgid ""
+"The empty model is a valid result. Choose another lambda rule only as a "
+"prespecified modeling decision and report that choice transparently."
+msgstr ""
+
 #: R/outcomeorganizer.b.R
 msgid ""
 "the event of interest (coded 1); this outcome also carries competing states, "
 "listed below"
+msgstr ""
+
+#: R/multisurvival.b.R
+msgid ""
+"The explanatory variable '{var}' has only one value in the analysed rows, so "
+"no effect can be estimated for it. Remove it, or check the data filter and "
+"missing values."
 msgstr ""
 
 #: R/survival.b.R
@@ -12063,6 +12133,27 @@ msgstr ""
 msgid "The outcome should indicate whether the event of interest occurred"
 msgstr ""
 
+#: lassocox/options/censorLevel.description.ui
+msgid ""
+"The outcome value for patients without the event. If left empty, the other "
+"of the two observed values is used."
+msgstr ""
+
+#: multisurvival/options/outcomeLevel.description.ui
+msgid ""
+"The outcome value that means the event happened (for example Dead, or 2 in a "
+"column coded 1/2). Every other value is treated as censored. Required unless "
+"the outcome is numeric 0/1; if a numeric column lists no values here, set "
+"its measure type to Nominal in Data > Setup."
+msgstr ""
+
+#: lassocox/options/outcomeLevel.description.ui
+msgid ""
+"The outcome value that means the event happened (for example Dead, or 2 in a "
+"column coded 1/2). Required unless the outcome is numeric 0/1. Values are "
+"matched exactly; the event is never taken from level order or numeric size."
+msgstr ""
+
 #: R/singlearm.b.R
 msgid "the outcome variable"
 msgstr ""
@@ -12261,6 +12352,12 @@ msgstr ""
 
 #: R/lassocox.b.R
 msgid ""
+"The selected rule retained no predictor columns, so there are no "
+"coefficients to plot."
+msgstr ""
+
+#: R/lassocox.b.R
+msgid ""
 "The selected rule retained no predictor columns; this valid empty model was "
 "preserved."
 msgstr ""
@@ -12324,6 +12421,10 @@ msgstr ""
 
 #: R/survivalcont.b.R
 msgid "The stratification variable has fewer than two levels in the analysed rows."
+msgstr ""
+
+#: R/lassocox.b.R
+msgid "The survival plot could not be drawn: {msg}"
 msgstr ""
 
 #: R/survivalcont.b.R
@@ -13054,6 +13155,21 @@ msgstr ""
 msgid "To fix:"
 msgstr ""
 
+#: R/multisurvival.b.R
+msgid ""
+"To fix: check that the correct outcome variable is selected, verify its type "
+"under Data > Setup, and convert a text variable to a numeric or factor "
+"outcome, for example with Transform > Compute."
+msgstr ""
+
+#: R/multisurvival.b.R
+msgid ""
+"To fix: select the level that represents the event with the Event Level "
+"option, or recode the outcome as numeric (0 = censored, 1 = event) or "
+"logical (FALSE/TRUE). For competing risks, use a factor with the levels "
+"'Censored', 'Event' and 'Competing'."
+msgstr ""
+
 #: R/lassocox.b.R
 msgid ""
 "Too few complete cases for analysis ({n}). Need at least 10 complete "
@@ -13076,10 +13192,6 @@ msgstr ""
 msgid ""
 "Total observed follow-up is zero, so an incidence rate cannot be calculated. "
 "Check the time variable and its units."
-msgstr ""
-
-#: R/multisurvival.b.R
-msgid "Total patients:"
 msgstr ""
 
 #: R/timeinterval.b.R
@@ -13941,6 +14053,14 @@ msgstr ""
 msgid ""
 "Within-subgroup hazard ratios are disabled in competing-risks (Fine-Gray) "
 "mode; interpret the interaction coefficient above instead."
+msgstr ""
+
+#: R/multisurvival.b.R
+msgid ""
+"Within-subgroup hazard ratios are exploratory: their p-values are not "
+"adjusted for multiple comparisons, and a significant result in one subgroup "
+"but not in another is not evidence that the effect differs. Use the "
+"interaction test above to judge effect modification."
 msgstr ""
 
 #: R/multisurvival.b.R

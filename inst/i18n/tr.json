@@ -7,36 +7,6 @@
                 "lang": "tr",
                 "plural_forms": "nplurals=2; plural=(n!=1);"
             },
-            "measured from the {adj} landmark": [
-                "{adj} sınır noktasından (landmark) itibaren ölçüldü"
-            ],
-            "plus %d with missing follow-up time": [
-                "artı eksik takip süresine sahip %d kişi"
-            ],
-            "%d patient(s) were left untouched because they have no follow-up time or no cut-off value; they keep their full follow-up and their original event status, so the cut-off applies to only part of the cohort. Supply the missing values, or exclude those rows, before comparing groups.": [
-                "Takip süresi veya kesme noktası değeri olmadığı için %d hasta olduğu gibi bırakıldı; tam takip sürelerini ve orijinal olay durumlarını korurlar, dolayısıyla kesme noktası kohortun yalnızca bir kısmı için geçerlidir. Grupları karşılaştırmadan önce eksik değerleri sağlayın veya bu satırları hariç tutun."
-            ],
-            "All times reported here are measured FROM the landmark, not from study entry, and all estimates are conditional on being event-free at the landmark. They are not comparable with unlandmarked survival times.": [
-                "Burada bildirilen tüm süreler çalışmaya girişten değil, landmark (referans) zamanından itibaren ölçülür ve tüm tahminler landmark anında olaysız olma koşuluna bağlıdır. Landmark uygulanmamış sağkalım süreleriyle karşılaştırılamazlar."
-            ],
-            "Calibration slope < 0.8 suggests the model predictions are too extreme (overfitting).": [
-                "Kalibrasyon eğiminin < 0.8 olması, model tahminlerinin çok uç olduğunu (aşırı uyum / overfitting) gösterir."
-            ],
-            "Calibration slope near 1 indicates good calibration.": [
-                "Kalibrasyon eğiminin 1'e yakın olması iyi kalibrasyonu gösterir."
-            ],
-            "Calibration slope slightly below 1 indicates mild overfitting.": [
-                "Kalibrasyon eğiminin 1'in biraz altında olması hafif düzeyde aşırı uyumu gösterir."
-            ],
-            "Excluding this share of the cohort can introduce selection bias; the landmark should be prespecified.": [
-                "Kohortun bu oranının hariç tutulması seçim yanlılığına (selection bias) yol açabilir; sınır noktası (landmark) önceden belirlenmelidir."
-            ],
-            "Full state breakdown (of {total} coded records): {states}.": [
-                "Tam durum dökümü ({total} kodlanmış kayıt içinde): {states}."
-            ],
-            "The cut-off reads %s while follow-up reaches only %s - that is what a date looks like once it has been imported as a plain number, and it is almost certainly not in the same units as the follow-up time.": [
-                "Kesme noktası %s olarak okunurken takip süresi yalnızca %s düzeyine ulaşıyor - bu, bir tarihin düz bir sayı olarak içe aktarıldığında aldığı görünümdür ve neredeyse kesinlikle takip süresiyle aynı birimde değildir."
-            ],
             "- A per-patient state code (0 = disease-free, 1 = disease, 2 = death from disease, 3 = death from other causes)": [
                 "- Hasta başına durum kodu (0 = hastalıksız, 1 = hastalık, 2 = hastalıktan ölüm, 3 = diğer nedenlerden ölüm)"
             ],
@@ -84,12 +54,6 @@
             ],
             "- Standard survival analysis with death as censoring": [
                 "- Ölümün sansürleme olarak alındığı standart sağkalım analizi"
-            ],
-            "{missing} of the {total} rows were missing": [
-                "{total} satırın {missing} tanesi kayıptı"
-            ],
-            "Check variability, group-size constraints, and event counts, or use the continuous Cox model.": [
-                "Değişkenliği, grup büyüklüğü kısıtlamalarını ve olay sayılarını kontrol edin veya sürekli Cox modelini kullanın."
             ],
             "'{analysis}' is not available with Multiple Event Levels enabled. Recurrence-based endpoints (RFS, PFS, DFS, TTP) are built from the Recurrence/Progression variable together with the outcome, not from the four vital-status categories. Turn Multiple Event Levels off and select a Recurrence/Progression variable, or choose Overall Survival, Cause-Specific, Competing Risks or Multistate.": [
                 "Çoklu Olay Düzeyleri etkinken '{analysis}' kullanılamaz. Nükse dayalı sonlanım noktaları (RFS, PFS, DFS, TTP), dört yaşamsal durum kategorisinden değil, sonuçla birlikte Nüks/İlerleme değişkeninden oluşturulur. Çoklu Olay Düzeylerini kapatın ve bir Nüks/İlerleme değişkeni seçin ya da Genel Sağkalım, Nedene Özgü, Yarışan Riskler veya Çok Durumlu seçeneğini belirleyin."
@@ -184,6 +148,9 @@
             "{median}: Natural Language Summary": [
                 "{median}: Doğal Dil Özeti"
             ],
+            "{missing} of the {total} rows were missing": [
+                "{total} satırın {missing} tanesi kayıptı"
+            ],
             "{n} missing time intervals due to missing dates": [
                 "Eksik tarihler nedeniyle {n} eksik zaman aralığı"
             ],
@@ -276,6 +243,9 @@
             ],
             "%d patient(s) have more than one row. For each, the EARLIEST record carrying the priority outcome (%s) was kept as the event and their later rows were censored, so the event is not moved earlier in time.": [
                 "%d hasta birden fazla satıra sahiptir. Her biri için öncelikli sonucu (%s) taşıyan EN ERKEN kayıt olay olarak tutulmuş ve sonraki satırları sansürlenmiştir, böylece olay zamanda daha erkene taşınmaz."
+            ],
+            "%d patient(s) were left untouched because they have no follow-up time or no cut-off value; they keep their full follow-up and their original event status, so the cut-off applies to only part of the cohort. Supply the missing values, or exclude those rows, before comparing groups.": [
+                "Takip süresi veya kesme noktası değeri olmadığı için %d hasta olduğu gibi bırakıldı; tam takip sürelerini ve orijinal olay durumlarını korurlar, dolayısıyla kesme noktası kohortun yalnızca bir kısmı için geçerlidir. Grupları karşılaştırmadan önce eksik değerleri sağlayın veya bu satırları hariç tutun."
             ],
             "%d row(s) have an interval start later than their interval end. An interval must run forwards - Surv(type='interval2') requires start <= end - so these rows cannot be used as they stand. Check that the Interval Start and Interval End variables are not swapped.": [
                 "%d satırın aralık başlangıcı aralık bitişinden sonradır. Bir aralık ileriye doğru gitmelidir - Surv(type='interval2') start <= end şartını arar - bu nedenle bu satırlar bu haliyle kullanılamaz. Aralık Başlangıcı ve Aralık Bitişi değişkenlerinin yer değiştirip değiştirmediğini kontrol edin."
@@ -667,9 +637,6 @@
             "Adjusted Probability Curves": [
                 "Düzeltilmiş Olasılık Eğrileri"
             ],
-            "Adjusted Probability Natural Language Summary": [
-                "Düzeltilmiş Olasılık Doğal Dil Özeti"
-            ],
             "Adjusted Probability Plot": [
                 "Düzeltilmiş Olasılık Grafiği"
             ],
@@ -919,6 +886,9 @@
             "All tests compare survival distributions across levels of {title}. These are members of the Fleming-Harrington G-rho family (survival::survdiff): rho=0 is the standard log-rank test (equal weight at all time points); larger rho weights early events more heavily (weights = S(t)^rho). When survival curves cross or the proportional hazards assumption is violated, different rho values may yield different conclusions.": [
                 "Tüm testler {title} düzeyleri arasındaki sağkalım dağılımlarını karşılaştırır. Bunlar Fleming-Harrington G-rho ailesinin (survival::survdiff) üyeleridir: rho=0 standart log-rank testidir (tüm zaman noktalarında eşit ağırlık); daha büyük rho değerleri erken olaylara daha fazla ağırlık verir (ağırlıklar = S(t)^rho). Sağkalım eğrileri kesiştiğinde veya orantılı tehlikeler varsayımı ihlal edildiğinde, farklı rho değerleri farklı sonuçlar verebilir."
             ],
+            "All times reported here are measured FROM the landmark, not from study entry, and all estimates are conditional on being event-free at the landmark. They are not comparable with unlandmarked survival times.": [
+                "Burada bildirilen tüm süreler çalışmaya girişten değil, landmark (referans) zamanından itibaren ölçülür ve tüm tahminler landmark anında olaysız olma koşuluna bağlıdır. Landmark uygulanmamış sağkalım süreleriyle karşılaştırılamazlar."
+            ],
             "All values in {name} are missing (NA). • Please select a column with valid datetime entries before proceeding.": [
                 "{name} içindeki tüm değerler kayıptır (NA). • Lütfen devam etmeden önce geçerli tarih-saat girişleri olan bir sütun seçin."
             ],
@@ -1005,9 +975,6 @@
             ],
             "Analysis warning": [
                 "Analiz uyarısı"
-            ],
-            "Analysis will proceed, but consider these recommendations for optimal results.": [
-                "Analiz devam edecek; ancak en iyi sonuçlar için bu önerileri dikkate alın."
             ],
             "Analysis with Multiple Outcomes": [
                 "Çoklu Sonlanımlı Analiz"
@@ -1303,6 +1270,15 @@
             "Calibration slope": [
                 "Kalibrasyon eğimi"
             ],
+            "Calibration slope < 0.8 suggests the model predictions are too extreme (overfitting).": [
+                "Kalibrasyon eğiminin < 0.8 olması, model tahminlerinin çok uç olduğunu (aşırı uyum / overfitting) gösterir."
+            ],
+            "Calibration slope near 1 indicates good calibration.": [
+                "Kalibrasyon eğiminin 1'e yakın olması iyi kalibrasyonu gösterir."
+            ],
+            "Calibration slope slightly below 1 indicates mild overfitting.": [
+                "Kalibrasyon eğiminin 1'in biraz altında olması hafif düzeyde aşırı uyumu gösterir."
+            ],
             "Calibration Time Point": [
                 "Kalibrasyon Zaman Noktası"
             ],
@@ -1408,6 +1384,12 @@
             "Check that the variable name is correct in your dataset": [
                 "Değişken adının veri setinizde doğru olduğunu kontrol edin"
             ],
+            "Check the selected variables and the model options.": [
+                ""
+            ],
+            "Check variability, group-size constraints, and event counts, or use the continuous Cox model.": [
+                "Değişkenliği, grup büyüklüğü kısıtlamalarını ve olay sayılarını kontrol edin veya sürekli Cox modelini kullanın."
+            ],
             "Chi-square": [
                 "Ki-kare"
             ],
@@ -1416,6 +1398,9 @@
             ],
             "Choose parametric distribution for survival modeling. Weibull is most common, while splines provide flexible hazard shapes. Different distributions make different assumptions about hazard function shape.": [
                 "Sağkalım modellemesi için parametrik dağılımı seçin. Weibull en yaygın olanıdır, splinelar ise esnek hazard şekilleri sağlar. Farklı dağılımlar hazard fonksiyonu şekli hakkında farklı varsayımlarda bulunur."
+            ],
+            "Choose the Event Level: the outcome value that means the event happened. Values found: {levels}. The analysis does not pick one from the level order, because the order does not say which value is the event.": [
+                ""
             ],
             "Choose which binary predictor to use for the separate, unadjusted sensitivity, specificity, and likelihood-ratio calculations. If left empty, the first explanatory variable is used when it is binary.": [
                 "Ayrı, düzeltilmemiş duyarlılık, özgüllük ve olabilirlik oranı hesaplamaları için hangi ikili belirtecin kullanılacağını seçin. Boş bırakılırsa, ikili olduğunda ilk açıklayıcı değişken kullanılır."
@@ -2035,8 +2020,8 @@
             "Data Quality Assessment": [
                 "Veri Kalitesi Değerlendirmesi"
             ],
-            "Data suitability": [
-                "Veri uygunluğu"
+            "Data Suitability": [
+                ""
             ],
             "Data suitability assessment": [
                 "Veri uygunluğu değerlendirmesi"
@@ -2046,9 +2031,6 @@
             ],
             "Data Validation Issues": [
                 "Veri Doğrulama Sorunları"
-            ],
-            "Data Validation Warnings": [
-                "Veri Doğrulama Uyarıları"
             ],
             "Data validation warnings": [
                 "Veri doğrulama uyarıları"
@@ -2416,6 +2398,9 @@
             "Each row is a piecewise occurrence/exposure rate for (previous endpoint, Time], with the first interval including time zero. Equal-width intervals span the observed follow-up; their number is limited to about one interval per 10 total events (maximum 10) to reduce sparsity. Person-time is calculated exactly from individual follow-up. Limits are Garwood Poisson 95% intervals conditional on the observed exposure. These are interval rates, not pointwise instantaneous hazards or Cox-model coefficients.": [
                 "Her satır, ilk aralık sıfır zamanını içerecek şekilde (önceki uç nokta, Zaman] için parçalı bir oluşum/maruziyet hızıdır. Eşit genişlikteki aralıklar gözlemlenen takibi kapsar; seyrekleşmeyi azaltmak için sayıları toplam 10 olay başına yaklaşık bir aralıkla (maksimum 10) sınırlandırılmıştır. Kişi-zamanı, bireysel takipten tam olarak hesaplanır. Sınırlar, gözlemlenen maruziyete bağlı olarak Garwood Poisson %95 aralıklarıdır. Bunlar aralık hızlarıdır, noktasal anlık tehlikeler veya Cox modeli katsayıları değildir."
             ],
+            "Each row is a separate likelihood-ratio test for that covariate given all the others; the p-values are not adjusted for multiple comparisons.": [
+                ""
+            ],
             "Each row tests whether the focal effect differs across the moderator (effect modification). A significant p indicates the effect is modified.": [
                 "Her satır odak etkisinin moderatöre göre farklılaşıp farklılaşmadığını (etki değişimi) test eder. Anlamlı bir p, etkinin değiştiğini gösterir."
             ],
@@ -2584,9 +2569,6 @@
             "Error creating residuals plot: {message}": [
                 "Artıklar grafiği oluşturulurken hata: {message}"
             ],
-            "Error creating survival plot:\n{msg}\n\nPlease check your data and model parameters.": [
-                "Sağkalım grafiği oluşturulurken hata: {msg}. Verilerinizi ve model parametrelerini kontrol ediniz."
-            ],
             "Error fitting Firth model: {message}": [
                 "Firth modeli uydurulurken hata oluştu: {message}"
             ],
@@ -2604,9 +2586,6 @@
             ],
             "Error setting variable labels.": [
                 "Değişken etiketleri ayarlanırken hata oluştu."
-            ],
-            "Error:": [
-                "Hata:"
             ],
             "Error: Data could not be cleaned for analysis.": [
                 "Hata: Veriler analiz için temizlenemedi."
@@ -2707,6 +2686,12 @@
             "Event Rate": [
                 "Olay oranı"
             ],
+            "Event status with exactly two observed values. A numeric column coded 0/1 is read as 0 = censored, 1 = event. Any other coding (for example 1/2, or Alive/Dead) is never guessed: choose the event value in Event level.": [
+                ""
+            ],
+            "Event status. A numeric column coded 0/1 is read as 0 = censored, 1 = event. Any other coding (for example 1/2, or text such as Alive/Dead) is never guessed: choose the event value in Event Level.": [
+                ""
+            ],
             "Event Time": [
                 "Olay Zamanı"
             ],
@@ -2788,6 +2773,9 @@
             "Excluded %d observation%s with missing time or outcome values. Analysis based on %d complete cases.": [
                 "Kayıp zaman veya sonuç değerleri olan %d gözlem%s hariç tutuldu. Analiz %d eksiksiz olguya dayanmaktadır."
             ],
+            "Excluding this share of the cohort can introduce selection bias; the landmark should be prespecified.": [
+                "Kohortun bu oranının hariç tutulması seçim yanlılığına (selection bias) yol açabilir; sınır noktası (landmark) önceden belirlenmelidir."
+            ],
             "Expected Deaths": [
                 "Beklenen Ölümler"
             ],
@@ -2800,8 +2788,8 @@
             "Explanatory notes": [
                 "Açıklayıcı notlar"
             ],
-            "Explanatory output": [
-                "Açıklayıcı çıktılar"
+            "Explanatory Output": [
+                ""
             ],
             "Explanatory Variable": [
                 "Açıklayıcı Değişken"
@@ -3070,6 +3058,9 @@
             "Four Groups": [
                 "Dört Grup"
             ],
+            "Full state breakdown (of {total} coded records): {states}.": [
+                "Tam durum dökümü ({total} kodlanmış kayıt içinde): {states}."
+            ],
             "Gamma": [
                 "Gama"
             ],
@@ -3243,6 +3234,9 @@
             ],
             "How It Works:": [
                 "Nasıl Çalışır:"
+            ],
+            "How this numeric outcome was read: the value {event} is the event and every other value ({censored}) is treated as censored. Values are matched exactly, not by size, so for a column coded 1/2 the Event Level decides which value is the event.": [
+                ""
             ],
             "How to read the nomogram:": [
                 "Nomogram nasıl okunur:"
@@ -3631,6 +3625,9 @@
             "Landmark analysis excluded every participant: none of the {n} observations reached the {amount} landmark. Lower the landmark time or switch landmark analysis off.": [
                 "Yer işareti analizi tüm katılımcıları hariç tuttu: {n} gözlemin hiçbiri {amount} yer işaretine ulaşamadı. Yer işareti zamanını düşürün veya yer işareti analizini kapatın."
             ],
+            "Landmark analysis is on: rows with follow-up shorter than the landmark time were excluded before this check.": [
+                ""
+            ],
             "Landmark analysis removed %d subject(s) whose follow-up ended at or before %s %s; %d remain. Time is measured from the landmark, and estimates are conditional on surviving to it.": [
                 "Yer işareti analizi, takibi %s %s veya öncesinde sona eren %d deneği çıkardı; %d denek kaldı. Zaman yer işaretinden itibaren ölçülür ve tahminler o zamana kadar hayatta kalmaya bağlıdır."
             ],
@@ -3862,6 +3859,9 @@
             "Meaning": [
                 "Anlam"
             ],
+            "measured from the {adj} landmark": [
+                "{adj} sınır noktasından (landmark) itibaren ölçüldü"
+            ],
             "Measures rank discrimination among comparable patient pairs. 0.5 indicates chance ordering and 1.0 perfect ordering. There are no universal clinical cut-offs; adequacy depends on the intended use, outcome, case mix, and external validation.": [
                 "Karşılaştırılabilir hasta çiftleri arasındaki sıralama ayırt etme gücünü ölçer. 0.5 rastgele sıralamayı, 1.0 kusursuz sıralamayı gösterir. Evrensel bir klinik kesim değeri yoktur; yeterlilik amaçlanan kullanıma, sonlanıma, olgu karışımına ve dış doğrulamaya bağlıdır."
             ],
@@ -4078,8 +4078,8 @@
             "Model Metrics:": [
                 "Model Ölçütleri:"
             ],
-            "Model options": [
-                "Model seçenekleri"
+            "Model Options": [
+                ""
             ],
             "Model performance metrics": [
                 "Model performans ölçütleri"
@@ -4330,9 +4330,6 @@
             "No complete records remain after applying the selected variables and landmark restriction.": [
                 "Seçilen değişkenler ve sınır noktası kısıtlaması uygulandıktan sonra geriye tam bir kayıt kalmadı."
             ],
-            "No complete survival data available.\n\nThis can occur when:\n• There are missing values in time or outcome variables\n• Risk score calculation failed\n• Data filtering removed all observations": [
-                "Tam sağkalım verisi yok. Zaman veya sonlanım değerleri eksik olabilir, risk skoru hesaplaması başarısız olmuş olabilir ya da veri süzme tüm gözlemleri dışlamış olabilir."
-            ],
             "No concern was identified by these limited checks; formal sample-size planning and validation are still required.": [
                 "Bu sınırlı kontrollerde sorun belirlenmedi; biçimsel örneklem büyüklüğü planlaması ve doğrulama yine gereklidir."
             ],
@@ -4483,8 +4480,8 @@
             "No valid time intervals could be calculated. Check that the date format setting matches the data and that both date columns contain readable dates.": [
                 "Geçerli zaman aralıkları hesaplanamadı. Tarih biçimi ayarının verilerle eşleştiğini ve her iki tarih sütununun da okunabilir tarihler içerdiğini kontrol edin."
             ],
-            "No variable-based risk scores are available because the selected rule retained no predictors.\n\nThe empty model is a valid result. Choose another lambda rule only as a prespecified modeling decision and report that choice transparently.": [
-                "Seçilen kural hiçbir yordayıcıyı korumadığı için değişkene dayalı risk skorları yoktur. Boş model geçerli bir sonuçtur. Farklı bir lambda kuralını yalnızca önceden belirlenmiş bir modelleme kararı olarak seçiniz ve bu seçimi açıkça raporlayınız."
+            "No variable-based risk scores are available because the selected rule retained no predictors.": [
+                ""
             ],
             "No variables selected": [
                 "Değişken seçilmedi"
@@ -4687,8 +4684,14 @@
             "Numeric Format Selected For A Text Column": [
                 "Metin Sütunu İçin Sayısal Biçim Seçildi"
             ],
+            "Numeric outcome is not coded 0/1. Values found: {values}. The analysis does not guess which value is the event, because a coding such as 1/2 means 2 = event in some datasets and 1 = event in others. Either recode it as 0 = censored / 1 = event, or choose the value that represents the event in Event Level (in jamovi, first set the column's measure type to Nominal in Data > Setup so its values are listed).": [
+                ""
+            ],
             "Numeric outcome must have exactly 2 observed values. Found {n} value(s): {values}. For competing events, construct an explicit binary cause-specific status in which the event of interest is 1 and every non-event observation is 0; do not omit other event types.": [
                 "Sayısal sonlanım tam olarak 2 gözlenen değer içermelidir. {n} değer bulundu: {values}. Yarışan olaylar için ilgilenilen olayın 1, olay dışındaki tüm gözlemlerin 0 olduğu açık bir ikili nedene özgü durum oluşturunuz; diğer olay türlerini dışlamayınız."
+            ],
+            "Numeric outcomes: a column coded 0/1 is read as 0 = censored and 1 = event. Any other coding, such as 1/2, is never guessed: choose the event value in Event Level (set the column to Nominal in Data > Setup if its values are not listed). Every other value is treated as censored.": [
+                ""
             ],
             "Numeric: one-unit increase": [
                 "Sayısal: bir birim artış"
@@ -4876,6 +4879,9 @@
             "Outcome Distribution": [
                 "Sonuç Dağılımı"
             ],
+            "Outcome Factor Has Unsupported Levels: the outcome variable has non-numeric levels that cannot be interpreted as events: {levels}.": [
+                ""
+            ],
             "Outcome imbalance may make folds and performance estimates unstable; inspect absolute event and censoring counts.": [
                 "Sonlanım dengesizliği katları ve performans tahminlerini kararsızlaştırabilir; mutlak olay ve sansürlü gözlem sayılarını inceleyiniz."
             ],
@@ -4954,6 +4960,9 @@
             "Outcome variable summary: {counts}": [
                 "Sonuç değişkeni özeti: {counts}"
             ],
+            "Outcome Variable Type Not Supported: the outcome variable has type '{type}', which cannot be used for survival analysis.": [
+                ""
+            ],
             "Outcome/event indicator contains %d missing (NA) value(s) after data cleaning. Every observation must be classified as an event or as censored. Analysis was halted. Check the outcome variable and the selected event level.": [
                 "Sonuç/olay göstergesi veri temizliğinden sonra %d eksik (NA) değer içermektedir. Her gözlem bir olay veya sansürlenmiş olarak sınıflandırılmalıdır. Analiz durduruldu. Sonuç değişkenini ve seçilen olay düzeyini kontrol edin."
             ],
@@ -4962,9 +4971,6 @@
             ],
             "Output Options": [
                 "Çıktı Seçenekleri"
-            ],
-            "Output options": [
-                "Çıktı seçenekleri"
             ],
             "Output table": [
                 "Çıktı tablosu"
@@ -5097,6 +5103,9 @@
             ],
             "patients in the disease state": [
                 "hastalık durumundaki hastalar"
+            ],
+            "Patients in the model:": [
+                ""
             ],
             "Patients were then divided at empirical quantile cutpoints into {groups} groups based on these scores (ties can make group sizes unequal):": [
                 "Hastalar daha sonra bu skorlara göre ampirik kantil kesim noktalarından {groups} gruba ayrıldı (bağlar grup büyüklüklerini eşitsiz yapabilir):"
@@ -5359,6 +5368,9 @@
             "Plots Explanations": [
                 "Grafik Açıklamaları"
             ],
+            "plus %d with missing follow-up time": [
+                "artı eksik takip süresine sahip %d kişi"
+            ],
             "Points to Risk Conversion": [
                 "Puandan Riske Dönüşüm"
             ],
@@ -5556,6 +5568,9 @@
             ],
             "Random seed used to select candidate combinations when the minimum-P-value search space is too large for exhaustive evaluation.": [
                 "Minimum P-değeri arama uzayı kapsamlı değerlendirme için çok büyük olduğunda aday kombinasyonları seçmek için kullanılan rastgele tohum."
+            ],
+            "Random seed: {seed}": [
+                ""
             ],
             "Rank discrimination at this horizon; 0.5 = chance, 1.0 = perfect ordering": [
                 "Bu zaman ufkunda sıralama ayırt etme gücü; 0.5 = şans, 1.0 = kusursuz sıralama"
@@ -5992,9 +6007,6 @@
             "Second (0-59)": [
                 "Saniye (0-59)"
             ],
-            "Seed": [
-                "Tohum"
-            ],
             "Select a continuous predictor variable to assess for non-linear effects. The variable will be modeled with restricted cubic splines and compared to a linear model. Common candidates include age, tumor size, biomarker levels, and follow-up duration.": [
                 "Doğrusal olmayan etkileri değerlendirmek için sürekli bir öngörücü değişken seçin. Değişken kısıtlı kübik splinelar ile modellenecek ve doğrusal bir modelle karşılaştırılacaktır. Yaygın adaylar arasında yaş, tümör boyutu, biyobelirteç düzeyleri ve takip süresi yer alır."
             ],
@@ -6094,8 +6106,11 @@
             "Shaded area:": [
                 "Gölgeli alan:"
             ],
-            "Short median follow-up ({time} {units}). May be insufficient for meaningful survival analysis.": [
-                "Medyan izlem kısa ({time} {units}). Anlamlı bir sağkalım analizi için yetersiz olabilir."
+            "Short median follow-up ({time} {units}, reverse Kaplan-Meier). May be insufficient for meaningful survival analysis.": [
+                ""
+            ],
+            "Short median observed time ({time} {units}). Median follow-up could not be estimated by reverse Kaplan-Meier, so this is the median time to event-or-censoring, which understates how long the cohort was observed. Interpret the adequacy of follow-up with that in mind.": [
+                ""
             ],
             "Show Kaplan-Meier survival curves stratified by age groups. Displays separate curves for each age group within the explanatory variable.": [
                 "Yaş gruplarına göre tabakalandırılmış Kaplan-Meier sağkalım eğrilerini gösterin. Açıklayıcı değişken içindeki her yaş grubu için ayrı eğriler görüntüler."
@@ -6433,6 +6448,9 @@
             "Summary of Outcome Recoding": [
                 "Sonuç Yeniden Kodlama Özeti"
             ],
+            "Supported types: numeric 0 (censored) and 1 (event); logical FALSE (censored) and TRUE (event); or a factor with numeric levels ('0'/'1') or competing-risk levels ('Censored'/'Event'/'Competing').": [
+                ""
+            ],
             "Survival": [
                 "Sağkalım"
             ],
@@ -6489,9 +6507,6 @@
             ],
             "Survival data export skipped (competing risks)": [
                 "Sağkalım verilerini dışa aktarma atlandı (yarışan riskler)"
-            ],
-            "Survival data not available.\n\nPlease check that:\n• Time and outcome variables are properly selected\n• Data contains valid survival information": [
-                "Sağkalım verisi mevcut değil. Zaman ve sonlanım değişkenlerinin doğru seçildiğini ve verinin geçerli sağkalım bilgisi içerdiğini kontrol ediniz."
             ],
             "Survival estimate time points": [
                 "Sağkalım tahmini zaman noktaları"
@@ -6634,11 +6649,11 @@
             "The 'rms' package is required for nomogram generation but is not available.": [
                 "Nomogram oluşturmak için 'rms' paketi gerekli ancak kullanılamıyor."
             ],
-            "The {landmark} landmark excluded no participants, because it is only {share}% of the median follow-up in these data ({median} {unit}). It still subtracted {amount} from every interval, so every duration and the total person-time below are that much smaller than the follow-up observed. Check that the landmark is expressed in the same unit as the results ({unit}): entering a value meant as months while the output unit is days is the usual cause.": [
-                "{landmark} yer işareti hiçbir katılımcıyı hariç tutmadı, çünkü bu verilerdeki medyan takibin yalnızca %{share}'idir ({median} {unit}). Yine de her aralıktan {amount} çıkardı, bu nedenle aşağıdaki her süre ve toplam kişi-zamanı gözlemlenen takipten o kadar küçüktür. Yer işaretinin sonuçlarla aynı birimde ({unit}) ifade edildiğini kontrol edin: çıktı birimi gün iken ay olarak amaçlanan bir değer girmek olağan nedendir."
+            "The {landmark} landmark excluded no participants, because it is only {share}% of the median observed interval in these data ({median} {unit}). It still subtracted {amount} from every interval, so every duration and the total person-time below are that much smaller than the follow-up observed. Check that the landmark is expressed in the same unit as the results ({unit}): entering a value meant as months while the output unit is days is the usual cause.": [
+                ""
             ],
-            "The {landmark} landmark is later than the median follow-up in these data ({median} {unit}), so more than half the cohort could not reach it and {excluded} of {total} observations were excluded. What remains is a subgroup defined by having been followed to the landmark, and the total person-time above is the denominator for that subgroup only: a rate computed from it answers \"among those still under observation at {amount}, how often did events occur\", not the same question for the cohort you enrolled. This analysis has no event indicator, so it cannot tell you whether the excluded participants had short follow-up because they died early or simply because they were enrolled recently - check that before interpreting the selection. Report the landmark, the number excluded and the reason alongside any rate taken from this analysis.": [
-                "{landmark} yer işareti bu verilerdeki medyan takipten ({median} {unit}) daha sonradır, bu nedenle kohortun yarısından fazlası ona ulaşamadı ve {total} gözlemin {excluded} tanesi hariç tutuldu. Geriye kalan, yer işaretine kadar takip edilmiş olarak tanımlanan bir alt gruptur ve yukarıdaki toplam kişi-zamanı yalnızca bu alt grup için paydadır: bundan hesaplanan bir hız \"kaydettiğiniz kohort için aynı soruyu değil, {amount} anında hala gözlem altında olanlar arasında olaylar ne sıklıkla meydana geldi\" sorusuna yanıt verir. Bu analizde olay göstergesi yoktur, bu nedenle hariç tutulan katılımcıların erken öldükleri için mi yoksa sadece yakın zamanda kaydoldukları için mi kısa takipleri olduğunu söyleyemez - seçimi yorumlamadan önce bunu kontrol edin. Yer işaretini, hariç tutulanların sayısını ve nedenini bu analizden alınan herhangi bir hızın yanında bildirin."
+            "The {landmark} landmark is later than the median observed interval in these data ({median} {unit}), so more than half the cohort could not reach it and {excluded} of {total} observations were excluded. What remains is a subgroup defined by having been followed to the landmark, and the total person-time above is the denominator for that subgroup only: a rate computed from it answers \"among those still under observation at {amount}, how often did events occur\", not the same question for the cohort you enrolled. This analysis has no event indicator, so it cannot tell you whether the excluded participants had short follow-up because they died early or simply because they were enrolled recently - check that before interpreting the selection. Report the landmark, the number excluded and the reason alongside any rate taken from this analysis.": [
+                ""
             ],
             "The {rule} rule retained no predictor columns. The valid empty model has been preserved; choose a different lambda rule only as a prespecified modeling decision, not because the empty result is inconvenient.": [
                 "{rule} kuralı hiçbir yordayıcı sütununu korumadı. Geçerli boş model korundu; farklı bir lambda kuralını boş sonucu beğenmediğiniz için değil yalnızca önceden belirlenmiş bir modelleme kararı olarak seçiniz."
@@ -6730,6 +6745,9 @@
             "The cut-off is the value that maximises the standardised log-rank statistic (maximally selected rank statistic, survminer::surv_cutpoint / maxstat). No multiplicity-adjusted p-value is computed or reported for the selected cut-off; the group comparison p-values shown after the split are exploratory because the split was chosen from these same data. Report the continuous Cox model as the primary analysis and validate the cut-off in independent data. When publishing, cite survminer and maxstat.": [
                 "Kesme noktası, standartlaştırılmış log-rank istatistiğini en üst düzeye çıkaran değerdir (azami seçilmiş sıra istatistiği, survminer::surv_cutpoint / maxstat). Seçilen kesme noktası için çoklu test düzeltmesi yapılmış p değeri hesaplanmaz veya raporlanmaz; bölünmeden sonra gösterilen grup karşılaştırma p değerleri keşif amaçlıdır çünkü bölünme bu verilerin kendisinden seçilmiştir. Sürekli Cox modelini birincil analiz olarak raporlayın ve kesme noktasını bağımsız verilerde doğrulayın. Yayınlarken survminer ve maxstat paketlerine atıfta bulunun."
             ],
+            "The cut-off reads %s while follow-up reaches only %s - that is what a date looks like once it has been imported as a plain number, and it is almost certainly not in the same units as the follow-up time.": [
+                "Kesme noktası %s olarak okunurken takip süresi yalnızca %s düzeyine ulaşıyor - bu, bir tarihin düz bir sayı olarak içe aktarıldığında aldığı görünümdür ve neredeyse kesinlikle takip süresiyle aynı birimde değildir."
+            ],
             "The data-derived cut-off point for {variable_name} is {cutoff_value}; it separates lower and higher marker values in this dataset.": [
                 "{variable_name} için veriden türetilen kesme noktası {cutoff_value}'dir; bu veri kümesindeki daha düşük ve daha yüksek belirteç değerlerini ayırır."
             ],
@@ -6760,8 +6778,14 @@
             "The displayed score is the Fine-Gray relative subdistribution-hazard score, exp(centered linear predictor), calculated from all model coefficients. It is a ranking score, not an absolute event probability; a higher score indicates a higher fitted subdistribution hazard for the event of interest.": [
                 "Gösterilen skor, tüm model katsayılarından hesaplanan Fine-Gray göreceli alt dağılım tehlike skoru exp(merkezlenmiş doğrusal öngördürücü)'dür. Bir sıralama skorudur, mutlak olay olasılığı değildir; daha yüksek skor ilgilenilen olay için daha yüksek bir model alt dağılım tehlikesini gösterir."
             ],
+            "The empty model is a valid result. Choose another lambda rule only as a prespecified modeling decision and report that choice transparently.": [
+                ""
+            ],
             "the event of interest (coded 1); this outcome also carries competing states, listed below": [
                 "ilgilenilen olay (1 olarak kodlanmıştır); bu sonuç ayrıca aşağıda listelenen yarışan durumları da taşır"
+            ],
+            "The explanatory variable '{var}' has only one value in the analysed rows, so no effect can be estimated for it. Remove it, or check the data filter and missing values.": [
+                ""
             ],
             "The explanatory variable has only two levels, so there is a single comparison and no multiplicity adjustment is applied; it is equivalent to the overall log-rank test above.": [
                 "Açıklayıcı değişken yalnızca iki düzeye sahiptir, bu nedenle tek bir karşılaştırma vardır ve çoklu karşılaştırma düzeltmesi uygulanmaz; yukarıdaki genel log-rank testine eşdeğerdir."
@@ -6910,6 +6934,15 @@
             "The outcome should indicate whether the event of interest occurred": [
                 "Sonlanım, ilgilenilen olayın gerçekleşip gerçekleşmediğini göstermelidir"
             ],
+            "The outcome value for patients without the event. If left empty, the other of the two observed values is used.": [
+                ""
+            ],
+            "The outcome value that means the event happened (for example Dead, or 2 in a column coded 1/2). Every other value is treated as censored. Required unless the outcome is numeric 0/1; if a numeric column lists no values here, set its measure type to Nominal in Data > Setup.": [
+                ""
+            ],
+            "The outcome value that means the event happened (for example Dead, or 2 in a column coded 1/2). Required unless the outcome is numeric 0/1. Values are matched exactly; the event is never taken from level order or numeric size.": [
+                ""
+            ],
             "the outcome variable": [
                 "sonuç değişkeni"
             ],
@@ -7018,6 +7051,9 @@
             "The selected positive predictor level '{level}' is not present among paired complete observations. Available levels: {levels}.": [
                 "Seçilen pozitif belirteç düzeyi '{level}', eşleştirilmiş eksiksiz gözlemler arasında mevcut değildir. Mevcut düzeyler: {levels}."
             ],
+            "The selected rule retained no predictor columns, so there are no coefficients to plot.": [
+                ""
+            ],
             "The selected rule retained no predictor columns; this valid empty model was preserved.": [
                 "Seçilen kural hiçbir yordayıcı sütununu korumadı; bu geçerli boş model korundu."
             ],
@@ -7050,6 +7086,9 @@
             ],
             "The stratification variable has fewer than two levels in the analysed rows.": [
                 "Tabakalama değişkeni analiz edilen satırlarda ikiden az düzeye sahiptir."
+            ],
+            "The survival plot could not be drawn: {msg}": [
+                ""
             ],
             "The survival tree produced no usable split for '{var}'. Quantile cut-points are shown instead. This usually means the tree found no split meeting the complexity and minimum group-size criteria.": [
                 "Sağkalım ağacı '{var}' için kullanılabilir bir bölünme üretmedi. Bunun yerine kantil kesme noktaları gösterilmektedir. Bu genellikle ağacın karmaşıklık ve asgari grup büyüklüğü kriterlerini karşılayan bir bölünme bulamadığı anlamına gelir."
@@ -7408,6 +7447,12 @@
             "To fix:": [
                 "Düzeltmek için:"
             ],
+            "To fix: check that the correct outcome variable is selected, verify its type under Data > Setup, and convert a text variable to a numeric or factor outcome, for example with Transform > Compute.": [
+                ""
+            ],
+            "To fix: select the level that represents the event with the Event Level option, or recode the outcome as numeric (0 = censored, 1 = event) or logical (FALSE/TRUE). For competing risks, use a factor with the levels 'Censored', 'Event' and 'Competing'.": [
+                ""
+            ],
             "Too few complete cases for analysis ({n}). Need at least 10 complete observations.": [
                 "Analiz için çok az tam olgu var ({n}). En az 10 tam gözlem gerekir."
             ],
@@ -7422,9 +7467,6 @@
             ],
             "Total observed follow-up is zero, so an incidence rate cannot be calculated. Check the time variable and its units.": [
                 "Gözlenen toplam izlem sıfır olduğundan insidans hızı hesaplanamıyor. Zaman değişkenini ve birimlerini kontrol edin."
-            ],
-            "Total patients:": [
-                "Toplam hasta:"
             ],
             "Total person-time": [
                 "Toplam kişi-zamanı"
@@ -7932,6 +7974,9 @@
             ],
             "Within-subgroup hazard ratios are disabled in competing-risks (Fine-Gray) mode; interpret the interaction coefficient above instead.": [
                 "Alt grup içi tehlike oranları yarışan riskler (Fine-Gray) modunda devre dışıdır; bunun yerine yukarıdaki etkileşim katsayısını yorumlayın."
+            ],
+            "Within-subgroup hazard ratios are exploratory: their p-values are not adjusted for multiple comparisons, and a significant result in one subgroup but not in another is not evidence that the effect differs. Use the interaction test above to judge effect modification.": [
+                ""
             ],
             "Within-Subgroup Hazard Ratios.": [
                 "Alt Grup İçi Tehlike Oranları."
