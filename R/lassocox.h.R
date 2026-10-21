@@ -57,11 +57,13 @@ lassocoxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..outcomeLevel <- jmvcore::OptionLevel$new(
                 "outcomeLevel",
                 outcomeLevel,
-                variable="(outcome)")
+                variable="(outcome)",
+                allowNone=TRUE)
             private$..censorLevel <- jmvcore::OptionLevel$new(
                 "censorLevel",
                 censorLevel,
-                variable="(outcome)")
+                variable="(outcome)",
+                allowNone=TRUE)
             private$..explanatory <- jmvcore::OptionVariables$new(
                 "explanatory",
                 explanatory,
@@ -719,7 +721,7 @@ lassocoxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 package = "jsurvival",
                 name = "lassocox",
-                version = c(1,0,82),
+                version = c(1,1,1),
                 options = options,
                 results = lassocoxResults$new(options=options),
                 data = data,
@@ -740,7 +742,7 @@ lassocoxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' 
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' lassocox(
 #'     data = lassocox_breast_cancer,
 #'     elapsedtime = "survival_months",

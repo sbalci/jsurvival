@@ -4,7 +4,7 @@ title: Survival Analysis for Continuous Explanatory Variable
 menuGroup: Survival
 menuSubgroup: ClinicoPath Survival
 menuSubtitle: 'Cut-off & Univariate Survival Analysis'
-version: '1.0.81'
+version: '1.1.1'
 jas: '1.2'
 
 options:
@@ -83,12 +83,18 @@ options:
       description: >-
         The outcome variable to be used in the analysis.
 
+    # allowNone: without it the jamovi client pre-fills levels[0], so the first level - not
+    # the one the user means - becomes the event. Empty is handled below, never inferred.
     - name: outcomeLevel
       title: Event level
       type: Level
       variable: (outcome)
+      allowNone: true
       description: >-
         The level of the outcome variable that represents the event of interest.
+        Required for a factor outcome, and never taken from the order of the levels:
+        without it the analysis stops and lists the levels. A numeric 0/1 outcome is
+        read as 1 = event.
 
     - name: dod
       title: Dead of disease

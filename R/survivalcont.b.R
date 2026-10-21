@@ -216,7 +216,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
             .landmarkNote = function(tbl, results) {
                 offset <- results$landmark_offset
                 if (is.null(offset) || !is.finite(offset) || offset <= 0) return(invisible(NULL))
-                tbl$setNote("landmark", jmvcore::format(.("Times are measured from the landmark at {offset} {unit}, not from diagnosis; add {offset} to express a time as time from diagnosis."), offset = round(offset, 2), unit = self$options$timetypeoutput))
+                tbl$setNote("landmark", .fmt(.("Times are measured from the landmark at {offset} {unit}, not from diagnosis; add {offset} to express a time as time from diagnosis."), offset = round(offset, 2), unit = self$options$timetypeoutput))
                 invisible(NULL)
             },
 
@@ -585,23 +585,26 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                 # so `all_labels == <original>` always matches exactly one column.
                 mydata <- self$data
 
-                mydata$row_names <- rownames(mydata)
-
                 original_names <- names(mydata)
-
-                labels <- setNames(original_names, original_names)
-
-                mydata <- mydata %>% janitor::clean_names()
-
-                corrected_labels <-
-                    setNames(original_names, names(mydata))
+                # Reserve the join key before cleaning user names. A source column
+                # named row_names (or Row Names) must retain its values and mapping.
+                internal_names <- c(
+                    "row_names", "start", "end", "interval", "mytime", "myoutcome",
+                    "myfactor", "rmst_groups", "risk_groups", "test_groups"
+                )
+                names(mydata) <- janitor::make_clean_names(
+                    c(internal_names, original_names)
+                )[-seq_along(internal_names)]
+                corrected_labels <- setNames(original_names, names(mydata))
+                mydata$row_names <- rownames(mydata)
 
                 mydata <- labelled::set_variable_labels(
                     .data = mydata,
-                    .labels = corrected_labels
+                    .labels = c(corrected_labels, row_names = "row_names")
                 )
 
-                all_labels <- labelled::var_label(mydata)
+                # Only source variables belong in the selection/display mapping.
+                all_labels <- labelled::var_label(mydata)[names(corrected_labels)]
 
 
                 mytime <-
@@ -796,7 +799,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                             private$.addHtmlMessage(
                                 "error",
                                 .("Numeric dates are not epoch seconds"),
-                                jmvcore::format(.("The numeric date columns hold values too small to be Unix epoch seconds (the largest is {max_val}, which is January 1970). They look like day counts, as produced by an R Date column or an Excel serial date. Numeric dates must be seconds since 1970-01-01 -- use the DateTime Converter's corrected_datetime_numeric output, or supply the dates as text (e.g. \"2024-01-15\") and set the matching input time type."), max_val = base::format(max(abs(epoch_vals)), big.mark = ",")))
+                                .fmt(.("The numeric date columns hold values too small to be Unix epoch seconds (the largest is {maxVal}, which is January 1970). They look like day counts, as produced by an R Date column or an Excel serial date. Numeric dates must be seconds since 1970-01-01 -- use the DateTime Converter's corrected_datetime_numeric output, or supply the dates as text (e.g. \"2024-01-15\") and set the matching input time type."), maxVal = base::format(max(abs(epoch_vals)), big.mark = ",")))
                             return(NULL)
                         }
                         mydata[["start"]] <- as.POSIXct(mydata[[dxdate]], origin="1970-01-01", tz="UTC")
@@ -1164,7 +1167,10 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         !!name3contexpl := myfactor
                     )
 
-                analysis_outcome <- paste0(name2outcome, "_event")
+                # The generated indicator must not replace a selected time/marker.
+                analysis_outcome <- tail(make.unique(c(
+                    names(cleanData), paste0(name2outcome, "_event")
+                ), sep = "_"), 1L)
                 cleanData[[analysis_outcome]] <- private$.eventOfInterestIndicator(cleanData[[name2outcome]])
 
                 # naOmit ----
@@ -1539,9 +1545,9 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                     } else {
                         # No results this cycle: drop the previous cycle's rows
                         # rather than leaving them under a failure message.
-                        self$results$multipleCutTable$deleteRows()
-                        self$results$multipleMedianTable$deleteRows()
-                        self$results$multipleSurvTable$deleteRows()
+                        .deleteTableRows(self$results$multipleCutTable)
+                        .deleteTableRows(self$results$multipleMedianTable)
+                        .deleteTableRows(self$results$multipleSurvTable)
                     }
                     if (is.null(multicut_results) && !private$.lowEventCount) {
                         reason <- private$.multicutFailReason
@@ -1971,11 +1977,11 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                 # this reset addRow() appended a second copy of every row on each
                 # cycle: after three runs the survival table showed 18 rows instead of
                 # 6 and each cut-off group appeared three times.
-                coxTable$deleteRows()
+                .deleteTableRows(coxTable)
 
                 coxTable$setNote(
                     "scale",
-                    jmvcore::format(.("Hazard ratios are unadjusted and correspond to a one-unit increase in '{var}'. The model assumes a linear association with log hazard and proportional hazards over time."), var = self$options$contexpl)
+                    .fmt(.("Hazard ratios are unadjusted and correspond to a one-unit increase in '{var}'. The model assumes a linear association with log hazard and proportional hazards over time."), var = self$options$contexpl)
                 )
 
                 data_frame <- tCox_df
@@ -2119,11 +2125,11 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                 rescut_summary <- summary(res.cut)
 
                 rescutTable <- self$results$rescutTable
-                rescutTable$deleteRows()
+                .deleteTableRows(rescutTable)
 
                 # Simple plain text title (table titles don't render HTML)
                 rescutTable$setTitle(
-                    jmvcore::format(.("{var} Optimal Cut-off Analysis"), var = self$options$contexpl)
+                    .fmt(.("{var} Optimal Cut-off Analysis"), var = self$options$contexpl)
                 )
 
                 # Add plain text interpretation note if cutoff was found
@@ -2131,7 +2137,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                     cutoff_value <- rescut_summary[1, "cutpoint"]
                     variable_name <- self$options$contexpl
 
-                    clinical_note <- jmvcore::format(.("The data-derived cut-off point for {variable_name} is {cutoff_value}; it separates lower and higher marker values in this dataset."), variable_name = variable_name, cutoff_value = round(cutoff_value, 2))
+                    clinical_note <- .fmt(.("The data-derived cut-off point for {variableName} is {cutoffValue}; it separates lower and higher marker values in this dataset."), variableName = variable_name, cutoffValue = round(cutoff_value, 2))
 
                     # Set table note with plain text (notes don't render HTML)
                     rescutTable$setNote("clinical", clinical_note)
@@ -2236,7 +2242,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
 
                 medianTable <- self$results$medianTable
-                medianTable$deleteRows()
+                .deleteTableRows(medianTable)
                 private$.landmarkNote(self$results$medianTable, results)
                 data_frame <- results2table
                 for (i in seq_along(data_frame[, 1, drop = TRUE])) {
@@ -2362,9 +2368,9 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                 dropped <- utimes[utimes > max_observed]
                 utimes <- utimes[utimes <= max_observed]
                 if (length(dropped) > 0)
-                    self$results$survTable$setNote("horizon", jmvcore::format(.("Time point(s) {dropped} omitted: they exceed the longest observed follow-up ({max} {unit}). Survival cannot be estimated beyond the data."), dropped = paste(dropped, collapse = ", "), max = round(max_observed, 2), unit = self$options$timetypeoutput))
+                    self$results$survTable$setNote("horizon", .fmt(.("Time point(s) {dropped} omitted: they exceed the longest observed follow-up ({max} {unit}). Survival cannot be estimated beyond the data."), dropped = paste(dropped, collapse = ", "), max = round(max_observed, 2), unit = self$options$timetypeoutput))
                 if (length(utimes) == 0) {
-                    self$results$survTable$setNote("horizon", jmvcore::format(.("No survival time point could be reported: every requested time exceeds the longest observed follow-up ({max} {unit}). Choose earlier time points."), max = round(max_observed, 2), unit = self$options$timetypeoutput))
+                    self$results$survTable$setNote("horizon", .fmt(.("No survival time point could be reported: every requested time exceeds the longest observed follow-up ({max} {unit}). Choose earlier time points."), max = round(max_observed, 2), unit = self$options$timetypeoutput))
                     self$results$survTableSummary$setContent("")
                     return()
                 }
@@ -2392,7 +2398,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                 data_frame <- km_fit_df2
 
                 survTable <- self$results$survTable
-                survTable$deleteRows()
+                .deleteTableRows(survTable)
                 private$.landmarkNote(self$results$survTable, results)
 
 
@@ -2476,7 +2482,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                     .("Exact (Garwood) Poisson 95% CI. Rows with 0 events give a one-sided 97.5% upper bound; intervals with very little accrued person-time yield correspondingly wide bounds."))
 
                 # Add to personTimeTable - first the overall row
-                self$results$personTimeTable$deleteRows()
+                .deleteTableRows(self$results$personTimeTable)
                 private$.landmarkNote(self$results$personTimeTable, results)
                 self$results$personTimeTable$addRow(rowKey=1, values=list(
                     interval=paste0("Overall (0-max)"),
@@ -3022,6 +3028,11 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         "minpval" = private$.minPvalueCutoffs(mydata, mytime, myoutcome, mycontexpl, num_cuts)
                     )
 
+                    # Preserve the actual method when a tree used its existing
+                    # quantile fallback or needed quantile supplementation.
+                    actual_method <- attr(cutoff_values, "method", exact = TRUE)
+                    if (is.null(actual_method)) actual_method <- self$options$cutoff_method
+
                     # Check if cutoffs were successfully calculated
                     if (is.null(cutoff_values) || length(cutoff_values) == 0) {
                         return(fail(sprintf(
@@ -3104,7 +3115,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         cutoff_values = cutoff_values,
                         risk_groups = risk_groups,
                         group_stats = group_stats,
-                        method = self$options$cutoff_method,
+                        method = actual_method,
                         num_cuts = length(cutoff_values),
                         original_data = mydata,
                         mytime = mytime,
@@ -3189,8 +3200,17 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
             # Tree-based partitioning ----
             ,
             .treeCutoffs = function(mydata, mytime, myoutcome, mycontexpl, num_cuts) {
+                quantile_fallback <- function(reason) {
+                    private$.addHtmlMessage(
+                        "warning",
+                        .("Tree-based cut-points unavailable"),
+                        .fmt(.("The survival tree could not provide cut-points ({reason}). Quantile cut-points are shown instead."), reason = reason))
+                    points <- private$.quantileCutoffs(mydata[[mycontexpl]], num_cuts)
+                    attr(points, "method") <- "quantile (tree fallback)"
+                    points
+                }
                 if (!requireNamespace("rpart", quietly = TRUE)) {
-                    return(private$.quantileCutoffs(mydata[[mycontexpl]], num_cuts))
+                    return(quantile_fallback(.("the rpart package is unavailable")))
                 }
 
                 tryCatch({
@@ -3217,7 +3237,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                     # Extract split points
                     splits <- tree_fit$splits
                     if (is.null(splits) || nrow(splits) == 0) {
-                        return(private$.quantileCutoffs(mydata[[mycontexpl]], num_cuts))
+                        return(quantile_fallback(.("no split met the tree criteria")))
                     }
 
                     # rpart stores the splitting variable in rownames(splits),
@@ -3246,12 +3266,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         sort(unique(as.numeric(splits[is_var, "index"]))) else numeric(0)
 
                     if (length(cutoffs) == 0) {
-                        # Say so rather than silently returning quantiles under a
-                        # "tree" label.
-                        private$.addHtmlMessage(
-                            "warning",
-                            .("Tree-based cut-points unavailable"),
-                            jmvcore::format(.("The survival tree produced no usable split for '{var}'. Quantile cut-points are shown instead. This usually means the tree found no split meeting the complexity and minimum group-size criteria."), var = mycontexpl))
+                        return(quantile_fallback(.("no usable continuous split was found")))
                     }
 
                     if (length(cutoffs) > num_cuts) {
@@ -3277,11 +3292,16 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                         additional_cuts <- private$.quantileCutoffs(mydata[[mycontexpl]], num_cuts - length(cutoffs))
                         cutoffs <- sort(c(cutoffs, additional_cuts))
                         cutoffs <- unique(cutoffs)[1:num_cuts]
+                        attr(cutoffs, "method") <- "tree + quantile"
+                        private$.addHtmlMessage(
+                            "warning",
+                            .("Tree cut-points supplemented"),
+                            .("The survival tree provided fewer cut-points than requested. Quantile cut-points supplement the tree splits; the displayed method is tree + quantile."))
                     }
 
                     return(cutoffs)
                 }, error = function(e) {
-                    return(private$.quantileCutoffs(mydata[[mycontexpl]], num_cuts))
+                    return(quantile_fallback(conditionMessage(e)))
                 })
             }
 
@@ -3546,7 +3566,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 # Populate cut-off points table (without statistical columns)
                 cutoff_table <- self$results$multipleCutTable
-                cutoff_table$deleteRows()  # Clear existing rows
+                .deleteTableRows(cutoff_table)  # Clear existing rows
 
                 # Name the group this cut-off opens using the same vocabulary as
                 # every other table ("Low marker", "Middle marker", ...). It used to
@@ -3585,7 +3605,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                                              " (df = ", length(logrank_test$n) - 1, "), p = ",
                                              ifelse(overall_pval < 0.001, "< 0.001", round(overall_pval, 3)))
 
-                        interpretation <- .("The log-rank p above is EXPLORATORY: the cut-points were selected from these same data, so it is the largest of many statistics reported as a single test and is optimistic. No selection-adjusted p-value is reported: a single-split maximally selected-rank test does not adjust a multiple-cutoff procedure. Validate every cut-point in independent data before clinical use.")
+                        interpretation <- .("The log-rank p above is unadjusted. When survival outcomes guided the cut-point search, this comparison is optimistic and exploratory. No selection-adjusted p-value is reported; a single-split maximally selected-rank adjustment does not cover a multiple-cutoff procedure. Validate data-derived cut-points independently before clinical use.")
 
                         full_text <- paste(logrank_text, interpretation, sep = "\n\n")
 
@@ -3604,7 +3624,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 # Populate median survival table
                 median_table <- self$results$multipleMedianTable
-                median_table$deleteRows()  # Clear existing rows
+                .deleteTableRows(median_table)  # Clear existing rows
 
                 for (group_name in names(multicut_results$group_stats)) {
                     stats <- multicut_results$group_stats[[group_name]]
@@ -3622,7 +3642,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 # Populate survival estimates table
                 survtable <- self$results$multipleSurvTable
-                survtable$deleteRows()  # Clear existing rows
+                .deleteTableRows(survtable)  # Clear existing rows
 
                 # Calculate survival at flexible time points (defaults to 1, 3, 5 years)
                 time_points <- private$.parseSurvivalTimePoints(
@@ -3843,7 +3863,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                 # A tau between the two limits let the first pass write a summary and
                 # the second pass return early -- leaving an empty table beside a
                 # 276-character interpretation of an RMST that is no longer shown.
-                self$results$rmstTable$deleteRows()
+                .deleteTableRows(self$results$rmstTable)
                 self$results$rmstSummary$setContent("")
                 private$.landmarkNote(self$results$rmstTable, results)
 
@@ -4020,8 +4040,8 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
 
                 # Clear rows from any previous (pre-cutoff) invocation so integer rowKeys are
                 # not duplicated (addRow with an existing rowKey errors) when findcut is enabled.
-                self$results$residualsTable$deleteRows()
-                self$results$schoenfeldResidualsTable$deleteRows()
+                .deleteTableRows(self$results$residualsTable)
+                .deleteTableRows(self$results$schoenfeldResidualsTable)
 
                 # Use cutoffdata if provided, otherwise use original data
                 data_to_use <- if (!is.null(cutoffdata)) cutoffdata else results$cleanData
@@ -4168,7 +4188,7 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                 if (!self$options$stratified_cox) return()
 
                 tbl <- self$results$stratifiedCoxTable
-                tbl$deleteRows()
+                .deleteTableRows(tbl)
 
                 strata_var <- self$options$strata_variable
                 if (is.null(strata_var) || length(strata_var) == 0) {
@@ -4193,6 +4213,17 @@ survivalcontClass <- if (requireNamespace("jmvcore")) {
                 mydata[[".strata"]] <- src[[sv[1]]][
                     match(as.character(mydata$row_names), as.character(src$row_names))
                 ]
+                # An explicit NA factor level is not missing to is.na(). Restore
+                # genuine missing codes before excluding unclassified strata.
+                stratum <- mydata[[".strata"]]
+                if (is.factor(stratum) && anyNA(levels(stratum))) {
+                    old_levels <- levels(stratum)
+                    values <- attr(stratum, "values", exact = TRUE)
+                    levels(stratum) <- old_levels
+                    if (!is.null(values) && length(values) == length(old_levels))
+                        attr(stratum, "values") <- values[!is.na(old_levels)]
+                    mydata[[".strata"]] <- stratum
+                }
                 mydata <- mydata[!is.na(mydata[[".strata"]]), , drop = FALSE]
                 mydata[[".strata"]] <- droplevels(as.factor(mydata[[".strata"]]))
 

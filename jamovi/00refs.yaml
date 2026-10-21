@@ -49,9 +49,9 @@ refs:
 
     ClinicoPathJamoviModule:
         type: software
-        author: Serdar Balci
-        year: 2022
-        title: "ClinicoPath jamovi Module doi:10.5281/zenodo.3997188"
+        author: "Balci, S."
+        year: 2020
+        title: "ClinicoPath jamovi Module"
         publisher: "[R package]. Retrieved from https://github.com/sbalci/ClinicoPathJamoviModule"
         doi: 10.17605/OSF.IO/9SZUD
         url: "https://www.serdarbalci.com/ClinicoPathJamoviModule/"
@@ -124,7 +124,7 @@ refs:
         title: "Restricted Mean Survival Time: An Alternative to the Hazard Ratio for the Design and Analysis of Randomized Trials with a Time-to-Event Outcome"
         publisher: BMC Medical Research Methodology
         volume: 13
-        pages: 152
+        pages: "152"
         doi: 10.1186/1471-2288-13-152
         url: "https://doi.org/10.1186/1471-2288-13-152"
 
@@ -215,10 +215,11 @@ refs:
 
     epiR:
         type: software
-        author: Mark Stevenson with contributions from Telmo Nunes, Cord Heuer, Jonathon Marshall, Javier Sanchez, Ron Thornton, Jeno Reiczigel, Jim Robison-Cox, Paola Sebastiani, Peter Solymos, Kazuki Yoshida, Geoff Jones, Sarah Pirikahu, Simon Firestone, Ryan Kyle, Johann Popp, Mathew Jay and Charles Reynard.
-        year: 2020
-        title: "epiR: Tools for the Analysis of Epidemiological Data."
+        author: "Stevenson, M., & Sergeant, E."
+        year: 2026
+        title: "epiR: Tools for the Analysis of Epidemiological Data"
         publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=epiR"
+        doi: 10.32614/CRAN.package.epiR
         url: "https://CRAN.R-project.org/package=epiR"
 
     finalfit:
@@ -242,7 +243,7 @@ refs:
         author: Jerome Friedman, Trevor Hastie, Rob Tibshirani, Balasubramanian Narasimhan, Kenneth Tay, Noah Simon, James Yang, Jonathan Taylor
         year: 2026
         title: "glmnet: Lasso and Elastic-Net Regularized Generalized Linear Models"
-        publisher: "[R package version 5.0]. Retrieved from https://CRAN.R-project.org/package=glmnet"
+        publisher: "[R package version 5.1]. Retrieved from https://CRAN.R-project.org/package=glmnet"
         url: "https://CRAN.R-project.org/package=glmnet"
 
     glue:
@@ -271,10 +272,11 @@ refs:
 
     knitr:
         type: software
-        author: Yihui Xie
-        year: 2025
-        title: "knitr: R package"
+        author: "Xie, Y."
+        year: 2026
+        title: "knitr: A General-Purpose Package for Dynamic Report Generation in R"
         publisher: "[R package]. Retrieved from https://CRAN.R-project.org/package=knitr"
+        doi: 10.32614/CRAN.package.knitr
         url: "https://CRAN.R-project.org/package=knitr"
 
     labelled:

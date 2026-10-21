@@ -161,20 +161,6 @@ msgid ""
 "follow-up.{cinote}"
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid ""
-"{count} date value(s) were written with a two-digit year. These are read as "
-"2000-2068 for 00-68 and as 1969-1999 for 69-99, so a date such as 22/09/68 "
-"becomes 2068 and a 1950s-1960s date is pushed a century forward. If any "
-"interval is a century off, rewrite the column with four-digit years."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"{count} date values are in the future. Review date columns for data entry "
-"errors or incorrect date formats."
-msgstr ""
-
 #: R/datetimeconverter.b.R
 msgid ""
 "{count} date(s) are in the future. Verify this is intentional (for example "
@@ -185,12 +171,6 @@ msgstr ""
 msgid ""
 "{count} date(s) fall before 1900, which usually means the format was read "
 "wrongly or the source has data-entry errors."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"{count} observations ({pct}%) have missing time intervals. Investigate "
-"missing date values as this may affect study conclusions."
 msgstr ""
 
 #: R/datetimeconverter.b.R
@@ -265,14 +245,6 @@ msgstr ""
 msgid "{missing} of the {total} rows were missing"
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid "{n} missing time intervals due to missing dates"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid "{n} negative time intervals detected (end date before start date)"
-msgstr ""
-
 #: R/lassocox.b.R
 msgid "{n} rows excluded; {constants} constant predictors or columns removed"
 msgstr ""
@@ -286,14 +258,6 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid "{outcome}: OR (95% CI, p-value)"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"{pct}% of intervals are zero-length (start and end date on the same day). "
-"These contribute nothing to total person-time, so the denominator here is "
-"smaller than the number of participants suggests. Check whether unfilled "
-"follow-up dates were defaulted to the start date."
 msgstr ""
 
 #: R/datetimeconverter.b.R
@@ -338,10 +302,6 @@ msgstr ""
 msgid ""
 "* Model did not converge for: {fits} (likely small-sample separation); "
 "interpret these HRs with extreme caution."
-msgstr ""
-
-#: timeinterval/ui[3]/confidence_level.suffix
-msgid "%"
 msgstr ""
 
 #: R/survivalcont.b.R
@@ -819,7 +779,7 @@ msgstr ""
 msgid "95% confidence interval (uncertainty in the estimate)"
 msgstr ""
 
-#: survival/ui[4][1][0]/ci95.label
+#: survival/ui[5][1][0]/ci95.label
 #: survivalcont/ui[4][1][0]/ci95.label
 msgid "95% confidence intervals"
 msgstr ""
@@ -951,14 +911,6 @@ msgid ""
 "date column instead."
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid ""
-"A third cause makes every row negative by less than a day: a start column "
-"carrying a time of day against an end column recorded at midnight, which is "
-"what many laboratory systems export - check the Examples below for a time "
-"component on one side only."
-msgstr ""
-
 #: R/multisurvival.b.R
 msgid ""
 "A treatment-by-biomarker interaction supports a predictive-biomarker claim "
@@ -971,7 +923,6 @@ msgid "Aalen-Johansen estimator"
 msgstr ""
 
 #: datetimeconverter/results/aboutPanel.title
-#: timeinterval/results/aboutPanel.title
 msgid "About This Analysis"
 msgstr ""
 
@@ -1003,15 +954,10 @@ msgstr ""
 #: singlearm/options/calculatedtime.title
 #: singlearm/results/calculatedtime.title
 #: survival/options/calculatedtime.title
-#: survival/ui[7][0][0]/calculatedtime.label
+#: survival/ui[8][0][0]/calculatedtime.label
 #: survival/results/calculatedtime.title
 #: survivalcont/results/calculatedtime.title
 msgid "Add Calculated Time to Data"
-msgstr ""
-
-#: timeinterval/options/calculated_time.title
-#: timeinterval/ui[4][0]/calculated_time.label
-msgid "Add calculated times to dataset"
 msgstr ""
 
 #: survivalcont/results/calculatedmulticut.title
@@ -1028,7 +974,7 @@ msgstr ""
 #: singlearm/options/outcomeredefined.title
 #: singlearm/results/outcomeredefined.title
 #: survival/options/outcomeredefined.title
-#: survival/ui[7][0][0]/outcomeredefined.label
+#: survival/ui[8][0][0]/outcomeredefined.label
 #: survival/results/outcomeredefined.title
 #: survivalcont/results/outcomeredefined.title
 msgid "Add Redefined Outcome to Data"
@@ -1184,7 +1130,7 @@ msgid "Adjusted survival"
 msgstr ""
 
 #: survival/options/adjusted_curves.title
-#: survival/ui[3][1][0]/adjusted_curves.label
+#: survival/ui[4][1][0]/adjusted_curves.label
 msgid "Adjusted survival curves"
 msgstr ""
 
@@ -1343,30 +1289,14 @@ msgid "Advanced Analysis Options"
 msgstr ""
 
 #: multisurvival/ui[1].label
-#: singlearm/ui[1].label
-#: survival/ui[1].label
+#: singlearm/ui[2].label
+#: survival/ui[2].label
 #: survivalcont/ui[2].label
 msgid "Advanced Elapsed Time Options"
 msgstr ""
 
 #: outcomeorganizer/ui[3].label
 msgid "Advanced Options"
-msgstr ""
-
-#: package/analyses/timeinterval.menuSubtitle
-#: timeinterval/options.menuSubtitle
-msgid "Advanced time interval analysis with quality assessment"
-msgstr ""
-
-#: package/analyses/timeinterval.description
-#: timeinterval/options.description.main
-msgid ""
-"Advanced time interval calculator designed for survival analysis, "
-"epidemiological studies,  and person-time analysis. Features intelligent "
-"date parsing, comprehensive data quality  assessment, landmark analysis, and "
-"robust statistical summaries. Time intervals form the  foundation of "
-"person-time follow-up calculations, capturing both participant counts and  "
-"observation duration for accurate incidence rate calculations."
 msgstr ""
 
 #: package/analyses/outcomeorganizer.description
@@ -1384,11 +1314,11 @@ msgid ""
 "'{level}'."
 msgstr ""
 
-#: survival/ui[3][1][0]/age_interaction.label
+#: survival/ui[4][1][0]/age_interaction.label
 msgid "Age × group interaction"
 msgstr ""
 
-#: survival/ui[3][1].label
+#: survival/ui[4][1].label
 msgid "Age Adjustment"
 msgstr ""
 
@@ -1401,7 +1331,7 @@ msgstr ""
 msgid "Age as time scale"
 msgstr ""
 
-#: survival/ui[3][1][0]/age_time_scale.label
+#: survival/ui[4][1][0]/age_time_scale.label
 msgid "Age as time scale (epidemiologic)"
 msgstr ""
 
@@ -1409,7 +1339,7 @@ msgstr ""
 msgid "Age Group Cutpoints"
 msgstr ""
 
-#: survival/ui[3][1][0]/age_group_cutpoints.label
+#: survival/ui[4][1][0]/age_group_cutpoints.label
 msgid "Age Group Cutpoints (comma-separated)"
 msgstr ""
 
@@ -1419,7 +1349,7 @@ msgstr ""
 
 #: R/survival.b.R
 #: survival/options/age_standardization.title
-#: survival/ui[3][1][0]/age_standardization.label
+#: survival/ui[4][1][0]/age_standardization.label
 msgid "Age standardization (SMR)"
 msgstr ""
 
@@ -1439,7 +1369,7 @@ msgstr ""
 msgid "Age Variable"
 msgstr ""
 
-#: survival/ui[3][1][0][1][0].label
+#: survival/ui[4][1][0][1][0].label
 msgid "Age Variable (Continuous)"
 msgstr ""
 
@@ -1456,7 +1386,7 @@ msgid "Age-adjusted analysis"
 msgstr ""
 
 #: R/survival.b.R
-#: survival/ui[3][1][0]/age_adjustment.label
+#: survival/ui[4][1][0]/age_adjustment.label
 msgid "Age-adjusted Cox regression"
 msgstr ""
 
@@ -1486,7 +1416,7 @@ msgid "Age-Standardized Mortality"
 msgstr ""
 
 #: survival/options/age_stratified_cox.title
-#: survival/ui[3][1][0]/age_stratified_cox.label
+#: survival/ui[4][1][0]/age_stratified_cox.label
 msgid "Age-stratified Cox model"
 msgstr ""
 
@@ -1502,7 +1432,7 @@ msgid "Age-Stratified Kaplan-Meier Curves"
 msgstr ""
 
 #: survival/options/age_stratified_km.title
-#: survival/ui[3][1][0]/age_stratified_km.label
+#: survival/ui[4][1][0]/age_stratified_km.label
 msgid "Age-stratified KM plots"
 msgstr ""
 
@@ -1528,7 +1458,7 @@ msgid "Alive w/o Disease"
 msgstr ""
 
 #: outcomeorganizer/options/awd.title
-#: survival/ui[2][0][0][1][0]/awd.label
+#: survival/ui[3][0][0][1][0]/awd.label
 #: survivalcont/ui[3][0][0][1][0]/awd.label
 msgid "Alive with Disease"
 msgstr ""
@@ -1538,7 +1468,7 @@ msgid "Alive with disease"
 msgstr ""
 
 #: outcomeorganizer/options/awod.title
-#: survival/ui[2][0][0][1][0]/awod.label
+#: survival/ui[3][0][0][1][0]/awod.label
 #: survivalcont/ui[3][0][0][1][0]/awod.label
 msgid "Alive without Disease"
 msgstr ""
@@ -1562,11 +1492,9 @@ msgid ""
 "These are associations observed in these data."
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid ""
-"All observations were removed by the data quality filters ({n} rows). Switch "
-"the filters off to inspect the raw intervals; if every interval was "
-"negative, the start and end date columns are probably swapped."
+#: singlearm/options/cif_all_causes.title
+#: survival/options/cif_all_causes.title
+msgid "All event types at selected times"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -1642,7 +1570,7 @@ msgid ""
 msgstr ""
 
 #: R/singlearm.b.R
-msgid "An error occurred during {context}."
+msgid "An error occurred during {stage}."
 msgstr ""
 
 #: R/survivalcont.b.R
@@ -1667,21 +1595,6 @@ msgstr ""
 
 #: R/survivalcont.b.R
 msgid "Analysis completed for {variable}."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Analysis completed using {n} observations that reached the {landmark} "
-"landmark. All reported times are measured FROM the landmark, not from the "
-"start date ({amount} was subtracted from every interval): mean post-landmark "
-"follow-up {mean} {unit}, total post-landmark person-time {total} "
-"person-{unit}."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Analysis completed using {n} observations with mean follow-up {mean} {unit} "
-"(total person-time: {total} person-{unit})."
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -1712,15 +1625,15 @@ msgstr ""
 
 #: multisurvival/options/showExplanations.title
 #: singlearm/options/showExplanations.title
-#: singlearm/ui[7][0][0]/showExplanations.label
+#: singlearm/ui[8][0][0]/showExplanations.label
 #: survival/options/showExplanations.title
-#: survival/ui[8][0][0]/showExplanations.label
+#: survival/ui[9][0][0]/showExplanations.label
 #: survivalcont/options/showExplanations.title
 #: survivalcont/ui[8][0][0]/showExplanations.label
 msgid "Analysis explanations"
 msgstr ""
 
-#: survival/ui[8].label
+#: survival/ui[9].label
 msgid "Analysis Explanations"
 msgstr ""
 
@@ -1733,11 +1646,11 @@ msgid "Analysis of {variable} could not determine hazard ratio."
 msgstr ""
 
 #: multisurvival/ui[2][1].label
-#: singlearm/ui[2][1].label
+#: singlearm/ui[3][1].label
 msgid "Analysis Type"
 msgstr ""
 
-#: survival/ui[2][0][0]/analysistype.label
+#: survival/ui[3][0][0]/analysistype.label
 #: survivalcont/ui[3][0][0]/analysistype.label
 msgid "Analysis type"
 msgstr ""
@@ -1753,8 +1666,8 @@ msgid "Analysis warning"
 msgstr ""
 
 #: multisurvival/ui[2].label
-#: singlearm/ui[2].label
-#: survival/ui[2].label
+#: singlearm/ui[3].label
+#: survival/ui[3].label
 #: survivalcont/ui[3].label
 msgid "Analysis with Multiple Outcomes"
 msgstr ""
@@ -1858,26 +1771,14 @@ msgstr ""
 msgid "At reference covariate profile"
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid ""
-"At this share the fault is systematic rather than sporadic: the rows that "
-"were kept came from the same two columns and the same parsing, so they "
-"cannot be assumed correct merely because their interval came out positive - "
-"check the date columns and the Date Format setting before using any number "
-"on this page."
+#: R/singlearm.b.R
+#: singlearm/results/cifTable.columns.title
+#: survival/results/cifTable.columns.title
+msgid "At risk"
 msgstr ""
 
 #: datetimeconverter/options/datetime_format/auto.title
-#: timeinterval/options/time_format/auto.title
 msgid "Auto-detect Format"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Auto-detection is ambiguous: {formats} all parse these dates equally well "
-"({pct}% success). The '{format}' format was used, because it places these "
-"dates in the narrowest range of years - please verify it matches your data "
-"or select the format manually."
 msgstr ""
 
 #: R/singlearm.b.R
@@ -1885,18 +1786,6 @@ msgid ""
 "Automated adequacy grades are not assigned. Interpret event counts, "
 "completeness, follow-up, confidence intervals, and time-specific risk sets "
 "in the context of the endpoint and intended use."
-msgstr ""
-
-#: R/oddsratio.b.R
-msgid "Automatic detection - first match ({language})"
-msgstr ""
-
-#: R/oddsratio.b.R
-msgid "Automatic detection ({language})"
-msgstr ""
-
-#: R/oddsratio.b.R
-msgid "Automatic Predictor Level Detection"
 msgstr ""
 
 #: multisurvival/ui[12]/interactionSupplier.label
@@ -2012,11 +1901,11 @@ msgstr ""
 msgid "Bootstrap Internal Validation - {title}"
 msgstr ""
 
-#: survival/ui[3][2][0]/bootstrapValidation.label
+#: survival/ui[4][2][0]/bootstrapValidation.label
 msgid "Bootstrap internal validation (C-index)"
 msgstr ""
 
-#: survival/ui[3][2][0]/bootstrapValN.label
+#: survival/ui[4][2][0]/bootstrapValN.label
 msgid "Bootstrap Resamples (50-1000)"
 msgstr ""
 
@@ -2164,7 +2053,7 @@ msgid ""
 msgstr ""
 
 #: multisurvival/ui[2][2].label
-#: singlearm/ui[2][2].label
+#: singlearm/ui[3][2].label
 msgid "Calculated Outcome to Data"
 msgstr ""
 
@@ -2176,14 +2065,6 @@ msgstr ""
 msgid "Calculated time"
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid "Calculated Time ({unit}, from {landmark} {unit} landmark)"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid "Calculated Time ({unit})"
-msgstr ""
-
 #: R/singlearm.b.R
 msgid ""
 "Calculated time from dates contains %d missing value%s. These observations "
@@ -2191,25 +2072,17 @@ msgid ""
 "selected type and check for missing or invalid dates."
 msgstr ""
 
-#: timeinterval/results/calculated_time.title
-msgid "Calculated Time Intervals"
-msgstr ""
-
 #: survivalcont/ui[2][0][0]/calculatedtime.label
 msgid "Calculated Time Preview"
 msgstr ""
 
 #: multisurvival/ui[1][2].label
-#: singlearm/ui[1][2].label
+#: singlearm/ui[2][2].label
 msgid "Calculated Time to Data"
 msgstr ""
 
 #: R/multisurvival.b.R
 msgid "Calculation:"
-msgstr ""
-
-#: timeinterval/options/time_basis/calendar.title
-msgid "Calendar-aware (actual month lengths)"
 msgstr ""
 
 #: R/survival.b.R
@@ -2230,7 +2103,7 @@ msgstr ""
 
 #: R/survival.b.R
 #: survival/options/calibration_curves.title
-#: survival/ui[3][2][0]/calibration_curves.label
+#: survival/ui[4][2][0]/calibration_curves.label
 msgid "Calibration curves"
 msgstr ""
 
@@ -2352,7 +2225,6 @@ msgid ""
 msgstr ""
 
 #: datetimeconverter/results/caveatsPanel.title
-#: timeinterval/results/caveatsPanel.title
 msgid "Caveats & Assumptions"
 msgstr ""
 
@@ -2378,12 +2250,12 @@ msgstr ""
 msgid "Censored Level Used"
 msgstr ""
 
-#: singlearm/ui[3][1][0]/censored.label
+#: singlearm/ui[4][1][0]/censored.label
 #: survivalcont/ui[4][1][0]/censored.label
 msgid "Censored observations"
 msgstr ""
 
-#: survival/ui[4][1][0]/censored.label
+#: survival/ui[5][1][0]/censored.label
 msgid "Censored points"
 msgstr ""
 
@@ -2474,6 +2346,16 @@ msgid ""
 "the first explanatory variable is used when it is binary."
 msgstr ""
 
+#: oddsratio/options/predictorLevel.description.main
+msgid ""
+"Choose which level of the diagnostic predictor is the positive test result "
+"(e.g., \"Present\", \"Test+\", \"Yes\"). The diagnostic metrics "
+"(sensitivity, specificity, likelihood ratios) need this choice; it is never "
+"taken from the level names or their order. While it is empty the diagnostic "
+"metrics wait for it and list the observed levels, and the logistic model, "
+"odds ratios, forest plot and nomogram still run."
+msgstr ""
+
 #: R/multisurvival.b.R
 msgid "CIs and p-values differ:"
 msgstr ""
@@ -2534,10 +2416,6 @@ msgstr ""
 msgid "Clinical Summary"
 msgstr ""
 
-#: timeinterval/results/nlSummary.title
-msgid "Clinical Summary (Copy-Ready)"
-msgstr ""
-
 #: R/multisurvival.b.R
 msgid "Clinical summary unavailable"
 msgstr ""
@@ -2593,18 +2471,6 @@ msgstr ""
 msgid "Coefficients are on the original variable scale."
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid ""
-"Column '{column}' contains only missing values; cannot calculate time "
-"intervals."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Column '{column}' holds five-digit numbers such as {value}, which cannot be "
-"read as dates unambiguously."
-msgstr ""
-
 #: R/multisurvival.b.R
 msgid ""
 "Column names should describe your variables (e.g., 'Age', 'Survival_Time', "
@@ -2637,11 +2503,11 @@ msgid ""
 "the same units as the survival time."
 msgstr ""
 
-#: survival/ui[9][1][0]/compare_distributions.label
+#: survival/ui[10][1][0]/compare_distributions.label
 msgid "Compare distributions using AIC and BIC"
 msgstr ""
 
-#: survival/ui[9][1][0]/parametric_survival_plots.label
+#: survival/ui[10][1][0]/parametric_survival_plots.label
 msgid "Compare fitted curves with Kaplan-Meier estimates"
 msgstr ""
 
@@ -2764,14 +2630,6 @@ msgstr ""
 msgid "Comprehensive Outcome Preparation for Survival Analysis"
 msgstr ""
 
-#: package/analyses/timeinterval.title
-#: package/analyses/timeinterval.menuTitle
-#: timeinterval/options.title
-#: timeinterval/ui.title
-#: timeinterval/results.title
-msgid "Comprehensive Time Interval Calculator"
-msgstr ""
-
 #: survival/options/age_standardization.description
 msgid ""
 "Compute age-standardized mortality using direct or indirect standardization. "
@@ -2819,10 +2677,6 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "Confidence intervals require bootstrapping and are left blank."
-msgstr ""
-
-#: timeinterval/options/confidence_level.title
-msgid "Confidence level (%)"
 msgstr ""
 
 #: R/singlearm.b.R
@@ -2887,7 +2741,7 @@ msgid ""
 msgstr ""
 
 #: survival/options/rcs_variable.title
-#: survival/ui[3][3][0][1][0].label
+#: survival/ui[4][3][0][1][0].label
 msgid "Continuous Variable for Spline"
 msgstr ""
 
@@ -2952,13 +2806,6 @@ msgid ""
 "time-varying effects or stratification."
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid ""
-"Correct the dates at source, or tick 'Remove negative intervals' under Data "
-"Quality & Statistics to drop these rows from every statistic including "
-"person-time."
-msgstr ""
-
 #: R/multisurvival.b.R
 msgid "Correct Time Origin:"
 msgstr ""
@@ -3005,12 +2852,6 @@ msgid ""
 "requested folds or provide more outcome observations."
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid ""
-"Could not detect a common date format for columns '{start}' and '{end}'. "
-"Please select the correct format manually."
-msgstr ""
-
 #: R/outcomeorganizer.b.R
 msgid "Could not find outcome variable"
 msgstr ""
@@ -3038,13 +2879,6 @@ msgstr ""
 #: R/outcomeorganizer.b.R
 #: outcomeorganizer/results/outputTable.columns.title
 msgid "Count"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Counted from the spreadsheet epoch, {value} would be {date}; SAS and Stata "
-"count from 1960-01-01 and R from 1970-01-01, so the same digits mean a date "
-"decades apart depending on which program wrote them."
 msgstr ""
 
 #: multisurvival/results/modelContributionTable.columns.title
@@ -3124,7 +2958,7 @@ msgid "Cox regression analysis"
 msgstr ""
 
 #: R/survivalcont.b.R
-#: survival/ui[3][0].label
+#: survival/ui[4][0].label
 #: survival/results/coxRegressionHeading.title
 #: survivalcont/ui[6][0].label
 msgid "Cox Regression Analysis"
@@ -3216,13 +3050,6 @@ msgid ""
 "consider removing rows with missing data."
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid ""
-"Critically small sample (n={n}). Statistical summaries are unreliable with "
-"fewer than 10 observations. Results should be considered exploratory only. "
-"Minimum n=20 recommended for basic descriptive analysis."
-msgstr ""
-
 #: lassocox/ui[2][1].label
 msgid "Cross-validation"
 msgstr ""
@@ -3266,6 +3093,11 @@ msgstr ""
 msgid "Crude Event Rate"
 msgstr ""
 
+#: singlearm/results/cifTable.columns.title
+#: survival/results/cifTable.columns.title
+msgid "Cumulative censoring"
+msgstr ""
+
 #: R/singlearm.b.R
 #: singlearm/options/ce.title
 msgid "Cumulative event probability"
@@ -3279,8 +3111,10 @@ msgstr ""
 msgid "Cumulative Event Probability of the Whole Group"
 msgstr ""
 
+#: singlearm/results/cifTable.columns.title
 #: survival/options/ce.title
-#: survival/ui[4][0][0]/ce.label
+#: survival/ui[5][0][0]/ce.label
+#: survival/results/cifTable.columns.title
 #: survivalcont/options/ce.title
 msgid "Cumulative events"
 msgstr ""
@@ -3295,7 +3129,7 @@ msgstr ""
 
 #: singlearm/options/ch.title
 #: survival/options/ch.title
-#: survival/ui[4][0][0]/ch.label
+#: survival/ui[5][0][0]/ch.label
 #: survivalcont/options/ch.title
 msgid "Cumulative hazard"
 msgstr ""
@@ -3433,12 +3267,8 @@ msgstr ""
 msgid "Data entry errors in date fields"
 msgstr ""
 
-#: survival/ui[7].label
+#: survival/ui[8].label
 msgid "Data Export Options"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid "Data frame is empty; ensure your dataset has at least one row."
 msgstr ""
 
 #: R/lassocox.b.R
@@ -3454,11 +3284,9 @@ msgid "Data must have column names."
 msgstr ""
 
 #: package/analyses/datetimeconverter.menuSubgroup
-#: package/analyses/timeinterval.menuSubgroup
 #: package/analyses/outcomeorganizer.menuSubgroup
 #: datetimeconverter/options.menuSubgroup
 #: outcomeorganizer/options.menuSubgroup
-#: timeinterval/options.menuSubgroup
 msgid "Data Preparation"
 msgstr ""
 
@@ -3470,18 +3298,11 @@ msgstr ""
 msgid "Data Quality"
 msgstr ""
 
-#: timeinterval/ui[3].label
-msgid "Data Quality & Statistics"
-msgstr ""
-
 #: datetimeconverter/options/show_quality_metrics.title
-#: timeinterval/options/include_quality_metrics.title
-#: timeinterval/ui[3]/include_quality_metrics.label
 msgid "Data quality assessment"
 msgstr ""
 
 #: datetimeconverter/results/qualityAssessment.title
-#: timeinterval/results/qualityAssessment.title
 msgid "Data Quality Assessment"
 msgstr ""
 
@@ -3525,26 +3346,12 @@ msgstr ""
 msgid "Date Components"
 msgstr ""
 
-#: timeinterval/options/time_format.title
-msgid "Date format"
-msgstr ""
-
-#: timeinterval/ui[1].label
-msgid "Date Format Configuration"
-msgstr ""
-
 #: R/survivalcont.b.R
 msgid "Date format does not match the data"
 msgstr ""
 
 #: survivalcont/ui[2][0][0][2].label
 msgid "Date Format in Data"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Date parsing failed for column '{column}' using format '{format}'. Example "
-"values: {examples}"
 msgstr ""
 
 #: R/singlearm.b.R
@@ -3555,8 +3362,8 @@ msgid ""
 msgstr ""
 
 #: multisurvival/ui[1][0][0][1].label
-#: singlearm/ui[1][0][0][1].label
-#: survival/ui[1][0][0][1].label
+#: singlearm/ui[2][0][0][1].label
+#: survival/ui[2][0][0][1].label
 #: survivalcont/ui[2][0][0][1].label
 msgid "Date Variables"
 msgstr ""
@@ -3656,12 +3463,7 @@ msgstr ""
 msgid "days"
 msgstr ""
 
-#: timeinterval/options/output_unit/days.title
-msgid "Days"
-msgstr ""
-
 #: datetimeconverter/options/datetime_format/dmy.title
-#: timeinterval/options/time_format/dmy.title
 msgid "DD-MM-YYYY (or DD/MM/YYYY)"
 msgstr ""
 
@@ -3674,7 +3476,6 @@ msgid "DD-MM-YYYY HH:MM:SS"
 msgstr ""
 
 #: datetimeconverter/options/datetime_format/dym.title
-#: timeinterval/options/time_format/dym.title
 msgid "DD-YYYY-MM"
 msgstr ""
 
@@ -3682,7 +3483,7 @@ msgstr ""
 #: outcomeorganizer/options/dod.title
 #: singlearm/options/dod.title
 #: survival/options/dod.title
-#: survival/ui[2][0][0][1][0]/dod.label
+#: survival/ui[3][0][0][1][0]/dod.label
 #: survivalcont/ui[3][0][0][1][0]/dod.label
 msgid "Dead of Disease"
 msgstr ""
@@ -3698,7 +3499,7 @@ msgid "Dead of Other"
 msgstr ""
 
 #: outcomeorganizer/options/dooc.title
-#: survival/ui[2][0][0][1][0]/dooc.label
+#: survival/ui[3][0][0][1][0]/dooc.label
 #: survivalcont/ui[3][0][0][1][0]/dooc.label
 msgid "Dead of Other Causes"
 msgstr ""
@@ -3737,10 +3538,6 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "decreased hazard"
-msgstr ""
-
-#: R/oddsratio.b.R
-msgid "Default (second factor level)"
 msgstr ""
 
 #: singlearm/options/analysistype.description
@@ -3807,7 +3604,7 @@ msgstr ""
 msgid "Detail"
 msgstr ""
 
-#: singlearm/ui[7].label
+#: singlearm/ui[8].label
 #: survivalcont/ui[8].label
 msgid "Detailed Output"
 msgstr ""
@@ -3840,7 +3637,7 @@ msgstr ""
 #: multisurvival/options/dxdate.title
 #: singlearm/options/dxdate.title
 #: survival/options/dxdate.title
-#: survival/ui[1][0][0][1][0][0].label
+#: survival/ui[2][0][0][1][0][0].label
 #: survivalcont/ui[2][0][0][1][0][0].label
 msgid "Diagnosis Date"
 msgstr ""
@@ -3884,6 +3681,14 @@ msgstr ""
 
 #: outcomeorganizer/results/diagnosticsTable.title
 msgid "Diagnostic Information"
+msgstr ""
+
+#: R/oddsratio.b.R
+msgid ""
+"Diagnostic metrics are waiting for the Predictor Positive Level. Choose "
+"which level of '{variable}' is the positive test result. Observed levels: "
+"{levels}. The logistic model, odds ratios, forest plot and nomogram are not "
+"affected."
 msgstr ""
 
 #: R/oddsratio.b.R
@@ -4062,20 +3867,20 @@ msgid ""
 msgstr ""
 
 #: outcomeorganizer/ui[5].label
-#: singlearm/ui[7][0].label
+#: singlearm/ui[8][0].label
 #: survivalcont/ui[8][0].label
 msgid "Display Options"
 msgstr ""
 
 #: singlearm/options/risktable.description
 msgid ""
-"Display the number of subjects still at risk below supported Kaplan-Meier "
-"plots. This is a count, not a table of probabilities or hazards. A combined "
-"risk panel is not available for the competing-risk CIF plot; use the "
-"cumulative-incidence table for counts at selected times."
+"Display the number of subjects still at risk below Kaplan-Meier and "
+"cumulative-incidence plots. Counts use the common event-free risk set just "
+"before each time point and are restricted to observed follow-up. The "
+"all-event table also reports cumulative counts."
 msgstr ""
 
-#: survival/ui[9][0][0]/parametric_distribution.label
+#: survival/ui[10][0][0]/parametric_distribution.label
 #: survival/results/parametricModelComparison.columns.title
 msgid "Distribution"
 msgstr ""
@@ -4366,21 +4171,6 @@ msgstr ""
 msgid "Encoded predictors contain non-finite values."
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid ""
-"End date column contains only missing values; cannot calculate time "
-"intervals."
-msgstr ""
-
-#: timeinterval/options/fu_date.title
-#: timeinterval/ui[0][1].label
-msgid "End Date Variable"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid "End dates are not valid date objects"
-msgstr ""
-
 #: singlearm/options/yend_plot.title
 #: survivalcont/options/yend_plot.title
 msgid "End y-axis"
@@ -4440,7 +4230,6 @@ msgid "Equal-width intervals; events divided by exact person-time"
 msgstr ""
 
 #: R/oddsratio.b.R
-#: R/timeinterval.b.R
 msgid "Error"
 msgstr ""
 
@@ -4476,10 +4265,6 @@ msgstr ""
 
 #: R/lassocox.b.R
 msgid "Error in cross-validation: {msg}"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid "Error parsing dates with format {format}: {message}"
 msgstr ""
 
 #: R/datetimeconverter.b.R
@@ -4651,7 +4436,7 @@ msgstr ""
 msgid "Event level and censored level must be different."
 msgstr ""
 
-#: survival/ui[2][0][0][1].label
+#: survival/ui[3][0][0][1].label
 #: survivalcont/ui[3][0][0][1].label
 msgid "Event Level Assignment"
 msgstr ""
@@ -4793,10 +4578,6 @@ msgstr ""
 msgid "Example:"
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid "Examples:"
-msgstr ""
-
 #: datetimeconverter/options/datetime_format/excel_serial.title
 msgid "Excel Serial (Days since 1900)"
 msgstr ""
@@ -4866,7 +4647,7 @@ msgid "Explanatory Output"
 msgstr ""
 
 #: survival/options/explanatory.title
-#: survival/ui[0][2].label
+#: survival/ui[1][2].label
 msgid "Explanatory Variable"
 msgstr ""
 
@@ -4955,11 +4736,11 @@ msgid "Exponentiated, centered coefficient-weighted linear predictor"
 msgstr ""
 
 #: survival/options/export_survival_data.title
-#: survival/ui[7][0][0]/export_survival_data.label
+#: survival/ui[8][0][0]/export_survival_data.label
 msgid "Export Estimated Survival"
 msgstr ""
 
-#: survival/ui[7][0].label
+#: survival/ui[8][0].label
 msgid "Export Settings"
 msgstr ""
 
@@ -5006,36 +4787,6 @@ msgid ""
 "and may destabilize cross-validation."
 msgstr ""
 
-#: timeinterval/options/extreme_multiplier.title
-msgid "Extreme threshold multiplier"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Extreme-value filtering cannot act on these data: with {n} intervals (fewer "
-"than 101) the 99th percentile is interpolated between the two longest "
-"intervals, so at a multiplier of {mult} no interval can exceed the '{mult} x "
-"99th percentile' threshold of {threshold} {unit}, and none was removed. "
-"Review the longest intervals directly."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Extreme-value filtering was skipped: the 99th percentile of the intervals is "
-"{q99}, so a '{mult} x 99th percentile' threshold cannot separate long "
-"follow-up from typical follow-up. Review the interval distribution directly."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Extreme-value removal dropped {count} of the longest interval(s) (above "
-"{threshold} {unit}) from the analysis. These rows are excluded from the "
-"mean, the median and the total person-time, so the person-time denominator "
-"here is smaller than the follow-up actually observed. Long follow-up is not "
-"automatically an error: check the removed rows before using this person-time "
-"for an incidence rate."
-msgstr ""
-
 #: R/lassocox.b.R
 msgid "Factor variable '{var}' has insufficient variation in complete cases."
 msgstr ""
@@ -5046,7 +4797,7 @@ msgstr ""
 
 #: R/outcomeorganizer.b.R
 msgid ""
-"Few events: only {n_ev} of {n_total} non-missing outcomes ({pct}%) are "
+"Few events: only {nEv} of {nTotal} non-missing outcomes ({pct}%) are "
 "'{level}'. Kaplan-Meier and Cox estimates are unstable with fewer than 5 "
 "events."
 msgstr ""
@@ -5120,7 +4871,7 @@ msgstr ""
 msgid "Fisher's exact test"
 msgstr ""
 
-#: survival/ui[9][0][0]/use_parametric.label
+#: survival/ui[10][0][0]/use_parametric.label
 msgid "Fit a parametric survival model"
 msgstr ""
 
@@ -5136,13 +4887,6 @@ msgid ""
 "Fits a cross-validated LASSO-penalized Cox model for exploratory model "
 "development. Apparent performance requires internal and external validation "
 "before clinical use."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Fix the source data: format the column as a date before exporting (in Excel: "
-"Format Cells > Date), or convert it to text in YYYY-MM-DD form, then "
-"re-import."
 msgstr ""
 
 #: survival/options/survivalTestType/fh_rho0_5.title
@@ -5167,7 +4911,7 @@ msgstr ""
 #: multisurvival/options/fudate.title
 #: singlearm/options/fudate.title
 #: survival/options/fudate.title
-#: survival/ui[1][0][0][1][0][1].label
+#: survival/ui[2][0][0][1][0][1].label
 #: survivalcont/ui[2][0][0][1][0][1].label
 msgid "Follow-up Date"
 msgstr ""
@@ -5182,6 +4926,11 @@ msgstr ""
 
 #: R/singlearm.b.R
 msgid "Follow-up Range (min-max)"
+msgstr ""
+
+#: singlearm/options/show_followup_support.title
+#: survival/options/show_followup_support.title
+msgid "Follow-up support counts"
 msgstr ""
 
 #: lassocox/options/elapsedtime.title
@@ -5354,7 +5103,6 @@ msgid ""
 msgstr ""
 
 #: datetimeconverter/results/welcome.title
-#: timeinterval/results/todo.title
 msgid "Getting Started"
 msgstr ""
 
@@ -5369,7 +5117,6 @@ msgid "glmnet version"
 msgstr ""
 
 #: datetimeconverter/options/show_glossary.title
-#: timeinterval/options/show_glossary.title
 msgid "Glossary of terms"
 msgstr ""
 
@@ -5387,13 +5134,15 @@ msgid ""
 "across groups: chi-square = {stat}, df = {df}, p = {p}."
 msgstr ""
 
+#: singlearm/results/cifTable.columns.title
+#: survival/results/cifTable.columns.title
 #: survival/results/ageStandardizationTable.columns.title
 #: survival/results/rmstTable.columns.title
 #: survivalcont/results/rmstTable.columns.title
 msgid "Group"
 msgstr ""
 
-#: survival/ui[9][0][0]/parametric_covariates.label
+#: survival/ui[10][0][0]/parametric_covariates.label
 msgid "Group variable as covariate"
 msgstr ""
 
@@ -5410,13 +5159,6 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "Groups defined by empirical quantiles of the Cox relative-risk score"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Guessed as a packed date instead, the same digits give a different year, so "
-"the time intervals and the person-time would be wrong by decades without any "
-"visible sign."
 msgstr ""
 
 #: R/outcomeorganizer.b.R
@@ -5457,7 +5199,7 @@ msgstr ""
 msgid "Harrell's C-index is not reported for this competing-risk fit."
 msgstr ""
 
-#: singlearm/ui[6].label
+#: singlearm/ui[7].label
 msgid "Hazard Analysis"
 msgstr ""
 
@@ -5520,7 +5262,7 @@ msgstr ""
 msgid "Hazards Regression Plot"
 msgstr ""
 
-#: survival/ui[8][0].label
+#: survival/ui[9][0].label
 msgid "Help & Interpretation"
 msgstr ""
 
@@ -5777,10 +5519,6 @@ msgid "Important Notes:"
 msgstr ""
 
 #: R/oddsratio.b.R
-msgid "Important:"
-msgstr ""
-
-#: R/oddsratio.b.R
 msgid "Important: Please Verify These Interpretations"
 msgstr ""
 
@@ -5808,7 +5546,7 @@ msgstr ""
 msgid "Incidence Rate"
 msgstr ""
 
-#: survival/ui[6][0].label
+#: survival/ui[7][0].label
 msgid "Incidence Rate Analysis"
 msgstr ""
 
@@ -5875,10 +5613,6 @@ msgstr ""
 msgid "infinite (zero false results in this cell)"
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid "Info"
-msgstr ""
-
 #: R/oddsratio.b.R
 #: multisurvival/results/infoMessages.title
 #: oddsratio/results/infoMessages.title
@@ -5889,7 +5623,7 @@ msgstr ""
 msgid "Information"
 msgstr ""
 
-#: survival/ui[1][0][0][2][0]/timetypedata.label
+#: survival/ui[2][0][0][2][0]/timetypedata.label
 #: survivalcont/ui[2][0][0][2][0]/timetypedata.label
 msgid "Input time type"
 msgstr ""
@@ -6203,7 +5937,6 @@ msgid "Key Points:"
 msgstr ""
 
 #: datetimeconverter/results/glossaryPanel.title
-#: timeinterval/results/glossaryPanel.title
 msgid "Key Terms & Concepts"
 msgstr ""
 
@@ -6215,7 +5948,7 @@ msgstr ""
 msgid "KM Upper CI"
 msgstr ""
 
-#: survival/ui[4][0][0]/kmunicate.label
+#: survival/ui[5][0][0]/kmunicate.label
 msgid "KMunicate plot"
 msgstr ""
 
@@ -6245,14 +5978,9 @@ msgstr ""
 msgid "Lambda selection rule"
 msgstr ""
 
-#: survival/ui[1][1].label
+#: survival/ui[2][1].label
 #: survivalcont/ui[2][2].label
-#: timeinterval/ui[2].label
 msgid "Landmark Analysis"
-msgstr ""
-
-#: timeinterval/options/use_landmark.title
-msgid "Landmark analysis"
 msgstr ""
 
 #: R/survival.b.R
@@ -6265,13 +5993,6 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "Landmark analysis at {time} {unit}."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Landmark analysis excluded every participant: none of the {n} observations "
-"reached the {amount} landmark. Lower the landmark time or switch landmark "
-"analysis off."
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -6306,15 +6027,15 @@ msgstr ""
 #: multisurvival/ui[1][1].label
 #: singlearm/options/landmark.title
 #: survival/options/landmark.title
-#: survival/ui[1][1][0]/uselandmark/landmark.label
+#: survival/ui[2][1][0]/uselandmark/landmark.label
 #: survivalcont/ui[2][2][0]/uselandmark/landmark.label
 msgid "Landmark Time"
 msgstr ""
 
 #: multisurvival/ui[1][1][0]/uselandmark.label
-#: singlearm/ui[1][1].label
-#: singlearm/ui[1][1][0]/uselandmark.label
-#: survival/ui[1][1][0]/uselandmark.label
+#: singlearm/ui[2][1].label
+#: singlearm/ui[2][1][0]/uselandmark.label
+#: survival/ui[2][1][0]/uselandmark.label
 #: survivalcont/options/landmark.title
 #: survivalcont/ui[2][2][0]/uselandmark.label
 msgid "Landmark time"
@@ -6330,19 +6051,11 @@ msgstr ""
 msgid "Landmark time must be a finite, non-negative value."
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid "Landmark time must be a non-negative number"
-msgstr ""
-
 #: R/singlearm.b.R
 msgid ""
 "Landmark time must be zero or positive (received %s). A landmark is a time "
 "point during follow-up; a negative value would shift every subject's "
 "follow-up forward instead of conditioning on surviving to it."
-msgstr ""
-
-#: timeinterval/options/landmark_time.title
-msgid "Landmark time point"
 msgstr ""
 
 #: R/oddsratio.b.R
@@ -6473,7 +6186,7 @@ msgid "Log-Likelihood"
 msgstr ""
 
 #: survival/options/loglog.title
-#: survival/ui[3][0][0]/loglog.label
+#: survival/ui[4][0][0]/loglog.label
 #: survivalcont/options/loglog.title
 msgid "Log-log plot"
 msgstr ""
@@ -6503,17 +6216,6 @@ msgstr ""
 msgid ""
 "Logistic regression odds-ratio table, forest plot, prediction nomogram, and "
 "optional binary diagnostic metrics."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Longest interval in the data is {years} years ({value} {unit}, before any "
-"landmark or filter). Intervals beyond 50 years exceed the follow-up of "
-"essentially every clinical cohort, and usually mean the dates were parsed "
-"with the wrong format rather than observed. Check the Date Format setting "
-"and the raw date columns before reporting this person-time. If the intervals "
-"are genuinely this long (a lifetime cohort, or an age computed from date of "
-"birth), this message can be ignored."
 msgstr ""
 
 #: R/datetimeconverter.b.R
@@ -6592,6 +6294,11 @@ msgstr ""
 msgid "lower (wider CI)"
 msgstr ""
 
+#: singlearm/results/cifTable.columns.title
+#: survival/results/cifTable.columns.title
+msgid "Lower 95% CI"
+msgstr ""
+
 #: R/lassocox.b.R
 msgid "Lower fitted hazard"
 msgstr ""
@@ -6666,32 +6373,12 @@ msgstr ""
 msgid "Mean calibration (observed - predicted at t = {t})"
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid "mean follow-up"
-msgstr ""
-
 #: R/multisurvival.b.R
 msgid "Mean over {b} resamples"
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid "mean post-landmark follow-up"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid "Mean post-landmark time"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid "Mean time"
-msgstr ""
-
 #: outcomeorganizer/results/outputTable.columns.title
 msgid "Meaning"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid "measured from the {adj} landmark"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -6804,7 +6491,7 @@ msgid ""
 "to {upper} {unit})."
 msgstr ""
 
-#: survival/ui[4][1][0]/medianline.label
+#: survival/ui[5][1][0]/medianline.label
 #: survivalcont/options/medianline.title
 #: survivalcont/ui[4][1][0]/medianline.label
 msgid "Median survival line"
@@ -6869,10 +6556,6 @@ msgid ""
 "for larger candidate spaces it evaluates 1000 unique combinations selected "
 "reproducibly from the Random seed. All data-derived cut-offs and their group "
 "comparisons are exploratory and require external validation."
-msgstr ""
-
-#: R/oddsratio.b.R
-msgid "Method: {method}"
 msgstr ""
 
 #: lassocox/options/showMethodologyNotes.title
@@ -6992,7 +6675,6 @@ msgid "Mixing cause-specific and subdistribution hazards in competing risks"
 msgstr ""
 
 #: datetimeconverter/options/datetime_format/mdy.title
-#: timeinterval/options/time_format/mdy.title
 msgid "MM-DD-YYYY (or MM/DD/YYYY)"
 msgstr ""
 
@@ -7005,7 +6687,6 @@ msgid "MM-DD-YYYY HH:MM:SS"
 msgstr ""
 
 #: datetimeconverter/options/datetime_format/myd.title
-#: timeinterval/options/time_format/myd.title
 msgid "MM-YYYY-DD"
 msgstr ""
 
@@ -7013,11 +6694,11 @@ msgstr ""
 msgid "Model"
 msgstr ""
 
-#: survival/ui[9][1].label
+#: survival/ui[10][1].label
 msgid "Model Comparison and Plot"
 msgstr ""
 
-#: survival/ui[9][0].label
+#: survival/ui[10][0].label
 msgid "Model Configuration"
 msgstr ""
 
@@ -7095,7 +6776,7 @@ msgstr ""
 msgid "Model Type"
 msgstr ""
 
-#: survival/ui[3][2].label
+#: survival/ui[4][2].label
 msgid "Model Validation"
 msgstr ""
 
@@ -7192,10 +6873,6 @@ msgstr ""
 msgid "months"
 msgstr ""
 
-#: timeinterval/options/output_unit/months.title
-msgid "Months"
-msgstr ""
-
 #: singlearm/options/timetypeoutput/months.title
 msgid "months (recommended for oncology)"
 msgstr ""
@@ -7233,12 +6910,12 @@ msgstr ""
 msgid "Multiple cut-offs unavailable"
 msgstr ""
 
-#: survival/ui[2][0][0]/multievent.label
+#: survival/ui[3][0][0]/multievent.label
 #: survivalcont/ui[3][0][0]/multievent.label
 msgid "Multiple event analysis"
 msgstr ""
 
-#: survival/ui[2][0].label
+#: survival/ui[3][0].label
 #: survivalcont/ui[3][0].label
 msgid "Multiple Event Configuration"
 msgstr ""
@@ -7252,7 +6929,7 @@ msgid "Multiple event levels"
 msgstr ""
 
 #: multisurvival/ui[2][0].label
-#: singlearm/ui[2][0].label
+#: singlearm/ui[3][0].label
 msgid "Multiple Event Levels"
 msgstr ""
 
@@ -7345,9 +7022,9 @@ msgstr ""
 
 #: multisurvival/options/showSummaries.title
 #: singlearm/options/showSummaries.title
-#: singlearm/ui[7][0][0]/showSummaries.label
+#: singlearm/ui[8][0][0]/showSummaries.label
 #: survival/options/showSummaries.title
-#: survival/ui[8][0][0]/showSummaries.label
+#: survival/ui[9][0][0]/showSummaries.label
 #: survivalcont/options/showSummaries.title
 #: survivalcont/ui[8][0][0]/showSummaries.label
 msgid "Natural language summaries"
@@ -7366,7 +7043,6 @@ msgid "Natural Language Summary (Copy-Ready)"
 msgstr ""
 
 #: datetimeconverter/options/show_summary.title
-#: timeinterval/options/show_summary.title
 msgid "Natural-language summary"
 msgstr ""
 
@@ -7396,12 +7072,6 @@ msgstr ""
 msgid ""
 "Negative Survival Times Detected: {count} observation(s) have negative time "
 "values."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Negative time intervals detected (end date before start date) in {count} of "
-"{total} rows ({pct}%)."
 msgstr ""
 
 #: R/lassocox.b.R
@@ -7561,10 +7231,6 @@ msgstr ""
 msgid "No Influential Outliers:"
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid "No interval exceeded the extreme threshold of {threshold} {unit} (0 removed)"
-msgstr ""
-
 #: R/lassocox.b.R
 msgid "No issues"
 msgstr ""
@@ -7635,6 +7301,10 @@ msgid ""
 "follow-up (%.2f %s)."
 msgstr ""
 
+#: R/survivalcont.b.R
+msgid "no split met the tree criteria"
+msgstr ""
+
 #: R/multisurvival.b.R
 msgid ""
 "No statistically significant association was identified for the 1 factor "
@@ -7692,8 +7362,8 @@ msgid ""
 "Enter one or more valid time points to override them."
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid "No valid dates found for format detection in either column"
+#: R/survivalcont.b.R
+msgid "no usable continuous split was found"
 msgstr ""
 
 #: R/datetimeconverter.b.R
@@ -7702,22 +7372,6 @@ msgstr ""
 
 #: R/lassocox.b.R
 msgid "No valid explanatory variables remain after removing constant predictors."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid "No valid time intervals after parsing start/end dates."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"No valid time intervals could be calculated; please verify start/end dates "
-"and selected format."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"No valid time intervals could be calculated. Check that the date format "
-"setting matches the data and that both date columns contain readable dates."
 msgstr ""
 
 #: R/lassocox.b.R
@@ -7793,7 +7447,7 @@ msgstr ""
 msgid "Non-Finite Survival Time"
 msgstr ""
 
-#: survival/ui[3][3].label
+#: survival/ui[4][3].label
 msgid "Non-Linearity Assessment"
 msgstr ""
 
@@ -7996,7 +7650,7 @@ msgstr ""
 msgid "Number of Knots"
 msgstr ""
 
-#: survival/ui[3][3][0]/rcs_knots.label
+#: survival/ui[4][3][0]/rcs_knots.label
 msgid "Number of Knots (3-7)"
 msgstr ""
 
@@ -8017,7 +7671,7 @@ msgstr ""
 
 #: multisurvival/options/numRiskGroups.title
 #: survival/options/calibration_ngroups.title
-#: survival/ui[3][2][0]/calibration_ngroups.label
+#: survival/ui[4][2][0]/calibration_ngroups.label
 msgid "Number of Risk Groups"
 msgstr ""
 
@@ -8036,7 +7690,7 @@ msgstr ""
 msgid "Number of Spline Knots"
 msgstr ""
 
-#: survival/ui[9][0][0]/spline_knots.label
+#: survival/ui[10][0][0]/spline_knots.label
 msgid "Number of spline knots"
 msgstr ""
 
@@ -8153,6 +7807,16 @@ msgstr ""
 msgid "Observed Records"
 msgstr ""
 
+#: singlearm/ui[0].label
+#: survival/ui[0].label
+msgid "Observed-Time Competing Risks"
+msgstr ""
+
+#: singlearm/results/cifTable.title
+#: survival/results/cifTable.title
+msgid "Observed-time cumulative incidence and follow-up support"
+msgstr ""
+
 #: R/multisurvival.b.R
 msgid "Occur when events happen"
 msgstr ""
@@ -8227,13 +7891,6 @@ msgid ""
 "event count guarantees reliable prediction modeling."
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid ""
-"Only {percent}% of non-missing values in '{column}' were parsed with format "
-"'{format}'. Please verify that the selected format matches all values or "
-"standardise the column."
-msgstr ""
-
 #: R/survivalcont.b.R
 msgid ""
 "Only %d event(s) detected (n=%d total). Descriptive results are shown, but "
@@ -8271,14 +7928,6 @@ msgstr ""
 
 #: R/outcomeorganizer.b.R
 msgid "Only %d/%d (%.1f%%) outcomes successfully recoded"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Only one interval could be calculated. No spread can be estimated from a "
-"single observation, so the standard deviation and the confidence interval "
-"are reported as NA, and the mean, median and range are all that one value. "
-"This is not a basis for any statistical statement."
 msgstr ""
 
 #: R/lassocox.b.R
@@ -8382,9 +8031,9 @@ msgstr ""
 #: multisurvival/options/outcome.title
 #: multisurvival/ui[0][1].label
 #: singlearm/options/outcome.title
-#: singlearm/ui[0][1].label
+#: singlearm/ui[1][1].label
 #: survival/options/outcome.title
-#: survival/ui[0][1].label
+#: survival/ui[1][1].label
 #: survivalcont/options/outcome.title
 #: survivalcont/ui[0][1].label
 msgid "Outcome"
@@ -8577,7 +8226,6 @@ msgstr ""
 
 #: datetimeconverter/ui[8].label
 #: lassocox/ui[4].label
-#: timeinterval/ui[4].label
 msgid "Output Options"
 msgstr ""
 
@@ -8585,7 +8233,7 @@ msgstr ""
 msgid "Output table"
 msgstr ""
 
-#: survival/ui[1][0][0][2][0]/timetypeoutput.label
+#: survival/ui[2][0][0][2][0]/timetypeoutput.label
 #: survivalcont/ui[2][1][0]/timetypeoutput.label
 msgid "Output time type"
 msgstr ""
@@ -8653,7 +8301,7 @@ msgstr ""
 msgid "P-value"
 msgstr ""
 
-#: survival/ui[3][4][0]/padjustmethod.label
+#: survival/ui[4][4][0]/padjustmethod.label
 msgid "P-value adjustment method"
 msgstr ""
 
@@ -8661,7 +8309,7 @@ msgstr ""
 msgid "p-value not available"
 msgstr ""
 
-#: survival/ui[4][1][0]/pplot.label
+#: survival/ui[5][1][0]/pplot.label
 msgid "P-values"
 msgstr ""
 
@@ -8670,11 +8318,11 @@ msgid "Pairwise Comparison Analysis"
 msgstr ""
 
 #: survival/options/pw.title
-#: survival/ui[3][4][0]/pw.label
+#: survival/ui[4][4][0]/pw.label
 msgid "Pairwise comparisons"
 msgstr ""
 
-#: survival/ui[3][4].label
+#: survival/ui[4][4].label
 msgid "Pairwise Comparisons"
 msgstr ""
 
@@ -8696,7 +8344,7 @@ msgstr ""
 msgid "Pairwise log-rank comparisons"
 msgstr ""
 
-#: survival/ui[3][4][0]/survivalTestType.label
+#: survival/ui[4][4][0]/survivalTestType.label
 msgid "Pairwise test type"
 msgstr ""
 
@@ -8732,7 +8380,7 @@ msgstr ""
 msgid "Parametric survival models"
 msgstr ""
 
-#: survival/ui[9].label
+#: survival/ui[10].label
 msgid "Parametric Survival Models"
 msgstr ""
 
@@ -8812,9 +8460,7 @@ msgid ""
 msgstr ""
 
 #: R/oddsratio.b.R
-msgid ""
-"Penalized AIC: {aic} (-2 x penalized log-likelihood + 2 x {n_par} "
-"parameters)."
+msgid "Penalized AIC: {aic} (-2 x penalized log-likelihood + 2 x {nPar} parameters)."
 msgstr ""
 
 #: R/lassocox.b.R
@@ -8955,10 +8601,10 @@ msgstr ""
 #: multisurvival/ui[10].label
 #: multisurvival/results/personTimeHeading.title
 #: multisurvival/results/personTimeTable.title
-#: singlearm/ui[5].label
+#: singlearm/ui[6].label
 #: singlearm/results/personTimeHeading.title
 #: singlearm/results/personTimeTable.title
-#: survival/ui[6].label
+#: survival/ui[7].label
 #: survival/results/personTimeHeading.title
 #: survival/results/personTimeTable.title
 #: survivalcont/ui[7].label
@@ -9019,7 +8665,7 @@ msgid ""
 msgstr ""
 
 #: multisurvival/ui[10][0]/person_time.label
-#: singlearm/ui[5][0]/person_time.label
+#: singlearm/ui[6][0]/person_time.label
 #: survivalcont/options/person_time.title
 msgid "Person-time metrics"
 msgstr ""
@@ -9036,7 +8682,7 @@ msgid ""
 "subjects' subsequent person-time at the observed competing-event time."
 msgstr ""
 
-#: survival/ui[6][0][0]/person_time.label
+#: survival/ui[7][0][0]/person_time.label
 msgid "Person-time rates"
 msgstr ""
 
@@ -9180,18 +8826,12 @@ msgid ""
 "case (e.g., 'Dead', 'Event', 'Yes', 'Positive')."
 msgstr ""
 
-#: R/oddsratio.b.R
-msgid ""
-"Please verify that '{level}' is the correct positive level. If this is "
-"wrong, diagnostic metrics will be inverted."
-msgstr ""
-
-#: survival/ui[4][1].label
+#: survival/ui[5][1].label
 msgid "Plot Appearance"
 msgstr ""
 
 #: multisurvival/ui[4][0].label
-#: singlearm/ui[3][1].label
+#: singlearm/ui[4][1].label
 msgid "Plot Arguments"
 msgstr ""
 
@@ -9209,7 +8849,7 @@ msgstr ""
 #: multisurvival/options/endplot.title
 #: singlearm/options/endplot.title
 #: survival/options/endplot.title
-#: survival/ui[4][2][0]/endplot.label
+#: survival/ui[5][2][0]/endplot.label
 #: survivalcont/ui[4][1][0]/endplot.label
 msgid "Plot End Time"
 msgstr ""
@@ -9238,7 +8878,7 @@ msgstr ""
 msgid "Plot Options"
 msgstr ""
 
-#: survival/ui[4][2].label
+#: survival/ui[5][2].label
 msgid "Plot Scale & Timing"
 msgstr ""
 
@@ -9255,15 +8895,15 @@ msgid ""
 "proportion of the cohort that had had the event by time t\"."
 msgstr ""
 
-#: survival/ui[4][0].label
+#: survival/ui[5][0].label
 #: survivalcont/ui[4][0].label
 msgid "Plot Types"
 msgstr ""
 
 #: lassocox/ui[3].label
 #: multisurvival/ui[3].label
-#: singlearm/ui[3].label
-#: singlearm/ui[3][0].label
+#: singlearm/ui[4].label
+#: singlearm/ui[4][0].label
 #: survivalcont/ui[4].label
 msgid "Plots"
 msgstr ""
@@ -9307,8 +8947,8 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid ""
-"Positive outcome level: '{pos_outcome}' ({outcome_method})\n"
-"Positive predictor level: '{pos_pred}' ({pred_method})\n"
+"Positive outcome level: '{posOutcome}' ({outcomeMethod})\n"
+"Positive predictor level: '{posPred}' ({predMethod})\n"
 "Contingency table:\n"
 "  {pred1} → {out1}: {c11} | {out2}: {c12}\n"
 "  {pred2} → {out1}: {c21} | {out2}: {c22}\n"
@@ -9448,6 +9088,11 @@ msgid ""
 "every event and remove them all."
 msgstr ""
 
+#: singlearm/results/cifTable.columns.title
+#: survival/results/cifTable.columns.title
+msgid "Probability"
+msgstr ""
+
 #: singlearm/results/survTable.columns.title
 msgid "Probability Estimate"
 msgstr ""
@@ -9527,7 +9172,7 @@ msgstr ""
 msgid "Proportional hazards diagnostics unavailable"
 msgstr ""
 
-#: survival/ui[3][0][0]/ph_cox.label
+#: survival/ui[4][0][0]/ph_cox.label
 msgid "Proportional hazards test"
 msgstr ""
 
@@ -9585,7 +9230,7 @@ msgid "Random seed"
 msgstr ""
 
 #: survival/options/seed.title
-#: survival/ui[3][2][0]/seed.label
+#: survival/ui[4][2][0]/seed.label
 #: survivalcont/ui[8][0][0]/seed.label
 msgid "Random Seed"
 msgstr ""
@@ -9615,7 +9260,7 @@ msgstr ""
 #: multisurvival/options/rate_multiplier.title
 #: singlearm/options/rate_multiplier.title
 #: survival/options/rate_multiplier.title
-#: survival/ui[6][0][0]/rate_multiplier.label
+#: survival/ui[7][0][0]/rate_multiplier.label
 #: survivalcont/ui[7][0][0]/rate_multiplier.label
 msgid "Rate Multiplier"
 msgstr ""
@@ -9762,7 +9407,7 @@ msgid ""
 msgstr ""
 
 #: survival/options/remark_checklist.title
-#: survival/ui[8][0][0]/remark_checklist.label
+#: survival/ui[9][0][0]/remark_checklist.label
 msgid "REMARK reporting checklist"
 msgstr ""
 
@@ -9772,15 +9417,6 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "Remove any duplicate column names"
-msgstr ""
-
-#: timeinterval/options/remove_extreme.title
-msgid "Remove extreme values"
-msgstr ""
-
-#: timeinterval/options/remove_negative.title
-#: timeinterval/ui[3]/remove_negative.label
-msgid "Remove negative intervals"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -9811,20 +9447,6 @@ msgstr ""
 msgid "Removed encoded columns constant in complete cases: {vars}."
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid ""
-"Removing negative intervals dropped {count} of {total} rows ({pct}%) whose "
-"end date fell before their start date. A negative interval is not an unusual "
-"measurement but an impossible one: at least one of the two dates in each of "
-"those rows is wrong. Those rows are dropped from the mean, the median and "
-"the total person-time, so the person-time denominator reported here covers "
-"fewer participants than you supplied. These dates were read with the "
-"\"{format}\" format; the usual causes are the start and end date columns "
-"being swapped for those rows, or a mis-detected day/month order, which flips "
-"only the rows whose day-of-month is 12 or less. Correct the dates at source "
-"rather than leaving them to this filter before reporting this person-time."
-msgstr ""
-
 #: singlearm/options/advancedDiagnostics.description
 msgid ""
 "Report cohort size, event count, observed event proportion, follow-up "
@@ -9845,6 +9467,13 @@ msgstr ""
 msgid ""
 "Report the endpoint, candidate parameters, exclusions, coding, penalty rule, "
 "folds, software versions, and validation limitations."
+msgstr ""
+
+#: singlearm/options/cif_all_causes.description
+#: survival/options/cif_all_causes.description
+msgid ""
+"Report the event-free probability and cumulative incidence of the target and "
+"competing events within observed follow-up."
 msgstr ""
 
 #: R/singlearm.b.R
@@ -9898,7 +9527,7 @@ msgstr ""
 msgid "Residual calculation failed: %s"
 msgstr ""
 
-#: survival/ui[3][0][0]/residual_diagnostics.label
+#: survival/ui[4][0][0]/residual_diagnostics.label
 #: survivalcont/options/residual_diagnostics.title
 msgid "Residual diagnostics"
 msgstr ""
@@ -9915,7 +9544,7 @@ msgstr ""
 msgid "Restricted cubic spline assessment"
 msgstr ""
 
-#: survival/ui[3][3][0]/rcs_analysis.label
+#: survival/ui[4][3][0]/rcs_analysis.label
 msgid "Restricted cubic splines (RCS)"
 msgstr ""
 
@@ -9932,7 +9561,7 @@ msgstr ""
 msgid "Restricted mean survival time"
 msgstr ""
 
-#: survival/ui[3][6].label
+#: survival/ui[4][6].label
 #: survival/results/rmstTable.title
 #: survivalcont/ui[6][1].label
 #: survivalcont/results/rmstTable.title
@@ -10079,9 +9708,9 @@ msgid ""
 msgstr ""
 
 #: multisurvival/options/risktable.title
-#: singlearm/ui[3][1][0]/risktable.label
+#: singlearm/ui[4][1][0]/risktable.label
 #: survival/options/risktable.title
-#: survival/ui[4][1][0]/risktable.label
+#: survival/ui[5][1][0]/risktable.label
 #: survivalcont/options/risktable.title
 msgid "Risk table"
 msgstr ""
@@ -10104,7 +9733,7 @@ msgstr ""
 msgid "RMST"
 msgstr ""
 
-#: survival/ui[3][6][0]/rmst_analysis.label
+#: survival/ui[4][6][0]/rmst_analysis.label
 #: survivalcont/ui[6][1][0]/rmst_analysis.label
 msgid "RMST analysis"
 msgstr ""
@@ -10544,6 +10173,13 @@ msgid ""
 "effect of age differences between groups."
 msgstr ""
 
+#: singlearm/options/show_followup_support.description
+#: survival/options/show_followup_support.description
+msgid ""
+"Show numbers at risk and cumulative event and censoring counts with the "
+"all-event cumulative incidence table. A late plateau does not establish cure."
+msgstr ""
+
 #: R/lassocox.b.R
 msgid ""
 "Showing {shown} of {total} paths on the original scale, ranked by summed "
@@ -10604,13 +10240,6 @@ msgstr ""
 msgid ""
 "Small sample size (n = {n}). Consider larger sample for more reliable "
 "cut-off analysis."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Small sample size (n={n}). Confidence intervals may be very wide and "
-"unreliable with fewer than 20 observations. Consider collecting more data or "
-"interpreting results cautiously."
 msgstr ""
 
 #: R/oddsratio.b.R
@@ -10680,23 +10309,6 @@ msgstr ""
 msgid ""
 "Some rows could not be computed ({detail}). Empty cells mean the model could "
 "not be fitted, not that it performed poorly."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Some rows may have been entered with the day and month the other way round "
-"from the rest of this column. {count} of {total} rows read as a valid date "
-"under both \"{format}\" and \"{swapped}\"; the other {others} can only be "
-"read as \"{format}\", which is how the format was chosen. Those two groups "
-"should have the same follow-up on average, because the day of the month has "
-"nothing to do with how long a patient is followed - but here the ambiguous "
-"rows run at a median of {medianamb} days against {medianref} days for the "
-"rest (rank-sum p = {p}), which is what a mis-typed day/month order looks "
-"like. Check rows {rows} first: the largest of them spans {examplechosen} "
-"days as read and {exampleswapped} days with the day and month swapped. Dates "
-"typed in two different orders in one column parse without error and stay "
-"positive, so nothing else on this page can see them, and the total "
-"person-time is wrong by however much those rows are wrong."
 msgstr ""
 
 #: package/analyses/lassocox.menuSubtitle
@@ -10816,13 +10428,6 @@ msgid ""
 "values to request custom points in the selected output time scale."
 msgstr ""
 
-#: oddsratio/options/predictorLevel.description.main
-msgid ""
-"Specify which level of the diagnostic predictor represents the positive case "
-"(e.g., \"Present\", \"Test+\", \"Yes\"). If omitted, the module attempts "
-"automatic detection and displays the selected level for verification."
-msgstr ""
-
 #: oddsratio/options/outcomeLevel.description.main
 msgid ""
 "Specify which outcome level represents the positive case (e.g., \"Dead\", "
@@ -10838,15 +10443,8 @@ msgstr ""
 msgid "Spline Scale"
 msgstr ""
 
-#: survival/ui[9][0][0]/spline_scale.label
+#: survival/ui[10][0][0]/spline_scale.label
 msgid "Spline scale"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Spreadsheets and statistics packages store a date as a count of days since "
-"an epoch, and exporting the column as plain numbers loses the date "
-"formatting."
 msgstr ""
 
 #: R/lassocox.b.R
@@ -10877,27 +10475,8 @@ msgstr ""
 msgid "Standardization Method"
 msgstr ""
 
-#: survival/ui[3][1][0]/age_standardization_method.label
+#: survival/ui[4][1][0]/age_standardization_method.label
 msgid "Standardization method"
-msgstr ""
-
-#: timeinterval/options/time_basis/standardized.title
-msgid "Standardized (30.4375-day months, 365.25-day years)"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Start date column contains only missing values; cannot calculate time "
-"intervals."
-msgstr ""
-
-#: timeinterval/options/dx_date.title
-#: timeinterval/ui[0][0].label
-msgid "Start Date Variable"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid "Start dates are not valid date objects"
 msgstr ""
 
 #: singlearm/options/ybegin_plot.title
@@ -10909,12 +10488,17 @@ msgstr ""
 msgid "Start Y-axis"
 msgstr ""
 
+#: singlearm/results/cifTable.columns.title
+#: survival/results/cifTable.columns.title
+msgid "State / event"
+msgstr ""
+
 #: lassocox/results/modelSummary.columns.title
 #: survivalcont/results/rescutTable.columns.title
 msgid "Statistic"
 msgstr ""
 
-#: survival/ui[3].label
+#: survival/ui[4].label
 msgid "Statistical Analysis"
 msgstr ""
 
@@ -10924,10 +10508,6 @@ msgstr ""
 
 #: multisurvival/results/glossaryPanel.title
 msgid "Statistical Glossary"
-msgstr ""
-
-#: timeinterval/results/summary.title
-msgid "Statistical Summary & Person-Time Analysis"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -10963,7 +10543,7 @@ msgid "Stratification Notes"
 msgstr ""
 
 #: survival/options/strata_variable.title
-#: survival/ui[3][0][0][4][0].label
+#: survival/ui[4][0][0][4][0].label
 #: survivalcont/ui[6][0][0][2][0].label
 msgid "Stratification Variable"
 msgstr ""
@@ -11001,7 +10581,7 @@ msgid ""
 "their direct effects."
 msgstr ""
 
-#: survival/ui[3][0][0]/stratified_cox.label
+#: survival/ui[4][0][0]/stratified_cox.label
 msgid "Stratified Cox model"
 msgstr ""
 
@@ -11049,10 +10629,6 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Strong warning"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid "Strong Warning"
 msgstr ""
 
 #: multisurvival/results/strongWarnings.title
@@ -11152,7 +10728,6 @@ msgstr ""
 #: package/analyses/multisurvival.menuGroup
 #: package/analyses/oddsratio.menuGroup
 #: package/analyses/datetimeconverter.menuGroup
-#: package/analyses/timeinterval.menuGroup
 #: package/analyses/outcomeorganizer.menuGroup
 #: package/analyses/lassocox.menuGroup
 #: datetimeconverter/options.menuGroup
@@ -11166,7 +10741,6 @@ msgstr ""
 #: survivalcont/options.menuGroup
 #: survivalcont/results/survTable.columns.title
 #: survivalcont/results/multipleSurvTable.columns.title
-#: timeinterval/options.menuGroup
 msgid "Survival"
 msgstr ""
 
@@ -11224,7 +10798,7 @@ msgid ""
 "quality issues."
 msgstr ""
 
-#: survival/ui[4][0][0]/sc.label
+#: survival/ui[5][0][0]/sc.label
 msgid "Survival curves"
 msgstr ""
 
@@ -11292,7 +10866,7 @@ msgid "Survival plot"
 msgstr ""
 
 #: multisurvival/results/survivalPlotsHeading.title
-#: survival/ui[4].label
+#: survival/ui[5].label
 msgid "Survival Plots"
 msgstr ""
 
@@ -11331,7 +10905,7 @@ msgstr ""
 msgid "Survival Probability Tables"
 msgstr ""
 
-#: singlearm/ui[4][0].label
+#: singlearm/ui[5][0].label
 msgid "Survival table"
 msgstr ""
 
@@ -11343,8 +10917,8 @@ msgstr ""
 msgid "Survival Table Natural Language Summary"
 msgstr ""
 
-#: singlearm/ui[4].label
-#: survival/ui[5].label
+#: singlearm/ui[5].label
+#: survival/ui[6].label
 #: survivalcont/ui[5].label
 msgid "Survival Tables"
 msgstr ""
@@ -11385,7 +10959,7 @@ msgid ""
 msgstr ""
 
 #: multisurvival/options/tint.title
-#: singlearm/ui[1][0][0]/tint.label
+#: singlearm/ui[2][0][0]/tint.label
 msgid "Survival time from dates"
 msgstr ""
 
@@ -11444,16 +11018,12 @@ msgstr ""
 msgid "system"
 msgstr ""
 
-#: timeinterval/options/timezone/system.title
-msgid "System Default"
-msgstr ""
-
-#: survival/ui[5][0].label
+#: survival/ui[6][0].label
 #: survivalcont/ui[5][0].label
 msgid "Table Configuration"
 msgstr ""
 
-#: survival/ui[3][6][0]/rmst_tau.label
+#: survival/ui[4][6][0]/rmst_tau.label
 #: survivalcont/ui[6][1][0]/rmst_tau.label
 msgid "Tau (Restriction Time)"
 msgstr ""
@@ -11494,33 +11064,6 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "The 'rms' package is required for nomogram generation but is not available."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"The {landmark} landmark excluded no participants, because it is only "
-"{share}% of the median observed interval in these data ({median} {unit}). It "
-"still subtracted {amount} from every interval, so every duration and the "
-"total person-time below are that much smaller than the follow-up observed. "
-"Check that the landmark is expressed in the same unit as the results "
-"({unit}): entering a value meant as months while the output unit is days is "
-"the usual cause."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"The {landmark} landmark is later than the median observed interval in these "
-"data ({median} {unit}), so more than half the cohort could not reach it and "
-"{excluded} of {total} observations were excluded. What remains is a subgroup "
-"defined by having been followed to the landmark, and the total person-time "
-"above is the denominator for that subgroup only: a rate computed from it "
-"answers \"among those still under observation at {amount}, how often did "
-"events occur\", not the same question for the cohort you enrolled. This "
-"analysis has no event indicator, so it cannot tell you whether the excluded "
-"participants had short follow-up because they died early or simply because "
-"they were enrolled recently - check that before interpreting the selection. "
-"Report the landmark, the number excluded and the reason alongside any rate "
-"taken from this analysis."
 msgstr ""
 
 #: R/lassocox.b.R
@@ -11718,14 +11261,14 @@ msgstr ""
 
 #: R/survivalcont.b.R
 msgid ""
-"The data-derived cut-off point for {variable_name} is {cutoff_value}; it "
-"separates lower and higher marker values in this dataset."
+"The data-derived cut-off point for {variable} is {cutoff}; it separates "
+"lower and higher marker values in this dataset."
 msgstr ""
 
 #: R/survivalcont.b.R
 msgid ""
-"The data-derived cut-off point for {variable} is {cutoff}; it separates "
-"lower and higher marker values in this dataset."
+"The data-derived cut-off point for {variableName} is {cutoffValue}; it "
+"separates lower and higher marker values in this dataset."
 msgstr ""
 
 #: survivalcont/options/dxdate.description
@@ -11943,16 +11486,20 @@ msgid "The level '{level}' is used as the positive/exposure category as specifie
 msgstr ""
 
 #: survivalcont/options/outcomeLevel.description
-msgid "The level of the outcome variable that represents the event of interest."
+msgid ""
+"The level of the outcome variable that represents the event of interest. "
+"Required for a factor outcome, and never taken from the order of the levels: "
+"without it the analysis stops and lists the levels. A numeric 0/1 outcome is "
+"read as 1 = event."
 msgstr ""
 
 #: R/survivalcont.b.R
 msgid ""
-"The log-rank p above is EXPLORATORY: the cut-points were selected from these "
-"same data, so it is the largest of many statistics reported as a single test "
-"and is optimistic. No selection-adjusted p-value is reported: a single-split "
-"maximally selected-rank test does not adjust a multiple-cutoff procedure. "
-"Validate every cut-point in independent data before clinical use."
+"The log-rank p above is unadjusted. When survival outcomes guided the "
+"cut-point search, this comparison is optimistic and exploratory. No "
+"selection-adjusted p-value is reported; a single-split maximally "
+"selected-rank adjustment does not cover a multiple-cutoff procedure. "
+"Validate data-derived cut-points independently before clinical use."
 msgstr ""
 
 #: singlearm/options/endplot.description
@@ -12091,7 +11638,7 @@ msgstr ""
 #: R/survivalcont.b.R
 msgid ""
 "The numeric date columns hold values too small to be Unix epoch seconds (the "
-"largest is {max_val}, which is January 1970). They look like day counts, as "
+"largest is {maxVal}, which is January 1970). They look like day counts, as "
 "produced by an R Date column or an Excel serial date. Numeric dates must be "
 "seconds since 1970-01-01 -- use the DateTime Converter's "
 "corrected_datetime_numeric output, or supply the dates as text (e.g. "
@@ -12198,10 +11745,6 @@ msgstr ""
 msgid "The point-scoring guide and the nomogram plot are shown below."
 msgstr ""
 
-#: R/oddsratio.b.R
-msgid "The positive predictor level was automatically detected as: '{level}'"
-msgstr ""
-
 #: R/multisurvival.b.R
 msgid "The predicted risk is based on the total points from all variables"
 msgstr ""
@@ -12289,15 +11832,12 @@ msgid ""
 "lowest risk groups."
 msgstr ""
 
-#: R/survival.b.R
-msgid "the same hazard"
+#: R/survivalcont.b.R
+msgid "the rpart package is unavailable"
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid ""
-"The same variable ({variable}) is selected as both the start and the end "
-"date, so every interval is exactly zero and the total person-time is zero. "
-"Select the follow-up or event date as the End Date Variable."
+#: R/survival.b.R
+msgid "the same hazard"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -12429,9 +11969,15 @@ msgstr ""
 
 #: R/survivalcont.b.R
 msgid ""
-"The survival tree produced no usable split for '{var}'. Quantile cut-points "
-"are shown instead. This usually means the tree found no split meeting the "
-"complexity and minimum group-size criteria."
+"The survival tree could not provide cut-points ({reason}). Quantile "
+"cut-points are shown instead."
+msgstr ""
+
+#: R/survivalcont.b.R
+msgid ""
+"The survival tree provided fewer cut-points than requested. Quantile "
+"cut-points supplement the tree splits; the displayed method is tree + "
+"quantile."
 msgstr ""
 
 #: singlearm/options/timetypeoutput.description
@@ -12464,21 +12010,6 @@ msgid ""
 "denominator when person-time rates are requested; Kaplan-Meier estimates "
 "instead use ordered event times and risk sets. Values must be finite and "
 "zero or positive, in one consistent unit."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid "The total person-time"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid "The total post-landmark person-time"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"The UTC timezone setting applies only to the \"YYYY-MM-DD HH:MM:SS\" format, "
-"the only one carrying a time of day. These dates were read as \"{format}\", "
-"so they are calendar days and the timezone has no effect on the intervals."
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -12566,13 +12097,6 @@ msgid ""
 "the data before running a survival model."
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid ""
-"These rows cannot be analysed: a negative interval subtracts from total "
-"person-time and would corrupt any incidence rate computed from that "
-"denominator."
-msgstr ""
-
 #: R/oddsratio.b.R
 msgid ""
 "These unadjusted diagnostic metrics depend on these interpretations being "
@@ -12584,13 +12108,6 @@ msgid ""
 "They pool information across subgroups, so the confidence intervals are "
 "typically narrower (and p-values smaller) than fitting a separate Cox model "
 "within each subgroup; the point estimates are nearly identical."
-msgstr ""
-
-#: R/oddsratio.b.R
-msgid ""
-"This AIC is computed from the penalized (Firth) likelihood. Compare it only "
-"with other Firth models fitted to these same observations, not with the "
-"maximum-likelihood AIC of an unpenalized fit."
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -12710,6 +12227,15 @@ msgstr ""
 
 #: R/singlearm.b.R
 msgid "This hazard plot"
+msgstr ""
+
+#: R/oddsratio.b.R
+msgid ""
+"This is a model-specific penalized-likelihood quantity that depends on "
+"predictor units and parameterisation. It is not suitable for comparing "
+"separately fitted Firth models or for comparison with maximum-likelihood "
+"AIC. For nested models, use a documented common-penalty likelihood-ratio "
+"comparison instead."
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -12837,7 +12363,9 @@ msgstr ""
 
 #: R/lassocox.b.R
 #: multisurvival/results/adjustedSurvTable.columns.title
+#: singlearm/results/cifTable.columns.title
 #: singlearm/results/baselineHazardTable.columns.title
+#: survival/results/cifTable.columns.title
 #: survivalcont/results/multipleSurvTable.columns.title
 msgid "Time"
 msgstr ""
@@ -12862,10 +12390,6 @@ msgstr ""
 msgid "Time and outcome must be different variables."
 msgstr ""
 
-#: timeinterval/options/time_basis.title
-msgid "Time basis"
-msgstr ""
-
 #: datetimeconverter/ui[6].label
 msgid "Time Components"
 msgstr ""
@@ -12886,9 +12410,9 @@ msgstr ""
 #: multisurvival/options/elapsedtime.title
 #: multisurvival/ui[0][0].label
 #: singlearm/options/elapsedtime.title
-#: singlearm/ui[0][0].label
+#: singlearm/ui[1][0].label
 #: survival/options/elapsedtime.title
-#: survival/ui[0][0].label
+#: survival/ui[1][0].label
 #: survivalcont/ui[0][0].label
 msgid "Time Elapsed"
 msgstr ""
@@ -12897,7 +12421,7 @@ msgstr ""
 msgid "Time elapsed"
 msgstr ""
 
-#: survival/ui[1][0][0]/tint.label
+#: survival/ui[2][0][0]/tint.label
 #: survivalcont/ui[2][0][0]/tint.label
 msgid "Time from dates"
 msgstr ""
@@ -12917,10 +12441,10 @@ msgstr ""
 #: multisurvival/ui[1][0].label
 #: multisurvival/results/personTimeTable.columns.title
 #: singlearm/options/byplot.title
-#: singlearm/ui[1][0].label
+#: singlearm/ui[2][0].label
 #: singlearm/results/personTimeTable.columns.title
 #: survival/options/byplot.title
-#: survival/ui[4][2][0]/byplot.label
+#: survival/ui[5][2][0]/byplot.label
 #: survival/results/personTimeTable.columns.title
 #: survivalcont/ui[4][1][0]/byplot.label
 #: survivalcont/results/personTimeTable.columns.title
@@ -12937,7 +12461,7 @@ msgid ""
 "enter a positive value for \"Time Interval\"."
 msgstr ""
 
-#: survival/ui[1][0].label
+#: survival/ui[2][0].label
 #: survivalcont/ui[2][0].label
 msgid "Time Interval Calculation"
 msgstr ""
@@ -12952,7 +12476,7 @@ msgstr ""
 msgid "Time interval stratification"
 msgstr ""
 
-#: survival/ui[6][0][0]/time_intervals.label
+#: survival/ui[7][0][0]/time_intervals.label
 #: survivalcont/ui[7][0][0]/time_intervals.label
 msgid "Time Intervals"
 msgstr ""
@@ -12970,7 +12494,7 @@ msgid ""
 "accrue before the start of observation or after the last one."
 msgstr ""
 
-#: survival/ui[3][2][0]/calibration_timepoint.label
+#: survival/ui[4][2][0]/calibration_timepoint.label
 msgid "Time Point (0 = median)"
 msgstr ""
 
@@ -13000,7 +12524,7 @@ msgid ""
 "occur at the origin."
 msgstr ""
 
-#: survival/ui[5][0][0]/cutp.label
+#: survival/ui[6][0][0]/cutp.label
 msgid "Time Points for Table"
 msgstr ""
 
@@ -13025,7 +12549,7 @@ msgid "Time to Progression (TTP)"
 msgstr ""
 
 #: multisurvival/ui[1][0][0][2].label
-#: singlearm/ui[1][0][0][2].label
+#: singlearm/ui[2][0][0][2].label
 msgid "Time Type"
 msgstr ""
 
@@ -13040,16 +12564,12 @@ msgstr ""
 msgid "Time Type in Output"
 msgstr ""
 
-#: survival/ui[1][0][0][2].label
+#: survival/ui[2][0][0][2].label
 msgid "Time Type Settings"
 msgstr ""
 
 #: singlearm/options/timetypeoutput.title
 msgid "Time Unit"
-msgstr ""
-
-#: timeinterval/options/output_unit.title
-msgid "Time unit for results"
 msgstr ""
 
 #: survivalcont/ui[2][1].label
@@ -13124,7 +12644,6 @@ msgstr ""
 
 #: datetimeconverter/options/timezone.title
 #: datetimeconverter/ui[3][1].label
-#: timeinterval/options/timezone.title
 msgid "Timezone"
 msgstr ""
 
@@ -13132,6 +12651,10 @@ msgstr ""
 msgid ""
 "Timezone {requested} is not a recognised Olson timezone. Falling back to the "
 "system default ({fallback})."
+msgstr ""
+
+#: R/oddsratio.b.R
+msgid "To choose a level, first put '{variable}' in the Diagnostic Predictor box."
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -13194,16 +12717,8 @@ msgid ""
 "Check the time variable and its units."
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid "Total person-time"
-msgstr ""
-
 #: R/multisurvival.b.R
 msgid "Total Points"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid "Total post-landmark person-time (from {amount} onward)"
 msgstr ""
 
 #: R/survivalcont.b.R
@@ -13232,6 +12747,10 @@ msgstr ""
 
 #: R/lassocox.b.R
 msgid "Treatment indicators"
+msgstr ""
+
+#: R/survivalcont.b.R
+msgid "Tree cut-points supplemented"
 msgstr ""
 
 #: R/survivalcont.b.R
@@ -13446,7 +12965,6 @@ msgstr ""
 #: singlearm/results/personTimeExplanation.title
 #: survival/results/personTimeExplanation.title
 #: survivalcont/results/personTimeExplanation.title
-#: timeinterval/results/personTimeInfo.title
 msgid "Understanding Person-Time Analysis"
 msgstr ""
 
@@ -13538,18 +13056,10 @@ msgstr ""
 msgid "Unpenalized refit after LASSO selection"
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid "Unsupported date format: {format}"
-msgstr ""
-
 #: R/singlearm.b.R
 msgid ""
 "Unsupported date format: %s. Supported formats are: %s. Please select the "
 "correct format from Time Type options."
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid "Unsupported output unit for calendar-based calculation"
 msgstr ""
 
 #: R/survivalcont.b.R
@@ -13584,6 +13094,11 @@ msgstr ""
 msgid "Upper"
 msgstr ""
 
+#: singlearm/results/cifTable.columns.title
+#: survival/results/cifTable.columns.title
+msgid "Upper 95% CI"
+msgstr ""
+
 #: R/lassocox.b.R
 msgid ""
 "Use <strong>Multivariable Survival</strong> in ClinicoPath for standard Cox "
@@ -13602,10 +13117,6 @@ msgstr ""
 #: survival/options/uselandmark.title
 #: survivalcont/options/uselandmark.title
 msgid "Use landmark time"
-msgstr ""
-
-#: R/oddsratio.b.R
-msgid "Use the 'Predictor Positive Level' option to set this manually."
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -13672,18 +13183,6 @@ msgstr ""
 #: survival/options/tint.title
 #: survivalcont/options/tint.title
 msgid "Using dates to calculate survival time"
-msgstr ""
-
-#: R/timeinterval.b.R
-msgid ""
-"Usual causes are that the start and end date columns are swapped, or that "
-"the date format was mis-detected - a wrong day/month order flips only the "
-"rows whose day-of-month is 12 or less, which is why a few rows can be "
-"negative while the rest look correct."
-msgstr ""
-
-#: timeinterval/options/timezone/utc.title
-msgid "UTC"
 msgstr ""
 
 #: R/lassocox.b.R
@@ -13844,7 +13343,6 @@ msgid "Wald test = {stat}, df = {df}, p = {p}"
 msgstr ""
 
 #: R/oddsratio.b.R
-#: R/timeinterval.b.R
 msgid "Warning"
 msgstr ""
 
@@ -13895,10 +13393,6 @@ msgstr ""
 msgid "weeks"
 msgstr ""
 
-#: timeinterval/options/output_unit/weeks.title
-msgid "Weeks"
-msgstr ""
-
 #: survival/options/parametric_distribution/weibull.title
 msgid "Weibull"
 msgstr ""
@@ -13909,11 +13403,11 @@ msgstr ""
 
 #: R/survival.b.R
 #: survival/options/weightedLogRank.title
-#: survival/ui[3][5][0]/weightedLogRank.label
+#: survival/ui[4][5][0]/weightedLogRank.label
 msgid "Weighted log-rank tests"
 msgstr ""
 
-#: survival/ui[3][5].label
+#: survival/ui[4][5].label
 msgid "Weighted Log-Rank Tests"
 msgstr ""
 
@@ -13999,13 +13493,6 @@ msgstr ""
 msgid "Why it matters:"
 msgstr ""
 
-#: R/timeinterval.b.R
-msgid ""
-"with {n} intervals (fewer than 101) the 99th percentile is interpolated "
-"between the two longest intervals, so this rule can flag at most the single "
-"longest one"
-msgstr ""
-
 #: R/singlearm.b.R
 msgid ""
 "with %d event(s) and %d censored observation(s) among %d subjects (%.1f%% "
@@ -14071,15 +13558,11 @@ msgstr ""
 msgid "Within-subgroup HRs are computed for 2-way interactions only."
 msgstr ""
 
-#: timeinterval/ui[3]/extreme_multiplier.suffix
-msgid "x 99th %ile"
-msgstr ""
-
 #: R/multisurvival.b.R
 msgid "X-axis:"
 msgstr ""
 
-#: survival/ui[4][2][0]/yend_plot.label
+#: survival/ui[5][2][0]/yend_plot.label
 #: survivalcont/ui[4][1][0]/yend_plot.label
 msgid "Y-axis End"
 msgstr ""
@@ -14096,7 +13579,7 @@ msgid ""
 "plot axis settings."
 msgstr ""
 
-#: survival/ui[4][2][0]/ybegin_plot.label
+#: survival/ui[5][2][0]/ybegin_plot.label
 #: survivalcont/ui[4][1][0]/ybegin_plot.label
 msgid "Y-axis Start"
 msgstr ""
@@ -14141,10 +13624,6 @@ msgstr ""
 msgid "years"
 msgstr ""
 
-#: timeinterval/options/output_unit/years.title
-msgid "Years"
-msgstr ""
-
 #: R/lassocox.b.R
 msgid "Yes"
 msgstr ""
@@ -14166,12 +13645,10 @@ msgid "You have selected more than two variables."
 msgstr ""
 
 #: datetimeconverter/options/datetime_format/ydm.title
-#: timeinterval/options/time_format/ydm.title
 msgid "YYYY-DD-MM"
 msgstr ""
 
 #: datetimeconverter/options/datetime_format/ymd.title
-#: timeinterval/options/time_format/ymd.title
 msgid "YYYY-MM-DD"
 msgstr ""
 
@@ -14180,7 +13657,6 @@ msgid "YYYY-MM-DD HH:MM"
 msgstr ""
 
 #: datetimeconverter/options/datetime_format/ymdhms.title
-#: timeinterval/options/time_format/ymdhms.title
 msgid "YYYY-MM-DD HH:MM:SS"
 msgstr ""
 

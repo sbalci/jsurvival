@@ -182,7 +182,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         # invalid.
         for (nm in c("medianTable", "survTable", "personTimeTable",
                      "baselineHazardTable")) {
-          try(self$results[[nm]]$deleteRows(), silent = TRUE)
+          try(.deleteTableRows(self$results[[nm]]), silent = TRUE)
         }
         # dataQualityTable keeps the metric rows scaffolded in .init(); only
         # their contents are reset (the median row's label varies per run).
@@ -224,6 +224,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         # early-return paths it never reaches.
         self$results$plot$setVisible(FALSE)
         self$results$plot_cif$setVisible(FALSE)
+        self$results$cifTable$setVisible(FALSE)
       },
 
       .displayMessages = function() {
@@ -297,14 +298,14 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         ev_lab <- if (length(ev_lab) > 0 && nzchar(ev_lab[1])) ev_lab[1] else .("(not set)")
         if (n_events == 0) {
           counts <- if (isTRUE(dq$n_competing > 0))
-            jmvcore::format(.("{censored} censored, {k} competing"),
+            .fmt(.("{censored} censored, {k} competing"),
                             censored = dq$n_censored, k = dq$n_competing)
           else
-            jmvcore::format(.("{censored} censored"), censored = dq$n_censored)
-          private$.addWarning(jmvcore::format(.("No events of interest were observed among {n} subjects ({counts}). Every survival or cumulative-incidence estimate is therefore a boundary value and the median is not estimable. The event level currently mapped to the event of interest is \"{level}\"; check that it is the intended level before interpreting these results as low risk."),
+            .fmt(.("{censored} censored"), censored = dq$n_censored)
+          private$.addWarning(.fmt(.("No events of interest were observed among {n} subjects ({counts}). Every survival or cumulative-incidence estimate is therefore a boundary value and the median is not estimable. The event level currently mapped to the event of interest is \"{level}\"; check that it is the intended level before interpreting these results as low risk."),
             n = dq$n_total, counts = counts, level = ev_lab), strong = TRUE)
         } else if (n_events < 10) {
-          private$.addWarning(jmvcore::format(.("Only {n} event(s) of interest among {total} subjects. Estimates with fewer than 10 events are imprecise: confidence intervals will be wide and the {median} may not be reached. Report the number at risk alongside every estimate and treat this as a descriptive result."),
+          private$.addWarning(.fmt(.("Only {n} event(s) of interest among {total} subjects. Estimates with fewer than 10 events are imprecise: confidence intervals will be wide and the {median} may not be reached. Report the number at risk alongside every estimate and treat this as a descriptive result."),
             n = n_events, total = dq$n_total,
             median = if (cr) .("median cumulative-incidence time") else .("median")), strong = TRUE)
         }
@@ -543,7 +544,11 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             "plot_generation" = .("Plot generation failed. Try adjusting plot parameters or checking data quality."),
             "baseline_hazard" = .("Piecewise hazard-rate calculation failed. This may occur with very sparse data."),
             "person_time" = .("Person-time analysis failed. Please check time intervals and event data."),
-            jmvcore::format(.("An error occurred during {context}."), context = context)
+            # Placeholder is {stage}, not {context}: `context` is a real formal of
+            # jmvcore::format (which .fmt delegates to), so it bound to that formal
+            # instead of substituting, and the user saw "during ...." with the value
+            # swallowed.
+            .fmt(.("An error occurred during {stage}."), stage = context)
           )
           
           if (!silent) {
@@ -1632,6 +1637,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         cr <- private$.isCompetingRisk()
         self$results$plot$setVisible(isTRUE(self$options$sc) && !cr)
         self$results$plot_cif$setVisible(isTRUE(self$options$sc) && cr)
+        self$results$cifTable$setVisible(isTRUE(self$options$cif_all_causes) && cr)
 
         # The piecewise-hazard section is not computed under competing risks
         # (the renderers refuse and .baselineHazardAnalysis() returns early),
@@ -1713,7 +1719,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           if (!identical(self$options$medianline, "none"))
             unavailable <- c(unavailable, "median reference lines")
           if (length(unavailable) > 0L)
-            private$.addInfo(jmvcore::format(.("The competing-risk CIF plot does not display {options}. The cumulative-incidence table remains available for estimates, confidence intervals, and counts at selected times."),
+            private$.addInfo(.fmt(.("The competing-risk CIF plot does not display {options}. The cumulative-incidence table remains available for estimates, confidence intervals, and counts at selected times."),
               options = paste(unavailable, collapse = ", ")))
         }
         if (!private$.isCompetingRisk() && isTRUE(self$options$kmunicate) &&
@@ -1920,7 +1926,7 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             n_at_risk <- sum(mydata[[mytime]] >= candidate, na.rm = TRUE)
 
             if (is.finite(max_time) && candidate >= max_time && prev_est < 0.5) {
-              private$.addWarning(jmvcore::format(.("The cumulative incidence of the event of interest reaches 50% only at the very last observed time ({time} {unit}), stepping from {before}% to {after}% with {atrisk} subject(s) still at risk. That step is driven by the final observation rather than by the cohort, so no median is reported. Report the cumulative incidence at fixed time points instead, or extend follow-up."),
+              private$.addWarning(.fmt(.("The cumulative incidence of the event of interest reaches 50% only at the very last observed time ({time} {unit}), stepping from {before}% to {after}% with {atrisk} subject(s) still at risk. That step is driven by the final observation rather than by the cohort, so no median is reported. Report the cumulative incidence at fixed time points instead, or extend follow-up."),
                 time   = base::format(round(candidate, 1), trim = TRUE),
                 unit   = self$options$timetypeoutput,
                 before = sprintf("%.1f", 100 * prev_est),
@@ -2042,9 +2048,9 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             "cr_ci",
             .("No confidence interval is computed for the cumulative-incidence median. Restricted-mean survival columns are not applicable to this cumulative-incidence quantile and are left empty."))
         } else {
-          median_title <- jmvcore::format(.("{median} Analysis"), median = estimand_meta$median)
+          median_title <- .fmt(.("{median} Analysis"), median = estimand_meta$median)
           self$results$medianHeading$setTitle(median_title)
-          medianTable$setTitle(jmvcore::format(.("{median} Table"), median = estimand_meta$median))
+          medianTable$setTitle(.fmt(.("{median} Table"), median = estimand_meta$median))
           medianTable$getColumn("median")$setTitle(estimand_meta$median)
           medianTable$getColumn("rmean")$setTitle(
             if (identical(private$.eventRecode$estimand, "overall survival"))
@@ -2061,11 +2067,11 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                     base::format(round(max(mydata[[mytime]], na.rm = TRUE), 2), trim = TRUE),
                     self$options$timetypeoutput))
           self$results$medianSummary$setTitle(
-            jmvcore::format(.("{median}: Natural Language Summary"), median = estimand_meta$median))
+            .fmt(.("{median}: Natural Language Summary"), median = estimand_meta$median))
           self$results$medianHeading3$setTitle(
-            jmvcore::format(.("{median}: Explanations"), median = estimand_meta$median))
+            .fmt(.("{median}: Explanations"), median = estimand_meta$median))
           self$results$medianSurvivalExplanation$setTitle(
-            jmvcore::format(.("Understanding {median}"), median = estimand_meta$median))
+            .fmt(.("Understanding {median}"), median = estimand_meta$median))
         }
         data_frame <- results1table
 
@@ -2130,13 +2136,13 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           # Standard survival analysis narrative
           km_fit_median_definition <- ifelse(
             !is.finite(.med) & results1table$events == 0,
-            jmvcore::format(.("{median} cannot be estimated: no events were observed, so the Kaplan-Meier event-free probability is 100% throughout the observed follow-up and the curve never falls to 50%."),
+            .fmt(.("{median} cannot be estimated: no events were observed, so the Kaplan-Meier event-free probability is 100% throughout the observed follow-up and the curve never falls to 50%."),
                             median = estimand_meta$median),
             ifelse(
               !is.finite(.med),
-              jmvcore::format(.("{median} was not reached: the Kaplan-Meier curve did not fall to 50% within the observed follow-up."),
+              .fmt(.("{median} was not reached: the Kaplan-Meier curve did not fall to 50% within the observed follow-up."),
                               median = estimand_meta$median),
-              jmvcore::format(.("{median} is {val} {unit}{ci}."),
+              .fmt(.("{median} is {val} {unit}{ci}."),
                               median = estimand_meta$median, val = round(.med, 1), unit = time_unit, ci = .ci_txt)))
         }  # End of if/else for competing risk vs standard
 
@@ -2341,17 +2347,17 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           self$results$survivalProbabilityExplanation$setTitle(
             .("Understanding Cumulative Incidence at Selected Time Points"))
         } else {
-          surv_title <- jmvcore::format(.("{probability} at Selected Time Points ({unit})"),
+          surv_title <- .fmt(.("{probability} at Selected Time Points ({unit})"),
                                 probability = estimand_meta$probability,
                                 unit = self$options$timetypeoutput)
           self$results$survTable$getColumn("surv")$setTitle(
             estimand_meta$probability)
           self$results$survTableSummary$setTitle(
-            jmvcore::format(.("{probability}: Natural Language Summary"), probability = estimand_meta$probability))
+            .fmt(.("{probability}: Natural Language Summary"), probability = estimand_meta$probability))
           self$results$survTableHeading3$setTitle(
-            jmvcore::format(.("{probability}: Explanations"), probability = estimand_meta$probability))
+            .fmt(.("{probability}: Explanations"), probability = estimand_meta$probability))
           self$results$survivalProbabilityExplanation$setTitle(
-            jmvcore::format(.("Understanding {probability}"), probability = estimand_meta$probability))
+            .fmt(.("Understanding {probability}"), probability = estimand_meta$probability))
         }
         self$results$survTableHeading$setTitle(surv_title)
         self$results$survTable$setTitle(surv_title)
@@ -2366,6 +2372,11 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         # Handle Competing Risk Analysis for Survival Table
         if (private$.isCompetingRisk()) {
+          if (isTRUE(self$options$cif_all_causes)) {
+            .populateObservedCif(self$results$cifTable, mydata[[mytime]],
+                                mydata[[myoutcome]],
+                                private$.resolveCutpoints(self$options$cutp))
+          }
           # For competing risk, we calculate Cumulative Incidence
           
           # Build the multi-state status as a FACTOR with explicit levels.
@@ -3487,7 +3498,24 @@ singlearmClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             breaks = seq(0, self$options$endplot, by = self$options$byplot)) +
           ggplot2::theme(legend.position = 'bottom')
 
-        .quietly(print(plot_obj))
+        if (isTRUE(self$options$risktable)) {
+          breaks <- seq(0, self$options$endplot, by = self$options$byplot)
+          breaks <- breaks[breaks <= max(plotData[[mytime]], na.rm = TRUE)]
+          counts <- vapply(breaks, function(t) sum(plotData[[mytime]] >= t), integer(1))
+          risk <- ggplot2::ggplot(data.frame(time = breaks, n = counts),
+                                 ggplot2::aes(time, 1, label = n)) +
+            ggplot2::geom_text() +
+            ggplot2::scale_x_continuous(limits = c(0, self$options$endplot), breaks = breaks) +
+            ggplot2::labs(x = paste0('Time (', self$options$timetypeoutput, ')'),
+                          y = .("At risk")) + ggtheme +
+            ggplot2::theme(axis.text.y = ggplot2::element_blank(),
+                           axis.ticks.y = ggplot2::element_blank(),
+                           panel.grid = ggplot2::element_blank())
+          .quietly(print(ggpubr::ggarrange(plot_obj, risk, ncol = 1, heights = c(4, 1),
+                                         align = "v")))
+        } else {
+          .quietly(print(plot_obj))
+        }
         TRUE
       }
 

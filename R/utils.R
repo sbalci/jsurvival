@@ -155,3 +155,80 @@ NULL
 # ============================================================================
 # BOOTSTRAP UTILITIES
 # ============================================================================
+
+
+# ============================================================================
+# USER-SUPPLIED NAMES IN STRING OPERATIONS
+# ============================================================================
+
+#' Strip a literal prefix from a string
+#'
+#' A user's column or level name is not a regular expression. `Age (years)`,
+#' `BMI-1`, `A+B` and `Grade 2/3` are all ordinary jamovi column names, and
+#' pasting one into a pattern makes the engine read `(` as a group, `+` as a
+#' quantifier and `.` as a wildcard - so the strip either fails or removes the
+#' wrong text, silently corrupting a label in the results.
+#'
+#' `sub(paste0("^", name), "", x)` is the shape to avoid. This does the same job
+#' with no regex at all.
+#'
+#' @param x character vector to strip from.
+#' @param prefix literal prefix; elements of `x` that do not start with it are
+#'   returned unchanged.
+#' @return `x` with `prefix` removed from the front of each element that has it.
+#' @noRd
+.stripPrefix <- function(x, prefix) {
+    if (length(prefix) != 1L || is.na(prefix) || !nzchar(prefix))
+        return(x)
+    hit <- !is.na(x) & startsWith(x, prefix)
+    x[hit] <- substring(x[hit], nchar(prefix) + 1L)
+    x
+}
+
+#' Empty a jmvcore Table, row names included
+#'
+#' jmvcore's `Table$deleteRows()` resets the row keys, the cells and the row
+#' count but not the private row names, which only `addRow()` rewrites. A table
+#' emptied after holding rows therefore keeps phantom names: `$asDF` fails with
+#' "invalid 'row.names' length" and `fromProtoBuf()` indexes past the keys
+#' (measured on jmvcore 2.7.38: rowCount 0, rowKeys 0, names 2).
+#'
+#' jmvcore has no public setter, so the names are reset to `character(0)`, the
+#' value a newly built Table starts with. Once jmvcore clears them itself, the
+#' guard never fires. If a jmvcore release renames the field, the write lands
+#' nowhere and the regression test in `test-utils-delete-table-rows.R` fails.
+#'
+#' @param table a `jmvcore::Table`.
+#' @return `table`, invisibly.
+#' @noRd
+.deleteTableRows <- function(table) {
+    table$deleteRows()
+    if (length(table$names) > 0)
+        table$.__enclos_env__$private$.rowNames <- character()
+    invisible(table)
+}
+
+# Which outcome level is the positive class, and why (enhancedROC, psychopdaROC). Never taken
+# from level order: only a NUMERIC 0/1 outcome defaults (1 = positive), as .defineEventIndicator()
+# does. Pure - the analyses translate `status`. A blank "" is missing, like an explicit NA level
+# (R path only: jamovi stores an empty cell as missing); both analyses drop those rows too.
+.rocOutcomeCoding <- function(outcome, positive = NULL) {
+    numeric01 <- is.numeric(outcome) && all(outcome[!is.na(outcome)] %in% c(0, 1))
+    x <- droplevels(factor(if (is.factor(outcome)) outcome else factor(outcome), exclude = c(NA, "")))  # explicit NA level or "" = missing
+    lv <- levels(x)
+    pos <- if (length(positive) && !is.na(positive[1]) && nzchar(positive[1])) as.character(positive[1])
+    status <- if (length(lv) < 2L) "single" else if (!is.null(pos)) (if (pos %in% lv) "selected" else "invalid")
+              else if (numeric01) "default01" else "unset"
+    if (identical(status, "default01")) pos <- "1"
+    list(levels = lv, counts = as.integer(table(x)), positive = pos, status = status,  # table() follows level order; [lv] would miss a level named ""
+         numeric = is.numeric(outcome), n_missing = sum(is.na(x)), values = x)
+}
+# A level or variable name placed in a table note or cell: jamovi parses both as HTML, so break a "<"
+# that would open a tag (never htmlEscape: the client shows entities literally). setNote() also
+# re-translates its text and cuts it at " [", so for notes map [] to (); cells are never translated
+# (jmvcore Cell$asProtoBuf), so a cell passes note = FALSE and keeps the real name.
+.rocLabel <- function(x, note = TRUE) {
+    x <- as.character(x)
+    if (note) x <- chartr("[]", "()", x)
+    gsub("<([A-Za-z/!?])", "< \\1", x)
+}

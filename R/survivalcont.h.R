@@ -116,7 +116,8 @@ survivalcontOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
             private$..outcomeLevel <- jmvcore::OptionLevel$new(
                 "outcomeLevel",
                 outcomeLevel,
-                variable="(outcome)")
+                variable="(outcome)",
+                allowNone=TRUE)
             private$..dod <- jmvcore::OptionLevel$new(
                 "dod",
                 dod,
@@ -2101,7 +2102,7 @@ survivalcontBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 package = "jsurvival",
                 name = "survivalcont",
-                version = c(1,0,81),
+                version = c(1,1,1),
                 options = options,
                 results = survivalcontResults$new(options=options),
                 data = data,
@@ -2139,7 +2140,9 @@ survivalcontBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   analysis.
 #' @param outcome The outcome variable to be used in the analysis.
 #' @param outcomeLevel The level of the outcome variable that represents the
-#'   event of interest.
+#'   event of interest. Required for a factor outcome, and never taken from the
+#'   order of the levels: without it the analysis stops and lists the levels. A
+#'   numeric 0/1 outcome is read as 1 = event.
 #' @param dod .
 #' @param dooc .
 #' @param awd .
