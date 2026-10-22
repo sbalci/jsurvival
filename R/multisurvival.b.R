@@ -268,6 +268,16 @@
                 }
               }
             }
+          } else if ("exp(coef)" %in% names(results)) {
+            for (i in sig_indices) {
+              hr_val <- suppressWarnings(as.numeric(results[["exp(coef)"]][i]))
+              if (!is.na(hr_val) && is.finite(hr_val) && hr_val > 0 &&
+                  abs(log(hr_val)) > abs(log(strongest_hr))) {
+                strongest_hr <- hr_val
+                strongest_var <- rownames(results)[i]
+                strongest_effect <- if (hr_val > 1) .("a higher fitted hazard") else .("a lower fitted hazard")
+              }
+            }
           }
         }
       }
@@ -1557,15 +1567,36 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
         # naOmit ----
-
-        cleanData <- jmvcore::naOmit(cleanData)
+        # Only drop rows with missing values in variables that enter the model
+        # (time, outcome, explanatory, continuous explanatory, stratification).
+        # An auxiliary adjexplanatory variable that is not in the model must not
+        # shrink the main Cox regression sample size when ac = TRUE.
+        model_cols <- intersect(
+          unique(c("row_names", "mytime", "myoutcome",
+                   myexplanatory_labelled, mycontexpl_labelled, mystratvar_labelled)),
+          names(cleanData)
+        )
+        extra_cols <- setdiff(names(cleanData), model_cols)
+        clean_model <- jmvcore::naOmit(cleanData[, model_cols, drop = FALSE])
+        n_omitted_model <- attr(clean_model, "nRowsOmitted")
+        if (is.null(n_omitted_model) || is.na(n_omitted_model)) n_omitted_model <- 0L
+        n_missing_rows <- as.integer(
+          (if (isTRUE(self$options$uselandmark)) n_missing_time else 0L) + n_omitted_model
+        )
+        if (length(extra_cols) > 0) {
+          idx <- match(clean_model$row_names, cleanData$row_names)
+          for (ec in extra_cols) {
+            clean_model[[ec]] <- cleanData[[ec]][idx]
+            base::attributes(clean_model[[ec]]) <- base::attributes(cleanData[[ec]])
+          }
+        }
+        cleanData <- clean_model
 
 
 
         ## Add Calculated Time to Data ----
 
         if (self$options$tint &&
-            self$options$calculatedtime &&
             self$results$calculatedtime$isNotFilled()) {
           self$results$calculatedtime$setRowNums(cleanData$row_names)
           self$results$calculatedtime$setValues(cleanData$mytime)
@@ -1575,8 +1606,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         ## Add Redefined Outcome to Data ----
 
-        if (self$options$multievent  &&
-            self$options$outcomeredefined &&
+        if (self$options$multievent &&
             self$results$outcomeredefined$isNotFilled()) {
           self$results$outcomeredefined$setRowNums(cleanData$row_names)
           self$results$outcomeredefined$setValues(cleanData$myoutcome)
@@ -1595,6 +1625,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             "adjexplanatory_name" = adjexplanatory_name,
 
             "cleanData" = cleanData,
+            "n_missing_rows" = n_missing_rows,
             "mydata_labelled" = mydata_labelled,
             "mytime_labelled" = mytime_labelled,
             "myoutcome_labelled" = myoutcome_labelled,
@@ -1711,6 +1742,10 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         private$.startPerformanceTimer("survival_analysis")
         analysis_results <- private$.performSurvivalAnalysis(cleaneddata)
         survival_time <- private$.stopPerformanceTimer("survival_analysis")
+
+        if (is.null(analysis_results)) {
+          return(NULL)
+        }
 
         ml_time <- 0
 
@@ -2458,8 +2493,13 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           group_label <- self$options$explanatory[[1]]
 
           if (!is.null(group_var) && !is.na(group_var) && group_var %in% names(mydata)) {
-            # Get unique groups
-            groups <- unique(mydata[[group_var]])
+            # Preserve declared factor level order so row permutations do not
+            # swap subgroup rows in personTimeTable.
+            groups <- if (is.factor(mydata[[group_var]])) {
+              levels(droplevels(mydata[[group_var]]))
+            } else {
+              unique(mydata[[group_var]])
+            }
             groups <- groups[!is.na(groups)]  # Remove NA groups
 
             rowKey_counter <- 2  # Start after overall row
@@ -3063,7 +3103,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
             red_ll  <- as.numeric(stats::logLik(fit_red))
             lrt     <- 2 * (full_ll - red_ll)
-            df_diff <- length(stats::coef(full_local)) - length(stats::coef(fit_red))
+            df_diff <- sum(!is.na(stats::coef(full_local))) - sum(!is.na(stats::coef(fit_red)))
             pval    <- if (df_diff > 0) stats::pchisq(lrt, df_diff, lower.tail = FALSE) else NA_real_
 
             rk <- rk + 1L
@@ -3185,12 +3225,31 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         is_finegray <- !is.null(cox_model$weights) && private$.isCompetingRisk()
 
+        interaction_terms_nom <- character(0)
+        interact_list <- list()
+        if (length(self$options$interactions) > 0) {
+          .all_labels_nom <- labelled::var_label(cleaneddata$mydata_labelled)
+          .mapped_nom <- .mapInteractionTerms(self$options$interactions, .all_labels_nom)
+          interaction_terms_nom <- .interactionTermsForFormula(.mapped_nom)
+          for (.it in .mapped_nom) {
+            .cont_in_it <- intersect(.it, mycontexpl_labelled)
+            if (length(.cont_in_it) >= 2) {
+              for (.cv in .cont_in_it[-1]) {
+                interact_list[[.cv]] <- unique(signif(
+                  stats::quantile(mydata[[.cv]], c(0.25, 0.5, 0.75), na.rm = TRUE), 3
+                ))
+              }
+            }
+          }
+        }
+
         base_formula <- .buildSurvivalFormula(
           time_var = "mytime",
           outcome_var = "myoutcome",
           predictors = var_names,
           survival_type = "standard",
-          strata_vars = strata_vars
+          strata_vars = strata_vars,
+          interaction_terms = interaction_terms_nom
         )
 
         # Fit the model using rms::cph
@@ -3300,10 +3359,16 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           })
           private$.nom_times <- pred_times
 
-          .quietly(rms::nomogram(f,
-                        fun = risk_funs,
-                        funlabel = paste("Predicted", pred_times, self$options$timetypeoutput, "risk"),
-                        fun.at = risk_ats))
+          nom_args <- list(
+            f,
+            fun = risk_funs,
+            funlabel = paste("Predicted", pred_times, self$options$timetypeoutput, "risk"),
+            fun.at = risk_ats
+          )
+          if (length(interact_list) > 0) {
+            nom_args$interact <- interact_list
+          }
+          .quietly(do.call(rms::nomogram, nom_args))
         }, silent = TRUE)
 
 
@@ -3375,6 +3440,10 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             tech_details <- c(tech_details, nom_output[i])
           }
           i <- i + 1
+        }
+        if (length(self$options$interactions) > 0) {
+          int_str <- paste(vapply(self$options$interactions, function(x) paste(x, collapse = " * "), character(1)), collapse = ", ")
+          tech_details <- c(tech_details, paste0(.("Interactions in model: "), int_str))
         }
 
         # Initialize data structures
@@ -4055,7 +4124,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             .quietly(print(plot3))
             TRUE
         } else {
-            FALSE
+            TRUE
         }
 
       }
@@ -4317,8 +4386,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
 
         ### Add risk scores to output if requested ----
-        if (self$options$addRiskScore &&
-            self$results$addRiskScore$isNotFilled()) {
+        if (self$results$addRiskScore$isNotFilled()) {
           self$results$addRiskScore$setRowNums(mydata$row_names)
           self$results$addRiskScore$setValues(mydata$risk_score)
         }
@@ -4426,8 +4494,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         mydata$risk_group <- result
 
         ### Add risk group to output if requested ----
-        if (self$options$addRiskGroup &&
-            self$results$addRiskGroup$isNotFilled()) {
+        if (self$results$addRiskGroup$isNotFilled()) {
           self$results$addRiskGroup$setRowNums(mydata$row_names)
           self$results$addRiskGroup$setValues(mydata$risk_group)
         }
@@ -4645,7 +4712,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           grp <- rep(names(aj$strata), aj$strata)
           cif <- data.frame(time  = aj$time,
                             cif   = aj$pstate[, ev_col],
-                            group = sub("^group=", "", grp),
+                            group = factor(sub("^group=", "", grp),
+                                           levels = levels(factor(riskData$risk_group))),
                             stringsAsFactors = FALSE)
 
           p <- ggplot2::ggplot(cif, ggplot2::aes(x = time, y = cif, colour = group)) +
@@ -6011,6 +6079,20 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
     # Extract and format model metrics from finalfit
     metrics_text <- unlist(tCox[[2]])
 
+    # finalfit runs on cleanData after naOmit(), so its own header always reads
+    # "Number in dataframe = <N_complete>, Number in model = <N_complete>, Missing = 0".
+    # Restore the actual pre-naOmit count and missing count when rows were dropped.
+    n_miss <- cleaneddata$n_missing_rows
+    if (!is.null(n_miss) && !is.na(n_miss) && n_miss > 0L) {
+      n_mod <- nrow(mydata)
+      n_df  <- n_mod + n_miss
+      metrics_text <- sub(
+        "Number in dataframe = [0-9]+, Number in model = [0-9]+, Missing = [0-9]+",
+        sprintf("Number in dataframe = %d, Number in model = %d, Missing = %d", n_df, n_mod, n_miss),
+        metrics_text
+      )
+    }
+
     # One C-index per report.
     #
     # finalfit computes its own concordance from its own fit, which differed
@@ -6358,6 +6440,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
               a <- cox_model$assign
               if (is.list(a) && length(a) > 0) a else NULL
             }, error = function(e) NULL)
+            if (!is.null(.tmap)) {
+              n_vars <- max(n_vars, length(.tmap))
+            }
 
             clinical_summary <- .generateClinicalSummary(
               results = cox_results,

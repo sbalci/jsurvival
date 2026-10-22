@@ -5697,6 +5697,10 @@ msgid "Interaction Terms:"
 msgstr ""
 
 #: R/multisurvival.b.R
+msgid "Interactions in model: "
+msgstr ""
+
+#: R/multisurvival.b.R
 msgid ""
 "Interactions with a continuous moderator are shown as a coefficient in the "
 "table above; per-subgroup HRs require a categorical moderator. If both "

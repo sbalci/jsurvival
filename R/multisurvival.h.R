@@ -736,7 +736,8 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "interactions",
                     "uselandmark",
                     "landmark",
-                    "timetypedata")))
+                    "timetypedata",
+                    "showSummaries")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="text2",
@@ -916,7 +917,8 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "interactions",
                     "uselandmark",
                     "landmark",
-                    "timetypedata")))
+                    "timetypedata",
+                    "showSummaries")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="glossaryPanel",
@@ -1552,6 +1554,9 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "risktable",
                     "censored",
                     "medianline",
+                    "endplot",
+                    "byplot",
+                    "pplot",
                     "elapsedtime",
                     "fudate",
                     "dxdate",
@@ -1620,6 +1625,8 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 title="Stratification Notes",
                 visible="(use_stratify)",
                 clearWith=list(
+                    "use_stratify",
+                    "stratvar",
                     "calculateRiskScore",
                     "outcome",
                     "outcomeLevel",
@@ -1921,7 +1928,8 @@ multisurvivalResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "interactions",
                     "uselandmark",
                     "landmark",
-                    "timetypedata")))
+                    "timetypedata",
+                    "showSummaries")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="adjustedSurvTable",
