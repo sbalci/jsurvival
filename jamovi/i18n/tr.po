@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: jsurvival 2.0.0\n"
+"Project-Id-Version: ClinicoPath\n"
 "POT-Creation-Date: 2021-07-26 12:08:06+01000\n"
-"PO-Revision-Date: 2026-09-05 14:25+0300\n"
-"Last-Translator: Antigravity AI <antigravity@clinpy.org>\n"
-"Language-Team: Turkish <jamovi-i18n@lists.jamovi.org>\n"
+"PO-Revision-Date: 2021-07-29 16:59:59+01000\n"
+"Last-Translator: ClinicoPath translators\n"
+"Language-Team: Turkish\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: R/outcomeorganizer.b.R
 msgid ""
@@ -589,7 +589,7 @@ msgstr ""
 msgid ""
 "%s could not be estimated: no events were observed (longest follow-up %%.1f "
 "%%s)"
-msgstr "%s tahmin edilemedi: hiç olay gözlenmedi (en uzun takip %%.1f %%s)"
+msgstr ""
 
 #: R/singlearm.b.R
 msgid ""
@@ -633,7 +633,7 @@ msgstr ""
 
 #: R/singlearm.b.R
 msgid "%s was %%.1f %%s"
-msgstr "%s: %%.1f %%s"
+msgstr ""
 
 #: R/singlearm.b.R
 msgid ""
@@ -642,15 +642,11 @@ msgid ""
 "process, short follow-up, or censoring, so no conclusion about outcome "
 "should be drawn from its absence"
 msgstr ""
-"%s değerine ulaşılamadı: Kaplan-Meier eğrisi gözlemlenen takip süresi içinde "
-"%%%%50'nin üzerinde kaldı (en uzun takip %%.1f %%s). Bu durum olay sürecini, "
-"kısa takip süresini veya sansürlemeyi yansıtabilir; dolayısıyla "
-"ulaşılamamasından sonuçla ilgili kesin bir çıkarım yapılmamalıdır"
 
 #: R/survival.b.R
 msgid ""
 "%s was supplied as a numeric column with only %d distinct values, so it is "
-"analysed as a categorical variable throughout: every hazard ratio compares "
+"analyzed as a categorical variable throughout: every hazard ratio compares "
 "one level with the reference level, not a one-unit increase. To model it as "
 "a linear trend instead, use Survival Analysis for Continuous Variable."
 msgstr ""
@@ -1288,7 +1284,7 @@ msgstr ""
 #: R/multisurvival.b.R
 msgid ""
 "Adjusted curves are model-based survival or cumulative-incidence predictions "
-"under the selected standardisation."
+"under the selected standardization."
 msgstr ""
 "Düzeltilmiş eğriler, seçilen standardizasyon altında modele dayalı sağkalım "
 "veya kümülatif insidans öngörüleridir."
@@ -1374,14 +1370,14 @@ msgstr "düzeltilmiş sağkalım"
 msgid "Adjusted survival"
 msgstr "Düzeltilmiş sağkalım"
 
+#: survival/results/adjustedCurvesPlot.title
+msgid "Adjusted Survival Curves"
+msgstr "Düzeltilmiş Sağkalım Eğrileri"
+
 #: survival/options/adjusted_curves.title
 #: survival/ui[4][1][0]/adjusted_curves.label
 msgid "Adjusted survival curves"
 msgstr "Düzeltilmiş sağkalım eğrileri"
-
-#: survival/results/adjustedCurvesPlot.title
-msgid "Adjusted Survival Curves"
-msgstr "Düzeltilmiş Sağkalım Eğrileri"
 
 #: R/multisurvival.b.R
 msgid "Adjusted Survival Curves for {variable}"
@@ -1677,15 +1673,15 @@ msgstr "Yaş x Grup Etkileşim Testi"
 msgid "Age-adjusted analysis"
 msgstr "Yaşa göre düzeltilmiş analiz"
 
-#: R/survival.b.R
-#: survival/ui[4][1][0]/age_adjustment.label
-msgid "Age-adjusted Cox regression"
-msgstr "Yaşa göre düzeltilmiş Cox regresyonu"
-
 #: survival/results/ageAdjustedCoxHeading.title
 #: survival/results/ageAdjustedCoxTable.title
 msgid "Age-Adjusted Cox Regression"
 msgstr "Yaşa Göre Düzeltilmiş Cox Regresyonu"
+
+#: R/survival.b.R
+#: survival/ui[4][1][0]/age_adjustment.label
+msgid "Age-adjusted Cox regression"
+msgstr "Yaşa göre düzeltilmiş Cox regresyonu"
 
 #: R/survival.b.R
 msgid "Age-adjusted Cox regression failed: {message}"
@@ -1913,14 +1909,14 @@ msgstr ""
 msgid "An sHR is not a risk ratio and does not quantify a cause-specific hazard."
 msgstr "sTO bir risk oranı değildir ve nedene özgü tehlikeyi ölçmez."
 
+#: R/survivalcont.b.R
+msgid "Analysis Complete"
+msgstr "Analiz Tamamlandı"
+
 #: R/multisurvival.b.R
 #: R/survival.b.R
 msgid "Analysis complete"
 msgstr "Analiz tamamlandı"
-
-#: R/survivalcont.b.R
-msgid "Analysis Complete"
-msgstr "Analiz Tamamlandı"
 
 #: R/survivalcont.b.R
 msgid "Analysis completed for {variable}."
@@ -1957,6 +1953,10 @@ msgstr "Analiz tamamlandı. Ayrıntılı sonuçları aşağıda inceleyin."
 msgid "Analysis Error"
 msgstr "Analiz hatası"
 
+#: survival/ui[9].label
+msgid "Analysis Explanations"
+msgstr "Analiz Açıklamaları"
+
 #: multisurvival/options/showExplanations.title
 #: singlearm/options/showExplanations.title
 #: singlearm/ui[8][0][0]/showExplanations.label
@@ -1966,10 +1966,6 @@ msgstr "Analiz hatası"
 #: survivalcont/ui[8][0][0]/showExplanations.label
 msgid "Analysis explanations"
 msgstr "Analiz açıklamaları"
-
-#: survival/ui[9].label
-msgid "Analysis Explanations"
-msgstr "Analiz Açıklamaları"
 
 #: R/lassocox.b.R
 msgid "Analysis Notes"
@@ -2270,14 +2266,14 @@ msgstr "Mavi: lambda.min, yeşil: lambda.1se"
 msgid "bonferroni"
 msgstr "bonferroni"
 
+#: survival/results/bootstrapValidationTable.title
+msgid "Bootstrap Internal Validation"
+msgstr "Bootstrap Dahili Doğrulama"
+
 #: R/survival.b.R
 #: survival/options/bootstrapValidation.title
 msgid "Bootstrap internal validation"
 msgstr "Bootstrap dahili doğrulama"
-
-#: survival/results/bootstrapValidationTable.title
-msgid "Bootstrap Internal Validation"
-msgstr "Bootstrap Dahili Doğrulama"
 
 #: R/survival.b.R
 msgid "Bootstrap Internal Validation - {title}"
@@ -2607,7 +2603,7 @@ msgstr ""
 msgid ""
 "Categorical variable used for stratification in Cox regression, allowing a "
 "different baseline hazard in each stratum. Must be a factor with a small "
-"number of reasonably sized groups (for example treating centre or stage). A "
+"number of reasonably sized groups (for example treating center or stage). A "
 "near-continuous variable would give one stratum per patient and no estimable "
 "hazard ratio."
 msgstr ""
@@ -2810,6 +2806,12 @@ msgid ""
 "metrics wait for it and list the observed levels, and the logistic model, "
 "odds ratios, forest plot and nomogram still run."
 msgstr ""
+"Tanısal belirtecin hangi düzeyinin pozitif test sonucu olduğunu seçin (ör. "
+"\"Present\", \"Test+\", \"Yes\"). Tanısal ölçütler (duyarlılık, özgüllük, "
+"olabilirlik oranları) bu seçimi gerektirir; düzey adlarından ya da "
+"sıralarından asla alınmaz. Boş kaldığı sürece tanısal ölçütler bu seçimi "
+"bekler ve gözlenen düzeyleri listeler; lojistik model, olasılık oranları, "
+"orman grafiği ve nomogram yine çalışır."
 
 #: R/multisurvival.b.R
 msgid "CIs and p-values differ:"
@@ -2917,12 +2919,12 @@ msgstr ""
 "seçimini hesaba katmadığından geleneksel p-değerleri ve güven aralıkları "
 "özellikle raporlanmaz."
 
-#: lassocox/options/path_plot.title
-msgid "Coefficient paths"
-msgstr "Katsayı yolları"
-
 #: lassocox/results/path_plot.title
 msgid "Coefficient Paths"
+msgstr "Katsayı yolları"
+
+#: lassocox/options/path_plot.title
+msgid "Coefficient paths"
 msgstr "Katsayı yolları"
 
 #: lassocox/results/coef_plot.title
@@ -3165,7 +3167,7 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid ""
-"Confidence intervals are left blank: a standardised curve has no closed-form "
+"Confidence intervals are left blank: a standardized curve has no closed-form "
 "interval and would need bootstrapping."
 msgstr ""
 "Güven aralıkları boş bırakıldı: standardize bir eğrinin kapalı formda "
@@ -3359,21 +3361,21 @@ msgstr "Düzeltilmiş"
 msgid "Corrected datetime"
 msgstr "Düzeltilmiş tarih-saat"
 
-#: datetimeconverter/options/corrected_datetime_numeric.title
-msgid "Corrected datetime (numeric)"
-msgstr "Düzeltilmiş tarih-saat (sayısal)"
-
 #: datetimeconverter/results/corrected_datetime_numeric.title
 msgid "Corrected DateTime (Numeric)"
 msgstr "Düzeltilmiş Tarih-Saat (Sayısal)"
 
-#: datetimeconverter/options/corrected_datetime_char.title
-msgid "Corrected datetime (text)"
-msgstr "Düzeltilmiş tarih-saat (metin)"
+#: datetimeconverter/options/corrected_datetime_numeric.title
+msgid "Corrected datetime (numeric)"
+msgstr "Düzeltilmiş tarih-saat (sayısal)"
 
 #: datetimeconverter/results/corrected_datetime_char.title
 msgid "Corrected DateTime (Text)"
 msgstr "Düzeltilmiş Tarih-Saat (Metin)"
+
+#: datetimeconverter/options/corrected_datetime_char.title
+msgid "Corrected datetime (text)"
+msgstr "Düzeltilmiş tarih-saat (metin)"
 
 #: R/lassocox.b.R
 msgid "Could not assess"
@@ -3510,14 +3512,14 @@ msgid "Cox regression"
 msgstr "Cox regresyonu"
 
 #: R/survivalcont.b.R
-msgid "Cox regression analysis"
-msgstr "Cox regresyon analizi"
-
-#: R/survivalcont.b.R
 #: survival/ui[4][0].label
 #: survival/results/coxRegressionHeading.title
 #: survivalcont/ui[6][0].label
 msgid "Cox Regression Analysis"
+msgstr "Cox regresyon analizi"
+
+#: R/survivalcont.b.R
+msgid "Cox regression analysis"
 msgstr "Cox regresyon analizi"
 
 #: survival/results/coxRegressionHeading3.title
@@ -3653,12 +3655,12 @@ msgstr ""
 msgid "Cross-Validation Plot"
 msgstr "Çapraz doğrulama grafiği"
 
-#: lassocox/options/cv_plot.title
-msgid "Cross-validation plot"
-msgstr "Çapraz doğrulama grafiği"
-
 #: lassocox/results/cv_plot.title
 msgid "Cross-validation Plot"
+msgstr "Çapraz doğrulama grafiği"
+
+#: lassocox/options/cv_plot.title
+msgid "Cross-validation plot"
 msgstr "Çapraz doğrulama grafiği"
 
 #: R/singlearm.b.R
@@ -3711,16 +3713,16 @@ msgstr "{group} için kümülatif olaylar"
 msgid "Cumulative events plot"
 msgstr "Kümülatif olaylar grafiği"
 
+#: singlearm/results/plot3.title
+msgid "Cumulative Hazard"
+msgstr "Kümülatif Tehlike"
+
 #: singlearm/options/ch.title
 #: survival/options/ch.title
 #: survival/ui[5][0][0]/ch.label
 #: survivalcont/options/ch.title
 msgid "Cumulative hazard"
 msgstr "Kümülatif tehlike"
-
-#: singlearm/results/plot3.title
-msgid "Cumulative Hazard"
-msgstr "Kümülatif Tehlike"
 
 #: R/survival.b.R
 msgid "Cumulative hazard for {group}"
@@ -3893,25 +3895,25 @@ msgstr "Veri işleme başarısız oldu. Lütfen girdi değişkenlerinizi kontrol
 msgid "Data Quality"
 msgstr "Veri kalitesi"
 
-#: datetimeconverter/options/show_quality_metrics.title
-msgid "Data quality assessment"
-msgstr "Veri kalitesi değerlendirmesi"
-
 #: datetimeconverter/results/qualityAssessment.title
 msgid "Data Quality Assessment"
 msgstr "Veri Kalitesi Değerlendirmesi"
 
+#: datetimeconverter/options/show_quality_metrics.title
+msgid "Data quality assessment"
+msgstr "Veri kalitesi değerlendirmesi"
+
 #: lassocox/ui[1].label
 msgid "Data Suitability"
-msgstr ""
-
-#: lassocox/options/suitabilityCheck.title
-msgid "Data suitability assessment"
-msgstr "Veri uygunluğu değerlendirmesi"
+msgstr "Veri Uygunluğu"
 
 #: lassocox/results/suitabilityReport.title
 msgid "Data Suitability Assessment"
 msgstr "Veri Uygunluk Değerlendirmesi"
+
+#: lassocox/options/suitabilityCheck.title
+msgid "Data suitability assessment"
+msgstr "Veri uygunluğu değerlendirmesi"
 
 #: R/multisurvival.b.R
 msgid "Data Validation Issues"
@@ -4023,15 +4025,15 @@ msgstr "Tarih-Saat Değişkeni"
 msgid "Day"
 msgstr "Gün"
 
+#: datetimeconverter/results/dayname_out.title
+msgid "Day Name"
+msgstr "Gün Adı"
+
 #: datetimeconverter/options/extract_dayname.title
 #: datetimeconverter/options/dayname_out.title
 #: datetimeconverter/ui[7][0][1][0]/dayname_out.label
 msgid "Day name"
 msgstr "Gün adı"
-
-#: datetimeconverter/results/dayname_out.title
-msgid "Day Name"
-msgstr "Gün Adı"
 
 #: datetimeconverter/ui[7][0][0][0]/extract_dayname.label
 msgid "Day name (e.g., Monday)"
@@ -4043,15 +4045,15 @@ msgstr "Gün adı (ör. Pazartesi)"
 msgid "Day of month"
 msgstr "Ayın günü"
 
+#: datetimeconverter/results/dayofyear_out.title
+msgid "Day of Year"
+msgstr "Yılın Günü"
+
 #: datetimeconverter/options/extract_dayofyear.title
 #: datetimeconverter/options/dayofyear_out.title
 #: datetimeconverter/ui[7][0][1][0]/dayofyear_out.label
 msgid "Day of year"
 msgstr "Yılın günü"
-
-#: datetimeconverter/results/dayofyear_out.title
-msgid "Day of Year"
-msgstr "Yılın Günü"
 
 #: datetimeconverter/ui[7][0][0][0]/extract_dayofyear.label
 msgid "Day of year (1-366)"
@@ -4318,13 +4320,13 @@ msgstr ""
 msgid "Diagnosis/start date and follow-up/end date must be different variables."
 msgstr "Tanı/başlangıç tarihi ve takip/bitiş tarihi farklı değişkenler olmalıdır."
 
-#: outcomeorganizer/options/diagnostics.title
-msgid "Diagnostic information"
-msgstr "Tanısal / hata ayıklama bilgisi"
-
 #: outcomeorganizer/results/diagnosticsTable.title
 msgid "Diagnostic Information"
 msgstr "Tanısal Bilgiler"
+
+#: outcomeorganizer/options/diagnostics.title
+msgid "Diagnostic information"
+msgstr "Tanısal / hata ayıklama bilgisi"
 
 #: R/oddsratio.b.R
 msgid ""
@@ -4333,6 +4335,10 @@ msgid ""
 "{levels}. The logistic model, odds ratios, forest plot and nomogram are not "
 "affected."
 msgstr ""
+"Tanısal ölçütler Belirteç Pozitif Düzeyi'ni bekliyor. '{variable}' "
+"değişkeninin hangi düzeyinin pozitif test sonucu olduğunu seçin. Gözlenen "
+"düzeyler: {levels}. Lojistik model, olasılık oranları, orman grafiği ve "
+"nomogram bundan etkilenmez."
 
 #: R/oddsratio.b.R
 msgid ""
@@ -4420,7 +4426,7 @@ msgstr "Ayırt etme"
 
 #: R/multisurvival.b.R
 msgid ""
-"Discrimination is not summarised by Harrell's C here: it assumes a single "
+"Discrimination is not summarized by Harrell's C here: it assumes a single "
 "event type, and under competing risks it would rank expanded "
 "pseudo-observations rather than patients."
 msgstr ""
@@ -4452,13 +4458,13 @@ msgid "Disease-free (0)"
 msgstr "Hastalıksız (0)"
 
 #: R/outcomeorganizer.b.R
-msgid "disease-free survival"
-msgstr "hastalıksız sağkalım"
-
-#: R/outcomeorganizer.b.R
 #: R/singlearm.b.R
 msgid "Disease-Free Survival"
 msgstr "Hastalıksız Sağkalım"
+
+#: R/outcomeorganizer.b.R
+msgid "disease-free survival"
+msgstr "hastalıksız sağkalım"
 
 #: R/singlearm.b.R
 msgid "Disease-free survival"
@@ -4992,7 +4998,7 @@ msgstr "Sürekli olarak girildi: {variables}."
 
 #: R/oddsratio.b.R
 msgid ""
-"Entered as continuous: {variables}. Each is modelled as one odds ratio per "
+"Entered as continuous: {variables}. Each is modeled as one odds ratio per "
 "one-unit increase, which assumes a constant step in log odds between "
 "consecutive values. To estimate a separate odds ratio for each level "
 "instead, change the variable's measure type to Nominal or Ordinal in the "
@@ -5098,7 +5104,7 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid ""
-"Estimand: survival standardised over the observed patients - every patient "
+"Estimand: survival standardized over the observed patients - every patient "
 "is set to the stated level in turn and the model-predicted curves are "
 "averaged (g-computation). Confidence intervals require bootstrapping and are "
 "left blank."
@@ -5244,11 +5250,6 @@ msgstr ""
 "Öncelikli Olay Türünü bu analiz türü tarafından fiilen üretilen kodlardan "
 "birine ayarlayın."
 
-#: lassocox/options/outcomeLevel.title
-#: survivalcont/options/outcomeLevel.title
-msgid "Event level"
-msgstr "Olay düzeyi"
-
 #: multisurvival/options/outcomeLevel.title
 #: outcomeorganizer/options/outcomeLevel.title
 #: outcomeorganizer/options/recurrenceLevel.title
@@ -5256,6 +5257,11 @@ msgstr "Olay düzeyi"
 #: survival/options/outcomeLevel.title
 msgid "Event Level"
 msgstr "Olay Düzeyi"
+
+#: lassocox/options/outcomeLevel.title
+#: survivalcont/options/outcomeLevel.title
+msgid "Event level"
+msgstr "Olay düzeyi"
 
 #: R/outcomeorganizer.b.R
 msgid "Event level '%s' -> 1 (%d rows); %s -> 0 (%d rows); %d row(s) missing."
@@ -5308,11 +5314,6 @@ msgstr "Olay türü"
 msgid "Event-Free Probability for the Selected Event"
 msgstr "Seçilen Olay İçin Olaysızlık Olasılığı"
 
-#: R/outcomeorganizer.b.R
-#: R/singlearm.b.R
-msgid "events"
-msgstr "olaylar"
-
 #: multisurvival/results/personTimeTable.columns.title
 #: multisurvival/results/riskScoreTable.columns.title
 #: singlearm/results/medianTable.columns.title
@@ -5325,6 +5326,11 @@ msgstr "olaylar"
 #: survivalcont/results/multipleMedianTable.columns.title
 msgid "Events"
 msgstr "Olaylar"
+
+#: R/outcomeorganizer.b.R
+#: R/singlearm.b.R
+msgid "events"
+msgstr "olaylar"
 
 #: R/outcomeorganizer.b.R
 msgid ""
@@ -5427,7 +5433,7 @@ msgstr "Negatif süreli gözlemleri veri hataları açısından inceleyin"
 
 #: package/datasets/histopathologyincludinganalysis.description
 msgid "Example survival analysis for histopathology data"
-msgstr "Histopatoloji verileri için örnek sağkalım analizi"
+msgstr ""
 
 #: R/multisurvival.b.R
 msgid "Example:"
@@ -5515,7 +5521,7 @@ msgstr "Açıklayıcı notlar"
 
 #: lassocox/ui[5].label
 msgid "Explanatory Output"
-msgstr ""
+msgstr "Açıklayıcı Çıktı"
 
 #: survival/options/explanatory.title
 #: survival/ui[1][2].label
@@ -5764,7 +5770,7 @@ msgstr "Firth cezalı lojistik regresyon"
 
 #: R/oddsratio.b.R
 msgid "Fisher's exact test"
-msgstr "Fisher kesin olasılık testi (Fisher's exact test)"
+msgstr "Fisher kesin testi"
 
 #: survival/ui[10][0][0]/use_parametric.label
 msgid "Fit a parametric survival model"
@@ -5837,15 +5843,15 @@ msgstr "Takip Aralığı (min-maks)"
 msgid "Follow-up support counts"
 msgstr ""
 
-#: lassocox/options/elapsedtime.title
-#: lassocox/ui[0][0].label
-msgid "Follow-up time"
-msgstr "İzlem süresi"
-
 #: outcomeorganizer/options/followupTime.title
 #: outcomeorganizer/ui[3][0][1].label
 msgid "Follow-up Time"
 msgstr "Takip Süresi"
+
+#: lassocox/options/elapsedtime.title
+#: lassocox/ui[0][0].label
+msgid "Follow-up time"
+msgstr "İzlem süresi"
 
 #: R/outcomeorganizer.b.R
 msgid "follow-up time"
@@ -6223,14 +6229,14 @@ msgstr "Tehlike Regresyon Grafikleri"
 msgid "Hazard Scale"
 msgstr "Hazard Ölçeği"
 
-#: multisurvival/options/hr.title
-msgid "Hazards regression plot"
-msgstr "Tehlike regresyon grafiği"
-
 #: multisurvival/results/plot.title
 #: multisurvival/results/plot3.title
 msgid "Hazards Regression Plot"
 msgstr "Tehlike Regresyon Grafiği"
+
+#: multisurvival/options/hr.title
+msgid "Hazards regression plot"
+msgstr "Tehlike regresyon grafiği"
 
 #: survival/ui[9][0].label
 msgid "Help & Interpretation"
@@ -6294,7 +6300,7 @@ msgstr "Daha yüksek skorlar"
 
 #: package/datasets/histopathologyincludinganalysis.name
 msgid "histopathology including analysis"
-msgstr "analiz içeren histopatoloji"
+msgstr ""
 
 #: survival/options/padjustmethod/hochberg.title
 msgid "hochberg"
@@ -7047,15 +7053,15 @@ msgstr "KM Üst GA"
 msgid "KMunicate plot"
 msgstr "KMunicate grafiği"
 
+#: singlearm/results/plot6.title
+msgid "KMunicate-Style Plot"
+msgstr "KMunicate Tarzı Grafik"
+
 #: singlearm/options/kmunicate.title
 #: survival/options/kmunicate.title
 #: survivalcont/options/kmunicate.title
 msgid "KMunicate-style plot"
 msgstr "KMunicate tarzı grafik"
-
-#: singlearm/results/plot6.title
-msgid "KMunicate-Style Plot"
-msgstr "KMunicate Tarzı Grafik"
 
 #: survivalcont/ui[4][0][0]/kmunicate.label
 msgid "KMunicate-style plot (publication ready)"
@@ -7107,9 +7113,9 @@ msgid ""
 "%s %s; %d remain. Time is measured from the landmark, and estimates are "
 "conditional on surviving to it."
 msgstr ""
-"Yer işareti analizi, takibi %s %s veya öncesinde sona eren %d deneği "
-"çıkardı; %d denek kaldı. Zaman yer işaretinden itibaren ölçülür ve tahminler "
-"o zamana kadar hayatta kalmaya bağlıdır."
+"Yer işareti analizi, takibi %2$s %3$s veya öncesinde sona eren %1$d deneği "
+"çıkardı; %4$d denek kaldı. Zaman yer işaretinden itibaren ölçülür ve "
+"tahminler o zamana kadar hayatta kalmaya bağlıdır."
 
 #: R/survivalcont.b.R
 msgid ""
@@ -7438,7 +7444,7 @@ msgstr "daha düşük (daha geniş GA)"
 #: singlearm/results/cifTable.columns.title
 #: survival/results/cifTable.columns.title
 msgid "Lower 95% CI"
-msgstr ""
+msgstr "Alt %95 GA"
 
 #: R/lassocox.b.R
 msgid "Lower fitted hazard"
@@ -7540,16 +7546,16 @@ msgstr ""
 "bir klinik kesim değeri yoktur; yeterlilik amaçlanan kullanıma, sonlanıma, "
 "olgu karışımına ve dış doğrulamaya bağlıdır."
 
-#: R/singlearm.b.R
-msgid "median"
-msgstr "medyan"
-
 #: multisurvival/results/adjustedMedianTable.columns.title
 #: singlearm/results/medianTable.columns.title
 #: survival/results/medianTable.columns.title
 #: survivalcont/results/medianTable.columns.title
 msgid "Median"
 msgstr "Medyan"
+
+#: R/singlearm.b.R
+msgid "median"
+msgstr "medyan"
 
 #: R/singlearm.b.R
 msgid ""
@@ -7759,13 +7765,13 @@ msgstr ""
 msgid "Minimum CV error"
 msgstr "En düşük çapraz doğrulama hatası"
 
-#: survivalcont/options/min_group_size.title
-msgid "Minimum group size (%)"
-msgstr "Minimum grup büyüklüğü (%)"
-
 #: survivalcont/ui[1][1][0]/min_group_size.label
 msgid "Minimum Group Size (%)"
 msgstr "Minimum Grup Büyüklüğü (%)"
+
+#: survivalcont/options/min_group_size.title
+msgid "Minimum group size (%)"
+msgstr "Minimum grup büyüklüğü (%)"
 
 #: R/survivalcont.b.R
 msgid "Minimum group size not met"
@@ -7903,7 +7909,7 @@ msgstr "Model Ölçütleri:"
 
 #: lassocox/ui[2].label
 msgid "Model Options"
-msgstr ""
+msgstr "Model Seçenekleri"
 
 #: multisurvival/options/show_survmetrics.title
 msgid "Model performance metrics"
@@ -8046,14 +8052,14 @@ msgstr "Ay (ad)"
 msgid "Month (number)"
 msgstr "Ay (sayı)"
 
+#: datetimeconverter/results/monthname_out.title
+msgid "Month Name"
+msgstr "Ay Adı"
+
 #: datetimeconverter/options/extract_monthname.title
 #: datetimeconverter/options/monthname_out.title
 msgid "Month name"
 msgstr "Ay adı"
-
-#: datetimeconverter/results/monthname_out.title
-msgid "Month Name"
-msgstr "Ay Adı"
 
 #: datetimeconverter/options/month_out.title
 msgid "Month number"
@@ -8120,6 +8126,11 @@ msgstr "Çoklu olay analizi"
 msgid "Multiple Event Configuration"
 msgstr "Çoklu Olay Yapılandırması"
 
+#: multisurvival/ui[2][0].label
+#: singlearm/ui[3][0].label
+msgid "Multiple Event Levels"
+msgstr "Çoklu Olay Düzeyleri"
+
 #: multisurvival/options/multievent.title
 #: outcomeorganizer/options/multievent.title
 #: singlearm/options/multievent.title
@@ -8127,11 +8138,6 @@ msgstr "Çoklu Olay Yapılandırması"
 #: survivalcont/options/multievent.title
 msgid "Multiple event levels"
 msgstr "Çoklu olay düzeyleri"
-
-#: multisurvival/ui[2][0].label
-#: singlearm/ui[3][0].label
-msgid "Multiple Event Levels"
-msgstr "Çoklu Olay Düzeyleri"
 
 #: outcomeorganizer/ui[1].label
 msgid "Multiple Event Types"
@@ -8292,7 +8298,7 @@ msgstr "Hayır"
 #: R/multisurvival.b.R
 msgid ""
 "No adjusted curve or table is shown; nothing was substituted for it. Choose "
-"Average (standardised over the observed patients) or Conditional Mean "
+"Average (standardized over the observed patients) or Conditional Mean "
 "instead."
 msgstr ""
 "Düzeltilmiş eğri veya tablo gösterilmiyor; yerine başka bir şey konulmadı. "
@@ -8361,7 +8367,7 @@ msgstr "Tahmin edilecek kovaryat kalmadı"
 
 #: R/survivalcont.b.R
 msgid ""
-"No Cox regression results are available to summarise. This usually means the "
+"No Cox regression results are available to summarize. This usually means the "
 "model could not be fitted, or every hazard ratio was missing."
 msgstr ""
 "Özetlenecek Cox regresyonu sonucu yok. Bu durum genellikle modelin "
@@ -8821,7 +8827,7 @@ msgstr "Parametrik bir sağkalım modeli kurmak için yeterli olay / gözlem yok
 
 #: R/survival.b.R
 msgid "Not estimable"
-msgstr "Tahmin edilemez"
+msgstr "Kestirilemiyor"
 
 #: R/multisurvival.b.R
 msgid "Not estimable (term is aliased)"
@@ -8829,7 +8835,7 @@ msgstr "Tahmin edilemez (terim eşdoğrusal)"
 
 #: R/survivalcont.b.R
 msgid ""
-"Not fitted: '%s' has %d levels across %d analysed rows (about %.1f patients "
+"Not fitted: '%s' has %d levels across %d analyzed rows (about %.1f patients "
 "per stratum). Stratification needs a small number of reasonably sized "
 "groups; a near-continuous variable gives one stratum per patient and no "
 "estimable hazard ratio. Use a categorical variable, or add this variable as "
@@ -8928,15 +8934,15 @@ msgstr ""
 "Sıfır hipotezi: {var} değişkeninin doğrusal etkisi. {df} serbestlik "
 "derecesine sahip doğal eğriler (natural splines)."
 
-#: R/lassocox.b.R
-msgid "Number at risk"
-msgstr "Risk altındaki sayı"
-
 #: singlearm/results/survTable.columns.title
 #: survival/results/survTable.columns.title
 #: survivalcont/results/survTable.columns.title
 msgid "Number at Risk"
 msgstr "Risk Altındaki Sayı"
+
+#: R/lassocox.b.R
+msgid "Number at risk"
+msgstr "Risk altındaki sayı"
 
 #: survivalcont/ui[4][1][0]/risktable.label
 msgid "Number at risk table"
@@ -9443,13 +9449,13 @@ msgstr "Sonlanım"
 msgid "Outcome Category"
 msgstr "Sonuç Kategorisi"
 
-#: outcomeorganizer/options/visualization.title
-msgid "Outcome distribution"
-msgstr "Sonuç dağılımı"
-
 #: outcomeorganizer/results/outcomeViz.title
 msgid "Outcome Distribution"
 msgstr "Sonuç Dağılımı"
+
+#: outcomeorganizer/options/visualization.title
+msgid "Outcome distribution"
+msgstr "Sonuç dağılımı"
 
 #: R/multisurvival.b.R
 msgid ""
@@ -9700,13 +9706,13 @@ msgstr ""
 "{lower} - {upper})"
 
 #: R/outcomeorganizer.b.R
-msgid "overall survival"
-msgstr "genel sağkalım"
-
-#: R/outcomeorganizer.b.R
 #: R/singlearm.b.R
 msgid "Overall Survival"
 msgstr "Genel Sağkalım"
+
+#: R/outcomeorganizer.b.R
+msgid "overall survival"
+msgstr "genel sağkalım"
 
 #: R/singlearm.b.R
 msgid "Overall survival"
@@ -9760,14 +9766,14 @@ msgstr "P-değerleri"
 msgid "Pairwise Comparison Analysis"
 msgstr "İkili Karşılaştırma Analizi"
 
+#: survival/ui[4][4].label
+msgid "Pairwise Comparisons"
+msgstr "İkili Karşılaştırmalar"
+
 #: survival/options/pw.title
 #: survival/ui[4][4][0]/pw.label
 msgid "Pairwise comparisons"
 msgstr "İkili karşılaştırmalar"
-
-#: survival/ui[4][4].label
-msgid "Pairwise Comparisons"
-msgstr "İkili Karşılaştırmalar"
 
 #: R/survival.b.R
 msgid "Pairwise comparisons: {factor}"
@@ -10479,7 +10485,7 @@ msgstr "alt gruplar arasında bilgiyi havuzlar"
 
 #: R/survival.b.R
 msgid "Poor"
-msgstr "Kötü"
+msgstr "Zayıf"
 
 #: oddsratio/options/outcomeLevel.title
 #: oddsratio/ui[0][1]/outcomeLevel.label
@@ -10669,7 +10675,7 @@ msgstr ""
 #: singlearm/results/cifTable.columns.title
 #: survival/results/cifTable.columns.title
 msgid "Probability"
-msgstr ""
+msgstr "Olasılık"
 
 #: singlearm/results/survTable.columns.title
 msgid "Probability Estimate"
@@ -10680,12 +10686,12 @@ msgid "progression"
 msgstr "progresyon"
 
 #: R/outcomeorganizer.b.R
-msgid "progression-free survival"
-msgstr "progresyonsuz sağkalım"
-
-#: R/outcomeorganizer.b.R
 msgid "Progression-Free Survival"
 msgstr "Progresyonsuz Sağkalım"
+
+#: R/outcomeorganizer.b.R
+msgid "progression-free survival"
+msgstr "progresyonsuz sağkalım"
 
 #: outcomeorganizer/options/analysistype/pfs.title
 msgid "Progression-Free Survival (PFS)"
@@ -10707,16 +10713,16 @@ msgstr "Orantılı Tehlikeler (PH) Varsayımı"
 msgid "Proportional Hazards Assessment & Recommendations"
 msgstr "Orantılı Hazardlar Değerlendirmesi ve Önerileri"
 
-#: multisurvival/options/ph_cox.title
-#: survival/options/ph_cox.title
-msgid "Proportional hazards assumption"
-msgstr "Orantılı tehlikeler varsayımı"
-
 #: multisurvival/ui[3][1].label
 #: multisurvival/results/cox_phTable.title
 #: survival/results/cox_ph.title
 msgid "Proportional Hazards Assumption"
 msgstr "Orantılı Tehlikeler Varsayımı"
+
+#: multisurvival/options/ph_cox.title
+#: survival/options/ph_cox.title
+msgid "Proportional hazards assumption"
+msgstr "Orantılı tehlikeler varsayımı"
 
 #: R/survival.b.R
 msgid "Proportional hazards assumption may be violated (smallest cox.zph p = {p})"
@@ -10811,17 +10817,17 @@ msgstr "Çeyrek (1-4)"
 msgid "R version"
 msgstr "R sürümü"
 
-#: R/lassocox.b.R
-#: lassocox/options/random_seed.title
-#: survivalcont/options/seed.title
-msgid "Random seed"
-msgstr "Rastgelelik tohumu"
-
 #: survival/options/seed.title
 #: survival/ui[4][2][0]/seed.label
 #: survivalcont/ui[8][0][0]/seed.label
 msgid "Random Seed"
 msgstr "Rastgele Tohum"
+
+#: R/lassocox.b.R
+#: lassocox/options/random_seed.title
+#: survivalcont/options/seed.title
+msgid "Random seed"
+msgstr "Rastgelelik tohumu"
 
 #: survivalcont/options/seed.description
 msgid ""
@@ -10835,7 +10841,7 @@ msgstr ""
 #: R/multisurvival.b.R
 #: R/survival.b.R
 msgid "Random seed: {seed}"
-msgstr ""
+msgstr "Rastgelelik tohumu: {seed}"
 
 #: R/multisurvival.b.R
 msgid "Rank discrimination at this horizon; 0.5 = chance, 1.0 = perfect ordering"
@@ -11018,14 +11024,14 @@ msgstr ""
 "etkisinin o moderatör düzeyi <i>içindeki</i> değeridir: TO = exp(katsayı); "
 "GA ve p o modelin varyans-kovaryans matrisinden alınır."
 
+#: survival/results/remarkChecklist.title
+msgid "REMARK Reporting Checklist"
+msgstr "REMARK Raporlama Kontrol Listesi"
+
 #: survival/options/remark_checklist.title
 #: survival/ui[9][0][0]/remark_checklist.label
 msgid "REMARK reporting checklist"
 msgstr "REMARK raporlama kontrol listesi"
-
-#: survival/results/remarkChecklist.title
-msgid "REMARK Reporting Checklist"
-msgstr "REMARK Raporlama Kontrol Listesi"
 
 #: R/multisurvival.b.R
 msgid "Remove any duplicate column names"
@@ -11116,12 +11122,12 @@ msgstr "Yeniden üretilebilirlik ayrıntıları"
 msgid "Reproducibility Details"
 msgstr "Yeniden üretilebilirlik ayrıntıları"
 
-#: lassocox/options/showRCode.title
-msgid "Reproducible R code"
-msgstr "Yeniden üretilebilir R kodu"
-
 #: lassocox/results/rCode.title
 msgid "Reproducible R Code"
+msgstr "Yeniden üretilebilir R kodu"
+
+#: lassocox/options/showRCode.title
+msgid "Reproducible R code"
 msgstr "Yeniden üretilebilir R kodu"
 
 #: R/singlearm.b.R
@@ -11190,17 +11196,17 @@ msgstr "Kısıtlı ortalama olaysız süre"
 msgid "Restricted Mean Event-Free Time"
 msgstr "Kısıtlı Ortalama Olaysız Süre"
 
-#: R/singlearm.b.R
-#: R/survival.b.R
-msgid "Restricted mean survival time"
-msgstr "Kısıtlı ortalama sağkalım süresi"
-
 #: survival/ui[4][6].label
 #: survival/results/rmstTable.title
 #: survivalcont/ui[6][1].label
 #: survivalcont/results/rmstTable.title
 msgid "Restricted Mean Survival Time"
 msgstr "Kısıtlı Ortalama Sağkalım Süresi"
+
+#: R/singlearm.b.R
+#: R/survival.b.R
+msgid "Restricted mean survival time"
+msgstr "Kısıtlı ortalama sağkalım süresi"
 
 #: survival/options/rmst_analysis.title
 msgid "Restricted mean survival time (RMST)"
@@ -11270,13 +11276,13 @@ msgstr "Risk grubu"
 msgid "Risk group"
 msgstr "Risk grubu"
 
-#: multisurvival/options/plotRiskGroups.title
-msgid "Risk group survival plot"
-msgstr "Risk grubu sağkalım grafiği"
-
 #: multisurvival/results/riskGroupPlot.title
 msgid "Risk Group Survival Plot"
 msgstr "Risk Grubu Sağkalım Grafiği"
+
+#: multisurvival/options/plotRiskGroups.title
+msgid "Risk group survival plot"
+msgstr "Risk grubu sağkalım grafiği"
 
 #: R/multisurvival.b.R
 msgid "Risk groups"
@@ -11380,15 +11386,15 @@ msgstr "rmean (kısıtlı ortalama)"
 msgid "RMST"
 msgstr "RMST"
 
-#: survival/ui[4][6][0]/rmst_analysis.label
-#: survivalcont/ui[6][1][0]/rmst_analysis.label
-msgid "RMST analysis"
-msgstr "RMST analizi"
-
 #: survival/results/rmstHeading.title
 #: survivalcont/results/rmstHeading.title
 msgid "RMST Analysis"
 msgstr "RMST Analizi"
+
+#: survival/ui[4][6][0]/rmst_analysis.label
+#: survivalcont/ui[6][1][0]/rmst_analysis.label
+msgid "RMST analysis"
+msgstr "RMST analizi"
 
 #: R/survivalcont.b.R
 msgid ""
@@ -11790,7 +11796,7 @@ msgid ""
 "events; Cause Specific treats other-cause death as censored; Disease-Free "
 "counts disease, recurrence, and death categories as events according to the "
 "selected mapping. Competing-risk coding is retained for compatibility but is "
-"not analysed by this continuous cut-off function; select it to receive "
+"not analyzed by this continuous cut-off function; select it to receive "
 "guidance to a competing-risk analysis."
 msgstr ""
 "Sağkalım tahmin hedefini (estimand) seçin. Genel, her iki ölüm kategorisini "
@@ -12289,11 +12295,6 @@ msgstr ""
 "belirteç varyasyonunu, seyrek kategorileri ve ayrılmayı inceleyin; uygun "
 "olduğunda Firth cezalı regresyonu düşünün."
 
-#: R/multisurvival.b.R
-#: multisurvival/options/ac_method/average.title
-msgid "Standardised over cohort (g-computation)"
-msgstr "Kohort üzerinde standardize (g-hesaplaması)"
-
 #: survival/options/age_standardization_method.title
 msgid "Standardization Method"
 msgstr "Standardizasyon Yöntemi"
@@ -12301,6 +12302,11 @@ msgstr "Standardizasyon Yöntemi"
 #: survival/ui[4][1][0]/age_standardization_method.label
 msgid "Standardization method"
 msgstr "Standardizasyon yöntemi"
+
+#: R/multisurvival.b.R
+#: multisurvival/options/ac_method/average.title
+msgid "Standardized over cohort (g-computation)"
+msgstr "Kohort üzerinde standardize (g-hesaplaması)"
 
 #: singlearm/options/ybegin_plot.title
 #: survivalcont/options/ybegin_plot.title
@@ -12626,13 +12632,13 @@ msgstr ""
 msgid "Survival Analysis for Continuous Explanatory Variable"
 msgstr "Sürekli Açıklayıcı Değişken İçin Sağkalım Analizi"
 
-#: outcomeorganizer/options/showGlossary.title
-msgid "Survival analysis glossary"
-msgstr "Sağkalım analizi sözlüğü"
-
 #: outcomeorganizer/results/glossary.title
 msgid "Survival Analysis Glossary"
 msgstr "Sağkalım Analizi Sözlüğü"
+
+#: outcomeorganizer/options/showGlossary.title
+msgid "Survival analysis glossary"
+msgstr "Sağkalım analizi sözlüğü"
 
 #: outcomeorganizer/options/analysistype.title
 msgid "Survival Analysis Type"
@@ -12709,7 +12715,7 @@ msgstr "Tüm grup için sağkalım, açıklayıcı faktör yok"
 
 #: package.title
 msgid "Survival Module of ClinicoPath for jamovi"
-msgstr "jamovi İçin ClinicoPath Sağkalım Modülü"
+msgstr ""
 
 #: package.description
 msgid ""
@@ -12720,13 +12726,6 @@ msgid ""
 "requests or reporting bugs, please open an issue at "
 "<https://github.com/sbalci/ClinicoPathJamoviModule/issues/>."
 msgstr ""
-"jamovi için ClinicoPath Sağkalım Modülü. ClinicoPath, araştırmacıların veri "
-"setlerinin doğal dil özetlerini oluşturmalarına, istatistiksel testlerle "
-"çapraz tablolar üretmelerine ve sağkalım tabloları, sağkalım grafikleri ve "
-"doğal dil özetleri ile sağkalım analizi yapmalarına yardımcı olur. Yorumlar, "
-"öneriler, özellik istekleri veya hata bildirimleri için lütfen "
-"<https://github.com/sbalci/ClinicoPathJamoviModule/issues/> adresinde bir "
-"konu açın."
 
 #: singlearm/results/plot.title
 msgid "Survival Plot"
@@ -13200,7 +13199,7 @@ msgstr "'%s' kesme noktası grupları"
 
 #: R/survivalcont.b.R
 msgid ""
-"The cut-off is the value that maximises the standardised log-rank statistic "
+"The cut-off is the value that maximizes the standardized log-rank statistic "
 "(maximally selected rank statistic, survminer::surv_cutpoint / maxstat). No "
 "multiplicity-adjusted p-value is computed or reported for the selected "
 "cut-off; the group comparison p-values shown after the split are exploratory "
@@ -13358,7 +13357,7 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid ""
-"The explanatory variable '{var}' has only one value in the analysed rows, so "
+"The explanatory variable '{var}' has only one value in the analyzed rows, so "
 "no effect can be estimated for it. Remove it, or check the data filter and "
 "missing values."
 msgstr ""
@@ -13545,6 +13544,10 @@ msgid ""
 "without it the analysis stops and lists the levels. A numeric 0/1 outcome is "
 "read as 1 = event."
 msgstr ""
+"Sonuç değişkeninin ilgilenilen olayı temsil eden düzeyi. Faktör türünde bir "
+"sonuç için zorunludur ve asla düzeylerin sırasından alınmaz: seçilmezse "
+"analiz durur ve düzeyleri listeler. Sayısal 0/1 bir sonuç 1 = olay olarak "
+"okunur."
 
 #: R/survivalcont.b.R
 msgid ""
@@ -13607,9 +13610,9 @@ msgid ""
 "that outcomes were good"
 msgstr ""
 "İlgilenilen olaya kadar geçen medyan süreye ulaşılamadı: ilgilenilen olayın "
-"kümülatif insidansı gözlemlenen takip içinde %%%50'nin altında kaldı (en "
-"uzun takip %.1f %s). Yarışan risklerde, yarışan olay sık olduğunda bu durum "
-"beklenir, çünkü takip ne kadar sürerse sürsün kümülatif insidans %%%50'nin "
+"kümülatif insidansı gözlemlenen takip içinde %%50'nin altında kaldı (en uzun "
+"takip %.1f %s). Yarışan risklerde, yarışan olay sık olduğunda bu durum "
+"beklenir, çünkü takip ne kadar sürerse sürsün kümülatif insidans %%50'nin "
 "altında bir platoya ulaşabilir; bu, sonuçların iyi olduğuna dair bir ifade "
 "değildir"
 
@@ -13932,7 +13935,7 @@ msgid ""
 "The proportional hazards test (cox.zph) is significant for: {terms}. The "
 "hazard ratio of such a term is a time-average of an effect that changes over "
 "follow-up and may misrepresent it at any particular time. Consider entering "
-"the variable as a stratification variable, modelling a time-varying effect, "
+"the variable as a stratification variable, modeling a time-varying effect, "
 "or reporting hazard ratios within time windows."
 msgstr ""
 "Orantılı tehlikeler testi (cox.zph) şu terimler için anlamlıdır: {terms}. "
@@ -14138,7 +14141,7 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid ""
-"The standardised option averages predictions over all observed patients; the "
+"The standardized option averages predictions over all observed patients; the "
 "reference-profile option uses one mean/mode profile"
 msgstr ""
 "Standardize seçeneği öngörülerin ortalamasını tüm gözlenen hastalar üzerinde "
@@ -14146,7 +14149,7 @@ msgstr ""
 
 #: R/survivalcont.b.R
 msgid ""
-"The statistic is the maximally selected standardised log-rank statistic; no "
+"The statistic is the maximally selected standardized log-rank statistic; no "
 "multiplicity-adjusted p-value is reported for this cut-off. Downstream group "
 "comparisons are exploratory and should be validated in independent data."
 msgstr ""
@@ -14159,7 +14162,7 @@ msgid "The stratification variable could not be located in the data."
 msgstr "Tabakalama değişkeni veride bulunamadı."
 
 #: R/survivalcont.b.R
-msgid "The stratification variable has fewer than two levels in the analysed rows."
+msgid "The stratification variable has fewer than two levels in the analyzed rows."
 msgstr "Tabakalama değişkeni analiz edilen satırlarda ikiden az düzeye sahiptir."
 
 #: R/lassocox.b.R
@@ -14186,7 +14189,7 @@ msgid ""
 "elapsed-time variable is supplied, no conversion is possible (the column "
 "carries no unit), so this option DECLARES the unit that variable is already "
 "recorded in. Either way it determines how cutpoints and plausibility checks "
-"are interpreted, and how axes are labelled - so selecting the wrong unit for "
+"are interpreted, and how axes are labeled, so selecting the wrong unit for "
 "pre-calculated time changes the reported results, not just the labels."
 msgstr ""
 "Analiz boyunca kullanılan zaman birimi. Sağkalım süresi tarihlerden "
@@ -14496,7 +14499,7 @@ msgstr ""
 msgid ""
 "This describes one hypothetical patient, not your cohort. If your covariates "
 "are skewed, that reference patient may resemble nobody in the data. Choose "
-"\"Standardised over cohort\" if you want a curve that represents the "
+"\"Standardized over cohort\" if you want a curve that represents the "
 "patients you actually have."
 msgstr ""
 "Bu, kohortunuzu değil tek bir varsayımsal hastayı tanımlar. Kovaryatlarınız "
@@ -15044,7 +15047,7 @@ msgstr "Saat Dilimi"
 
 #: R/datetimeconverter.b.R
 msgid ""
-"Timezone {requested} is not a recognised Olson timezone. Falling back to the "
+"Timezone {requested} is not a recognized Olson timezone. Falling back to the "
 "system default ({fallback})."
 msgstr ""
 "{requested} saat dilimi tanınan bir Olson saat dilimi değildir. Sistem "
@@ -15053,10 +15056,12 @@ msgstr ""
 #: R/oddsratio.b.R
 msgid "To choose a level, first put '{variable}' in the Diagnostic Predictor box."
 msgstr ""
+"Bir düzey seçmek için önce '{variable}' değişkenini Tanısal Belirteç "
+"kutusuna yerleştirin."
 
 #: R/multisurvival.b.R
 msgid ""
-"To compare a single subgroup head-to-head, match the row set (analyse that "
+"To compare a single subgroup head-to-head, match the row set (analyze that "
 "one marker with the moderator); otherwise the N and event count, and "
 "therefore the CI and p, can differ for that reason alone."
 msgstr ""
@@ -15355,12 +15360,12 @@ msgstr "Kesim Noktası Analizini Anlama"
 msgid "Understanding Diagnostic Test Performance"
 msgstr "Tanı Testi Performansını Anlama"
 
-#: R/lassocox.b.R
-msgid "Understanding LASSO Cox regression"
-msgstr "LASSO Cox regresyonunu anlama"
-
 #: lassocox/results/lassoExplanation.title
 msgid "Understanding LASSO Cox Regression"
+msgstr "LASSO Cox regresyonunu anlama"
+
+#: R/lassocox.b.R
+msgid "Understanding LASSO Cox regression"
 msgstr "LASSO Cox regresyonunu anlama"
 
 #: survivalcont/results/loglogPlotExplanation.title
@@ -15418,12 +15423,12 @@ msgstr "Risk Ölçümlerini Anlama"
 msgid "Understanding Risk Score Analysis"
 msgstr "Risk Skoru Analizini Anlamak"
 
-#: R/lassocox.b.R
-msgid "Understanding risk scores and survival curves"
-msgstr "Risk skorlarını ve sağkalım eğrilerini anlama"
-
 #: lassocox/results/riskScoreExplanation.title
 msgid "Understanding Risk Scores and Survival Curves"
+msgstr "Risk skorlarını ve sağkalım eğrilerini anlama"
+
+#: R/lassocox.b.R
+msgid "Understanding risk scores and survival curves"
 msgstr "Risk skorlarını ve sağkalım eğrilerini anlama"
 
 #: survivalcont/results/rmstExplanation.title
@@ -15534,7 +15539,7 @@ msgstr "Üst"
 #: singlearm/results/cifTable.columns.title
 #: survival/results/cifTable.columns.title
 msgid "Upper 95% CI"
-msgstr ""
+msgstr "Üst %95 GA"
 
 #: R/lassocox.b.R
 msgid ""
@@ -15576,7 +15581,7 @@ msgstr "Seçiminizi yapmak için sonuç değişkeninin altındaki açılır men�
 #: R/multisurvival.b.R
 msgid ""
 "Use this to see the model's overall fitted survival. If you selected an "
-"adjustment variable expecting to compare groups, choose \"Standardised over "
+"adjustment variable expecting to compare groups, choose \"Standardized over "
 "cohort\" instead."
 msgstr ""
 "Modelin genel uydurulmuş sağkalımını görmek için bunu kullanın. Grupları "
@@ -15858,13 +15863,13 @@ msgstr ""
 msgid "Warnings"
 msgstr "Uyarılar"
 
-#: datetimeconverter/ui[7][0][1][0]/weeknum_out.label
-msgid "Week number"
-msgstr "Hafta numarası"
-
 #: datetimeconverter/results/weeknum_out.title
 msgid "Week Number"
 msgstr "Hafta Numarası"
+
+#: datetimeconverter/ui[7][0][1][0]/weeknum_out.label
+msgid "Week number"
+msgstr "Hafta numarası"
 
 #: datetimeconverter/options/extract_weeknum.title
 #: datetimeconverter/options/weeknum_out.title
@@ -15887,15 +15892,15 @@ msgstr "Weibull"
 msgid "Weighted Log-Rank Test Interpretation"
 msgstr "Ağırlıklı Log-Rank Testi Yorumu"
 
+#: survival/ui[4][5].label
+msgid "Weighted Log-Rank Tests"
+msgstr "Ağırlıklı Log-Rank Testleri"
+
 #: R/survival.b.R
 #: survival/options/weightedLogRank.title
 #: survival/ui[4][5][0]/weightedLogRank.label
 msgid "Weighted log-rank tests"
 msgstr "Ağırlıklı log-rank testleri"
-
-#: survival/ui[4][5].label
-msgid "Weighted Log-Rank Tests"
-msgstr "Ağırlıklı Log-Rank Testleri"
 
 #: R/survival.b.R
 msgid "Weighted Log-Rank Tests - {title}"
@@ -16187,3 +16192,246 @@ msgid ""
 msgstr ""
 "Çapraz tabloda sıfır değerli hücreler saptandı. Bu durum odds oranı "
 "hesaplamasını etkileyebilir."
+
+#~ msgid ""
+#~ "%.0f%% confidence interval via the irr::kappa2 fallback (approximate, built "
+#~ "from the null-hypothesis standard error): vcd::Kappa could not return a "
+#~ "finite SE for this (near-degenerate) table. A null-SE interval is too narrow "
+#~ "when kappa is high, so treat it as optimistic."
+#~ msgstr ""
+#~ "irr::kappa2 yedek yöntemiyle elde edilen %%%.0f güven aralığı (yaklaşık; "
+#~ "sıfır hipotezi standart hatasından oluşturulmuştur): vcd::Kappa bu "
+#~ "(neredeyse dejenere) tablo için sonlu bir SH döndüremedi. Sıfır-SH aralığı "
+#~ "kappa yüksek olduğunda fazla dardır; bu nedenle onu iyimser kabul edin."
+
+#~ msgid ""
+#~ "%.0f%% confidence interval via the irr::kappa2 fallback (approximate, built "
+#~ "from the null-hypothesis standard error). Install the 'vcd' package to "
+#~ "enable the more accurate ASE-based interval. A null-SE interval is too "
+#~ "narrow when kappa is high, so treat it as optimistic."
+#~ msgstr ""
+#~ "irr::kappa2 yedek yöntemiyle elde edilen %%%.0f güven aralığı (yaklaşık; "
+#~ "sıfır hipotezi standart hatasından oluşturulmuştur). Daha doğru olan ASE "
+#~ "tabanlı aralığı etkinleştirmek için 'vcd' paketini kurun. Sıfır-SH aralığı "
+#~ "kappa yüksek olduğunda fazla dardır; bu nedenle onu iyimser kabul edin."
+
+#~ msgid "Alpha for Confidence Intervals"
+#~ msgstr "Güven Aralıkları İçin Alfa"
+
+#~ msgid ""
+#~ "At least one interval in this table was built from the null-hypothesis "
+#~ "standard error (kappa divided by its H0 test statistic) because the non-null "
+#~ "asymptotic standard error from vcd::Kappa was unavailable for that rater, "
+#~ "most often because a rating category is unused at one time point and the "
+#~ "agreement table is near-degenerate. Null-SE intervals are too narrow when "
+#~ "kappa is high, so treat them as optimistic."
+#~ msgstr ""
+#~ "Bu tablodaki en az bir aralık, o değerlendirici için vcd::Kappa'dan "
+#~ "sıfır-dışı asimptotik standart hata elde edilemediğinden sıfır hipotezi "
+#~ "standart hatasından (kappanın H0 test istatistiğine bölümü) oluşturulmuştur; "
+#~ "bunun en sık nedeni, bir değerlendirme kategorisinin bir zaman noktasında "
+#~ "kullanılmamış olması ve uyum tablosunun neredeyse dejenere olmasıdır. "
+#~ "Sıfır-SH aralıkları kappa yüksek olduğunda fazla dardır; bu nedenle bunları "
+#~ "iyimser kabul edin."
+
+#~ msgid ""
+#~ "At least one interval in this table was built from the null-hypothesis "
+#~ "standard error (kappa divided by its H0 test statistic) because the non-null "
+#~ "asymptotic standard error from vcd::Kappa was unavailable for that subgroup. "
+#~ "Null-SE intervals are too narrow when kappa is high, so treat them as "
+#~ "optimistic; three or more raters always use this fallback."
+#~ msgstr ""
+#~ "Bu tablodaki en az bir aralık, o alt grup için vcd::Kappa'dan sıfır-dışı "
+#~ "asimptotik standart hata elde edilemediğinden sıfır hipotezi standart "
+#~ "hatasından (kappanın H0 test istatistiğine bölümü) oluşturulmuştur. Sıfır-SH "
+#~ "aralıkları kappa yüksek olduğunda fazla dardır, bu nedenle bunları iyimser "
+#~ "kabul edin; üç veya daha fazla değerlendirici olduğunda her zaman bu yedek "
+#~ "yöntem kullanılır."
+
+#~ msgid ""
+#~ "At least one interval was built from the null-hypothesis standard error, "
+#~ "because vcd::Kappa returned no finite asymptotic standard error for that "
+#~ "institution (most often a category unused there). Such intervals are too "
+#~ "narrow when kappa is high, so treat them as optimistic."
+#~ msgstr ""
+#~ "En az bir aralık sıfır hipotezi standart hatasından oluşturulmuştur, çünkü "
+#~ "vcd::Kappa o kurum için sonlu bir asimptotik standart hata döndürmemiştir "
+#~ "(en sık nedeni, o kurumda bir kategorinin kullanılmamış olmasıdır). Bu tür "
+#~ "aralıklar kappa yüksek olduğunda fazla dardır; bu nedenle bunları iyimser "
+#~ "kabul edin."
+
+#~ msgid "Average Net Benefit Over the Threshold Range"
+#~ msgstr "Eşik Aralığında Ortalama Net Fayda"
+
+#~ msgid "CI Method for Agreement"
+#~ msgstr "Uyum için GA Yöntemi"
+
+#~ msgid "Class Variable (Gold Standard)"
+#~ msgstr "Sınıf Değişkeni (Altın Standart)"
+
+#~ msgid "Clinical Decision Rule (binary)"
+#~ msgstr "Klinik Karar Kuralı (ikili)"
+
+#~ msgid "Clinical Decision Rule Integration"
+#~ msgstr "Klinik Karar Kuralı Entegrasyonu"
+
+#~ msgid "Clinical Range Highlight"
+#~ msgstr "Klinik Aralık Vurgulama"
+
+#~ msgid "Cost Ratio (FP:FN)"
+#~ msgstr "Maliyet Oranı (YP:YN)"
+
+#~ msgid "Decision Consequences Table"
+#~ msgstr "Karar Sonuçları Tablosu"
+
+#~ msgid "Decision Curve Plot"
+#~ msgstr "Karar Eğrisi Grafiği"
+
+#~ msgid "Decision Rule Label"
+#~ msgstr "Karar Kuralı Etiketi"
+
+#~ msgid "Decision Rule Positive Level"
+#~ msgstr "Karar Kuralı Pozitif Düzeyi"
+
+#~ msgid "Enhanced Multi-Model Comparison"
+#~ msgstr "Gelişmiş Çoklu Model Karşılaştırması"
+
+#~ msgid "Exclude other observed levels"
+#~ msgstr "Gözlenen diğer düzeyleri dışla"
+
+#~ msgid "Fixed Analysis Type"
+#~ msgstr "Sabit Analiz Türü"
+
+#~ msgid "Fixed sensitivity/Specificity analysis"
+#~ msgstr "Sabit duyarlılık/özgüllük analizi"
+
+#~ msgid "Harm-to-Benefit Ratio"
+#~ msgstr "Zarar-Fayda Oranı"
+
+#~ msgid "Highlight Range Maximum"
+#~ msgstr "Aralık Maksimumunu Vurgula"
+
+#~ msgid "Highlight Range Minimum"
+#~ msgstr "Aralık Minimumunu Vurgula"
+
+#~ msgid "IDI/NRI Bootstrap Iterations"
+#~ msgstr "IDI/NRI Bootstrap Yinelemeleri"
+
+#~ msgid "Illustrative Scenario Example"
+#~ msgstr "Açıklayıcı Senaryo Örneği"
+
+#~ msgid "Interval Type"
+#~ msgstr "Aralık Türü"
+
+#~ msgid "Maximum Thresholds to Display"
+#~ msgstr "Görüntülenecek Maksimum Eşikler"
+
+#~ msgid "Monetary Cost per Test/Screening"
+#~ msgstr "Test/Tarama Başına Parasal Maliyet"
+
+#~ msgid "Monetary Cost per Treatment"
+#~ msgstr "Tedavi Başına Parasal Maliyet"
+
+#~ msgid "Monetary Harm Assigned to a False Positive"
+#~ msgstr "Yanlış Pozitife Atanan Parasal Zarar"
+
+#~ msgid "Monetary Value Assigned to a True Positive"
+#~ msgstr "Gerçek Pozitife Atanan Parasal Değer"
+
+#~ msgid "Net Interventions Avoided"
+#~ msgstr "Net Önlenen Girişimler"
+
+#~ msgid ""
+#~ "No confidence interval is shown: across three or more rater × time-point "
+#~ "columns this row reports Fleiss' kappa, for which only the null-hypothesis "
+#~ "test statistic is available here. An interval built from that null standard "
+#~ "error would be too narrow at high kappa. The per-rater rows above carry "
+#~ "non-null intervals."
+#~ msgstr ""
+#~ "Güven aralığı gösterilmemiştir: üç veya daha fazla değerlendirici × zaman "
+#~ "noktası sütunu boyunca bu satır Fleiss kappasını raporlar ve bunun için "
+#~ "burada yalnızca sıfır hipotezi test istatistiği mevcuttur. Bu sıfır hipotezi "
+#~ "standart hatasından oluşturulan bir aralık, yüksek kappa değerlerinde fazla "
+#~ "dar olur. Yukarıdaki değerlendirici başına satırlar sıfır-dışı aralıklar "
+#~ "içerir."
+
+#~ msgid "NRI Risk Categories"
+#~ msgstr "NRI Risk Kategorileri"
+
+#~ msgid "Partial AUC From (Specificity)"
+#~ msgstr "Kısmi EAA Başlangıcı (Özgüllük)"
+
+#~ msgid "Partial AUC To (Specificity)"
+#~ msgstr "Kısmi EAA Bitişi (Özgüllük)"
+
+#~ msgid "Population Size for Projections"
+#~ msgstr "Projeksiyonlar İçin Popülasyon Boyutu"
+
+#~ msgid "Power Analysis Type"
+#~ msgstr "Güç Analizi Türü"
+
+#~ msgid "Prediction Variables/Models"
+#~ msgstr "Tahmin Değişkenleri/Modelleri"
+
+#~ msgid "Prior AUC Belief"
+#~ msgstr "Öncül EAA İnancı"
+
+#~ msgid "Prior Precision"
+#~ msgstr "Öncül Kesinliği"
+
+#~ msgid "Prior Prevalence Value"
+#~ msgstr "Öncül Prevalans Değeri"
+
+#~ msgid "Quantile Positions"
+#~ msgstr "Kantil Konumları"
+
+#~ msgid "Reference Line Labels"
+#~ msgstr "Referans Çizgisi Etiketleri"
+
+#~ msgid "Reference Test for IDI/NRI"
+#~ msgstr "IDI/NRI için Referans Test"
+
+#~ msgid "Resource Utilization Analysis"
+#~ msgstr "Kaynak Kullanımı Analizi"
+
+#~ msgid "Results Table"
+#~ msgstr "Sonuç Tablosu"
+
+#~ msgid "ROC Smoothing Method"
+#~ msgstr "ROC Düzeltme Yöntemi"
+
+#~ msgid "Selected Thresholds for Table"
+#~ msgstr "Tablo İçin Seçilen Eşikler"
+
+#~ msgid "Sensitivity/Specificity vs threshold"
+#~ msgstr "Duyarlılık/Özgüllük - eşik"
+
+#~ msgid "Test 1 Negative Level"
+#~ msgstr "Test 1 Negatif Düzey"
+
+#~ msgid "Test 1 Positive Level"
+#~ msgstr "Test 1 Pozitif Düzey"
+
+#~ msgid "Test 2 (Required for Comparison)"
+#~ msgstr "Test 2 (Karşılaştırma İçin Zorunlu)"
+
+#~ msgid "Test 2 Negative Level"
+#~ msgstr "Test 2 Negatif Düzey"
+
+#~ msgid "Test 2 Positive Level"
+#~ msgstr "Test 2 Pozitif Düzey"
+
+#~ msgid "Test 3 Negative Level"
+#~ msgstr "Test 3 Negatif Düzey"
+
+#~ msgid "Test 3 Positive Level"
+#~ msgstr "Test 3 Pozitif Düzey"
+
+#~ msgid "Test Variables"
+#~ msgstr "Test Değişkenleri"
+
+#~ msgid "Threshold Step Size"
+#~ msgstr "Eşik Adım Boyutu"
+
+#~ msgid "Treatment Threshold Range"
+#~ msgstr "Tedavi Eşik Aralığı"

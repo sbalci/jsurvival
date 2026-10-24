@@ -5,7 +5,7 @@
             "": {
                 "domain": "messages",
                 "lang": "en",
-                "plural_forms": "nplurals=2; plural=(n!=1);"
+                "plural_forms": "nplurals=2; plural=(n != 1)"
             },
             "- A per-patient state code (0 = disease-free, 1 = disease, 2 = death from disease, 3 = death from other causes)": [
                 ""
@@ -94,19 +94,10 @@
             "{comparison}: hazard ratio {hr} (95% CI {lower} to {upper}, {stats}) - {direction} in the compared group relative to the reference. The hazard ratio is a relative rate, not a cumulative risk difference; the absolute benefit or harm depends on the baseline risk, the endpoint and the length of follow-up.{cinote}": [
                 ""
             ],
-            "{count} date value(s) were written with a two-digit year. These are read as 2000-2068 for 00-68 and as 1969-1999 for 69-99, so a date such as 22/09/68 becomes 2068 and a 1950s-1960s date is pushed a century forward. If any interval is a century off, rewrite the column with four-digit years.": [
-                ""
-            ],
-            "{count} date values are in the future. Review date columns for data entry errors or incorrect date formats.": [
-                ""
-            ],
             "{count} date(s) are in the future. Verify this is intentional (for example planned follow-up dates).": [
                 ""
             ],
             "{count} date(s) fall before 1900, which usually means the format was read wrongly or the source has data-entry errors.": [
-                ""
-            ],
-            "{count} observations ({pct}%) have missing time intervals. Investigate missing date values as this may affect study conclusions.": [
                 ""
             ],
             "{count} of {total} dates ({pct}%) are in the future, and this column has two-digit years: a year such as 55 is read as 2055, not 1955. If these dates cannot be in the future - dates of birth, diagnosis or specimen dates - set Two-digit years to 'Always in the past'.": [
@@ -151,12 +142,6 @@
             "{missing} of the {total} rows were missing": [
                 ""
             ],
-            "{n} missing time intervals due to missing dates": [
-                ""
-            ],
-            "{n} negative time intervals detected (end date before start date)": [
-                ""
-            ],
             "{n} rows excluded; {constants} constant predictors or columns removed": [
                 ""
             ],
@@ -164,9 +149,6 @@
                 ""
             ],
             "{outcome}: OR (95% CI, p-value)": [
-                ""
-            ],
-            "{pct}% of intervals are zero-length (start and end date on the same day). These contribute nothing to total person-time, so the denominator here is smaller than the number of participants suggests. Check whether unfilled follow-up dates were defaulted to the start date.": [
                 ""
             ],
             "{pct}% of non-missing values produced a date, but see the warnings above: a column read in the wrong format still parses at a high rate.": [
@@ -194,9 +176,6 @@
                 ""
             ],
             "* Model did not converge for: {fits} (likely small-sample separation); interpret these HRs with extreme caution.": [
-                ""
-            ],
-            "%": [
                 ""
             ],
             "%.0f%% of date values could not be read as '%s'. This is a format mismatch rather than missing data. Set 'Input time type' to the format actually used in your columns.": [
@@ -274,7 +253,7 @@
             "%s was not reached: the Kaplan-Meier curve stayed above 50%%%% within the observed follow-up (longest follow-up %%.1f %%s). This can reflect the event process, short follow-up, or censoring, so no conclusion about outcome should be drawn from its absence": [
                 ""
             ],
-            "%s was supplied as a numeric column with only %d distinct values, so it is analysed as a categorical variable throughout: every hazard ratio compares one level with the reference level, not a one-unit increase. To model it as a linear trend instead, use Survival Analysis for Continuous Variable.": [
+            "%s was supplied as a numeric column with only %d distinct values, so it is analyzed as a categorical variable throughout: every hazard ratio compares one level with the reference level, not a one-unit increase. To model it as a linear trend instead, use Survival Analysis for Continuous Variable.": [
                 ""
             ],
             "%s were used exactly as entered (%s) and are read in %s, the selected time unit. Note that \"12, 36, 60\" is also the built-in default, which is written in months; if you meant 1, 3 and 5 years, enter %s.": [
@@ -511,9 +490,6 @@
             "A text date format is selected but this column is numeric. • Choose Excel Serial or Unix Epoch if these really are serial numbers, or select a text date column instead.": [
                 ""
             ],
-            "A third cause makes every row negative by less than a day: a start column carrying a time of day against an end column recorded at midnight, which is what many laboratory systems export - check the Examples below for a time component on one side only.": [
-                ""
-            ],
             "A treatment-by-biomarker interaction supports a predictive-biomarker claim only in an appropriate treatment-comparison design with pre-specified validation.": [
                 ""
             ],
@@ -539,9 +515,6 @@
                 ""
             ],
             "Add Calculated Time to Data": [
-                ""
-            ],
-            "Add calculated times to dataset": [
                 ""
             ],
             "Add Multiple Cut-off Groups to Data": [
@@ -592,7 +565,7 @@
             "Adjusted curves are based on the Fine-Gray subdistribution model and display cumulative incidence of the event of interest, not cause-specific survival.": [
                 ""
             ],
-            "Adjusted curves are model-based survival or cumulative-incidence predictions under the selected standardisation.": [
+            "Adjusted curves are model-based survival or cumulative-incidence predictions under the selected standardization.": [
                 ""
             ],
             "Adjusted curves unavailable": [
@@ -655,10 +628,10 @@
             "Adjusted survival": [
                 ""
             ],
-            "Adjusted survival curves": [
+            "Adjusted Survival Curves": [
                 ""
             ],
-            "Adjusted Survival Curves": [
+            "Adjusted survival curves": [
                 ""
             ],
             "Adjusted Survival Curves for {variable}": [
@@ -748,12 +721,6 @@
             "Advanced Options": [
                 ""
             ],
-            "Advanced time interval analysis with quality assessment": [
-                ""
-            ],
-            "Advanced time interval calculator designed for survival analysis, epidemiological studies,  and person-time analysis. Features intelligent date parsing, comprehensive data quality  assessment, landmark analysis, and robust statistical summaries. Time intervals form the  foundation of person-time follow-up calculations, capturing both participant counts and  observation duration for accurate incidence rate calculations.": [
-                ""
-            ],
             "Advanced tool for preparing outcome variables for various types of survival analysis including overall survival, cause-specific, competing risks, progression-free survival, and multistate models.": [
                 ""
             ],
@@ -811,10 +778,10 @@
             "Age-adjusted analysis": [
                 ""
             ],
-            "Age-adjusted Cox regression": [
+            "Age-Adjusted Cox Regression": [
                 ""
             ],
-            "Age-Adjusted Cox Regression": [
+            "Age-adjusted Cox regression": [
                 ""
             ],
             "Age-adjusted Cox regression failed: {message}": [
@@ -874,7 +841,7 @@
             "All estimates are mutually adjusted for the other variables in this model. These are associations observed in these data.": [
                 ""
             ],
-            "All observations were removed by the data quality filters ({n} rows). Switch the filters off to inspect the raw intervals; if every interval was negative, the start and end date columns are probably swapped.": [
+            "All event types at selected times": [
                 ""
             ],
             "All patients have nearly identical risk scores (variance = %.2e). This occurs when covariate patterns are very similar across patients, model coefficients are very small, or predictors carry limited prognostic information. Recommendations: review predictor selection for discriminative variables, consider simpler risk stratification approaches, or interpret C-index instead of risk groups.": [
@@ -913,7 +880,7 @@
             "An <b>AIC if dropped</b> below the full-model AIC ({aic}) indicates the covariate could be removed without penalising fit.": [
                 ""
             ],
-            "An error occurred during {context}.": [
+            "An error occurred during {stage}.": [
                 ""
             ],
             "An optimal cut-off could not be estimated from these data. The continuous Cox model remains the primary analysis; check predictor variability, event count, and minimum group size.": [
@@ -922,19 +889,13 @@
             "An sHR is not a risk ratio and does not quantify a cause-specific hazard.": [
                 ""
             ],
-            "Analysis complete": [
-                ""
-            ],
             "Analysis Complete": [
                 ""
             ],
+            "Analysis complete": [
+                ""
+            ],
             "Analysis completed for {variable}.": [
-                ""
-            ],
-            "Analysis completed using {n} observations that reached the {landmark} landmark. All reported times are measured FROM the landmark, not from the start date ({amount} was subtracted from every interval): mean post-landmark follow-up {mean} {unit}, total post-landmark person-time {total} person-{unit}.": [
-                ""
-            ],
-            "Analysis completed using {n} observations with mean follow-up {mean} {unit} (total person-time: {total} person-{unit}).": [
                 ""
             ],
             "Analysis completed using %d observations with %d events (%.1f%% event rate) over a median follow-up of %.1f %s (reverse Kaplan-Meier).": [
@@ -952,10 +913,10 @@
             "Analysis Error": [
                 ""
             ],
-            "Analysis explanations": [
+            "Analysis Explanations": [
                 ""
             ],
-            "Analysis Explanations": [
+            "Analysis explanations": [
                 ""
             ],
             "Analysis Notes": [
@@ -1036,25 +997,13 @@
             "At reference covariate profile": [
                 ""
             ],
-            "At this share the fault is systematic rather than sporadic: the rows that were kept came from the same two columns and the same parsing, so they cannot be assumed correct merely because their interval came out positive - check the date columns and the Date Format setting before using any number on this page.": [
+            "At risk": [
                 ""
             ],
             "Auto-detect Format": [
                 ""
             ],
-            "Auto-detection is ambiguous: {formats} all parse these dates equally well ({pct}% success). The '{format}' format was used, because it places these dates in the narrowest range of years - please verify it matches your data or select the format manually.": [
-                ""
-            ],
             "Automated adequacy grades are not assigned. Interpret event counts, completeness, follow-up, confidence intervals, and time-specific risk sets in the context of the endpoint and intended use.": [
-                ""
-            ],
-            "Automatic detection - first match ({language})": [
-                ""
-            ],
-            "Automatic detection ({language})": [
-                ""
-            ],
-            "Automatic Predictor Level Detection": [
                 ""
             ],
             "Available Predictors": [
@@ -1117,10 +1066,10 @@
             "bonferroni": [
                 ""
             ],
-            "Bootstrap internal validation": [
+            "Bootstrap Internal Validation": [
                 ""
             ],
-            "Bootstrap Internal Validation": [
+            "Bootstrap internal validation": [
                 ""
             ],
             "Bootstrap Internal Validation - {title}": [
@@ -1222,16 +1171,7 @@
             "Calculated time": [
                 ""
             ],
-            "Calculated Time ({unit}, from {landmark} {unit} landmark)": [
-                ""
-            ],
-            "Calculated Time ({unit})": [
-                ""
-            ],
             "Calculated time from dates contains %d missing value%s. These observations will be excluded from the analysis. Please verify date format matches selected type and check for missing or invalid dates.": [
-                ""
-            ],
-            "Calculated Time Intervals": [
                 ""
             ],
             "Calculated Time Preview": [
@@ -1241,9 +1181,6 @@
                 ""
             ],
             "Calculation:": [
-                ""
-            ],
-            "Calendar-aware (actual month lengths)": [
                 ""
             ],
             "Calibration assessed at t = {t}. N = {n} patients in {k} risk groups.": [
@@ -1303,7 +1240,7 @@
             "Categorical predictors are represented by indicator columns and LASSO selects those columns individually rather than selecting each factor as a group. Factor(s): {vars}.": [
                 ""
             ],
-            "Categorical variable used for stratification in Cox regression, allowing a different baseline hazard in each stratum. Must be a factor with a small number of reasonably sized groups (for example treating centre or stage). A near-continuous variable would give one stratum per patient and no estimable hazard ratio.": [
+            "Categorical variable used for stratification in Cox regression, allowing a different baseline hazard in each stratum. Must be a factor with a small number of reasonably sized groups (for example treating center or stage). A near-continuous variable would give one stratum per patient and no estimable hazard ratio.": [
                 ""
             ],
             "Cause Specific": [
@@ -1405,6 +1342,9 @@
             "Choose which binary predictor to use for the separate, unadjusted sensitivity, specificity, and likelihood-ratio calculations. If left empty, the first explanatory variable is used when it is binary.": [
                 ""
             ],
+            "Choose which level of the diagnostic predictor is the positive test result (e.g., \"Present\", \"Test+\", \"Yes\"). The diagnostic metrics (sensitivity, specificity, likelihood ratios) need this choice; it is never taken from the level names or their order. While it is empty the diagnostic metrics wait for it and list the observed levels, and the logistic model, odds ratios, forest plot and nomogram still run.": [
+                ""
+            ],
             "CIs and p-values differ:": [
                 ""
             ],
@@ -1444,9 +1384,6 @@
             "Clinical Summary": [
                 ""
             ],
-            "Clinical Summary (Copy-Ready)": [
-                ""
-            ],
             "Clinical summary unavailable": [
                 ""
             ],
@@ -1465,10 +1402,10 @@
             "Coefficient and Hazard Ratio are from the penalized LASSO Cox fit at the selected lambda. Conventional p-values and confidence intervals are intentionally not reported because same-data post-selection inference would not account for variable and penalty selection.": [
                 ""
             ],
-            "Coefficient paths": [
+            "Coefficient Paths": [
                 ""
             ],
-            "Coefficient Paths": [
+            "Coefficient paths": [
                 ""
             ],
             "Coefficient Plot": [
@@ -1478,12 +1415,6 @@
                 ""
             ],
             "Coefficients are on the original variable scale.": [
-                ""
-            ],
-            "Column '{column}' contains only missing values; cannot calculate time intervals.": [
-                ""
-            ],
-            "Column '{column}' holds five-digit numbers such as {value}, which cannot be read as dates unambiguously.": [
                 ""
             ],
             "Column names should describe your variables (e.g., 'Age', 'Survival_Time', 'Event_Status')": [
@@ -1579,9 +1510,6 @@
             "Comprehensive Outcome Preparation for Survival Analysis": [
                 ""
             ],
-            "Comprehensive Time Interval Calculator": [
-                ""
-            ],
             "Compute age-standardized mortality using direct or indirect standardization. Reports Standardized Mortality Ratio comparing observed vs expected deaths by age group.": [
                 ""
             ],
@@ -1600,7 +1528,7 @@
             "Confidence intervals and p-values use the subject-clustered robust variance.": [
                 ""
             ],
-            "Confidence intervals are left blank: a standardised curve has no closed-form interval and would need bootstrapping.": [
+            "Confidence intervals are left blank: a standardized curve has no closed-form interval and would need bootstrapping.": [
                 ""
             ],
             "Confidence intervals are those of that single prediction.": [
@@ -1610,9 +1538,6 @@
                 ""
             ],
             "Confidence intervals require bootstrapping and are left blank.": [
-                ""
-            ],
-            "Confidence level (%)": [
                 ""
             ],
             "Confidence limits are left blank where the Kaplan-Meier event-free estimate is exactly 0% or 100%. The Greenwood-based complementary log-log interval degenerates at a probability boundary; the absence of observed events does not establish zero population risk.": [
@@ -1684,9 +1609,6 @@
             "Core assumption of Cox regression that the hazard ratio stays constant over time. Tested using cox.zph; p &gt; 0.05 means no departure was detected, which is not the same as the assumption holding. If violated, consider time-varying effects or stratification.": [
                 ""
             ],
-            "Correct the dates at source, or tick 'Remove negative intervals' under Data Quality & Statistics to drop these rows from every statistic including person-time.": [
-                ""
-            ],
             "Correct Time Origin:": [
                 ""
             ],
@@ -1696,16 +1618,16 @@
             "Corrected datetime": [
                 ""
             ],
-            "Corrected datetime (numeric)": [
-                ""
-            ],
             "Corrected DateTime (Numeric)": [
                 ""
             ],
-            "Corrected datetime (text)": [
+            "Corrected datetime (numeric)": [
                 ""
             ],
             "Corrected DateTime (Text)": [
+                ""
+            ],
+            "Corrected datetime (text)": [
                 ""
             ],
             "Could not assess": [
@@ -1718,9 +1640,6 @@
                 ""
             ],
             "Could not create event/censor-stratified cross-validation folds. Reduce the requested folds or provide more outcome observations.": [
-                ""
-            ],
-            "Could not detect a common date format for columns '{start}' and '{end}'. Please select the correct format manually.": [
                 ""
             ],
             "Could not find outcome variable": [
@@ -1739,9 +1658,6 @@
                 ""
             ],
             "Count": [
-                ""
-            ],
-            "Counted from the spreadsheet epoch, {value} would be {date}; SAS and Stata count from 1960-01-01 and R from 1970-01-01, so the same digits mean a date decades apart depending on which program wrote them.": [
                 ""
             ],
             "Covariate": [
@@ -1795,10 +1711,10 @@
             "Cox regression": [
                 ""
             ],
-            "Cox regression analysis": [
+            "Cox Regression Analysis": [
                 ""
             ],
-            "Cox Regression Analysis": [
+            "Cox regression analysis": [
                 ""
             ],
             "Cox Regression Analysis Explanations": [
@@ -1846,9 +1762,6 @@
             "Critical validation errors detected: {errors}. Ensure the outcome variable has exactly 2 levels, explanatory variables have sufficient variation, and consider removing rows with missing data.": [
                 ""
             ],
-            "Critically small sample (n={n}). Statistical summaries are unreliable with fewer than 10 observations. Results should be considered exploratory only. Minimum n=20 recommended for basic descriptive analysis.": [
-                ""
-            ],
             "Cross-validation": [
                 ""
             ],
@@ -1861,10 +1774,10 @@
             "Cross-Validation Plot": [
                 ""
             ],
-            "Cross-validation plot": [
+            "Cross-validation Plot": [
                 ""
             ],
-            "Cross-validation Plot": [
+            "Cross-validation plot": [
                 ""
             ],
             "Crude Cause-Specific Person-Time Rate": [
@@ -1877,6 +1790,9 @@
                 ""
             ],
             "Crude Event Rate": [
+                ""
+            ],
+            "Cumulative censoring": [
                 ""
             ],
             "Cumulative event probability": [
@@ -1897,10 +1813,10 @@
             "Cumulative events plot": [
                 ""
             ],
-            "Cumulative hazard": [
+            "Cumulative Hazard": [
                 ""
             ],
-            "Cumulative Hazard": [
+            "Cumulative hazard": [
                 ""
             ],
             "Cumulative hazard for {group}": [
@@ -1990,9 +1906,6 @@
             "Data Export Options": [
                 ""
             ],
-            "Data frame is empty; ensure your dataset has at least one row.": [
-                ""
-            ],
             "Data is usable but review the flagged items.": [
                 ""
             ],
@@ -2011,22 +1924,19 @@
             "Data Quality": [
                 ""
             ],
-            "Data Quality & Statistics": [
+            "Data Quality Assessment": [
                 ""
             ],
             "Data quality assessment": [
                 ""
             ],
-            "Data Quality Assessment": [
-                ""
-            ],
             "Data Suitability": [
                 ""
             ],
-            "Data suitability assessment": [
+            "Data Suitability Assessment": [
                 ""
             ],
-            "Data Suitability Assessment": [
+            "Data suitability assessment": [
                 ""
             ],
             "Data Validation Issues": [
@@ -2047,19 +1957,10 @@
             "Date Components": [
                 ""
             ],
-            "Date format": [
-                ""
-            ],
-            "Date Format Configuration": [
-                ""
-            ],
             "Date format does not match the data": [
                 ""
             ],
             "Date Format in Data": [
-                ""
-            ],
-            "Date parsing failed for column '{column}' using format '{format}'. Example values: {examples}": [
                 ""
             ],
             "Date parsing failed. Start date valid: %d, End date valid: %d. Please verify date format matches selected type (%s) and check for missing/invalid date values.": [
@@ -2092,10 +1993,10 @@
             "Day": [
                 ""
             ],
-            "Day name": [
+            "Day Name": [
                 ""
             ],
-            "Day Name": [
+            "Day name": [
                 ""
             ],
             "Day name (e.g., Monday)": [
@@ -2104,10 +2005,10 @@
             "Day of month": [
                 ""
             ],
-            "Day of year": [
+            "Day of Year": [
                 ""
             ],
-            "Day of Year": [
+            "Day of year": [
                 ""
             ],
             "Day of year (1-366)": [
@@ -2120,9 +2021,6 @@
                 ""
             ],
             "days": [
-                ""
-            ],
-            "Days": [
                 ""
             ],
             "DD-MM-YYYY (or DD/MM/YYYY)": [
@@ -2171,9 +2069,6 @@
                 ""
             ],
             "decreased hazard": [
-                ""
-            ],
-            "Default (second factor level)": [
                 ""
             ],
             "Defines how the four mapped categories are coded. Overall counts both death categories as events. Cause Specific counts Dead of Disease as the event and treats other categories as censored; its Kaplan-Meier probability is net/cause-specific survival and can overstate real-world absolute risk when other-cause death competes. Disease-Free counts death and Alive with Disease as events; the supplied time for Alive with Disease must be time to recurrence/progression, not last follow-up. Competing Risk estimates cumulative incidence of Dead of Disease while retaining Dead of Other Causes as a competing terminal event.": [
@@ -2251,10 +2146,13 @@
             "Diagnosis/start date and follow-up/end date must be different variables.": [
                 ""
             ],
+            "Diagnostic Information": [
+                ""
+            ],
             "Diagnostic information": [
                 ""
             ],
-            "Diagnostic Information": [
+            "Diagnostic metrics are waiting for the Predictor Positive Level. Choose which level of '{variable}' is the positive test result. Observed levels: {levels}. The logistic model, odds ratios, forest plot and nomogram are not affected.": [
                 ""
             ],
             "Diagnostic metrics for '{variable}' require paired complete observations with exactly two observed predictor levels and two observed outcome levels. The prediction nomogram is unaffected.": [
@@ -2299,7 +2197,7 @@
             "Discrimination": [
                 ""
             ],
-            "Discrimination is not summarised by Harrell's C here: it assumes a single event type, and under competing risks it would rank expanded pseudo-observations rather than patients.": [
+            "Discrimination is not summarized by Harrell's C here: it assumes a single event type, and under competing risks it would rank expanded pseudo-observations rather than patients.": [
                 ""
             ],
             "Disease event (1)": [
@@ -2317,10 +2215,10 @@
             "Disease-free (0)": [
                 ""
             ],
-            "disease-free survival": [
+            "Disease-Free Survival": [
                 ""
             ],
-            "Disease-Free Survival": [
+            "disease-free survival": [
                 ""
             ],
             "Disease-free survival": [
@@ -2356,7 +2254,7 @@
             "Display Options": [
                 ""
             ],
-            "Display the number of subjects still at risk below supported Kaplan-Meier plots. This is a count, not a table of probabilities or hazards. A combined risk panel is not available for the competing-risk CIF plot; use the cumulative-incidence table for counts at selected times.": [
+            "Display the number of subjects still at risk below Kaplan-Meier and cumulative-incidence plots. Counts use the common event-free risk set just before each time point and are restricted to observed follow-up. The all-event table also reports cumulative counts.": [
                 ""
             ],
             "Distribution": [
@@ -2503,15 +2401,6 @@
             "Encoded predictors contain non-finite values.": [
                 ""
             ],
-            "End date column contains only missing values; cannot calculate time intervals.": [
-                ""
-            ],
-            "End Date Variable": [
-                ""
-            ],
-            "End dates are not valid date objects": [
-                ""
-            ],
             "End y-axis": [
                 ""
             ],
@@ -2542,7 +2431,7 @@
             "Entered as continuous: {variables}.": [
                 ""
             ],
-            "Entered as continuous: {variables}. Each is modelled as one odds ratio per one-unit increase, which assumes a constant step in log odds between consecutive values. To estimate a separate odds ratio for each level instead, change the variable's measure type to Nominal or Ordinal in the data setup.": [
+            "Entered as continuous: {variables}. Each is modeled as one odds ratio per one-unit increase, which assumes a constant step in log odds between consecutive values. To estimate a separate odds ratio for each level instead, change the variable's measure type to Nominal or Ordinal in the data setup.": [
                 ""
             ],
             "EPV (Events Per Variable)": [
@@ -2578,9 +2467,6 @@
             "Error in cross-validation: {msg}": [
                 ""
             ],
-            "Error parsing dates with format {format}: {message}": [
-                ""
-            ],
             "Error parsing datetimes with format {fmt}. • Parser error: {msg} • Try selecting a different format. • Check that your data matches the selected format.": [
                 ""
             ],
@@ -2602,7 +2488,7 @@
             "Estimand: one curve for the whole cohort with each patient at their own covariate values; the adjustment variable is not varied. Confidence intervals require bootstrapping and are left blank.": [
                 ""
             ],
-            "Estimand: survival standardised over the observed patients - every patient is set to the stated level in turn and the model-predicted curves are averaged (g-computation). Confidence intervals require bootstrapping and are left blank.": [
+            "Estimand: survival standardized over the observed patients - every patient is set to the stated level in turn and the model-predicted curves are averaged (g-computation). Confidence intervals require bootstrapping and are left blank.": [
                 ""
             ],
             "Estimand: the model-predicted curve for one reference patient - the mean of every numeric covariate and the most common level of every categorical covariate. Confidence intervals are those of that single prediction.": [
@@ -2662,10 +2548,10 @@
             "Event hierarchy NOT applied: the priority event code %s does not occur in the recoded outcome, which contains only %s. No record was changed. Set Priority Event Type to one of the codes actually produced by this analysis type.": [
                 ""
             ],
-            "Event level": [
+            "Event Level": [
                 ""
             ],
-            "Event Level": [
+            "Event level": [
                 ""
             ],
             "Event level '%s' -> 1 (%d rows); %s -> 0 (%d rows); %d row(s) missing.": [
@@ -2701,10 +2587,10 @@
             "Event-Free Probability for the Selected Event": [
                 ""
             ],
-            "events": [
+            "Events": [
                 ""
             ],
-            "Events": [
+            "events": [
                 ""
             ],
             "Events are known to occur within time intervals rather than at exact times. Your two interval columns were checked but are <b>not</b> written back - this analysis exports only the recoded outcome - so build the response yourself with Surv(&lt;start&gt;, &lt;end&gt;, type='interval2') using your original interval columns.": [
@@ -2747,9 +2633,6 @@
                 ""
             ],
             "Example:": [
-                ""
-            ],
-            "Examples:": [
                 ""
             ],
             "Excel Serial (Days since 1900)": [
@@ -2878,25 +2761,13 @@
             "Extreme outcome imbalance provides limited information for one outcome state and may destabilize cross-validation.": [
                 ""
             ],
-            "Extreme threshold multiplier": [
-                ""
-            ],
-            "Extreme-value filtering cannot act on these data: with {n} intervals (fewer than 101) the 99th percentile is interpolated between the two longest intervals, so at a multiplier of {mult} no interval can exceed the '{mult} x 99th percentile' threshold of {threshold} {unit}, and none was removed. Review the longest intervals directly.": [
-                ""
-            ],
-            "Extreme-value filtering was skipped: the 99th percentile of the intervals is {q99}, so a '{mult} x 99th percentile' threshold cannot separate long follow-up from typical follow-up. Review the interval distribution directly.": [
-                ""
-            ],
-            "Extreme-value removal dropped {count} of the longest interval(s) (above {threshold} {unit}) from the analysis. These rows are excluded from the mean, the median and the total person-time, so the person-time denominator here is smaller than the follow-up actually observed. Long follow-up is not automatically an error: check the removed rows before using this person-time for an incidence rate.": [
-                ""
-            ],
             "Factor variable '{var}' has insufficient variation in complete cases.": [
                 ""
             ],
             "fdr": [
                 ""
             ],
-            "Few events: only {n_ev} of {n_total} non-missing outcomes ({pct}%) are '{level}'. Kaplan-Meier and Cox estimates are unstable with fewer than 5 events.": [
+            "Few events: only {nEv} of {nTotal} non-missing outcomes ({pct}%) are '{level}'. Kaplan-Meier and Cox estimates are unstable with fewer than 5 events.": [
                 ""
             ],
             "finalfit": [
@@ -2956,9 +2827,6 @@
             "Fits a cross-validated LASSO-penalized Cox model for exploratory model development. Apparent performance requires internal and external validation before clinical use.": [
                 ""
             ],
-            "Fix the source data: format the column as a date before exporting (in Excel: Format Cells > Date), or convert it to text in YYYY-MM-DD form, then re-import.": [
-                ""
-            ],
             "Fleming-Harrington (rho=0.5)": [
                 ""
             ],
@@ -2983,10 +2851,13 @@
             "Follow-up Range (min-max)": [
                 ""
             ],
-            "Follow-up time": [
+            "Follow-up support counts": [
                 ""
             ],
             "Follow-up Time": [
+                ""
+            ],
+            "Follow-up time": [
                 ""
             ],
             "follow-up time": [
@@ -3115,9 +2986,6 @@
             "Groups defined by empirical quantiles of the Cox relative-risk score": [
                 ""
             ],
-            "Guessed as a packed date instead, the same digits give a different year, so the time intervals and the person-time would be wrong by decades without any visible sign.": [
-                ""
-            ],
             "Guide: Use the dropdown menus to map your outcome values to the four standard categories: Dead of Disease, Dead of Other Causes, Alive with Disease, and Alive without Disease.": [
                 ""
             ],
@@ -3172,10 +3040,10 @@
             "Hazard Scale": [
                 ""
             ],
-            "Hazards regression plot": [
+            "Hazards Regression Plot": [
                 ""
             ],
-            "Hazards Regression Plot": [
+            "Hazards regression plot": [
                 ""
             ],
             "Help & Interpretation": [
@@ -3322,9 +3190,6 @@
             "Important Notes:": [
                 ""
             ],
-            "Important:": [
-                ""
-            ],
             "Important: Please Verify These Interpretations": [
                 ""
             ],
@@ -3385,9 +3250,6 @@
             "infinite (zero false results in this cell)": [
                 ""
             ],
-            "Info": [
-                ""
-            ],
             "Information": [
                 ""
             ],
@@ -3440,6 +3302,9 @@
                 ""
             ],
             "Interaction Terms:": [
+                ""
+            ],
+            "Interactions in model: ": [
                 ""
             ],
             "Interactions with a continuous moderator are shown as a coefficient in the table above; per-subgroup HRs require a categorical moderator. If both variables in a term are continuous, no subgroups can be formed.": [
@@ -3592,10 +3457,10 @@
             "KMunicate plot": [
                 ""
             ],
-            "KMunicate-style plot": [
+            "KMunicate-Style Plot": [
                 ""
             ],
-            "KMunicate-Style Plot": [
+            "KMunicate-style plot": [
                 ""
             ],
             "KMunicate-style plot (publication ready)": [
@@ -3613,16 +3478,10 @@
             "Landmark Analysis": [
                 ""
             ],
-            "Landmark analysis": [
-                ""
-            ],
             "Landmark analysis at {time} {unit}: {n} patients excluded (events/censoring before landmark). All times are measured FROM the landmark, not from study entry, and all estimates are conditional on being event-free at the landmark; they are not comparable with unlandmarked survival times.": [
                 ""
             ],
             "Landmark analysis at {time} {unit}.": [
-                ""
-            ],
-            "Landmark analysis excluded every participant: none of the {n} observations reached the {amount} landmark. Lower the landmark time or switch landmark analysis off.": [
                 ""
             ],
             "Landmark analysis is on: rows with follow-up shorter than the landmark time were excluded before this check.": [
@@ -3652,13 +3511,7 @@
             "Landmark time must be a finite, non-negative value.": [
                 ""
             ],
-            "Landmark time must be a non-negative number": [
-                ""
-            ],
             "Landmark time must be zero or positive (received %s). A landmark is a time point during follow-up; a negative value would shift every subject's follow-up forward instead of conditioning on surviving to it.": [
-                ""
-            ],
-            "Landmark time point": [
                 ""
             ],
             "Large amount of missing data: {percent}% of rows will be removed ({removed} out of {total} rows).": [
@@ -3757,9 +3610,6 @@
             "Logistic regression odds-ratio table, forest plot, prediction nomogram, and optional binary diagnostic metrics.": [
                 ""
             ],
-            "Longest interval in the data is {years} years ({value} {unit}, before any landmark or filter). Intervals beyond 50 years exceed the follow-up of essentially every clinical cohort, and usually mean the dates were parsed with the wrong format rather than observed. Check the Date Format setting and the raw date columns before reporting this person-time. If the intervals are genuinely this long (a lifetime cohort, or an age computed from date of birth), this message can be ignored.": [
-                ""
-            ],
             "Low datetime parsing success rate: {pct}% • Only {parsed} of {total} non-missing values were successfully parsed. • This may indicate incorrect format selection or data quality issues. • Try a different datetime format, review the failed samples in the Quality Assessment panel, and check the data source for systematic errors. • Clinical analysis may be unreliable below 70% success.": [
                 ""
             ],
@@ -3791,6 +3641,9 @@
                 ""
             ],
             "lower (wider CI)": [
+                ""
+            ],
+            "Lower 95% CI": [
                 ""
             ],
             "Lower fitted hazard": [
@@ -3841,34 +3694,19 @@
             "Mean calibration (observed - predicted at t = {t})": [
                 ""
             ],
-            "mean follow-up": [
-                ""
-            ],
             "Mean over {b} resamples": [
-                ""
-            ],
-            "mean post-landmark follow-up": [
-                ""
-            ],
-            "Mean post-landmark time": [
-                ""
-            ],
-            "Mean time": [
                 ""
             ],
             "Meaning": [
                 ""
             ],
-            "measured from the {adj} landmark": [
-                ""
-            ],
             "Measures rank discrimination among comparable patient pairs. 0.5 indicates chance ordering and 1.0 perfect ordering. There are no universal clinical cut-offs; adequacy depends on the intended use, outcome, case mix, and external validation.": [
                 ""
             ],
-            "median": [
+            "Median": [
                 ""
             ],
-            "Median": [
+            "median": [
                 ""
             ],
             "Median calculated follow-up from \"%s\" and \"%s\" is %.0f years, which is implausible for a clinical follow-up interval. Check the date encoding, century, and source values before analysis.": [
@@ -3973,9 +3811,6 @@
             "Method for finding multiple cut-offs. Quantile-based uses equally spaced quantiles. Recursive repeatedly finds an optimal split after excluding observations close to earlier splits. Tree-based uses survival-tree splits. Minimum P-value exhaustively searches up to 1000 admissible combinations; for larger candidate spaces it evaluates 1000 unique combinations selected reproducibly from the Random seed. All data-derived cut-offs and their group comparisons are exploratory and require external validation.": [
                 ""
             ],
-            "Method: {method}": [
-                ""
-            ],
             "Methodology notes": [
                 ""
             ],
@@ -3991,10 +3826,10 @@
             "Minimum CV error": [
                 ""
             ],
-            "Minimum group size (%)": [
+            "Minimum Group Size (%)": [
                 ""
             ],
-            "Minimum Group Size (%)": [
+            "Minimum group size (%)": [
                 ""
             ],
             "Minimum group size not met": [
@@ -4159,10 +3994,10 @@
             "Month (number)": [
                 ""
             ],
-            "Month name": [
+            "Month Name": [
                 ""
             ],
-            "Month Name": [
+            "Month name": [
                 ""
             ],
             "Month number": [
@@ -4175,9 +4010,6 @@
                 ""
             ],
             "months": [
-                ""
-            ],
-            "Months": [
                 ""
             ],
             "months (recommended for oncology)": [
@@ -4213,10 +4045,10 @@
             "Multiple Event Configuration": [
                 ""
             ],
-            "Multiple event levels": [
+            "Multiple Event Levels": [
                 ""
             ],
-            "Multiple Event Levels": [
+            "Multiple event levels": [
                 ""
             ],
             "Multiple Event Types": [
@@ -4306,13 +4138,10 @@
             "Negative Survival Times Detected: {count} observation(s) have negative time values.": [
                 ""
             ],
-            "Negative time intervals detected (end date before start date) in {count} of {total} rows ({pct}%).": [
-                ""
-            ],
             "No": [
-                ""
+                "No"
             ],
-            "No adjusted curve or table is shown; nothing was substituted for it. Choose Average (standardised over the observed patients) or Conditional Mean instead.": [
+            "No adjusted curve or table is shown; nothing was substituted for it. Choose Average (standardized over the observed patients) or Conditional Mean instead.": [
                 ""
             ],
             "no better than ignoring covariates": [
@@ -4342,7 +4171,7 @@
             "No covariates left to estimate": [
                 ""
             ],
-            "No Cox regression results are available to summarise. This usually means the model could not be fitted, or every hazard ratio was missing.": [
+            "No Cox regression results are available to summarize. This usually means the model could not be fitted, or every hazard ratio was missing.": [
                 ""
             ],
             "No cumulative incidence found for the event of interest, although %d such event(s) are present. Please verify the event of interest is coded as 1 in your outcome variable for competing risk analysis.": [
@@ -4390,9 +4219,6 @@
             "No Influential Outliers:": [
                 ""
             ],
-            "No interval exceeded the extreme threshold of {threshold} {unit} (0 removed)": [
-                ""
-            ],
             "No issues": [
                 ""
             ],
@@ -4432,6 +4258,9 @@
             "No requested timepoint was estimable; the nomogram uses the median observed follow-up (%.2f %s).": [
                 ""
             ],
+            "no split met the tree criteria": [
+                ""
+            ],
             "No statistically significant association was identified for the 1 factor examined (p-value ≥ 0.05).": [
                 ""
             ],
@@ -4462,22 +4291,13 @@
             "No usable %s remained, so the built-in defaults (%s %s) were used instead. Enter one or more valid time points to override them.": [
                 ""
             ],
-            "No valid dates found for format detection in either column": [
+            "no usable continuous split was found": [
                 ""
             ],
             "No Valid Datetime Values Found": [
                 ""
             ],
             "No valid explanatory variables remain after removing constant predictors.": [
-                ""
-            ],
-            "No valid time intervals after parsing start/end dates.": [
-                ""
-            ],
-            "No valid time intervals could be calculated; please verify start/end dates and selected format.": [
-                ""
-            ],
-            "No valid time intervals could be calculated. Check that the date format setting matches the data and that both date columns contain readable dates.": [
                 ""
             ],
             "No variable-based risk scores are available because the selected rule retained no predictors.": [
@@ -4573,7 +4393,7 @@
             "Not estimable (term is aliased)": [
                 ""
             ],
-            "Not fitted: '%s' has %d levels across %d analysed rows (about %.1f patients per stratum). Stratification needs a small number of reasonably sized groups; a near-continuous variable gives one stratum per patient and no estimable hazard ratio. Use a categorical variable, or add this variable as a covariate in Multivariable Survival Analysis instead.": [
+            "Not fitted: '%s' has %d levels across %d analyzed rows (about %.1f patients per stratum). Stratification needs a small number of reasonably sized groups; a near-continuous variable gives one stratum per patient and no estimable hazard ratio. Use a categorical variable, or add this variable as a covariate in Multivariable Survival Analysis instead.": [
                 ""
             ],
             "not graded": [
@@ -4612,10 +4432,10 @@
             "Null hypothesis: linear effect of {var}. Natural splines with {df} degrees of freedom.": [
                 ""
             ],
-            "Number at risk": [
+            "Number at Risk": [
                 ""
             ],
-            "Number at Risk": [
+            "Number at risk": [
                 ""
             ],
             "Number at risk table": [
@@ -4735,6 +4555,12 @@
             "Observed Records": [
                 ""
             ],
+            "Observed-Time Competing Risks": [
+                ""
+            ],
+            "Observed-time cumulative incidence and follow-up support": [
+                ""
+            ],
             "Occur when events happen": [
                 ""
             ],
@@ -4777,9 +4603,6 @@
             "Only {nEvents} events and {nCensored} censored observations are available. Cross-validation and selected coefficients may be highly unstable; no fixed event count guarantees reliable prediction modeling.": [
                 ""
             ],
-            "Only {percent}% of non-missing values in '{column}' were parsed with format '{format}'. Please verify that the selected format matches all values or standardise the column.": [
-                ""
-            ],
             "Only %d event(s) detected (n=%d total). Descriptive results are shown, but estimates from this many events are unstable with very wide confidence intervals. Cut-off determination is suppressed.": [
                 ""
             ],
@@ -4796,9 +4619,6 @@
                 ""
             ],
             "Only %d/%d (%.1f%%) outcomes successfully recoded": [
-                ""
-            ],
-            "Only one interval could be calculated. No spread can be estimated from a single observation, so the standard deviation and the confidence interval are reported as NA, and the mean, median and range are all that one value. This is not a basis for any statistical statement.": [
                 ""
             ],
             "Only one predictor column; collinearity not applicable.": [
@@ -4873,10 +4693,10 @@
             "Outcome Category": [
                 ""
             ],
-            "Outcome distribution": [
+            "Outcome Distribution": [
                 ""
             ],
-            "Outcome Distribution": [
+            "Outcome distribution": [
                 ""
             ],
             "Outcome Factor Has Unsupported Levels: the outcome variable has non-numeric levels that cannot be interpreted as events: {levels}.": [
@@ -4987,10 +4807,10 @@
             "Overall incidence rate: <b>{rate}</b> per {multiplier} person-{unit} (95% CI {lower} to {upper})": [
                 ""
             ],
-            "overall survival": [
+            "Overall Survival": [
                 ""
             ],
-            "Overall Survival": [
+            "overall survival": [
                 ""
             ],
             "Overall survival": [
@@ -5026,10 +4846,10 @@
             "Pairwise Comparison Analysis": [
                 ""
             ],
-            "Pairwise comparisons": [
+            "Pairwise Comparisons": [
                 ""
             ],
-            "Pairwise Comparisons": [
+            "Pairwise comparisons": [
                 ""
             ],
             "Pairwise comparisons: {factor}": [
@@ -5122,7 +4942,7 @@
             "Patients whose follow-up ended before the landmark were excluded (n = {n} removed).": [
                 ""
             ],
-            "Penalized AIC: {aic} (-2 x penalized log-likelihood + 2 x {n_par} parameters).": [
+            "Penalized AIC: {aic} (-2 x penalized log-likelihood + 2 x {nPar} parameters).": [
                 ""
             ],
             "Penalized coefficient": [
@@ -5317,9 +5137,6 @@
             "Please select which level of your outcome variable represents the 'positive' case (e.g., 'Dead', 'Event', 'Yes', 'Positive').": [
                 ""
             ],
-            "Please verify that '{level}' is the correct positive level. If this is wrong, diagnostic metrics will be inverted.": [
-                ""
-            ],
             "Plot Appearance": [
                 ""
             ],
@@ -5392,7 +5209,7 @@
             "Positive outcome level:": [
                 ""
             ],
-            "Positive outcome level: '{pos_outcome}' ({outcome_method})\nPositive predictor level: '{pos_pred}' ({pred_method})\nContingency table:\n  {pred1} → {out1}: {c11} | {out2}: {c12}\n  {pred2} → {out1}: {c21} | {out2}: {c22}\nTrue Positives: {tp}, False Positives: {fp}, False Negatives: {fn}, True Negatives: {tn}": [
+            "Positive outcome level: '{posOutcome}' ({outcomeMethod})\nPositive predictor level: '{posPred}' ({predMethod})\nContingency table:\n  {pred1} → {out1}: {c11} | {out2}: {c12}\n  {pred2} → {out1}: {c21} | {out2}: {c22}\nTrue Positives: {tp}, False Positives: {fp}, False Negatives: {fn}, True Negatives: {tn}": [
                 ""
             ],
             "Positive predictor level:": [
@@ -5473,16 +5290,19 @@
             "Priority Event Type must be 1 or greater (it is {value}). Code 0 is the censored/baseline code, so giving it priority would make censoring outrank every event and remove them all.": [
                 ""
             ],
+            "Probability": [
+                ""
+            ],
             "Probability Estimate": [
                 ""
             ],
             "progression": [
                 ""
             ],
-            "progression-free survival": [
+            "Progression-Free Survival": [
                 ""
             ],
-            "Progression-Free Survival": [
+            "progression-free survival": [
                 ""
             ],
             "Progression-Free Survival (PFS)": [
@@ -5500,10 +5320,10 @@
             "Proportional Hazards Assessment & Recommendations": [
                 ""
             ],
-            "Proportional hazards assumption": [
+            "Proportional Hazards Assumption": [
                 ""
             ],
-            "Proportional Hazards Assumption": [
+            "Proportional hazards assumption": [
                 ""
             ],
             "Proportional hazards assumption may be violated (smallest cox.zph p = {p})": [
@@ -5560,10 +5380,10 @@
             "R version": [
                 ""
             ],
-            "Random seed": [
+            "Random Seed": [
                 ""
             ],
-            "Random Seed": [
+            "Random seed": [
                 ""
             ],
             "Random seed used to select candidate combinations when the minimum-P-value search space is too large for exhaustive evaluation.": [
@@ -5671,19 +5491,13 @@
             "Releveling changes only the parameterization, not the fit, so the focal main-effect coefficient in the releveled model is the focal effect <i>within</i> that moderator level: HR = exp(coef), with CI and p taken from that model's variance-covariance matrix.": [
                 ""
             ],
-            "REMARK reporting checklist": [
-                ""
-            ],
             "REMARK Reporting Checklist": [
                 ""
             ],
+            "REMARK reporting checklist": [
+                ""
+            ],
             "Remove any duplicate column names": [
-                ""
-            ],
-            "Remove extreme values": [
-                ""
-            ],
-            "Remove negative intervals": [
                 ""
             ],
             "Remove the interaction first if you want to test the main effect.": [
@@ -5707,9 +5521,6 @@
             "Removed encoded columns constant in complete cases: {vars}.": [
                 ""
             ],
-            "Removing negative intervals dropped {count} of {total} rows ({pct}%) whose end date fell before their start date. A negative interval is not an unusual measurement but an impossible one: at least one of the two dates in each of those rows is wrong. Those rows are dropped from the mean, the median and the total person-time, so the person-time denominator reported here covers fewer participants than you supplied. These dates were read with the \"{format}\" format; the usual causes are the start and end date columns being swapped for those rows, or a mis-detected day/month order, which flips only the rows whose day-of-month is 12 or less. Correct the dates at source rather than leaving them to this filter before reporting this person-time.": [
-                ""
-            ],
             "Report cohort size, event count, observed event proportion, follow-up summaries, raw-variable completeness, and memory footprint. These are descriptive checks, not a validated risk-of-bias assessment; they cannot verify non-informative censoring, representativeness, or adequacy for a particular clinical decision.": [
                 ""
             ],
@@ -5717,6 +5528,9 @@
                 ""
             ],
             "Report the endpoint, candidate parameters, exclusions, coding, penalty rule, folds, software versions, and validation limitations.": [
+                ""
+            ],
+            "Report the event-free probability and cumulative incidence of the target and competing events within observed follow-up.": [
                 ""
             ],
             "Report these estimates alongside the number at risk and the follow-up duration; comparison with an external cohort is not a treatment-effect estimate.": [
@@ -5728,10 +5542,10 @@
             "Reproducibility Details": [
                 ""
             ],
-            "Reproducible R code": [
+            "Reproducible R Code": [
                 ""
             ],
-            "Reproducible R Code": [
+            "Reproducible R code": [
                 ""
             ],
             "Requested time point(s) %s are beyond the longest follow-up in the data (%s %s) and were omitted: the longest observation is censored, so subjects were still event-free when observation stopped and the estimate is undefined past that point.": [
@@ -5770,10 +5584,10 @@
             "Restricted Mean Event-Free Time": [
                 ""
             ],
-            "Restricted mean survival time": [
+            "Restricted Mean Survival Time": [
                 ""
             ],
-            "Restricted Mean Survival Time": [
+            "Restricted mean survival time": [
                 ""
             ],
             "Restricted mean survival time (RMST)": [
@@ -5809,10 +5623,10 @@
             "Risk group": [
                 ""
             ],
-            "Risk group survival plot": [
+            "Risk Group Survival Plot": [
                 ""
             ],
-            "Risk Group Survival Plot": [
+            "Risk group survival plot": [
                 ""
             ],
             "Risk groups": [
@@ -5878,10 +5692,10 @@
             "RMST": [
                 ""
             ],
-            "RMST analysis": [
+            "RMST Analysis": [
                 ""
             ],
-            "RMST Analysis": [
+            "RMST analysis": [
                 ""
             ],
             "RMST and its Greenwood-based standard error are calculated from the Kaplan-Meier estimator using survival::survfit at a common observed time horizon. Wald 95% confidence intervals are shown.": [
@@ -6052,7 +5866,7 @@
             "Select the number of risk groups to create from the risk scores. The data will be divided into equal quantiles based on this selection.": [
                 ""
             ],
-            "Select the survival estimand. Overall counts both death categories as events; Cause Specific treats other-cause death as censored; Disease-Free counts disease, recurrence, and death categories as events according to the selected mapping. Competing-risk coding is retained for compatibility but is not analysed by this continuous cut-off function; select it to receive guidance to a competing-risk analysis.": [
+            "Select the survival estimand. Overall counts both death categories as events; Cause Specific treats other-cause death as censored; Disease-Free counts disease, recurrence, and death categories as events according to the selected mapping. Competing-risk coding is retained for compatibility but is not analyzed by this continuous cut-off function; select it to receive guidance to a competing-risk analysis.": [
                 ""
             ],
             "Selected": [
@@ -6118,6 +5932,9 @@
             "Show Kaplan-Meier-style survival curves adjusted for age using the Cox model. Displays what the survival curves would look like after removing the effect of age differences between groups.": [
                 ""
             ],
+            "Show numbers at risk and cumulative event and censoring counts with the all-event cumulative incidence table. A late plateau does not establish cure.": [
+                ""
+            ],
             "Showing {shown} of {total} paths on the original scale, ranked by summed absolute coefficients (not clinical importance). Long legend labels are abbreviated.": [
                 ""
             ],
@@ -6152,9 +5969,6 @@
                 ""
             ],
             "Small sample size (n = {n}). Consider larger sample for more reliable cut-off analysis.": [
-                ""
-            ],
-            "Small sample size (n={n}). Confidence intervals may be very wide and unreliable with fewer than 20 observations. Consider collecting more data or interpreting results cautiously.": [
                 ""
             ],
             "Small sample size after removing missing data: {n} observations. Results may be unreliable.": [
@@ -6194,9 +6008,6 @@
                 ""
             ],
             "Some rows could not be computed ({detail}). Empty cells mean the model could not be fitted, not that it performed poorly.": [
-                ""
-            ],
-            "Some rows may have been entered with the day and month the other way round from the rest of this column. {count} of {total} rows read as a valid date under both \"{format}\" and \"{swapped}\"; the other {others} can only be read as \"{format}\", which is how the format was chosen. Those two groups should have the same follow-up on average, because the day of the month has nothing to do with how long a patient is followed - but here the ambiguous rows run at a median of {medianamb} days against {medianref} days for the rest (rank-sum p = {p}), which is what a mis-typed day/month order looks like. Check rows {rows} first: the largest of them spans {examplechosen} days as read and {exampleswapped} days with the day and month swapped. Dates typed in two different orders in one column parse without error and stay positive, so nothing else on this page can see them, and the total person-time is wrong by however much those rows are wrong.": [
                 ""
             ],
             "Sparse Cox model development with cross-validated L1 penalization.": [
@@ -6250,9 +6061,6 @@
             "Specify time points for survival-probability estimates. The historical factory value \"12, 36, 60\" and the word \"default\" both select unit-aware 1-, 3-, and 5-year points (for example 365, 1095, and 1825 for days, or 1, 3, and 5 for years). Enter any other comma- or space-separated positive values to request custom points in the selected output time scale.": [
                 ""
             ],
-            "Specify which level of the diagnostic predictor represents the positive case (e.g., \"Present\", \"Test+\", \"Yes\"). If omitted, the module attempts automatic detection and displays the selected level for verification.": [
-                ""
-            ],
             "Specify which outcome level represents the positive case (e.g., \"Dead\", \"Event\", \"Yes\"). This is important for correct calculation of likelihood ratios and diagnostic metrics.": [
                 ""
             ],
@@ -6263,9 +6071,6 @@
                 ""
             ],
             "Spline scale": [
-                ""
-            ],
-            "Spreadsheets and statistics packages store a date as a count of days since an epoch, and exporting the column as plain numbers loses the date formatting.": [
                 ""
             ],
             "Standard Cox (all variables)": [
@@ -6280,31 +6085,22 @@
             "Standard logistic regression could not be fitted: {message}. Review outcome coding, predictor variation, sparse categories, and separation; consider Firth penalized regression when appropriate.": [
                 ""
             ],
-            "Standardised over cohort (g-computation)": [
-                ""
-            ],
             "Standardization Method": [
                 ""
             ],
             "Standardization method": [
                 ""
             ],
-            "Standardized (30.4375-day months, 365.25-day years)": [
-                ""
-            ],
-            "Start date column contains only missing values; cannot calculate time intervals.": [
-                ""
-            ],
-            "Start Date Variable": [
-                ""
-            ],
-            "Start dates are not valid date objects": [
+            "Standardized over cohort (g-computation)": [
                 ""
             ],
             "Start y-axis": [
                 ""
             ],
             "Start Y-axis": [
+                ""
+            ],
+            "State / event": [
                 ""
             ],
             "Statistic": [
@@ -6317,9 +6113,6 @@
                 ""
             ],
             "Statistical Glossary": [
-                ""
-            ],
-            "Statistical Summary & Person-Time Analysis": [
                 ""
             ],
             "Statistical Terms Glossary": [
@@ -6394,9 +6187,6 @@
             "Strong warning": [
                 ""
             ],
-            "Strong Warning": [
-                ""
-            ],
             "Strong Warnings": [
                 ""
             ],
@@ -6466,10 +6256,10 @@
             "Survival Analysis for Continuous Explanatory Variable": [
                 ""
             ],
-            "Survival analysis glossary": [
+            "Survival Analysis Glossary": [
                 ""
             ],
-            "Survival Analysis Glossary": [
+            "Survival analysis glossary": [
                 ""
             ],
             "Survival Analysis Type": [
@@ -6616,9 +6406,6 @@
             "system": [
                 ""
             ],
-            "System Default": [
-                ""
-            ],
             "Table Configuration": [
                 ""
             ],
@@ -6647,12 +6434,6 @@
                 ""
             ],
             "The 'rms' package is required for nomogram generation but is not available.": [
-                ""
-            ],
-            "The {landmark} landmark excluded no participants, because it is only {share}% of the median observed interval in these data ({median} {unit}). It still subtracted {amount} from every interval, so every duration and the total person-time below are that much smaller than the follow-up observed. Check that the landmark is expressed in the same unit as the results ({unit}): entering a value meant as months while the output unit is days is the usual cause.": [
-                ""
-            ],
-            "The {landmark} landmark is later than the median observed interval in these data ({median} {unit}), so more than half the cohort could not reach it and {excluded} of {total} observations were excluded. What remains is a subgroup defined by having been followed to the landmark, and the total person-time above is the denominator for that subgroup only: a rate computed from it answers \"among those still under observation at {amount}, how often did events occur\", not the same question for the cohort you enrolled. This analysis has no event indicator, so it cannot tell you whether the excluded participants had short follow-up because they died early or simply because they were enrolled recently - check that before interpreting the selection. Report the landmark, the number excluded and the reason alongside any rate taken from this analysis.": [
                 ""
             ],
             "The {rule} rule retained no predictor columns. The valid empty model has been preserved; choose a different lambda rule only as a prespecified modeling decision, not because the empty result is inconvenient.": [
@@ -6742,16 +6523,16 @@
             "the cut-off groups of '%s'": [
                 ""
             ],
-            "The cut-off is the value that maximises the standardised log-rank statistic (maximally selected rank statistic, survminer::surv_cutpoint / maxstat). No multiplicity-adjusted p-value is computed or reported for the selected cut-off; the group comparison p-values shown after the split are exploratory because the split was chosen from these same data. Report the continuous Cox model as the primary analysis and validate the cut-off in independent data. When publishing, cite survminer and maxstat.": [
+            "The cut-off is the value that maximizes the standardized log-rank statistic (maximally selected rank statistic, survminer::surv_cutpoint / maxstat). No multiplicity-adjusted p-value is computed or reported for the selected cut-off; the group comparison p-values shown after the split are exploratory because the split was chosen from these same data. Report the continuous Cox model as the primary analysis and validate the cut-off in independent data. When publishing, cite survminer and maxstat.": [
                 ""
             ],
             "The cut-off reads %s while follow-up reaches only %s - that is what a date looks like once it has been imported as a plain number, and it is almost certainly not in the same units as the follow-up time.": [
                 ""
             ],
-            "The data-derived cut-off point for {variable_name} is {cutoff_value}; it separates lower and higher marker values in this dataset.": [
+            "The data-derived cut-off point for {variable} is {cutoff}; it separates lower and higher marker values in this dataset.": [
                 ""
             ],
-            "The data-derived cut-off point for {variable} is {cutoff}; it separates lower and higher marker values in this dataset.": [
+            "The data-derived cut-off point for {variableName} is {cutoffValue}; it separates lower and higher marker values in this dataset.": [
                 ""
             ],
             "The date of diagnosis or study entry. Accepts: (1) Date/datetime text (e.g., \"2024-01-15\"), (2) Numeric Unix epoch seconds (from DateTime Converter's corrected_datetime_numeric output), (3) Numeric datetime values from R. Time intervals calculated as difference from follow-up date.": [
@@ -6784,7 +6565,7 @@
             "the event of interest (coded 1); this outcome also carries competing states, listed below": [
                 ""
             ],
-            "The explanatory variable '{var}' has only one value in the analysed rows, so no effect can be estimated for it. Remove it, or check the data filter and missing values.": [
+            "The explanatory variable '{var}' has only one value in the analyzed rows, so no effect can be estimated for it. Remove it, or check the data filter and missing values.": [
                 ""
             ],
             "The explanatory variable has only two levels, so there is a single comparison and no multiplicity adjustment is applied; it is equivalent to the overall log-rank test above.": [
@@ -6850,10 +6631,10 @@
             "The level '{level}' is used as the positive/exposure category as specified.": [
                 ""
             ],
-            "The level of the outcome variable that represents the event of interest.": [
+            "The level of the outcome variable that represents the event of interest. Required for a factor outcome, and never taken from the order of the levels: without it the analysis stops and lists the levels. A numeric 0/1 outcome is read as 1 = event.": [
                 ""
             ],
-            "The log-rank p above is EXPLORATORY: the cut-points were selected from these same data, so it is the largest of many statistics reported as a single test and is optimistic. No selection-adjusted p-value is reported: a single-split maximally selected-rank test does not adjust a multiple-cutoff procedure. Validate every cut-point in independent data before clinical use.": [
+            "The log-rank p above is unadjusted. When survival outcomes guided the cut-point search, this comparison is optimistic and exploratory. No selection-adjusted p-value is reported; a single-split maximally selected-rank adjustment does not cover a multiple-cutoff procedure. Validate data-derived cut-points independently before clinical use.": [
                 ""
             ],
             "The maximum time point to include in the survival plots. This is the end time for the survival curves and cumulative event/hazard plots, in the selected Time Unit. Must be greater than zero; zero or a negative value is rejected rather than drawn.": [
@@ -6916,7 +6697,7 @@
             "The nomogram plot could not be constructed for this model; the summary above still describes the fitted model.": [
                 ""
             ],
-            "The numeric date columns hold values too small to be Unix epoch seconds (the largest is {max_val}, which is January 1970). They look like day counts, as produced by an R Date column or an Excel serial date. Numeric dates must be seconds since 1970-01-01 -- use the DateTime Converter's corrected_datetime_numeric output, or supply the dates as text (e.g. \"2024-01-15\") and set the matching input time type.": [
+            "The numeric date columns hold values too small to be Unix epoch seconds (the largest is {maxVal}, which is January 1970). They look like day counts, as produced by an R Date column or an Excel serial date. Numeric dates must be seconds since 1970-01-01 -- use the DateTime Converter's corrected_datetime_numeric output, or supply the dates as text (e.g. \"2024-01-15\") and set the matching input time type.": [
                 ""
             ],
             "The odds ratio could not be estimated for: {variables}. The confidence interval is unbounded, which means the data separate the outcome perfectly (or nearly so) for that variable and the maximum-likelihood estimate does not exist. The cell is shown as 'not estimable' rather than as the arbitrary large number the fitting algorithm stopped at. Enable Firth penalized logistic regression to obtain a finite estimate, or combine sparse categories. Note that the forest plot below is drawn by finalfit from the same unpenalized fit and will still show the unbounded estimate.": [
@@ -6967,9 +6748,6 @@
             "The point-scoring guide and the nomogram plot are shown below.": [
                 ""
             ],
-            "The positive predictor level was automatically detected as: '{level}'": [
-                ""
-            ],
             "The predicted risk is based on the total points from all variables": [
                 ""
             ],
@@ -6985,7 +6763,7 @@
             "The proportional hazards assumption could NOT be tested, so no conclusion about it should be drawn from the absence of a warning. This may occur with very small samples or perfect separation. Interpret the Cox results cautiously and consider visual inspection with log-log plots.": [
                 ""
             ],
-            "The proportional hazards test (cox.zph) is significant for: {terms}. The hazard ratio of such a term is a time-average of an effect that changes over follow-up and may misrepresent it at any particular time. Consider entering the variable as a stratification variable, modelling a time-varying effect, or reporting hazard ratios within time windows.": [
+            "The proportional hazards test (cox.zph) is significant for: {terms}. The hazard ratio of such a term is a time-average of an effect that changes over follow-up and may misrepresent it at any particular time. Consider entering the variable as a stratification variable, modeling a time-varying effect, or reporting hazard ratios within time windows.": [
                 ""
             ],
             "The proportional-hazards diagnostic did not complete cleanly: {message}": [
@@ -7015,10 +6793,10 @@
             "The risk scores show a <b>{fold}-fold difference</b> between the highest and lowest risk groups.": [
                 ""
             ],
-            "the same hazard": [
+            "the rpart package is unavailable": [
                 ""
             ],
-            "The same variable ({variable}) is selected as both the start and the end date, so every interval is exactly zero and the total person-time is zero. Select the follow-up or event date as the End Date Variable.": [
+            "the same hazard": [
                 ""
             ],
             "The Schoenfeld-residual test could not be computed: {message}": [
@@ -7075,25 +6853,28 @@
             "The spacing between tick marks on the time axis. Must be greater than zero; zero or a negative value is rejected rather than drawn.": [
                 ""
             ],
-            "The standardised option averages predictions over all observed patients; the reference-profile option uses one mean/mode profile": [
+            "The standardized option averages predictions over all observed patients; the reference-profile option uses one mean/mode profile": [
                 ""
             ],
-            "The statistic is the maximally selected standardised log-rank statistic; no multiplicity-adjusted p-value is reported for this cut-off. Downstream group comparisons are exploratory and should be validated in independent data.": [
+            "The statistic is the maximally selected standardized log-rank statistic; no multiplicity-adjusted p-value is reported for this cut-off. Downstream group comparisons are exploratory and should be validated in independent data.": [
                 ""
             ],
             "The stratification variable could not be located in the data.": [
                 ""
             ],
-            "The stratification variable has fewer than two levels in the analysed rows.": [
+            "The stratification variable has fewer than two levels in the analyzed rows.": [
                 ""
             ],
             "The survival plot could not be drawn: {msg}": [
                 ""
             ],
-            "The survival tree produced no usable split for '{var}'. Quantile cut-points are shown instead. This usually means the tree found no split meeting the complexity and minimum group-size criteria.": [
+            "The survival tree could not provide cut-points ({reason}). Quantile cut-points are shown instead.": [
                 ""
             ],
-            "The time unit used throughout the analysis. When survival time is calculated from dates, dates are CONVERTED to this unit. When a pre-calculated elapsed-time variable is supplied, no conversion is possible (the column carries no unit), so this option DECLARES the unit that variable is already recorded in. Either way it determines how cutpoints and plausibility checks are interpreted, and how axes are labelled - so selecting the wrong unit for pre-calculated time changes the reported results, not just the labels.": [
+            "The survival tree provided fewer cut-points than requested. Quantile cut-points supplement the tree splits; the displayed method is tree + quantile.": [
+                ""
+            ],
+            "The time unit used throughout the analysis. When survival time is calculated from dates, dates are CONVERTED to this unit. When a pre-calculated elapsed-time variable is supplied, no conversion is possible (the column carries no unit), so this option DECLARES the unit that variable is already recorded in. Either way it determines how cutpoints and plausibility checks are interpreted, and how axes are labeled, so selecting the wrong unit for pre-calculated time changes the reported results, not just the labels.": [
                 ""
             ],
             "The time variable should represent time from study entry to event or last follow-up": [
@@ -7103,15 +6884,6 @@
                 ""
             ],
             "The time-to-event or follow-up duration for each patient. The sum is the denominator when person-time rates are requested; Kaplan-Meier estimates instead use ordered event times and risk sets. Values must be finite and zero or positive, in one consistent unit.": [
-                ""
-            ],
-            "The total person-time": [
-                ""
-            ],
-            "The total post-landmark person-time": [
-                ""
-            ],
-            "The UTC timezone setting applies only to the \"YYYY-MM-DD HH:MM:SS\" format, the only one carrying a time of day. These dates were read as \"{format}\", so they are calendar days and the timezone has no effect on the intervals.": [
                 ""
             ],
             "The variable selected for adjusted curves must also be selected under Explanatory Variables or Stratification Variables. No curve was produced because changing a variable absent from the fitted model cannot change its predictions.": [
@@ -7156,16 +6928,10 @@
             "These rows are truncated and written back unchanged in sign - fix them in the data before running a survival model.": [
                 ""
             ],
-            "These rows cannot be analysed: a negative interval subtracts from total person-time and would corrupt any incidence rate computed from that denominator.": [
-                ""
-            ],
             "These unadjusted diagnostic metrics depend on these interpretations being correct": [
                 ""
             ],
             "They pool information across subgroups, so the confidence intervals are typically narrower (and p-values smaller) than fitting a separate Cox model within each subgroup; the point estimates are nearly identical.": [
-                ""
-            ],
-            "This AIC is computed from the penalized (Firth) likelihood. Compare it only with other Firth models fitted to these same observations, not with the maximum-likelihood AIC of an unpenalized fit.": [
                 ""
             ],
             "This analysis adjusts for multiple variables simultaneously, providing <b>conditional associations</b> for each term given the others in the fitted model.": [
@@ -7201,7 +6967,7 @@
             "This column was converted as Unix epoch seconds, but its {which} value ({value}) converts to {date}. • Epoch seconds for a realistic clinical date are roughly 1e8 to 4e9 (1973 to 2096). • If these are Excel serial numbers, choose an Excel Serial format instead; if they are measurements, select a real date column.": [
                 ""
             ],
-            "This describes one hypothetical patient, not your cohort. If your covariates are skewed, that reference patient may resemble nobody in the data. Choose \"Standardised over cohort\" if you want a curve that represents the patients you actually have.": [
+            "This describes one hypothetical patient, not your cohort. If your covariates are skewed, that reference patient may resemble nobody in the data. Choose \"Standardized over cohort\" if you want a curve that represents the patients you actually have.": [
                 ""
             ],
             "This does not establish that no association exists; the analysis may lack power to detect one.": [
@@ -7214,6 +6980,9 @@
                 ""
             ],
             "This hazard plot": [
+                ""
+            ],
+            "This is a model-specific penalized-likelihood quantity that depends on predictor units and parameterisation. It is not suitable for comparing separately fitted Firth models or for comparison with maximum-likelihood AIC. For nested models, use a documented common-penalty likelihood-ratio comparison instead.": [
                 ""
             ],
             "This is equivalent to reading \\u{03B2}(focal) and \\u{03B2}(focal) + \\u{03B2}(focal:moderator) off the one interaction model; releveling is simply how each conditional effect is read, with the correct standard error, directly.": [
@@ -7289,9 +7058,6 @@
                 ""
             ],
             "Time and outcome must be different variables.": [
-                ""
-            ],
-            "Time basis": [
                 ""
             ],
             "Time Components": [
@@ -7387,9 +7153,6 @@
             "Time Unit": [
                 ""
             ],
-            "Time unit for results": [
-                ""
-            ],
             "Time Unit of the Analysis": [
                 ""
             ],
@@ -7435,10 +7198,13 @@
             "Timezone": [
                 ""
             ],
-            "Timezone {requested} is not a recognised Olson timezone. Falling back to the system default ({fallback}).": [
+            "Timezone {requested} is not a recognized Olson timezone. Falling back to the system default ({fallback}).": [
                 ""
             ],
-            "To compare a single subgroup head-to-head, match the row set (analyse that one marker with the moderator); otherwise the N and event count, and therefore the CI and p, can differ for that reason alone.": [
+            "To choose a level, first put '{variable}' in the Diagnostic Predictor box.": [
+                ""
+            ],
+            "To compare a single subgroup head-to-head, match the row set (analyze that one marker with the moderator); otherwise the N and event count, and therefore the CI and p, can differ for that reason alone.": [
                 ""
             ],
             "To Do": [
@@ -7468,13 +7234,7 @@
             "Total observed follow-up is zero, so an incidence rate cannot be calculated. Check the time variable and its units.": [
                 ""
             ],
-            "Total person-time": [
-                ""
-            ],
             "Total Points": [
-                ""
-            ],
-            "Total post-landmark person-time (from {amount} onward)": [
                 ""
             ],
             "Total sample size n=%d is small for survival analysis. Asymptotic assumptions for confidence intervals and hypothesis tests may not hold. Results should be considered preliminary and validated in larger datasets.": [
@@ -7490,6 +7250,9 @@
                 ""
             ],
             "Treatment indicators": [
+                ""
+            ],
+            "Tree cut-points supplemented": [
                 ""
             ],
             "Tree-based cut-points unavailable": [
@@ -7603,10 +7366,10 @@
             "Understanding Diagnostic Test Performance": [
                 ""
             ],
-            "Understanding LASSO Cox regression": [
+            "Understanding LASSO Cox Regression": [
                 ""
             ],
-            "Understanding LASSO Cox Regression": [
+            "Understanding LASSO Cox regression": [
                 ""
             ],
             "Understanding Log-Log Plots for Proportional Hazards Assessment": [
@@ -7645,10 +7408,10 @@
             "Understanding Risk Score Analysis": [
                 ""
             ],
-            "Understanding risk scores and survival curves": [
+            "Understanding Risk Scores and Survival Curves": [
                 ""
             ],
-            "Understanding Risk Scores and Survival Curves": [
+            "Understanding risk scores and survival curves": [
                 ""
             ],
             "Understanding RMST Analysis": [
@@ -7693,13 +7456,7 @@
             "Unpenalized refit after LASSO selection": [
                 ""
             ],
-            "Unsupported date format: {format}": [
-                ""
-            ],
             "Unsupported date format: %s. Supported formats are: %s. Please select the correct format from Time Type options.": [
-                ""
-            ],
-            "Unsupported output unit for calendar-based calculation": [
                 ""
             ],
             "Unsupported RMST horizon": [
@@ -7711,6 +7468,9 @@
             "Upper": [
                 ""
             ],
+            "Upper 95% CI": [
+                ""
+            ],
             "Use <strong>Multivariable Survival</strong> in ClinicoPath for standard Cox regression with fewer predictors.": [
                 ""
             ],
@@ -7720,16 +7480,13 @@
             "Use landmark time": [
                 ""
             ],
-            "Use the 'Predictor Positive Level' option to set this manually.": [
-                ""
-            ],
             "Use the adjusted cumulative-incidence or risk-group cumulative-incidence plot; those account for competing events.": [
                 ""
             ],
             "Use the dropdown menu below the outcome variable to make your selection.": [
                 ""
             ],
-            "Use this to see the model's overall fitted survival. If you selected an adjustment variable expecting to compare groups, choose \"Standardised over cohort\" instead.": [
+            "Use this to see the model's overall fitted survival. If you selected an adjustment variable expecting to compare groups, choose \"Standardized over cohort\" instead.": [
                 ""
             ],
             "Use total points to find the predicted risk in the Risk Prediction section": [
@@ -7759,14 +7516,8 @@
             "Using dates to calculate survival time": [
                 ""
             ],
-            "Usual causes are that the start and end date columns are swapped, or that the date format was mis-detected - a wrong day/month order flips only the rows whose day-of-month is 12 or less, which is why a few rows can be negative while the rest look correct.": [
-                ""
-            ],
-            "UTC": [
-                ""
-            ],
             "Value": [
-                ""
+                "Value"
             ],
             "Variable": [
                 ""
@@ -7870,10 +7621,10 @@
             "Warnings": [
                 ""
             ],
-            "Week number": [
+            "Week Number": [
                 ""
             ],
-            "Week Number": [
+            "Week number": [
                 ""
             ],
             "Week number (Jan-1 blocks, not ISO)": [
@@ -7882,19 +7633,16 @@
             "weeks": [
                 ""
             ],
-            "Weeks": [
-                ""
-            ],
             "Weibull": [
                 ""
             ],
             "Weighted Log-Rank Test Interpretation": [
                 ""
             ],
-            "Weighted log-rank tests": [
+            "Weighted Log-Rank Tests": [
                 ""
             ],
-            "Weighted Log-Rank Tests": [
+            "Weighted log-rank tests": [
                 ""
             ],
             "Weighted Log-Rank Tests - {title}": [
@@ -7948,9 +7696,6 @@
             "Why it matters:": [
                 ""
             ],
-            "with {n} intervals (fewer than 101) the 99th percentile is interpolated between the two longest intervals, so this rule can flag at most the single longest one": [
-                ""
-            ],
             "with %d event(s) and %d censored observation(s) among %d subjects (%.1f%% crude event proportion).": [
                 ""
             ],
@@ -7982,9 +7727,6 @@
                 ""
             ],
             "Within-subgroup HRs are computed for 2-way interactions only.": [
-                ""
-            ],
-            "x 99th %ile": [
                 ""
             ],
             "X-axis:": [
@@ -8026,11 +7768,8 @@
             "years": [
                 ""
             ],
-            "Years": [
-                ""
-            ],
             "Yes": [
-                ""
+                "Yes"
             ],
             "ymd": [
                 ""

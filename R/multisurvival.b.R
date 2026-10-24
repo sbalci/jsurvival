@@ -561,7 +561,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           .("Both are valid but answer subtly different questions; the interaction-model (conditional) subgroup effect is the more efficient estimand preferred for predictive-biomarker subgroup analysis, and is what this table reports (an implied conditional effect of the single interaction model, not an independent subgroup fit)."), "</p>",
           "<p><b>", .("A note on sample size when comparing to a manual per-subgroup fit:"), "</b> ",
           .("this analysis uses complete cases across <i>all</i> selected variables, whereas fitting one marker at a time (for example per-marker na.omit()) uses that marker's own complete-case set."), " ",
-          .("To compare a single subgroup head-to-head, match the row set (analyse that one marker with the moderator); otherwise the N and event count, and therefore the CI and p, can differ for that reason alone."), "</p>",
+          .("To compare a single subgroup head-to-head, match the row set (analyze that one marker with the moderator); otherwise the N and event count, and therefore the CI and p, can differ for that reason alone."), "</p>",
           "</div>")
         self$results$interactionExplanation$setContent(interaction_expl_base)
 
@@ -912,9 +912,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           if (self$options$ac) {
             self$results$adjustedSurvivalExplanation$setContent(box(
               "rgba(255, 169, 33, 0.14)", "#ff9800", .("Understanding Adjusted Survival Curves"), paste0(
-                para(.("Adjusted curves are model-based survival or cumulative-incidence predictions under the selected standardisation.")),
+                para(.("Adjusted curves are model-based survival or cumulative-incidence predictions under the selected standardization.")),
                 para("<b>", .("Key Points:"), "</b>"),
-                ul(.("The standardised option averages predictions over all observed patients; the reference-profile option uses one mean/mode profile"),
+                ul(.("The standardized option averages predictions over all observed patients; the reference-profile option uses one mean/mode profile"),
                    .("Useful for model-based comparisons conditional on the measured covariates included in the model"),
                    .("Does not remove bias from unmeasured confounding or model misspecification")))))
           }
@@ -1730,7 +1730,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             label <- labelled::var_label(x)
             jmvcore::reject(trimws(paste(
               .fmt(
-                .("The explanatory variable '{var}' has only one value in the analysed rows, so no effect can be estimated for it. Remove it, or check the data filter and missing values."),
+                .("The explanatory variable '{var}' has only one value in the analyzed rows, so no effect can be estimated for it. Remove it, or check the data filter and missing values."),
                 var = if (is.null(label)) v else label),
               if (isTRUE(self$options$uselandmark))
                 .("Landmark analysis is on: rows with follow-up shorter than the landmark time were excluded before this check.")
@@ -2369,7 +2369,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             private$.addHtmlMessage(
               "strongWarning",
               .("Proportional hazards violation"),
-              .fmt(.("The proportional hazards test (cox.zph) is significant for: {terms}. The hazard ratio of such a term is a time-average of an effect that changes over follow-up and may misrepresent it at any particular time. Consider entering the variable as a stratification variable, modelling a time-varying effect, or reporting hazard ratios within time windows."),
+              .fmt(.("The proportional hazards test (cox.zph) is significant for: {terms}. The hazard ratio of such a term is a time-average of an effect that changes over follow-up and may misrepresent it at any particular time. Consider entering the variable as a stratification variable, modeling a time-varying effect, or reporting hazard ratios within time windows."),
                    terms = viol_txt)
             )
           }
@@ -4593,7 +4593,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                groups = as.character(length(levels(mydata$risk_group)))), "<br>",
           percentile_text, "<br><br>",
           if (is.na(c_index))
-            .("Discrimination is not summarised by Harrell's C here: it assumes a single event type, and under competing risks it would rank expanded pseudo-observations rather than patients.")
+            .("Discrimination is not summarized by Harrell's C here: it assumes a single event type, and under competing risks it would rank expanded pseudo-observations rather than patients.")
           else
             .fmt(.("The apparent Harrell's C-index is {cindex}. It measures rank discrimination in these same data and may be optimistic; 0.5 indicates chance ordering and 1.0 perfect ordering."), cindex = c_index_formatted),
           "<br><br>")
@@ -4974,7 +4974,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           "warning",
           .("Adjusted curves unavailable"),
           paste(.fmt(.("Adjustment method: {method}."), method = method), detail,
-                .("No adjusted curve or table is shown; nothing was substituted for it. Choose Average (standardised over the observed patients) or Conditional Mean instead."))
+                .("No adjusted curve or table is shown; nothing was substituted for it. Choose Average (standardized over the observed patients) or Conditional Mean instead."))
         )
         return(NULL)
       }
@@ -5069,7 +5069,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
       body <- switch(
         method,
         "average" = paste0(
-          "<p><b>", .("Standardised over cohort (g-computation)"), "</b></p>",
+          "<p><b>", .("Standardized over cohort (g-computation)"), "</b></p>",
           "<p>", sprintf(.("Every one of the %s patients is set to <i>%s</i> = each level in turn%s, a survival curve is predicted for each patient from the fitted model, and those curves are averaged. The procedure repeats for every level."),
                          esc(n_pat), var_show, lv_txt), "</p>",
           # Do NOT name example covariates here: the text is generic and the
@@ -5077,18 +5077,18 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           # treatment mix", which asserted three variables that were absent from
           # the fitted model on the very first dataset it was run against.
           "<p>", .("Because the same patients underlie every curve, the curves differ <i>only</i> by the adjustment variable - the distribution of every other covariate in the model is identical across them. This is what most published papers mean by an adjusted survival curve."), "</p>",
-          "<p>", .("Confidence intervals are left blank: a standardised curve has no closed-form interval and would need bootstrapping."), "</p>"),
+          "<p>", .("Confidence intervals are left blank: a standardized curve has no closed-form interval and would need bootstrapping."), "</p>"),
         "conditional" = paste0(
           "<p><b>", .("At reference covariate profile"), "</b></p>",
           "<p>", sprintf(.("One curve is predicted per level of <i>%s</i>%s for a single reference patient: the mean of every numeric covariate and the most common level of every categorical covariate."),
                          var_show, lv_txt), "</p>",
-          "<p>", .("This describes one hypothetical patient, not your cohort. If your covariates are skewed, that reference patient may resemble nobody in the data. Choose \"Standardised over cohort\" if you want a curve that represents the patients you actually have."), "</p>",
+          "<p>", .("This describes one hypothetical patient, not your cohort. If your covariates are skewed, that reference patient may resemble nobody in the data. Choose \"Standardized over cohort\" if you want a curve that represents the patients you actually have."), "</p>",
           "<p>", .("Confidence intervals are those of that single prediction."), "</p>"),
         "single" = paste0(
           "<p><b>", .("Whole-cohort expected survival"), "</b></p>",
           "<p>", sprintf(.("One curve is produced for the whole cohort, each patient at their own observed covariate values. <i>%s</i> is <b>not</b> varied, so this output does <b>not</b> compare its levels."),
                          var_show), "</p>",
-          "<p>", .("Use this to see the model's overall fitted survival. If you selected an adjustment variable expecting to compare groups, choose \"Standardised over cohort\" instead."), "</p>",
+          "<p>", .("Use this to see the model's overall fitted survival. If you selected an adjustment variable expecting to compare groups, choose \"Standardized over cohort\" instead."), "</p>",
           "<p>", .("Confidence intervals require bootstrapping and are left blank."), "</p>"),
         paste0("<p>", .("Model-based adjusted survival."), "</p>")
       )
@@ -5120,7 +5120,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
     .adjustedEstimandNote = function(method, has_competing = FALSE) {
       base <- switch(
         method,
-        "average" = .("Estimand: survival standardised over the observed patients - every patient is set to the stated level in turn and the model-predicted curves are averaged (g-computation). Confidence intervals require bootstrapping and are left blank."),
+        "average" = .("Estimand: survival standardized over the observed patients - every patient is set to the stated level in turn and the model-predicted curves are averaged (g-computation). Confidence intervals require bootstrapping and are left blank."),
         "conditional" = .("Estimand: the model-predicted curve for one reference patient - the mean of every numeric covariate and the most common level of every categorical covariate. Confidence intervals are those of that single prediction."),
         "single" = .("Estimand: one curve for the whole cohort with each patient at their own covariate values; the adjustment variable is not varied. Confidence intervals require bootstrapping and are left blank."),
         .("Estimand: model-based adjusted survival.")

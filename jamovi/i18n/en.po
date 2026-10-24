@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: jsurvival 2.0.0\n"
-"POT-Creation-Date: 2021-07-26 12:08:06+01000\n"
-"PO-Revision-Date: 2026-09-05 14:25+0300\n"
-"Last-Translator: Antigravity AI <antigravity@clinpy.org>\n"
-"Language-Team: English <jamovi-i18n@lists.jamovi.org>\n"
-"Language: en\n"
+"Project-Id-Version: ClinicoPath\n"
+"Last-Translator: ClinicoPath translators\n"
+"Language-Team: English\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"POT-Creation-Date: 2021-07-26 12:08:06+01000\n"
+"PO-Revision-Date: 2021-07-29 16:59:59+01000\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: R/outcomeorganizer.b.R
 msgid ""
@@ -494,7 +494,7 @@ msgstr ""
 #: R/survival.b.R
 msgid ""
 "%s was supplied as a numeric column with only %d distinct values, so it is "
-"analysed as a categorical variable throughout: every hazard ratio compares "
+"analyzed as a categorical variable throughout: every hazard ratio compares "
 "one level with the reference level, not a one-unit increase. To model it as "
 "a linear trend instead, use Survival Analysis for Continuous Variable."
 msgstr ""
@@ -1045,7 +1045,7 @@ msgstr ""
 #: R/multisurvival.b.R
 msgid ""
 "Adjusted curves are model-based survival or cumulative-incidence predictions "
-"under the selected standardisation."
+"under the selected standardization."
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -1129,13 +1129,13 @@ msgstr ""
 msgid "Adjusted survival"
 msgstr ""
 
+#: survival/results/adjustedCurvesPlot.title
+msgid "Adjusted Survival Curves"
+msgstr ""
+
 #: survival/options/adjusted_curves.title
 #: survival/ui[4][1][0]/adjusted_curves.label
 msgid "Adjusted survival curves"
-msgstr ""
-
-#: survival/results/adjustedCurvesPlot.title
-msgid "Adjusted Survival Curves"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -1385,14 +1385,14 @@ msgstr ""
 msgid "Age-adjusted analysis"
 msgstr ""
 
-#: R/survival.b.R
-#: survival/ui[4][1][0]/age_adjustment.label
-msgid "Age-adjusted Cox regression"
-msgstr ""
-
 #: survival/results/ageAdjustedCoxHeading.title
 #: survival/results/ageAdjustedCoxTable.title
 msgid "Age-Adjusted Cox Regression"
+msgstr ""
+
+#: R/survival.b.R
+#: survival/ui[4][1][0]/age_adjustment.label
+msgid "Age-adjusted Cox regression"
 msgstr ""
 
 #: R/survival.b.R
@@ -1584,13 +1584,13 @@ msgstr ""
 msgid "An sHR is not a risk ratio and does not quantify a cause-specific hazard."
 msgstr ""
 
+#: R/survivalcont.b.R
+msgid "Analysis Complete"
+msgstr ""
+
 #: R/multisurvival.b.R
 #: R/survival.b.R
 msgid "Analysis complete"
-msgstr ""
-
-#: R/survivalcont.b.R
-msgid "Analysis Complete"
 msgstr ""
 
 #: R/survivalcont.b.R
@@ -1623,6 +1623,10 @@ msgstr ""
 msgid "Analysis Error"
 msgstr ""
 
+#: survival/ui[9].label
+msgid "Analysis Explanations"
+msgstr ""
+
 #: multisurvival/options/showExplanations.title
 #: singlearm/options/showExplanations.title
 #: singlearm/ui[8][0][0]/showExplanations.label
@@ -1631,10 +1635,6 @@ msgstr ""
 #: survivalcont/options/showExplanations.title
 #: survivalcont/ui[8][0][0]/showExplanations.label
 msgid "Analysis explanations"
-msgstr ""
-
-#: survival/ui[9].label
-msgid "Analysis Explanations"
 msgstr ""
 
 #: R/lassocox.b.R
@@ -1888,13 +1888,13 @@ msgstr ""
 msgid "bonferroni"
 msgstr ""
 
+#: survival/results/bootstrapValidationTable.title
+msgid "Bootstrap Internal Validation"
+msgstr ""
+
 #: R/survival.b.R
 #: survival/options/bootstrapValidation.title
 msgid "Bootstrap internal validation"
-msgstr ""
-
-#: survival/results/bootstrapValidationTable.title
-msgid "Bootstrap Internal Validation"
 msgstr ""
 
 #: R/survival.b.R
@@ -2178,7 +2178,7 @@ msgstr ""
 msgid ""
 "Categorical variable used for stratification in Cox regression, allowing a "
 "different baseline hazard in each stratum. Must be a factor with a small "
-"number of reasonably sized groups (for example treating centre or stage). A "
+"number of reasonably sized groups (for example treating center or stage). A "
 "near-continuous variable would give one stratum per patient and no estimable "
 "hazard ratio."
 msgstr ""
@@ -2451,12 +2451,12 @@ msgid ""
 "not account for variable and penalty selection."
 msgstr ""
 
-#: lassocox/options/path_plot.title
-msgid "Coefficient paths"
-msgstr ""
-
 #: lassocox/results/path_plot.title
 msgid "Coefficient Paths"
+msgstr ""
+
+#: lassocox/options/path_plot.title
+msgid "Coefficient paths"
 msgstr ""
 
 #: lassocox/results/coef_plot.title
@@ -2661,7 +2661,7 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid ""
-"Confidence intervals are left blank: a standardised curve has no closed-form "
+"Confidence intervals are left blank: a standardized curve has no closed-form "
 "interval and would need bootstrapping."
 msgstr ""
 
@@ -2818,20 +2818,20 @@ msgstr ""
 msgid "Corrected datetime"
 msgstr ""
 
-#: datetimeconverter/options/corrected_datetime_numeric.title
-msgid "Corrected datetime (numeric)"
-msgstr ""
-
 #: datetimeconverter/results/corrected_datetime_numeric.title
 msgid "Corrected DateTime (Numeric)"
 msgstr ""
 
-#: datetimeconverter/options/corrected_datetime_char.title
-msgid "Corrected datetime (text)"
+#: datetimeconverter/options/corrected_datetime_numeric.title
+msgid "Corrected datetime (numeric)"
 msgstr ""
 
 #: datetimeconverter/results/corrected_datetime_char.title
 msgid "Corrected DateTime (Text)"
+msgstr ""
+
+#: datetimeconverter/options/corrected_datetime_char.title
+msgid "Corrected datetime (text)"
 msgstr ""
 
 #: R/lassocox.b.R
@@ -2954,14 +2954,14 @@ msgid "Cox regression"
 msgstr ""
 
 #: R/survivalcont.b.R
-msgid "Cox regression analysis"
-msgstr ""
-
-#: R/survivalcont.b.R
 #: survival/ui[4][0].label
 #: survival/results/coxRegressionHeading.title
 #: survivalcont/ui[6][0].label
 msgid "Cox Regression Analysis"
+msgstr ""
+
+#: R/survivalcont.b.R
+msgid "Cox regression analysis"
 msgstr ""
 
 #: survival/results/coxRegressionHeading3.title
@@ -3069,12 +3069,12 @@ msgstr ""
 msgid "Cross-Validation Plot"
 msgstr ""
 
-#: lassocox/options/cv_plot.title
-msgid "Cross-validation plot"
-msgstr ""
-
 #: lassocox/results/cv_plot.title
 msgid "Cross-validation Plot"
+msgstr ""
+
+#: lassocox/options/cv_plot.title
+msgid "Cross-validation plot"
 msgstr ""
 
 #: R/singlearm.b.R
@@ -3127,15 +3127,15 @@ msgstr ""
 msgid "Cumulative events plot"
 msgstr ""
 
+#: singlearm/results/plot3.title
+msgid "Cumulative Hazard"
+msgstr ""
+
 #: singlearm/options/ch.title
 #: survival/options/ch.title
 #: survival/ui[5][0][0]/ch.label
 #: survivalcont/options/ch.title
 msgid "Cumulative hazard"
-msgstr ""
-
-#: singlearm/results/plot3.title
-msgid "Cumulative Hazard"
 msgstr ""
 
 #: R/survival.b.R
@@ -3298,24 +3298,24 @@ msgstr ""
 msgid "Data Quality"
 msgstr ""
 
-#: datetimeconverter/options/show_quality_metrics.title
-msgid "Data quality assessment"
-msgstr ""
-
 #: datetimeconverter/results/qualityAssessment.title
 msgid "Data Quality Assessment"
+msgstr ""
+
+#: datetimeconverter/options/show_quality_metrics.title
+msgid "Data quality assessment"
 msgstr ""
 
 #: lassocox/ui[1].label
 msgid "Data Suitability"
 msgstr ""
 
-#: lassocox/options/suitabilityCheck.title
-msgid "Data suitability assessment"
-msgstr ""
-
 #: lassocox/results/suitabilityReport.title
 msgid "Data Suitability Assessment"
+msgstr ""
+
+#: lassocox/options/suitabilityCheck.title
+msgid "Data suitability assessment"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -3413,14 +3413,14 @@ msgstr ""
 msgid "Day"
 msgstr ""
 
+#: datetimeconverter/results/dayname_out.title
+msgid "Day Name"
+msgstr ""
+
 #: datetimeconverter/options/extract_dayname.title
 #: datetimeconverter/options/dayname_out.title
 #: datetimeconverter/ui[7][0][1][0]/dayname_out.label
 msgid "Day name"
-msgstr ""
-
-#: datetimeconverter/results/dayname_out.title
-msgid "Day Name"
 msgstr ""
 
 #: datetimeconverter/ui[7][0][0][0]/extract_dayname.label
@@ -3433,14 +3433,14 @@ msgstr ""
 msgid "Day of month"
 msgstr ""
 
+#: datetimeconverter/results/dayofyear_out.title
+msgid "Day of Year"
+msgstr ""
+
 #: datetimeconverter/options/extract_dayofyear.title
 #: datetimeconverter/options/dayofyear_out.title
 #: datetimeconverter/ui[7][0][1][0]/dayofyear_out.label
 msgid "Day of year"
-msgstr ""
-
-#: datetimeconverter/results/dayofyear_out.title
-msgid "Day of Year"
 msgstr ""
 
 #: datetimeconverter/ui[7][0][0][0]/extract_dayofyear.label
@@ -3675,12 +3675,12 @@ msgstr ""
 msgid "Diagnosis/start date and follow-up/end date must be different variables."
 msgstr ""
 
-#: outcomeorganizer/options/diagnostics.title
-msgid "Diagnostic information"
-msgstr ""
-
 #: outcomeorganizer/results/diagnosticsTable.title
 msgid "Diagnostic Information"
+msgstr ""
+
+#: outcomeorganizer/options/diagnostics.title
+msgid "Diagnostic information"
 msgstr ""
 
 #: R/oddsratio.b.R
@@ -3764,7 +3764,7 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid ""
-"Discrimination is not summarised by Harrell's C here: it assumes a single "
+"Discrimination is not summarized by Harrell's C here: it assumes a single "
 "event type, and under competing risks it would rank expanded "
 "pseudo-observations rather than patients."
 msgstr ""
@@ -3793,12 +3793,12 @@ msgid "Disease-free (0)"
 msgstr ""
 
 #: R/outcomeorganizer.b.R
-msgid "disease-free survival"
+#: R/singlearm.b.R
+msgid "Disease-Free Survival"
 msgstr ""
 
 #: R/outcomeorganizer.b.R
-#: R/singlearm.b.R
-msgid "Disease-Free Survival"
+msgid "disease-free survival"
 msgstr ""
 
 #: R/singlearm.b.R
@@ -4214,7 +4214,7 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid ""
-"Entered as continuous: {variables}. Each is modelled as one odds ratio per "
+"Entered as continuous: {variables}. Each is modeled as one odds ratio per "
 "one-unit increase, which assumes a constant step in log odds between "
 "consecutive values. To estimate a separate odds ratio for each level "
 "instead, change the variable's measure type to Nominal or Ordinal in the "
@@ -4303,7 +4303,7 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid ""
-"Estimand: survival standardised over the observed patients - every patient "
+"Estimand: survival standardized over the observed patients - every patient "
 "is set to the stated level in turn and the model-predicted curves are "
 "averaged (g-computation). Confidence intervals require bootstrapping and are "
 "left blank."
@@ -4415,17 +4415,17 @@ msgid ""
 "type."
 msgstr ""
 
-#: lassocox/options/outcomeLevel.title
-#: survivalcont/options/outcomeLevel.title
-msgid "Event level"
-msgstr ""
-
 #: multisurvival/options/outcomeLevel.title
 #: outcomeorganizer/options/outcomeLevel.title
 #: outcomeorganizer/options/recurrenceLevel.title
 #: singlearm/options/outcomeLevel.title
 #: survival/options/outcomeLevel.title
 msgid "Event Level"
+msgstr ""
+
+#: lassocox/options/outcomeLevel.title
+#: survivalcont/options/outcomeLevel.title
+msgid "Event level"
 msgstr ""
 
 #: R/outcomeorganizer.b.R
@@ -4479,11 +4479,6 @@ msgstr ""
 msgid "Event-Free Probability for the Selected Event"
 msgstr ""
 
-#: R/outcomeorganizer.b.R
-#: R/singlearm.b.R
-msgid "events"
-msgstr ""
-
 #: multisurvival/results/personTimeTable.columns.title
 #: multisurvival/results/riskScoreTable.columns.title
 #: singlearm/results/medianTable.columns.title
@@ -4495,6 +4490,11 @@ msgstr ""
 #: survivalcont/results/medianTable.columns.title
 #: survivalcont/results/multipleMedianTable.columns.title
 msgid "Events"
+msgstr ""
+
+#: R/outcomeorganizer.b.R
+#: R/singlearm.b.R
+msgid "events"
 msgstr ""
 
 #: R/outcomeorganizer.b.R
@@ -4933,14 +4933,14 @@ msgstr ""
 msgid "Follow-up support counts"
 msgstr ""
 
-#: lassocox/options/elapsedtime.title
-#: lassocox/ui[0][0].label
-msgid "Follow-up time"
-msgstr ""
-
 #: outcomeorganizer/options/followupTime.title
 #: outcomeorganizer/ui[3][0][1].label
 msgid "Follow-up Time"
+msgstr ""
+
+#: lassocox/options/elapsedtime.title
+#: lassocox/ui[0][0].label
+msgid "Follow-up time"
 msgstr ""
 
 #: R/outcomeorganizer.b.R
@@ -5253,13 +5253,13 @@ msgstr ""
 msgid "Hazard Scale"
 msgstr ""
 
-#: multisurvival/options/hr.title
-msgid "Hazards regression plot"
-msgstr ""
-
 #: multisurvival/results/plot.title
 #: multisurvival/results/plot3.title
 msgid "Hazards Regression Plot"
+msgstr ""
+
+#: multisurvival/options/hr.title
+msgid "Hazards regression plot"
 msgstr ""
 
 #: survival/ui[9][0].label
@@ -5956,14 +5956,14 @@ msgstr ""
 msgid "KMunicate plot"
 msgstr ""
 
+#: singlearm/results/plot6.title
+msgid "KMunicate-Style Plot"
+msgstr ""
+
 #: singlearm/options/kmunicate.title
 #: survival/options/kmunicate.title
 #: survivalcont/options/kmunicate.title
 msgid "KMunicate-style plot"
-msgstr ""
-
-#: singlearm/results/plot6.title
-msgid "KMunicate-Style Plot"
 msgstr ""
 
 #: survivalcont/ui[4][0][0]/kmunicate.label
@@ -6393,15 +6393,15 @@ msgid ""
 "external validation."
 msgstr ""
 
-#: R/singlearm.b.R
-msgid "median"
-msgstr ""
-
 #: multisurvival/results/adjustedMedianTable.columns.title
 #: singlearm/results/medianTable.columns.title
 #: survival/results/medianTable.columns.title
 #: survivalcont/results/medianTable.columns.title
 msgid "Median"
+msgstr ""
+
+#: R/singlearm.b.R
+msgid "median"
 msgstr ""
 
 #: R/singlearm.b.R
@@ -6589,12 +6589,12 @@ msgstr ""
 msgid "Minimum CV error"
 msgstr ""
 
-#: survivalcont/options/min_group_size.title
-msgid "Minimum group size (%)"
-msgstr ""
-
 #: survivalcont/ui[1][1][0]/min_group_size.label
 msgid "Minimum Group Size (%)"
+msgstr ""
+
+#: survivalcont/options/min_group_size.title
+msgid "Minimum group size (%)"
 msgstr ""
 
 #: R/survivalcont.b.R
@@ -6850,13 +6850,13 @@ msgstr ""
 msgid "Month (number)"
 msgstr ""
 
+#: datetimeconverter/results/monthname_out.title
+msgid "Month Name"
+msgstr ""
+
 #: datetimeconverter/options/extract_monthname.title
 #: datetimeconverter/options/monthname_out.title
 msgid "Month name"
-msgstr ""
-
-#: datetimeconverter/results/monthname_out.title
-msgid "Month Name"
 msgstr ""
 
 #: datetimeconverter/options/month_out.title
@@ -6924,17 +6924,17 @@ msgstr ""
 msgid "Multiple Event Configuration"
 msgstr ""
 
+#: multisurvival/ui[2][0].label
+#: singlearm/ui[3][0].label
+msgid "Multiple Event Levels"
+msgstr ""
+
 #: multisurvival/options/multievent.title
 #: outcomeorganizer/options/multievent.title
 #: singlearm/options/multievent.title
 #: survival/options/multievent.title
 #: survivalcont/options/multievent.title
 msgid "Multiple event levels"
-msgstr ""
-
-#: multisurvival/ui[2][0].label
-#: singlearm/ui[3][0].label
-msgid "Multiple Event Levels"
 msgstr ""
 
 #: outcomeorganizer/ui[1].label
@@ -7080,12 +7080,12 @@ msgstr ""
 
 #: R/lassocox.b.R
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: R/multisurvival.b.R
 msgid ""
 "No adjusted curve or table is shown; nothing was substituted for it. Choose "
-"Average (standardised over the observed patients) or Conditional Mean "
+"Average (standardized over the observed patients) or Conditional Mean "
 "instead."
 msgstr ""
 
@@ -7140,7 +7140,7 @@ msgstr ""
 
 #: R/survivalcont.b.R
 msgid ""
-"No Cox regression results are available to summarise. This usually means the "
+"No Cox regression results are available to summarize. This usually means the "
 "model could not be fitted, or every hazard ratio was missing."
 msgstr ""
 
@@ -7526,7 +7526,7 @@ msgstr ""
 
 #: R/survivalcont.b.R
 msgid ""
-"Not fitted: '%s' has %d levels across %d analysed rows (about %.1f patients "
+"Not fitted: '%s' has %d levels across %d analyzed rows (about %.1f patients "
 "per stratum). Stratification needs a small number of reasonably sized "
 "groups; a near-continuous variable gives one stratum per patient and no "
 "estimable hazard ratio. Use a categorical variable, or add this variable as "
@@ -7600,14 +7600,14 @@ msgid ""
 "of freedom."
 msgstr ""
 
-#: R/lassocox.b.R
-msgid "Number at risk"
-msgstr ""
-
 #: singlearm/results/survTable.columns.title
 #: survival/results/survTable.columns.title
 #: survivalcont/results/survTable.columns.title
 msgid "Number at Risk"
+msgstr ""
+
+#: R/lassocox.b.R
+msgid "Number at risk"
 msgstr ""
 
 #: survivalcont/ui[4][1][0]/risktable.label
@@ -8047,12 +8047,12 @@ msgstr ""
 msgid "Outcome Category"
 msgstr ""
 
-#: outcomeorganizer/options/visualization.title
-msgid "Outcome distribution"
-msgstr ""
-
 #: outcomeorganizer/results/outcomeViz.title
 msgid "Outcome Distribution"
+msgstr ""
+
+#: outcomeorganizer/options/visualization.title
+msgid "Outcome distribution"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -8261,12 +8261,12 @@ msgid ""
 msgstr ""
 
 #: R/outcomeorganizer.b.R
-msgid "overall survival"
+#: R/singlearm.b.R
+msgid "Overall Survival"
 msgstr ""
 
 #: R/outcomeorganizer.b.R
-#: R/singlearm.b.R
-msgid "Overall Survival"
+msgid "overall survival"
 msgstr ""
 
 #: R/singlearm.b.R
@@ -8321,13 +8321,13 @@ msgstr ""
 msgid "Pairwise Comparison Analysis"
 msgstr ""
 
+#: survival/ui[4][4].label
+msgid "Pairwise Comparisons"
+msgstr ""
+
 #: survival/options/pw.title
 #: survival/ui[4][4][0]/pw.label
 msgid "Pairwise comparisons"
-msgstr ""
-
-#: survival/ui[4][4].label
-msgid "Pairwise Comparisons"
 msgstr ""
 
 #: R/survival.b.R
@@ -9106,11 +9106,11 @@ msgid "progression"
 msgstr ""
 
 #: R/outcomeorganizer.b.R
-msgid "progression-free survival"
+msgid "Progression-Free Survival"
 msgstr ""
 
 #: R/outcomeorganizer.b.R
-msgid "Progression-Free Survival"
+msgid "progression-free survival"
 msgstr ""
 
 #: outcomeorganizer/options/analysistype/pfs.title
@@ -9133,15 +9133,15 @@ msgstr ""
 msgid "Proportional Hazards Assessment & Recommendations"
 msgstr ""
 
-#: multisurvival/options/ph_cox.title
-#: survival/options/ph_cox.title
-msgid "Proportional hazards assumption"
-msgstr ""
-
 #: multisurvival/ui[3][1].label
 #: multisurvival/results/cox_phTable.title
 #: survival/results/cox_ph.title
 msgid "Proportional Hazards Assumption"
+msgstr ""
+
+#: multisurvival/options/ph_cox.title
+#: survival/options/ph_cox.title
+msgid "Proportional hazards assumption"
 msgstr ""
 
 #: R/survival.b.R
@@ -9227,16 +9227,16 @@ msgstr ""
 msgid "R version"
 msgstr ""
 
-#: R/lassocox.b.R
-#: lassocox/options/random_seed.title
-#: survivalcont/options/seed.title
-msgid "Random seed"
-msgstr ""
-
 #: survival/options/seed.title
 #: survival/ui[4][2][0]/seed.label
 #: survivalcont/ui[8][0][0]/seed.label
 msgid "Random Seed"
+msgstr ""
+
+#: R/lassocox.b.R
+#: lassocox/options/random_seed.title
+#: survivalcont/options/seed.title
+msgid "Random seed"
 msgstr ""
 
 #: survivalcont/options/seed.description
@@ -9410,13 +9410,13 @@ msgid ""
 "that model's variance-covariance matrix."
 msgstr ""
 
+#: survival/results/remarkChecklist.title
+msgid "REMARK Reporting Checklist"
+msgstr ""
+
 #: survival/options/remark_checklist.title
 #: survival/ui[9][0][0]/remark_checklist.label
 msgid "REMARK reporting checklist"
-msgstr ""
-
-#: survival/results/remarkChecklist.title
-msgid "REMARK Reporting Checklist"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -9495,12 +9495,12 @@ msgstr ""
 msgid "Reproducibility Details"
 msgstr ""
 
-#: lassocox/options/showRCode.title
-msgid "Reproducible R code"
-msgstr ""
-
 #: lassocox/results/rCode.title
 msgid "Reproducible R Code"
+msgstr ""
+
+#: lassocox/options/showRCode.title
+msgid "Reproducible R code"
 msgstr ""
 
 #: R/singlearm.b.R
@@ -9560,16 +9560,16 @@ msgstr ""
 msgid "Restricted Mean Event-Free Time"
 msgstr ""
 
-#: R/singlearm.b.R
-#: R/survival.b.R
-msgid "Restricted mean survival time"
-msgstr ""
-
 #: survival/ui[4][6].label
 #: survival/results/rmstTable.title
 #: survivalcont/ui[6][1].label
 #: survivalcont/results/rmstTable.title
 msgid "Restricted Mean Survival Time"
+msgstr ""
+
+#: R/singlearm.b.R
+#: R/survival.b.R
+msgid "Restricted mean survival time"
 msgstr ""
 
 #: survival/options/rmst_analysis.title
@@ -9630,12 +9630,12 @@ msgstr ""
 msgid "Risk group"
 msgstr ""
 
-#: multisurvival/options/plotRiskGroups.title
-msgid "Risk group survival plot"
-msgstr ""
-
 #: multisurvival/results/riskGroupPlot.title
 msgid "Risk Group Survival Plot"
+msgstr ""
+
+#: multisurvival/options/plotRiskGroups.title
+msgid "Risk group survival plot"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -9737,14 +9737,14 @@ msgstr ""
 msgid "RMST"
 msgstr ""
 
-#: survival/ui[4][6][0]/rmst_analysis.label
-#: survivalcont/ui[6][1][0]/rmst_analysis.label
-msgid "RMST analysis"
-msgstr ""
-
 #: survival/results/rmstHeading.title
 #: survivalcont/results/rmstHeading.title
 msgid "RMST Analysis"
+msgstr ""
+
+#: survival/ui[4][6][0]/rmst_analysis.label
+#: survivalcont/ui[6][1][0]/rmst_analysis.label
+msgid "RMST analysis"
 msgstr ""
 
 #: R/survivalcont.b.R
@@ -10069,7 +10069,7 @@ msgid ""
 "events; Cause Specific treats other-cause death as censored; Disease-Free "
 "counts disease, recurrence, and death categories as events according to the "
 "selected mapping. Competing-risk coding is retained for compatibility but is "
-"not analysed by this continuous cut-off function; select it to receive "
+"not analyzed by this continuous cut-off function; select it to receive "
 "guidance to a competing-risk analysis."
 msgstr ""
 
@@ -10470,17 +10470,17 @@ msgid ""
 "Firth penalized regression when appropriate."
 msgstr ""
 
-#: R/multisurvival.b.R
-#: multisurvival/options/ac_method/average.title
-msgid "Standardised over cohort (g-computation)"
-msgstr ""
-
 #: survival/options/age_standardization_method.title
 msgid "Standardization Method"
 msgstr ""
 
 #: survival/ui[4][1][0]/age_standardization_method.label
 msgid "Standardization method"
+msgstr ""
+
+#: R/multisurvival.b.R
+#: multisurvival/options/ac_method/average.title
+msgid "Standardized over cohort (g-computation)"
 msgstr ""
 
 #: singlearm/options/ybegin_plot.title
@@ -10774,12 +10774,12 @@ msgstr ""
 msgid "Survival Analysis for Continuous Explanatory Variable"
 msgstr ""
 
-#: outcomeorganizer/options/showGlossary.title
-msgid "Survival analysis glossary"
-msgstr ""
-
 #: outcomeorganizer/results/glossary.title
 msgid "Survival Analysis Glossary"
+msgstr ""
+
+#: outcomeorganizer/options/showGlossary.title
+msgid "Survival analysis glossary"
 msgstr ""
 
 #: outcomeorganizer/options/analysistype.title
@@ -11247,7 +11247,7 @@ msgstr ""
 
 #: R/survivalcont.b.R
 msgid ""
-"The cut-off is the value that maximises the standardised log-rank statistic "
+"The cut-off is the value that maximizes the standardized log-rank statistic "
 "(maximally selected rank statistic, survminer::surv_cutpoint / maxstat). No "
 "multiplicity-adjusted p-value is computed or reported for the selected "
 "cut-off; the group comparison p-values shown after the split are exploratory "
@@ -11355,7 +11355,7 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid ""
-"The explanatory variable '{var}' has only one value in the analysed rows, so "
+"The explanatory variable '{var}' has only one value in the analyzed rows, so "
 "no effect can be estimated for it. Remove it, or check the data filter and "
 "missing values."
 msgstr ""
@@ -11786,7 +11786,7 @@ msgid ""
 "The proportional hazards test (cox.zph) is significant for: {terms}. The "
 "hazard ratio of such a term is a time-average of an effect that changes over "
 "follow-up and may misrepresent it at any particular time. Consider entering "
-"the variable as a stratification variable, modelling a time-varying effect, "
+"the variable as a stratification variable, modeling a time-varying effect, "
 "or reporting hazard ratios within time windows."
 msgstr ""
 
@@ -11948,13 +11948,13 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid ""
-"The standardised option averages predictions over all observed patients; the "
+"The standardized option averages predictions over all observed patients; the "
 "reference-profile option uses one mean/mode profile"
 msgstr ""
 
 #: R/survivalcont.b.R
 msgid ""
-"The statistic is the maximally selected standardised log-rank statistic; no "
+"The statistic is the maximally selected standardized log-rank statistic; no "
 "multiplicity-adjusted p-value is reported for this cut-off. Downstream group "
 "comparisons are exploratory and should be validated in independent data."
 msgstr ""
@@ -11964,7 +11964,7 @@ msgid "The stratification variable could not be located in the data."
 msgstr ""
 
 #: R/survivalcont.b.R
-msgid "The stratification variable has fewer than two levels in the analysed rows."
+msgid "The stratification variable has fewer than two levels in the analyzed rows."
 msgstr ""
 
 #: R/lassocox.b.R
@@ -11991,7 +11991,7 @@ msgid ""
 "elapsed-time variable is supplied, no conversion is possible (the column "
 "carries no unit), so this option DECLARES the unit that variable is already "
 "recorded in. Either way it determines how cutpoints and plausibility checks "
-"are interpreted, and how axes are labelled - so selecting the wrong unit for "
+"are interpreted, and how axes are labeled, so selecting the wrong unit for "
 "pre-calculated time changes the reported results, not just the labels."
 msgstr ""
 
@@ -12207,7 +12207,7 @@ msgstr ""
 msgid ""
 "This describes one hypothetical patient, not your cohort. If your covariates "
 "are skewed, that reference patient may resemble nobody in the data. Choose "
-"\"Standardised over cohort\" if you want a curve that represents the "
+"\"Standardized over cohort\" if you want a curve that represents the "
 "patients you actually have."
 msgstr ""
 
@@ -12653,7 +12653,7 @@ msgstr ""
 
 #: R/datetimeconverter.b.R
 msgid ""
-"Timezone {requested} is not a recognised Olson timezone. Falling back to the "
+"Timezone {requested} is not a recognized Olson timezone. Falling back to the "
 "system default ({fallback})."
 msgstr ""
 
@@ -12663,7 +12663,7 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid ""
-"To compare a single subgroup head-to-head, match the row set (analyse that "
+"To compare a single subgroup head-to-head, match the row set (analyze that "
 "one marker with the moderator); otherwise the N and event count, and "
 "therefore the CI and p, can differ for that reason alone."
 msgstr ""
@@ -12926,12 +12926,12 @@ msgstr ""
 msgid "Understanding Diagnostic Test Performance"
 msgstr ""
 
-#: R/lassocox.b.R
-msgid "Understanding LASSO Cox regression"
-msgstr ""
-
 #: lassocox/results/lassoExplanation.title
 msgid "Understanding LASSO Cox Regression"
+msgstr ""
+
+#: R/lassocox.b.R
+msgid "Understanding LASSO Cox regression"
 msgstr ""
 
 #: survivalcont/results/loglogPlotExplanation.title
@@ -12989,12 +12989,12 @@ msgstr ""
 msgid "Understanding Risk Score Analysis"
 msgstr ""
 
-#: R/lassocox.b.R
-msgid "Understanding risk scores and survival curves"
-msgstr ""
-
 #: lassocox/results/riskScoreExplanation.title
 msgid "Understanding Risk Scores and Survival Curves"
+msgstr ""
+
+#: R/lassocox.b.R
+msgid "Understanding risk scores and survival curves"
 msgstr ""
 
 #: survivalcont/results/rmstExplanation.title
@@ -13136,7 +13136,7 @@ msgstr ""
 #: R/multisurvival.b.R
 msgid ""
 "Use this to see the model's overall fitted survival. If you selected an "
-"adjustment variable expecting to compare groups, choose \"Standardised over "
+"adjustment variable expecting to compare groups, choose \"Standardized over "
 "cohort\" instead."
 msgstr ""
 
@@ -13198,7 +13198,7 @@ msgstr ""
 #: singlearm/results/dataQualityTable.columns.title
 #: survival/results/calibrationTable.columns.title
 msgid "Value"
-msgstr ""
+msgstr "Value"
 
 #: R/multisurvival.b.R
 #: R/oddsratio.b.R
@@ -13376,12 +13376,12 @@ msgstr ""
 msgid "Warnings"
 msgstr ""
 
-#: datetimeconverter/ui[7][0][1][0]/weeknum_out.label
-msgid "Week number"
-msgstr ""
-
 #: datetimeconverter/results/weeknum_out.title
 msgid "Week Number"
+msgstr ""
+
+#: datetimeconverter/ui[7][0][1][0]/weeknum_out.label
+msgid "Week number"
 msgstr ""
 
 #: datetimeconverter/options/extract_weeknum.title
@@ -13405,14 +13405,14 @@ msgstr ""
 msgid "Weighted Log-Rank Test Interpretation"
 msgstr ""
 
+#: survival/ui[4][5].label
+msgid "Weighted Log-Rank Tests"
+msgstr ""
+
 #: R/survival.b.R
 #: survival/options/weightedLogRank.title
 #: survival/ui[4][5][0]/weightedLogRank.label
 msgid "Weighted log-rank tests"
-msgstr ""
-
-#: survival/ui[4][5].label
-msgid "Weighted Log-Rank Tests"
 msgstr ""
 
 #: R/survival.b.R
@@ -13630,7 +13630,7 @@ msgstr ""
 
 #: R/lassocox.b.R
 msgid "Yes"
-msgstr ""
+msgstr "Yes"
 
 #: singlearm/options/timetypedata/ymd.title
 #: survival/options/timetypedata/ymd.title
@@ -13669,3 +13669,214 @@ msgid ""
 "Zero cells detected in contingency table. This may affect odds ratio "
 "calculation."
 msgstr ""
+
+#~ msgid ""
+#~ "%.0f%% confidence interval via the irr::kappa2 fallback (approximate, built "
+#~ "from the null-hypothesis standard error): vcd::Kappa could not return a "
+#~ "finite SE for this (near-degenerate) table. A null-SE interval is too narrow "
+#~ "when kappa is high, so treat it as optimistic."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "%.0f%% confidence interval via the irr::kappa2 fallback (approximate, built "
+#~ "from the null-hypothesis standard error). Install the 'vcd' package to "
+#~ "enable the more accurate ASE-based interval. A null-SE interval is too "
+#~ "narrow when kappa is high, so treat it as optimistic."
+#~ msgstr ""
+
+#~ msgid "Alpha for Confidence Intervals"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "At least one interval in this table was built from the null-hypothesis "
+#~ "standard error (kappa divided by its H0 test statistic) because the non-null "
+#~ "asymptotic standard error from vcd::Kappa was unavailable for that rater, "
+#~ "most often because a rating category is unused at one time point and the "
+#~ "agreement table is near-degenerate. Null-SE intervals are too narrow when "
+#~ "kappa is high, so treat them as optimistic."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "At least one interval in this table was built from the null-hypothesis "
+#~ "standard error (kappa divided by its H0 test statistic) because the non-null "
+#~ "asymptotic standard error from vcd::Kappa was unavailable for that subgroup. "
+#~ "Null-SE intervals are too narrow when kappa is high, so treat them as "
+#~ "optimistic; three or more raters always use this fallback."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "At least one interval was built from the null-hypothesis standard error, "
+#~ "because vcd::Kappa returned no finite asymptotic standard error for that "
+#~ "institution (most often a category unused there). Such intervals are too "
+#~ "narrow when kappa is high, so treat them as optimistic."
+#~ msgstr ""
+
+#~ msgid "Average Net Benefit Over the Threshold Range"
+#~ msgstr ""
+
+#~ msgid "CI Method for Agreement"
+#~ msgstr ""
+
+#~ msgid "Class Variable (Gold Standard)"
+#~ msgstr ""
+
+#~ msgid "Clinical Decision Rule (binary)"
+#~ msgstr ""
+
+#~ msgid "Clinical Decision Rule Integration"
+#~ msgstr ""
+
+#~ msgid "Clinical Range Highlight"
+#~ msgstr ""
+
+#~ msgid "Cost Ratio (FP:FN)"
+#~ msgstr ""
+
+#~ msgid "Decision Consequences Table"
+#~ msgstr ""
+
+#~ msgid "Decision Curve Plot"
+#~ msgstr ""
+
+#~ msgid "Decision Rule Label"
+#~ msgstr ""
+
+#~ msgid "Decision Rule Positive Level"
+#~ msgstr ""
+
+#~ msgid "Enhanced Multi-Model Comparison"
+#~ msgstr ""
+
+#~ msgid "Exclude other observed levels"
+#~ msgstr ""
+
+#~ msgid "Fixed Analysis Type"
+#~ msgstr ""
+
+#~ msgid "Fixed sensitivity/Specificity analysis"
+#~ msgstr ""
+
+#~ msgid "Harm-to-Benefit Ratio"
+#~ msgstr ""
+
+#~ msgid "Highlight Range Maximum"
+#~ msgstr ""
+
+#~ msgid "Highlight Range Minimum"
+#~ msgstr ""
+
+#~ msgid "IDI/NRI Bootstrap Iterations"
+#~ msgstr ""
+
+#~ msgid "Illustrative Scenario Example"
+#~ msgstr ""
+
+#~ msgid "Interval Type"
+#~ msgstr ""
+
+#~ msgid "Maximum Thresholds to Display"
+#~ msgstr ""
+
+#~ msgid "Monetary Cost per Test/Screening"
+#~ msgstr ""
+
+#~ msgid "Monetary Cost per Treatment"
+#~ msgstr ""
+
+#~ msgid "Monetary Harm Assigned to a False Positive"
+#~ msgstr ""
+
+#~ msgid "Monetary Value Assigned to a True Positive"
+#~ msgstr ""
+
+#~ msgid "Net Interventions Avoided"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "No confidence interval is shown: across three or more rater × time-point "
+#~ "columns this row reports Fleiss' kappa, for which only the null-hypothesis "
+#~ "test statistic is available here. An interval built from that null standard "
+#~ "error would be too narrow at high kappa. The per-rater rows above carry "
+#~ "non-null intervals."
+#~ msgstr ""
+
+#~ msgid "NRI Risk Categories"
+#~ msgstr ""
+
+#~ msgid "Partial AUC From (Specificity)"
+#~ msgstr ""
+
+#~ msgid "Partial AUC To (Specificity)"
+#~ msgstr ""
+
+#~ msgid "Population Size for Projections"
+#~ msgstr ""
+
+#~ msgid "Power Analysis Type"
+#~ msgstr ""
+
+#~ msgid "Prediction Variables/Models"
+#~ msgstr ""
+
+#~ msgid "Prior AUC Belief"
+#~ msgstr ""
+
+#~ msgid "Prior Precision"
+#~ msgstr ""
+
+#~ msgid "Prior Prevalence Value"
+#~ msgstr ""
+
+#~ msgid "Quantile Positions"
+#~ msgstr ""
+
+#~ msgid "Reference Line Labels"
+#~ msgstr ""
+
+#~ msgid "Reference Test for IDI/NRI"
+#~ msgstr ""
+
+#~ msgid "Resource Utilization Analysis"
+#~ msgstr ""
+
+#~ msgid "Results Table"
+#~ msgstr ""
+
+#~ msgid "ROC Smoothing Method"
+#~ msgstr ""
+
+#~ msgid "Selected Thresholds for Table"
+#~ msgstr ""
+
+#~ msgid "Sensitivity/Specificity vs threshold"
+#~ msgstr ""
+
+#~ msgid "Test 1 Negative Level"
+#~ msgstr ""
+
+#~ msgid "Test 1 Positive Level"
+#~ msgstr ""
+
+#~ msgid "Test 2 (Required for Comparison)"
+#~ msgstr ""
+
+#~ msgid "Test 2 Negative Level"
+#~ msgstr ""
+
+#~ msgid "Test 2 Positive Level"
+#~ msgstr ""
+
+#~ msgid "Test 3 Negative Level"
+#~ msgstr ""
+
+#~ msgid "Test 3 Positive Level"
+#~ msgstr ""
+
+#~ msgid "Test Variables"
+#~ msgstr ""
+
+#~ msgid "Threshold Step Size"
+#~ msgstr ""
+
+#~ msgid "Treatment Threshold Range"
+#~ msgstr ""

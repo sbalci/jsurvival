@@ -1874,7 +1874,7 @@ survivalClass <- if (requireNamespace('jmvcore'))
                 self$results$coxTable$setNote(
                     "coerced_to_factor",
                     if (is.null(private$.explanatoryCoercedLevels)) NULL else sprintf(
-                        .("%s was supplied as a numeric column with only %d distinct values, so it is analysed as a categorical variable throughout: every hazard ratio compares one level with the reference level, not a one-unit increase. To model it as a linear trend instead, use Survival Analysis for Continuous Variable."),
+                        .("%s was supplied as a numeric column with only %d distinct values, so it is analyzed as a categorical variable throughout: every hazard ratio compares one level with the reference level, not a one-unit increase. To model it as a linear trend instead, use Survival Analysis for Continuous Variable."),
                         self$options$explanatory,
                         private$.explanatoryCoercedLevels
                     )

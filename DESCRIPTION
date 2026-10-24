@@ -26,6 +26,7 @@ Imports:
     finalfit,
     flexsurv,
     ggplot2,
+    ggpubr,
     glmnet,
     glue,
     graphics,

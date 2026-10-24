@@ -3127,7 +3127,7 @@ survivalBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   validation.
 #' @param seed Random seed for the reproducible bootstrap internal validation.
 #'   Change this value to obtain a different bootstrap draw; the default (42)
-#'   reproduces the previous fixed behaviour.
+#'   reproduces the previous fixed behavior.
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$cifTable} \tab \tab \tab \tab \tab a table \cr

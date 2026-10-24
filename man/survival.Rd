@@ -361,7 +361,7 @@ validation.}
 
 \item{seed}{Random seed for the reproducible bootstrap internal validation.
 Change this value to obtain a different bootstrap draw; the default (42)
-reproduces the previous fixed behaviour.}
+reproduces the previous fixed behavior.}
 }
 \value{
 A results object containing:

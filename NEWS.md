@@ -1,6 +1,18 @@
-# jsurvival 1.0.82.03 (development version)
+# jsurvival (development version)
 
-A development build, not released on its own. It stops LASSO Cox from guessing which outcome value is the event, puts saved risk scores back on the
+- **Multivariable Survival:** the plain-language summary names the interaction terms in the model,
+  and refreshes when the summary or plot options change.
+- **American spelling throughout** (analyzed, modeled, standardized, behavior, labeled). The Turkish
+  translations follow.
+- **Package:** `ggpubr`, used for the risk table under the Single Arm survival plot, is now declared
+  in Imports instead of arriving through survminer.
+- **Repository:** a personal settings file is no longer tracked.
+
+# jsurvival 1.1.1 (2026-10-21)
+
+The first release since 1.0.81. It also adds observed-time competing-risk options (cumulative
+incidence) to Survival Analysis and removes the Time Interval calculator from this module; the
+rest of this entry covers the development builds 1.0.82 to 1.0.82.03. It stops LASSO Cox from guessing which outcome value is the event, puts saved risk scores back on the
 right patients when a filter is active, and repairs `multisurvival` plots and data columns that went
 blank or stale.
 

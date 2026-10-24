@@ -873,7 +873,7 @@ options:
           R: >
             Random seed for the reproducible bootstrap internal validation.
             Change this value to obtain a different bootstrap draw; the default
-            (42) reproduces the previous fixed behaviour.
+            (42) reproduces the previous fixed behavior.
 
 
 ...
