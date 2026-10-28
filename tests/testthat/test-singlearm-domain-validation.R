@@ -354,6 +354,35 @@ test_that("risktable = FALSE still draws the curve alone", {
 })
 
 
+test_that("competing-risk plots render the CIF with and without at-risk counts", {
+    d <- data.frame(
+        time = c(10, 20, 30, 40, 50, 60),
+        status = factor(c("Event", "Event", "Competing", "Competing",
+                          "Censored", "Censored"),
+                        levels = c("Censored", "Event", "Competing")))
+
+    for (show_risk in c(FALSE, TRUE)) {
+        opts <- singlearmOptions$new(
+            elapsedtime = "time", outcome = "status", outcomeLevel = "Event",
+            tint = FALSE, sc = TRUE, risktable = show_risk,
+            timetypeoutput = "months", endplot = 60, byplot = 12,
+            dod = NULL, dooc = NULL, awd = NULL, awod = NULL)
+        a <- singlearmClass$new(options = opts, data = d)
+        a$run()
+        expect_true(a$results$plot_cif$visible)
+        labels <- drawn_text(expect_true(a$.__enclos_env__$private$.plotCIF(
+            a$results$plot_cif, ggplot2::theme_bw(), NULL)))
+
+        # Exercise the real ggpubr composition and inspect the rendered figure.
+        expect_true("Cumulative incidence" %in% labels)
+        expect_true(all(c("Event", "Competing") %in% labels))
+        expect_identical("At risk" %in% labels, show_risk)
+        if (show_risk)
+            expect_true(all(as.character(c(6, 5, 4, 3, 2, 1)) %in% labels))
+    }
+})
+
+
 # ---------------------------------------------------------- V3: explanations
 
 test_that("plot explanations do not depend on person-time metrics", {

@@ -35,6 +35,7 @@ importFrom(ggplot2,
   theme,
   theme_void
 )
+importFrom(ggpubr,ggarrange)
 importFrom(glmnet,cv.glmnet)
 importFrom(glue,glue)
 importFrom(graphics,par)

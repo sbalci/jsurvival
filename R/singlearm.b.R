@@ -2,6 +2,7 @@
 #' @importFrom R6 R6Class
 #' @importFrom ggplot2 ggplot aes geom_text geom_line geom_point labs theme_void theme element_blank scale_x_continuous scale_y_continuous annotate
 #' @importFrom gridExtra grid.arrange
+#' @importFrom ggpubr ggarrange
 #' @importFrom survminer ggsurvplot ggcompetingrisks
 #'
 #' @description
