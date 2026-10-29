@@ -36,6 +36,7 @@ importFrom(ggplot2,
   theme,
   theme_void
 )
+importFrom(ggpubr,ggarrange)
 importFrom(glmnet,cv.glmnet)
 importFrom(glue,glue)
 importFrom(graphics,par)
@@ -48,6 +49,7 @@ importFrom(labelled,set_variable_labels)
 importFrom(logistf,logistf)
 importFrom(lubridate,ymd)
 importFrom(magrittr,"%>%")
+importFrom(pROC,roc)
 importFrom(patchwork,wrap_plots)
 importFrom(riskRegression,Score)
 importFrom(rms,datadist)

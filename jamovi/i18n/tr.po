@@ -1089,6 +1089,14 @@ msgstr ""
 "Anlamlı olmayan bir test <i>ihlal için kanıt yokluğudur</i>; bu, varsayımın "
 "sağlandığını doğrulamakla aynı şey değildir."
 
+#: R/survival.b.R
+msgid ""
+"A p-value is given for covariate effects only; testing a distribution "
+"parameter (shape, scale, rate) against zero has no clinical meaning."
+msgstr ""
+"p değeri yalnızca kovaryat etkileri için verilir; bir dağılım parametresinin "
+"(şekil, ölçek, oran) sıfıra karşı test edilmesinin klinik bir anlamı yoktur."
+
 #: R/multisurvival.b.R
 msgid ""
 "A per-patient risk score could not be produced for this fit (the "
@@ -2174,10 +2182,6 @@ msgstr ""
 msgid "Assessment"
 msgstr "Değerlendirme"
 
-#: R/survival.b.R
-msgid "Assessment of Proportional Hazards Assumption"
-msgstr "Orantılı Hazardlar Varsayımının Değerlendirilmesi"
-
 #: R/multisurvival.b.R
 msgid ""
 "Assign every observed outcome level under Multiple Event Levels to continue. "
@@ -2372,12 +2376,6 @@ msgstr "BIC"
 #: oddsratio/options/outcome.title
 msgid "Binary Outcome"
 msgstr "İkili Sonuç"
-
-#: R/survivalcont.b.R
-msgid ""
-"Blank/NaN median or confidence limit indicates that the Kaplan-Meier curve "
-"did not reach 50% in that group during observed follow-up."
-msgstr ""
 
 #: R/lassocox.b.R
 msgid "Blue: lambda.min, Green: lambda.1se"
@@ -3320,6 +3318,15 @@ msgid "Confidence intervals and p-values use the subject-clustered robust varian
 msgstr ""
 "Güven aralıkları ve p-değerleri bireye göre kümelenmiş sağlam varyansı "
 "kullanır."
+
+#: R/multisurvival.b.R
+msgid ""
+"Confidence intervals are computed for the concordance index only; the Brier "
+"score, time-dependent AUC and integrated Brier score are reported without "
+"intervals."
+msgstr ""
+"Güven aralıkları yalnızca uyum indeksi için hesaplanır; Brier skoru, zamana "
+"bağlı EAA ve entegre Brier skoru aralık olmadan raporlanır."
 
 #: R/multisurvival.b.R
 msgid "Confidence intervals are those of that single prediction."
@@ -6356,10 +6363,10 @@ msgstr "İyi"
 #: R/survival.b.R
 msgid ""
 "Gray's test for equality of cumulative incidence of the event of interest "
-"across groups: chi-square = {stat}, df = {df}, p = {p}."
+"across groups: chi-square = {stat}, df = {df}, {p}."
 msgstr ""
 "İlgilenilen olayın kümülatif insidansının gruplar arasında eşitliği için "
-"Gray testi: ki-kare = {stat}, sd = {df}, p = {p}."
+"Gray testi: ki-kare = {stat}, sd = {df}, {p}."
 
 #: singlearm/results/cifTable.columns.title
 #: survival/results/cifTable.columns.title
@@ -9228,6 +9235,11 @@ msgstr "mevcut değil"
 msgid "Not computed"
 msgstr "Hesaplanmadı"
 
+#: R/singlearm.b.R
+#: R/survival.b.R
+msgid "Not computed for the cumulative-incidence median; see the table note."
+msgstr "Kümülatif insidans medyanı için hesaplanmadı; tablo notuna bakın."
+
 #: R/survival.b.R
 msgid "Not enough events / observations to fit a parametric survival model."
 msgstr "Parametrik bir sağkalım modeli kurmak için yeterli olay / gözlem yok."
@@ -9243,6 +9255,10 @@ msgstr ""
 #: R/multisurvival.b.R
 msgid "Not estimable (term is aliased)"
 msgstr "Tahmin edilemez (terim eşdoğrusal)"
+
+#: R/singlearm.b.R
+msgid "Not estimable at this time point; see the table note."
+msgstr "Bu zaman noktasında tahmin edilemez; tablo notuna bakın."
 
 #: R/survivalcont.b.R
 msgid ""
@@ -9270,6 +9286,20 @@ msgstr "model uydurucu tarafından tanımlanamadı"
 #: R/multisurvival.b.R
 msgid "not reached"
 msgstr ""
+
+#: R/singlearm.b.R
+#: R/survival.b.R
+#: R/survivalcont.b.R
+msgid "Not reached or not estimable within the observed follow-up."
+msgstr "Gözlemlenen takip süresi içinde ulaşılamadı veya tahmin edilemez."
+
+#: R/survivalcont.b.R
+msgid ""
+"Not reached: the Kaplan-Meier curve (or its confidence limit) did not cross "
+"50% in this group during observed follow-up."
+msgstr ""
+"Ulaşılamadı: Kaplan-Meier eğrisi (veya güven sınırı) bu grupta gözlemlenen "
+"takip süresi boyunca %50'yi geçmedi."
 
 #: R/multisurvival.b.R
 msgid "not reported for competing risks"
@@ -9727,7 +9757,7 @@ msgstr ""
 
 #: R/survivalcont.b.R
 msgid "only %d non-missing value(s) of '%s' are available; at least 10 are required"
-msgstr "'%s' için yalnızca %d eksik olmayan değer mevcut; en az 10 gereklidir"
+msgstr "'%2$s' için yalnızca %1$d eksik olmayan değer mevcut; en az 10 gereklidir"
 
 #: R/outcomeorganizer.b.R
 msgid ""
@@ -12048,10 +12078,6 @@ msgstr ""
 "Ölçeğe göre düzeltilmiş büyüklük, |katsayı| ile kodlanmış sütunun standart "
 "sapımının çarpımıdır. Yolda yer alma, bootstrap seçim sıklığı veya "
 "kararlılık kanıtı değildir."
-
-#: survivalcont/results/residualsTable.columns.title
-msgid "Schoenfeld (not case-aligned)"
-msgstr "Schoenfeld (olgu hizalı değil)"
 
 #: survivalcont/results/schoenfeldResidualsTable.columns.title
 msgid "Schoenfeld Residual"
@@ -15643,6 +15669,14 @@ msgstr "Zamana bağlı EAA (t = {t} {unit})"
 #: R/multisurvival.b.R
 msgid "Time-dependent metrics unavailable for a stratified model"
 msgstr "Tabakalı model için zamana bağlı ölçütler hesaplanamıyor"
+
+#: R/survival.b.R
+msgid ""
+"Time-point estimates in competing-risks mode are cumulative incidences; turn "
+"on 'All event types at selected times' to show them."
+msgstr ""
+"Yarışan riskler modunda zaman noktası tahminleri kümülatif insidanslardır; "
+"bunları göstermek için 'All event types at selected times' seçeneğini açın."
 
 #: singlearm/results/survTableHeading.title
 #: singlearm/results/survTable.title

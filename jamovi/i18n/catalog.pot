@@ -894,6 +894,12 @@ msgid ""
 "the same as confirming the assumption holds."
 msgstr ""
 
+#: R/survival.b.R
+msgid ""
+"A p-value is given for covariate effects only; testing a distribution "
+"parameter (shape, scale, rate) against zero has no clinical meaning."
+msgstr ""
+
 #: R/multisurvival.b.R
 msgid ""
 "A per-patient risk score could not be produced for this fit (the "
@@ -1838,10 +1844,6 @@ msgstr ""
 msgid "Assessment"
 msgstr ""
 
-#: R/survival.b.R
-msgid "Assessment of Proportional Hazards Assumption"
-msgstr ""
-
 #: R/multisurvival.b.R
 msgid ""
 "Assign every observed outcome level under Multiple Event Levels to continue. "
@@ -2002,12 +2004,6 @@ msgstr ""
 
 #: oddsratio/options/outcome.title
 msgid "Binary Outcome"
-msgstr ""
-
-#: R/survivalcont.b.R
-msgid ""
-"Blank/NaN median or confidence limit indicates that the Kaplan-Meier curve "
-"did not reach 50% in that group during observed follow-up."
 msgstr ""
 
 #: R/lassocox.b.R
@@ -2838,6 +2834,13 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "Confidence intervals and p-values use the subject-clustered robust variance."
+msgstr ""
+
+#: R/multisurvival.b.R
+msgid ""
+"Confidence intervals are computed for the concordance index only; the Brier "
+"score, time-dependent AUC and integrated Brier score are reported without "
+"intervals."
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -5461,7 +5464,7 @@ msgstr ""
 #: R/survival.b.R
 msgid ""
 "Gray's test for equality of cumulative incidence of the event of interest "
-"across groups: chi-square = {stat}, df = {df}, p = {p}."
+"across groups: chi-square = {stat}, df = {df}, {p}."
 msgstr ""
 
 #: singlearm/results/cifTable.columns.title
@@ -7990,6 +7993,11 @@ msgstr ""
 msgid "Not computed"
 msgstr ""
 
+#: R/singlearm.b.R
+#: R/survival.b.R
+msgid "Not computed for the cumulative-incidence median; see the table note."
+msgstr ""
+
 #: R/survival.b.R
 msgid "Not enough events / observations to fit a parametric survival model."
 msgstr ""
@@ -8004,6 +8012,10 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "Not estimable (term is aliased)"
+msgstr ""
+
+#: R/singlearm.b.R
+msgid "Not estimable at this time point; see the table note."
 msgstr ""
 
 #: R/survivalcont.b.R
@@ -8025,6 +8037,18 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "not reached"
+msgstr ""
+
+#: R/singlearm.b.R
+#: R/survival.b.R
+#: R/survivalcont.b.R
+msgid "Not reached or not estimable within the observed follow-up."
+msgstr ""
+
+#: R/survivalcont.b.R
+msgid ""
+"Not reached: the Kaplan-Meier curve (or its confidence limit) did not cross "
+"50% in this group during observed follow-up."
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -10461,10 +10485,6 @@ msgid ""
 "Scale-adjusted magnitude is |coefficient| multiplied by the encoded-column "
 "standard deviation. Path inclusion is not bootstrap selection frequency or "
 "evidence of stability."
-msgstr ""
-
-#: survivalcont/results/residualsTable.columns.title
-msgid "Schoenfeld (not case-aligned)"
 msgstr ""
 
 #: survivalcont/results/schoenfeldResidualsTable.columns.title
@@ -13385,6 +13405,12 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "Time-dependent metrics unavailable for a stratified model"
+msgstr ""
+
+#: R/survival.b.R
+msgid ""
+"Time-point estimates in competing-risks mode are cumulative incidences; turn "
+"on 'All event types at selected times' to show them."
 msgstr ""
 
 #: singlearm/results/survTableHeading.title

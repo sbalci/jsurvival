@@ -1,5 +1,39 @@
-# jsurvival (development version)
+# jsurvival 1.1.3
 
+## Behavior changes -- saved analyses may produce different results
+
+- **Odds Ratio:** new **Negative Level** and **Predictor Negative Level** options name the
+  reference outcome and the negative test result explicitly. Both outcome levels must be chosen;
+  any other outcome levels are excluded instead of being pooled.
+
+## New and fixed
+
+- **Comprehensive Time Interval Calculator** is back in this module (Survival > Data Preparation).
+- **LASSO Cox:** a factor predictor carrying an explicit `NA` level (for example from `addNA()`) is
+  treated as missing instead of as a category of its own. The generated R syntax keeps every
+  option the analysis ran with.
+- **Date-Time Converter:** Unix epoch values in milliseconds are detected and converted, with a
+  note saying so.
+- **No more "NaN" cells:** a median that is not reached, and a confidence limit or p-value that is
+  not computed, are now blank with a footnote or table note saying why (Survival Analysis, Single
+  Arm, Survival Analysis (continuous), Multivariable Survival). The always-empty Schoenfeld column
+  of the case-level residuals table is removed; those residuals stay in the event-time table.
+- **Survival Analysis (continuous):** with quantile cut-offs, a minimum group size that the
+  requested quantiles cannot meet now falls back to fewer equal-sized groups (for example tertiles)
+  instead of an uneven split. The survival-plots explanation now appears only when **Show
+  explanations** is on.
+- **Survival Analysis:** in competing-risks mode the Kaplan-Meier survival table is no longer shown
+  empty; the median table says where the cumulative-incidence time-point estimates are when that
+  table is off. Age-adjusted outputs appear only when **Age-adjusted Cox regression** is on (they used to show
+  empty). The log-log plot draws the Kaplan-Meier steps at the observed event times.
+- **p-values read "p < 0.001" or "p = 0.042"** instead of "p=<0.001", "p = < 0.001" or
+  "p = 0.000" (Survival Analysis, Survival Analysis (continuous)). The continuous-variable Cox text
+  shows bold headings instead of literal `**` marks.
+- **Multivariable Survival:** the clinical summary names each term as entered ("treatment: B
+  (vs A)") instead of the internal coefficient name ("treatmentB").
+- **Single Arm:** the time-point summary keeps the capitals in "Kaplan-Meier".
+- **Survival Analysis (continuous), Turkish:** with fewer than 10 non-missing predictor values the
+  multiple cut-off analysis now gives the minimum-count message instead of a formatting error.
 - **Multivariable Survival:** the plain-language summary names the interaction terms in the model,
   and refreshes when the summary or plot options change.
 - **American spelling throughout** (analyzed, modeled, standardized, behavior, labeled). The Turkish

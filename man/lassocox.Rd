@@ -175,7 +175,7 @@ development. Apparent performance requires internal and external validation
 before clinical use.
 }
 \examples{
-\dontrun{
+\donttest{
 lassocox(
     data = lassocox_breast_cancer,
     elapsedtime = "survival_months",
