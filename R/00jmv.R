@@ -101,6 +101,13 @@
         `pages`="457-481", 
         `doi`="10.1080/01621459.1958.10501452", 
         `url`="https://doi.org/10.1080/01621459.1958.10501452"), 
+    `MASS`=list(
+        `type`="software", 
+        `author`="Ripley, B., Venables W., Bates, D. M., Hornik, K., Gebhardt, A., & Firth, D.", 
+        `year`=2018, 
+        `title`="MASS: Support Functions and Datasets for Venables and Ripley's MASS", 
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=MASS", 
+        `url`="https://CRAN.R-project.org/package=MASS"), 
     `Matrix`=list(
         `type`="software", 
         `author`="Douglas Bates, Martin Maechler, Mikael Jagan", 
@@ -238,6 +245,13 @@
         `title`="The R Graphics Package", 
         `publisher`="[R package version 4.6.0]. Retrieved from https://CRAN.R-project.org/package=graphics", 
         `url`="https://CRAN.R-project.org/package=graphics"), 
+    `htmltools`=list(
+        `type`="software", 
+        `author`="Joe Cheng, Carson Sievert, Barret Schloerke, Winston Chang, Yihui Xie, Jeff Allen", 
+        `year`=2025, 
+        `title`="htmltools: R package", 
+        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=htmltools", 
+        `url`="https://CRAN.R-project.org/package=htmltools"), 
     `janitor`=list(
         `type`="software", 
         `author`="Firke, S.", 
@@ -298,6 +312,13 @@
         `pages`="39-40", 
         `doi`="10.2105/AJPH.2012.300897", 
         `url`="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3518362/"), 
+    `pROC`=list(
+        `type`="software", 
+        `author`="Xavier Robin", 
+        `year`=2026, 
+        `title`="pROC: Display and Analyze ROC Curves", 
+        `publisher`="[R package version 1.19.1]. Retrieved from https://CRAN.R-project.org/package=pROC", 
+        `url`="https://CRAN.R-project.org/package=pROC"), 
     `padjust`=list(
         `type`="website", 
         `author`="R Core Team", 
@@ -378,9 +399,8 @@
         `type`="software", 
         `author`="R Core Team", 
         `year`=2026, 
-        `title`="tools: R package", 
-        `publisher`="[R package]. Retrieved from https://CRAN.R-project.org/package=tools", 
-        `url`="https://CRAN.R-project.org/package=tools"), 
+        `title`="tools: Tools for Package Development (Base R)", 
+        `publisher`="[R base package]. R Foundation for Statistical Computing"), 
     `tripod`=list(
         `type`="article", 
         `author`="Collins, G. S., Reitsma, J. B., Altman, D. G., & Moons, K. G. M.", 

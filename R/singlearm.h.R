@@ -1063,7 +1063,6 @@ singlearmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs=list(
                     "KaplanMeier1958"),
                 visible="(sc && (!multievent || analysistype:overall || analysistype:cause || analysistype:dfs))",
-                requiresData=TRUE,
                 clearWith=list(
                     "sc",
                     "endplot",
@@ -1528,7 +1527,7 @@ singlearmBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 package = "jsurvival",
                 name = "singlearm",
-                version = c(1,1,1),
+                version = c(1,1,3),
                 options = options,
                 results = singlearmResults$new(options=options),
                 data = data,

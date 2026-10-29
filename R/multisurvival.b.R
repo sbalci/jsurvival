@@ -307,7 +307,7 @@
       if (!is.null(strongest_var) && !is.null(strongest_effect)) {
         summary_parts$strongest <- .fmt(
           .("Strongest predictor: {variable} was associated with {effect} ({measure} = {hr})."),
-          variable = strongest_var, effect = strongest_effect, measure = effect_name, hr = round(strongest_hr, 2))
+          variable = htmltools::htmlEscape(as.character(strongest_var)), effect = strongest_effect, measure = effect_name, hr = round(strongest_hr, 2))
       }
     } else {
       summary_parts$findings <- paste0(
@@ -396,6 +396,32 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
     inherit = multisurvivalBase,
     private = list(
 
+      .sourcifyOption = function(option) {
+        # Saved files can supply undeclared names and values of any option type.
+        if (!option$name %in% names(formals(multisurvival))) return("")
+        if (identical(option$name, "data")) return(super$.sourcifyOption(option))
+
+        value <- option$value
+        if (identical(value, option$default)) return("")
+        plain <- function(x) {
+          typeof(x) %in% c("NULL", "logical", "integer", "double", "character") &&
+            length(setdiff(names(attributes(x)), "names")) == 0L
+        }
+        if (is.list(value)) {
+          # Terms legitimately contain character vectors; their names are not syntax.
+          if (!identical(option$name, "interactions") ||
+              !all(vapply(value, function(x) is.character(x) && plain(x), logical(1))))
+            return("")
+          value <- unname(lapply(value, unname))
+        } else if (!plain(value)) {
+          return("")
+        }
+
+        # Only unnamed primitive literals reach deparse(), never saved list names.
+        literal <- paste(deparse(unname(value), width.cutoff = 500L), collapse = "\n")
+        paste0(option$name, " = ", literal)
+      },
+
       # Constants for plot sizing
       PLOT_WIDTH_FACTOR = 400,
       PLOT_HEIGHT_FACTOR = 300,
@@ -432,8 +458,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
       # HTML notice helper (replaces self$results$insert(N, jmvcore::Notice))
       # See R/survivalcont.b.R:700-743 for canonical pattern.
-      # The protobuf serialization of Notice objects can fail with
-      # "attempt to apply non-function"; rendering to dedicated Html outputs avoids it.
+      # Dedicated Html outputs support the module's multi-line notice layout.
       .addHtmlMessage = function(type, title, message) {
           output_name <- switch(type,
               "error" = "errors",
@@ -508,9 +533,10 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
       # warning after the user adds data) would persist stale across re-runs.
       .initializeMessageOutputs = function() {
           for (nm in c("errors", "strongWarnings", "warnings", "infoMessages")) {
-              self$results[[nm]]$setContent("")
+              self$results[[nm]]$setContent("<div></div>")
               self$results[[nm]]$setVisible(FALSE)
           }
+          self$results$eventRecodeInfo$setContent("<div></div>")
       },
 
       # Populate the interaction (effect-modification) test table and the
@@ -525,44 +551,18 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # appended AFTER the subgroup loop, and only when the within-subgroup
         # table actually comes out empty (see below), so it does not clutter the
         # panel when subgroup HRs are present.
-        th <- function(x) paste0("<th style='border:1px solid #ccc;padding:3px 8px;text-align:left;'>", x, "</th>")
-        td <- function(x) paste0("<td style='border:1px solid #ccc;padding:3px 8px;'>", x, "</td>")
         interaction_expl_base <- paste0(
-          "<div style='font-size:13px;line-height:1.55;'>",
+          "<div style='font-size:13px;line-height:1.55;max-width:100%;overflow-wrap:anywhere;'>",
           "<p><b>", .("Interaction (Effect-Modification) Test."), "</b> ",
-          .("One row per crossed term."), " ",
-          .("The HR is the ratio of one variable's hazard ratio between the levels of the other; a small p indicates evidence that the effect of one variable <b>depends on</b> the other (effect modification)."), " ",
-          .("A treatment-by-biomarker interaction supports a predictive-biomarker claim only in an appropriate treatment-comparison design with pre-specified validation."), " ",
-          .("HR = 1 means no modification."), "</p>",
+          .("Each coefficient row tests an interaction contrast. For a term spanning several coefficients, read the joint test to assess overall effect modification. HR = 1 means no modification on that contrast."), " ",
+          .("A treatment-by-biomarker interaction supports a predictive-biomarker claim only in an appropriate treatment-comparison design with pre-specified validation."), "</p>",
           "<p><b>", .("Within-Subgroup Hazard Ratios."), "</b> ",
-          .("The focal variable's HR <i>within each level of the categorical moderator</i>."), " ",
-          .("For a term A \u{00D7} B the subgroups are formed by whichever variable is categorical (the moderator), and the HR shown is the other variable's effect within each subgroup."), " ",
-          .("These are read from the single interaction model by relevel-and-refit: the model's implied conditional effects."), " ",
-          .("They pool information across subgroups, so the confidence intervals are typically narrower (and p-values smaller) than fitting a separate Cox model within each subgroup; the point estimates are nearly identical."), "</p>",
-          "<p><b>", .("Are the subgroup HRs from the interaction model, or from separate per-subgroup fits?"), "</b> ",
-          .("Directly from the single interaction model, not from separate subgroup Cox fits."), " ",
-          .("For each moderator level the module relevels the moderator so that level is the reference and refits the <i>same</i> full model (Surv ~ focal \u{00D7} moderator, plus any other covariates you included)."), " ",
-          .("Releveling changes only the parameterization, not the fit, so the focal main-effect coefficient in the releveled model is the focal effect <i>within</i> that moderator level: HR = exp(coef), with CI and p taken from that model's variance-covariance matrix."), " ",
-          .("This is equivalent to reading \u{03B2}(focal) and \u{03B2}(focal) + \u{03B2}(focal:moderator) off the one interaction model; releveling is simply how each conditional effect is read, with the correct standard error, directly."), "</p>",
-          "<p><b>", .("Why do the subgroup HRs nearly match but the CIs and p-values differ from separate within-subgroup Cox models?"), "</b> ",
-          .("This is the expected, core statistical distinction between one interaction model and per-subgroup fits:"), "</p>",
-          "<table style='border-collapse:collapse;font-size:12px;margin:6px 0;'>",
-          "<tr style='background-color: rgba(33, 33, 33, 0.07); color: inherit;'>", th(""), th(.("Interaction model (this module)")), th(.("Separate Cox per subgroup")), "</tr>",
-          "<tr>", td(paste0("<b>", .("Baseline hazard"), "</b>")), td(.("common across moderator levels")), td(.("each subgroup has its own")), "</tr>",
-          "<tr>", td(paste0("<b>", .("Other covariates' effects"), "</b>")), td(.("assumed common (pooled)")), td(.("re-estimated per subgroup")), "</tr>",
-          "<tr>", td(paste0("<b>", .("Standard errors"), "</b>")), td(.("pool information across subgroups")), td(.("subgroup data only")), "</tr>",
-          "<tr>", td(paste0("<b>", .("Efficiency"), "</b>")), td(.("higher (narrower CI, more power)")), td(.("lower (wider CI)")), "</tr>",
-          "</table>",
-          "<p><b>", .("HRs nearly identical:"), "</b> ",
-          .("with only focal \u{00D7} moderator in the model, they differ only because the interaction model uses a common baseline hazard across moderator levels while a subgroup-only fit uses a moderator-specific baseline (Cox's risk sets differ)."), " ",
-          .("With other covariates included, the small gap also reflects the interaction model's assumption of common covariate effects; hence \u201cvery close but not exactly equal\u201d."), "</p>",
-          "<p><b>", .("CIs and p-values differ:"), "</b> ",
-          .("the interaction model borrows strength across both subgroups for the variance, giving tighter intervals and smaller p; a separate fit sees only that subgroup's data, giving wider intervals."), " ",
-          .("Both are valid but answer subtly different questions; the interaction-model (conditional) subgroup effect is the more efficient estimand preferred for predictive-biomarker subgroup analysis, and is what this table reports (an implied conditional effect of the single interaction model, not an independent subgroup fit)."), "</p>",
-          "<p><b>", .("A note on sample size when comparing to a manual per-subgroup fit:"), "</b> ",
-          .("this analysis uses complete cases across <i>all</i> selected variables, whereas fitting one marker at a time (for example per-marker na.omit()) uses that marker's own complete-case set."), " ",
-          .("To compare a single subgroup head-to-head, match the row set (analyze that one marker with the moderator); otherwise the N and event count, and therefore the CI and p, can differ for that reason alone."), "</p>",
-          "</div>")
+          .("For each two-way interaction with a categorical moderator, these are conditional effects implied by the single full interaction model. The moderator is releveled and the same model is refitted; its focal coefficient and covariance give the subgroup HR, CI and p-value."), " ",
+          .("If only one variable is categorical, that variable defines the subgroups. Continuous-by-continuous and higher-order interactions do not have discrete subgroup HRs here."), "</p>",
+          "<p><b>", .("Comparison with separate subgroup fits."), "</b> ",
+          .("The interaction model shares a baseline hazard and the non-interacting covariate effects across moderator levels, within any selected strata. Separate subgroup models estimate these independently. Their HRs, confidence intervals and p-values can differ substantially; neither closer estimates nor narrower intervals are guaranteed."), " ",
+          .("Compare models on the same complete-case rows and choose the model assumptions to match the study question."), "</p>",
+          "<p>", .("Subgroup p-values are exploratory and are not adjusted for multiple comparisons. Significance in one subgroup but not another does not establish effect modification; use the interaction test."), "</p></div>")
         self$results$interactionExplanation$setContent(interaction_expl_base)
 
         # --- Interaction (effect-modification) test table ---
@@ -618,8 +618,14 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         nonconverged <- character(0)
         for (term in real_interactions) {
           info <- .interactionModeratorInfo(term, data)
-          if (!isTRUE(info$twoway)) { skipped_highorder <- TRUE; next }
-          if (!isTRUE(info$categorical_moderator)) { skipped_continuous <- TRUE; next }
+          if (!isTRUE(info$twoway)) {
+            skipped_highorder <- TRUE
+            next
+          }
+          if (!isTRUE(info$categorical_moderator)) {
+            skipped_continuous <- TRUE
+            next
+          }
           if (isTRUE(info$swapped)) any_swapped <- TRUE
           sub <- tryCatch(
             .computeSubgroupHRs(cox_formula, data,
@@ -1003,12 +1009,10 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           jmvcore::reject(.("Data must have column names"))
         }
 
-        # Add row names if missing
-        if (is.null(rownames(mydata))) {
-          mydata$row_names <- seq_len(nrow(mydata))
-        } else {
-          mydata$row_names <- rownames(mydata)
-        }
+        # Preserve spreadsheet identity before creating any internal columns.
+        # A user predictor called row_names must not be replaced by these IDs.
+        row_ids <- rownames(mydata)
+        if (is.null(row_ids)) row_ids <- as.character(seq_len(nrow(mydata)))
 
         # Get original names
         original_names <- names(mydata)
@@ -1047,6 +1051,17 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           ))
         }
 
+
+        # Protect source variables whose cleaned names match temporary columns.
+        # Otherwise mytime/myoutcome collide in the joins, row_names becomes an
+        # accidental patient-ID predictor, and fgid is overwritten by finegray.
+        reserved <- c("row_names", "mytime", "myoutcome", "fgid",
+                      "fgstart", "fgstop", "fgstatus", "fgwt")
+        names(mydata_cleaned) <- make.unique(
+          c(reserved, names(mydata_cleaned)), sep = "_"
+        )[-seq_along(reserved)]
+        mydata_cleaned$row_names <- row_ids
+        original_names <- c(original_names, "row_names")
 
         # Create corrected labels
         corrected_labels <- stats::setNames(original_names, names(mydata_cleaned))
@@ -1354,6 +1369,11 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
         }
 
+        # Missing follow-up is excluded later; an infinite value is a data error.
+        if (any(!is.na(mydata$mytime) & !is.finite(mydata$mytime))) {
+          jmvcore::reject(.("Use finite follow-up times. Infinite time values cannot be analyzed; check the elapsed-time column or the selected dates."))
+        }
+
         ### Early validation: Check for negative times immediately after calculation ----
         # This prevents wasted computation in downstream cleaning and model fitting
         if (any(mydata$mytime < 0, na.rm = TRUE)) {
@@ -1510,12 +1530,18 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         cleanData <- dplyr::left_join(time, outcome, by = "row_names") %>%
           dplyr::left_join(factor, by = "row_names")
 
+        cleanData_pre <- cleanData
+        has_outcome_pre <- !is.na(cleanData_pre$myoutcome)
+        ev_pre <- .eventIndicator(cleanData_pre$myoutcome)
+        is_pre_landmark <- rep(FALSE, nrow(cleanData_pre))
+
         ## Landmark ----
 
         # https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html#landmark_method
 
         if (self$options$uselandmark) {
           landmark <- jmvcore::toNumeric(self$options$landmark)
+          is_pre_landmark <- !is.na(cleanData_pre$mytime) & cleanData_pre$mytime < landmark
 
           # dplyr::filter also drops rows whose mytime is NA (NA >= landmark is
           # NA), and .definemytime() yields NA for a blank time cell or a date
@@ -1592,6 +1618,11 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         }
         cleanData <- clean_model
 
+        in_final_model <- cleanData_pre$row_names %in% cleanData$row_names
+        dropped_cov_time_mask <- has_outcome_pre & !is_pre_landmark & !in_final_model
+        n_missing_cov_time <- as.integer(sum(dropped_cov_time_mask))
+        n_missing_cov_time_events <- as.integer(sum(ev_pre[dropped_cov_time_mask], na.rm = TRUE))
+
 
 
         ## Add Calculated Time to Data ----
@@ -1626,6 +1657,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
             "cleanData" = cleanData,
             "n_missing_rows" = n_missing_rows,
+            "n_missing_cov_time" = n_missing_cov_time,
+            "n_missing_cov_time_events" = n_missing_cov_time_events,
             "mydata_labelled" = mydata_labelled,
             "mytime_labelled" = mytime_labelled,
             "myoutcome_labelled" = myoutcome_labelled,
@@ -1673,13 +1706,17 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           return(FALSE)
         }
 
-        # Additional specific validations for multievent scenarios
+        # An unfinished mapping is configuration, not a model failure. Do not
+        # require a death category: DFS can contain recurrence events only.
+        # The shared coder checks all observed levels once mapping has begun.
         if (self$options$multievent) {
-          if (is.null(self$options$dod) && is.null(self$options$dooc)) {
+          mappings <- list(self$options$dod, self$options$dooc,
+                           self$options$awd, self$options$awod)
+          if (all(vapply(mappings, is.null, logical(1)))) {
             private$.addHtmlMessage(
-              "error",
-              .("Multiple events configuration error"),
-              .("When using multiple event levels, you must specify at least one event type (Dead of Disease or Dead of Other Causes). Select at least one event level from the outcome variable and ensure it has the appropriate levels."))
+              "info",
+              .("Assign outcome levels"),
+              .("Assign every observed outcome level under Multiple Event Levels to continue. Categories absent from the cohort may remain unselected."))
             self$results$todo$setVisible(FALSE)
             return(FALSE)
           }
@@ -1943,6 +1980,13 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           self$results$eventRecodeInfo$setContent(recode_html)
         }
 
+        if (isTRUE(self$options$multievent) && identical(self$options$analysistype, "dfs")) {
+          private$.addHtmlMessage(
+            "info",
+            .("Disease-free endpoint timing"),
+            .("For disease-free survival, follow-up must end at the first qualifying recurrence or death, or at censoring if neither occurred. Disease status at the last visit alone cannot establish the time of the first event."))
+        }
+
         # Generate analysis completion summary notice
         # This provides confidence that analysis completed and summarizes key metrics
         tryCatch({
@@ -1981,14 +2025,13 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           recode_note <- ""
           rc <- private$.eventRecode
           if (!is.null(rc)) {
-            rc_total <- sum(c(rc$n_event, rc$n_censored, rc$n_missing), na.rm = TRUE)
-            dropped <- rc_total - n_obs
-            dropped_ev <- if (!is.null(rc$n_event)) rc$n_event - n_events else NA_integer_
-            if (!is.na(dropped) && dropped > 0)
+            dropped <- cleaneddata$n_missing_cov_time
+            dropped_ev <- cleaneddata$n_missing_cov_time_events
+            if (!is.null(dropped) && !is.na(dropped) && dropped > 0)
               recode_note <- paste0(" ", .fmt(
                 .("A further {rows} row(s){events} were excluded from the model because the follow-up time or at least one selected covariate was missing; the outcome recode shown above counts the outcome column alone."),
                 rows = dropped,
-                events = if (!is.na(dropped_ev) && dropped_ev > 0)
+                events = if (!is.null(dropped_ev) && !is.na(dropped_ev) && dropped_ev > 0)
                   paste0(" ", .fmt(.("({count} of them events)"), count = dropped_ev)) else ""
               ))
           }
@@ -2215,11 +2258,14 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # Capture fitter warnings (monotone likelihood / "coefficient may be
         # infinite", ran out of iterations, singular X) so they reach the
         # results pane as a notice instead of only the Analysis Notes.
-        cox_fit_warnings <- character(0)
-        .capture_fit <- function(expr) withCallingHandlers(expr, warning = function(w) {
-          cox_fit_warnings <<- c(cox_fit_warnings, conditionMessage(w))
-          invokeRestart("muffleWarning")
-        })
+        warn_env <- new.env(parent = emptyenv())
+        warn_env$msgs <- character(0)
+        .capture_fit <- function(expr) {
+          withCallingHandlers(expr, warning = function(w) {
+            warn_env$msgs <- c(warn_env$msgs, conditionMessage(w))
+            invokeRestart("muffleWarning")
+          })
+        }
 
         if (private$.isCompetingRisk()) {
             # Use Fine-Gray model
@@ -2274,8 +2320,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             ))
         }
 
-        if (length(cox_fit_warnings) > 0) {
-          msgs <- unique(trimws(cox_fit_warnings))
+        if (length(warn_env$msgs) > 0) {
+          msgs <- unique(trimws(warn_env$msgs))
           # coxph names the offending column(s) by index ("... before
           # variable  2,3 ; ..."); map them back to coefficient names.
           coef_names <- names(stats::coef(cox_model))
@@ -2332,7 +2378,9 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                epv = if (n_coef > 0 && !is.na(n_events)) n_events / n_coef else NA_real_)
         }, error = function(e) list(events = NA, coefficients = NA, epv = NA))
 
-        .ev <- epv_info$events; .k <- epv_info$coefficients; .epv <- epv_info$epv
+        .ev <- epv_info$events
+        .k <- epv_info$coefficients
+        .epv <- epv_info$epv
         if (!is.na(.ev) && !is.na(.k) && .k > 0 &&
             (.ev < 50 || (!is.na(.epv) && .epv < 10))) {
           # One notice, graded by severity: fewer than 20 events or fewer than
@@ -2483,63 +2531,61 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         ))
 
         # FIX: Add group-stratified person-time analysis
-        # If explanatory variables exist, calculate person-time for each group
+        # If explanatory variables exist, calculate person-time for each categorical variable's levels
         if (!is.null(self$options$explanatory) && length(self$options$explanatory) > 0) {
-          # Group by the first explanatory variable. cleanData carries the
-          # janitor-cleaned column name (`sex`) while the option holds the
-          # user's label (`Sex`); indexing with the label made this whole block
-          # silently skip for any capitalised or spaced variable name.
-          group_var <- cleaneddata$myexplanatory_labelled[1]
-          group_label <- self$options$explanatory[[1]]
+          rowKey_counter <- 2  # Start after overall row
+          for (k in seq_along(cleaneddata$myexplanatory_labelled)) {
+            group_var <- cleaneddata$myexplanatory_labelled[k]
+            group_label <- if (k <= length(self$options$explanatory))
+              self$options$explanatory[[k]] else group_var
 
-          if (!is.null(group_var) && !is.na(group_var) && group_var %in% names(mydata)) {
-            # Preserve declared factor level order so row permutations do not
-            # swap subgroup rows in personTimeTable.
-            groups <- if (is.factor(mydata[[group_var]])) {
-              levels(droplevels(mydata[[group_var]]))
-            } else {
-              unique(mydata[[group_var]])
-            }
-            groups <- groups[!is.na(groups)]  # Remove NA groups
+            if (!is.null(group_var) && !is.na(group_var) && group_var %in% names(mydata)) {
+              # Preserve declared factor level order so row permutations do not
+              # swap subgroup rows in personTimeTable.
+              groups <- if (is.factor(mydata[[group_var]])) {
+                levels(droplevels(mydata[[group_var]]))
+              } else {
+                unique(mydata[[group_var]])
+              }
+              groups <- groups[!is.na(groups)]  # Remove NA groups
 
-            rowKey_counter <- 2  # Start after overall row
+              for (group in groups) {
+                # Filter data for this group
+                group_data <- mydata[mydata[[group_var]] == group, ]
+                group_events <- event_indicator[mydata[[group_var]] == group]
 
-            for (group in groups) {
-              # Filter data for this group
-              group_data <- mydata[mydata[[group_var]] == group, ]
-              group_events <- event_indicator[mydata[[group_var]] == group]
+                if (nrow(group_data) > 0) {
+                  # Calculate group-specific metrics
+                  group_time <- sum(group_data[["mytime"]], na.rm = TRUE)
+                  group_events_count <- sum(group_events, na.rm = TRUE)
 
-              if (nrow(group_data) > 0) {
-                # Calculate group-specific metrics
-                group_time <- sum(group_data[["mytime"]], na.rm = TRUE)
-                group_events_count <- sum(group_events, na.rm = TRUE)
+                  # Calculate group incidence rate
+                  if (group_time > 0) {
+                    group_rate <- (group_events_count / group_time) * rate_multiplier
 
-                # Calculate group incidence rate
-                if (group_time > 0) {
-                  group_rate <- (group_events_count / group_time) * rate_multiplier
+                    # Calculate confidence intervals using Poisson exact method
+                    if (group_events_count > 0) {
+                      group_ci_lower <- (stats::qchisq(0.025, 2*group_events_count) / 2) / group_time * rate_multiplier
+                      group_ci_upper <- (stats::qchisq(0.975, 2*(group_events_count + 1)) / 2) / group_time * rate_multiplier
+                    } else {
+                      group_ci_lower <- 0
+                      group_ci_upper <- (stats::qchisq(0.975, 2) / 2) / group_time * rate_multiplier
+                    }
 
-                  # Calculate confidence intervals using Poisson exact method
-                  if (group_events_count > 0) {
-                    group_ci_lower <- (stats::qchisq(0.025, 2*group_events_count) / 2) / group_time * rate_multiplier
-                    group_ci_upper <- (stats::qchisq(0.975, 2*(group_events_count + 1)) / 2) / group_time * rate_multiplier
-                  } else {
-                    group_ci_lower <- 0
-                    group_ci_upper <- (stats::qchisq(0.975, 2) / 2) / group_time * rate_multiplier
+                    # Add to personTimeTable with group label.
+                    # Use a "grp_" key namespace disjoint from the "int_" interval
+                    # rows below so the two sub-loops never collide on rowKey.
+                    self$results$personTimeTable$addRow(rowKey=paste0("grp_", rowKey_counter), values=list(
+                      interval=paste0(group_label, ": ", as.character(group)),
+                      events=group_events_count,
+                      person_time=round(group_time, 2),
+                      rate=round(group_rate, 2),
+                      rate_ci_lower=round(group_ci_lower, 2),
+                      rate_ci_upper=round(group_ci_upper, 2)
+                    ))
+
+                    rowKey_counter <- rowKey_counter + 1
                   }
-
-                  # Add to personTimeTable with group label.
-                  # Use a "grp_" key namespace disjoint from the "int_" interval
-                  # rows below so the two sub-loops never collide on rowKey.
-                  self$results$personTimeTable$addRow(rowKey=paste0("grp_", rowKey_counter), values=list(
-                    interval=paste0(group_label, ": ", as.character(group)),
-                    events=group_events_count,
-                    person_time=round(group_time, 2),
-                    rate=round(group_rate, 2),
-                    rate_ci_lower=round(group_ci_lower, 2),
-                    rate_ci_upper=round(group_ci_upper, 2)
-                  ))
-
-                  rowKey_counter <- rowKey_counter + 1
                 }
               }
             }
@@ -2653,7 +2699,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # Create summary text with interpretation
         summary_html <- paste0(
           "<h4>", .("Person-Time Analysis Summary"), "</h4>",
-          "<p>", .fmt(.("Total follow-up time: <b>{time} person-{unit}</b>"), time = round(total_time, 1), unit = time_unit), "</p>",
+          "<p>", .fmt(.("Total follow-up time: <b>{time} person-{unit}</b>"), time = round(total_time, 2), unit = time_unit), "</p>",
           "<p>", .fmt(.("Number of events: <b>{events}</b>"), events = total_events), "</p>",
           "<p>", .fmt(.("Overall incidence rate: <b>{rate}</b> per {multiplier} person-{unit} (95% CI {lower} to {upper})"),
                       rate = round(overall_rate, 2), multiplier = rate_multiplier, unit = time_unit,
@@ -2773,7 +2819,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
               # overwrite these, so the old "Performance metric error ... has new
               # levels" text and an empty Brier frame stayed on the page next to
               # the notice explaining that the metrics were not computed.
-              try(self$results$survMetricsSummary$setContent(""), silent = TRUE)
+              try(self$results$survMetricsSummary$setContent("<div></div>"), silent = TRUE)
               try(self$results$survMetricsSummary$setVisible(FALSE), silent = TRUE)
               try(self$results$survMetricsPlot$setVisible(FALSE), silent = TRUE)
               return(invisible(NULL))
@@ -2911,7 +2957,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
               "<p style='background-color: rgba(255, 161, 33, 0.12);border-left:4px solid #e67e22;padding:8px;margin:10px 0; color: inherit;'>",
               "<b>", .("These are apparent (in-sample) estimates."), "</b> ",
               .("The model was fitted and evaluated on the same observations, with no bootstrap correction, cross-validation or held-out set, so every value here is optimistic, typically substantially so with many covariates or few events."), " ",
-              .("Treat them as an upper bound on the performance this model would show in new patients (TRIPOD, Collins et al. 2015)."), "</p>",
+              .("Discrimination may be overstated and prediction error understated. These estimates are not bounds on performance in new patients; use internal validation and external validation in the intended population."), "</p>",
               "<p style='color: inherit;font-size:0.9em;'><i>", .("Brier / AUC / IBS computed with riskRegression using Kaplan-Meier censoring weights."), "</i></p>"
             ))
           }
@@ -3443,7 +3489,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         }
         if (length(self$options$interactions) > 0) {
           int_str <- paste(vapply(self$options$interactions, function(x) paste(x, collapse = " * "), character(1)), collapse = ", ")
-          tech_details <- c(tech_details, paste0(.("Interactions in model: "), int_str))
+          tech_details <- c(tech_details, .fmt(.("Interactions in model: {terms}"), terms = int_str))
         }
 
         # Initialize data structures
@@ -3496,6 +3542,8 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         .nomogram-container {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             max-width: 800px;
+            box-sizing: border-box;
+            overflow-wrap: anywhere;
             margin: 20px auto;
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.06); color: inherit;
@@ -4365,12 +4413,16 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # that back aborted the entire analysis with a replacement-length error,
         # for the entirely reasonable combination of competing risks plus a risk
         # score. Recompute the linear predictor on the unexpanded frame instead.
-        risk_scores <- predict(cox_model, type = "risk")
+        risk_scores <- tryCatch(
+            predict(cox_model, type = "risk", reference = "sample"),
+            error = function(e) predict(cox_model, type = "risk"))
 
         if (length(risk_scores) != nrow(mydata)) {
             risk_scores <- tryCatch(
-                predict(cox_model, newdata = mydata, type = "risk"),
-                error = function(e) NULL)
+                predict(cox_model, newdata = mydata, type = "risk", reference = "sample"),
+                error = function(e) tryCatch(
+                    predict(cox_model, newdata = mydata, type = "risk"),
+                    error = function(e2) NULL))
         }
 
         if (is.null(risk_scores) || length(risk_scores) != nrow(mydata)) {
@@ -4626,7 +4678,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             summary_html <- paste0(
               "<div style='background-color: rgba(153, 33, 170, 0.12); padding: 15px; border-radius: 5px; margin: 10px 0; border-left: 4px solid #9c27b0; color: inherit;'>",
               "<p style='margin: 0; line-height: 1.8;'>",
-              .fmt(.("Risk stratification identified <b>{groups} distinct risk groups</b> from the Cox model."), groups = nrow(risk_summary)), " ",
+              .fmt(
+                if (.cr_mode)
+                  .("Risk stratification identified <b>{groups} distinct risk groups</b> from the Fine-Gray model.")
+                else
+                  .("Risk stratification identified <b>{groups} distinct risk groups</b> from the Cox model."),
+                groups = nrow(risk_summary)), " ",
               .fmt(.("The <b>{highest}</b> group showed the highest median risk score ({score}) with <b>{events} events</b> observed, while the <b>{lowest}</b> group had <b>{lowestevents} events</b>."),
                    highest = highest_risk_group, score = sprintf("%.2f", highest_median_score), events = highest_events,
                    lowest = lowest_risk_group, lowestevents = lowest_events),
@@ -4710,11 +4767,20 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           st_names <- colnames(aj$pstate)
           ev_col <- if ("Event" %in% st_names) which(st_names == "Event")[1] else 2L
           grp <- rep(names(aj$strata), aj$strata)
+          cif_lower <- if (!is.null(aj$lower) && ncol(aj$lower) >= ev_col) aj$lower[, ev_col] else rep(NA_real_, length(aj$time))
+          cif_upper <- if (!is.null(aj$upper) && ncol(aj$upper) >= ev_col) aj$upper[, ev_col] else rep(NA_real_, length(aj$time))
           cif <- data.frame(time  = aj$time,
                             cif   = aj$pstate[, ev_col],
+                            lower = cif_lower,
+                            upper = cif_upper,
                             group = factor(sub("^group=", "", grp),
                                            levels = levels(factor(riskData$risk_group))),
                             stringsAsFactors = FALSE)
+
+          if (!is.null(self$options$endplot) && is.finite(self$options$endplot) &&
+              self$options$endplot > 0) {
+            cif <- cif[cif$time <= self$options$endplot, , drop = FALSE]
+          }
 
           p <- ggplot2::ggplot(cif, ggplot2::aes(x = time, y = cif, colour = group)) +
             ggplot2::geom_step(linewidth = 0.8, na.rm = TRUE) +
@@ -4729,8 +4795,14 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             ggplot2::theme_bw() +
             ggplot2::theme(plot.caption = ggplot2::element_text(hjust = 0, size = 8))
 
+          if (isTRUE(self$options$ci95) && !all(is.na(cif$lower))) {
+            p <- p + ggplot2::geom_ribbon(
+              ggplot2::aes(ymin = lower, ymax = upper, fill = group),
+              alpha = 0.15, colour = NA, show.legend = FALSE, na.rm = TRUE)
+          }
+
           if (!is.null(self$options$byplot) && is.finite(self$options$byplot) &&
-              self$options$byplot > 0)
+              self$options$byplot > 0 && nrow(cif) > 0)
             p <- p + ggplot2::scale_x_continuous(
               breaks = seq(0, max(cif$time, na.rm = TRUE), by = self$options$byplot))
 
@@ -5077,7 +5149,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           # treatment mix", which asserted three variables that were absent from
           # the fitted model on the very first dataset it was run against.
           "<p>", .("Because the same patients underlie every curve, the curves differ <i>only</i> by the adjustment variable - the distribution of every other covariate in the model is identical across them. This is what most published papers mean by an adjusted survival curve."), "</p>",
-          "<p>", .("Confidence intervals are left blank: a standardized curve has no closed-form interval and would need bootstrapping."), "</p>"),
+          "<p>", .("Confidence intervals for standardized curves are not implemented here and are left blank. Appropriate uncertainty estimation, such as patient-level bootstrapping, is required."), "</p>"),
         "conditional" = paste0(
           "<p><b>", .("At reference covariate profile"), "</b></p>",
           "<p>", sprintf(.("One curve is predicted per level of <i>%s</i>%s for a single reference patient: the mean of every numeric covariate and the most common level of every categorical covariate."),
@@ -5155,7 +5227,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         # because the code that fills it was skipped, so wipe both explicitly or
         # last run's numbers stay on screen under the new method's name.
         .deleteTableRows(self$results$adjustedSurvTable)
-        self$results$adjustedSurvTableSummary$setContent("")
+        self$results$adjustedSurvTableSummary$setContent("<div></div>")
         return(NULL)
       }
 
@@ -5231,7 +5303,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             .fmt(.("For {level} at {time} {unit}, {estimate} is {value}{ci}."),
                  level = htmltools::htmlEscape(row$strata), time = row$time, unit = self$options$timetypeoutput,
                  estimate = estimate_label, value = row$surv, ci = ci), " ",
-            .fmt(.("Among the {atrisk} patients still under observation at that time, {events} events had been observed in this group."),
+            .fmt(.("In the observed group, {atrisk} patients were still at risk at that time and {events} events had occurred by that time."),
                  atrisk = row$atrisk, events = row$events)
           )
         })
@@ -5240,7 +5312,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           paste(c(summaries, private$.adjustedEstimandNote(method, private$.isCompetingRisk())),
                 collapse = "<br><br>"))
       } else {
-        self$results$adjustedSurvTableSummary$setContent("")
+        self$results$adjustedSurvTableSummary$setContent("<div></div>")
       }
 
       self$results$adjustedSurvTable$setNote("estimand",
@@ -5287,6 +5359,20 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
         }
         list(curves = as.data.frame(curves), finegray = is_finegray,
              has_competing = has_competing)
+      },
+
+      # ggplot does not wrap titles/subtitles at the image boundary. Account for
+      # the current width, including long labels without whitespace.
+      .wrapPlotText = function(text, image, max_chars = 76L) {
+        width <- image$width
+        chars <- if (length(width) == 1L && is.finite(width))
+          max(24L, min(max_chars, floor(width / 8))) else max_chars
+        lines <- strwrap(as.character(text), width = chars)
+        if (length(lines) == 0L) return("")
+        paste(vapply(lines, function(line) {
+          starts <- seq.int(1L, max(1L, nchar(line)), by = chars)
+          paste(substring(line, starts, starts + chars - 1L), collapse = "\n")
+        }, character(1)), collapse = "\n")
       },
 
       .plot_adj = function(image_plot_adj, ggtheme, theme, ...) {
@@ -5340,13 +5426,18 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
               x = paste0("Time (", self$options$timetypeoutput, ")"),
               y = .("Cumulative incidence"),
               colour = self$options$adjexplanatory,
-              title = .fmt(.("Adjusted Cumulative Incidence for {variable}"),
-                                      variable = self$options$adjexplanatory),
-              subtitle = private$.adjustedEstimandNote(self$options$ac_method,
-                                                       isTRUE(plotData$has_competing)),
-              caption = .("Cumulative incidence, not 1 - Kaplan-Meier: competing events are accounted for.")) +
-            ggplot2::theme_bw() +
-            ggplot2::theme(plot.caption = ggplot2::element_text(hjust = 0, size = 8))
+              title = private$.wrapPlotText(
+                .fmt(.("Adjusted Cumulative Incidence for {variable}"),
+                     variable = self$options$adjexplanatory), image_plot_adj),
+              subtitle = private$.wrapPlotText(
+                private$.adjustedEstimandNote(self$options$ac_method,
+                                             isTRUE(plotData$has_competing)), image_plot_adj),
+              caption = private$.wrapPlotText(
+                .("Cumulative incidence, not 1 - Kaplan-Meier: competing events are accounted for."),
+                image_plot_adj)) +
+            ggtheme +
+            ggplot2::theme(plot.subtitle = ggplot2::element_text(size = 8),
+                           plot.caption = ggplot2::element_text(hjust = 0, size = 8))
 
           # Honour the Time Interval option here as the standard branch does.
           if (nrow(cif_df) > 0 && !is.null(self$options$byplot) &&
@@ -5381,11 +5472,13 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             y = .("Adjusted survival"),
             colour = self$options$adjexplanatory,
             fill = self$options$adjexplanatory,
-            title = .fmt(.("Adjusted Survival Curves for {variable}"),
-                                    variable = self$options$adjexplanatory),
-            subtitle = private$.adjustedEstimandNote(method,
-                                                     isTRUE(plotData$has_competing))) +
-          ggplot2::theme_bw() +
+            title = private$.wrapPlotText(
+              .fmt(.("Adjusted Survival Curves for {variable}"),
+                   variable = self$options$adjexplanatory), image_plot_adj),
+            subtitle = private$.wrapPlotText(
+              private$.adjustedEstimandNote(method,
+                                           isTRUE(plotData$has_competing)), image_plot_adj)) +
+          ggtheme +
           ggplot2::theme(plot.subtitle = ggplot2::element_text(size = 8),
                          plot.caption = ggplot2::element_text(hjust = 0, size = 8))
 
@@ -5478,7 +5571,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
       }
       .deleteTableRows(medianTable)
       if (is.null(curves)) {
-        self$results$adjustedMedianSummary$setContent("")
+        self$results$adjustedMedianSummary$setContent("<div></div>")
         return(invisible(NULL))
       }
 
@@ -5525,7 +5618,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           factor  = r$factor,
           records = r$records,
           events  = r$events,
-          median  = round(r$median, 1)
+          median  = if (is.finite(r$median)) round(r$median, 1) else NULL
         )
         if (!is.na(r$x0_95lcl)) vals$x0_95lcl <- round(r$x0_95lcl, 1)
         if (!is.na(r$x0_95ucl)) vals$x0_95ucl <- round(r$x0_95ucl, 1)
@@ -5535,11 +5628,15 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
       # Create natural language summaries
       summaries <- lapply(rows, function(r) {
         ci <- if (is.na(r$x0_95lcl) && is.na(r$x0_95ucl)) "" else
-          paste0(" ", .fmt(.("(95% CI {lower} to {upper})"), lower = round(r$x0_95lcl, 1), upper = round(r$x0_95ucl, 1)))
+          paste0(" ", .fmt(.("(95% CI {lower} to {upper})"),
+            lower = if (is.finite(r$x0_95lcl)) round(r$x0_95lcl, 1) else .("not estimable"),
+            upper = if (is.finite(r$x0_95ucl)) round(r$x0_95ucl, 1) else .("not estimable")))
         quantity <- if (is_cr) .("adjusted median time to the event of interest") else .("adjusted median survival")
         description <- .fmt(.("For {variable} = {level}, {quantity} is {median}{ci} {unit}."),
                             variable = htmltools::htmlEscape(adj_var), level = htmltools::htmlEscape(r$factor), quantity = quantity,
-                            median = round(r$median, 1), ci = ci, unit = self$options$timetypeoutput)
+                            median = if (is.finite(r$median)) round(r$median, 1)
+                                     else .("not reached"),
+                            ci = ci, unit = self$options$timetypeoutput)
         if (is.na(r$median)) {
           description <- paste0(description, "\n", .("Note:"), " ",
             if (is_cr)
@@ -5637,7 +5734,7 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
           } else {
             vapply(comps, shown, character(1))
           }
-          return(list(kind = "interaction", var = paste(lab, collapse = " \u{00D7} ")))
+          return(list(kind = "interaction", var = paste(lab, collapse = " \u00D7 ")))
         }
         u <- bare(tm)
         if (!(u %in% names(ctr)))
@@ -5826,10 +5923,16 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
       # Proportional hazards check if requested (adjustedCoxPH is a Preformatted
       # slot; capture the printed cox.zph table as text).
       if (self$options$ph_cox) {
-        zph <- survival::cox.zph(cox_model)
-        self$results$adjustedCoxPH$setContent(
-          paste(utils::capture.output(print(zph)), collapse = "\n")
-        )
+        zph <- tryCatch(survival::cox.zph(cox_model), error = function(e) e)
+        if (inherits(zph, "error")) {
+          self$results$adjustedCoxPH$setContent(
+            .fmt(.("Proportional hazards test could not be computed: {msg}"), msg = zph$message)
+          )
+        } else {
+          self$results$adjustedCoxPH$setContent(
+            paste(utils::capture.output(print(zph)), collapse = "\n")
+          )
+        }
       }
     }
 
@@ -6262,7 +6365,10 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                        else rep("", nrow(cox_table))
             hr_txt <- as.character(cox_table[[hr_name]])
 
-            out$n_total_vars <- length(unique(stats::na.omit(var_col)))
+            tested_vars <- unique(var_col[!is.na(var_col) & !is.na(hr_txt) &
+                                          nzchar(trimws(hr_txt)) & trimws(hr_txt) != "-"])
+            out$n_total_vars <- if (length(tested_vars) > 0) length(tested_vars)
+                                else length(unique(stats::na.omit(var_col)))
             sig_vars <- character(0)
             best <- 0
 
@@ -6364,10 +6470,13 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
                            ". ", .("These define separate baseline hazards and have no point scale, so the nomogram applies within a stratum."), "</p>")
                 else ""
 
-                n_patients <- if (!is.null(cox_model$n)) cox_model$n else NA_integer_
-                n_events   <- if (!is.null(cox_model$nevent)) cox_model$nevent else NA_integer_
-                cidx <- tryCatch(unname(summary(cox_model)$concordance[1]),
-                                 error = function(e) NA_real_)
+                # Fine-Gray's n counts expanded pseudo-rows, not patients.
+                # Its ordinary Cox concordance is not patient discrimination.
+                is_cr <- private$.isCompetingRisk()
+                n_patients <- nrow(cleaneddata$cleanData)
+                n_events <- sum(.eventIndicator(cleaneddata$cleanData$myoutcome), na.rm = TRUE)
+                cidx <- if (is_cr) NA_real_ else tryCatch(
+                  unname(summary(cox_model)$concordance[1]), error = function(e) NA_real_)
                 cidx_html <- if (is.na(cidx)) .("not available") else sprintf("%.2f", cidx)
 
                 nom_times <- private$.nom_times
@@ -6387,11 +6496,19 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
 
                 summary_html <- paste0(
                     "<div style='font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif; line-height: 1.6; max-width: 820px;'>",
-                    "<p>", sprintf(.("This nomogram is a visual calculator derived from a multivariable Cox proportional-hazards model fitted on <b>%s patients</b> with <b>%s events</b>. It turns the model into a point-scoring tool so an individual patient's risk can be read off directly."),
+                    "<p>", sprintf(
+                      if (is_cr)
+                        .("This nomogram is derived from a multivariable Fine-Gray subdistribution-hazards model fitted on <b>%s patients</b> with <b>%s events of interest</b>. Its risk scales describe cumulative incidence of the event of interest while accounting for competing events.")
+                      else
+                        .("This nomogram is a visual calculator derived from a multivariable Cox proportional-hazards model fitted on <b>%s patients</b> with <b>%s events</b>. It turns the model into a point-scoring tool so an individual patient's risk can be read off directly."),
                                    base::format(n_patients), base::format(n_events)), "</p>",
                     "<p><b>", .("Predictors included:"), "</b></p><ul>", pred_html, "</ul>",
                     strat_html,
-                    "<p>", .fmt(.("The nomogram estimates the probability of the event by <b>{timepoints}</b> of follow-up, one risk scale per timepoint. Model discrimination (Harrell's C-index) is <b>{cindex}</b>, where 0.5 is no better than chance and 1.0 is perfect separation."),
+                    "<p>", .fmt(
+                      if (is_cr)
+                        .("The nomogram estimates cumulative incidence by <b>{timepoints}</b> of follow-up, one risk scale per timepoint. Harrell's C-index is not reported for the expanded Fine-Gray fit; validation requires a cause- and horizon-specific measure.")
+                      else
+                        .("The nomogram estimates the probability of the event by <b>{timepoints}</b> of follow-up, one risk scale per timepoint. Model discrimination (Harrell's C-index) is <b>{cindex}</b>, where 0.5 is no better than chance and 1.0 is perfect separation."),
                                 timepoints = horizon_txt, cindex = cidx_html), "</p>",
                     "<p><b>", .("How to read the nomogram:"), "</b></p><ol>",
                     "<li>", .("For each predictor, draw a vertical line up to the <i>Points</i> axis to read its score."), "</li>",
@@ -6419,7 +6536,12 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
             mydata <- cleaneddata$cleanData
             n_total <- nrow(mydata)
             n_events <- sum(.eventIndicator(mydata$myoutcome), na.rm = TRUE)
-            n_vars <- length(c(cleaneddata$myexplanatory_labelled, cleaneddata$mycontexpl_labelled))
+            strat_vars <- if (isTRUE(self$options$use_stratify)) cleaneddata$mystratvar_labelled else NULL
+            all_expl_vars <- setdiff(
+              c(cleaneddata$myexplanatory_labelled, cleaneddata$mycontexpl_labelled),
+              strat_vars
+            )
+            n_vars <- length(all_expl_vars)
 
             # Try to get Cox regression results for summary
             cox_results <- NULL
@@ -6428,6 +6550,22 @@ multisurvivalClass <- if (requireNamespace('jmvcore'))
               if (!is.null(cox_model)) {
                 cox_summary <- summary(cox_model)
                 cox_results <- cox_summary$coefficients
+                if (!is.null(cox_results) && is.matrix(cox_results) && nrow(cox_results) > 0) {
+                  display <- c(
+                    stats::setNames(self$options$explanatory, cleaneddata$myexplanatory_labelled),
+                    stats::setNames(self$options$contexpl, cleaneddata$mycontexpl_labelled)
+                  )
+                  term_info <- tryCatch(private$.coefTerms(cox_model, display), error = function(e) NULL)
+                  if (!is.null(term_info) && nrow(term_info) == nrow(cox_results)) {
+                    pretty_names <- ifelse(
+                      nzchar(term_info$level),
+                      paste0(term_info$var, ": ", term_info$level,
+                             ifelse(nzchar(term_info$ref), paste0(" (vs ", term_info$ref, ")"), "")),
+                      term_info$var
+                    )
+                    rownames(cox_results) <- pretty_names
+                  }
+                }
               }
             }, error = function(e) {
               # Silent error handling

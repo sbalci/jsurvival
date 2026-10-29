@@ -10,6 +10,7 @@ export(outcomeorganizer)
 export(singlearm)
 export(survival)
 export(survivalcont)
+export(timeinterval)
 importFrom(KMunicate,KMunicate)
 importFrom(Matrix,rowSums)
 importFrom(R6,R6Class)
@@ -35,7 +36,6 @@ importFrom(ggplot2,
   theme,
   theme_void
 )
-importFrom(ggpubr,ggarrange)
 importFrom(glmnet,cv.glmnet)
 importFrom(glue,glue)
 importFrom(graphics,par)

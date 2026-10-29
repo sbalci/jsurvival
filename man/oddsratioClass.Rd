@@ -29,9 +29,12 @@ complete cases for the selected outcome and explanatory variables only.
 }
 \section{International Usage}{
 
-For international users, the function includes an outcomeLevel parameter to
-explicitly specify which outcome level represents the positive case. This is
-important for correct interpretation of likelihood ratios and diagnostic metrics.
+For international users, the function includes \code{outcomeLevel} and
+\code{outcomeNegativeLevel} parameters to explicitly specify which outcome
+levels represent the positive (event) and negative (reference/non-event)
+cases. Any other outcome levels are excluded with a warning. This is essential
+for unambiguous interpretation of odds ratios, likelihood ratios, and
+diagnostic metrics.
 }
 
 \section{Nomogram Features}{
@@ -40,8 +43,9 @@ When showNomogram is enabled, the function generates:
 \itemize{
 \item Prediction nomogram based on the fitted logistic model
 \item Diagnostic metrics (sensitivity, specificity, likelihood ratios) for the
-chosen \code{predictorLevel}; with \code{predictorLevel = NULL} they wait for
-that choice and the model and nomogram still run
+chosen \code{predictorLevel} and \code{predictorNegativeLevel}; with either
+set to \code{NULL} they wait for those choices while the model and nomogram
+still run
 \item Contingency table analysis
 \item User guidance for interpretation
 }
@@ -55,16 +59,21 @@ result <- oddsratio(
   explanatory = c("age", "gender", "smoking"),
   outcome = "mortality",
   outcomeLevel = "Yes",
-  predictorLevel = NULL
+  outcomeNegativeLevel = "No",
+  predictorLevel = NULL,
+  predictorNegativeLevel = NULL
 )
 
-# With nomogram and specified outcome level
+# With nomogram and specified outcome and predictor levels
 result <- oddsratio(
   data = clinical_data,
   explanatory = c("age", "treatment"),
   outcome = "recurrence",
   outcomeLevel = "Yes",
-  predictorLevel = NULL,
+  outcomeNegativeLevel = "No",
+  diagnosticPredictor = "treatment",
+  predictorLevel = "Treated",
+  predictorNegativeLevel = "Control",
   showNomogram = TRUE
 )
 }

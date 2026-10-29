@@ -94,11 +94,20 @@
             "{comparison}: hazard ratio {hr} (95% CI {lower} to {upper}, {stats}) - {direction} in the compared group relative to the reference. The hazard ratio is a relative rate, not a cumulative risk difference; the absolute benefit or harm depends on the baseline risk, the endpoint and the length of follow-up.{cinote}": [
                 "{comparison}: hazard oranı {hr} (%95 GA {lower} ila {upper}, {stats}) - referansa kıyasla karşılaştırılan grupta {direction}. Hazard oranı bir kümülatif risk farkı değil, göreceli bir hızdır; mutlak fayda veya zarar başlangıç riskine, sonlanım noktasına ve takip süresine bağlıdır.{cinote}"
             ],
+            "{count} date value(s) were written with a two-digit year. These are read as 2000-2068 for 00-68 and as 1969-1999 for 69-99, so a date such as 22/09/68 becomes 2068 and a 1950s-1960s date is pushed a century forward. If any interval is a century off, rewrite the column with four-digit years.": [
+                ""
+            ],
+            "{count} date values are in the future. Review date columns for data entry errors or incorrect date formats.": [
+                ""
+            ],
             "{count} date(s) are in the future. Verify this is intentional (for example planned follow-up dates).": [
                 "{count} tarih gelecekte yer alıyor. Bunun kasıtlı olduğunu doğrulayın (örneğin planlanan takip tarihleri)."
             ],
             "{count} date(s) fall before 1900, which usually means the format was read wrongly or the source has data-entry errors.": [
                 "{count} tarih 1900 yılından öncesine denk geliyor; bu genellikle biçimin yanlış okunduğu veya kaynakta veri giriş hataları olduğu anlamına gelir."
+            ],
+            "{count} observations ({pct}%) have missing time intervals. Investigate missing date values as this may affect study conclusions.": [
+                ""
             ],
             "{count} of {total} dates ({pct}%) are in the future, and this column has two-digit years: a year such as 55 is read as 2055, not 1955. If these dates cannot be in the future - dates of birth, diagnosis or specimen dates - set Two-digit years to 'Always in the past'.": [
                 "{total} tarihten {count} tanesi (%{pct}) gelecekte yer alıyor ve bu sütunda iki basamaklı yıllar var: 55 gibi bir yıl 1955 olarak değil, 2055 olarak okunur. Bu tarihler gelecekte olamazsa (doğum tarihleri, tanı veya örnek tarihleri) İki basamaklı yılları 'Her zaman geçmişte' olarak ayarlayın."
@@ -142,6 +151,12 @@
             "{missing} of the {total} rows were missing": [
                 "{total} satırın {missing} tanesi kayıptı"
             ],
+            "{n} missing time intervals due to missing dates": [
+                ""
+            ],
+            "{n} negative time intervals detected (end date before start date)": [
+                ""
+            ],
             "{n} rows excluded; {constants} constant predictors or columns removed": [
                 "{n} satır dışlandı; {constants} sabit yordayıcı veya sütun çıkarıldı"
             ],
@@ -150,6 +165,9 @@
             ],
             "{outcome}: OR (95% CI, p-value)": [
                 "{outcome}: OR (%95 GA, p değeri)"
+            ],
+            "{pct}% of intervals are zero-length (start and end date on the same day). These contribute nothing to total person-time, so the denominator here is smaller than the number of participants suggests. Check whether unfilled follow-up dates were defaulted to the start date.": [
+                ""
             ],
             "{pct}% of non-missing values produced a date, but see the warnings above: a column read in the wrong format still parses at a high rate.": [
                 "Eksik olmayan değerlerin %{pct}'si bir tarih üretti, ancak yukarıdaki uyarılara bakın: yanlış biçimde okunan bir sütun yine de yüksek oranda ayrıştırılabilir."
@@ -178,6 +196,9 @@
             "* Model did not converge for: {fits} (likely small-sample separation); interpret these HRs with extreme caution.": [
                 "* Model şu alt gruplarda yakınsamadı: {fits} (olası neden küçük örneklemde ayrışma); bu TO değerlerini son derece dikkatli yorumlayın."
             ],
+            "%": [
+                ""
+            ],
             "%.0f%% of date values could not be read as '%s'. This is a format mismatch rather than missing data. Set 'Input time type' to the format actually used in your columns.": [
                 "Tarih değerlerinin %.0f%% kadarı '%s' olarak okunamadı. Bu durum eksik veriden ziyade bir biçim uyuşmazlığıdır. 'Girdi zaman türü' ayarını sütunlarınızda fiilen kullanılan biçime ayarlayın."
             ],
@@ -198,6 +219,9 @@
             ],
             "%d observation(s) have negative time values. To fix: (1) if using 'Elapsed Time' directly, verify all values are positive; (2) if calculating from dates, check diagnosis date precedes follow-up date; (3) review data for entry errors; (4) consider excluding problematic observations.": [
                 "%d gözlemde negatif zaman değeri var. Düzeltmek için: (1) 'Geçen Süre' doğrudan kullanılıyorsa tüm değerlerin pozitif olduğunu doğrulayın; (2) tarihlerden hesaplanıyorsa tanı tarihinin izlem tarihinden önce olduğunu kontrol edin; (3) veriyi giriş hataları açısından gözden geçirin; (4) sorunlu gözlemleri dışlamayı değerlendirin."
+            ],
+            "%d of %d analyzed record(s) had missing values in stratification variable '%s' and were excluded from the stratified Cox model (n=%d, events=%d analyzed).": [
+                ""
             ],
             "%d of %d date value(s) did not match the selected input time type '%s'. Those records are dropped. Values that DO match an ambiguous format (for example 03/04/2024 read as %s) are converted using it, so check 'Input time type' before interpreting these results.": [
                 "%d / %d tarih değeri seçilen girdi zaman türü olan '%s' ile eşleşmedi. Bu kayıtlar çıkarıldı. Belirsiz bir biçimle eşleşen değerler (örneğin %s olarak okunan 03/04/2024) bu biçim kullanılarak dönüştürülür; dolayısıyla bu sonuçları yorumlamadan önce 'Girdi zaman türü' ayarını kontrol edin."
@@ -220,8 +244,8 @@
             "%d patient(s) have more than one row. For each of them the priority outcome (%s) has been written to EVERY one of their rows. Because this analysis has no follow-up-time variable it cannot order those rows, so if they are successive time points a later event is copied back onto the earlier ones - which in a survival model would place the event earlier than it happened, and count it once per row. Reduce your data to one row per patient (keeping the earliest priority event and its date) before using this option.": [
                 "%d hasta birden fazla satıra sahiptir. Bunların her biri için öncelikli sonuç (%s) HER BİR satırlarına yazılmıştır. Bu analiz takip süresi değişkenine sahip olmadığından bu satırları sıralayamaz; bu nedenle ardışık zaman noktaları söz konusuysa daha sonraki bir olay daha öncekilerin üzerine kopyalanır - bu da bir sağkalım modelinde olayı gerçekleştiğinden daha erkene yerleştirir ve her satır için bir kez sayar. Bu seçeneği kullanmadan önce verilerinizi (en erken öncelikli olayı ve tarihini koruyarak) hasta başına bir satıra indirgeyin."
             ],
-            "%d patient(s) have more than one row. For each, the EARLIEST record carrying the priority outcome (%s) was kept as the event and their later rows were censored, so the event is not moved earlier in time.": [
-                "%d hasta birden fazla satıra sahiptir. Her biri için öncelikli sonucu (%s) taşıyan EN ERKEN kayıt olay olarak tutulmuş ve sonraki satırları sansürlenmiştir, böylece olay zamanda daha erkene taşınmaz."
+            "%d patient(s) have more than one row. For each, the EARLIEST record carrying the priority outcome (%s) was kept as the event and their tied or later rows were censored, so the event is not moved earlier in time. However, this analysis does not collapse the dataset to one row per patient: passing multiple rows per patient into an unclustered survival analysis (Surv(time, status)) treats repeated rows as independent subjects and double-counts censored person-time. Reduce your data to one row per patient (or use a clustered/counting-process model) before running downstream survival analyses.": [
+                ""
             ],
             "%d patient(s) were left untouched because they have no follow-up time or no cut-off value; they keep their full follow-up and their original event status, so the cut-off applies to only part of the cohort. Supply the missing values, or exclude those rows, before comparing groups.": [
                 "Takip süresi veya kesme noktası değeri olmadığı için %d hasta olduğu gibi bırakıldı; tam takip sürelerini ve orijinal olay durumlarını korurlar, dolayısıyla kesme noktası kohortun yalnızca bir kısmı için geçerlidir. Grupları karşılaştırmadan önce eksik değerleri sağlayın veya bu satırları hariç tutun."
@@ -457,9 +481,6 @@
             "A non-significant test is <i>no evidence of a violation</i>, which is not the same as confirming the assumption holds.": [
                 "Anlamlı olmayan bir test <i>ihlal için kanıt yokluğudur</i>; bu, varsayımın sağlandığını doğrulamakla aynı şey değildir."
             ],
-            "A note on sample size when comparing to a manual per-subgroup fit:": [
-                "Elle yapılan alt grup uydurmalarıyla karşılaştırırken örneklem büyüklüğü hakkında not:"
-            ],
             "A per-patient risk score could not be produced for this fit (the competing-risks model is fitted on an expanded dataset with more rows than patients). All other results are unaffected.": [
                 "Bu uydurma için hasta başına risk skoru üretilemedi (yarışan riskler modeli, hasta sayısından fazla satır içeren genişletilmiş bir veri setine uydurulur). Diğer tüm sonuçlar etkilenmez."
             ],
@@ -472,14 +493,14 @@
             "A recursive optimal split could not be estimated. Quantile-based cut-points were used for the remaining groups.": [
                 "Özyinelemeli en uygun bölme tahmin edilemedi. Kalan gruplar için kantil tabanlı kesim noktaları kullanıldı."
             ],
-            "A result table could not be populated completely: {message}": [
-                "Bir sonuç tablosu tamamen doldurulamadı: {message}"
-            ],
             "A small p-value indicates the covariate significantly improves fit.": [
                 "Küçük bir p-değeri kovaryatın model uyumunu anlamlı biçimde iyileştirdiğini gösterir."
             ],
             "A smoothed continuous hazard was not estimated because one or more events occurred at time zero. Such events create a probability mass at the origin rather than a finite continuous hazard; use the survival or cumulative-incidence output to report them.": [
                 "Sıfır zamanında bir veya daha fazla olay meydana geldiği için düzeltilmiş sürekli bir tehlike tahmin edilmedi. Bu tür olaylar, sonlu sürekli bir tehlikeden ziyade başlangıç noktasında bir olasılık kütlesi oluşturur; bunları bildirmek için sağkalım veya kümülatif insidans çıktısını kullanın."
+            ],
+            "A smoothed hazard was not estimated because automatic binning produced %d usable interval(s). At least three interval-rate estimates are needed for this exploratory smoother.": [
+                ""
             ],
             "A smoothed hazard was not estimated because no events were observed. A flat zero line would be a boundary point estimate, not evidence that the population hazard is exactly zero.": [
                 "Hiçbir olay gözlemlenmediği için düzeltilmiş bir tehlike tahmin edilmedi. Düz bir sıfır çizgisi bir sınır noktası tahmini olurdu, popülasyon tehlikesinin tam olarak sıfır olduğunun kanıtı değil."
@@ -489,6 +510,9 @@
             ],
             "A text date format is selected but this column is numeric. • Choose Excel Serial or Unix Epoch if these really are serial numbers, or select a text date column instead.": [
                 "Metin tarih biçimi seçildi ancak bu sütun sayısaldır. • Bunlar gerçekten seri numaralarıysa Excel Seri veya Unix Zaman Başlangıcı (Epoch) seçeneğini belirleyin veya bunun yerine bir metin tarih sütunu seçin."
+            ],
+            "A third cause makes every row negative by less than a day: a start column carrying a time of day against an end column recorded at midnight, which is what many laboratory systems export - check the Examples below for a time component on one side only.": [
+                ""
             ],
             "A treatment-by-biomarker interaction supports a predictive-biomarker claim only in an appropriate treatment-comparison design with pre-specified validation.": [
                 "Tedavi-biyobelirteç etkileşimi, öngördürücü biyobelirteç iddiasını yalnızca uygun bir tedavi karşılaştırma tasarımında ve önceden belirlenmiş doğrulama ile destekler."
@@ -516,6 +540,9 @@
             ],
             "Add Calculated Time to Data": [
                 "Hesaplanan Süreyi Veriye Ekle"
+            ],
+            "Add calculated times to dataset": [
+                ""
             ],
             "Add Multiple Cut-off Groups to Data": [
                 "Çoklu Kesim Noktası Gruplarını Veriye Ekle"
@@ -721,6 +748,12 @@
             "Advanced Options": [
                 "Gelişmiş Seçenekler"
             ],
+            "Advanced time interval analysis with quality assessment": [
+                ""
+            ],
+            "Advanced time interval calculator designed for survival analysis, epidemiological studies,  and person-time analysis. Features intelligent date parsing, comprehensive data quality  assessment, landmark analysis, and robust statistical summaries. Time intervals form the  foundation of person-time follow-up calculations, capturing both participant counts and  observation duration for accurate incidence rate calculations.": [
+                ""
+            ],
             "Advanced tool for preparing outcome variables for various types of survival analysis including overall survival, cause-specific, competing risks, progression-free survival, and multistate models.": [
                 "Genel sağkalım, nedene özgü, yarışan riskler, ilerlemesiz sağkalım ve çok durumlu modeller dahil olmak üzere çeşitli sağkalım analizi türleri için sonuç değişkenlerini hazırlamaya yönelik gelişmiş araç."
             ],
@@ -750,6 +783,9 @@
             ],
             "Age interaction test failed: {message}": [
                 "Yaş etkileşim testi başarısız oldu: {message}"
+            ],
+            "Age interaction test suppressed: fewer than 10 events.": [
+                ""
             ],
             "Age standardization (SMR)": [
                 "Yaş standardizasyonu (SMR)"
@@ -787,8 +823,14 @@
             "Age-adjusted Cox regression failed: {message}": [
                 "Yaşa göre düzeltilmiş Cox regresyonu başarısız oldu: {message}"
             ],
+            "Age-adjusted Cox regression suppressed: fewer than 10 events.": [
+                ""
+            ],
             "Age-as-time-scale analysis failed: {message}": [
                 "Zaman ölçeği olarak yaş analizi başarısız oldu: {message}"
+            ],
+            "Age-as-time-scale Cox regression suppressed: fewer than 10 events.": [
+                ""
             ],
             "Age-as-time-scale model did not converge, so no hazard ratio is reported. This normally means one group has no events on the age scale, or the groups are perfectly separated. Use the standard time scale, or combine categories, before interpreting.": [
                 "Zaman ölçeği olarak yaş kullanılan model yakınsamadı, bu nedenle hazard oranı bildirilmedi. Bu normalde bir grupta yaş ölçeğinde hiç olay olmadığı veya grupların mükemmel şekilde ayrıldığı anlamına gelir. Yorumlamadan önce standart zaman ölçeğini kullanın veya kategorileri birleştirin."
@@ -844,6 +886,9 @@
             "All event types at selected times": [
                 ""
             ],
+            "All observations were removed by the data quality filters ({n} rows). Switch the filters off to inspect the raw intervals; if every interval was negative, the start and end date columns are probably swapped.": [
+                ""
+            ],
             "All patients have nearly identical risk scores (variance = %.2e). This occurs when covariate patterns are very similar across patients, model coefficients are very small, or predictors carry limited prognostic information. Recommendations: review predictor selection for discriminative variables, consider simpler risk stratification approaches, or interpret C-index instead of risk groups.": [
                 "Tüm hastaların risk skorları neredeyse aynı (varyans = %.2e). Bu durum, hastalar arasında kovaryat örüntüleri çok benzer olduğunda, model katsayıları çok küçük olduğunda veya öngördürücüler sınırlı prognostik bilgi taşıdığında ortaya çıkar. Öneriler: ayırt edici değişkenler için öngördürücü seçimini gözden geçirin, daha basit risk katmanlama yaklaşımlarını değerlendirin veya risk grupları yerine C-indeksini yorumlayın."
             ],
@@ -874,9 +919,6 @@
             "Ambiguous Format Detected": [
                 "Belirsiz Biçim Algılandı"
             ],
-            "Among the {atrisk} patients still under observation at that time, {events} events had been observed in this group.": [
-                "O zamanda hâlâ gözlem altında olan {atrisk} hastanın bulunduğu bu grupta {events} olay gözlenmişti."
-            ],
             "An <b>AIC if dropped</b> below the full-model AIC ({aic}) indicates the covariate could be removed without penalising fit.": [
                 "Tam model AIC değerinin ({aic}) altındaki bir <b>çıkarılırsa AIC</b>, kovaryatın uyumu bozmadan çıkarılabileceğini gösterir."
             ],
@@ -897,6 +939,12 @@
             ],
             "Analysis completed for {variable}.": [
                 "{variable} için analiz tamamlandı."
+            ],
+            "Analysis completed using {n} observations that reached the {landmark} landmark. All reported times are measured FROM the landmark, not from the start date ({amount} was subtracted from every interval): mean post-landmark follow-up {mean} {unit}, total post-landmark person-time {total} person-{unit}.": [
+                ""
+            ],
+            "Analysis completed using {n} observations with mean follow-up {mean} {unit} (total person-time: {total} person-{unit}).": [
+                ""
             ],
             "Analysis completed using %d observations with %d events (%.1f%% event rate) over a median follow-up of %.1f %s (reverse Kaplan-Meier).": [
                 "Analiz %d gözlem ve %d olay (%%%.1f olay oranı) ile, %.1f %s ortanca izlem süresinde (ters Kaplan-Meier) tamamlandı."
@@ -964,9 +1012,6 @@
             "are created by dividing patients into quantiles (tertiles, quartiles, etc.)": [
                 "hastaların kantillere (tersil, çeyrek vb.) bölünmesiyle oluşturulur"
             ],
-            "Are the subgroup HRs from the interaction model, or from separate per-subgroup fits?": [
-                "Alt grup TO değerleri etkileşim modelinden mi, yoksa ayrı alt grup uydurmalarından mı geliyor?"
-            ],
             "Assess calibration of the Cox model by comparing predicted versus observed survival at specified time points. Groups patients by predicted risk quintiles and computes Kaplan-Meier survival per group. Includes calibration slope, calibration-in-the-large, and calibration plot. Requires Cox model to be fitted.": [
                 "Belirtilen zaman noktalarında öngörülen ve gözlemlenen sağkalımı karşılaştırarak Cox modelinin kalibrasyonunu değerlendirin. Hastaları öngörülen risk kuintillerine göre gruplandırır ve grup başına Kaplan-Meier sağkalımını hesaplar. Kalibrasyon eğimini, geniş ölçekli kalibrasyonu (calibration-in-the-large) ve kalibrasyon grafiğini içerir. Cox modelinin kurulmasını gerektirir."
             ],
@@ -979,8 +1024,11 @@
             "Assessment of Proportional Hazards Assumption": [
                 "Orantılı Hazardlar Varsayımının Değerlendirilmesi"
             ],
-            "assumed common (pooled)": [
-                "ortak varsayılır (havuzlanmış)"
+            "Assign every observed outcome level under Multiple Event Levels to continue. Categories absent from the cohort may remain unselected.": [
+                ""
+            ],
+            "Assign outcome levels": [
+                ""
             ],
             "Assumptions & Caveats": [
                 "Varsayımlar ve Uyarılar"
@@ -1000,8 +1048,14 @@
             "At risk": [
                 ""
             ],
+            "At this share the fault is systematic rather than sporadic: the rows that were kept came from the same two columns and the same parsing, so they cannot be assumed correct merely because their interval came out positive - check the date columns and the Date Format setting before using any number on this page.": [
+                ""
+            ],
             "Auto-detect Format": [
                 "Biçimi Otomatik Algıla"
+            ],
+            "Auto-detection is ambiguous: {formats} all parse these dates equally well ({pct}% success). The '{format}' format was used, because it places these dates in the narrowest range of years - please verify it matches your data or select the format manually.": [
+                ""
             ],
             "Automated adequacy grades are not assigned. Interpret event counts, completeness, follow-up, confidence intervals, and time-specific risk sets in the context of the endpoint and intended use.": [
                 "Otomatik yeterlilik dereceleri atanmaz. Olay sayılarını, eksiksizliği, takibi, güven aralıklarını ve zamana özgü risk kümelerini sonlanım noktası ve kullanım amacı bağlamında yorumlayın."
@@ -1030,9 +1084,6 @@
             "Based on Kaplan-Meier estimates": [
                 "Kaplan-Meier tahminlerine dayalı"
             ],
-            "Baseline hazard": [
-                "Temel tehlike"
-            ],
             "Baseline hazard allowed to differ across the %d levels of '%s'. Stratification removes the proportional-hazards assumption for that variable, so no hazard ratio is estimated for it.": [
                 "%d düzey boyunca ('%s' değişkeni için) temel tehlikenin (baseline hazard) farklılaşmasına izin verildi. Tabakalama o değişken için orantılı tehlikeler varsayımını ortadan kaldırır, bu nedenle o değişken için herhangi bir hazard oranı tahmin edilmez."
             ],
@@ -1059,6 +1110,9 @@
             ],
             "Binary Outcome": [
                 "İkili Sonuç"
+            ],
+            "Blank/NaN median or confidence limit indicates that the Kaplan-Meier curve did not reach 50% in that group during observed follow-up.": [
+                ""
             ],
             "Blue: lambda.min, Green: lambda.1se": [
                 "Mavi: lambda.min, yeşil: lambda.1se"
@@ -1101,9 +1155,6 @@
             ],
             "both": [
                 "her ikisi"
-            ],
-            "Both are valid but answer subtly different questions; the interaction-model (conditional) subgroup effect is the more efficient estimand preferred for predictive-biomarker subgroup analysis, and is what this table reports (an implied conditional effect of the single interaction model, not an independent subgroup fit).": [
-                "Her ikisi de geçerlidir ancak ince farklarla farklı soruları yanıtlar; etkileşim modelinden okunan (koşullu) alt grup etkisi, öngördürücü biyobelirteç alt grup analizi için tercih edilen daha verimli tahmin hedefidir ve bu tabloda bildirilen de budur (tek etkileşim modelinin ima ettiği koşullu etki; bağımsız bir alt grup uydurması değil)."
             ],
             "Both optional comparison rows are unpenalized development-data fits. Their AIC values are not a formal selection-adjusted model comparison.": [
                 "İsteğe bağlı iki karşılaştırma satırı da geliştirme verisinde kurulan cezasız modellerdir. AIC değerleri, seçimi dikkate alan biçimsel bir model karşılaştırması değildir."
@@ -1171,17 +1222,26 @@
             "Calculated time": [
                 "Hesaplanan süre"
             ],
+            "Calculated Time ({unit}, from {landmark} {unit} landmark)": [
+                ""
+            ],
+            "Calculated Time ({unit})": [
+                ""
+            ],
             "Calculated time from dates contains %d missing value%s. These observations will be excluded from the analysis. Please verify date format matches selected type and check for missing or invalid dates.": [
                 "Tarihlerden hesaplanan süre %d kayıp değer%s içeriyor. Bu gözlemler analizden hariç tutulacaktır. Lütfen tarih biçiminin seçilen türle eşleştiğini doğrulayın ve eksik veya geçersiz tarihleri kontrol edin."
             ],
-            "Calculated Time Preview": [
-                "Hesaplanan Süre Önizlemesi"
+            "Calculated Time Intervals": [
+                ""
             ],
             "Calculated Time to Data": [
                 "Hesaplanan Süreyi Veriye Ekle"
             ],
             "Calculation:": [
                 "Hesaplama:"
+            ],
+            "Calendar-aware (actual month lengths)": [
+                ""
             ],
             "Calibration assessed at t = {t}. N = {n} patients in {k} risk groups.": [
                 "Kalibrasyon t = {t} noktasında değerlendirildi. {k} risk grubunda N = {n} hasta."
@@ -1221,6 +1281,9 @@
             ],
             "Candidate predictors": [
                 "Aday yordayıcılar"
+            ],
+            "Candidate Predictors": [
+                ""
             ],
             "Cannot determine censored level: all observed levels equal the event level.": [
                 "Sansür düzeyi belirlenemedi: gözlenen tüm düzeyler olay düzeyine eşit."
@@ -1315,8 +1378,8 @@
             "Check that the data was imported correctly": [
                 "Verinin doğru içe aktarıldığını kontrol edin"
             ],
-            "Check that the positive outcome level is correct for your study": [
-                "Pozitif sonuç düzeyinin çalışmanız için doğru olduğunu kontrol edin"
+            "Check that the positive and negative outcome and predictor levels are correct for your study": [
+                ""
             ],
             "Check that the variable name is correct in your dataset": [
                 "Değişken adının veri setinizde doğru olduğunu kontrol edin"
@@ -1339,14 +1402,14 @@
             "Choose the Event Level: the outcome value that means the event happened. Values found: {levels}. The analysis does not pick one from the level order, because the order does not say which value is the event.": [
                 ""
             ],
-            "Choose which binary predictor to use for the separate, unadjusted sensitivity, specificity, and likelihood-ratio calculations. If left empty, the first explanatory variable is used when it is binary.": [
-                "Ayrı, düzeltilmemiş duyarlılık, özgüllük ve olabilirlik oranı hesaplamaları için hangi ikili belirtecin kullanılacağını seçin. Boş bırakılırsa, ikili olduğunda ilk açıklayıcı değişken kullanılır."
+            "Choose which categorical predictor to use for the separate, unadjusted sensitivity, specificity, and likelihood-ratio calculations. In the jamovi interface, select this variable here so the 'Predictor Positive Level' and 'Predictor Negative Level' selectors below can list its levels; in R, if left empty, the first explanatory variable is used.": [
+                ""
             ],
-            "Choose which level of the diagnostic predictor is the positive test result (e.g., \"Present\", \"Test+\", \"Yes\"). The diagnostic metrics (sensitivity, specificity, likelihood ratios) need this choice; it is never taken from the level names or their order. While it is empty the diagnostic metrics wait for it and list the observed levels, and the logistic model, odds ratios, forest plot and nomogram still run.": [
-                "Tanısal belirtecin hangi düzeyinin pozitif test sonucu olduğunu seçin (ör. \"Present\", \"Test+\", \"Yes\"). Tanısal ölçütler (duyarlılık, özgüllük, olabilirlik oranları) bu seçimi gerektirir; düzey adlarından ya da sıralarından asla alınmaz. Boş kaldığı sürece tanısal ölçütler bu seçimi bekler ve gözlenen düzeyleri listeler; lojistik model, olasılık oranları, orman grafiği ve nomogram yine çalışır."
+            "Choose which level of the diagnostic predictor is the negative test result (e.g., \"Absent\", \"Test-\", \"No\"). Both Predictor Positive Level and Predictor Negative Level must be selected for diagnostic metrics; they are never taken from the level names or their order, and any other levels are excluded. While either is empty the diagnostic metrics wait for them and list the observed levels, and the logistic model, odds ratios, forest plot and nomogram still run.": [
+                ""
             ],
-            "CIs and p-values differ:": [
-                "GA'lar ve p-değerleri farklıdır:"
+            "Choose which level of the diagnostic predictor is the positive test result (e.g., \"Present\", \"Test+\", \"Yes\"). Both Predictor Positive Level and Predictor Negative Level must be selected for diagnostic metrics; they are never taken from the level names or their order, and any other levels are excluded. While either is empty the diagnostic metrics wait for them and list the observed levels, and the logistic model, odds ratios, forest plot and nomogram still run.": [
+                ""
             ],
             "Clinical Assumptions and Warnings": [
                 "Klinik Varsayımlar ve Uyarılar"
@@ -1384,6 +1447,9 @@
             "Clinical Summary": [
                 "Klinik Özet"
             ],
+            "Clinical Summary (Copy-Ready)": [
+                ""
+            ],
             "Clinical summary unavailable": [
                 "Klinik özet oluşturulamadı"
             ],
@@ -1417,17 +1483,20 @@
             "Coefficients are on the original variable scale.": [
                 "Katsayılar özgün değişken ölçeğindedir."
             ],
+            "Column '{column}' contains only missing values; cannot calculate time intervals.": [
+                ""
+            ],
+            "Column '{column}' holds five-digit numbers such as {value}, which cannot be read as dates unambiguously.": [
+                ""
+            ],
             "Column names should describe your variables (e.g., 'Age', 'Survival_Time', 'Event_Status')": [
                 "Sütun adları değişkenlerinizi tanımlamalıdır (ör. 'Yas', 'Sagkalim_Suresi', 'Olay_Durumu')"
             ],
             "Column Selection Proportion": [
                 "Sütun seçilme oranı"
             ],
-            "Comma-separated age cutpoints for creating age groups. For example, 50, 65, 75 creates groups less than 50, 50-64, 65-74, 75 and above.": [
-                "Yaş grupları oluşturmak için virgülle ayrılmış yaş kesme noktaları. Örneğin 50, 65, 75; 50'den küçük, 50-64, 65-74, 75 ve üzeri grupları oluşturur."
-            ],
-            "common across moderator levels": [
-                "moderatör düzeyleri arasında ortak"
+            "Comma-separated age cutpoints for creating age groups. For example, 50, 65, 75 creates groups 50 or younger, over 50 to 65, over 65 to 75, and over 75. Each upper cutpoint is included in the preceding group.": [
+                ""
             ],
             "Common Pitfalls:": [
                 "Sık Yapılan Hatalar:"
@@ -1441,11 +1510,17 @@
             "Compare fitted curves with Kaplan-Meier estimates": [
                 "Uydurulan eğrileri Kaplan-Meier tahminleriyle karşılaştırın"
             ],
+            "Compare models on the same complete-case rows and choose the model assumptions to match the study question.": [
+                ""
+            ],
             "Compare multiple distributions": [
                 "Birden fazla dağılımı karşılaştırın"
             ],
             "Comparison Level": [
                 "Karşılaştırma düzeyi"
+            ],
+            "Comparison with separate subgroup fits.": [
+                ""
             ],
             "Competing event": [
                 "Yarışan olay"
@@ -1510,6 +1585,9 @@
             "Comprehensive Outcome Preparation for Survival Analysis": [
                 "Sağkalım Analizi İçin Kapsamlı Sonuç Değişkeni Hazırlığı"
             ],
+            "Comprehensive Time Interval Calculator": [
+                ""
+            ],
             "Compute age-standardized mortality using direct or indirect standardization. Reports Standardized Mortality Ratio comparing observed vs expected deaths by age group.": [
                 "Doğrudan veya dolaylı standardizasyon kullanarak yaşa göre standardize edilmiş ölüm oranını hesaplayın. Yaş grubuna göre gözlemlenen ve beklenen ölümleri karşılaştıran Standardize Ölüm Oranını (SMR) bildirir."
             ],
@@ -1528,17 +1606,23 @@
             "Confidence intervals and p-values use the subject-clustered robust variance.": [
                 "Güven aralıkları ve p-değerleri bireye göre kümelenmiş sağlam varyansı kullanır."
             ],
-            "Confidence intervals are left blank: a standardized curve has no closed-form interval and would need bootstrapping.": [
-                "Güven aralıkları boş bırakıldı: standardize bir eğrinin kapalı formda aralığı yoktur ve bootstrap gerektirir."
-            ],
             "Confidence intervals are those of that single prediction.": [
                 "Güven aralıkları o tek öngörüye aittir."
             ],
             "Confidence intervals for competing risk median times are not available (CIF quantile CIs require specialized methods such as bootstrap).": [
                 "Yarışan risk medyan süreleri için güven aralıkları mevcut değildir (KİF kantil GA'ları bootstrap gibi özel yöntemler gerektirir)."
             ],
+            "Confidence intervals for standardized curves are not implemented here and are left blank. Appropriate uncertainty estimation, such as patient-level bootstrapping, is required.": [
+                ""
+            ],
             "Confidence intervals require bootstrapping and are left blank.": [
                 "Güven aralıkları bootstrap gerektirir ve boş bırakılmıştır."
+            ],
+            "Confidence level (%)": [
+                ""
+            ],
+            "Confidence level must be between 90 and 99.": [
+                ""
             ],
             "Confidence limits are left blank where the Kaplan-Meier event-free estimate is exactly 0% or 100%. The Greenwood-based complementary log-log interval degenerates at a probability boundary; the absence of observed events does not establish zero population risk.": [
                 "Kaplan-Meier olaysızlık tahmini tam olarak %0 veya %100 olduğunda güven sınırları boş bırakılır. Greenwood tabanlı tamamlayıcı log-log aralığı bir olasılık sınırında bozulur; gözlemlenen olayların olmaması sıfır popülasyon riski anlamına gelmez."
@@ -1609,6 +1693,9 @@
             "Core assumption of Cox regression that the hazard ratio stays constant over time. Tested using cox.zph; p &gt; 0.05 means no departure was detected, which is not the same as the assumption holding. If violated, consider time-varying effects or stratification.": [
                 "Cox regresyonunun temel varsayımı: tehlike oranı zaman içinde sabit kalır. cox.zph ile test edilir; p &gt; 0.05 sapma saptanmadığı anlamına gelir, bu varsayımın sağlandığı anlamına gelmez. İhlal varsa zamanla değişen etkileri veya tabakalandırmayı değerlendirin."
             ],
+            "Correct the dates at source, or tick 'Remove negative intervals' under Data Quality & Statistics to drop these rows from every statistic including person-time.": [
+                ""
+            ],
             "Correct Time Origin:": [
                 "Doğru Zaman Başlangıcı:"
             ],
@@ -1642,6 +1729,9 @@
             "Could not create event/censor-stratified cross-validation folds. Reduce the requested folds or provide more outcome observations.": [
                 "Olay ve sansüre göre tabakalı çapraz doğrulama katları oluşturulamadı. İstenen kat sayısını azaltınız veya daha fazla sonlanım gözlemi sağlayınız."
             ],
+            "Could not detect a common date format for columns '{start}' and '{end}'. Please select the correct format manually.": [
+                ""
+            ],
             "Could not find outcome variable": [
                 "Sonuç değişkeni bulunamadı"
             ],
@@ -1659,6 +1749,9 @@
             ],
             "Count": [
                 "Sayı"
+            ],
+            "Counted from the spreadsheet epoch, {value} would be {date}; SAS and Stata count from 1960-01-01 and R from 1970-01-01, so the same digits mean a date decades apart depending on which program wrote them.": [
+                ""
             ],
             "Covariate": [
                 "Kovaryat"
@@ -1683,6 +1776,9 @@
             ],
             "Cox model convergence problem": [
                 "Cox modeli yakınsama sorunu"
+            ],
+            "Cox model residual calculation failed: {msg}": [
+                ""
             ],
             "Cox model residual diagnostics": [
                 "Cox modeli artık tanılama yöntemleri"
@@ -1723,20 +1819,14 @@
             "Cox regression data could not be added to the clinical summary: {message}": [
                 "Cox regresyon verileri klinik özete eklenemedi: {message}"
             ],
-            "Cox regression estimated {direction} for {comparison}, with a hazard ratio of {hr} (95% CI: {lower} to {upper}, p = {p}), which was {significance}.": [
-                "Cox regresyonu, {comparison} için {direction} tahmin etti; hazard oranı {hr} (%95 GA: {lower} ila {upper}, p = {p}) idi ve bu {significance}."
+            "Cox regression estimated {direction} for {comparison}, with a hazard ratio of {hr} (95% CI: {lower} to {upper}, {p}), which was {significance}.": [
+                ""
             ],
-            "Cox regression estimated a hazard ratio of {hr} for {comparison} (95% CI: {lower} to {upper}, p = {p}); the interval includes 1, so these data are compatible with both a lower and a higher hazard.": [
-                "Cox regresyonu, {comparison} için {hr} hazard oranı tahmin etti (%95 GA: {lower} ila {upper}, p = {p}); aralık 1'i içerir, bu nedenle bu veriler hem daha düşük hem de daha yüksek bir hazard ile uyumludur."
+            "Cox regression estimated a hazard ratio of {hr} for {comparison} (95% CI: {lower} to {upper}, {p}); the interval includes 1, so these data are compatible with both a lower and a higher hazard.": [
+                ""
             ],
             "Cox regression estimates the hazard ratio (HR) for a one-unit increase in the continuous predictor. HR > 1 indicates a higher instantaneous event rate and HR < 1 a lower rate, assuming a log-linear effect and proportional hazards.": [
                 "Cox regresyonu, sürekli yordayıcıdaki bir birimlik artış için hazard oranını (HR) tahmin eder. Log-doğrusal etki ve orantılı hazard varsayımları altında HR > 1 daha yüksek, HR < 1 ise daha düşük anlık olay hızını gösterir."
-            ],
-            "Cox Regression Explanations": [
-                "Cox Regresyonu Açıklamaları"
-            ],
-            "Cox Regression for Continuous Variables": [
-                "Sürekli Değişkenler İçin Cox Regresyonu"
             ],
             "Cox regression requires at least two observed groups. Descriptive survival results remain available.": [
                 "Cox regresyonu en az iki gözlemlenen grup gerektirir. Tanımlayıcı sağkalım sonuçları sunulmaya devam etmektedir."
@@ -1759,8 +1849,11 @@
             "Critical Errors": [
                 "Kritik Hatalar"
             ],
-            "Critical validation errors detected: {errors}. Ensure the outcome variable has exactly 2 levels, explanatory variables have sufficient variation, and consider removing rows with missing data.": [
-                "Kritik doğrulama hataları tespit edildi: {errors}. Sonuç değişkeninin tam olarak 2 düzeye sahip olduğundan, açıklayıcı değişkenlerin yeterli varyasyona sahip olduğundan emin olun ve eksik verili satırları kaldırmayı değerlendirin."
+            "Critical validation errors detected: {errors}. Ensure distinct positive and negative outcome levels are selected, explanatory variables have sufficient variation, and consider removing rows with missing data.": [
+                ""
+            ],
+            "Critically small sample (n={n}). Statistical summaries are unreliable with fewer than 10 observations. Results should be considered exploratory only. Minimum n=20 recommended for basic descriptive analysis.": [
+                ""
             ],
             "Cross-validation": [
                 "Çapraz doğrulama"
@@ -1867,17 +1960,11 @@
             "Cut-off #": [
                 "Kesim Noktası #"
             ],
-            "Cut-off Analysis Explanations": [
-                "Kesim Noktası Analizi Açıklamaları"
-            ],
             "Cut-off analysis for a continuous predictor does not support competing risks. Use Survival Analysis or Multivariable Survival Analysis for competing-risk models, or set survival type to Overall, Cause Specific, or Disease-Free here.": [
                 "Sürekli bir belirteç için kesme noktası analizi yarışan riskleri desteklemez. Yarışan risk modelleri için Sağkalım Analizi veya Çok Değişkenli Sağkalım Analizini kullanın ya da burada sağkalım türünü Genel, Nedene Özgü veya Hastalıksız olarak ayarlayın."
             ],
-            "Cut-off Options": [
-                "Kesim Noktası Seçenekleri"
-            ],
-            "Cut-off Point Analysis": [
-                "Kesim Noktası Analizi"
+            "Cut-off Constraints": [
+                ""
             ],
             "Cut-off Value": [
                 "Kesim Noktası Değeri"
@@ -1906,6 +1993,9 @@
             "Data Export Options": [
                 "Veri Dışa Aktarma Seçenekleri"
             ],
+            "Data frame is empty; ensure your dataset has at least one row.": [
+                ""
+            ],
             "Data is usable but review the flagged items.": [
                 "Veriler kullanılabilir, ancak işaretlenen noktaları inceleyiniz."
             ],
@@ -1923,6 +2013,9 @@
             ],
             "Data Quality": [
                 "Veri kalitesi"
+            ],
+            "Data Quality & Statistics": [
+                ""
             ],
             "Data Quality Assessment": [
                 "Veri Kalitesi Değerlendirmesi"
@@ -1957,11 +2050,20 @@
             "Date Components": [
                 "Tarih Bileşenleri"
             ],
+            "Date format": [
+                ""
+            ],
+            "Date Format Configuration": [
+                ""
+            ],
             "Date format does not match the data": [
                 "Tarih biçimi verilerle eşleşmiyor"
             ],
             "Date Format in Data": [
                 "Verideki Tarih Formatı"
+            ],
+            "Date parsing failed for column '{column}' using format '{format}'. Example values: {examples}": [
+                ""
             ],
             "Date parsing failed. Start date valid: %d, End date valid: %d. Please verify date format matches selected type (%s) and check for missing/invalid date values.": [
                 "Tarih ayrıştırma başarısız oldu. Başlangıç tarihi geçerli: %d, Bitiş tarihi geçerli: %d. Lütfen tarih biçiminin seçilen türle eşleştiğini doğrulayın (%s) ve eksik/geçersiz tarih değerlerini kontrol edin."
@@ -2022,6 +2124,9 @@
             ],
             "days": [
                 "gün"
+            ],
+            "Days": [
+                ""
             ],
             "DD-MM-YYYY (or DD/MM/YYYY)": [
                 "GG-AA-YYYY (veya GG/AA/YYYY)"
@@ -2152,20 +2257,26 @@
             "Diagnostic information": [
                 "Tanısal / hata ayıklama bilgisi"
             ],
-            "Diagnostic metrics are waiting for the Predictor Positive Level. Choose which level of '{variable}' is the positive test result. Observed levels: {levels}. The logistic model, odds ratios, forest plot and nomogram are not affected.": [
-                "Tanısal ölçütler Belirteç Pozitif Düzeyi'ni bekliyor. '{variable}' değişkeninin hangi düzeyinin pozitif test sonucu olduğunu seçin. Gözlenen düzeyler: {levels}. Lojistik model, olasılık oranları, orman grafiği ve nomogram bundan etkilenmez."
+            "Diagnostic metrics are waiting for the Predictor Positive Level and Predictor Negative Level. Choose which levels of '{variable}' represent the positive and negative test results. Observed levels: {levels}. The logistic model, odds ratios, forest plot and nomogram are not affected.": [
+                ""
             ],
-            "Diagnostic metrics for '{variable}' require paired complete observations with exactly two observed predictor levels and two observed outcome levels. The prediction nomogram is unaffected.": [
-                "'{variable}' için tanısal metrikler, tam olarak iki gözlemlenen belirteç düzeyi ve iki gözlemlenen sonuç düzeyi olan eşleştirilmiş eksiksiz gözlemler gerektirir. Tahmin nomogramı bundan etkilenmez."
+            "Diagnostic metrics for '{variable}' require both outcome levels to be present among the selected positive and negative predictor levels. The prediction nomogram is unaffected.": [
+                ""
             ],
-            "Diagnostic metrics were not calculated because a valid paired 2\\u{00D7}2 table could not be formed.": [
-                "Geçerli bir eşleştirilmiş 2\\u{00D7}2 tablo oluşturulamadığı için tanısal metrikler hesaplanmadı."
+            "Diagnostic metrics for '{variable}' require paired complete observations with at least two observed categorical predictor levels and two observed outcome levels. The prediction nomogram is unaffected.": [
+                ""
+            ],
+            "Diagnostic metrics were not calculated because a valid paired 2×2 table could not be formed.": [
+                ""
             ],
             "Diagnostic metrics were not calculated because no diagnostic predictor was available.": [
                 "Tanısal belirteç mevcut olmadığı için tanısal metrikler hesaplanmadı."
             ],
             "Diagnostic Metrics:": [
                 "Tanısal Metrikler:"
+            ],
+            "Diagnostic predictor '{variable}' has {n} observed levels ({allLevels}). Excluded {nExcl} observation(s) with unselected predictor level(s) ({excluded}) from the 2x2 diagnostic table so only '{pos}' (+) vs '{neg}' (-) are compared.": [
+                ""
             ],
             "Diagnostic Predictor (binary)": [
                 "Tanısal Belirteç (ikili)"
@@ -2191,14 +2302,17 @@
             "Direct method: the 'SMR' column holds the DIRECTLY STANDARDIZED RATE (events per unit person-time, using the cohort's person-time age distribution as the standard), with a log-scale 95% interval. Compare groups by the ratio of these rates. 'Expected' is the events this group's standardized rate implies over its own person-time. Switch to the indirect method if you want an observed/expected SMR.": [
                 "Doğrudan yöntem: 'SMR' sütunu DOĞRUDAN STANDARTLAŞTIRILMIŞ HIZI (standart olarak kohortun kişi-zaman yaş dağılımı kullanılarak, birim kişi-zaman başına düşen olay) log ölçeğinde %95 aralıkla içerir. Grupları bu hızların oranıyla karşılaştırın. 'Beklenen', bu grubun standartlaştırılmış hızının kendi kişi-zamanı üzerinde öngördüğü olay sayısıdır. Gözlenen/beklenen SMR istiyorsanız dolaylı yönteme geçin."
             ],
-            "Directly from the single interaction model, not from separate subgroup Cox fits.": [
-                "Doğrudan tek etkileşim modelinden; ayrı alt grup Cox uydurmalarından değil."
+            "Direct standardization is not estimable for {group}: no person-time in required age band(s) {bands}. Use groups with overlapping age support or combine age bands before comparing standardized rates.": [
+                ""
             ],
             "Discrimination": [
                 "Ayırt etme"
             ],
             "Discrimination is not summarized by Harrell's C here: it assumes a single event type, and under competing risks it would rank expanded pseudo-observations rather than patients.": [
                 "Ayırt etme burada Harrell C ile özetlenmez: tek bir olay türü varsayar ve yarışan riskler altında hastaları değil, genişletilmiş sözde gözlemleri sıralar."
+            ],
+            "Discrimination may be overstated and prediction error understated. These estimates are not bounds on performance in new patients; use internal validation and external validation in the intended population.": [
+                ""
             ],
             "Disease event (1)": [
                 "Hastalık olayı (1)"
@@ -2214,6 +2328,9 @@
             ],
             "Disease-free (0)": [
                 "Hastalıksız (0)"
+            ],
+            "Disease-free endpoint timing": [
+                ""
             ],
             "Disease-Free Survival": [
                 "Hastalıksız Sağkalım"
@@ -2284,6 +2401,9 @@
             "dym": [
                 "gya"
             ],
+            "Each coefficient row tests an interaction contrast. For a term spanning several coefficients, read the joint test to assess overall effect modification. HR = 1 means no modification on that contrast.": [
+                ""
+            ],
             "Each outcome level may be assigned to only one state. Assigned to more than one: {levels}.": [
                 "Her sonuç düzeyi yalnızca tek bir duruma atanabilir. Birden fazlasına atananlar: {levels}."
             ],
@@ -2302,9 +2422,6 @@
             "Each row tests whether the focal effect differs across the moderator (effect modification). A significant p indicates the effect is modified.": [
                 "Her satır odak etkisinin moderatöre göre farklılaşıp farklılaşmadığını (etki değişimi) test eder. Anlamlı bir p, etkinin değiştiğini gösterir."
             ],
-            "each subgroup has its own": [
-                "her alt grubun kendine ait"
-            ],
             "Educational Content": [
                 "Eğitici İçerik"
             ],
@@ -2322,9 +2439,6 @@
             ],
             "Effects are Fine-Gray subdistribution hazard ratios for the event of interest; they are not cause-specific hazard ratios or cumulative-risk ratios.": [
                 "Etkiler ilgilenilen olay için Fine-Gray alt dağılım tehlike oranlarıdır; nedene özgü tehlike oranları veya kümülatif risk oranları değildir."
-            ],
-            "Efficiency": [
-                "Verimlilik"
             ],
             "Elapsed time and outcome must be different variables.": [
                 "Geçen süre ve sonuç farklı değişkenler olmalıdır."
@@ -2401,6 +2515,15 @@
             "Encoded predictors contain non-finite values.": [
                 "Kodlanmış yordayıcılar sonlu olmayan değerler içeriyor."
             ],
+            "End date column contains only missing values; cannot calculate time intervals.": [
+                ""
+            ],
+            "End Date Variable": [
+                ""
+            ],
+            "End dates are not valid date objects": [
+                ""
+            ],
             "End y-axis": [
                 "Bitiş y ekseni"
             ],
@@ -2466,6 +2589,9 @@
             ],
             "Error in cross-validation: {msg}": [
                 "Çapraz doğrulama hatası: {msg}"
+            ],
+            "Error parsing dates with format {format}: {message}": [
+                ""
             ],
             "Error parsing datetimes with format {fmt}. • Parser error: {msg} • Try selecting a different format. • Check that your data matches the selected format.": [
                 "{fmt} biçimindeki tarih-saatler ayrıştırılırken hata oluştu. • Ayrıştırıcı hatası: {msg} • Farklı bir biçim seçmeyi deneyin. • Verilerinizin seçilen biçimle eşleştiğini kontrol edin."
@@ -2599,8 +2725,8 @@
             "Events observed:": [
                 "Gözlenen olaylar:"
             ],
-            "Events per variable (EPV) = %d/%d = %.1f. Recommended minimum is 10 EPV for reliable Cox regression. With EPV < 10, coefficient estimates may be biased, standard errors inflated, and overfitting likely. Consider: (1) collecting more events, (2) simpler models, or (3) penalized regression methods.": [
-                "Değişken başına olay sayısı (EPV) = %d/%d = %.1f. Güvenilir Cox regresyonu için önerilen asgari değer 10 EPV'dir. EPV < 10 olduğunda katsayı tahminleri yanlı olabilir, standart hatalar şişebilir ve aşırı uyum olasıdır. Şunları düşünün: (1) daha fazla olay toplama, (2) daha basit modeller veya (3) cezalandırılmış regresyon yöntemleri."
+            "Events per person-%s": [
+                ""
             ],
             "Events per variable = %.1f (< 10). Cox model may be unstable; interpret hazard ratios with caution.": [
                 "Değişken başına olay sayısı = %.1f (< 10). Cox modeli kararsız olabilir; hazard oranlarını dikkatle yorumlayın."
@@ -2634,6 +2760,9 @@
             ],
             "Example:": [
                 "Örnek:"
+            ],
+            "Examples:": [
+                ""
             ],
             "Excel Serial (Days since 1900)": [
                 "Excel Seri (1900'den bu yana geçen gün sayısı)"
@@ -2761,13 +2890,28 @@
             "Extreme outcome imbalance provides limited information for one outcome state and may destabilize cross-validation.": [
                 "Aşırı sonlanım dengesizliği, sonlanım durumlarından biri için sınırlı bilgi sağlar ve çapraz doğrulamayı kararsızlaştırabilir."
             ],
-            "Factor variable '{var}' has insufficient variation in complete cases.": [
-                "'{var}' faktörü tam olgularda yeterli değişkenlik göstermiyor."
+            "Extreme threshold multiplier": [
+                ""
+            ],
+            "Extreme threshold multiplier must be between 1.5 and 5.": [
+                ""
+            ],
+            "Extreme-value filtering cannot act on these data: with {n} intervals (fewer than 101) the 99th percentile is interpolated between the two longest intervals, so at a multiplier of {mult} no interval can exceed the '{mult} x 99th percentile' threshold of {threshold} {unit}, and none was removed. Review the longest intervals directly.": [
+                ""
+            ],
+            "Extreme-value filtering was skipped: the 99th percentile of the intervals is {q99}, so a '{mult} x 99th percentile' threshold cannot separate long follow-up from typical follow-up. Review the interval distribution directly.": [
+                ""
+            ],
+            "Extreme-value removal dropped {count} of the longest interval(s) (above {threshold} {unit}) from the analysis. These rows are excluded from the mean, the median and the total person-time, so the person-time denominator here is smaller than the follow-up actually observed. Long follow-up is not automatically an error: check the removed rows before using this person-time for an incidence rate.": [
+                ""
+            ],
+            "Factor '{var}' lost level(s) ({dropped}) after complete-case filtering; reference level is '{ref}'.": [
+                ""
             ],
             "fdr": [
                 "fdr"
             ],
-            "Few events: only {nEv} of {nTotal} non-missing outcomes ({pct}%) are '{level}'. Kaplan-Meier and Cox estimates are unstable with fewer than 5 events.": [
+            "Few events: only {nEv} of {nTotal} non-missing outcomes ({pct}%) are '{level}'. As a general rule of thumb (< 5 events), Kaplan-Meier and Cox estimates are unstable with fewer than 5 events.": [
                 ""
             ],
             "finalfit": [
@@ -2815,8 +2959,8 @@
             "Firth penalized logistic regression": [
                 "Firth cezalı lojistik regresyon"
             ],
-            "Fisher's exact test": [
-                "Fisher kesin testi"
+            "Fisher's exact test / Firth regression": [
+                ""
             ],
             "Fit a parametric survival model": [
                 "Parametrik bir sağkalım modeli kurun"
@@ -2826,6 +2970,9 @@
             ],
             "Fits a cross-validated LASSO-penalized Cox model for exploratory model development. Apparent performance requires internal and external validation before clinical use.": [
                 "Keşifsel model geliştirme için çapraz doğrulamalı, LASSO cezalı Cox modeli kurar. Görünür performans, klinik kullanımdan önce iç ve dış doğrulama gerektirir."
+            ],
+            "Fix the source data: format the column as a date before exporting (in Excel: Format Cells > Date), or convert it to text in YYYY-MM-DD form, then re-import.": [
+                ""
             ],
             "Fleming-Harrington (rho=0.5)": [
                 "Fleming-Harrington (rho=0.5)"
@@ -2884,9 +3031,6 @@
             "For {variable}, the adjusted {effect} is {estimate}.": [
                 "{variable} için düzeltilmiş {effect} {estimate}."
             ],
-            "For a term A \\u{00D7} B the subgroups are formed by whichever variable is categorical (the moderator), and the HR shown is the other variable's effect within each subgroup.": [
-                "A \\\\u{00D7} B terimi için alt gruplar, hangi değişken kategorikse (moderatör) ona göre oluşturulur ve gösterilen TO, diğer değişkenin her alt grup içindeki etkisidir."
-            ],
             "For categorical variables, use the exact points shown": [
                 "Kategorik değişkenler için gösterilen puanları aynen kullanın"
             ],
@@ -2896,11 +3040,14 @@
             "For continuous variables, interpolate between the given values": [
                 "Sürekli değişkenler için verilen değerler arasında ara değer bulun"
             ],
-            "For each moderator level the module relevels the moderator so that level is the reference and refits the <i>same</i> full model (Surv ~ focal \\u{00D7} moderator, plus any other covariates you included).": [
-                "Her moderatör düzeyi için modül, moderatörü o düzey referans olacak şekilde yeniden düzeyler ve <i>aynı</i> tam modeli (Surv ~ odak \\\\u{00D7} moderatör, artı dahil ettiğiniz diğer kovaryatlar) yeniden uydurur."
+            "For disease-free survival, follow-up must end at the first qualifying recurrence or death, or at censoring if neither occurred. Disease status at the last visit alone cannot establish the time of the first event.": [
+                ""
             ],
             "For each predictor, draw a vertical line up to the <i>Points</i> axis to read its score.": [
                 "Her öngördürücü için puanını okumak üzere <i>Puan</i> eksenine dik bir çizgi çekin."
+            ],
+            "For each two-way interaction with a categorical moderator, these are conditional effects implied by the single full interaction model. The moderator is releveled and the same model is refitted; its focal coefficient and covariance give the subgroup HR, CI and p-value.": [
+                ""
             ],
             "For each variable below, find your patient's value": [
                 "Aşağıdaki her değişken için hastanızın değerini bulun"
@@ -2986,6 +3133,9 @@
             "Groups defined by empirical quantiles of the Cox relative-risk score": [
                 "Gruplar Cox göreceli risk skorunun ampirik kantilleriyle tanımlanmıştır"
             ],
+            "Guessed as a packed date instead, the same digits give a different year, so the time intervals and the person-time would be wrong by decades without any visible sign.": [
+                ""
+            ],
             "Guide: Use the dropdown menus to map your outcome values to the four standard categories: Dead of Disease, Dead of Other Causes, Alive with Disease, and Alive without Disease.": [
                 "Kılavuz: Sonuç değerlerinizi dört standart kategoriye eşlemek için açılır menüleri kullanın: Hastalıktan Ölü, Diğer Nedenlerden Ölü, Hastalıkla Canlı ve Hastalıksız Canlı."
             ],
@@ -3064,9 +3214,6 @@
             "High-dimensional setting where an unpenalized full Cox model is unlikely to be stable. Penalization is appropriate, but rigorous internal validation remains necessary.": [
                 "Yüksek boyutlu bu durumda tüm değişkenleri içeren cezasız Cox modelinin kararlı olması beklenmez. Cezalandırma uygundur, ancak titiz iç doğrulama yine gereklidir."
             ],
-            "higher (narrower CI, more power)": [
-                "daha yüksek (daha dar GA, daha fazla güç)"
-            ],
             "Higher event information per encoded candidate column. This descriptive ratio is not a sample-size guarantee and does not establish stable selection.": [
                 "Kodlanmış aday sütun başına daha fazla olay bilgisi vardır. Bu betimsel oran örneklem büyüklüğü garantisi değildir ve kararlı seçimi kanıtlamaz."
             ],
@@ -3130,17 +3277,11 @@
             "HR (Univariable)": [
                 "HO (Tek Değişkenli)"
             ],
-            "HR = 1 means no modification.": [
-                "TO = 1 etki değişimi olmadığı anlamına gelir."
-            ],
             "HR = 1.05 means each one-unit increase multiplies the hazard by 1.05; it is not a cumulative risk ratio and does not by itself establish causality.": [
                 "HR = 1,05, her bir birimlik artışın hazardı 1,05 ile çarptığı anlamına gelir; bu kümülatif risk oranı değildir ve tek başına nedensellik göstermez."
             ],
             "HR = 2.0 means the hazard is doubled; HR = 0.5 means the hazard is halved compared to the reference group.": [
                 "TO = 2.0 tehlikenin iki katına çıktığı, TO = 0.5 ise referans gruba göre yarıya indiği anlamına gelir."
-            ],
-            "HRs nearly identical:": [
-                "TO değerleri neredeyse aynıdır:"
             ],
             "Ideal": [
                 "İdeal"
@@ -3157,17 +3298,20 @@
             "If imputation or cutoffs are developed, learn them only in the development training splits and apply the frozen definitions to validation patients.": [
                 "Atama yöntemleri veya eşik değerleri geliştiriliyorsa bunları yalnızca geliştirme eğitim bölümlerinde öğreniniz ve sabitlenmiş tanımları doğrulama hastalarına uygulayınız."
             ],
-            "If incorrect, use the 'Positive Outcome Level' dropdown to specify the correct level": [
-                "Yanlışsa, doğru düzeyi belirtmek için 'Pozitif Sonuç Düzeyi' açılır menüsünü kullanın"
+            "If incorrect, use the 'Positive Level', 'Negative Level', 'Predictor Positive Level', and 'Predictor Negative Level' dropdowns to specify the correct levels": [
+                ""
             ],
             "If multiple events occur, priority is given to type {type}.": [
                 "Birden fazla olay meydana gelirse, öncelik {type} türüne verilir."
             ],
+            "If only one variable is categorical, that variable defines the subgroups. Continuous-by-continuous and higher-order interactions do not have discrete subgroup HRs here.": [
+                ""
+            ],
             "If using multiple imputation, repeat imputation and all preprocessing inside each resampling training split; imputing once before validation leaks information.": [
                 "Çoklu atama kullanılıyorsa her yeniden örnekleme eğitim bölümünde atamayı ve tüm ön işlemleri tekrarlayınız; doğrulamadan önce bir kez atama yapmak bilgi sızıntısına yol açar."
             ],
-            "If you enable this option, the calculated cut-off group will be added to your data as a new variable. This variable will have two levels: \"Below Cut-off\" and \"Above Cut-off\" based on the data-derived cut-off point found using the maximally selected rank statistic. This option is only available if you enable the \"Find Cut-off for Continuous Explanatory Variable\" option.": [
-                "Bu seçeneği etkinleştirirseniz, hesaplanan kesim noktası grubu verilerinize yeni bir değişken olarak eklenecektir. Bu değişken, maksimum seçilmiş sıra istatistiği kullanılarak bulunan veriden türetilmiş kesim noktasına dayalı olarak iki düzeye sahip olacaktır: \"Kesim Noktası Altında\" ve \"Kesim Noktası Üstünde\". Bu seçenek yalnızca \"Sürekli Açıklayıcı Değişken İçin Kesim Noktası Bul\" seçeneğini etkinleştirirseniz kullanılabilir."
+            "If you enable this option, the calculated cut-off group will be added to your data as a new variable with two levels (\"low\" for values less than or equal to the cut-off and \"high\" for values strictly above the cut-off) based on the data-derived cut-off point found using the maximally selected rank statistic. This option is only available if you enable the \"Find Cut-off for Continuous Explanatory Variable\" option.": [
+                ""
             ],
             "If you enable this option, the calculated time-to-event or follow-up duration will be added to your data as a new variable.": [
                 "Bu seçeneği etkinleştirirseniz, hesaplanan olaya kadar geçen süre veya takip süresi verilerinize yeni bir değişken olarak eklenecektir."
@@ -3198,6 +3342,12 @@
             ],
             "In the {group} group, half of the patients had the event by {median} {unit} (95% CI {lower} to {upper}).": [
                 "{group} grubunda hastaların yarısı {median} {unit} zamanına kadar olayı yaşadı (%95 GA {lower} ila {upper})."
+            ],
+            "In the {group} group, half of the patients had the event by {median} {unit}.": [
+                ""
+            ],
+            "In the observed group, {atrisk} patients were still at risk at that time and {events} events had occurred by that time.": [
+                ""
             ],
             "In-sample (optimistic)": [
                 "Örneklem içi (iyimser)"
@@ -3250,6 +3400,9 @@
             "infinite (zero false results in this cell)": [
                 "sonsuz (bu hücrede sıfır yanlış sonuç)"
             ],
+            "Info": [
+                ""
+            ],
             "Information": [
                 "Bilgi"
             ],
@@ -3292,9 +3445,6 @@
             "Interaction (Effect-Modification) Test.": [
                 "Etkileşim (Etki Değişimi) Testi."
             ],
-            "Interaction model (this module)": [
-                "Etkileşim modeli (bu modül)"
-            ],
             "Interaction Terms": [
                 "Etkileşim Terimleri"
             ],
@@ -3304,7 +3454,7 @@
             "Interaction Terms:": [
                 "Etkileşim Terimleri:"
             ],
-            "Interactions in model: ": [
+            "Interactions in model: {terms}": [
                 ""
             ],
             "Interactions with a continuous moderator are shown as a coefficient in the table above; per-subgroup HRs require a categorical moderator. If both variables in a term are continuous, no subgroups can be formed.": [
@@ -3379,6 +3529,9 @@
             "Invalid landmark time": [
                 "Geçersiz sınır noktası (landmark) süresi"
             ],
+            "Invalid minimum group size": [
+                ""
+            ],
             "Invalid nomogram timepoints ignored": [
                 "Geçersiz nomogram zaman noktaları yok sayıldı"
             ],
@@ -3388,6 +3541,12 @@
             "Invalid person-time cutpoints ignored": [
                 "Geçersiz kişi-zaman kesim noktaları yok sayıldı"
             ],
+            "Invalid rate multiplier": [
+                ""
+            ],
+            "Invalid RMST horizon": [
+                ""
+            ],
             "Invalid survival object. Check time and status variables.": [
                 "Geçersiz sağkalım nesnesi. Zaman ve durum değişkenlerini kontrol ediniz."
             ],
@@ -3396,6 +3555,9 @@
             ],
             "Invalid Timezone": [
                 "Geçersiz Saat Dilimi"
+            ],
+            "Invalid variable selection.": [
+                ""
             ],
             "is the inverse-probability-of-censoring-weighted mean squared error between predicted survival and observed status at a timepoint (lower is better).": [
                 "bir zaman noktasında öngörülen sağkalım ile gözlenen durum arasındaki, sansür olasılığının tersiyle ağırlıklandırılmış ortalama kare hatadır (düşük olması daha iyidir)."
@@ -3478,11 +3640,17 @@
             "Landmark Analysis": [
                 "Kerteriz (Landmark) Analizi"
             ],
+            "Landmark analysis": [
+                ""
+            ],
             "Landmark analysis at {time} {unit}: {n} patients excluded (events/censoring before landmark). All times are measured FROM the landmark, not from study entry, and all estimates are conditional on being event-free at the landmark; they are not comparable with unlandmarked survival times.": [
                 "{time} {unit} zamanında sınır noktası (landmark) analizi: {n} hasta hariç tutuldu (sınır noktasından önceki olaylar/sansürlemeler). Tüm süreler çalışmaya girişten değil, sınır noktasından İTİBAREN ölçülür ve tüm tahminler sınır noktasında olaysız olma koşuluna bağlıdır; sınır noktası uygulanmamış sağkalım süreleriyle karşılaştırılamazlar."
             ],
             "Landmark analysis at {time} {unit}.": [
                 "{time} {unit} landmark (referans zaman) analizi."
+            ],
+            "Landmark analysis excluded every participant: none of the {n} observations reached the {amount} landmark. Lower the landmark time or switch landmark analysis off.": [
+                ""
             ],
             "Landmark analysis is on: rows with follow-up shorter than the landmark time were excluded before this check.": [
                 ""
@@ -3508,17 +3676,23 @@
             "Landmark time {landmark} is beyond all observed follow-up times; no patients remain at risk.": [
                 "{landmark} kerteriz zamanı gözlemlenen tüm takip sürelerinin ötesindedir; risk altında hiçbir hasta kalmamıştır."
             ],
+            "Landmark time must be a finite non-negative number": [
+                ""
+            ],
             "Landmark time must be a finite, non-negative value.": [
                 "Sınır noktası süresi sonlu ve negatif olmayan bir değer olmalıdır."
             ],
             "Landmark time must be zero or positive (received %s). A landmark is a time point during follow-up; a negative value would shift every subject's follow-up forward instead of conditioning on surviving to it.": [
                 "Yer işareti zamanı sıfır veya pozitif olmalıdır (%s alındı). Yer işareti, takip sırasındaki bir zaman noktasıdır; negatif bir değer, hayatta kalmaya bağlı kılmak yerine her deneğin takibini ileri kaydırır."
             ],
+            "Landmark time point": [
+                ""
+            ],
             "Large amount of missing data: {percent}% of rows will be removed ({removed} out of {total} rows).": [
                 "Büyük miktarda kayıp veri: satırların %{percent}'si çıkarılacak ({total} satırdan {removed} tanesi)."
             ],
-            "Large amount of missing outcome data: {pct}% ({missing} out of {total} rows).": [
-                "Büyük miktarda eksik sonuç verisi: %{pct} ({total} satırdan {missing} tanesi)."
+            "Large amount of missing outcome data: {pct}% ({missing} out of {total} rows). Complete-case analysis drops missing rows (general rule of thumb > 10% missing).": [
+                ""
             ],
             "Large dataset detected": [
                 "Büyük veri kümesi saptandı"
@@ -3610,6 +3784,9 @@
             "Logistic regression odds-ratio table, forest plot, prediction nomogram, and optional binary diagnostic metrics.": [
                 "Lojistik regresyon odds oranı tablosu, orman grafiği, tahmin nomogramı ve isteğe bağlı ikili tanısal metrikler."
             ],
+            "Longest interval in the data is {years} years ({value} {unit}, before any landmark or filter). Intervals beyond 50 years exceed the follow-up of essentially every clinical cohort, and usually mean the dates were parsed with the wrong format rather than observed. Check the Date Format setting and the raw date columns before reporting this person-time. If the intervals are genuinely this long (a lifetime cohort, or an age computed from date of birth), this message can be ignored.": [
+                ""
+            ],
             "Low datetime parsing success rate: {pct}% • Only {parsed} of {total} non-missing values were successfully parsed. • This may indicate incorrect format selection or data quality issues. • Try a different datetime format, review the failed samples in the Quality Assessment panel, and check the data source for systematic errors. • Clinical analysis may be unreliable below 70% success.": [
                 "Düşük tarih-saat ayrıştırma başarı oranı: %{pct} • Eksik olmayan {total} değerin yalnızca {parsed} tanesi başarıyla ayrıştırıldı. • Bu, yanlış biçim seçimini veya veri kalitesi sorunlarını gösterebilir. • Farklı bir tarih-saat biçimi deneyin, Kalite Değerlendirmesi panelindeki başarısız örnekleri inceleyin ve veri kaynağını sistematik hatalar açısından kontrol edin. • Klinik analiz %70 başarının altında güvenilmez olabilir."
             ],
@@ -3621,9 +3798,6 @@
             ],
             "Low events per variable": [
                 "Değişken başına düşük olay sayısı"
-            ],
-            "Low Events Per Variable (EPV)": [
-                "Değişken Başına Düşük Olay Sayısı (EPV)"
             ],
             "Low events-per-variable (EPV ≈ {epv}). Odds ratios may be unstable; consider penalized/Firth logistic regression.": [
                 "Düşük değişken başına olay sayısı (EPV ≈ {epv}). Odds oranları kararsız olabilir; cezalı/Firth lojistik regresyonu düşünün."
@@ -3639,9 +3813,6 @@
             ],
             "Lower": [
                 "Alt"
-            ],
-            "lower (wider CI)": [
-                "daha düşük (daha geniş GA)"
             ],
             "Lower 95% CI": [
                 "Alt %95 GA"
@@ -3685,6 +3856,9 @@
             "Martingale residuals against the linear predictor; a trend suggests a mis-specified functional form": [
                 "Doğrusal öngörücüye karşı Martingale artıkları; bir eğilim yanlış belirtilmiş bir fonksiyonel formu gösterir"
             ],
+            "Maximum-likelihood odds ratios could not be estimated due to separation for: {variables}. Enable Firth penalized regression or combine sparse categories before interpreting model-based predictions.": [
+                ""
+            ],
             "mdy": [
                 "ayg"
             ],
@@ -3694,11 +3868,26 @@
             "Mean calibration (observed - predicted at t = {t})": [
                 "Ortalama kalibrasyon (t = {t} anında gözlenen - tahmin edilen)"
             ],
+            "mean follow-up": [
+                ""
+            ],
             "Mean over {b} resamples": [
                 "{b} yeniden örneklemin ortalaması"
             ],
+            "mean post-landmark follow-up": [
+                ""
+            ],
+            "Mean post-landmark time": [
+                ""
+            ],
+            "Mean time": [
+                ""
+            ],
             "Meaning": [
                 "Anlam"
+            ],
+            "measured from the {adj} landmark": [
+                ""
             ],
             "Measures rank discrimination among comparable patient pairs. 0.5 indicates chance ordering and 1.0 perfect ordering. There are no universal clinical cut-offs; adequacy depends on the intended use, outcome, case mix, and external validation.": [
                 "Karşılaştırılabilir hasta çiftleri arasındaki sıralama ayırt etme gücünü ölçer. 0.5 rastgele sıralamayı, 1.0 kusursuz sıralamayı gösterir. Evrensel bir klinik kesim değeri yoktur; yeterlilik amaçlanan kullanıma, sonlanıma, olgu karışımına ve dış doğrulamaya bağlıdır."
@@ -3769,6 +3958,9 @@
             "Median survival for the {group} group was {median} {unit} (95% CI: {lower} to {upper} {unit}).": [
                 "{group} grubu için medyan sağkalım {median} {unit} idi (%95 GA: {lower} ila {upper} {unit})."
             ],
+            "Median survival for the {group} group was {median} {unit}.": [
+                ""
+            ],
             "Median survival line": [
                 "Medyan sağkalım çizgisi"
             ],
@@ -3826,11 +4018,11 @@
             "Minimum CV error": [
                 "En düşük çapraz doğrulama hatası"
             ],
-            "Minimum Group Size (%)": [
-                "Minimum Grup Büyüklüğü (%)"
-            ],
             "Minimum group size (%)": [
                 "Minimum grup büyüklüğü (%)"
+            ],
+            "Minimum group size (%) must be between 5 and 30; defaulting to 10%.": [
+                ""
             ],
             "Minimum group size not met": [
                 "Asgari grup büyüklüğü karşılanmadı"
@@ -3862,14 +4054,17 @@
             "Missing Dependencies": [
                 "Eksik bağımlılıklar"
             ],
-            "Missing observations are removed only for variables used by each calculation. Variable names with spaces or special characters are handled automatically and restored in the output.": [
-                "Kayıp gözlemler yalnızca her hesaplama tarafından kullanılan değişkenler için kaldırılır. Boşluk veya özel karakter içeren değişken adları otomatik olarak işlenir ve çıktıda geri yüklenir."
+            "Missing observations are removed only for variables used by each analysis path (complete cases across the selected outcome and explanatory variables for the regression table; paired complete outcome and diagnostic-predictor observations for diagnostic metrics). Variable names with spaces or special characters are handled automatically and restored in the output.": [
+                ""
             ],
             "Missing outcome data: {pct}% ({missing} out of {total} rows).": [
                 "Eksik sonuç verisi: %{pct} ({total} satırdan {missing} tanesi)."
             ],
             "Missing outcome values excluded": [
                 "Eksik sonuç değerleri hariç tutuldu"
+            ],
+            "Missing stratification values excluded": [
+                ""
             ],
             "Missing time/outcome values": [
                 "Eksik süre/sonlanım değerleri"
@@ -3970,8 +4165,8 @@
             "Moderate datetime parsing success rate: {pct}% • {parsed} of {total} non-missing values were successfully parsed. • Review the failed samples in the Quality Assessment panel. • Consider specifying the format manually if auto-detection is incorrect.": [
                 "Orta düzeyde tarih-saat ayrıştırma başarı oranı: %{pct} • Eksik olmayan {total} değerden {parsed} tanesi başarıyla ayrıştırıldı. • Kalite Değerlendirmesi panelindeki başarısız örnekleri inceleyin. • Otomatik algılama yanlışsa biçimi manuel olarak belirtmeyi düşünün."
             ],
-            "Moderate dimensionality. Consider standard Cox regression (Multivariable Survival in ClinicoPath) as an alternative.": [
-                "Orta düzeyde boyutluluk. Alternatif olarak standart Cox regresyonunu (ClinicoPath içinde Çok Değişkenli Sağkalım) düşününüz."
+            "Moderate dimensionality with ample events. LASSO is valid, and standard Cox regression (Multivariable Survival in ClinicoPath) may also be considered.": [
+                ""
             ],
             "Moderate event count": [
                 "Orta düzeyde olay sayısı"
@@ -4012,17 +4207,20 @@
             "months": [
                 "ay"
             ],
+            "Months": [
+                ""
+            ],
             "months (recommended for oncology)": [
                 "ay (onkoloji için önerilir)"
-            ],
-            "More reliable for small cell counts": [
-                "Küçük hücre sayıları için daha güvenilirdir"
             ],
             "Most rows have no usable outcome": [
                 "Çoğu satırda kullanılabilir sonuç yok"
             ],
             "Multicollinearity": [
                 "Çoklu bağlantı"
+            ],
+            "Multiple Cut-off Detection": [
+                ""
             ],
             "Multiple cut-off marker groups": [
                 "Çoklu kesim noktası belirteç grupları"
@@ -4057,9 +4255,6 @@
             "Multiple Event Types is enabled but no outcome level has been assigned to a category. Assign each level of your outcome variable to one of: {categories}. A category with no patients in this cohort is fine and can be left empty - what matters is that every level present in the data is assigned somewhere.": [
                 "Çoklu Olay Türleri etkin ancak hiçbir sonuç düzeyi bir kategoriye atanmadı. Sonuç değişkeninizin her düzeyini şunlardan birine atayın: {categories}. Bu kohortta hastası olmayan bir kategori sorun teşkil etmez ve boş bırakılabilir - önemli olan verilerde mevcut olan her düzeyin bir yere atanmasıdır."
             ],
-            "Multiple events configuration error": [
-                "Çoklu olay yapılandırma hatası"
-            ],
             "multistate": [
                 "çok durumlu"
             ],
@@ -4090,6 +4285,9 @@
             "myd": [
                 "ayg"
             ],
+            "N = {n} observations.": [
+                ""
+            ],
             "N at Risk": [
                 "Risk Altındaki Sayı (N)"
             ],
@@ -4104,6 +4302,9 @@
             ],
             "N/A (single column)": [
                 "Uygulanamaz (tek sütun)"
+            ],
+            "N/A (single factor)": [
+                ""
             ],
             "Natural language summaries": [
                 "Doğal dil özetleri"
@@ -4123,8 +4324,17 @@
             "Near-perfect collinearity detected. Remove redundant variables before analysis.": [
                 "Neredeyse tam çoklu bağlantı saptandı. Analizden önce gereksiz tekrar içeren değişkenleri çıkarınız."
             ],
+            "Negative Level": [
+                ""
+            ],
             "Negative LR: {value}": [
                 "Negatif OO: {value}"
+            ],
+            "Negative outcome level:": [
+                ""
+            ],
+            "Negative predictor level:": [
+                ""
             ],
             "Negative survival time": [
                 "Negatif sağkalım süresi"
@@ -4137,6 +4347,9 @@
             ],
             "Negative Survival Times Detected: {count} observation(s) have negative time values.": [
                 "Negatif Sağkalım Süreleri Saptandı: {count} gözlemde negatif zaman değeri var."
+            ],
+            "Negative time intervals detected (end date before start date) in {count} of {total} rows ({pct}%).": [
+                ""
             ],
             "No": [
                 "Hayır"
@@ -4219,6 +4432,9 @@
             "No Influential Outliers:": [
                 "Etkili Uç Değer Yok:"
             ],
+            "No interval exceeded the extreme threshold of {threshold} {unit} (0 removed)": [
+                ""
+            ],
             "No issues": [
                 "Sorun yok"
             ],
@@ -4294,11 +4510,23 @@
             "no usable continuous split was found": [
                 ""
             ],
+            "No valid dates found for format detection in either column": [
+                ""
+            ],
             "No Valid Datetime Values Found": [
                 "Geçerli Tarih-Saat Değeri Bulunamadı"
             ],
             "No valid explanatory variables remain after removing constant predictors.": [
                 "Sabit yordayıcılar çıkarıldıktan sonra geçerli açıklayıcı değişken kalmadı."
+            ],
+            "No valid time intervals after parsing start/end dates.": [
+                ""
+            ],
+            "No valid time intervals could be calculated; please verify start/end dates and selected format.": [
+                ""
+            ],
+            "No valid time intervals could be calculated. Check that the date format setting matches the data and that both date columns contain readable dates.": [
+                ""
             ],
             "No variable-based risk scores are available because the selected rule retained no predictors.": [
                 ""
@@ -4390,6 +4618,9 @@
             "Not estimable": [
                 "Kestirilemiyor"
             ],
+            "not estimable": [
+                ""
+            ],
             "Not estimable (term is aliased)": [
                 "Tahmin edilemez (terim eşdoğrusal)"
             ],
@@ -4401,6 +4632,9 @@
             ],
             "not identified by the fitter": [
                 "model uydurucu tarafından tanımlanamadı"
+            ],
+            "not reached": [
+                ""
             ],
             "not reported for competing risks": [
                 "yarışan riskler için bildirilmez"
@@ -4450,6 +4684,9 @@
             "Number of CV folds": [
                 "Çapraz doğrulama katı sayısı"
             ],
+            "Number of CV folds must be an integer of at least 3.": [
+                ""
+            ],
             "Number of Events": [
                 "Olay sayısı"
             ],
@@ -4468,8 +4705,8 @@
             "Number of Knots (3-7)": [
                 "Düğüm Sayısı (3-7)"
             ],
-            "Number of knots for restricted cubic splines. 3 knots = 2 df (simplest), 4 knots = 3 df (recommended default), 5 knots = 4 df (more flexible). Knots are placed at Harrell-recommended percentiles. More knots allow detection of complex non-linear patterns but may overfit with small samples.": [
-                "Kısıtlı kübik splinelar için düğüm sayısı. 3 düğüm = 2 sd (en basit), 4 düğüm = 3 sd (önerilen varsayılan), 5 düğüm = 4 sd (daha esnek). Düğümler Harrell tarafından önerilen yüzdeliklere yerleştirilir. Daha fazla düğüm karmaşık doğrusal olmayan kalıpların tespit edilmesini sağlar ancak küçük örneklemlerde aşırı uyuma (overfitting) yol açabilir."
+            "Number of knots for restricted cubic splines. 3 knots = 2 df (simplest), 4 knots = 3 df (recommended default), 5 knots = 4 df (more flexible). Uses natural splines with interior knots at equally spaced quantiles and boundary knots at the observed minimum and maximum, as in splines::ns(). More knots allow detection of complex non-linear patterns but may overfit with small samples.": [
+                ""
             ],
             "Number of knots for spline-based models. More knots allow more flexible hazard shapes but may lead to overfitting. Used only for Royston-Parmar splines.": [
                 "Spline tabanlı modeller için düğüm sayısı. Daha fazla düğüm daha esnek hazard şekilleri sağlar ancak aşırı uyuma yol açabilir. Yalnızca Royston-Parmar splineları için kullanılır."
@@ -4552,6 +4789,9 @@
             "Observed Events": [
                 "Gözlenen Olaylar"
             ],
+            "Observed outcome levels:": [
+                ""
+            ],
             "Observed Records": [
                 "Gözlenen Kayıtlar"
             ],
@@ -4576,8 +4816,8 @@
             "Odds Ratio Table and Plot": [
                 "Odds Oranı Tablosu ve Grafiği"
             ],
-            "Odds ratios interpretation": [
-                "Odds oranları yorumu"
+            "Odds ratios interpretation (Positive vs Negative)": [
+                ""
             ],
             "Odds Scale": [
                 "Odds Ölçeği"
@@ -4587,9 +4827,6 @@
             ],
             "One curve is produced for the whole cohort, each patient at their own observed covariate values. <i>%s</i> is <b>not</b> varied, so this output does <b>not</b> compare its levels.": [
                 "Her hasta kendi gözlenen kovaryat değerlerinde olacak şekilde tüm kohort için tek bir eğri üretilir. <i>%s</i> <b>değiştirilmez</b>; dolayısıyla bu çıktı düzeylerini karşılaştır<b>maz</b>."
-            ],
-            "One row per crossed term.": [
-                "Her çaprazlanmış terim için bir satır."
             ],
             "Only {count} event(s) observed": [
                 "Yalnızca {count} olay gözlemlendi"
@@ -4602,6 +4839,9 @@
             ],
             "Only {nEvents} events and {nCensored} censored observations are available. Cross-validation and selected coefficients may be highly unstable; no fixed event count guarantees reliable prediction modeling.": [
                 "Yalnızca {nEvents} olay ve {nCensored} sansürlü gözlem vardır. Çapraz doğrulama ve seçilen katsayılar çok kararsız olabilir; sabit bir olay sayısı güvenilir tahmin modellemesini garanti etmez."
+            ],
+            "Only {percent}% of non-missing values in '{column}' were parsed with format '{format}'. Please verify that the selected format matches all values or standardize the column.": [
+                ""
             ],
             "Only %d event(s) detected (n=%d total). Descriptive results are shown, but estimates from this many events are unstable with very wide confidence intervals. Cut-off determination is suppressed.": [
                 "Yalnızca %d olay saptandı (toplam n=%d). Tanımlayıcı sonuçlar gösterilmektedir ancak bu kadar az olaydan elde edilen tahminler çok geniş güven aralıklarıyla kararsızdır. Kesme noktası belirleme engellendi."
@@ -4620,6 +4860,12 @@
             ],
             "Only %d/%d (%.1f%%) outcomes successfully recoded": [
                 "Yalnızca %d/%d (%.1f%%) sonuç başarıyla yeniden kodlandı"
+            ],
+            "Only one categorical predictor supplied (represented by multiple mutually exclusive indicator columns); between-predictor collinearity is not applicable.": [
+                ""
+            ],
+            "Only one interval could be calculated. No spread can be estimated from a single observation, so the standard deviation and the confidence interval are reported as NA, and the mean, median and range are all that one value. This is not a basis for any statistical statement.": [
+                ""
             ],
             "Only one predictor column; collinearity not applicable.": [
                 "Yalnızca bir yordayıcı sütunu vardır; çoklu bağlantı değerlendirmesi uygulanamaz."
@@ -4684,9 +4930,6 @@
             "Other Components": [
                 "Diğer Bileşenler"
             ],
-            "Other covariates' effects": [
-                "Diğer kovaryatların etkileri"
-            ],
             "Outcome": [
                 "Sonlanım"
             ],
@@ -4711,14 +4954,20 @@
             "Outcome label matches multiple variables after cleaning; using '{variable}'. Please verify selection.": [
                 "Sonuç etiketi temizleme sonrasında birden fazla değişkenle eşleşiyor; '{variable}' kullanılıyor. Lütfen seçimi doğrulayın."
             ],
-            "Outcome level modeled as the event: '{level}'.": [
-                "Olay olarak modellenen sonuç düzeyi: '{level}'."
+            "Outcome level modeled as the event: '{level}' (negative/reference level: '{neg}').": [
+                ""
             ],
             "Outcome level(s) not assigned to any state: {levels}. Assign every level to one of the four states; unassigned levels would otherwise be dropped from the analysis.": [
                 "Hiçbir duruma atanmamış sonuç düzey(ler)i: {levels}. Her düzeyi dört durumdan birine atayın; aksi takdirde atanmamış düzeyler analizden çıkarılacaktır."
             ],
             "Outcome Organizer for Survival Analysis": [
                 "Sağkalım Analizi İçin Sonuç Düzenleyici"
+            ],
+            "Outcome positive and negative levels must be different (both set to '{level}').": [
+                ""
+            ],
+            "Outcome positive and negative levels must be different. Please select distinct positive and negative outcome levels.": [
+                ""
             ],
             "Outcome Recode": [
                 "Sonlanım Yeniden Kodlaması"
@@ -4750,8 +4999,8 @@
             "Outcome variable has {count} unique values: {values}{more}": [
                 "Sonuç değişkeni {count} benzersiz değere sahip: {values}{more}"
             ],
-            "Outcome variable has {n} levels. For odds ratio analysis, the outcome must be binary (exactly 2 levels). Consider creating a binary variable or using multinomial regression.": [
-                "Sonuç değişkeni {n} düzeye sahip. Odds oranı analizi için sonuç ikili olmalıdır (tam olarak 2 düzey). İkili bir değişken oluşturmayı veya multinomiyal regresyon kullanmayı düşünün."
+            "Outcome variable has {n} observed levels ({allLevels}). Excluded {nExcl} observation(s) with unselected outcome level(s) ({excluded}) so only '{pos}' (positive) vs '{neg}' (negative) are analyzed.": [
+                ""
             ],
             "Outcome variable has very few observations in one category ({minCount} out of {totalCount}). Results may be unreliable.": [
                 "Sonuç değişkeninin bir kategorisinde çok az gözlem var ({totalCount} gözlemden {minCount} tanesi). Sonuçlar güvenilmez olabilir."
@@ -4996,8 +5245,8 @@
             "Performs a conditional landmark description: only subjects still event-free and under observation after the landmark are retained, and their time scale is reset there. This changes the target population and does not by itself remove immortal-time bias, estimate a treatment effect, or justify excluding early events.": [
                 "Koşullu bir kerteriz (landmark) tanımlaması gerçekleştirir: yalnızca kerterizden sonra hala olaysız ve gözlem altında olan denekler tutulur ve zaman ölçekleri orada sıfırlanır. Bu hedef popülasyonu değiştirir ve tek başına ölümsüz zaman yanlılığını (immortal-time bias) ortadan kaldırmaz, bir tedavi etkisini tahmin etmez veya erken olayların hariç tutulmasını meşrulaştırmaz."
             ],
-            "Performs multivariable survival analysis using Cox proportional hazards regression. In multivariable survival analysis, person-time follow-up is crucial for properly adjusting for covariates while accounting for varying observation periods. The Cox proportional hazards model incorporates person-time by modeling the hazard function, which represents the instantaneous event rate per unit of person-time. When stratifying analyses or examining multiple predictors, the model accounts for how these factors influence event rates relative to the person-time at risk in each subgroup.": [
-                "Cox orantılı tehlikeler regresyonu kullanarak çok değişkenli sağkalım analizi yapar. Çok değişkenli sağkalım analizinde, değişen gözlem sürelerini hesaba katarken kovaryatlara göre uygun düzeltme yapmak için kişi-zaman izlemi kritik önemdedir. Cox orantılı tehlikeler modeli, kişi-zaman birimi başına anlık olay hızını temsil eden tehlike fonksiyonunu modelleyerek kişi-zamanı dahil eder. Analizler tabakalandırıldığında veya birden fazla öngördürücü incelendiğinde model, bu faktörlerin her alt gruptaki risk altındaki kişi-zamana göre olay hızlarını nasıl etkilediğini hesaba katar."
+            "Performs multivariable survival analysis using Cox proportional hazards regression. In multivariable survival analysis, person-time follow-up is crucial for properly adjusting for covariates while accounting for varying observation periods. The Cox proportional hazards model incorporates person-time by modeling the hazard function, which represents the instantaneous event rate per unit of person-time. When stratifying analyses or examining multiple predictors, the model accounts for how these factors influence event rates relative to the person-time at risk in each subgroup. Each row must represent one independent patient with one event or censoring time. Repeated visits, recurrent events, delayed entry, clustering and time-dependent covariates require a different analysis designed for those data.": [
+                ""
             ],
             "Performs survival analysis for a single cohort without group comparisons. Kaplan-Meier estimates use event times and risk sets; in competing-risk mode, cumulative incidence retains competing terminal events as separate states. Optional person-time rates use the sum of individual observation periods as their denominator. This is descriptive analysis of one cohort, not a treatment-effect estimate.": [
                 "Grup karşılaştırması yapmaksızın tek bir kohort için sağkalım analizi gerçekleştirir. Kaplan-Meier tahminleri olay zamanlarını ve risk kümelerini kullanır; yarışan riskler modunda kümülatif insidans yarışan nihai olayları ayrı durumlar olarak korur. İsteğe bağlı kişi-zamanı hızları paydada bireysel gözlem sürelerinin toplamını kullanır. Bu, tek bir kohortun tanımlayıcı analizidir, bir tedavi etkisi tahmini değildir."
@@ -5125,17 +5374,17 @@
             "Please install it using:": [
                 "Lütfen şununla kurun:"
             ],
+            "Please select both the 'Positive Level' (event, e.g., 'Dead', 'Event', 'Yes') and the 'Negative Level' (reference/non-event, e.g., 'Alive', 'No Event', 'No') of your outcome variable.": [
+                ""
+            ],
+            "Please select both the positive and negative outcome levels from the dropdown menus below the outcome variable.": [
+                ""
+            ],
             "Please select one or two categorical explanatory variables to create the Kaplan-Meier plot.": [
                 "Kaplan-Meier grafiği oluşturmak için lütfen bir veya iki kategorik açıklayıcı değişken seçin."
             ],
-            "Please select the positive outcome level from the dropdown menu below the outcome variable.": [
-                "Lütfen sonuç değişkeninin altındaki açılır menüden pozitif sonuç düzeyini seçin."
-            ],
             "Please select the positive outcome level. Available levels: {levels}": [
                 "Lütfen pozitif sonuç düzeyini seçin. Mevcut düzeyler: {levels}"
-            ],
-            "Please select which level of your outcome variable represents the 'positive' case (e.g., 'Dead', 'Event', 'Yes', 'Positive').": [
-                "Lütfen sonuç değişkeninizin hangi düzeyinin 'pozitif' olguyu temsil ettiğini seçin (ör. 'Ölü', 'Olay', 'Evet', 'Pozitif')."
             ],
             "Plot Appearance": [
                 "Grafik Görünümü"
@@ -5191,20 +5440,17 @@
             "Points to Risk Conversion": [
                 "Puandan Riske Dönüşüm"
             ],
-            "pool information across subgroups": [
-                "alt gruplar arasında bilgiyi havuzlar"
-            ],
             "Poor": [
                 "Zayıf"
+            ],
+            "Positive and Negative Outcome Levels Required": [
+                ""
             ],
             "Positive Level": [
                 "Pozitif Düzey"
             ],
             "Positive LR: {value}": [
                 "Pozitif OO: {value}"
-            ],
-            "Positive Outcome Level Required": [
-                "Pozitif Sonuç Düzeyi Gerekli"
             ],
             "Positive outcome level:": [
                 "Pozitif sonuç düzeyi:"
@@ -5251,6 +5497,9 @@
             "Prediction nomogram not generated.": [
                 "Tahmin nomogramı üretilmedi."
             ],
+            "Prediction nomogram was not generated because maximum-likelihood estimates could not be identified for separated predictor(s): {variables}.": [
+                ""
+            ],
             "Predictor encoding": [
                 "Yordayıcı kodlaması"
             ],
@@ -5259,6 +5508,15 @@
             ],
             "Predictor Level Modeling:": [
                 "Belirteç Düzeyi Modellemesi:"
+            ],
+            "Predictor Negative Level": [
+                ""
+            ],
+            "Predictor positive and negative levels for '{variable}' must be different (both set to '{level}').": [
+                ""
+            ],
+            "Predictor positive and negative levels must be different (both set to '{level}').": [
+                ""
             ],
             "Predictor Positive Level": [
                 "Belirteç Pozitif Düzeyi"
@@ -5350,6 +5608,9 @@
             "Proportional Hazards Test (Adjusted Cox)": [
                 "Orantılı Tehlikeler Testi (Düzeltilmiş Cox)"
             ],
+            "Proportional hazards test could not be computed: {msg}": [
+                ""
+            ],
             "Proportional Hazards Test Could Not Be Performed": [
                 "Orantılı Tehlikeler Testi Gerçekleştirilemedi"
             ],
@@ -5362,8 +5623,8 @@
             "Proportional Hazards: Schoenfeld Residual Plots": [
                 "Orantılı Tehlikeler: Schoenfeld Artık Grafikleri"
             ],
-            "Provides exact p-values regardless of sample size": [
-                "Örneklem büyüklüğünden bağımsız olarak kesin p değerleri sağlar"
+            "Provides exact 2x2 p-values and finite penalized odds ratios in small samples": [
+                ""
             ],
             "Quality Assessment": [
                 "Kalite Değerlendirmesi"
@@ -5407,8 +5668,8 @@
             "Rate multiplier must be a finite positive number (received %s). It is the unit rates are expressed in - 100 for \"events per 100 person-%s\", 1000 for \"per 1000\". A negative or zero multiplier would report negative incidence rates. Person-time analysis was not performed.": [
                 "Hız çarpanı sonlu bir pozitif sayı olmalıdır (%s alındı). Hızların ifade edildiği birimdir: \"100 kişi-%s başına olay\" için 100, \"1000 başına\" için 1000. Negatif veya sıfır çarpan negatif insidans hızları bildirir. Kişi-zamanı analizi yapılmadı."
             ],
-            "re-estimated per subgroup": [
-                "her alt grup için yeniden tahmin edilir"
+            "Rate multiplier must be a positive number; defaulting to 100.": [
+                ""
             ],
             "Read across to the Points scale to determine points for that variable": [
                 "O değişkenin puanını belirlemek için Puan ölçeğine doğru okuyun"
@@ -5449,9 +5710,6 @@
             "Recurrence-Free Survival (RFS)": [
                 "Nükssüz Sağkalım (RFS)"
             ],
-            "Recurrence/Progression": [
-                "Nüks / İlerleme"
-            ],
             "recurrence/progression or death": [
                 "nüks/progresyon veya ölüm"
             ],
@@ -5466,9 +5724,6 @@
             ],
             "Redefined outcome": [
                 "Yeniden tanımlanan sonlanım"
-            ],
-            "Redefined Outcome Preview": [
-                "Yeniden Tanımlanan Sonuç Önizlemesi"
             ],
             "Redefined survival outcome": [
                 "Yeniden tanımlanan sağkalım sonucu"
@@ -5488,9 +5743,6 @@
             "Relative instantaneous event rate under a proportional-hazards model. HR &gt; 1 indicates a higher fitted hazard and HR &lt; 1 a lower fitted hazard. It is not a cumulative-risk ratio or a causal effect by itself.": [
                 "Orantılı tehlikeler modeli altında göreceli anlık olay hızı. TO &gt; 1 daha yüksek, TO &lt; 1 daha düşük bir model tehlikesini gösterir. Tek başına kümülatif risk oranı veya nedensel etki değildir."
             ],
-            "Releveling changes only the parameterization, not the fit, so the focal main-effect coefficient in the releveled model is the focal effect <i>within</i> that moderator level: HR = exp(coef), with CI and p taken from that model's variance-covariance matrix.": [
-                "Yeniden düzeyleme yalnızca parametrelemeyi değiştirir, uydurmayı değil; bu nedenle yeniden düzeylenmiş modeldeki odak ana etki katsayısı, odak etkisinin o moderatör düzeyi <i>içindeki</i> değeridir: TO = exp(katsayı); GA ve p o modelin varyans-kovaryans matrisinden alınır."
-            ],
             "REMARK Reporting Checklist": [
                 "REMARK Raporlama Kontrol Listesi"
             ],
@@ -5499,6 +5751,12 @@
             ],
             "Remove any duplicate column names": [
                 "Yinelenen sütun adlarını kaldırın"
+            ],
+            "Remove extreme values": [
+                ""
+            ],
+            "Remove negative intervals": [
+                ""
             ],
             "Remove the interaction first if you want to test the main effect.": [
                 "Ana etkiyi test etmek istiyorsanız önce etkileşimi kaldırın."
@@ -5520,6 +5778,9 @@
             ],
             "Removed encoded columns constant in complete cases: {vars}.": [
                 "Tam olgularda sabit olan kodlanmış sütunlar çıkarıldı: {vars}."
+            ],
+            "Removing negative intervals dropped {count} of {total} rows ({pct}%) whose end date fell before their start date. A negative interval is not an unusual measurement but an impossible one: at least one of the two dates in each of those rows is wrong. Those rows are dropped from the mean, the median and the total person-time, so the person-time denominator reported here covers fewer participants than you supplied. These dates were read with the \"{format}\" format; the usual causes are the start and end date columns being swapped for those rows, or a mis-detected day/month order, which flips only the rows whose day-of-month is 12 or less. Correct the dates at source rather than leaving them to this filter before reporting this person-time.": [
+                ""
             ],
             "Report cohort size, event count, observed event proportion, follow-up summaries, raw-variable completeness, and memory footprint. These are descriptive checks, not a validated risk-of-bias assessment; they cannot verify non-informative censoring, representativeness, or adequacy for a particular clinical decision.": [
                 "Kohort boyutunu, olay sayısını, gözlemlenen olay oranını, takip özetlerini, ham değişken tamlığını ve bellek ayak izini bildirin. Bunlar tanımlayıcı kontrollerdir, doğrulanmış bir yanlılık riski değerlendirmesi değildir; bilgilendirici olmayan sansürlemeyi, temsiliyeti veya belirli bir klinik karar için yeterliliği doğrulayamazlar."
@@ -5560,20 +5821,23 @@
             "Required packages are unavailable: {packages}. Reinstall or update the module before running this analysis.": [
                 "Gerekli paketler mevcut değil: {packages}. Analizi çalıştırmadan önce modülü yeniden kurunuz veya güncelleyiniz."
             ],
-            "Residual calculation failed: %s": [
-                "Artık hesaplaması başarısız oldu: %s"
-            ],
             "Residual diagnostics": [
                 "Artık tanılamaları"
             ],
             "Residual diagnostics could not be calculated: {message}": [
                 "Artık tanılamaları hesaplanamadı: {message}"
             ],
+            "Residual diagnostics could not be computed": [
+                ""
+            ],
             "Residuals are from a Cox model of survival on %s.": [
                 "Artıklar, sağkalımın %s üzerindeki Cox modelinden elde edilmiştir."
             ],
             "Restricted cubic spline assessment": [
                 "Kısıtlanmış kübik spline (RCS) değerlendirmesi"
+            ],
+            "Restricted cubic spline assessment suppressed: fewer than 10 events.": [
+                ""
             ],
             "Restricted cubic splines (RCS)": [
                 "Kısıtlı kübik splinelar (RCS)"
@@ -5589,6 +5853,9 @@
             ],
             "Restricted mean survival time": [
                 "Kısıtlı ortalama sağkalım süresi"
+            ],
+            "Restricted mean survival time (rmean) in this table is integrated up to the longest observed follow-up ({max} {unit}, survival::survfit default). For RMST at a prespecified or common group horizon (tau), see the Restricted Mean Survival Time table.": [
+                ""
             ],
             "Restricted mean survival time (RMST)": [
                 "Kısıtlı ortalama sağkalım süresi (RMST)"
@@ -5677,6 +5944,9 @@
             "Risk stratification identified <b>{groups} distinct risk groups</b> from the Cox model.": [
                 "Risk katmanlama Cox modelinden <b>{groups} ayrı risk grubu</b> belirledi."
             ],
+            "Risk stratification identified <b>{groups} distinct risk groups</b> from the Fine-Gray model.": [
+                ""
+            ],
             "Risk table": [
                 "Risk tablosu"
             ],
@@ -5722,6 +5992,9 @@
             "RMST time horizon (τ)": [
                 "RMST zaman ufku (τ)"
             ],
+            "RMST time horizon must be a non-negative finite number (use 0 for the default 75th percentile horizon).": [
+                ""
+            ],
             "RMST time horizon must be no larger than %.2f, the maximum follow-up supported in every displayed group.": [
                 "RMST zaman ufku, görüntülenen her grupta desteklenen en yüksek takip süresi olan %.2f değerinden büyük olmamalıdır."
             ],
@@ -5755,8 +6028,8 @@
             "Saved scores align with the original rows; excluded observations receive missing values. A valid empty model produces zero scores.": [
                 "Kaydedilen skorlar özgün satırlarla hizalıdır; dışlanan gözlemler eksik değer alır. Geçerli bir boş model sıfır skorlar üretir."
             ],
-            "Scale for spline-based models. Hazard scale models log hazard function, odds scale models log cumulative odds, normal scale models normal scores.": [
-                "Spline tabanlı modeller için ölçek. Hazard ölçeği log hazard fonksiyonunu modeller, odds ölçeği log kümülatif odds'u modeller, normal ölçek normal skorları modeller."
+            "Scale for spline-based models. Hazard scale models log cumulative hazard, odds scale models log cumulative odds, normal scale models normal scores.": [
+                ""
             ],
             "Scale-Adjusted Magnitude |beta| x SD": [
                 "Ölçeğe göre düzeltilmiş büyüklük |beta| x SS"
@@ -5775,9 +6048,6 @@
             ],
             "Schoenfeld Residual": [
                 "Schoenfeld Kalıntısı"
-            ],
-            "Schoenfeld residual calculation failed: %s": [
-                "Schoenfeld artık hesaplaması başarısız oldu: %s"
             ],
             "Schoenfeld residuals are indexed by event time, not by patient row, and are therefore reported in the separate event-time table.": [
                 "Schoenfeld artıkları hasta satırına göre değil olay zamanına göre dizinlenir ve bu nedenle ayrı olay zamanı tablosunda raporlanır."
@@ -5830,8 +6100,8 @@
             "Select Adjusted Variable": [
                 "Düzeltme Değişkenini Seçin"
             ],
-            "Select one binary outcome, identify its positive/event level, and add one or more categorical or continuous explanatory variables. The analysis reports logistic-regression odds ratios with confidence intervals and a matching forest plot.": [
-                "Bir ikili sonuç seçin, pozitif/olay düzeyini belirleyin ve bir veya daha fazla kategorik ya da sürekli açıklayıcı değişken ekleyin. Analiz, güven aralıkları ve eşleşen bir orman grafiği ile lojistik regresyon odds oranlarını raporlar."
+            "Select one outcome variable, identify its positive (event) and negative (reference) levels, and add one or more categorical or continuous explanatory variables. The analysis reports logistic-regression odds ratios with confidence intervals and a matching forest plot.": [
+                ""
             ],
             "Select Stratification Variables": [
                 "Tabakalandırma Değişkenlerini Seçin"
@@ -5884,11 +6154,11 @@
             "Selected Original Predictors": [
                 "Seçilen özgün yordayıcılar"
             ],
-            "Selected positive outcome level '{level}' not found in data. Available levels: {levels}": [
-                "Seçilen pozitif sonuç düzeyi '{level}' verilerde bulunamadı. Mevcut düzeyler: {levels}"
-            ],
             "Selected Predictor Columns": [
                 "Seçilen yordayıcı sütunları"
+            ],
+            "Selected recurrence/progression event level '{level}' is not a level of '{var}'. Levels available: {levels}.": [
+                ""
             ],
             "Selected variable {name} was not found in the dataset. • The column may have been renamed or removed. • Please select a different variable from the left panel. • Available variables: {available}": [
                 "Seçilen {name} değişkeni veri setinde bulunamadı. • Sütun yeniden adlandırılmış veya kaldırılmış olabilir. • Lütfen sol panelden farklı bir değişken seçin. • Kullanılabilir değişkenler: {available}"
@@ -5902,17 +6172,23 @@
             "Selected Variables and Coefficients": [
                 "Seçilen değişkenler ve katsayılar"
             ],
+            "Selected variables are not present in the dataset: {vars}.": [
+                ""
+            ],
             "Selected-refit test p = %.3f": [
                 "Seçilen değişkenlerle yeniden kurulum testi p = %.3f"
             ],
             "Sensitivity and specificity": [
                 "Duyarlılık ve özgüllük"
             ],
+            "Sensitivity and specificity above already use exact Clopper-Pearson intervals; for 2x2 association testing or sparse-cell odds ratios, use exact or penalized methods": [
+                ""
+            ],
             "Sensitivity: {value}": [
                 "Duyarlılık: {value}"
             ],
-            "Separate Cox per subgroup": [
-                "Alt grup başına ayrı Cox"
+            "Set {count} infinite value(s) (Inf/-Inf) to missing before numeric date conversion.": [
+                ""
             ],
             "Set {count} negative value(s) to missing: a negative serial is not a valid date in either Excel epoch.": [
                 "{count} negatif değer eksiğe ayarlandı: negatif bir seri numarası her iki Excel epoch'unda da geçerli bir tarih değildir."
@@ -5956,8 +6232,8 @@
             "Single Cut-off Detection": [
                 "Tekli Kesim Noktası Tespiti"
             ],
-            "Small expected cell counts detected (minimum = {min}). Chi-square assumptions may be violated.": [
-                "Küçük beklenen hücre sayıları saptandı (en küçük = {min}). Ki-kare varsayımları ihlal edilmiş olabilir."
+            "Small expected cell counts detected (minimum = {min}). Asymptotic 2x2 approximations and log-method likelihood-ratio intervals may be imprecise.": [
+                ""
             ],
             "Small Group After Cut-off": [
                 "Kesme Noktasından Sonra Küçük Grup"
@@ -5971,11 +6247,14 @@
             "Small sample size (n = {n}). Consider larger sample for more reliable cut-off analysis.": [
                 "Örneklem küçük (n = {n}). Daha güvenilir kesim noktası analizi için daha büyük bir örneklem değerlendirin."
             ],
+            "Small sample size (n={n}). Confidence intervals may be very wide and unreliable with fewer than 20 observations. Consider collecting more data or interpreting results cautiously.": [
+                ""
+            ],
             "Small sample size after removing missing data: {n} observations. Results may be unreliable.": [
                 "Kayıp veriler çıkarıldıktan sonra küçük örneklem büyüklüğü: {n} gözlem. Sonuçlar güvenilmez olabilir."
             ],
-            "Small sample size: {n} observations. Consider larger sample for more reliable estimates.": [
-                "Küçük örneklem büyüklüğü: {n} gözlem. Daha güvenilir tahminler için daha büyük örneklemi değerlendirin."
+            "Small sample size: {n} observations. As a general rule of thumb (< 30 observations), consider a larger sample for more reliable estimates.": [
+                ""
             ],
             "Smooth the equal-width interval rates with a person-time-weighted, local-constant LOESS curve. This is an exploratory, bandwidth-dependent trend, not an exact instantaneous hazard. At least three usable automatic intervals are required; otherwise the plot explains why no curve was estimated. There is no proportional-hazards assumption to assess in a single-arm analysis. No curve is estimated with zero observed events or an event at time zero.": [
                 "Eşit genişlikteki aralık hızlarını kişi-zaman ağırlıklı, yerel-sabit bir LOESS eğrisi ile düzleştirin. Bu keşif amaçlı, bant genişliğine bağlı bir eğilimdir, kesin bir anlık hazard değildir. En az üç kullanılabilir otomatik aralık gereklidir; aksi takdirde grafik neden eğri tahmin edilmediğini açıklar. Tek kollu bir analizde değerlendirilecek bir orantılı hazardlar varsayımı yoktur. Sıfır gözlemlenen olayla veya sıfır zamanındaki bir olayla hiçbir eğri tahmin edilmez."
@@ -5985,6 +6264,9 @@
             ],
             "Smoothed hazard function": [
                 "Düzleştirilmiş hazard fonksiyonu"
+            ],
+            "Smoothed Hazard Rate": [
+                ""
             ],
             "SMR / Standardized Rate": [
                 "SMR / Standardize Hız"
@@ -6010,6 +6292,9 @@
             "Some rows could not be computed ({detail}). Empty cells mean the model could not be fitted, not that it performed poorly.": [
                 "Bazı satırlar hesaplanamadı ({detail}). Boş hücreler modelin kötü performansını değil, modelin kurulamadığını belirtir."
             ],
+            "Some rows may have been entered with the day and month the other way round from the rest of this column. {count} of {total} rows read as a valid date under both \"{format}\" and \"{swapped}\"; the other {others} can only be read as \"{format}\", which is how the format was chosen. Those two groups should have the same follow-up on average, because the day of the month has nothing to do with how long a patient is followed - but here the ambiguous rows run at a median of {medianamb} days against {medianref} days for the rest (rank-sum p = {p}), which is what a mis-typed day/month order looks like. Check rows {rows} first: the largest of them spans {examplechosen} days as read and {exampleswapped} days with the day and month swapped. Dates typed in two different orders in one column parse without error and stay positive, so nothing else on this page can see them, and the total person-time is wrong by however much those rows are wrong.": [
+                ""
+            ],
             "Sparse Cox model development with cross-validated L1 penalization.": [
                 "Çapraz doğrulamalı L1 cezasıyla seyrek Cox modeli geliştirme."
             ],
@@ -6021,6 +6306,9 @@
             ],
             "Specificity: {value}": [
                 "Özgüllük: {value}"
+            ],
+            "Specified negative outcome level '{level}' not found in outcome variable. Available levels: {levels}": [
+                ""
             ],
             "Specified positive outcome level '{level}' not found in outcome variable. Available levels: {levels}": [
                 "Belirtilen pozitif sonuç düzeyi '{level}' sonuç değişkeninde bulunamadı. Mevcut düzeyler: {levels}"
@@ -6061,8 +6349,11 @@
             "Specify time points for survival-probability estimates. The historical factory value \"12, 36, 60\" and the word \"default\" both select unit-aware 1-, 3-, and 5-year points (for example 365, 1095, and 1825 for days, or 1, 3, and 5 for years). Enter any other comma- or space-separated positive values to request custom points in the selected output time scale.": [
                 "Sağkalım olasılığı tahminleri için zaman noktalarını belirtin. Geçmiş fabrika değeri \"12, 36, 60\" ve \"varsayılan\" sözcüğü birime duyarlı 1, 3 ve 5 yıllık noktaları seçer (örneğin günler için 365, 1095 ve 1825 veya yıllar için 1, 3 ve 5). Seçilen çıktı zaman ölçeğinde özel noktalar istemek için virgülle veya boşlukla ayrılmış başka pozitif değerler girin."
             ],
-            "Specify which outcome level represents the positive case (e.g., \"Dead\", \"Event\", \"Yes\"). This is important for correct calculation of likelihood ratios and diagnostic metrics.": [
-                "Hangi sonuç düzeyinin pozitif durumu temsil ettiğini belirtin (ör. \"Ölü\", \"Olay\", \"Evet\"). Bu, olabilirlik oranlarının ve tanısal metriklerin doğru hesaplanması için önemlidir."
+            "Specify which outcome level represents the negative/reference case (e.g., \"Alive\", \"No Event\", \"No\"). Both Positive and Negative outcome levels must be selected; any other outcome levels are excluded.": [
+                ""
+            ],
+            "Specify which outcome level represents the positive case (e.g., \"Dead\", \"Event\", \"Yes\"). Both Positive and Negative outcome levels must be selected; any other outcome levels are excluded.": [
+                ""
             ],
             "Spline (Royston-Parmar)": [
                 "Spline (Royston-Parmar)"
@@ -6073,14 +6364,14 @@
             "Spline scale": [
                 "Spline ölçeği"
             ],
+            "Spreadsheets and statistics packages store a date as a count of days since an epoch, and exporting the column as plain numbers loses the date formatting.": [
+                ""
+            ],
             "Standard Cox (all variables)": [
                 "Standart Cox (tüm değişkenler)"
             ],
             "Standard Cox on all variables: {message}": [
                 "Tüm değişkenlerle standart Cox: {message}"
-            ],
-            "Standard errors": [
-                "Standart hatalar"
             ],
             "Standard logistic regression could not be fitted: {message}. Review outcome coding, predictor variation, sparse categories, and separation; consider Firth penalized regression when appropriate.": [
                 "Standart lojistik regresyon uydurulamadı: {message}. Sonuç kodlamasını, belirteç varyasyonunu, seyrek kategorileri ve ayrılmayı inceleyin; uygun olduğunda Firth cezalı regresyonu düşünün."
@@ -6091,8 +6382,20 @@
             "Standardization method": [
                 "Standardizasyon yöntemi"
             ],
+            "Standardized (30.4375-day months, 365.25-day years)": [
+                ""
+            ],
             "Standardized over cohort (g-computation)": [
                 "Kohort üzerinde standardize (g-hesaplaması)"
+            ],
+            "Start date column contains only missing values; cannot calculate time intervals.": [
+                ""
+            ],
+            "Start Date Variable": [
+                ""
+            ],
+            "Start dates are not valid date objects": [
+                ""
             ],
             "Start y-axis": [
                 "Başlangıç y ekseni"
@@ -6114,6 +6417,9 @@
             ],
             "Statistical Glossary": [
                 "İstatistik Sözlüğü"
+            ],
+            "Statistical Summary & Person-Time Analysis": [
+                ""
             ],
             "Statistical Terms Glossary": [
                 "İstatistik Terimleri Sözlüğü"
@@ -6157,20 +6463,26 @@
             "Stratification variables: use these when the proportional hazards assumption is violated for certain variables. The model creates a separate baseline hazard for each level of the stratification variables but does not estimate their direct effects.": [
                 "Tabakalandırma değişkenleri: belirli değişkenler için orantılı tehlikeler varsayımı ihlal edildiğinde bunları kullanın. Model, tabakalandırma değişkenlerinin her düzeyi için ayrı bir temel tehlike oluşturur ancak doğrudan etkilerini tahmin etmez."
             ],
+            "Stratified by {var}": [
+                ""
+            ],
             "Stratified Cox model": [
                 "Tabakalandırılmış Cox modeli"
             ],
             "Stratified Cox model (different baseline hazards)": [
                 "Tabakalı Cox modeli (farklı başlangıç tehlikeleri)"
             ],
-            "Stratified Cox model could not be fitted: %s": [
-                "Tabakalı Cox modeli kurulamadı: %s"
+            "Stratified Cox model could not be fitted": [
+                ""
             ],
             "Stratified Cox regression": [
                 "Tabakalandırılmış Cox regresyonu"
             ],
             "Stratified Cox Regression": [
                 "Tabakalı Cox Regresyonu"
+            ],
+            "Stratified Cox regression failed: {msg}": [
+                ""
             ],
             "Stratified Cox regression was requested, but no stratification variable was selected. The Cox model was not fitted.": [
                 "Tabakalı Cox regresyonu istendi, ancak herhangi bir tabakalama değişkeni seçilmedi. Cox modeli kurulmadı."
@@ -6186,6 +6498,9 @@
             ],
             "Strong warning": [
                 "Güçlü uyarı"
+            ],
+            "Strong Warning": [
+                ""
             ],
             "Strong Warnings": [
                 "Güçlü Uyarılar"
@@ -6205,11 +6520,11 @@
             "Subgroup": [
                 "Alt grup"
             ],
-            "subgroup data only": [
-                "yalnızca alt grup verisi"
-            ],
             "Subgroup HRs are computed only when the term is <b>2-way</b> and the moderator is <b>categorical</b>.": [
                 "Alt grup TO değerleri yalnızca terim <b>iki yönlü</b> ve moderatör <b>kategorik</b> olduğunda hesaplanır."
+            ],
+            "Subgroup p-values are exploratory and are not adjusted for multiple comparisons. Significance in one subgroup but not another does not establish effect modification; use the interaction test.": [
+                ""
             ],
             "Subgroups were defined by the categorical variable in each term.": [
                 "Alt gruplar her terimdeki kategorik değişkene göre tanımlandı."
@@ -6301,6 +6616,9 @@
             "Survival estimate time points": [
                 "Sağkalım tahmini zaman noktaları"
             ],
+            "Survival estimates are not reported (shown as blank/NA) for time points exceeding a group's longest observed follow-up: {groups}.": [
+                ""
+            ],
             "Survival for whole group, no explanatory factor": [
                 "Tüm grup için sağkalım, açıklayıcı faktör yok"
             ],
@@ -6373,8 +6691,8 @@
             "Survival time from dates": [
                 "Tarihlerden sağkalım süresi"
             ],
-            "Survival Time Points (default: 1,3,5 years)": [
-                "Sağkalım Zaman Noktaları (varsayılan: 1, 3, 5 yıl)"
+            "Survival time points (default: 1, 3, 5 years)": [
+                ""
             ],
             "Survival time points not understood": [
                 "Sağkalım zaman noktaları anlaşılamadı"
@@ -6406,11 +6724,17 @@
             "system": [
                 "sistem"
             ],
+            "System Default": [
+                ""
+            ],
             "Table Configuration": [
                 "Tablo Yapılandırması"
             ],
             "Tau (Restriction Time)": [
                 "Tau (Kısıtlama Zamanı)"
+            ],
+            "Tau (restriction time)": [
+                ""
             ],
             "Term": [
                 "Terim"
@@ -6435,6 +6759,12 @@
             ],
             "The 'rms' package is required for nomogram generation but is not available.": [
                 "Nomogram oluşturmak için 'rms' paketi gerekli ancak kullanılamıyor."
+            ],
+            "The {landmark} landmark excluded no participants, because it is only {share}% of the median observed interval in these data ({median} {unit}). It still subtracted {amount} from every interval, so every duration and the total person-time below are that much smaller than the follow-up observed. Check that the landmark is expressed in the same unit as the results ({unit}): entering a value meant as months while the output unit is days is the usual cause.": [
+                ""
+            ],
+            "The {landmark} landmark is later than the median observed interval in these data ({median} {unit}), so more than half the cohort could not reach it and {excluded} of {total} observations were excluded. What remains is a subgroup defined by having been followed to the landmark, and the total person-time above is the denominator for that subgroup only: a rate computed from it answers \"among those still under observation at {amount}, how often did events occur\", not the same question for the cohort you enrolled. This analysis has no event indicator, so it cannot tell you whether the excluded participants had short follow-up because they died early or simply because they were enrolled recently - check that before interpreting the selection. Report the landmark, the number excluded and the reason alongside any rate taken from this analysis.": [
+                ""
             ],
             "The {rule} rule retained no predictor columns. The valid empty model has been preserved; choose a different lambda rule only as a prespecified modeling decision, not because the empty result is inconvenient.": [
                 "{rule} kuralı hiçbir yordayıcı sütununu korumadı. Geçerli boş model korundu; farklı bir lambda kuralını boş sonucu beğenmediğiniz için değil yalnızca önceden belirlenmiş bir modelleme kararı olarak seçiniz."
@@ -6589,9 +6919,6 @@
             "The flexsurv package is required for parametric survival models.": [
                 "Parametrik sağkalım modelleri için 'flexsurv' paketi gereklidir."
             ],
-            "The focal variable's HR <i>within each level of the categorical moderator</i>.": [
-                "Odak değişkenin <i>kategorik moderatörün her düzeyi içindeki</i> TO değeri."
-            ],
             "The following explanatory variable(s) have no variation after complete-case filtering: {variables}.": [
                 "Aşağıdaki açıklayıcı değişken(ler) eksiksiz olgu filtrelemesinden sonra hiçbir varyasyona sahip değildir: {variables}."
             ],
@@ -6604,17 +6931,14 @@
             "The horizontal axis is log lambda; the vertical axis is cross-validated partial-likelihood deviance. Lower deviance is better for this tuning criterion.": [
                 "Yatay eksen log lambda, dikey eksen çapraz doğrulamalı kısmi olabilirlik sapmasıdır. Bu ayarlama ölçütünde daha düşük sapma daha iyidir."
             ],
-            "The HR is the ratio of one variable's hazard ratio between the levels of the other; a small p indicates evidence that the effect of one variable <b>depends on</b> the other (effect modification).": [
-                "TO, bir değişkenin tehlike oranının diğerinin düzeyleri arasındaki oranıdır; küçük bir p, bir değişkenin etkisinin diğerine <b>bağlı olduğuna</b> (etki değişimi) dair kanıt gösterir."
-            ],
             "The Integrated Brier Score": [
                 "Entegre Brier Skoru"
             ],
             "The interaction is read as <i>focal : moderator</i>: the first variable is the focal effect and the second is the moderator that defines the subgroups (if only the first variable is categorical, the two are swapped so the categorical variable becomes the moderator).": [
                 "Etkileşim <i>odak : moderatör</i> olarak okunur: ilk değişken odak etkisi, ikincisi alt grupları tanımlayan moderatördür (yalnızca ilk değişken kategorikse ikisi yer değiştirir ve kategorik değişken moderatör olur)."
             ],
-            "the interaction model borrows strength across both subgroups for the variance, giving tighter intervals and smaller p; a separate fit sees only that subgroup's data, giving wider intervals.": [
-                "etkileşim modeli varyans için her iki alt gruptan güç alır ve daha dar aralıklarla daha küçük p verir; ayrı bir uydurma yalnızca o alt grubun verisini görür ve daha geniş aralıklar verir."
+            "The interaction model shares a baseline hazard and the non-interacting covariate effects across moderator levels, within any selected strata. Separate subgroup models estimate these independently. Their HRs, confidence intervals and p-values can differ substantially; neither closer estimates nor narrower intervals are guaranteed.": [
+                ""
             ],
             "The Kaplan-Meier survival plot": [
                 "Kaplan-Meier sağkalım grafiği"
@@ -6628,8 +6952,8 @@
             "The landmark time point, in the selected Time Unit. Must be zero or positive and must fall inside the observed follow-up range. Subjects whose follow-up ended at or before the landmark are excluded, and time is then measured from the landmark, so all estimates are conditional on surviving to it.": [
                 "Seçilen Zaman Biriminde yer işareti zaman noktası. Sıfır veya pozitif olmalı ve gözlemlenen takip aralığı içine düşmelidir. Takibi yer işaretinde veya öncesinde sona eren denekler hariç tutulur ve zaman daha sonra yer işaretinden itibaren ölçülür, bu nedenle tüm tahminler o zamana kadar hayatta kalmaya bağlıdır."
             ],
-            "The level '{level}' is used as the positive/exposure category as specified.": [
-                "'{level}' düzeyi belirtildiği gibi pozitif/maruziyet kategorisi olarak kullanılır."
+            "The level '{level}' is used as the positive/exposure category as specified (negative/reference category: '{neg}').": [
+                ""
             ],
             "The level of the outcome variable that represents the event of interest. Required for a factor outcome, and never taken from the order of the levels: without it the analysis stops and lists the levels. A numeric 0/1 outcome is read as 1 = event.": [
                 "Sonuç değişkeninin ilgilenilen olayı temsil eden düzeyi. Faktör türünde bir sonuç için zorunludur ve asla düzeylerin sırasından alınmaz: seçilmezse analiz durur ve düzeyleri listeler. Sayısal 0/1 bir sonuç 1 = olay olarak okunur."
@@ -6651,6 +6975,9 @@
             ],
             "The median time to the event of interest could not be estimated: no event of interest was observed (longest follow-up %.1f %s)": [
                 "İlgilenilen olaya kadar geçen medyan süre tahmin edilemedi: hiçbir ilgilenilen olay gözlemlenmedi (en uzun takip %.1f %s)"
+            ],
+            "The median time to the event of interest was not reached within interior follow-up: the cumulative incidence of the event of interest reached 50%% only at the final observed follow-up time (%.1f %s, reaching %.1f%%), where the step is driven by the last observation(s); report fixed-time cumulative incidence estimates instead": [
+                ""
             ],
             "The median time to the event of interest was not reached: the cumulative incidence of the event of interest stayed below 50%% within the observed follow-up (longest follow-up %.1f %s). With competing risks this is expected whenever the competing event is frequent, since the cumulative incidence can plateau below 50%% however long follow-up continues; it is not a statement that outcomes were good": [
                 "İlgilenilen olaya kadar geçen medyan süreye ulaşılamadı: ilgilenilen olayın kümülatif insidansı gözlemlenen takip içinde %%50'nin altında kaldı (en uzun takip %.1f %s). Yarışan risklerde, yarışan olay sık olduğunda bu durum beklenir, çünkü takip ne kadar sürerse sürsün kümülatif insidans %%50'nin altında bir platoya ulaşabilir; bu, sonuçların iyi olduğuna dair bir ifade değildir"
@@ -6690,6 +7017,9 @@
             ],
             "The nomogram could not be drawn:": [
                 "Nomogram çizilemedi:"
+            ],
+            "The nomogram estimates cumulative incidence by <b>{timepoints}</b> of follow-up, one risk scale per timepoint. Harrell's C-index is not reported for the expanded Fine-Gray fit; validation requires a cause- and horizon-specific measure.": [
+                ""
             ],
             "The nomogram estimates the probability of the event by <b>{timepoints}</b> of follow-up, one risk scale per timepoint. Model discrimination (Harrell's C-index) is <b>{cindex}</b>, where 0.5 is no better than chance and 1.0 is perfect separation.": [
                 "Nomogram, her zaman noktası için ayrı bir risk ölçeğiyle, <b>{timepoints}</b> izlem süresine kadar olay olasılığını tahmin eder. Model ayırt etme gücü (Harrell C-indeksi) <b>{cindex}</b>; 0.5 şanstan farksız, 1.0 kusursuz ayrım anlamına gelir."
@@ -6784,9 +7114,6 @@
             "The restricted mean survival time for group \"%s\" is shown without a confidence interval because its standard error could not be estimated.": [
                 "\"%s\" grubu için kısıtlanmış ortalama sağkalım süresi (RMST), standart hatası tahmin edilemediği için güven aralığı olmaksızın gösterilmektedir."
             ],
-            "The result table was incomplete.": [
-                "Sonuç tablosu tamamlanmamıştı."
-            ],
             "The risk score takes too few distinct values to be split into groups; this happens when the model contains only categorical predictors with few levels. The risk score itself is unaffected, and all other results below are unchanged. Add a continuous predictor if you want risk groups.": [
                 "Risk skoru gruplara ayrılamayacak kadar az farklı değer alıyor; bu, model yalnızca az düzeyli kategorik öngördürücüler içerdiğinde olur. Risk skorunun kendisi etkilenmez ve aşağıdaki diğer tüm sonuçlar değişmez. Risk grupları istiyorsanız sürekli bir öngördürücü ekleyin."
             ],
@@ -6798,6 +7125,9 @@
             ],
             "the same hazard": [
                 "aynı hazard"
+            ],
+            "The same variable ({variable}) is selected as both the start and the end date, so every interval is exactly zero and the total person-time is zero. Select the follow-up or event date as the End Date Variable.": [
+                ""
             ],
             "The Schoenfeld-residual test could not be computed: {message}": [
                 "Schoenfeld artık testi hesaplanamadı: {message}"
@@ -6822,6 +7152,12 @@
             ],
             "The selected lambda retained no predictor columns, so there is no fitted predictor effect for a Schoenfeld-residual diagnostic.": [
                 "Seçilen lambda hiçbir yordayıcı sütununu korumadı; dolayısıyla Schoenfeld artıkları tanılaması için tahmin edilmiş bir yordayıcı etkisi yoktur."
+            ],
+            "The selected negative outcome level '{level}' is not present among paired complete observations. Available levels: {levels}.": [
+                ""
+            ],
+            "The selected negative predictor level '{level}' is not present among paired complete observations. Available levels: {levels}.": [
+                ""
             ],
             "The selected outcome could not be mapped after variable-name normalization.": [
                 "Seçilen sonuç, değişken adı normalleştirmesinden sonra eşleştirilemedi."
@@ -6886,6 +7222,18 @@
             "The time-to-event or follow-up duration for each patient. The sum is the denominator when person-time rates are requested; Kaplan-Meier estimates instead use ordered event times and risk sets. Values must be finite and zero or positive, in one consistent unit.": [
                 "Her hasta için olaya kadar geçen süre veya takip süresi. Kişi-zamanı hızları istendiğinde toplam paydadır; Kaplan-Meier tahminleri bunun yerine sıralı olay zamanlarını ve risk kümelerini kullanır. Değerler sonlu ve tutarlı bir birimde sıfır veya pozitif olmalıdır."
             ],
+            "The total person-time": [
+                ""
+            ],
+            "The total post-landmark person-time": [
+                ""
+            ],
+            "The TTP status marks %d patient(s) as having progressed, while deaths without progression are coded 0 (censored). This analysis writes the STATUS only: it has no progression date variable. Pairing this status with overall survival or death time overstates time to progression for every patient who progressed before dying or last contact - their progression event is recorded at the later death/contact time. Supply time to progression (or time to last tumor assessment/death for non-progressing patients) as the time variable in downstream survival analyses.": [
+                ""
+            ],
+            "The UTC timezone setting applies only to the \"YYYY-MM-DD HH:MM:SS\" format, the only one carrying a time of day. These dates were read as \"{format}\", so they are calendar days and the timezone has no effect on the intervals.": [
+                ""
+            ],
             "The variable selected for adjusted curves must also be selected under Explanatory Variables or Stratification Variables. No curve was produced because changing a variable absent from the fitted model cannot change its predictions.": [
                 "Düzeltilmiş eğriler için seçilen değişken Açıklayıcı Değişkenler veya Tabakalandırma Değişkenleri altında da seçilmelidir. Uydurulan modelde olmayan bir değişkeni değiştirmek öngörüleri değiştiremeyeceğinden eğri üretilmedi."
             ],
@@ -6907,9 +7255,6 @@
             "These are model-based predictions. They rely on the Cox model being correctly specified and on proportional hazards holding, and they adjust only for variables in the model - not for anything unmeasured.": [
                 "Bunlar modele dayalı öngörülerdir. Cox modelinin doğru belirlenmiş olmasına ve orantılı tehlikelerin sağlanmasına dayanırlar; yalnızca modeldeki değişkenlere göre düzeltme yaparlar, ölçülmemiş hiçbir şeye göre değil."
             ],
-            "These are read from the single interaction model by relevel-and-refit: the model's implied conditional effects.": [
-                "Bunlar tek etkileşim modelinden yeniden düzeyleme ve yeniden uydurma ile okunur: modelin ima ettiği koşullu etkiler."
-            ],
             "These curves do not estimate an individual patient's absolute risk. External use requires a frozen prediction model and independent validation.": [
                 "Bu eğriler tek bir hastanın mutlak riskini tahmin etmez. Dış kullanım için sabitlenmiş bir tahmin modeli ve bağımsız doğrulama gerekir."
             ],
@@ -6928,20 +7273,17 @@
             "These rows are truncated and written back unchanged in sign - fix them in the data before running a survival model.": [
                 "Bu satırlar kırpılmış ve işareti değiştirilmeden geri yazılmıştır - bir sağkalım modeli çalıştırmadan önce verilerde bunları düzeltin."
             ],
+            "These rows cannot be analyzed: a negative interval subtracts from total person-time and would corrupt any incidence rate computed from that denominator.": [
+                ""
+            ],
             "These unadjusted diagnostic metrics depend on these interpretations being correct": [
                 "Bu düzeltilmemiş tanısal metrikler, bu yorumların doğru olmasına bağlıdır"
-            ],
-            "They pool information across subgroups, so the confidence intervals are typically narrower (and p-values smaller) than fitting a separate Cox model within each subgroup; the point estimates are nearly identical.": [
-                "Alt gruplar arasında bilgiyi havuzladıklarından güven aralıkları genellikle her alt grupta ayrı bir Cox modeli uydurmaya göre daha dardır (ve p-değerleri daha küçüktür); nokta tahminleri neredeyse aynıdır."
             ],
             "This analysis adjusts for multiple variables simultaneously, providing <b>conditional associations</b> for each term given the others in the fitted model.": [
                 "Bu analiz birden fazla değişkene aynı anda düzeltme yapar ve her terim için uydurulan modeldeki diğerleri verildiğinde <b>koşullu ilişkiler</b> sağlar."
             ],
             "This analysis fits a sparse development model. Its apparent performance and median-split survival curves require validation before clinical use.": [
                 "Bu analiz seyrek bir geliştirme modeli kurar. Görünür performansı ve medyana göre ayrılan sağkalım eğrileri klinik kullanımdan önce doğrulama gerektirir."
-            ],
-            "this analysis uses complete cases across <i>all</i> selected variables, whereas fitting one marker at a time (for example per-marker na.omit()) uses that marker's own complete-case set.": [
-                "bu analiz seçilen <i>tüm</i> değişkenler için eksiksiz olguları kullanır; oysa belirteçleri tek tek uydurmak (örneğin belirteç başına na.omit()) o belirtecin kendi eksiksiz olgu setini kullanır."
             ],
             "This apparent concordance is optimistic; see the C-index validation table for an optimism-corrected estimate.": [
                 "Bu görünür uyum iyimserdir; iyimserlik düzeltmeli tahmin için C-indeksi doğrulama tablosuna bakın."
@@ -6985,17 +7327,11 @@
             "This is a model-specific penalized-likelihood quantity that depends on predictor units and parameterisation. It is not suitable for comparing separately fitted Firth models or for comparison with maximum-likelihood AIC. For nested models, use a documented common-penalty likelihood-ratio comparison instead.": [
                 ""
             ],
-            "This is equivalent to reading \\u{03B2}(focal) and \\u{03B2}(focal) + \\u{03B2}(focal:moderator) off the one interaction model; releveling is simply how each conditional effect is read, with the correct standard error, directly.": [
-                "Bu, tek etkileşim modelinden \\\\u{03B2}(odak) ve \\\\u{03B2}(odak) + \\\\u{03B2}(odak:moderatör) okumaya eşdeğerdir; yeniden düzeyleme, her koşullu etkinin doğru standart hatayla doğrudan okunma biçimidir."
-            ],
             "This is not median survival. It is the first time at which the estimated cumulative incidence of the event of interest reaches 50% or greater, with competing risks accounted for. Because the curve changes in steps, it need not equal exactly 50% at that time; the estimate indicates that at least half the cohort has had the event of interest by then.": [
                 "Bu medyan sağkalım değildir. Yarışan riskler hesaba katıldığında, ilgilenilen olayın tahmini kümülatif insidansının %50 veya daha fazlasına ulaştığı ilk zamandır. Eğri adımlarla değiştiğinden, o sırada tam olarak %50'ye eşit olması gerekmez; tahmin, kohortun en az yarısının o zamana kadar ilgilenilen olayı yaşadığını gösterir."
             ],
             "This is required for correct calculation of:": [
                 "Şunların doğru hesaplanması için bu gereklidir:"
-            ],
-            "This is the expected, core statistical distinction between one interaction model and per-subgroup fits:": [
-                "Bu, tek etkileşim modeli ile alt grup uydurmaları arasındaki beklenen temel istatistiksel ayrımdır:"
             ],
             "This median is the time when the adjusted cumulative incidence of the event of interest reaches 50%.": [
                 "Bu ortanca, ilgilenilen olayın düzeltilmiş kümülatif insidansının %50'ye ulaştığı zamandır."
@@ -7020,6 +7356,9 @@
             ],
             "This nomogram is derived and evaluated in the same data. It is not a point-of-care decision tool without calibration, internal validation, and external validation in the intended population.": [
                 "Bu nomogram aynı veride türetilip değerlendirilmiştir. Kalibrasyon, iç doğrulama ve amaçlanan popülasyonda dış doğrulama olmadan bakım noktasında karar aracı değildir."
+            ],
+            "This nomogram is derived from a multivariable Fine-Gray subdistribution-hazards model fitted on <b>%s patients</b> with <b>%s events of interest</b>. Its risk scales describe cumulative incidence of the event of interest while accounting for competing events.": [
+                ""
             ],
             "This output is for model development only. Use bootstrap optimism correction or nested cross-validation that repeats preprocessing and tuning, followed by external validation, before considering clinical use.": [
                 "Bu çıktı yalnızca model geliştirme içindir. Klinik kullanımı düşünmeden önce ön işleme ve ayarlamayı tekrarlayan bootstrap iyimserlik düzeltmesi veya iç içe çapraz doğrulama, ardından dış doğrulama kullanınız."
@@ -7054,11 +7393,17 @@
             "Time ({unit})": [
                 "Zaman ({unit})"
             ],
+            "Time (%s)": [
+                ""
+            ],
             "Time and outcome cannot also be predictors: {vars}. Use predictors available at the intended prediction time.": [
                 "Zaman ve sonlanım aynı zamanda yordayıcı olamaz: {vars}. Hedeflenen tahmin anında mevcut olan yordayıcıları kullanınız."
             ],
             "Time and outcome must be different variables.": [
                 "Zaman ve sonlanım farklı değişkenler olmalıdır."
+            ],
+            "Time basis": [
+                ""
             ],
             "Time Components": [
                 "Zaman Bileşenleri"
@@ -7104,6 +7449,9 @@
             ],
             "Time Intervals": [
                 "Zaman Aralıkları"
+            ],
+            "Time intervals": [
+                ""
             ],
             "Time intervals for stratified person-time analysis, as a comma-separated list in the selected Time Unit. For example \"12, 36, 60\" creates the intervals 0-12, 12-36, 36-60 and 60+. Values are always interpreted in the selected Time Unit; the built-in text is 12, 36 and 60 of that unit and is not silently rescaled. A zero boundary is silently treated as the origin because the analysis already starts at zero. Negative, non-finite, or non-numeric boundaries are ignored with a warning. Boundaries at or beyond the longest observed follow-up are also omitted because person-time cannot accrue before the start of observation or after the last one.": [
                 "Seçilen Zaman Biriminde virgülle ayrılmış bir liste olarak tabakalı kişi-zamanı analizi için zaman aralıkları. Örneğin \"12, 36, 60\" 0-12, 12-36, 36-60 ve 60+ aralıklarını oluşturur. Değerler her zaman seçilen Zaman Biriminde yorumlanır; yerleşik metin o birimin 12, 36 ve 60'ıdır ve sessizce yeniden ölçeklendirilmez. Sıfır sınırı sessizce başlangıç noktası olarak değerlendirilir çünkü analiz zaten sıfırdan başlar. Negatif, sonlu olmayan veya sayısal olmayan sınırlar bir uyarıyla yok sayılır. Gözlemlenen en uzun takibe eşit veya bunun ötesindeki sınırlar da atlanır çünkü kişi-zamanı gözlem başlamadan önce veya sonuncusundan sonra birikemez."
@@ -7152,6 +7500,9 @@
             ],
             "Time Unit": [
                 "Zaman Birimi"
+            ],
+            "Time unit for results": [
+                ""
             ],
             "Time Unit of the Analysis": [
                 "Analizin Zaman Birimi"
@@ -7204,9 +7555,6 @@
             "To choose a level, first put '{variable}' in the Diagnostic Predictor box.": [
                 "Bir düzey seçmek için önce '{variable}' değişkenini Tanısal Belirteç kutusuna yerleştirin."
             ],
-            "To compare a single subgroup head-to-head, match the row set (analyze that one marker with the moderator); otherwise the N and event count, and therefore the CI and p, can differ for that reason alone.": [
-                "Tek bir alt grubu birebir karşılaştırmak için satır kümesini eşleştirin (o tek belirteci moderatörle analiz edin); aksi halde N ve olay sayısı, dolayısıyla GA ve p, yalnızca bu nedenle farklılaşabilir."
-            ],
             "To Do": [
                 "Yapılacaklar"
             ],
@@ -7234,8 +7582,14 @@
             "Total observed follow-up is zero, so an incidence rate cannot be calculated. Check the time variable and its units.": [
                 "Gözlenen toplam izlem sıfır olduğundan insidans hızı hesaplanamıyor. Zaman değişkenini ve birimlerini kontrol edin."
             ],
+            "Total person-time": [
+                ""
+            ],
             "Total Points": [
                 "Toplam Puan"
+            ],
+            "Total post-landmark person-time (from {amount} onward)": [
+                ""
             ],
             "Total sample size n=%d is small for survival analysis. Asymptotic assumptions for confidence intervals and hypothesis tests may not hold. Results should be considered preliminary and validated in larger datasets.": [
                 "Toplam örneklem büyüklüğü n=%d sağkalım analizi için küçüktür. Güven aralıkları ve hipotez testleri için asimptotik varsayımlar geçerli olmayabilir. Sonuçlar öncül kabul edilmeli ve daha büyük veri kümelerinde doğrulanmalıdır."
@@ -7245,9 +7599,6 @@
             ],
             "transition to the disease state (1); this is a multistate coding with four states, not a single event indicator - the per-state breakdown below is the meaningful summary": [
                 "hastalık durumuna geçiş (1); bu, tek bir olay göstergesi değil, dört durumlu çok durumlu bir kodlamadır - aşağıdaki durum başına döküm anlamlı özettir"
-            ],
-            "Treat them as an upper bound on the performance this model would show in new patients (TRIPOD, Collins et al. 2015).": [
-                "Bunları, modelin yeni hastalarda göstereceği performansın üst sınırı olarak değerlendirin (TRIPOD, Collins ve ark. 2015)."
             ],
             "Treatment indicators": [
                 "Referans kategori göstergeleri"
@@ -7264,8 +7615,11 @@
             "Try reloading your data file": [
                 "Veri dosyanızı yeniden yüklemeyi deneyin"
             ],
-            "TTP: Only progression events counted, deaths censored": [
-                "TTP: Yalnızca progresyon olayları sayılır, ölümler sansürlenir"
+            "TTP status produced - pair it with time to progression": [
+                ""
+            ],
+            "TTP: Only progression events counted, deaths censored (%d events, %d censored, %d missing). This analysis produces the STATUS only - pair it with time to progression (or last disease assessment/death for censored rows), not overall survival time.": [
+                ""
             ],
             "Two Groups": [
                 "İki Grup"
@@ -7312,8 +7666,8 @@
             "Unable to perform survival analysis. Please check for: (1) sufficient events, (2) valid time values, (3) properly coded outcome variable.": [
                 "Sağkalım analizi yapılamıyor. Lütfen şunları kontrol edin: (1) yeterli olay, (2) geçerli zaman değerleri, (3) uygun şekilde kodlanmış sonuç değişkeni."
             ],
-            "Unadjusted 2\\u{00D7}2 estimates. Clopper-Pearson exact intervals for sensitivity and specificity; log method (Simel et al. 1991) for the likelihood ratios. Computed as in epiR::epi.tests() with its default settings.": [
-                "Düzeltilmemiş 2\\u{00D7}2 tahminleri. Duyarlılık ve özgüllük için Clopper-Pearson kesin aralıkları; olabilirlik oranları için log yöntemi (Simel ve ark. 1991). Varsayılan ayarlarıyla epiR::epi.tests() içinde olduğu gibi hesaplanmıştır."
+            "Unadjusted 2×2 estimates. Clopper-Pearson exact intervals for sensitivity and specificity; log method (Simel et al. 1991) for the likelihood ratios. Computed as in epiR::epi.tests() with its default settings.": [
+                ""
             ],
             "undefined (no informative cells)": [
                 "tanımsız (bilgilendirici hücre yok)"
@@ -7456,14 +7810,29 @@
             "Unpenalized refit after LASSO selection": [
                 "LASSO seçimi sonrası cezasız yeniden kurulum"
             ],
+            "Unsupported date format: {format}": [
+                ""
+            ],
             "Unsupported date format: %s. Supported formats are: %s. Please select the correct format from Time Type options.": [
                 "Desteklenmeyen tarih biçimi: %s. Desteklenen biçimler: %s. Lütfen Zaman Türü seçeneklerinden doğru biçimi seçin."
+            ],
+            "Unsupported output unit for calendar-based calculation": [
+                ""
+            ],
+            "Unsupported output unit.": [
+                ""
             ],
             "Unsupported RMST horizon": [
                 "Desteklenmeyen RMST ufku"
             ],
+            "Unsupported time basis.": [
+                ""
+            ],
             "Unsupported time type format: {format}. Supported formats are: {supported}": [
                 "Desteklenmeyen zaman türü biçimi: {format}. Desteklenen biçimler: {supported}"
+            ],
+            "Unsupported timezone setting.": [
+                ""
             ],
             "Upper": [
                 "Üst"
@@ -7477,14 +7846,17 @@
             "Use biological age as the time axis instead of follow-up time. The Cox model becomes Surv(age_at_entry, age_at_event, event). Most rigorous for cancer epidemiology where age drives risk.": [
                 "Takip süresi yerine zaman ekseni olarak biyolojik yaşı kullanın. Cox modeli Surv(age_at_entry, age_at_event, event) haline gelir. Yaşın riski belirlediği kanser epidemiyolojisi için en titiz yöntemdir."
             ],
+            "Use finite follow-up times. Infinite time values cannot be analyzed; check the elapsed-time column or the selected dates.": [
+                ""
+            ],
             "Use landmark time": [
                 "Landmark zamanı kullan"
             ],
+            "Use the 'Positive Level' and 'Negative Level' dropdown menus below the outcome variable to make your selections. Any other levels in a multi-level outcome variable will be excluded.": [
+                ""
+            ],
             "Use the adjusted cumulative-incidence or risk-group cumulative-incidence plot; those account for competing events.": [
                 "Düzeltilmiş kümülatif insidans veya risk grubu kümülatif insidans grafiğini kullanın; bunlar yarışan olayları hesaba katar."
-            ],
-            "Use the dropdown menu below the outcome variable to make your selection.": [
-                "Seçiminizi yapmak için sonuç değişkeninin altındaki açılır menüyü kullanın."
             ],
             "Use this to see the model's overall fitted survival. If you selected an adjustment variable expecting to compare groups, choose \"Standardized over cohort\" instead.": [
                 "Modelin genel uydurulmuş sağkalımını görmek için bunu kullanın. Grupları karşılaştırmayı bekleyerek bir düzeltme değişkeni seçtiyseniz bunun yerine \\\"Kohort üzerinde standardize\\\" seçeneğini seçin."
@@ -7516,6 +7888,12 @@
             "Using dates to calculate survival time": [
                 "Sağkalım süresini hesaplamak için tarihleri kullanma"
             ],
+            "Usual causes are that the start and end date columns are swapped, or that the date format was mis-detected - a wrong day/month order flips only the rows whose day-of-month is 12 or less, which is why a few rows can be negative while the rest look correct.": [
+                ""
+            ],
+            "UTC": [
+                ""
+            ],
             "Value": [
                 "Değer"
             ],
@@ -7524,6 +7902,9 @@
             ],
             "Variable \"%s\" has %d missing values (%.1f%%). These observations will be excluded from analysis. Consider investigating the pattern of missingness and whether imputation is appropriate.": [
                 "\"%s\" değişkeni %d eksik değere (%.1f%%) sahiptir. Bu gözlemler analizden hariç tutulacaktır. Eksiklik örüntüsünü araştırmayı ve atamanın (imputation) uygun olup olmadığını değerlendirmeyi düşünün."
+            ],
+            "Variable \"%s\" is categorical (non-numeric) and cannot be analyzed as a continuous explanatory variable. Select a numeric variable, or use Survival Analysis for categorical predictors.": [
+                ""
             ],
             "Variable for Adjusted Curve": [
                 "Düzeltilmiş Eğri Değişkeni"
@@ -7600,8 +7981,8 @@
             "Very small sample size (n = {n}). Results should be interpreted with extreme caution.": [
                 "Çok küçük örneklem büyüklüğü (n = {n}). Sonuçlar son derece dikkatli yorumlanmalıdır."
             ],
-            "Very small sample size: {n} observations. Results may be unreliable.": [
-                "Çok küçük örneklem büyüklüğü: {n} gözlem. Sonuçlar güvenilir olmayabilir."
+            "Very small sample size: {n} observations. As a general rule of thumb (< 10 observations), results may be unreliable.": [
+                ""
             ],
             "Wald test = {stat}, df = {df}, p = {p}": [
                 "Wald testi = {stat}, sd = {df}, p = {p}"
@@ -7632,6 +8013,9 @@
             ],
             "weeks": [
                 "hafta"
+            ],
+            "Weeks": [
+                ""
             ],
             "Weibull": [
                 "Weibull"
@@ -7678,23 +8062,20 @@
             "When using multiple event levels, at least one event type (Dead of Disease or Dead of Other) must be specified.": [
                 "Çoklu olay düzeyleri kullanılırken, en az bir olay türü (Hastalığa Bağlı Ölüm veya Diğer Nedenlere Bağlı Ölüm) belirtilmelidir."
             ],
-            "When using multiple event levels, you must specify at least one event type (Dead of Disease or Dead of Other Causes). Select at least one event level from the outcome variable and ensure it has the appropriate levels.": [
-                "Çoklu olay düzeyleri kullanırken, en az bir olay türü belirtmelisiniz (Hastalığa Bağlı Ölüm veya Diğer Nedenlere Bağlı Ölüm). Sonuç değişkeninden en az bir olay düzeyi seçin ve uygun düzeylere sahip olduğundan emin olun."
-            ],
             "Whole-cohort expected survival": [
                 "Tüm kohort için beklenen sağkalım"
             ],
             "Whole-cohort expected survival (one curve, no group contrast)": [
                 "Tüm kohort için beklenen sağkalım (tek eğri, grup karşılaştırması yok)"
             ],
-            "Why do the subgroup HRs nearly match but the CIs and p-values differ from separate within-subgroup Cox models?": [
-                "Alt grup TO değerleri neredeyse aynıyken GA'lar ve p-değerleri neden ayrı alt grup Cox modellerinden farklıdır?"
-            ],
             "Why is this table empty?": [
                 "Bu tablo neden boş?"
             ],
             "Why it matters:": [
                 "Neden önemli:"
+            ],
+            "with {n} intervals (fewer than 101) the 99th percentile is interpolated between the two longest intervals, so this rule can flag at most the single longest one": [
+                ""
             ],
             "with %d event(s) and %d censored observation(s) among %d subjects (%.1f%% crude event proportion).": [
                 "%d denek arasında %d olay ve %d sansürlenmiş gözlem ile (%%%.1f kaba olay oranı)."
@@ -7704,12 +8085,6 @@
             ],
             "With fewer than 10 events, results should be interpreted cautiously. Consider longer follow-up or pooled analysis.": [
                 "10'dan az olayla sonuçlar dikkatle yorumlanmalıdır. Daha uzun izlem veya havuzlanmış analizi değerlendirin."
-            ],
-            "with only focal \\u{00D7} moderator in the model, they differ only because the interaction model uses a common baseline hazard across moderator levels while a subgroup-only fit uses a moderator-specific baseline (Cox's risk sets differ).": [
-                "modelde yalnızca odak \\\\u{00D7} moderatör varken, fark yalnızca etkileşim modelinin moderatör düzeyleri arasında ortak bir temel tehlike kullanmasından, yalnızca alt grup uydurmasının ise moderatöre özgü bir temel kullanmasından kaynaklanır (Cox risk kümeleri farklıdır)."
-            ],
-            "With other covariates included, the small gap also reflects the interaction model's assumption of common covariate effects; hence “very close but not exactly equal”.": [
-                "Diğer kovaryatlar dahil edildiğinde küçük fark aynı zamanda etkileşim modelinin ortak kovaryat etkileri varsayımını da yansıtır; dolayısıyla “çok yakın ama tam olarak eşit değil”."
             ],
             "With very small samples, consider univariable analyses or use <strong>Survival Analysis</strong> in ClinicoPath.": [
                 "Çok küçük örneklemlerde tek değişkenli analizleri veya ClinicoPath içindeki <strong>Sağkalım Analizi</strong> seçeneğini düşününüz."
@@ -7729,11 +8104,17 @@
             "Within-subgroup HRs are computed for 2-way interactions only.": [
                 "Alt grup içi TO değerleri yalnızca iki yönlü etkileşimler için hesaplanır."
             ],
+            "x 99th %ile": [
+                ""
+            ],
             "X-axis:": [
                 "X ekseni:"
             ],
             "Y-axis End": [
                 "Y ekseni Bitişi"
+            ],
+            "Y-axis end": [
+                ""
             ],
             "Y-axis limits must lie within 0 and 1 (received %s to %s): the axis shows a survival probability. Please adjust plot axis settings.": [
                 "Y ekseni sınırları 0 ile 1 arasında olmalıdır (%s ila %s alındı): eksen bir sağkalım olasılığını gösterir. Lütfen grafik eksen ayarlarını yapın."
@@ -7743,6 +8124,9 @@
             ],
             "Y-axis Start": [
                 "Y ekseni Başlangıcı"
+            ],
+            "Y-axis start": [
+                ""
             ],
             "Y-axis:": [
                 "Y ekseni:"
@@ -7767,6 +8151,9 @@
             ],
             "years": [
                 "yıl"
+            ],
+            "Years": [
+                ""
             ],
             "Yes": [
                 "Evet"

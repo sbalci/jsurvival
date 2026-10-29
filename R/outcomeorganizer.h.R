@@ -281,8 +281,6 @@ outcomeorganizerResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
                 refs=list(
                     "ClinicoPathJamoviModule",
                     "survival",
-                    "survminer",
-                    "finalfit",
                     "cmprsk",
                     "mstate",
                     "survivaltutorial",
@@ -580,7 +578,7 @@ outcomeorganizerBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             super$initialize(
                 package = "jsurvival",
                 name = "outcomeorganizer",
-                version = c(1,1,1),
+                version = c(1,1,3),
                 options = options,
                 results = outcomeorganizerResults$new(options=options),
                 data = data,

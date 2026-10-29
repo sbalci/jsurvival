@@ -79,6 +79,13 @@
     if (is.null(outcome) || length(outcome) == 0)
         return(fail("No outcome variable available. Please select an outcome variable."))
 
+    # Normalize factors with an explicit NA level (e.g. from addNA()) so is.na(x)
+    # and as.character(x) agree on missingness across all paths.
+    if (is.factor(outcome) && (anyNA(levels(outcome)) || any(is.na(as.character(outcome)) & !is.na(outcome)))) {
+        lvls <- levels(outcome)[!is.na(levels(outcome))]
+        outcome <- factor(as.character(outcome), levels = lvls, ordered = is.ordered(outcome))
+    }
+
     # Ordered factors compare awkwardly against a plain level string.
     if (is.ordered(outcome)) outcome <- factor(outcome, ordered = FALSE)
 
@@ -405,9 +412,10 @@
             if (collapsed_terminal) paste0(
                 "If a collapsed level is a competing terminal event (for example death from ",
                 "another cause), Kaplan-Meier estimates net/cause-specific survival rather ",
-                "than absolute event risk and generally overstates the real-world probability ",
-                "of remaining event-free. Use Multiple Event Levels with survival type ",
-                "Competing Risk to estimate cumulative incidence."
+                "than real-world cumulative incidence: 1 - KM overstates the absolute risk ",
+                "(cumulative incidence) of the event, while KM overstates the probability of ",
+                "surviving free of both the target event and competing death. Use Multiple ",
+                "Event Levels with survival type Competing Risk to estimate cumulative incidence."
             ) else "This assumption cannot be verified from the displayed summaries.",
             "</p>")
     }

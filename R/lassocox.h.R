@@ -721,7 +721,7 @@ lassocoxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 package = "jsurvival",
                 name = "lassocox",
-                version = c(1,1,1),
+                version = c(1,1,3),
                 options = options,
                 results = lassocoxResults$new(options=options),
                 data = data,
@@ -742,7 +742,7 @@ lassocoxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' 
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' lassocox(
 #'     data = lassocox_breast_cancer,
 #'     elapsedtime = "survival_months",

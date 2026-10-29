@@ -75,6 +75,32 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     inherit = lassocoxBase,
     private = list(
 
+        .sourcifyOption = function(option) {
+            if (identical(option$name, "data"))
+                return("data = data")
+            declared <- setdiff(names(lassocoxOptions$active), c("data", "version"))
+            if (is.null(option$name) || !(option$name %in% declared))
+                return("")
+            value <- option$value
+            if (is.null(value) || is.list(value) || is.environment(value))
+                return("")
+            if (!identical(option$name, "explanatory") && length(value) != 1L)
+                return("")
+            if (is.character(value)) {
+                if (length(value) == 0L || anyNA(value) || (length(value) == 1L && !nzchar(value)))
+                    return("")
+                if (identical(value, option$default))
+                    return("")
+                rhs <- if (length(value) == 1L) {
+                    encodeString(value, quote = '"')
+                } else {
+                    paste0("c(", paste(encodeString(value, quote = '"'), collapse = ", "), ")")
+                }
+                return(paste0(option$name, " = ", rhs))
+            }
+            super$.sourcifyOption(option)
+        },
+
         .inputsReady = function() {
             !is.null(self$options$elapsedtime) && !is.null(self$options$outcome) &&
                 length(self$options$explanatory) > 0
@@ -98,10 +124,7 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         .init = function() {
             private$.clearAnalysisOutputs()
-            for (name in c("lassoExplanation", "methodologyNotes", "clinicalGuidance",
-                "regularizationPathExplanation", "crossValidationExplanation", "riskScoreExplanation")) {
-                self$results[[name]]$setContent("")
-            }
+            private$.initializeExplanations()
             if (private$.dependencyError()) return()
             if (!private$.inputsReady()) {
                 self$results$todo$setContent(paste0(
@@ -112,19 +135,22 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             } else {
                 private$.initFixedTables()
             }
-            private$.initializeExplanations()
+        },
+
+        .modelSummaryLabels = function() {
+            c(.("Encoded Predictor Columns"), .("Selected Predictor Columns"),
+              .("Column Selection Proportion"), .("Optimal Lambda"), .("Penalty Selected By"),
+              .("Stratified CV Folds Used"), .("Sample Size"), .("Number of Events"),
+              .("Censoring Rate"), .("Event Level Used"), .("Rows Excluded (Missing Data)"),
+              .("Original Candidate Predictors"), .("Selected Original Predictors"),
+              .("Censored Level Used"))
         },
 
         .initFixedTables = function() {
-            labels <- c(.("Encoded Predictor Columns"), .("Selected Predictor Columns"),
-                .("Column Selection Proportion"), .("Optimal Lambda"), .("Penalty Selected By"),
-                .("Stratified CV Folds Used"), .("Sample Size"), .("Number of Events"),
-                .("Censoring Rate"), .("Event Level Used"), .("Rows Excluded (Missing Data)"),
-                .("Original Candidate Predictors"), .("Selected Original Predictors"),
-                .("Censored Level Used"))
+            labels <- private$.modelSummaryLabels()
             for (i in seq_along(labels)) self$results$modelSummary$addRow(rowKey = i,
                 values = list(statistic = labels[i], value = NA_character_))
-            self$results$performance$addRow(rowKey = 1,
+            self$results$performance$addRow(rowKey = 1L,
                 values = list(metric = .("Apparent C-index"), value = NA_character_,
                     interpretation = .("Development data only; optimism not corrected")))
             if (self$options$showModelComparison) {
@@ -136,6 +162,7 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         .run = function() {
             private$.clearAnalysisOutputs(keep_rows = TRUE, clear_todo = FALSE)
+            private$.initializeExplanations()
             if (private$.dependencyError()) return()
             # Early exits for missing data or variables
             if (is.null(self$data) || nrow(self$data) == 0) {
@@ -262,6 +289,18 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             outcome_var <- self$options$outcome
             explanatory_vars <- self$options$explanatory
 
+            if (length(time_var) != 1L || !is.character(time_var) ||
+                length(outcome_var) != 1L || !is.character(outcome_var) ||
+                !is.character(explanatory_vars)) {
+                jmvcore::reject(.("Invalid variable selection."))
+            }
+            missing_cols <- setdiff(c(time_var, outcome_var, explanatory_vars), names(data))
+            if (length(missing_cols) > 0L) {
+                jmvcore::reject(.fmt(
+                    .("Selected variables are not present in the dataset: {vars}."),
+                    vars = paste(missing_cols, collapse = ", ")))
+            }
+
             if (identical(time_var, outcome_var)) {
                 jmvcore::reject(.("Time and outcome must be different variables."))
             }
@@ -300,8 +339,11 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             event_level_used <- NULL
             censor_level_used <- NULL
 
-            if (is.factor(outcome_raw) || is.character(outcome_raw)) {
-                outcome_chr <- as.character(outcome_raw)
+            is_lgl_tf <- is.logical(outcome_raw) &&
+                !is.null(self$options$outcomeLevel) &&
+                toupper(as.character(self$options$outcomeLevel)) %in% c("TRUE", "FALSE")
+            if (is.factor(outcome_raw) || is.character(outcome_raw) || is_lgl_tf) {
+                outcome_chr <- if (is_lgl_tf) toupper(as.character(outcome_raw)) else as.character(outcome_raw)
                 observed_levels <- sort(unique(outcome_chr[!is.na(outcome_chr)]))
                 if (length(observed_levels) != 2) {
                     jmvcore::reject(.fmt(.('Outcome variable must have exactly 2 observed values. Found {n} level(s): {levels}. For competing events, construct an explicit binary cause-specific status in which the event of interest is 1 and every non-event observation is 0; do not omit other event types.'),
@@ -315,7 +357,7 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                     jmvcore::reject(.fmt(.("Choose the Event Level: the outcome value that means the event happened. Values found: {levels}. The analysis does not pick one from the level order, because the order does not say which value is the event."),
                         levels = paste(observed_levels, collapse = ", ")))
                 }
-                event_level_used <- as.character(outcome_level_opt)
+                event_level_used <- if (is_lgl_tf) toupper(as.character(outcome_level_opt)) else as.character(outcome_level_opt)
                 if (!(event_level_used %in% observed_levels)) {
                     jmvcore::reject(.fmt(.("Selected event level ('{level}') is not present in observed outcome data."),
                         level = event_level_used))
@@ -331,7 +373,7 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                     }
                     censor_level_used <- remaining[1]
                 } else {
-                    censor_level_used <- as.character(censor_level_opt)
+                    censor_level_used <- if (is_lgl_tf) toupper(as.character(censor_level_opt)) else as.character(censor_level_opt)
                     if (!(censor_level_used %in% observed_levels)) {
                         jmvcore::reject(.fmt(.("Selected censored level ('{level}') is not present in observed outcome data."),
                             level = censor_level_used))
@@ -393,9 +435,24 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 status[outcome_num == censor_level_num] <- 0
             }
 
-            # Remove constant explanatory variables instead of failing hard
+            # Sanitize factor predictors with explicit NA levels (e.g., from addNA())
+            # so complete.cases() and contrast construction treat NA levels as missing.
+            for (var_name in names(predictors)) {
+                x <- predictors[[var_name]]
+                if (is.factor(x) && (anyNA(levels(x)) || any(is.na(as.character(x)) & !is.na(x)))) {
+                    keep_lev <- levels(x)[!is.na(levels(x))]
+                    predictors[[var_name]] <- factor(as.character(x), levels = keep_lev, ordered = is.ordered(x))
+                }
+            }
+
+            # Remove constant explanatory variables instead of failing hard.
+            # Evaluate constancy only on rows with valid time and outcome status so
+            # predictor values on already-excluded incomplete-outcome rows cannot alter
+            # complete-case listwise deletion.
+            valid_outcome <- !is.na(time) & !is.na(status)
             constant_vars <- sapply(predictors, function(x) {
-                length(unique(x[!is.na(x)])) <= 1
+                vals <- x[valid_outcome & !is.na(x)]
+                length(unique(vals)) <= 1
             })
             constant_var_names <- names(predictors)[constant_vars]
             if (any(constant_vars)) {
@@ -466,18 +523,38 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             contrasts_list <- list()
             encoding <- NULL
             removed_design_columns <- character()
+            cc_constant_factors <- character()
             # Only model.matrix() is guarded: a tryCatch around this whole block re-wrapped
             # the jmvcore::reject() messages below as "Error creating design matrix: ...".
                 for (var_name in factor_predictors) {
                     x <- predictors_cc[[var_name]]
+                    orig_x <- predictors[[var_name]][valid_outcome]
+                    orig_lev <- if (is.factor(orig_x)) levels(droplevels(orig_x)) else sort(unique(orig_x[!is.na(orig_x)]))
                     lev <- if (is.factor(x)) levels(droplevels(x)) else sort(unique(x))
                     if (length(lev) < 2) {
-                        jmvcore::reject(.fmt(.("Factor variable '{var}' has insufficient variation in complete cases."),
-                            var = var_name))
+                        cc_constant_factors <- c(cc_constant_factors, var_name)
+                        next
+                    }
+                    dropped_lev <- setdiff(orig_lev, lev)
+                    if (length(dropped_lev) > 0) {
+                        warning(.fmt(
+                            .("Factor '{var}' lost level(s) ({dropped}) after complete-case filtering; reference level is '{ref}'."),
+                            var = var_name,
+                            dropped = paste(dropped_lev, collapse = ", "),
+                            ref = lev[1]
+                        ))
                     }
                     factor_levels[[var_name]] <- lev
                     predictors_cc[[var_name]] <- factor(as.character(x), levels = lev)
                     contrasts_list[[var_name]] <- stats::contr.treatment(lev, base = 1)
+                }
+                if (length(cc_constant_factors) > 0) {
+                    predictors_cc <- predictors_cc[, setdiff(names(predictors_cc), cc_constant_factors), drop = FALSE]
+                    factor_predictors <- setdiff(factor_predictors, cc_constant_factors)
+                    ordered_predictors <- setdiff(ordered_predictors, cc_constant_factors)
+                    if (ncol(predictors_cc) == 0) {
+                        jmvcore::reject(.("No valid explanatory variables remain after removing constant predictors."))
+                    }
                 }
 
                 design <- tryCatch(
@@ -509,10 +586,10 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                     jmvcore::reject(.("Predictor variance cannot be represented numerically. Rescale extreme numeric values before fitting."))
                 }
                 valid_cols <- column_variance > 0
-                removed_design_columns <- colnames(X)[!valid_cols]
-                if (any(!valid_cols)) warning(.fmt(
+                removed_design_columns <- c(cc_constant_factors, colnames(X)[!valid_cols])
+                if (length(removed_design_columns) > 0) warning(.fmt(
                     .("Removed design columns constant in complete cases: {vars}."),
-                    vars = paste(colnames(X)[!valid_cols], collapse = ", ")))
+                    vars = paste(removed_design_columns, collapse = ", ")))
                 X <- X[, valid_cols, drop = FALSE]
                 encoding <- encoding[valid_cols, , drop = FALSE]
                 if (ncol(X) < 2) {
@@ -628,7 +705,12 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             }
 
             med <- stats::median(risk_scores, na.rm = TRUE)
-            groups <- ifelse(risk_scores <= med, .("Low Risk"), .("High Risk"))
+            low_idx <- if (any(risk_scores > med, na.rm = TRUE)) {
+                risk_scores <= med
+            } else {
+                risk_scores < med
+            }
+            groups <- ifelse(low_idx, .("Low Risk"), .("High Risk"))
             groups <- factor(groups, levels = c(.("Low Risk"), .("High Risk")))
             if (length(unique(groups)) < 2) {
                 return(NULL)
@@ -653,7 +735,10 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             }
 
             # Set up cross-validation parameters
-            nfolds_requested <- as.integer(self$options$nfolds)
+            nfolds_requested <- suppressWarnings(as.integer(self$options$nfolds))
+            if (length(nfolds_requested) != 1L || is.na(nfolds_requested)) {
+                jmvcore::reject(.("Number of CV folds must be an integer of at least 3."))
+            }
             nfolds <- min(nfolds_requested, data$n_events, data$n_censored)
             if (nfolds < 3) {
                 jmvcore::reject(.fmt(
@@ -687,8 +772,14 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 }
             }, add = TRUE)
             set.seed(seed_value)
+            # Center design columns before calling glmnet::coxnet so coordinate descent
+            # is invariant to additive location shifts on continuous predictors.
+            # Because the Cox partial likelihood has no intercept, subtracting column
+            # means cancels out of every fold's partial likelihood and leaves per-fold
+            # SDs and original-unit slope coefficients unchanged.
+            x_fit <- sweep(data$X, 2, colMeans(data$X), "-")
             cv_args <- list(
-                x = data$X,
+                x = x_fit,
                 y = y,
                 family = "cox", cox.ties = "breslow",
                 alpha = 1,  # Lasso (L1) penalty
@@ -713,12 +804,11 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             # Respect the selected rule exactly. In particular, an empty model at
             # lambda.1se is a valid cross-validation result and must not be replaced
             # data-dependently by lambda.min merely to force predictors into the table.
-            lambda_optimal <- switch(self$options$lambda,
+            lambda_rule_used <- if (identical(self$options$lambda, "lambda.min")) "lambda.min" else "lambda.1se"
+            lambda_optimal <- switch(lambda_rule_used,
                 "lambda.min" = cv_fit$lambda.min,
-                "lambda.1se" = cv_fit$lambda.1se,
-                cv_fit$lambda.1se  # Default fallback
+                "lambda.1se" = cv_fit$lambda.1se
             )
-            lambda_rule_used <- self$options$lambda
             if (length(lambda_optimal) != 1 || !is.finite(lambda_optimal) || lambda_optimal <= 0) {
                 jmvcore::reject(.("The selected cross-validation rule did not produce a valid positive lambda."))
             }
@@ -815,6 +905,7 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         },
 
         .populateModelSummary = function(results) {
+            labels <- private$.modelSummaryLabels()
             values <- list(ncol(results$data$X), length(results$selected_vars),
                 paste0(round(100 * length(results$selected_vars) / ncol(results$data$X), 1), "%"),
                 base::format(results$lambda_optimal, scientific = TRUE, digits = 3),
@@ -825,8 +916,8 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 length(results$data$candidate_variables),
                 length(unique(results$data$encoding$variable[results$selected_vars])),
                 results$data$censor_level_used)
-            for (i in seq_along(values)) self$results$modelSummary$setRow(rowKey = i,
-                values = list(value = as.character(values[[i]])))
+            for (i in seq_along(values)) .fillRow(self$results$modelSummary, rowKey = i,
+                values = list(statistic = labels[i], value = as.character(values[[i]])))
             # the cross-validation folds, and so lambda and the selection, come from this seed
             self$results$modelSummary$setNote("seed",
                 .fmt(.("Random seed: {seed}"), seed = results$seed_used), init = FALSE)
@@ -904,12 +995,16 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 paste0("  columns <- ", literal(results$data$variable_names)),
                 "  stopifnot(all(c(variables, time_name, outcome_name) %in% names(data)))",
                 "  predictors <- data[, variables, drop = FALSE]",
-                "  time <- as.numeric(data[[time_name]])",
-                "  outcome <- as.character(data[[outcome_name]])",
+                "  predictors[] <- lapply(predictors, function(x) if (is.factor(x) && anyNA(levels(x))) factor(as.character(x), levels = levels(x)[!is.na(levels(x))], ordered = is.ordered(x)) else x)",
+                "  time_col <- data[[time_name]]",
+                "  time <- if (!is.null(attr(time_col, 'values'))) attr(time_col, 'values')[as.integer(time_col)] else if (is.factor(time_col)) as.numeric(as.character(time_col)) else as.numeric(time_col)",
+                "  outcome_col <- data[[outcome_name]]",
+                "  outcome <- if (is.logical(outcome_col) && all(c(event_level, censor_level) %in% c('0', '1'))) as.character(as.integer(outcome_col)) else if (is.logical(outcome_col)) toupper(as.character(outcome_col)) else as.character(outcome_col)",
                 "  stopifnot(all(is.na(outcome) | outcome %in% c(event_level, censor_level)))",
                 "  status <- ifelse(is.na(outcome), NA_integer_, as.integer(outcome == event_level))",
                 "  complete <- complete.cases(time, status, predictors)",
                 "  predictors <- predictors[complete, , drop = FALSE]",
+                "  predictors <- predictors[, vapply(predictors, function(x) length(unique(x)) > 1L, logical(1)), drop = FALSE]",
                 "  time <- time[complete]",
                 "  status <- status[complete]",
                 "  stopifnot(all(is.finite(time)), all(time > 0))",
@@ -922,7 +1017,10 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 "  }",
                 "  X <- stats::model.matrix(~ ., data = predictors,",
                 "    contrasts.arg = if (length(contrasts_list)) contrasts_list else NULL)[, -1, drop = FALSE]",
-                "  colnames(X) <- make.unique(gsub('`', '', colnames(X), fixed = TRUE), sep = '_')",
+                "  nm <- gsub('(?<!\\\\\\\\)`', '', colnames(X), perl = TRUE)",
+                "  nm <- gsub('\\\\`', '`', nm, fixed = TRUE)",
+                "  if (anyDuplicated(nm)) nm <- make.unique(nm, sep = '_')",
+                "  colnames(X) <- nm",
                 "  stopifnot(all(columns %in% colnames(X)))",
                 "  X <- X[, columns, drop = FALSE]",
                 "  stopifnot(all(is.finite(X)))",
@@ -943,7 +1041,8 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 "  foldid[cens_idx] <- sample(rep(seq_len(nfolds), length.out = length(cens_idx)))",
                 paste0("  set.seed(", results$seed_used, ")"),
                 "  y <- survival::Surv(time, status)",
-                "  cv_fit <- glmnet::cv.glmnet(X, y, family = 'cox', cox.ties = 'breslow',",
+                "  X_fit <- sweep(X, 2, colMeans(X), '-')",
+                "  cv_fit <- glmnet::cv.glmnet(X_fit, y, family = 'cox', cox.ties = 'breslow',",
                 paste0("    alpha = 1, standardize = ", literal(isTRUE(self$options$standardize)),
                     ", foldid = foldid, parallel = FALSE)"),
                 paste0("  lambda_selected <- cv_fit[[", literal(results$lambda_rule_used), "]]"),
@@ -1002,7 +1101,7 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                     variable = var_name,
                     coefficient = coef_val,
                     hazardRatio = hr_val,
-                    importance = round(importance, 4)
+                    importance = importance
                 ))
             }
 
@@ -1021,8 +1120,10 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
         .populatePerformance = function(results) {
             value <- results$performance_metrics$cindex
-            self$results$performance$setRow(rowKey = 1, values = list(
-                value = if (is.finite(value)) as.character(round(value, 3)) else .("Not available")))
+            .fillRow(self$results$performance, rowKey = 1L, values = list(
+                metric = .("Apparent C-index"),
+                value = if (is.finite(value)) as.character(round(value, 3)) else .("Not available"),
+                interpretation = .("Development data only; optimism not corrected")))
             self$results$performance$setNote("apparent",
                 .("This C-index is apparent (training) performance from the same patients used for preprocessing, penalty selection, and model fitting. Its uncertainty does not include the modeling process. Use bootstrap optimism correction or nested cross-validation that repeats all preprocessing and tuning, followed by external validation before clinical use."), init = FALSE)
         },
@@ -1077,6 +1178,8 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         },
 
         .pathPlot = function(image, ggtheme, theme, ...) {
+            if (!self$options$path_plot) return(FALSE)
+
             state <- image$state
             if (is.null(state)) return(FALSE)
             tick_idx <- unique(round(seq(1, length(state$lambda), length.out = 6)))
@@ -1264,7 +1367,11 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             # to avoid protobuf serialization errors with function references
             if (self$options$path_plot) {
                 beta <- results$cv_fit$glmnet.fit$beta
-                path_order <- order(Matrix::rowSums(abs(beta)), decreasing = TRUE)
+                col_sd <- apply(results$data$X, 2, stats::sd)
+                col_sd[!is.finite(col_sd) | col_sd <= 0] <- 1
+                std_path_sum <- as.numeric(Matrix::rowSums(abs(beta))) * col_sd
+                is_sel <- seq_len(nrow(beta)) %in% results$selected_vars
+                path_order <- order(is_sel, std_path_sum, decreasing = TRUE)
                 shown <- head(path_order, 30L)
                 path_beta <- as.matrix(beta[shown, , drop = FALSE])
                 path_beta[, results$cv_fit$glmnet.fit$df == 0] <- 0
@@ -1354,6 +1461,10 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         },
 
         .initializeExplanations = function() {
+            for (name in c("lassoExplanation", "methodologyNotes", "clinicalGuidance",
+                "regularizationPathExplanation", "crossValidationExplanation", "riskScoreExplanation")) {
+                self$results[[name]]$setContent("")
+            }
             if (self$options$showExplanations) {
                 private$.populateLassoExplanation()
                 private$.populateCrossValidationExplanation()
@@ -1482,7 +1593,7 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 init = FALSE)
         },
 
-        # ── Data Suitability Assessment ─────────────────────────────
+        # -- Data Suitability Assessment -----------------------------
         .assessSuitability = function(results) {
             data <- results$data
             checks <- list()
@@ -1520,7 +1631,7 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                     value = sprintf("p=%d, n=%d (ratio=%.2f)", p, n, p / n),
                     detail = .("High-dimensional setting where an unpenalized full Cox model is unlikely to be stable. Penalization is appropriate, but rigorous internal validation remains necessary.")
                 )
-            } else if (p <= 5 && epv >= 30) {
+            } else if (p <= 5 && epv >= 20) {
                 checks$regularization <- list(
                     color = "green", label = .("Regularization Need"),
                     value = sprintf("p=%d, EPV=%.0f", p, epv),
@@ -1528,9 +1639,9 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 )
             } else if (p <= 10 && epv >= 20) {
                 checks$regularization <- list(
-                    color = "yellow", label = .("Regularization Need"),
+                    color = "green", label = .("Regularization Need"),
                     value = sprintf("p=%d, EPV=%.0f", p, epv),
-                    detail = .("Moderate dimensionality. Consider standard Cox regression (Multivariable Survival in ClinicoPath) as an alternative.")
+                    detail = .("Moderate dimensionality with ample events. LASSO is valid, and standard Cox regression (Multivariable Survival in ClinicoPath) may also be considered.")
                 )
             } else {
                 checks$regularization <- list(
@@ -1581,7 +1692,7 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                         color = "yellow", label = .("Pairwise Correlations"),
                         value = .("Not computed"),
                         detail = .("Pairwise correlation diagnostics are limited to 500 encoded columns to bound memory and computation. The fitted model still uses every retained column."))
-                } else if (ncol(data$X) >= 2) {
+                } else if (ncol(data$X) >= 2 && length(unique(col_origin)) >= 2) {
                     cor_matrix <- cor(data$X, use = "pairwise.complete.obs")
                     diag(cor_matrix) <- 0
                     # Within-factor dummy correlations describe the coding constraint,
@@ -1590,18 +1701,20 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                     cor_matrix[!is.na(origin_equal) & origin_equal] <- 0
                     max_cor <- max(abs(cor_matrix), na.rm = TRUE)
 
-                    # Find top correlated pairs
+                    # Find top correlated pairs (between distinct predictors with |r| > 0.5)
                     top_pairs <- character(0)
                     if (max_cor > 0.5) {
-                        idx <- which(upper.tri(cor_matrix), arr.ind = TRUE)
-                        pair_abs <- abs(cor_matrix[idx])
-                        ranked <- order(pair_abs, decreasing = TRUE)
-                        for (k in utils::head(ranked[is.finite(pair_abs[ranked])], 3L)) {
-                            top_pairs <- c(top_pairs,
-                                sprintf("%s & %s (r=%.2f)",
-                                        col_names[idx[k, 1]],
-                                        col_names[idx[k, 2]],
-                                        cor_matrix[idx[k, 1], idx[k, 2]]))
+                        idx <- which(upper.tri(cor_matrix) & (is.na(origin_equal) | !origin_equal) & abs(cor_matrix) > 0.5, arr.ind = TRUE)
+                        if (nrow(idx) > 0) {
+                            pair_abs <- abs(cor_matrix[idx])
+                            ranked <- order(pair_abs, decreasing = TRUE)
+                            for (k in utils::head(ranked[is.finite(pair_abs[ranked])], 3L)) {
+                                top_pairs <- c(top_pairs,
+                                    sprintf("%s & %s (r=%.2f)",
+                                            col_names[idx[k, 1]],
+                                            col_names[idx[k, 2]],
+                                            cor_matrix[idx[k, 1], idx[k, 2]]))
+                            }
                         }
                     }
                     pair_text <- if (length(top_pairs) > 0) {
@@ -1635,6 +1748,12 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                             detail = paste0(.("Near-perfect collinearity detected. Remove redundant variables before analysis."), pair_text)
                         )
                     }
+                } else if (ncol(data$X) >= 2) {
+                    checks$collinearity <- list(
+                        color = "green", label = .("Multicollinearity"),
+                        value = .("N/A (single factor)"),
+                        detail = .("Only one categorical predictor supplied (represented by multiple mutually exclusive indicator columns); between-predictor collinearity is not applicable.")
+                    )
                 } else {
                     checks$collinearity <- list(
                         color = "green", label = .("Multicollinearity"),
@@ -1891,7 +2010,7 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 failures <<- c(failures, .fmt(.("Post-LASSO Cox refit: {message}"), message = conditionMessage(e)))
             })
 
-            table$setRow(rowNo = 1, values = list(
+            .fillRow(table, rowKey = 1L, values = list(
                 model_type = .("Unpenalized refit after LASSO selection"),
                 n_variables = length(results$selected_vars),
                 cindex = selected_refit_cindex,
@@ -1915,7 +2034,7 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 failures <<- c(failures, .fmt(.("Standard Cox on all variables: {message}"), message = conditionMessage(e)))
             })
 
-            table$setRow(rowNo = 2, values = list(
+            .fillRow(table, rowKey = 2L, values = list(
                 model_type = .("Standard Cox (all variables)"),
                 n_variables = ncol(results$data$X),
                 cindex = std_cindex,
@@ -1951,7 +2070,6 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 .("The selected rule retained no predictor columns; this valid empty model was preserved.")
             else ""
 
-            lambda_val <- results$lambda_optimal
             metrics <- results$performance_metrics
 
             # Build selected variable list
@@ -1982,7 +2100,8 @@ lassocoxClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 "<h4 style='margin-top: 0;'>", .("Results Summary"), "</h4>",
                 "<p>", .fmt(
                     .("LASSO Cox regression was performed on {nObs} observations ({nEvents} events) with {nTotal} encoded predictor columns using {lambdaMethod} for lambda selection."),
-                    nObs = n_obs, nEvents = n_events, nTotal = n_total, lambdaMethod = lambda_method), " ",
+                    nObs = n_obs, nEvents = n_events, nTotal = n_total,
+                    lambdaMethod = htmltools::htmlEscape(lambda_method)), " ",
                 .fmt(
                     .("The model selected {nSelected} of {nTotal} encoded columns: {varList}."),
                     nSelected = n_selected, nTotal = n_total, varList = var_list), "</p>",

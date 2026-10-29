@@ -14,7 +14,14 @@ items:
       clearWith:
           - outcome
           - outcomeLevel
+          - elapsedtime
+          - contexpl
+          - fudate
+          - dxdate
+          - tint
           - multievent
+          - uselandmark
+          - landmark
           - analysistype
           - dod
           - dooc
@@ -51,11 +58,6 @@ items:
       title: Information
       type:  Html
       visible: false
-
-    - name:  coxRegressionHeading
-      title: Cox Regression for Continuous Variables
-      type:  Preformatted
-      
 
     - name:  coxSummary
       title: '`Cox Regression Summary and Table - ${contexpl}`'
@@ -185,7 +187,8 @@ items:
     - name:  tCoxtext2
       title: ''
       type:  Html
-      refs: finalfit
+      refs:
+          - finalfit
       clearWith:
           - sc
           - endplot
@@ -214,15 +217,6 @@ items:
           - timetypeoutput
           - timetypedata
 
-
-
-    - name:  coxRegressionHeading3
-      title: Cox Regression Explanations
-      type:  Preformatted
-      visible: (showExplanations)
-
-
-
     # Cox Regression Explanation
     - name: coxRegressionExplanation
       title: 'Understanding Cox Regression for Continuous Variables'
@@ -233,20 +227,6 @@ items:
           - outcome
           - timetypeoutput
           - timetypedata
-
-
-
-
-
-
-
-
-
-    - name:  personTimeHeading
-      title: Person-Time Analysis
-      type:  Preformatted
-      visible: (person_time)
-      
 
     - name: personTimeTable
       title: 'Person-Time Analysis'
@@ -279,9 +259,6 @@ items:
           type: number
           format: zto
       clearWith:
-        - outcome
-        - outcomeLevel
-        - elapsedtime
         - rate_multiplier
         - time_intervals
         - person_time
@@ -311,9 +288,6 @@ items:
       type: Html
       visible: (person_time && showSummaries)
       clearWith:
-        - outcome
-        - outcomeLevel
-        - elapsedtime
         - rate_multiplier
         - time_intervals
         - person_time
@@ -352,18 +326,6 @@ items:
           - outcome
           - timetypeoutput
           - timetypedata
-
-
-
-
-
-
-
-    - name:  rmstHeading
-      title: RMST Analysis
-      type:  Preformatted
-      visible: (rmst_analysis)
-      
 
     - name: rmstTable
       title: 'Restricted Mean Survival Time'
@@ -412,6 +374,8 @@ items:
         - multievent
         - findcut
         - multiple_cutoffs
+        - min_group_size
+        - seed
         - uselandmark
         - landmark
         - analysistype
@@ -436,8 +400,11 @@ items:
         - fudate
         - dxdate
         - tint
+        - multievent
         - findcut
         - multiple_cutoffs
+        - min_group_size
+        - seed
         - uselandmark
         - landmark
         - analysistype
@@ -507,6 +474,8 @@ items:
         - tint
         - multievent
         - findcut
+        - min_group_size
+        - seed
         - uselandmark
         - landmark
         - analysistype
@@ -540,7 +509,10 @@ items:
         - fudate
         - dxdate
         - tint
+        - multievent
         - findcut
+        - min_group_size
+        - seed
         - uselandmark
         - landmark
         - analysistype
@@ -569,12 +541,6 @@ items:
 
 
 
-
-    - name:  cutoffAnalysisHeading
-      title: Cut-off Point Analysis
-      type:  Preformatted
-      visible: (findcut)
-      
 
     - name:  rescutTable
       title: Cut Point
@@ -618,17 +584,6 @@ items:
           - seed
           - timetypeoutput
           - timetypedata
-
-
-
-
-    - name:  cutoffAnalysisHeading3
-      title: Cut-off Analysis Explanations
-      type:  Preformatted
-      visible: (findcut && showExplanations)
-
-
-
 
     # Cut-off Point Analysis Explanation  
     - name: cutoffAnalysisExplanation
@@ -873,7 +828,8 @@ items:
           type: text
         - name: 'time'
           title: "time"
-          type: integer
+          type: number
+          format: zto
         - name: n.risk
           title: "Number at Risk"
           type: integer
@@ -1043,14 +999,6 @@ items:
           - KMunicate
           - KMunicate2
 
-
-
-
-    - name:  survivalPlotsHeading3
-      title: Survival Plots Explanations
-      type:  Preformatted
-      visible: (((sc && (findcut || multiple_cutoffs)) || (findcut && (ce || ch || kmunicate))) && showExplanations)
-
     # Survival Plots Explanation
     - name: survivalPlotsExplanation
       title: Understanding Survival Curves and Plots
@@ -1145,6 +1093,8 @@ items:
         - tint
         - multievent
         - findcut
+        - min_group_size
+        - seed
         - uselandmark
         - landmark
         - analysistype
@@ -1162,9 +1112,6 @@ items:
       varTitle: '`Calculated Time in Continuous Survival Function - from ${ dxdate } to ${ fudate }`'
       varDescription: Calculated time from the selected dates in the continuous survival function
       clearWith:
-          - tint
-          - dxdate
-          - fudate
           - sc
           - endplot
           - byplot
@@ -1198,9 +1145,6 @@ items:
       varTitle: '`Redefined Outcome in Continuous Survival Function - from ${ outcome } for analysis ${ analysistype }`'
       varDescription: Redefined Outcome from Outcome based on Analysis Type in Continuous Survival Function
       clearWith:
-          - outcome
-          - analysistype
-          - multievent
           - sc
           - endplot
           - byplot
@@ -1234,11 +1178,6 @@ items:
       varTitle: '`Calculated Cut-off Group - from ${ contexpl }`'
       varDescription: Calculated Cut-off Group from given Cut-off in Continuous Survival Function
       clearWith:
-          - outcome
-          - analysistype
-          - multievent
-          - contexpl
-          - findcut
           - sc
           - endplot
           - byplot
@@ -1288,8 +1227,6 @@ items:
           - multiple_cutoffs
           - num_cutoffs
           - cutoff_method
-          - min_group_size
-          - seed
           - contexpl
           - outcome
           - outcomeLevel
@@ -1347,8 +1284,6 @@ items:
           - multiple_cutoffs
           - num_cutoffs
           - cutoff_method
-          - min_group_size
-          - seed
           - contexpl
           - outcome
           - outcomeLevel
@@ -1403,7 +1338,8 @@ items:
           type: text
         - name: time_point
           title: "Time"
-          type: integer
+          type: number
+          format: zto
         - name: n_risk
           title: "N at Risk"
           type: integer
@@ -1426,8 +1362,6 @@ items:
           - multiple_cutoffs
           - num_cutoffs
           - cutoff_method
-          - min_group_size
-          - seed
           - contexpl
           - outcome
           - outcomeLevel
@@ -1466,8 +1400,6 @@ items:
           - multiple_cutoffs
           - num_cutoffs
           - cutoff_method
-          - min_group_size
-          - seed
           - contexpl
           - outcome
           - outcomeLevel
@@ -1506,8 +1438,6 @@ items:
           - multiple_cutoffs
           - num_cutoffs
           - cutoff_method
-          - min_group_size
-          - seed
           - contexpl
           - outcome
           - outcomeLevel
@@ -1549,12 +1479,7 @@ items:
           - multiple_cutoffs
           - num_cutoffs
           - cutoff_method
-          - min_group_size
-          - seed
           - contexpl
-          - outcome
-          - analysistype
-          - multievent
           - findcut
           - sc
           - endplot
@@ -1588,10 +1513,14 @@ refs:
     - finalfit
     - survival
     - survminer
+    - maxstat
     - dichotomizing
     - survivaltutorial
     - survivalrwnahhas
     - SchemperSmith1996
+    - RoystonParmar2013
+    - Garwood1936
+    - Dafni2011
     - KMunicate
     - lubridate
     - patchwork
