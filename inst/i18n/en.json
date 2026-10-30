@@ -85,6 +85,9 @@
             "(not set)": [
                 ""
             ],
+            "{analysis} Analysis": [
+                ""
+            ],
             "{censored} censored": [
                 ""
             ],
@@ -92,6 +95,12 @@
                 ""
             ],
             "{comparison}: hazard ratio {hr} (95% CI {lower} to {upper}, {stats}) - {direction} in the compared group relative to the reference. The hazard ratio is a relative rate, not a cumulative risk difference; the absolute benefit or harm depends on the baseline risk, the endpoint and the length of follow-up.{cinote}": [
+                ""
+            ],
+            "{count} date value(s) have text after the date, for example \"{example}\". Only the date at the start of each value was read and the rest was ignored. Check that the ignored text does not change the date (a second date, a time, or a note such as 'approx.'), and clean the column so it holds dates only.": [
+                ""
+            ],
+            "{count} date value(s) here were written with a two-digit year, which is read as 2000-2068 for 00-68: a 1965 date written as 65 becomes 2065 and falls after its end date. If the Examples below show a start date in the future, rewrite the column with four-digit years.": [
                 ""
             ],
             "{count} date value(s) were written with a two-digit year. These are read as 2000-2068 for 00-68 and as 1969-1999 for 69-99, so a date such as 22/09/68 becomes 2068 and a 1950s-1960s date is pushed a century forward. If any interval is a century off, rewrite the column with four-digit years.": [
@@ -116,6 +125,12 @@
                 ""
             ],
             "{count} row(s) with missing outcome were excluded before model fitting.": [
+                ""
+            ],
+            "{count} value(s) could not be converted because that clock time does not exist in the {tz} timezone: it falls in the hour skipped when daylight-saving time starts (first: {example}). • These rows are left empty. • If the times were recorded in UTC or another fixed offset, set Timezone to UTC; otherwise correct the times at source.": [
+                ""
+            ],
+            "{count} value(s) have text after the date, for example \"{example}\". • Only the date at the start of each value was read and the rest was ignored. • Check that the ignored text does not change the date (a second date, a time, or a note such as 'approx.'), and clean the column so it holds dates only.": [
                 ""
             ],
             "{dist} model - AIC {aic}, BIC {bic}, log-likelihood {loglik}{cov}": [
@@ -193,6 +208,9 @@
             "{variable} was associated with {effect} (hazard ratio = {hr}).": [
                 ""
             ],
+            "{variable}: {level} (vs {reference})": [
+                ""
+            ],
             "* Model did not converge for: {fits} (likely small-sample separation); interpret these HRs with extreme caution.": [
                 ""
             ],
@@ -233,6 +251,9 @@
                 ""
             ],
             "%d of the %d requested cut-off(s) produced a group smaller than the %g%% minimum (%d patients) and were removed. %d cut-off(s) defining %d group(s) are reported. Lower the minimum group size, request fewer cut-offs, or use the continuous Cox model.": [
+                ""
+            ],
+            "%d of the entries in '%s' were not positive numbers and were ignored. Survival is shown at: %s.": [
                 ""
             ],
             "%d patient(s) have a follow-up time of zero, which contributes no person-time; check whether a missing date was read as the origin.": [
@@ -479,6 +500,9 @@
                 ""
             ],
             "A non-significant test is <i>no evidence of a violation</i>, which is not the same as confirming the assumption holds.": [
+                ""
+            ],
+            "A p-value is given for covariate effects only; testing a distribution parameter (shape, scale, rate) against zero has no clinical meaning.": [
                 ""
             ],
             "A per-patient risk score could not be produced for this fit (the competing-risks model is fitted on an expanded dataset with more rows than patients). All other results are unaffected.": [
@@ -889,6 +913,9 @@
             "All observations were removed by the data quality filters ({n} rows). Switch the filters off to inspect the raw intervals; if every interval was negative, the start and end date columns are probably swapped.": [
                 ""
             ],
+            "all other patients (recurrence/progression level(s) {levels}), including those who died without progression": [
+                ""
+            ],
             "All patients have nearly identical risk scores (variance = %.2e). This occurs when covariate patterns are very similar across patients, model coefficients are very small, or predictors carry limited prognostic information. Recommendations: review predictor selection for discriminative variables, consider simpler risk stratification approaches, or interpret C-index instead of risk groups.": [
                 ""
             ],
@@ -1021,9 +1048,6 @@
             "Assessment": [
                 ""
             ],
-            "Assessment of Proportional Hazards Assumption": [
-                ""
-            ],
             "Assign every observed outcome level under Multiple Event Levels to continue. Categories absent from the cohort may remain unselected.": [
                 ""
             ],
@@ -1054,7 +1078,7 @@
             "Auto-detect Format": [
                 ""
             ],
-            "Auto-detection is ambiguous: {formats} all parse these dates equally well ({pct}% success). The '{format}' format was used, because it places these dates in the narrowest range of years - please verify it matches your data or select the format manually.": [
+            "Auto-detection is ambiguous: {formats} all parse these dates equally well ({pct}% success) and place them in a plausible range of years. The '{format}' format was used - please verify it matches your data or select the format manually.": [
                 ""
             ],
             "Automated adequacy grades are not assigned. Interpret event counts, completeness, follow-up, confidence intervals, and time-specific risk sets in the context of the endpoint and intended use.": [
@@ -1099,6 +1123,9 @@
             "Before interpreting results, verify these assumptions:": [
                 ""
             ],
+            "Beyond the observed follow-up of this group.": [
+                ""
+            ],
             "BH": [
                 ""
             ],
@@ -1111,7 +1138,7 @@
             "Binary Outcome": [
                 ""
             ],
-            "Blank/NaN median or confidence limit indicates that the Kaplan-Meier curve did not reach 50% in that group during observed follow-up.": [
+            "Binary Outcome Coding": [
                 ""
             ],
             "Blue: lambda.min, Green: lambda.1se": [
@@ -1336,6 +1363,9 @@
             "Censored": [
                 ""
             ],
+            "Censored ({levels}): coded as 0": [
+                ""
+            ],
             "Censored (0)": [
                 ""
             ],
@@ -1349,6 +1379,9 @@
                 ""
             ],
             "Censored points": [
+                ""
+            ],
+            "censored records ({levels})": [
                 ""
             ],
             "Censoring": [
@@ -1525,6 +1558,9 @@
             "Competing event": [
                 ""
             ],
+            "Competing event ({levels}): coded as 2": [
+                ""
+            ],
             "Competing event (2)": [
                 ""
             ],
@@ -1573,6 +1609,9 @@
             "Competing-risk model": [
                 ""
             ],
+            "Competing-Risks Coding Detected": [
+                ""
+            ],
             "Competing-risks mode reports subdistribution hazard ratios (sHRs). They describe association with the cumulative incidence of the event of interest and are not cause-specific hazard ratios. To obtain cause-specific hazard ratios, set the survival type to cause-specific.": [
                 ""
             ],
@@ -1606,6 +1645,9 @@
             "Confidence intervals and p-values use the subject-clustered robust variance.": [
                 ""
             ],
+            "Confidence intervals are computed for the concordance index only; the Brier score, time-dependent AUC and integrated Brier score are reported without intervals.": [
+                ""
+            ],
             "Confidence intervals are those of that single prediction.": [
                 ""
             ],
@@ -1616,6 +1658,15 @@
                 ""
             ],
             "Confidence intervals require bootstrapping and are left blank.": [
+                ""
+            ],
+            "Confidence intervals: profile likelihood. P-values: Wald test.": [
+                ""
+            ],
+            "Confidence intervals: profile penalized likelihood. P-values: penalized likelihood-ratio test.": [
+                ""
+            ],
+            "Confidence intervals: Wald (profile-likelihood intervals could not be computed for this model). P-values: Wald test.": [
                 ""
             ],
             "Confidence level (%)": [
@@ -1718,6 +1769,9 @@
                 ""
             ],
             "Could not assess": [
+                ""
+            ],
+            "Could not be computed: %s": [
                 ""
             ],
             "Could not compute": [
@@ -2320,6 +2374,9 @@
             "disease progression only": [
                 ""
             ],
+            "disease progression only (recurrence/progression level {levels})": [
+                ""
+            ],
             "Disease state (1)": [
                 ""
             ],
@@ -2626,6 +2683,9 @@
             "Estimate exploratory interval event rates as events divided by exact person-time in equal-width intervals. The number of intervals is limited according to the total event count to reduce sparsity. These are piecewise occurrence/exposure rates, not exact instantaneous hazards or Cox-model coefficients, and should not be used alone to choose treatment or surveillance timing. The rate output is not estimated when an event occurs at time zero, because such an event is a probability mass at the origin rather than a finite continuous hazard.": [
                 ""
             ],
+            "Event ({levels}): coded as 1": [
+                ""
+            ],
             "Event (1)": [
                 ""
             ],
@@ -2693,6 +2753,9 @@
                 ""
             ],
             "Event of interest": [
+                ""
+            ],
+            "Event of interest ({levels}): coded as 1": [
                 ""
             ],
             "Event Rate": [
@@ -3115,7 +3178,7 @@
             "Good": [
                 ""
             ],
-            "Gray's test for equality of cumulative incidence of the event of interest across groups: chi-square = {stat}, df = {df}, p = {p}.": [
+            "Gray's test for equality of cumulative incidence of the event of interest across groups: chi-square = {stat}, df = {df}, {p}.": [
                 ""
             ],
             "Group": [
@@ -4441,9 +4504,6 @@
             "No log-rank p-value or group hazard ratio is reported for this same-data split. Uniform scores cannot form two risk groups.": [
                 ""
             ],
-            "No major concern was identified by these limited checks; standard Cox may also be appropriate.": [
-                ""
-            ],
             "No nomogram is drawn for a stratified model: each stratum has its own baseline hazard, so a single point-to-risk scale would be wrong for patients outside whichever stratum it was drawn from.": [
                 ""
             ],
@@ -4460,6 +4520,9 @@
                 ""
             ],
             "No Positive Follow-up": [
+                ""
+            ],
+            "No progression ({levels}), including deaths: coded as 0": [
                 ""
             ],
             "no reference available": [
@@ -4612,6 +4675,9 @@
             "Not computed": [
                 ""
             ],
+            "Not computed for the cumulative-incidence median; see the table note.": [
+                ""
+            ],
             "Not enough events / observations to fit a parametric survival model.": [
                 ""
             ],
@@ -4622,6 +4688,12 @@
                 ""
             ],
             "Not estimable (term is aliased)": [
+                ""
+            ],
+            "Not estimable at this time point; see the table note.": [
+                ""
+            ],
+            "Not estimable at this time point.": [
                 ""
             ],
             "Not fitted: '%s' has %d levels across %d analyzed rows (about %.1f patients per stratum). Stratification needs a small number of reasonably sized groups; a near-continuous variable gives one stratum per patient and no estimable hazard ratio. Use a categorical variable, or add this variable as a covariate in Multivariable Survival Analysis instead.": [
@@ -4636,7 +4708,19 @@
             "not reached": [
                 ""
             ],
+            "Not reached or not estimable within the observed follow-up.": [
+                ""
+            ],
+            "Not reached: the Kaplan-Meier curve (or its confidence limit) did not cross 50% in this group during observed follow-up.": [
+                ""
+            ],
             "not reported for competing risks": [
+                ""
+            ],
+            "not set": [
+                ""
+            ],
+            "Not shown (odds ratio not estimable): {terms}": [
                 ""
             ],
             "not statistically significant": [
@@ -4834,6 +4918,9 @@
             "Only {count} events observed": [
                 ""
             ],
+            "Only {levels} is coded 1; every other level is coded 0 and treated as censored, including any other category of death (for example death from other causes). For overall survival, which counts death from any cause, enable Multiple Event Levels and assign each death category.": [
+                ""
+            ],
             "Only {n} event(s) of interest among {total} subjects. Estimates with fewer than 10 events are imprecise: confidence intervals will be wide and the {median} may not be reached. Report the number at risk alongside every estimate and treat this as a descriptive result.": [
                 ""
             ],
@@ -4954,7 +5041,25 @@
             "Outcome label matches multiple variables after cleaning; using '{variable}'. Please verify selection.": [
                 ""
             ],
+            "outcome level {levels}": [
+                ""
+            ],
+            "outcome level {levels} only (no recurrence variable was supplied, so progression could not be identified)": [
+                ""
+            ],
+            "outcome level {levels} only (no recurrence variable was supplied, so the composite endpoint was not built)": [
+                ""
+            ],
+            "Outcome level {levels}: coded as 1": [
+                ""
+            ],
             "Outcome level modeled as the event: '{level}' (negative/reference level: '{neg}').": [
+                ""
+            ],
+            "Outcome level(s) {levels} without recurrence/progression: coded as 0": [
+                ""
+            ],
+            "outcome level(s) {levels}, treated as censored": [
                 ""
             ],
             "Outcome level(s) not assigned to any state: {levels}. Assign every level to one of the four states; unassigned levels would otherwise be dropped from the analysis.": [
@@ -5066,6 +5171,9 @@
                 ""
             ],
             "Overall Survival (OS)": [
+                ""
+            ],
+            "Overall Survival (OS) Analysis": [
                 ""
             ],
             "Overall:": [
@@ -5189,6 +5297,9 @@
                 ""
             ],
             "Patients whose follow-up ended before the landmark were excluded (n = {n} removed).": [
+                ""
+            ],
+            "patients with outcome level(s) {levels} and no recurrence/progression": [
                 ""
             ],
             "Penalized AIC: {aic} (-2 x penalized log-likelihood + 2 x {nPar} parameters).": [
@@ -5554,7 +5665,7 @@
             "Probability Estimate": [
                 ""
             ],
-            "progression": [
+            "Progression ({levels}): coded as 1": [
                 ""
             ],
             "Progression-Free Survival": [
@@ -5683,6 +5794,9 @@
             "Recoded Outcome Summary": [
                 ""
             ],
+            "Recoded outcome:": [
+                ""
+            ],
             "Recommendation:": [
                 ""
             ],
@@ -5708,6 +5822,15 @@
                 ""
             ],
             "Recurrence-Free Survival (RFS)": [
+                ""
+            ],
+            "Recurrence/Progression ({levels}): coded as 1": [
+                ""
+            ],
+            "recurrence/progression (level {rec}) or outcome level {levels}": [
+                ""
+            ],
+            "Recurrence/progression and the selected outcome level both count as events for {analysis} analysis; any other outcome level, including other categories of death, is coded 0 unless recurrence/progression occurred.": [
                 ""
             ],
             "recurrence/progression or death": [
@@ -6043,9 +6166,6 @@
             "Scale-adjusted magnitude is |coefficient| multiplied by the encoded-column standard deviation. Path inclusion is not bootstrap selection frequency or evidence of stability.": [
                 ""
             ],
-            "Schoenfeld (not case-aligned)": [
-                ""
-            ],
             "Schoenfeld Residual": [
                 ""
             ],
@@ -6175,7 +6295,7 @@
             "Selected variables are not present in the dataset: {vars}.": [
                 ""
             ],
-            "Selected-refit test p = %.3f": [
+            "Selected-refit test {p}": [
                 ""
             ],
             "Sensitivity and specificity": [
@@ -6293,6 +6413,9 @@
                 ""
             ],
             "Some rows may have been entered with the day and month the other way round from the rest of this column. {count} of {total} rows read as a valid date under both \"{format}\" and \"{swapped}\"; the other {others} can only be read as \"{format}\", which is how the format was chosen. Those two groups should have the same follow-up on average, because the day of the month has nothing to do with how long a patient is followed - but here the ambiguous rows run at a median of {medianamb} days against {medianref} days for the rest (rank-sum p = {p}), which is what a mis-typed day/month order looks like. Check rows {rows} first: the largest of them spans {examplechosen} days as read and {exampleswapped} days with the day and month swapped. Dates typed in two different orders in one column parse without error and stay positive, so nothing else on this page can see them, and the total person-time is wrong by however much those rows are wrong.": [
+                ""
+            ],
+            "Some survival time points were ignored": [
                 ""
             ],
             "Sparse Cox model development with cross-validated L1 penalization.": [
@@ -6748,6 +6871,9 @@
             "Test whether age modifies the effect of the explanatory variable on survival (age-group interaction). Reports the interaction term p-value.": [
                 ""
             ],
+            "Text After The Date Was Ignored": [
+                ""
+            ],
             "the '%s' method returned no cut-off value": [
                 ""
             ],
@@ -6892,6 +7018,9 @@
             "The empty model is a valid result. Choose another lambda rule only as a prespecified modeling decision and report that choice transparently.": [
                 ""
             ],
+            "the event of interest ({levels}); this outcome also carries competing states, listed below": [
+                ""
+            ],
             "the event of interest (coded 1); this outcome also carries competing states, listed below": [
                 ""
             ],
@@ -6952,7 +7081,7 @@
             "The landmark time point, in the selected Time Unit. Must be zero or positive and must fall inside the observed follow-up range. Subjects whose follow-up ended at or before the landmark are excluded, and time is then measured from the landmark, so all estimates are conditional on surviving to it.": [
                 ""
             ],
-            "The level '{level}' is used as the positive/exposure category as specified (negative/reference category: '{neg}').": [
+            "The level '{level}' is treated as a positive test result as specified (negative test result: '{neg}').": [
                 ""
             ],
             "The level of the outcome variable that represents the event of interest. Required for a factor outcome, and never taken from the order of the levels: without it the analysis stops and lists the levels. A numeric 0/1 outcome is read as 1 = event.": [
@@ -7030,7 +7159,7 @@
             "The numeric date columns hold values too small to be Unix epoch seconds (the largest is {maxVal}, which is January 1970). They look like day counts, as produced by an R Date column or an Excel serial date. Numeric dates must be seconds since 1970-01-01 -- use the DateTime Converter's corrected_datetime_numeric output, or supply the dates as text (e.g. \"2024-01-15\") and set the matching input time type.": [
                 ""
             ],
-            "The odds ratio could not be estimated for: {variables}. The confidence interval is unbounded, which means the data separate the outcome perfectly (or nearly so) for that variable and the maximum-likelihood estimate does not exist. The cell is shown as 'not estimable' rather than as the arbitrary large number the fitting algorithm stopped at. Enable Firth penalized logistic regression to obtain a finite estimate, or combine sparse categories. Note that the forest plot below is drawn by finalfit from the same unpenalized fit and will still show the unbounded estimate.": [
+            "The odds ratio could not be estimated for: {variables}. The confidence interval is unbounded, which means the data separate the outcome perfectly (or nearly so) for that variable and the maximum-likelihood estimate does not exist. The cell is shown as 'not estimable' rather than as the arbitrary large number the fitting algorithm stopped at. Enable Firth penalized logistic regression to obtain a finite estimate, or combine sparse categories. Terms whose multivariable odds ratio is not estimable are omitted from the forest plot.": [
                 ""
             ],
             "The odds-ratio model uses Firth penalized likelihood, whereas the available nomogram implementation uses ordinary maximum-likelihood logistic regression.": [
@@ -7043,6 +7172,9 @@
                 ""
             ],
             "The outcome should indicate whether the event of interest occurred": [
+                ""
+            ],
+            "The outcome supplied is already a multi-state coding, so it was recoded to:": [
                 ""
             ],
             "The outcome value for patients without the event. If left empty, the other of the two observed values is used.": [
@@ -7064,6 +7196,9 @@
                 ""
             ],
             "The outcome variable to be used in the analysis.": [
+                ""
+            ],
+            "The overall log-rank test across the cut-off groups could not be computed: %s": [
                 ""
             ],
             "The path legend uses a compact layout and abbreviates long names. Predictor encoding lists the complete design-column names.": [
@@ -7294,6 +7429,9 @@
             "This C-index is apparent (training) performance from the same patients used for preprocessing, penalty selection, and model fitting. Its uncertainty does not include the modeling process. Use bootstrap optimism correction or nested cross-validation that repeats all preprocessing and tuning, followed by external validation before clinical use.": [
                 ""
             ],
+            "This coding only treats disease progression as events; deaths without progression are censored. The outcome variable and its Event Level are not used.": [
+                ""
+            ],
             "This column can be read two ways and both fit: {a} and {b} each parsed more than 80% of the values but produced different dates. • {a} was used. • Check the preview, and set DateTime Format explicitly if that reading is wrong.": [
                 ""
             ],
@@ -7307,6 +7445,9 @@
                 ""
             ],
             "This column was converted as Unix epoch seconds, but its {which} value ({value}) converts to {date}. • Epoch seconds for a realistic clinical date are roughly 1e8 to 4e9 (1973 to 2096). • If these are Excel serial numbers, choose an Excel Serial format instead; if they are measurements, select a real date column.": [
+                ""
+            ],
+            "This column was converted as Unix epoch seconds, but its {which} value ({value}) converts to {date}. • Epoch seconds for a realistic clinical date are roughly 1e8 to 4e9 (1973 to 2096). • These values look like Unix epoch MILLISECONDS (1000 times larger than seconds). Select Auto-detect, which recognises and converts epoch milliseconds.": [
                 ""
             ],
             "This describes one hypothetical patient, not your cohort. If your covariates are skewed, that reference patient may resemble nobody in the data. Choose \"Standardized over cohort\" if you want a curve that represents the patients you actually have.": [
@@ -7327,10 +7468,16 @@
             "This is a model-specific penalized-likelihood quantity that depends on predictor units and parameterisation. It is not suitable for comparing separately fitted Firth models or for comparison with maximum-likelihood AIC. For nested models, use a documented common-penalty likelihood-ratio comparison instead.": [
                 ""
             ],
+            "This is NOT a two-level survival indicator. Kaplan-Meier and Cox treat any non-zero status as the same event, so use a competing-risks method (cumulative incidence, Fine-Gray) instead.": [
+                ""
+            ],
             "This is not median survival. It is the first time at which the estimated cumulative incidence of the event of interest reaches 50% or greater, with competing risks accounted for. Because the curve changes in steps, it need not equal exactly 50% at that time; the estimate indicates that at least half the cohort has had the event of interest by then.": [
                 ""
             ],
             "This is required for correct calculation of:": [
+                ""
+            ],
+            "This is standard coding for Cox regression and Kaplan-Meier analysis.": [
                 ""
             ],
             "This median is the time when the adjusted cumulative incidence of the event of interest reaches 50%.": [
@@ -7486,6 +7633,9 @@
             "Time to Progression (TTP)": [
                 ""
             ],
+            "Time to Progression (TTP) Analysis": [
+                ""
+            ],
             "Time Type": [
                 ""
             ],
@@ -7534,6 +7684,9 @@
             "Time-dependent metrics unavailable for a stratified model": [
                 ""
             ],
+            "Time-point estimates in competing-risks mode are cumulative incidences; turn on 'All event types at selected times' to show them.": [
+                ""
+            ],
             "Time-Specific Probability Estimates": [
                 ""
             ],
@@ -7544,6 +7697,9 @@
                 ""
             ],
             "Times are measured from the landmark at {offset} {unit}, not from diagnosis; add {offset} to express a time as time from diagnosis.": [
+                ""
+            ],
+            "Times In A Daylight-Saving Gap": [
                 ""
             ],
             "Timezone": [
@@ -7838,9 +7994,6 @@
                 ""
             ],
             "Upper 95% CI": [
-                ""
-            ],
-            "Use <strong>Multivariable Survival</strong> in ClinicoPath for standard Cox regression with fewer predictors.": [
                 ""
             ],
             "Use biological age as the time axis instead of follow-up time. The Cox model becomes Surv(age_at_entry, age_at_event, event). Most rigorous for cancer epidemiology where age drives risk.": [
@@ -8179,7 +8332,7 @@
             "YYYY-MM-DD HH:MM:SS": [
                 ""
             ],
-            "Zero cells detected in contingency table. This may affect odds ratio calculation.": [
+            "Zero cells detected in the 2x2 table. Sensitivity or specificity may be exactly 0 or 1, a likelihood ratio may be undefined, and confidence intervals are less reliable.": [
                 ""
             ]
         }

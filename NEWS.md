@@ -5,8 +5,34 @@
 - **Odds Ratio:** new **Negative Level** and **Predictor Negative Level** options name the
   reference outcome and the negative test result explicitly. Both outcome levels must be chosen;
   any other outcome levels are excluded instead of being pooled.
+- **Odds Ratio:** the Hosmer-Lemeshow test uses the number of risk groups actually formed (groups
+  - 2 degrees of freedom). It used 8 even when tied predictions formed only 3 groups, which made
+  calibration look falsely reassuring for all-categorical models.
+- **Comprehensive Time Interval Calculator:** when two date formats read the dates equally well,
+  auto-detect now drops readings whose years span more than 20 (the rule Date-Time Converter
+  uses) instead of preferring the narrowest year range, which could pick day-month-year for
+  year-month-day dates.
 
 ## New and fixed
+
+- **Odds Ratio:** terms whose odds ratio is not estimable (separation) are left out of the forest
+  plot, with a caption naming them. A table note names the confidence-interval method used in the
+  run, including when profile-likelihood intervals fall back to Wald. The C-statistic is labelled
+  in-sample, and a numeric 0/1 variable is accepted as the diagnostic predictor.
+- **Outcome Organizer:** the summary and copy-ready text name exactly which outcome levels are coded
+  1 and 0 (single-level overall survival no longer calls other-cause deaths "alive"); unset levels
+  read "not set" instead of empty brackets; Time to Progression no longer asks for an Event Level it
+  does not use; the plot lists codes in order.
+- **LASSO Cox:** coefficient and importance rows read "Grade: Grade 3 (vs Grade 1)" instead of
+  design-column names; the refit test p-value reads "p < 0.001" instead of "p = 0.000".
+- **Date-Time Converter and Time Interval Calculator:** values with text after the date are reported
+  instead of silently truncated; Date-Time Converter names daylight-saving gaps and suggests
+  Auto-detect for epoch milliseconds; a two-digit-year warning is kept when the interval check
+  rejects the run; the copy-ready sentence says it reports observed time and states the month and
+  year lengths.
+- **Survival Analysis (continuous):** an unsupported RMST horizon is reported once; ignored survival
+  time points are reported; a time point beyond a group's follow-up or one that fails is shown blank
+  with a footnote instead of disappearing; a failed log-rank test is noted.
 
 - **Comprehensive Time Interval Calculator** is back in this module (Survival > Data Preparation).
 - **LASSO Cox:** a factor predictor carrying an explicit `NA` level (for example from `addNA()`) is

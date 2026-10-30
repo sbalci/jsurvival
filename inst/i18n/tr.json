@@ -85,6 +85,9 @@
             "(not set)": [
                 "(ayarlanmadı)"
             ],
+            "{analysis} Analysis": [
+                "{analysis} Analizi"
+            ],
             "{censored} censored": [
                 "{censored} sansürlenmiş"
             ],
@@ -93,6 +96,12 @@
             ],
             "{comparison}: hazard ratio {hr} (95% CI {lower} to {upper}, {stats}) - {direction} in the compared group relative to the reference. The hazard ratio is a relative rate, not a cumulative risk difference; the absolute benefit or harm depends on the baseline risk, the endpoint and the length of follow-up.{cinote}": [
                 "{comparison}: hazard oranı {hr} (%95 GA {lower} ila {upper}, {stats}) - referansa kıyasla karşılaştırılan grupta {direction}. Hazard oranı bir kümülatif risk farkı değil, göreceli bir hızdır; mutlak fayda veya zarar başlangıç riskine, sonlanım noktasına ve takip süresine bağlıdır.{cinote}"
+            ],
+            "{count} date value(s) have text after the date, for example \"{example}\". Only the date at the start of each value was read and the rest was ignored. Check that the ignored text does not change the date (a second date, a time, or a note such as 'approx.'), and clean the column so it holds dates only.": [
+                "{count} tarih değerinde tarihten sonra metin var, örneğin \"{example}\". Her değerin yalnızca başındaki tarih okundu, geri kalanı yok sayıldı. Yok sayılan metnin tarihi değiştirmediğini (ikinci bir tarih, bir saat veya 'yaklaşık' gibi bir not) kontrol edin ve sütunu yalnızca tarih içerecek şekilde temizleyin."
+            ],
+            "{count} date value(s) here were written with a two-digit year, which is read as 2000-2068 for 00-68: a 1965 date written as 65 becomes 2065 and falls after its end date. If the Examples below show a start date in the future, rewrite the column with four-digit years.": [
+                "Buradaki {count} tarih değeri iki basamaklı yılla yazılmış; 00-68 arası 2000-2068 olarak okunur: 65 olarak yazılmış 1965 tarihli bir değer 2065 olur ve bitiş tarihinden sonraya düşer. Aşağıdaki örneklerde gelecekte bir başlangıç tarihi görüyorsanız sütunu dört basamaklı yıllarla yeniden yazın."
             ],
             "{count} date value(s) were written with a two-digit year. These are read as 2000-2068 for 00-68 and as 1969-1999 for 69-99, so a date such as 22/09/68 becomes 2068 and a 1950s-1960s date is pushed a century forward. If any interval is a century off, rewrite the column with four-digit years.": [
                 ""
@@ -117,6 +126,12 @@
             ],
             "{count} row(s) with missing outcome were excluded before model fitting.": [
                 "Eksik sonuca sahip {count} satır model uyumundan önce hariç tutuldu."
+            ],
+            "{count} value(s) could not be converted because that clock time does not exist in the {tz} timezone: it falls in the hour skipped when daylight-saving time starts (first: {example}). • These rows are left empty. • If the times were recorded in UTC or another fixed offset, set Timezone to UTC; otherwise correct the times at source.": [
+                "{count} değer dönüştürülemedi, çünkü bu saat {tz} saat diliminde mevcut değil: yaz saati uygulamasına geçişte atlanan saate denk geliyor (ilki: {example}). • Bu satırlar boş bırakıldı. • Saatler UTC'de veya başka bir sabit ofsette kaydedildiyse Saat Dilimi'ni UTC olarak ayarlayın; aksi halde saatleri kaynağında düzeltin."
+            ],
+            "{count} value(s) have text after the date, for example \"{example}\". • Only the date at the start of each value was read and the rest was ignored. • Check that the ignored text does not change the date (a second date, a time, or a note such as 'approx.'), and clean the column so it holds dates only.": [
+                "{count} değerde tarihten sonra metin var, örneğin \"{example}\". • Her değerin yalnızca başındaki tarih okundu, geri kalanı yok sayıldı. • Yok sayılan metnin tarihi değiştirmediğini (ikinci bir tarih, bir saat veya 'yaklaşık' gibi bir not) kontrol edin ve sütunu yalnızca tarih içerecek şekilde temizleyin."
             ],
             "{dist} model - AIC {aic}, BIC {bic}, log-likelihood {loglik}{cov}": [
                 "{dist} modeli - AIC {aic}, BIC {bic}, log-olabilirlik {loglik}{cov}"
@@ -193,6 +208,9 @@
             "{variable} was associated with {effect} (hazard ratio = {hr}).": [
                 "{variable}, {effect} ile ilişkiliydi (tehlike oranı = {hr})."
             ],
+            "{variable}: {level} (vs {reference})": [
+                "{variable}: {level} ({reference} ile karşılaştırıldığında)"
+            ],
             "* Model did not converge for: {fits} (likely small-sample separation); interpret these HRs with extreme caution.": [
                 "* Model şu alt gruplarda yakınsamadı: {fits} (olası neden küçük örneklemde ayrışma); bu TO değerlerini son derece dikkatli yorumlayın."
             ],
@@ -234,6 +252,9 @@
             ],
             "%d of the %d requested cut-off(s) produced a group smaller than the %g%% minimum (%d patients) and were removed. %d cut-off(s) defining %d group(s) are reported. Lower the minimum group size, request fewer cut-offs, or use the continuous Cox model.": [
                 "%d / %d istenen kesme noktası, %g%% asgari sınırından (%d hasta) daha küçük bir grup oluşturdu ve kaldırıldı. Bildirilen %d kesme noktası %d grup tanımlamaktadır. Asgari grup büyüklüğünü düşürün, daha az kesme noktası isteyin veya sürekli Cox modelini kullanın."
+            ],
+            "%d of the entries in '%s' were not positive numbers and were ignored. Survival is shown at: %s.": [
+                "'%2$s' içindeki girdilerden %1$d tanesi pozitif sayı değildi ve yok sayıldı. Sağkalım şu noktalarda gösteriliyor: %3$s."
             ],
             "%d patient(s) have a follow-up time of zero, which contributes no person-time; check whether a missing date was read as the origin.": [
                 "%d hasta sıfır takip süresine sahiptir ve bu durum kişi-zamanına katkıda bulunmaz; eksik bir tarihin başlangıç noktası olarak okunup okunmadığını kontrol edin."
@@ -480,6 +501,9 @@
             ],
             "A non-significant test is <i>no evidence of a violation</i>, which is not the same as confirming the assumption holds.": [
                 "Anlamlı olmayan bir test <i>ihlal için kanıt yokluğudur</i>; bu, varsayımın sağlandığını doğrulamakla aynı şey değildir."
+            ],
+            "A p-value is given for covariate effects only; testing a distribution parameter (shape, scale, rate) against zero has no clinical meaning.": [
+                "p değeri yalnızca kovaryat etkileri için verilir; bir dağılım parametresinin (şekil, ölçek, oran) sıfıra karşı test edilmesinin klinik bir anlamı yoktur."
             ],
             "A per-patient risk score could not be produced for this fit (the competing-risks model is fitted on an expanded dataset with more rows than patients). All other results are unaffected.": [
                 "Bu uydurma için hasta başına risk skoru üretilemedi (yarışan riskler modeli, hasta sayısından fazla satır içeren genişletilmiş bir veri setine uydurulur). Diğer tüm sonuçlar etkilenmez."
@@ -889,6 +913,9 @@
             "All observations were removed by the data quality filters ({n} rows). Switch the filters off to inspect the raw intervals; if every interval was negative, the start and end date columns are probably swapped.": [
                 ""
             ],
+            "all other patients (recurrence/progression level(s) {levels}), including those who died without progression": [
+                "diğer tüm hastalar (nüks/progresyon düzey(ler)i {levels}), progresyon olmadan ölenler dahil"
+            ],
             "All patients have nearly identical risk scores (variance = %.2e). This occurs when covariate patterns are very similar across patients, model coefficients are very small, or predictors carry limited prognostic information. Recommendations: review predictor selection for discriminative variables, consider simpler risk stratification approaches, or interpret C-index instead of risk groups.": [
                 "Tüm hastaların risk skorları neredeyse aynı (varyans = %.2e). Bu durum, hastalar arasında kovaryat örüntüleri çok benzer olduğunda, model katsayıları çok küçük olduğunda veya öngördürücüler sınırlı prognostik bilgi taşıdığında ortaya çıkar. Öneriler: ayırt edici değişkenler için öngördürücü seçimini gözden geçirin, daha basit risk katmanlama yaklaşımlarını değerlendirin veya risk grupları yerine C-indeksini yorumlayın."
             ],
@@ -1021,9 +1048,6 @@
             "Assessment": [
                 "Değerlendirme"
             ],
-            "Assessment of Proportional Hazards Assumption": [
-                "Orantılı Hazardlar Varsayımının Değerlendirilmesi"
-            ],
             "Assign every observed outcome level under Multiple Event Levels to continue. Categories absent from the cohort may remain unselected.": [
                 ""
             ],
@@ -1054,8 +1078,8 @@
             "Auto-detect Format": [
                 "Biçimi Otomatik Algıla"
             ],
-            "Auto-detection is ambiguous: {formats} all parse these dates equally well ({pct}% success). The '{format}' format was used, because it places these dates in the narrowest range of years - please verify it matches your data or select the format manually.": [
-                ""
+            "Auto-detection is ambiguous: {formats} all parse these dates equally well ({pct}% success) and place them in a plausible range of years. The '{format}' format was used - please verify it matches your data or select the format manually.": [
+                "Otomatik algılama belirsiz: {formats} biçimlerinin tümü bu tarihleri eşit başarıyla okuyor (%{pct} başarı) ve makul bir yıl aralığına yerleştiriyor. '{format}' biçimi kullanıldı - lütfen verilerinizle uyuştuğunu doğrulayın veya biçimi elle seçin."
             ],
             "Automated adequacy grades are not assigned. Interpret event counts, completeness, follow-up, confidence intervals, and time-specific risk sets in the context of the endpoint and intended use.": [
                 "Otomatik yeterlilik dereceleri atanmaz. Olay sayılarını, eksiksizliği, takibi, güven aralıklarını ve zamana özgü risk kümelerini sonlanım noktası ve kullanım amacı bağlamında yorumlayın."
@@ -1099,6 +1123,9 @@
             "Before interpreting results, verify these assumptions:": [
                 "Sonuçları yorumlamadan önce şu varsayımları doğrulayın:"
             ],
+            "Beyond the observed follow-up of this group.": [
+                "Bu grubun gözlemlenen takip süresinin ötesinde."
+            ],
             "BH": [
                 "BH"
             ],
@@ -1111,8 +1138,8 @@
             "Binary Outcome": [
                 "İkili Sonuç"
             ],
-            "Blank/NaN median or confidence limit indicates that the Kaplan-Meier curve did not reach 50% in that group during observed follow-up.": [
-                ""
+            "Binary Outcome Coding": [
+                "İkili Sonuç Kodlaması"
             ],
             "Blue: lambda.min, Green: lambda.1se": [
                 "Mavi: lambda.min, yeşil: lambda.1se"
@@ -1336,6 +1363,9 @@
             "Censored": [
                 "Sansürlü"
             ],
+            "Censored ({levels}): coded as 0": [
+                "Sansürlü ({levels}): 0 olarak kodlandı"
+            ],
             "Censored (0)": [
                 "Sansürlü (0)"
             ],
@@ -1350,6 +1380,9 @@
             ],
             "Censored points": [
                 "Sansürlenmiş noktalar"
+            ],
+            "censored records ({levels})": [
+                "sansürlü kayıtlar ({levels})"
             ],
             "Censoring": [
                 "Sansürleme"
@@ -1525,6 +1558,9 @@
             "Competing event": [
                 "Yarışan olay"
             ],
+            "Competing event ({levels}): coded as 2": [
+                "Yarışan olay ({levels}): 2 olarak kodlandı"
+            ],
             "Competing event (2)": [
                 "Yarışan olay (2)"
             ],
@@ -1573,6 +1609,9 @@
             "Competing-risk model": [
                 "Yarışan risk modeli"
             ],
+            "Competing-Risks Coding Detected": [
+                "Yarışan Risk Kodlaması Saptandı"
+            ],
             "Competing-risks mode reports subdistribution hazard ratios (sHRs). They describe association with the cumulative incidence of the event of interest and are not cause-specific hazard ratios. To obtain cause-specific hazard ratios, set the survival type to cause-specific.": [
                 "Yarışan riskler modu alt dağılım tehlike oranlarını (sTO) bildirir. Bunlar ilgilenilen olayın kümülatif insidansıyla ilişkiyi tanımlar ve nedene özgü tehlike oranları değildir. Nedene özgü tehlike oranları için sağkalım türünü nedene özgü olarak ayarlayın."
             ],
@@ -1606,6 +1645,9 @@
             "Confidence intervals and p-values use the subject-clustered robust variance.": [
                 "Güven aralıkları ve p-değerleri bireye göre kümelenmiş sağlam varyansı kullanır."
             ],
+            "Confidence intervals are computed for the concordance index only; the Brier score, time-dependent AUC and integrated Brier score are reported without intervals.": [
+                "Güven aralıkları yalnızca uyum indeksi için hesaplanır; Brier skoru, zamana bağlı EAA ve entegre Brier skoru aralık olmadan raporlanır."
+            ],
             "Confidence intervals are those of that single prediction.": [
                 "Güven aralıkları o tek öngörüye aittir."
             ],
@@ -1617,6 +1659,15 @@
             ],
             "Confidence intervals require bootstrapping and are left blank.": [
                 "Güven aralıkları bootstrap gerektirir ve boş bırakılmıştır."
+            ],
+            "Confidence intervals: profile likelihood. P-values: Wald test.": [
+                "Güven aralıkları: profil olabilirlik. P değerleri: Wald testi."
+            ],
+            "Confidence intervals: profile penalized likelihood. P-values: penalized likelihood-ratio test.": [
+                "Güven aralıkları: profil cezalı olabilirlik. P değerleri: cezalı olabilirlik oranı testi."
+            ],
+            "Confidence intervals: Wald (profile-likelihood intervals could not be computed for this model). P-values: Wald test.": [
+                "Güven aralıkları: Wald (bu model için profil olabilirlik aralıkları hesaplanamadı). P değerleri: Wald testi."
             ],
             "Confidence level (%)": [
                 ""
@@ -1719,6 +1770,9 @@
             ],
             "Could not assess": [
                 "Değerlendirilemedi"
+            ],
+            "Could not be computed: %s": [
+                "Hesaplanamadı: %s"
             ],
             "Could not compute": [
                 "Hesaplanamadı"
@@ -2320,6 +2374,9 @@
             "disease progression only": [
                 "yalnızca hastalık progresyonu"
             ],
+            "disease progression only (recurrence/progression level {levels})": [
+                "yalnızca hastalık progresyonu (nüks/progresyon düzeyi {levels})"
+            ],
             "Disease state (1)": [
                 "Hastalık durumu (1)"
             ],
@@ -2626,6 +2683,9 @@
             "Estimate exploratory interval event rates as events divided by exact person-time in equal-width intervals. The number of intervals is limited according to the total event count to reduce sparsity. These are piecewise occurrence/exposure rates, not exact instantaneous hazards or Cox-model coefficients, and should not be used alone to choose treatment or surveillance timing. The rate output is not estimated when an event occurs at time zero, because such an event is a probability mass at the origin rather than a finite continuous hazard.": [
                 "Eşit genişlikteki aralıklarda olayların kesin kişi-zamanına bölünmesiyle keşifsel aralık olay hızlarını tahmin edin. Aralık sayısı, seyrekleşmeyi azaltmak için toplam olay sayısına göre sınırlandırılmıştır. Bunlar parçalı oluşum/maruziyet hızlarıdır, tam anlık tehlikeler veya Cox modeli katsayıları değildir ve tedavi veya izlem zamanlamasını seçmek için tek başına kullanılmamalıdır. Sıfır zamanında bir olay meydana geldiğinde hız çıktısı tahmin edilmez, çünkü böyle bir olay sonlu sürekli bir tehlikeden ziyade başlangıç noktasında bir olasılık kütlesidir."
             ],
+            "Event ({levels}): coded as 1": [
+                "Olay ({levels}): 1 olarak kodlandı"
+            ],
             "Event (1)": [
                 "Olay (1)"
             ],
@@ -2694,6 +2754,9 @@
             ],
             "Event of interest": [
                 "İlgilenilen olay"
+            ],
+            "Event of interest ({levels}): coded as 1": [
+                "İlgilenilen olay ({levels}): 1 olarak kodlandı"
             ],
             "Event Rate": [
                 "Olay oranı"
@@ -3115,8 +3178,8 @@
             "Good": [
                 "İyi"
             ],
-            "Gray's test for equality of cumulative incidence of the event of interest across groups: chi-square = {stat}, df = {df}, p = {p}.": [
-                "İlgilenilen olayın kümülatif insidansının gruplar arasında eşitliği için Gray testi: ki-kare = {stat}, sd = {df}, p = {p}."
+            "Gray's test for equality of cumulative incidence of the event of interest across groups: chi-square = {stat}, df = {df}, {p}.": [
+                "İlgilenilen olayın kümülatif insidansının gruplar arasında eşitliği için Gray testi: ki-kare = {stat}, sd = {df}, {p}."
             ],
             "Group": [
                 "Grup"
@@ -4441,9 +4504,6 @@
             "No log-rank p-value or group hazard ratio is reported for this same-data split. Uniform scores cannot form two risk groups.": [
                 "Aynı veride oluşturulan bu ayrım için log-rank p-değeri veya grup hazard oranı raporlanmaz. Tekdüze skorlarla iki risk grubu oluşturulamaz."
             ],
-            "No major concern was identified by these limited checks; standard Cox may also be appropriate.": [
-                "Bu sınırlı kontrollerde önemli bir sorun belirlenmedi; standart Cox da uygun olabilir."
-            ],
             "No nomogram is drawn for a stratified model: each stratum has its own baseline hazard, so a single point-to-risk scale would be wrong for patients outside whichever stratum it was drawn from.": [
                 "Tabakalı bir model için nomogram çizilmez: her tabakanın kendi temel tehlikesi vardır; tek bir puan-risk ölçeği, çizildiği tabakanın dışındaki hastalar için yanlış olur."
             ],
@@ -4461,6 +4521,9 @@
             ],
             "No Positive Follow-up": [
                 "Pozitif Takip Süresi Yok"
+            ],
+            "No progression ({levels}), including deaths: coded as 0": [
+                "Progresyon yok ({levels}), ölümler dahil: 0 olarak kodlandı"
             ],
             "no reference available": [
                 "referans yok"
@@ -4612,6 +4675,9 @@
             "Not computed": [
                 "Hesaplanmadı"
             ],
+            "Not computed for the cumulative-incidence median; see the table note.": [
+                "Kümülatif insidans medyanı için hesaplanmadı; tablo notuna bakın."
+            ],
             "Not enough events / observations to fit a parametric survival model.": [
                 "Parametrik bir sağkalım modeli kurmak için yeterli olay / gözlem yok."
             ],
@@ -4623,6 +4689,12 @@
             ],
             "Not estimable (term is aliased)": [
                 "Tahmin edilemez (terim eşdoğrusal)"
+            ],
+            "Not estimable at this time point; see the table note.": [
+                "Bu zaman noktasında tahmin edilemez; tablo notuna bakın."
+            ],
+            "Not estimable at this time point.": [
+                "Bu zaman noktasında tahmin edilemez."
             ],
             "Not fitted: '%s' has %d levels across %d analyzed rows (about %.1f patients per stratum). Stratification needs a small number of reasonably sized groups; a near-continuous variable gives one stratum per patient and no estimable hazard ratio. Use a categorical variable, or add this variable as a covariate in Multivariable Survival Analysis instead.": [
                 "Uydurulamadı: '%s', %d analiz edilen satır boyunca %d düzeye sahip (katman başına yaklaşık %.1f hasta). Tabakalama, makul büyüklükte az sayıda grup gerektirir; neredeyse sürekli bir değişken hasta başına bir katman verir ve tahmin edilebilir bir hazard oranı sağlamaz. Kategorik bir değişken kullanın veya bu değişkeni Çok Değişkenli Sağkalım Analizinde bir ortak değişken olarak ekleyin."
@@ -4636,8 +4708,20 @@
             "not reached": [
                 ""
             ],
+            "Not reached or not estimable within the observed follow-up.": [
+                "Gözlemlenen takip süresi içinde ulaşılamadı veya tahmin edilemez."
+            ],
+            "Not reached: the Kaplan-Meier curve (or its confidence limit) did not cross 50% in this group during observed follow-up.": [
+                "Ulaşılamadı: Kaplan-Meier eğrisi (veya güven sınırı) bu grupta gözlemlenen takip süresi boyunca %50'yi geçmedi."
+            ],
             "not reported for competing risks": [
                 "yarışan riskler için bildirilmez"
+            ],
+            "not set": [
+                "ayarlanmadı"
+            ],
+            "Not shown (odds ratio not estimable): {terms}": [
+                "Gösterilmedi (odds oranı tahmin edilemez): {terms}"
             ],
             "not statistically significant": [
                 "istatistiksel olarak anlamlı değil"
@@ -4834,6 +4918,9 @@
             "Only {count} events observed": [
                 "Yalnızca {count} olay gözlemlendi"
             ],
+            "Only {levels} is coded 1; every other level is coded 0 and treated as censored, including any other category of death (for example death from other causes). For overall survival, which counts death from any cause, enable Multiple Event Levels and assign each death category.": [
+                "Yalnızca {levels} 1 olarak kodlandı; diğer tüm düzeyler 0 olarak kodlanır ve sansürlü kabul edilir, diğer ölüm kategorileri de dahil (örneğin başka nedenlere bağlı ölüm). Her nedene bağlı ölümü sayan genel sağkalım için Çoklu Olay Düzeyleri'ni etkinleştirin ve her ölüm kategorisini atayın."
+            ],
             "Only {n} event(s) of interest among {total} subjects. Estimates with fewer than 10 events are imprecise: confidence intervals will be wide and the {median} may not be reached. Report the number at risk alongside every estimate and treat this as a descriptive result.": [
                 "{total} denek arasında yalnızca {n} ilgilenilen olay. 10'dan az olay içeren tahminler kesin değildir: güven aralıkları geniş olacak ve {median} değerine ulaşılamayabilir. Her tahminin yanında risk altındaki sayıyı bildirin ve bunu tanımlayıcı bir sonuç olarak ele alın."
             ],
@@ -4853,7 +4940,7 @@
                 "Yalnızca %d olay saptandı (toplam n=%d). 20'den az olay içeren sağkalım analizinin istatistiksel güvenilirliği oldukça sınırlıdır. Güven aralıkları geniş olacak, medyan sağkalım tanımsız kalabilecek ve Cox regresyonu tahminleri kararsız olacaktır. Şunları düşünün: (1) daha fazla veri toplama, (2) harici veri kümeleriyle birleştirme veya (3) hipotez testi yapmadan yalnızca tanımlayıcı analiz yapma."
             ],
             "only %d non-missing value(s) of '%s' are available; at least 10 are required": [
-                "'%s' için yalnızca %d eksik olmayan değer mevcut; en az 10 gereklidir"
+                "'%2$s' için yalnızca %1$d eksik olmayan değer mevcut; en az 10 gereklidir"
             ],
             "Only %d of %d row(s) (%.1f%%) have an outcome value; the other %.1f%% are missing in the outcome variable and are dropped from every number below, so the denominator is smaller than your dataset and any percentage is over the survivors of that filtering. The levels you assigned (%s) cover every value that IS present, so this is missing data rather than a mis-selected level. Check that the outcome column is complete before reporting these numbers.": [
                 "Yalnızca %d / %d satır (%.1f%%) bir sonuç değerine sahip; diğer %.1f%% sonuç değişkeninde eksiktir ve aşağıdaki her sayıdan çıkarılmıştır, dolayısıyla payda veri kümenizden daha küçüktür ve herhangi bir yüzde bu filtrelemenin ardından kalanlar üzerindedir. Atadığınız düzeyler (%s) mevcut olan her değeri kapsar, dolayısıyla bu durum yanlış seçilmiş bir düzeyden ziyade eksik veridir. Bu sayıları bildirmeden önce sonuç sütununun eksiksiz olduğunu kontrol edin."
@@ -4954,8 +5041,26 @@
             "Outcome label matches multiple variables after cleaning; using '{variable}'. Please verify selection.": [
                 "Sonuç etiketi temizleme sonrasında birden fazla değişkenle eşleşiyor; '{variable}' kullanılıyor. Lütfen seçimi doğrulayın."
             ],
+            "outcome level {levels}": [
+                "sonuç düzeyi {levels}"
+            ],
+            "outcome level {levels} only (no recurrence variable was supplied, so progression could not be identified)": [
+                "yalnızca sonuç düzeyi {levels} (nüks değişkeni sağlanmadığı için progresyon tanımlanamadı)"
+            ],
+            "outcome level {levels} only (no recurrence variable was supplied, so the composite endpoint was not built)": [
+                "yalnızca sonuç düzeyi {levels} (nüks değişkeni sağlanmadığı için bileşik sonlanım noktası oluşturulmadı)"
+            ],
+            "Outcome level {levels}: coded as 1": [
+                "Sonuç düzeyi {levels}: 1 olarak kodlandı"
+            ],
             "Outcome level modeled as the event: '{level}' (negative/reference level: '{neg}').": [
                 ""
+            ],
+            "Outcome level(s) {levels} without recurrence/progression: coded as 0": [
+                "Nüks/progresyon olmadan sonuç düzey(ler)i {levels}: 0 olarak kodlandı"
+            ],
+            "outcome level(s) {levels}, treated as censored": [
+                "sonuç düzey(ler)i {levels}, sansürlü kabul edildi"
             ],
             "Outcome level(s) not assigned to any state: {levels}. Assign every level to one of the four states; unassigned levels would otherwise be dropped from the analysis.": [
                 "Hiçbir duruma atanmamış sonuç düzey(ler)i: {levels}. Her düzeyi dört durumdan birine atayın; aksi takdirde atanmamış düzeyler analizden çıkarılacaktır."
@@ -5067,6 +5172,9 @@
             ],
             "Overall Survival (OS)": [
                 "Genel Sağkalım (OS)"
+            ],
+            "Overall Survival (OS) Analysis": [
+                "Genel Sağkalım (OS) Analizi"
             ],
             "Overall:": [
                 "Genel:"
@@ -5190,6 +5298,9 @@
             ],
             "Patients whose follow-up ended before the landmark were excluded (n = {n} removed).": [
                 "İzlemi landmark zamanından önce sona eren hastalar dışlandı (n = {n} çıkarıldı)."
+            ],
+            "patients with outcome level(s) {levels} and no recurrence/progression": [
+                "sonuç düzey(ler)i {levels} olan ve nüks/progresyon olmayan hastalar"
             ],
             "Penalized AIC: {aic} (-2 x penalized log-likelihood + 2 x {nPar} parameters).": [
                 ""
@@ -5554,8 +5665,8 @@
             "Probability Estimate": [
                 "Olasılık Tahmini"
             ],
-            "progression": [
-                "progresyon"
+            "Progression ({levels}): coded as 1": [
+                "Progresyon ({levels}): 1 olarak kodlandı"
             ],
             "Progression-Free Survival": [
                 "Progresyonsuz Sağkalım"
@@ -5683,6 +5794,9 @@
             "Recoded Outcome Summary": [
                 "Yeniden Kodlanan Sonuç Özeti"
             ],
+            "Recoded outcome:": [
+                "Yeniden kodlanmış sonuç:"
+            ],
             "Recommendation:": [
                 "Öneri:"
             ],
@@ -5709,6 +5823,15 @@
             ],
             "Recurrence-Free Survival (RFS)": [
                 "Nükssüz Sağkalım (RFS)"
+            ],
+            "Recurrence/Progression ({levels}): coded as 1": [
+                "Nüks/Progresyon ({levels}): 1 olarak kodlandı"
+            ],
+            "recurrence/progression (level {rec}) or outcome level {levels}": [
+                "nüks/progresyon (düzey {rec}) veya sonuç düzeyi {levels}"
+            ],
+            "Recurrence/progression and the selected outcome level both count as events for {analysis} analysis; any other outcome level, including other categories of death, is coded 0 unless recurrence/progression occurred.": [
+                "{analysis} analizinde nüks/progresyon ve seçilen sonuç düzeyi olay olarak sayılır; diğer ölüm kategorileri dahil diğer tüm sonuç düzeyleri, nüks/progresyon olmadıkça 0 olarak kodlanır."
             ],
             "recurrence/progression or death": [
                 "nüks/progresyon veya ölüm"
@@ -6043,9 +6166,6 @@
             "Scale-adjusted magnitude is |coefficient| multiplied by the encoded-column standard deviation. Path inclusion is not bootstrap selection frequency or evidence of stability.": [
                 "Ölçeğe göre düzeltilmiş büyüklük, |katsayı| ile kodlanmış sütunun standart sapımının çarpımıdır. Yolda yer alma, bootstrap seçim sıklığı veya kararlılık kanıtı değildir."
             ],
-            "Schoenfeld (not case-aligned)": [
-                "Schoenfeld (olgu hizalı değil)"
-            ],
             "Schoenfeld Residual": [
                 "Schoenfeld Kalıntısı"
             ],
@@ -6175,8 +6295,8 @@
             "Selected variables are not present in the dataset: {vars}.": [
                 ""
             ],
-            "Selected-refit test p = %.3f": [
-                "Seçilen değişkenlerle yeniden kurulum testi p = %.3f"
+            "Selected-refit test {p}": [
+                "Seçilen değişkenlerle yeniden kurulum testi {p}"
             ],
             "Sensitivity and specificity": [
                 "Duyarlılık ve özgüllük"
@@ -6294,6 +6414,9 @@
             ],
             "Some rows may have been entered with the day and month the other way round from the rest of this column. {count} of {total} rows read as a valid date under both \"{format}\" and \"{swapped}\"; the other {others} can only be read as \"{format}\", which is how the format was chosen. Those two groups should have the same follow-up on average, because the day of the month has nothing to do with how long a patient is followed - but here the ambiguous rows run at a median of {medianamb} days against {medianref} days for the rest (rank-sum p = {p}), which is what a mis-typed day/month order looks like. Check rows {rows} first: the largest of them spans {examplechosen} days as read and {exampleswapped} days with the day and month swapped. Dates typed in two different orders in one column parse without error and stay positive, so nothing else on this page can see them, and the total person-time is wrong by however much those rows are wrong.": [
                 ""
+            ],
+            "Some survival time points were ignored": [
+                "Bazı sağkalım zaman noktaları yok sayıldı"
             ],
             "Sparse Cox model development with cross-validated L1 penalization.": [
                 "Çapraz doğrulamalı L1 cezasıyla seyrek Cox modeli geliştirme."
@@ -6748,6 +6871,9 @@
             "Test whether age modifies the effect of the explanatory variable on survival (age-group interaction). Reports the interaction term p-value.": [
                 "Yaşın açıklayıcı değişkenin sağkalım üzerindeki etkisini değiştirip değiştirmediğini test edin (yaş-grup etkileşimi). Etkileşim terimi p değerini bildirir."
             ],
+            "Text After The Date Was Ignored": [
+                "Tarihten Sonraki Metin Yok Sayıldı"
+            ],
             "the '%s' method returned no cut-off value": [
                 "'%s' yöntemi hiçbir kesim noktası değeri döndürmedi"
             ],
@@ -6892,6 +7018,9 @@
             "The empty model is a valid result. Choose another lambda rule only as a prespecified modeling decision and report that choice transparently.": [
                 ""
             ],
+            "the event of interest ({levels}); this outcome also carries competing states, listed below": [
+                "ilgilenilen olay ({levels}); bu sonuç aşağıda listelenen yarışan durumları da içeriyor"
+            ],
             "the event of interest (coded 1); this outcome also carries competing states, listed below": [
                 "ilgilenilen olay (1 olarak kodlanmıştır); bu sonuç ayrıca aşağıda listelenen yarışan durumları da taşır"
             ],
@@ -6952,8 +7081,8 @@
             "The landmark time point, in the selected Time Unit. Must be zero or positive and must fall inside the observed follow-up range. Subjects whose follow-up ended at or before the landmark are excluded, and time is then measured from the landmark, so all estimates are conditional on surviving to it.": [
                 "Seçilen Zaman Biriminde yer işareti zaman noktası. Sıfır veya pozitif olmalı ve gözlemlenen takip aralığı içine düşmelidir. Takibi yer işaretinde veya öncesinde sona eren denekler hariç tutulur ve zaman daha sonra yer işaretinden itibaren ölçülür, bu nedenle tüm tahminler o zamana kadar hayatta kalmaya bağlıdır."
             ],
-            "The level '{level}' is used as the positive/exposure category as specified (negative/reference category: '{neg}').": [
-                ""
+            "The level '{level}' is treated as a positive test result as specified (negative test result: '{neg}').": [
+                "'{level}' düzeyi belirtildiği gibi pozitif test sonucu olarak ele alınıyor (negatif test sonucu: '{neg}')."
             ],
             "The level of the outcome variable that represents the event of interest. Required for a factor outcome, and never taken from the order of the levels: without it the analysis stops and lists the levels. A numeric 0/1 outcome is read as 1 = event.": [
                 "Sonuç değişkeninin ilgilenilen olayı temsil eden düzeyi. Faktör türünde bir sonuç için zorunludur ve asla düzeylerin sırasından alınmaz: seçilmezse analiz durur ve düzeyleri listeler. Sayısal 0/1 bir sonuç 1 = olay olarak okunur."
@@ -7030,8 +7159,8 @@
             "The numeric date columns hold values too small to be Unix epoch seconds (the largest is {maxVal}, which is January 1970). They look like day counts, as produced by an R Date column or an Excel serial date. Numeric dates must be seconds since 1970-01-01 -- use the DateTime Converter's corrected_datetime_numeric output, or supply the dates as text (e.g. \"2024-01-15\") and set the matching input time type.": [
                 ""
             ],
-            "The odds ratio could not be estimated for: {variables}. The confidence interval is unbounded, which means the data separate the outcome perfectly (or nearly so) for that variable and the maximum-likelihood estimate does not exist. The cell is shown as 'not estimable' rather than as the arbitrary large number the fitting algorithm stopped at. Enable Firth penalized logistic regression to obtain a finite estimate, or combine sparse categories. Note that the forest plot below is drawn by finalfit from the same unpenalized fit and will still show the unbounded estimate.": [
-                "{variables} için odds oranı tahmin edilemedi. Güven aralığı sınırsızdır; bu da verilerin bu değişken için sonucu mükemmel şekilde (veya neredeyse mükemmel) ayırdığı ve maksimum olabilirlik tahmininin mevcut olmadığı anlamına gelir. Hücre, uydurma algoritmasının durduğu rastgele büyük sayı yerine 'tahmin edilemez' olarak gösterilir. Sonlu bir tahmin elde etmek için Firth cezalı lojistik regresyonunu etkinleştirin veya seyrek kategorileri birleştirin. Aşağıdaki orman grafiğinin aynı cezasız uyarlamadan finalfit tarafından çizildiğini ve yine de sınırsız tahmini göstereceğini unutmayın."
+            "The odds ratio could not be estimated for: {variables}. The confidence interval is unbounded, which means the data separate the outcome perfectly (or nearly so) for that variable and the maximum-likelihood estimate does not exist. The cell is shown as 'not estimable' rather than as the arbitrary large number the fitting algorithm stopped at. Enable Firth penalized logistic regression to obtain a finite estimate, or combine sparse categories. Terms whose multivariable odds ratio is not estimable are omitted from the forest plot.": [
+                "{variables} için odds oranı tahmin edilemedi. Güven aralığı sınırsızdır; bu da verilerin bu değişken için sonucu mükemmel şekilde (veya neredeyse mükemmel) ayırdığı ve maksimum olabilirlik tahmininin mevcut olmadığı anlamına gelir. Hücre, uydurma algoritmasının durduğu rastgele büyük sayı yerine 'tahmin edilemez' olarak gösterilir. Sonlu bir tahmin elde etmek için Firth cezalı lojistik regresyonunu etkinleştirin veya seyrek kategorileri birleştirin. Çok değişkenli odds oranı tahmin edilemeyen terimler orman grafiğinde gösterilmez."
             ],
             "The odds-ratio model uses Firth penalized likelihood, whereas the available nomogram implementation uses ordinary maximum-likelihood logistic regression.": [
                 "Odds oranı modeli Firth cezalı olabilirliğini kullanırken, mevcut nomogram uygulaması sıradan maksimum olabilirlik lojistik regresyonunu kullanır."
@@ -7044,6 +7173,9 @@
             ],
             "The outcome should indicate whether the event of interest occurred": [
                 "Sonlanım, ilgilenilen olayın gerçekleşip gerçekleşmediğini göstermelidir"
+            ],
+            "The outcome supplied is already a multi-state coding, so it was recoded to:": [
+                "Sağlanan sonuç zaten çok durumlu bir kodlama olduğundan şu şekilde yeniden kodlandı:"
             ],
             "The outcome value for patients without the event. If left empty, the other of the two observed values is used.": [
                 ""
@@ -7065,6 +7197,9 @@
             ],
             "The outcome variable to be used in the analysis.": [
                 "Analizde kullanılacak sonuç değişkeni."
+            ],
+            "The overall log-rank test across the cut-off groups could not be computed: %s": [
+                "Kesme noktası grupları arasındaki genel log-rank testi hesaplanamadı: %s"
             ],
             "The path legend uses a compact layout and abbreviates long names. Predictor encoding lists the complete design-column names.": [
                 "Yol göstergesi sıkıştırılmış bir düzen kullanır ve uzun adları kısaltır. Yordayıcı kodlaması tablosu tasarım sütunlarının tam adlarını listeler."
@@ -7294,6 +7429,9 @@
             "This C-index is apparent (training) performance from the same patients used for preprocessing, penalty selection, and model fitting. Its uncertainty does not include the modeling process. Use bootstrap optimism correction or nested cross-validation that repeats all preprocessing and tuning, followed by external validation before clinical use.": [
                 "Bu C-indeksi ön işleme, ceza seçimi ve model kurulumu için kullanılan aynı hastalardaki görünür (eğitim) performanstır. Belirsizliği modelleme sürecini içermez. Klinik kullanımdan önce tüm ön işleme ve ayarlamayı tekrarlayan bootstrap iyimserlik düzeltmesi veya iç içe çapraz doğrulama, ardından dış doğrulama kullanınız."
             ],
+            "This coding only treats disease progression as events; deaths without progression are censored. The outcome variable and its Event Level are not used.": [
+                "Bu kodlama yalnızca hastalık progresyonunu olay olarak kabul eder; progresyon olmadan gerçekleşen ölümler sansürlenir. Sonuç değişkeni ve Olay Düzeyi kullanılmaz."
+            ],
             "This column can be read two ways and both fit: {a} and {b} each parsed more than 80% of the values but produced different dates. • {a} was used. • Check the preview, and set DateTime Format explicitly if that reading is wrong.": [
                 "Bu sütun iki şekilde okunabilir ve her ikisi de uyar: {a} ve {b}'nin her biri değerlerin %80'inden fazlasını ayrıştırdı ancak farklı tarihler üretti. • {a} kullanıldı. • Önizlemeyi kontrol edin ve bu okuma yanlışsa Tarih-Saat Biçimi'ni açıkça ayarlayın."
             ],
@@ -7308,6 +7446,9 @@
             ],
             "This column was converted as Unix epoch seconds, but its {which} value ({value}) converts to {date}. • Epoch seconds for a realistic clinical date are roughly 1e8 to 4e9 (1973 to 2096). • If these are Excel serial numbers, choose an Excel Serial format instead; if they are measurements, select a real date column.": [
                 "Bu sütun Unix epoch saniyeleri olarak dönüştürüldü, ancak {which} değeri ({value}), {date} tarihine dönüştü. • Gerçekçi bir klinik tarih için epoch saniyeleri kabaca 1e8 ila 4e9 arasındadır (1973 - 2096). • Bunlar Excel seri numaralarıysa bunun yerine bir Excel Seri biçimi seçin; eğer ölçümlerse gerçek bir tarih sütunu seçin."
+            ],
+            "This column was converted as Unix epoch seconds, but its {which} value ({value}) converts to {date}. • Epoch seconds for a realistic clinical date are roughly 1e8 to 4e9 (1973 to 2096). • These values look like Unix epoch MILLISECONDS (1000 times larger than seconds). Select Auto-detect, which recognises and converts epoch milliseconds.": [
+                "Bu sütun Unix epoch saniyesi olarak dönüştürüldü, ancak {which} değeri ({value}) {date} tarihine karşılık geliyor. • Gerçekçi bir klinik tarih için epoch saniyesi yaklaşık 1e8 ile 4e9 arasındadır (1973-2096). • Bu değerler Unix epoch MİLİSANİYESİ gibi görünüyor (saniyeden 1000 kat büyük). Epoch milisaniyelerini tanıyıp dönüştüren Otomatik Algıla seçeneğini seçin."
             ],
             "This describes one hypothetical patient, not your cohort. If your covariates are skewed, that reference patient may resemble nobody in the data. Choose \"Standardized over cohort\" if you want a curve that represents the patients you actually have.": [
                 "Bu, kohortunuzu değil tek bir varsayımsal hastayı tanımlar. Kovaryatlarınız çarpıksa o referans hasta verideki hiç kimseye benzemeyebilir. Gerçekte sahip olduğunuz hastaları temsil eden bir eğri istiyorsanız \\\"Kohort üzerinde standardize\\\" seçeneğini seçin."
@@ -7327,11 +7468,17 @@
             "This is a model-specific penalized-likelihood quantity that depends on predictor units and parameterisation. It is not suitable for comparing separately fitted Firth models or for comparison with maximum-likelihood AIC. For nested models, use a documented common-penalty likelihood-ratio comparison instead.": [
                 ""
             ],
+            "This is NOT a two-level survival indicator. Kaplan-Meier and Cox treat any non-zero status as the same event, so use a competing-risks method (cumulative incidence, Fine-Gray) instead.": [
+                "Bu iki düzeyli bir sağkalım göstergesi DEĞİLDİR. Kaplan-Meier ve Cox sıfır olmayan her durumu aynı olay olarak ele alır; bu nedenle bunun yerine bir yarışan risk yöntemi (kümülatif insidans, Fine-Gray) kullanın."
+            ],
             "This is not median survival. It is the first time at which the estimated cumulative incidence of the event of interest reaches 50% or greater, with competing risks accounted for. Because the curve changes in steps, it need not equal exactly 50% at that time; the estimate indicates that at least half the cohort has had the event of interest by then.": [
                 "Bu medyan sağkalım değildir. Yarışan riskler hesaba katıldığında, ilgilenilen olayın tahmini kümülatif insidansının %50 veya daha fazlasına ulaştığı ilk zamandır. Eğri adımlarla değiştiğinden, o sırada tam olarak %50'ye eşit olması gerekmez; tahmin, kohortun en az yarısının o zamana kadar ilgilenilen olayı yaşadığını gösterir."
             ],
             "This is required for correct calculation of:": [
                 "Şunların doğru hesaplanması için bu gereklidir:"
+            ],
+            "This is standard coding for Cox regression and Kaplan-Meier analysis.": [
+                "Bu, Cox regresyonu ve Kaplan-Meier analizi için standart kodlamadır."
             ],
             "This median is the time when the adjusted cumulative incidence of the event of interest reaches 50%.": [
                 "Bu ortanca, ilgilenilen olayın düzeltilmiş kümülatif insidansının %50'ye ulaştığı zamandır."
@@ -7486,6 +7633,9 @@
             "Time to Progression (TTP)": [
                 "İlerlemeye Kadar Geçen Süre (TTP)"
             ],
+            "Time to Progression (TTP) Analysis": [
+                "Progresyona Kadar Geçen Süre (TTP) Analizi"
+            ],
             "Time Type": [
                 "Zaman Türü"
             ],
@@ -7534,6 +7684,9 @@
             "Time-dependent metrics unavailable for a stratified model": [
                 "Tabakalı model için zamana bağlı ölçütler hesaplanamıyor"
             ],
+            "Time-point estimates in competing-risks mode are cumulative incidences; turn on 'All event types at selected times' to show them.": [
+                "Yarışan riskler modunda zaman noktası tahminleri kümülatif insidanslardır; bunları göstermek için 'All event types at selected times' seçeneğini açın."
+            ],
             "Time-Specific Probability Estimates": [
                 "Zamana Özgü Olasılık Tahminleri"
             ],
@@ -7545,6 +7698,9 @@
             ],
             "Times are measured from the landmark at {offset} {unit}, not from diagnosis; add {offset} to express a time as time from diagnosis.": [
                 "Süreler tanıdan değil, {offset} {unit} konumundaki sınır noktasından (landmark) ölçülür; bir süreyi tanıdan itibaren ifade etmek için {offset} ekleyin."
+            ],
+            "Times In A Daylight-Saving Gap": [
+                "Yaz Saati Geçiş Boşluğundaki Saatler"
             ],
             "Timezone": [
                 "Saat Dilimi"
@@ -7839,9 +7995,6 @@
             ],
             "Upper 95% CI": [
                 "Üst %95 GA"
-            ],
-            "Use <strong>Multivariable Survival</strong> in ClinicoPath for standard Cox regression with fewer predictors.": [
-                "Daha az yordayıcıyla standart Cox regresyonu için ClinicoPath içindeki <strong>Çok Değişkenli Sağkalım</strong> analizini kullanınız."
             ],
             "Use biological age as the time axis instead of follow-up time. The Cox model becomes Surv(age_at_entry, age_at_event, event). Most rigorous for cancer epidemiology where age drives risk.": [
                 "Takip süresi yerine zaman ekseni olarak biyolojik yaşı kullanın. Cox modeli Surv(age_at_entry, age_at_event, event) haline gelir. Yaşın riski belirlediği kanser epidemiyolojisi için en titiz yöntemdir."
@@ -8179,8 +8332,8 @@
             "YYYY-MM-DD HH:MM:SS": [
                 "YYYY-AA-GG SS:DD:SS"
             ],
-            "Zero cells detected in contingency table. This may affect odds ratio calculation.": [
-                "Çapraz tabloda sıfır değerli hücreler saptandı. Bu durum odds oranı hesaplamasını etkileyebilir."
+            "Zero cells detected in the 2x2 table. Sensitivity or specificity may be exactly 0 or 1, a likelihood ratio may be undefined, and confidence intervals are less reliable.": [
+                "2x2 tabloda sıfır hücreler saptandı. Duyarlılık veya özgüllük tam olarak 0 veya 1 olabilir, bir olabilirlik oranı tanımsız olabilir ve güven aralıkları daha az güvenilirdir."
             ]
         }
     }
