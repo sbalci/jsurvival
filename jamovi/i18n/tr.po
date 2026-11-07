@@ -462,7 +462,9 @@ msgid ""
 "Replace placeholder dates before analyzing; a follow-up date such as "
 "2199-01-01 is not a censoring date."
 msgstr ""
-"{var} değişkenindeki {n} tarih makul aralığın dışında kalıyor (örneğin {example}). Analizden önce yer tutucu tarihleri değiştirin; 2199-01-01 gibi bir takip tarihi sansürleme tarihi değildir."
+"{var} değişkenindeki {n} tarih makul aralığın dışında kalıyor (örneğin "
+"{example}). Analizden önce yer tutucu tarihleri değiştirin; 2199-01-01 gibi "
+"bir takip tarihi sansürleme tarihi değildir."
 
 #: R/timeinterval.b.R
 msgid "{n} dates in the future detected"
@@ -484,7 +486,9 @@ msgid ""
 "the rate. The Kaplan-Meier or cumulative-incidence estimate shows them as a "
 "drop at the origin."
 msgstr ""
-"Sıfır zamanındaki {n} olay takip süresi olmadan sayılır; bu, hızı yükseltir. Kaplan-Meier veya kümülatif insidans tahmini bunları başlangıç noktasında bir düşüş olarak gösterir."
+"Sıfır zamanındaki {n} olay takip süresi olmadan sayılır; bu, hızı yükseltir. "
+"Kaplan-Meier veya kümülatif insidans tahmini bunları başlangıç noktasında "
+"bir düşüş olarak gösterir."
 
 #: R/timeinterval.b.R
 msgid "{n} missing time intervals due to missing dates"
@@ -560,7 +564,9 @@ msgid ""
 "excluded. Check the date format: when it does not match the data, the dates "
 "that were read may have day and month swapped."
 msgstr ""
-"{ninputs} tarihin {nfailed} tanesi okunamadı; bu nedenle ilgili hastalar hariç tutuldu. Tarih biçimini kontrol edin: biçim veriyle uyuşmadığında, okunabilen tarihlerde gün ve ay yer değiştirmiş olabilir."
+"{ninputs} tarihin {nfailed} tanesi okunamadı; bu nedenle ilgili hastalar "
+"hariç tutuldu. Tarih biçimini kontrol edin: biçim veriyle uyuşmadığında, "
+"okunabilen tarihlerde gün ve ay yer değiştirmiş olabilir."
 
 #: R/multisurvival.b.R
 #: R/singlearm.b.R
@@ -3886,14 +3892,17 @@ msgid ""
 "variance estimate; the median CI is the Brookmeyer-Crowley inversion of that "
 "pointwise band."
 msgstr ""
-"Güven aralıkları, Tek Kollu Sağkalım'da olduğu gibi, Greenwood varyans tahminine dayalı tamamlayıcı log-log dönüşümünü (conf.type='log-log') kullanır; medyan GA, bu noktasal bandın Brookmeyer-Crowley ters çevrimidir."
+"Güven aralıkları, Tek Kollu Sağkalım'da olduğu gibi, Greenwood varyans "
+"tahminine dayalı tamamlayıcı log-log dönüşümünü (conf.type='log-log') "
+"kullanır; medyan GA, bu noktasal bandın Brookmeyer-Crowley ters çevrimidir."
 
 #: R/survival.b.R
 msgid ""
 "Confidence intervals use the complementary log-log transformation with "
 "Greenwood's variance, as in Single Arm Survival."
 msgstr ""
-"Güven aralıkları, Tek Kollu Sağkalım'da olduğu gibi, Greenwood varyansıyla tamamlayıcı log-log dönüşümünü kullanır."
+"Güven aralıkları, Tek Kollu Sağkalım'da olduğu gibi, Greenwood varyansıyla "
+"tamamlayıcı log-log dönüşümünü kullanır."
 
 #: R/multisurvival.b.R
 msgid ""
@@ -16368,7 +16377,11 @@ msgid ""
 "without Disease) have recurrence level '{level}' and are counted as events. "
 "Check these rows for a coding error before reporting."
 msgstr ""
-"Hastalıksız sağkalım olayını nüks değişkeni belirler. '{awd}' (Hastalıkla Yaşıyor) olarak kodlanan {nawd} hastada nüks kaydı yoktur ve bu hastalar olaysız sayılır. '{awod}' (Hastalıksız Yaşıyor) olarak kodlanan {nawod} hastada '{level}' nüks düzeyi vardır ve bu hastalar olay olarak sayılır. Raporlamadan önce bu satırları kodlama hatası açısından kontrol edin."
+"Hastalıksız sağkalım olayını nüks değişkeni belirler. '{awd}' (Hastalıkla "
+"Yaşıyor) olarak kodlanan {nawd} hastada nüks kaydı yoktur ve bu hastalar "
+"olaysız sayılır. '{awod}' (Hastalıksız Yaşıyor) olarak kodlanan {nawod} "
+"hastada '{level}' nüks düzeyi vardır ve bu hastalar olay olarak sayılır. "
+"Raporlamadan önce bu satırları kodlama hatası açısından kontrol edin."
 
 #: R/survivalcont.b.R
 msgid "The requested multiple cut-offs could not be estimated from these data"
@@ -18567,8 +18580,7 @@ msgstr ""
 
 #: R/outcomeorganizer.b.R
 msgid "Vital status and recurrence disagree - please check these patients"
-msgstr ""
-"Yaşam durumu ile nüks uyuşmuyor - lütfen bu hastaları kontrol edin"
+msgstr "Yaşam durumu ile nüks uyuşmuyor - lütfen bu hastaları kontrol edin"
 
 #: R/multisurvival.b.R
 msgid "Wald test = {stat}, df = {df}, p = {p}"
