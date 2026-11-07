@@ -413,7 +413,8 @@ test_that("no plot selected still means no plot explanation", {
                          sc = FALSE, ce = FALSE, ch = FALSE, kmunicate = FALSE,
                          showExplanations = TRUE)
 
-    expect_equal(paste(res$survivalPlotsExplanation$content, collapse = ""), "")
+    # Blank markup ("<div></div>"), not "": an empty Html update is skipped by the client.
+    expect_equal(gsub("<[^>]+>", "", paste(res$survivalPlotsExplanation$content, collapse = "")), "")
 })
 
 

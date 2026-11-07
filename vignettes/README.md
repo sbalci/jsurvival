@@ -9,7 +9,7 @@ Recommended learning path
 - One complete workflow: 05-jamovi-workflow-user-friendly.Rmd
 - Comparing groups: 14-comparing-survival-user-friendly.Rmd
 - Competing risks: 15-competing-survival-user-friendly.Rmd
-- Diagnostics (advanced): 16-cox-model-diagnostics.Rmd
+- Cox regression, briefly: 18-cox-brief-for-clinicians.Rmd
 
 What you’ll learn
 -----------------
@@ -32,13 +32,13 @@ Key terms (plain language)
 - Kaplan–Meier curve: Probability of remaining event-free over time
 - Log-rank test: Are KM curves different beyond chance?
 - Median survival: Time at which 50% have had the event
-- Hazard ratio (HR): Relative risk at any moment (HR < 1 is lower risk)
+- Hazard ratio (HR): Ratio of hazards at any moment (HR < 1 is a lower hazard); an association, not a cause
 - Proportional hazards: HR stays roughly constant over time
 - Cumulative incidence (CIF): Probability an event has happened by a time accounting for competing risks
 
 Common pitfalls to avoid
 ------------------------
-- Mismatched coding: Ensure event is coded consistently (e.g., 1 = event)
+- Mismatched coding: Confirm that the Event Level you selected is the event
 - Time unit confusion: Keep time in consistent units (months/days)
 - Missing dates: Check for impossible/negative times when deriving time
 - Multiple groups: Use pairwise comparisons after overall log-rank
@@ -46,20 +46,7 @@ Common pitfalls to avoid
 
 jamovi navigation (at a glance)
 -------------------------------
-- Survival: Analyses > jSurvival > Survival Analysis
-- Competing risks: Analyses > jSurvival > Competing Risks
-- Cox model/diagnostics: Analyses > jSurvival > Cox Diagnostics
-
-Next steps
-----------
-- Replace the “Screenshot Placeholder” notes in vignettes with actual images
-- Use a consistent example dataset across user‑friendly vignettes
-- Add “Interpretation” boxes (example language for Results sections)
-
-Developer reference
--------------------
-- Detailed feature mappings and UI-to-code references are in:
-  - `survival_documentation.md`
-  - `comparingSurvival_documentation.md`
-  - Other `*_documentation.md` files
-  These are intended for developers and power users; clinicians can skip them.
+- One group: Survival > ClinicoPath Survival > Single Arm Survival
+- Comparing groups: Survival > ClinicoPath Survival > Survival Analysis
+- Competing risks: Single Arm Survival or Survival Analysis, under Analysis with Multiple Outcomes
+- Cox model and proportional hazards check: Survival > ClinicoPath Survival > Multivariable Survival Analysis

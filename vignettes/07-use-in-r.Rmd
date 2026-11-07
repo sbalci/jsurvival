@@ -1,37 +1,41 @@
 ---
 title: "Use jSurvival in R"
 author: "ClinicoPath Development Team"
-date: "`r Sys.Date()`"
 output: html_document
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
-  eval = FALSE,
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  fig.width = 8,
+  fig.height = 6
 )
 ```
 
-```{r setup}
-library(ClinicoPath)
-```
+This article shows how to call from R the same analysis you access in jamovi's interface. The code on this page runs each time the site is built.
 
+```{r setup}
+library(jsurvival)
+```
 
 ```{r data-histopathology}
-data("histopathology")
+data("histopathology", package = "jsurvival")
 ```
 
-```{r}
-#| glimpse histopathology
-
-dplyr::glimpse(histopathology)
+```{r glimpse-histopathology}
+dplyr::glimpse(histopathology[, c("SurgeryDate", "LastFollowUpDate", "OverallTime", "Outcome", "LVI")])
 ```
 
+# Run the analysis
 
-```{r}
-ClinicoPath::survival(
+The options `dod`, `dooc`, `awd` and `awod` are required arguments. Pass `NULL` for them unless you use multiple event levels. `outcomeLevel` is the value of the outcome column that means the event happened. Here survival time is calculated from the two date columns.
+
+```{r survival-analysis}
+overall_survival <- jsurvival::survival(
     data = histopathology,
     elapsedtime = "OverallTime",
     tint = TRUE,
@@ -39,7 +43,7 @@ ClinicoPath::survival(
     fudate = "LastFollowUpDate",
     explanatory = "LVI",
     outcome = "Outcome",
-    outcomeLevel = NULL,
+    outcomeLevel = "1",
     dod = NULL,
     dooc = NULL,
     awd = NULL,
@@ -51,126 +55,83 @@ ClinicoPath::survival(
     )
 ```
 
+# Read the results
 
+The result is a list of the items you see in jamovi.
 
-
-```{r}
-overall_survival <- ClinicoPath::survival(
-    data = histopathology,
-    elapsedtime = "OverallTime",
-    tint = TRUE,
-    dxdate = "SurgeryDate",
-    fudate = "LastFollowUpDate",
-    explanatory = "LVI",
-    outcome = "Outcome",
-    outcomeLevel = NULL,
-    dod = NULL,
-    dooc = NULL,
-    awd = NULL,
-    awod = NULL,
-    timetypedata = "ymdhms",
-    sc = TRUE,
-    ce = TRUE,
-    ch = TRUE
-    )
+```{r item-names}
+overall_survival$itemNames
 ```
 
-
-```{r}
-ls(overall_survival)
-```
-
-
-
-```{r}
-overall_survival$tCoxtext2
-```
-
-
-```{r}
-overall_survival$survTableSummary
-```
-
-
-```{r}
-overall_survival$survTable
-```
-
-
-
-```{r}
+```{r subtitle}
 overall_survival$subtitle
 ```
 
+## Median survival
 
-
-```{r}
-overall_survival$plot3
-```
-
-
-
-```{r}
-overall_survival$plot2
-```
-
-
-
-```{r}
-overall_survival$plot
-```
-
-
-
-```{r}
+```{r median-table}
 overall_survival$medianTable
 ```
 
-
-```{r}
+```{r median-summary}
 overall_survival$medianSummary
 ```
 
+## Cox regression
 
-
-```{r}
+```{r cox-table}
 overall_survival$coxTable
 ```
 
+A table can be read as a data frame:
 
-
-```{r}
+```{r cox-table-df}
 overall_survival$coxTable$asDF
 ```
 
-
-
-
-```{r}
+```{r cox-summary}
 overall_survival$coxSummary
 ```
 
+## Survival at selected times
 
+```{r surv-table}
+overall_survival$survTable
+```
 
+```{r surv-summary}
+overall_survival$survTableSummary
+```
 
-```{r}
+# Plots
+
+Survival plot:
+
+```{r plot-survival}
 overall_survival$plot
 ```
 
+Cumulative events:
 
-```{r}
-# Tip: Save a high-resolution PNG
-# overall_survival$plot$saveAs("overall_survival.png")
-# Convert to TIFF if needed for journals:
-# img <- png::readPNG("overall_survival.png")
-# tiff::writeTIFF(what = img, where = "overall_survival.tiff", compression = "none")
+```{r plot-events}
+overall_survival$plot2
 ```
- 
- 
 
+Cumulative hazard:
 
+```{r plot-hazard}
+overall_survival$plot3
+```
 
-Notes
------
-- This vignette shows how to call the same analysis from R that you access in jamovi’s GUI.
+To save a plot as a PNG file:
+
+```{r save-plot}
+png_file <- tempfile(fileext = ".png")
+overall_survival$plot$saveAs(png_file)
+file.exists(png_file)
+```
+
+# Notes
+
 - Keep event coding and time units consistent with your dataset.
+- These results describe associations in the data. They do not establish causes.

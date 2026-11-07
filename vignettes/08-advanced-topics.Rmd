@@ -1,7 +1,6 @@
 ---
 title: "Advanced Survival Analysis with jSurvival"
 author: "ClinicoPath Development Team"
-date: "`r Sys.Date()`"
 output: html_document
 ---
 
@@ -17,6 +16,37 @@ knitr::opts_chunk$set(
 
 This vignette covers advanced survival analysis techniques and methodological considerations when using jSurvival. It addresses complex scenarios that researchers commonly encounter in clinical and epidemiological studies.
 
+The code below uses simulated data, created here so that each call runs as written. The data carry no real effect.
+
+```{r example-data}
+library(jsurvival)
+set.seed(1)
+n <- 300
+mydata <- data.frame(
+  time_months = rexp(n, rate = 1 / 36),
+  death = rbinom(n, 1, 0.6),
+  treatment = sample(c("Control", "Experimental"), n, replace = TRUE),
+  sex = sample(c("Female", "Male"), n, replace = TRUE),
+  age = round(rnorm(n, 62, 10)),
+  center = sample(c("Center A", "Center B", "Center C"), n, replace = TRUE),
+  response_status = sample(c("Non-responder", "Responder"), n, replace = TRUE),
+  biomarker_value = rlnorm(n, meanlog = 2, sdlog = 0.6)
+)
+biomarker_data <- mydata
+original_data <- mydata
+
+cause <- sample(c("Alive", "Cancer", "Other"), n, replace = TRUE, prob = c(0.4, 0.4, 0.2))
+competing_data <- mydata
+competing_data$death_cancer <- as.numeric(cause == "Cancer")
+competing_data$death_other <- as.numeric(cause == "Other")
+
+study1_data <- mydata[1:100, ]
+study2_data <- mydata[101:200, ]
+study3_data <- mydata[201:300, ]
+
+data("histopathology", package = "jsurvival")
+```
+
 # Advanced Cox Regression Topics
 
 ## Checking Proportional Hazards Assumption
@@ -26,16 +56,16 @@ The Cox proportional hazards model assumes that hazard ratios remain constant ov
 ### Visual Assessment
 
 ```{r ph-visual}
-# Use survival analysis with extended follow-up time
+# ph_cox reports the proportional hazards test and draws the Schoenfeld plot
 ph_check <- survival(
   data = mydata,
   elapsedtime = time_months,
   outcome = death,
   outcomeLevel = "1",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
   explanatory = treatment,
   ph_cox = TRUE,
-  endplot = 120,  # Extended follow-up for visual inspection
-  sc = TRUE       # Schoenfeld residuals (if available)
+  endplot = 120   # Extended follow-up for visual inspection
 )
 ```
 
@@ -56,9 +86,11 @@ stratified_result <- multisurvival(
   elapsedtime = time_months,
   outcome = death,
   outcomeLevel = "1",
-  explanatory = c(treatment, age, sex),
-  # Note: Stratification would need to be implemented
-  # This is conceptual - actual implementation may vary
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
+  explanatory = c("treatment", "sex"),
+  contexpl = "age",
+  use_stratify = TRUE,
+  stratvar = "center"
 )
 ```
 
@@ -71,51 +103,11 @@ For variables with time-varying effects, consider:
 
 ## Model Selection and Variable Selection
 
-### Forward/Backward Selection
-
-```{r variable-selection}
-# Start with univariate screening
-candidate_vars <- c("age", "sex", "stage", "grade", "biomarker")
-univariate_results <- list()
-
-for(var in candidate_vars) {
-  univariate_results[[var]] <- survival(
-    data = mydata,
-    elapsedtime = time_months,
-    outcome = death,
-    outcomeLevel = "1",
-    explanatory = !!sym(var),
-    ph_cox = TRUE
-  )
-}
-
-# Variables with p < 0.20 in univariate analysis
-# proceed to multivariable model
-significant_vars <- c("age", "stage", "biomarker")  # Based on results
-
-final_model <- multisurvival(
-  data = mydata,
-  elapsedtime = time_months,
-  outcome = death,
-  outcomeLevel = "1",
-  explanatory = significant_vars
-)
-```
+Choose covariates in advance from clinical knowledge. Screening by univariable p-value biases estimates; use `lassocox` if you need data-driven selection, and validate it.
 
 ### Model Validation
 
-```{r model-validation}
-# Internal validation using bootstrap or cross-validation
-# External validation in independent dataset
-
-validation_result <- multisurvival(
-  data = validation_data,
-  elapsedtime = time_months,
-  outcome = death,
-  outcomeLevel = "1",
-  explanatory = final_model_variables
-)
-```
+External validation applies the frozen coefficients to new data and assesses discrimination and calibration. jsurvival does not do this; use `Add Risk Score to Data` only on the development cohort.
 
 ## Handling Missing Data
 
@@ -128,35 +120,14 @@ complete_result <- survival(
   elapsedtime = time_months,
   outcome = death,
   outcomeLevel = "1",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
   explanatory = treatment
 )
 ```
 
 ### Multiple Imputation Approach
 
-```{r multiple-imputation}
-# Conceptual approach for multiple imputation
-# 1. Create multiple imputed datasets
-# 2. Analyze each dataset separately
-# 3. Pool results using Rubin's rules
-
-# Example workflow (implementation details may vary):
-imputed_results <- list()
-for(i in 1:5) {  # 5 imputed datasets
-  imputed_results[[i]] <- survival(
-    data = imputed_data[[i]],
-    elapsedtime = time_months,
-    outcome = death,
-    outcomeLevel = "1",
-    explanatory = treatment
-  )
-}
-
-# Pool results (conceptual)
-pooled_hr <- mean(sapply(imputed_results, function(x) x$hazard_ratio))
-pooled_se <- sqrt(mean(sapply(imputed_results, function(x) x$se^2)) + 
-                  (1 + 1/5) * var(sapply(imputed_results, function(x) x$hazard_ratio)))
-```
+jsurvival has no imputation. Pool on the log hazard ratio with Rubin's rules using `mice` and `coxph` directly.
 
 # Cut-point Optimization
 
@@ -164,9 +135,18 @@ pooled_se <- sqrt(mean(sapply(imputed_results, function(x) x$se^2)) +
 
 ### Multiple Cut-point Testing
 
-There is **no p-value adjustment option** on `survivalcont`. `padjustmethod` does not exist and
-never has; passing it raises `unused argument`. What the analysis does offer is control over how
-the cut-offs themselves are derived, via `multiple_cutoffs`, `num_cutoffs` and `cutoff_method`:
+There is **no p-value adjustment option** on `survivalcont`, and passing `padjustmethod` raises
+`unused argument`, because the adjustment for a single cut-off is built in. With `findcut = TRUE`
+the cut-off table reports an **Adjusted p**, a minimum-p correction for the search over all
+candidate cut-offs; the note under the table names the approximations used. It is conservative. A
+p-value computed afterwards on the low and high groups ignores the search and is not a valid test.
+
+With several cut-offs chosen from the outcome (`cutoff_method` of `"recursive"`, `"tree"` or
+`"minpval"`) no adjusted p-value exists, so the log-rank p-value is labeled unadjusted and is not
+printed on the plot. Any data-derived cut-off needs validation in independent data.
+
+The analysis also offers control over how the cut-offs themselves are derived, via
+`multiple_cutoffs`, `num_cutoffs` and `cutoff_method`:
 
 ```{r multiple-cutpoints}
 cutpoint_analysis <- survivalcont(
@@ -174,6 +154,7 @@ cutpoint_analysis <- survivalcont(
   elapsedtime = time_months,
   outcome = death,
   outcomeLevel = "1",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
   contexpl = biomarker_value,
   findcut = TRUE,           # single cut-off, maximally selected rank statistic
   multiple_cutoffs = TRUE,  # or several candidate cut-offs
@@ -182,7 +163,7 @@ cutpoint_analysis <- survivalcont(
 )
 ```
 
-### Cross-Validation of Cut-points
+### Split-Sample Check of Cut-points
 
 ```{r cutpoint-validation}
 # Split data into training and validation sets
@@ -197,11 +178,13 @@ train_cutpoint <- survivalcont(
   elapsedtime = time_months,
   outcome = death,
   outcomeLevel = "1",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
   contexpl = biomarker_value,
   findcut = TRUE
 )
 
 # Apply cut-point to test data
+optimal_cutpoint <- train_cutpoint$rescutTable$asDF$cutpoint[1]
 test_data$biomarker_high <- ifelse(test_data$biomarker_value >= optimal_cutpoint, 
                                    "High", "Low")
 
@@ -210,6 +193,7 @@ validation_result <- survival(
   elapsedtime = time_months,
   outcome = death,
   outcomeLevel = "1",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
   explanatory = biomarker_high
 )
 ```
@@ -231,6 +215,7 @@ tertile_analysis <- survival(
   elapsedtime = time_months,
   outcome = death,
   outcomeLevel = "1",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
   explanatory = biomarker_tertile,
   analysistype = "overall"
 )
@@ -238,15 +223,15 @@ tertile_analysis <- survival(
 
 ### Spline Analysis
 
-Restricted cubic splines are built in — `survival()` gained `rcs_analysis` for exactly this, so
-there is no need to leave jsurvival to avoid dichotomising a continuous predictor:
+Restricted cubic splines are built in: `survival()` gained `rcs_analysis` for this, so there is no
+need to leave jsurvival to avoid dichotomizing a continuous predictor:
 
 ```{r spline-concept}
 spline_analysis <- survival(
   data = histopathology,
   elapsedtime = "OverallTime", outcome = "Outcome", outcomeLevel = "1",
   explanatory = "Group",
-  dod = "", dooc = "", awd = "", awod = "",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
   rcs_analysis = TRUE,
   rcs_variable = "Age",   # the continuous predictor to model flexibly
   rcs_knots    = 4        # 3 knots for a modest cohort, 5 when data allow
@@ -254,7 +239,7 @@ spline_analysis <- survival(
 ```
 
 This tests whether the log-hazard really is linear in the predictor. If it is not, a
-dichotomisation chosen from the same data will look better than it is. See
+dichotomization chosen from the same data will look better than it is. See
 [Features Added Since the Earlier Releases](#features-added-since-the-earlier-releases) for the
 calibration and internal-validation options that pair with it.
 
@@ -265,24 +250,19 @@ calibration and internal-validation options that pair with it.
 ### Multiple Landmark Points
 
 ```{r multiple-landmarks}
-# Analyze survival at different landmark times
+# Analyze survival at different landmark times. jsurvival applies the landmark itself,
+# so pass the original time column. Do not shift the time as well, or it is shifted
+# twice. Patients whose time equals the landmark exactly are excluded.
 landmark_times <- c(6, 12, 24)  # months
 landmark_results <- list()
 
 for(t in landmark_times) {
-  # Create landmark dataset
-  landmark_data <- subset(original_data, 
-                         time_months > t | (time_months <= t & death == 0))
-  
-  # Adjust survival times
-  landmark_data$time_from_landmark <- pmax(0, landmark_data$time_months - t)
-  
-  # Analyze
   landmark_results[[paste0("Month_", t)]] <- survival(
-    data = landmark_data,
-    elapsedtime = time_from_landmark,
+    data = original_data,
+    elapsedtime = time_months,
     outcome = death,
     outcomeLevel = "1",
+    dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
     explanatory = response_status,
     uselandmark = TRUE,
     landmark = t
@@ -296,15 +276,14 @@ for(t in landmark_times) {
 # Conditional survival probabilities
 # Probability of surviving additional 2 years given survival to 1 year
 
-# Patients alive at 12 months
-alive_12m <- subset(mydata, time_months > 12 | (time_months <= 12 & death == 0))
-alive_12m$time_conditional <- pmax(0, alive_12m$time_months - 12)
-
 conditional_survival <- singlearm(
-  data = alive_12m,
-  elapsedtime = time_conditional,
+  data = mydata,
+  elapsedtime = time_months,
   outcome = death,
   outcomeLevel = "1",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
+  uselandmark = TRUE,
+  landmark = 12,
   cutp = "24",  # Additional 2 years
   timetypeoutput = "months"
 )
@@ -322,6 +301,7 @@ cancer_death <- survival(
   elapsedtime = time_months,
   outcome = death_cancer,  # 1 = cancer death, 0 = alive or other death
   outcomeLevel = "1",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
   explanatory = treatment,
   ph_cox = TRUE
 )
@@ -332,6 +312,7 @@ other_death <- survival(
   elapsedtime = time_months,
   outcome = death_other,   # 1 = other death, 0 = alive or cancer death
   outcomeLevel = "1",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
   explanatory = treatment,
   ph_cox = TRUE
 )
@@ -339,31 +320,9 @@ other_death <- survival(
 
 ## Subdistribution Hazards (Fine-Gray Model)
 
-```{r fine-gray-concept}
-# Fine-Gray model for cumulative incidence
-# This approach treats competing events as censoring at the time they occur
-# but keeps subjects in the risk set
-
-# Implementation would require specialized competing risks functions
-# Currently beyond basic jSurvival functionality
-```
+The Fine-Gray model keeps patients who had a competing event in the risk set, with decreasing weights. In Multivariable Survival, use **Multiple event levels** with **Survival Type** set to **Competing Risk**. Its subdistribution hazard ratios describe cumulative incidence, not the cause-specific rate.
 
 # Sample Size and Power Calculations
-
-## Post-hoc Power Analysis
-
-```{r power-analysis}
-# Given observed data, calculate achieved power
-observed_events <- 120
-observed_hr <- 0.75
-alpha <- 0.05
-
-# Use standard formulas or specialized software for power calculation
-# Example calculation (conceptual):
-log_hr <- log(observed_hr)
-se_log_hr <- 1.96 / abs(qnorm(alpha/2))  # Approximate from CI
-power <- pnorm(abs(log_hr)/se_log_hr - qnorm(1-alpha/2))
-```
 
 ## Required Sample Size
 
@@ -398,26 +357,17 @@ meta_result <- multisurvival(
   elapsedtime = time_months,
   outcome = death,
   outcomeLevel = "1",
-  explanatory = c(treatment, age, sex, study)
-  # Consider stratification by study
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
+  explanatory = c("treatment", "sex"),
+  contexpl = "age",
+  use_stratify = TRUE,
+  stratvar = "study"
 )
 ```
 
 ## Fixed Effects vs. Random Effects
 
-```{r meta-approaches}
-# Fixed effects: assumes same treatment effect across studies
-fixed_effects <- survival(
-  data = combined_data,
-  elapsedtime = time_months,
-  outcome = death,
-  outcomeLevel = "1",
-  explanatory = treatment
-)
-
-# Random effects: allows heterogeneity between studies
-# Would require specialized meta-analysis functions
-```
+A pooled `survival()` call that ignores study is not a fixed-effects meta-analysis. Stratify by study, as above, for a one-stage analysis. Random-effects models need specialized meta-analysis functions outside jsurvival.
 
 # Quality Control and Validation
 
@@ -425,6 +375,7 @@ fixed_effects <- survival(
 
 ```{r quality-checks}
 # Check for data inconsistencies
+max_followup <- 200  # months; set this to the longest possible follow-up in your study
 data_checks <- list(
   # Negative survival times
   negative_times = sum(mydata$time_months < 0, na.rm = TRUE),
@@ -448,7 +399,8 @@ print(data_checks)
 ```{r model-diagnostics}
 # Concordance index (C-index)
 # Measures discriminative ability of the model
-# Values >0.7 generally considered good
+# Values >0.7 generally considered good, but the apparent value from the
+# same data used to fit the model is optimistic
 
 # Calibration assessment
 # Agreement between predicted and observed survival
@@ -483,7 +435,7 @@ nnt <- 1 / absolute_benefit  # Number needed to treat
 # HR = 0.75 (95% CI: 0.60-0.95)
 # Interpretation:
 # - Point estimate suggests 25% reduction in hazard
-# - We can be 95% confident the true HR is between 0.60 and 0.95
+# - The 95% CI for the HR is 0.60 to 0.95
 # - Since CI excludes 1.0, result is statistically significant
 # - Minimum plausible benefit is 5% (HR=0.95)
 # - Maximum plausible benefit is 40% (HR=0.60)
@@ -497,7 +449,7 @@ Advanced survival analysis requires careful consideration of:
 2. **Missing data patterns** and appropriate handling
 3. **Multiple comparisons** and adjustment strategies
 4. **Clinical relevance** beyond statistical significance
-5. **Robust validation** in independent datasets
+5. **Validation** in independent datasets
 
 Key principles for advanced analysis:
 
@@ -524,7 +476,7 @@ res <- survival(
   data = histopathology,
   elapsedtime = "OverallTime", outcome = "Outcome", outcomeLevel = "1",
   explanatory = "Group",
-  dod = "", dooc = "", awd = "", awod = "",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
   weightedLogRank  = TRUE,
   survivalTestType = "fh_rho1"   # "logrank", "fh_rho0_5", "fh_rho1"
 )
@@ -537,8 +489,8 @@ res$weightedLogRankTable$asDF
 
 All three tests are reported whichever `survivalTestType` you pick, each with the weighting it
 applies: `rho = 0` weights all time points equally, `rho = 0.5` gives moderate emphasis to early
-differences, and `rho = 1` weights by S(t) and emphasises early events. Choose the test **before**
-looking at the results — picking the smallest p-value from three tests is not a test.
+differences, and `rho = 1` weights by S(t) and emphasizes early events. Choose the test **before**
+looking at the results. Picking the smallest p-value from three tests is not a test.
 
 ## Age-Adjusted Analysis
 
@@ -550,14 +502,14 @@ res_age <- survival(
   data = histopathology,
   elapsedtime = "OverallTime", outcome = "Outcome", outcomeLevel = "1",
   explanatory = "Group",
-  dod = "", dooc = "", awd = "", awod = "",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
   age_adjustment = TRUE,
   age_variable   = "Age"
 )
 res_age$ageAdjustedCoxTable$asDF
 #>   variable            levels   n  hr_unadjusted hr_age_adjusted
 #> 1    group         Treatment 245 0.94 (0.69-1.27) 0.94 (0.69-1.28)
-#> 2      Age per unit (p=0.11)  NA                - 0.99 (0.98-1.00)
+#> 2      Age per unit (p=0.11) <NA>                - 0.99 (0.98-1.00)
 ```
 
 The table puts the unadjusted and age-adjusted hazard ratios side by side, which is the
@@ -570,7 +522,7 @@ different questions and can be combined with the above:
 | `age_stratified_cox = TRUE` | Adjust for age without assuming proportional hazards across age |
 | `age_group_cutpoints` | Age bands for stratification (default `"50, 65, 75"`) |
 | `age_time_scale = TRUE` | Use age, not time-on-study, as the time scale |
-| `age_standardization = TRUE` | Standardised mortality ratio; `age_standardization_method` is `"indirect"` or `"direct"` |
+| `age_standardization = TRUE` | Standardized mortality ratio; `age_standardization_method` is `"indirect"` or `"direct"` |
 | `age_stratified_km = TRUE` | Kaplan-Meier curves per age band |
 
 ## Parametric Survival Models
@@ -583,7 +535,7 @@ res_par <- survival(
   data = histopathology,
   elapsedtime = "OverallTime", outcome = "Outcome", outcomeLevel = "1",
   explanatory = "Group",
-  dod = "", dooc = "", awd = "", awod = "",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
   use_parametric          = TRUE,
   parametric_distribution = "weibull",   # exp, weibull, lnorm, llogis, gamma,
                                          # gengamma, gompertz, survspline
@@ -594,7 +546,7 @@ res_par <- survival(
 
 With `parametric_distribution = "survspline"`, `spline_knots` (default 3) and `spline_scale`
 (`"hazard"`, `"odds"` or `"normal"`) control the flexible-parametric fit. Extrapolation beyond the
-follow-up window is a modelling assumption, not a measurement — say so when you report it.
+follow-up window is a modeling assumption, not a measurement. Say so when you report it.
 
 ## Calibration, Non-Linearity and Internal Validation
 
@@ -603,39 +555,43 @@ res_val <- survival(
   data = histopathology,
   elapsedtime = "OverallTime", outcome = "Outcome", outcomeLevel = "1",
   explanatory = "Group",
-  dod = "", dooc = "", awd = "", awod = "",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
   calibration_curves    = TRUE,   # predicted vs observed survival
   calibration_timepoint = 12,     # in the analysis time unit
   calibration_ngroups   = 5,      # risk groups on the calibration plot
   rcs_analysis          = TRUE,   # restricted cubic splines: is the effect linear?
   rcs_variable          = "Age",
   rcs_knots             = 4,
-  bootstrapValN         = 200     # bootstrap resamples for internal validation
+  bootstrapValidation   = TRUE,   # bootstrap internal validation of the C-index
+  bootstrapValN         = 200     # bootstrap resamples
 )
 ```
 
 `rcs_analysis` answers a question that is easy to skip: a continuous predictor entered linearly
 assumes the log-hazard is linear in it, and that is frequently false for age and for biomarkers.
-Bootstrap validation here is *internal* — it corrects for optimism, it does not substitute for an
+Bootstrap validation here is *internal*: it corrects for optimism and does not substitute for an
 independent cohort.
 
 ## Model Performance in `multisurvival`
 
-Four `multisurvival()` options address the question a Cox table cannot answer on its own — how well
-does this model actually predict? All four ran against the bundled `histopathology` data.
+Four `multisurvival()` options address the question a Cox table cannot answer on its own: how well
+does this model predict? All four ran against the bundled `histopathology` data.
 
 ```{r multisurvival-performance}
 res_ms <- multisurvival(
   data = histopathology,
   elapsedtime = "OverallTime", outcome = "Outcome", outcomeLevel = "1",
   explanatory = c("Group", "LVI"), contexpl = "Age",
-  dod = "", dooc = "", awd = "", awod = "",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
   ci_optimism      = TRUE,   # optimism-corrected C-index by bootstrap
   ci_optimism_boot = 200,    # resamples (default 150)
   compare_models   = TRUE,   # covariate contribution by single-term deletion
   show_survmetrics = TRUE,   # Brier score and time-dependent AUC
   survmetrics_timepoints = "12, 36, 60",
-  survmetrics_show_plots = TRUE
+  survmetrics_show_plots = TRUE,
+  ac = TRUE,                 # adjusted probability curve
+  adjexplanatory = "Group",
+  ac_summary = TRUE          # adjusted probability summary tables
 )
 ```
 
@@ -646,7 +602,7 @@ res_ms <- multisurvival(
 | `show_survmetrics` | Brier score (calibration and discrimination together, lower is better) and time-dependent AUC at the timepoints you name in `survmetrics_timepoints`. |
 | `ac_summary` | With `ac = TRUE` and `adjexplanatory` set, adds adjusted probability summary tables to the adjusted survival curves. |
 
-Optimism correction is still *internal* validation. It tells you how much this modelling procedure
+Optimism correction is still *internal* validation. It tells you how much this modeling procedure
 overfits these data; it cannot tell you how the model behaves in another hospital's cohort.
 
 ## Reporting Aids
@@ -656,7 +612,7 @@ res_report <- survival(
   data = histopathology,
   elapsedtime = "OverallTime", outcome = "Outcome", outcomeLevel = "1",
   explanatory = "Group",
-  dod = "", dooc = "", awd = "", awod = "",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
   adjusted_curves  = TRUE,   # covariate-adjusted survival curves
   remark_checklist = TRUE,   # REMARK reporting checklist for prognostic marker studies
   showSummaries    = TRUE    # natural-language summaries alongside the tables

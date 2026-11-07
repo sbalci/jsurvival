@@ -1,19 +1,194 @@
-# jsurvival 1.1.3
+# jsurvival 1.1.3 (2026-10-30)
 
-## Behavior changes -- saved analyses may produce different results
+This release follows an independent review of all nine analyses. Estimators agreed with reference
+calculations (`survival`, `cmprsk`, `glmnet`, `logistf`); the defects were in how data reached them and
+how results were labelled. **If you have reported results from an earlier version, read the first section.**
+
+## Results from earlier versions that should be redone
+
+- **Survival Analysis, adjusted survival curves:** the curves were not adjusted. Each group kept its own
+  covariate mix, so a plot titled "Adjusted for age" reproduced the confounding it claimed to remove, and
+  could contradict the age-adjusted hazard ratio beside it. Curves are now directly standardized.
+  **Redo any figure made with Adjusted survival curves.** The hazard ratio tables were not affected.
+- **Survival Analysis and Multivariable Survival, emptied reference level:** when exclusions left no
+  patient in the first level of a variable (a marker never done on Grade 1, or a landmark past all of
+  them), the hazard ratio was a different comparison, printed against a group with no patients, and
+  could read in the reverse direction. Empty levels are now dropped and a note names the new reference.
+  Check any table with an `NA (NA-NA)` row.
+- **Survival Analysis and Multivariable Survival, Ordinal variables:** an Ordinal explanatory variable
+  gave polynomial contrasts in unlabelled rows, which also produced a summary naming no predictor.
+  Rows are now one hazard ratio per level against the first level, as for a Nominal variable.
+- **Multivariable Survival, interaction models:** a main effect in an interaction model was described as
+  an overall effect. It is the effect at the reference or zero value of the other term, and the output
+  now says which, flags a value outside the data, and leaves such terms out of "strongest predictor".
+- **LASSO Cox, with glmnet 5.0:** the cross-validation curve could be numerically impossible on a long
+  lambda path, which could select the wrong lambda, including under the default rule. The path now stops
+  before that point, and the output reports the lambda values used and searched. Models on healthy
+  paths are unchanged.
+- **Odds Ratio, separation:** detection read the printed text, so it could miss separation or flag a
+  slope that was merely on a small unit. It now tests the fit. A separated term reads "not estimable",
+  and the nomogram and Hosmer-Lemeshow test are withheld for it.
+- **Survival Analysis and Multivariable Survival, dates stored as numbers:** a numeric day count was read
+  as seconds with no message (a rate of 415559 per 100, a normal-looking Cox table). All analyses now use
+  one check: numeric date columns are accepted only as epoch seconds and otherwise refused with the reason.
+- **Survival Analysis (continuous), cut-off p-value:** the p-value at a data-derived cut-off ignored the
+  search over candidate cut-offs. A new **Adjusted p** column corrects for it. The exported group log-rank
+  p-value is unchanged and should not be reported on its own. With outcome-guided multiple cut-offs no
+  citable correction exists, so the table labels p as unadjusted and the plot shows none.
+- **Outcome Organizer, RFS, PFS, DFS and TTP:** these need a recurrence or progression variable and were
+  built incorrectly or refused in several configurations. See below.
+- **Outcome Organizer, DFS with a recurrence variable:** a patient coded Alive with Disease but recorded
+  without recurrence was counted as an event. The recurrence variable now decides, and a warning lists
+  the patients whose vital status and recurrence disagree so they can be checked.
+
+## Changes across analyses
+
+- **Landmark:** all analyses now keep patients with time strictly greater than the landmark. Single Arm
+  already did; Survival Analysis, Survival Analysis (continuous), Multivariable Survival and the Time
+  Interval Calculator kept patients at the landmark, so an exact tie (the norm with integer months) gave
+  different patients in different tables. A negative landmark is refused, and landmark may be a decimal.
+- **Dates:** a far-future "unknown" date such as 2199-12-31 is refused in every analysis; it used to halve
+  incidence rates with an unchanged median in three of them. Unreadable dates are reported with a count
+  everywhere, with the warning that a format that does not match the data can swap day and month in
+  the dates that were read. Survival Analysis (continuous) no longer refuses a run when more than 20% of
+  dates fail; that cut-off had no basis and no other analysis used it.
+- **Saved columns:** Add Calculated Time and Add Outcome write every source row, before any landmark
+  shift, in all analyses. Competing-risk outcomes are saved as a labelled Censored/Event/Competing factor,
+  because a saved integer column reread as nominal treated competing deaths as censored.
+- **Rates and proportions** are no longer rounded before display, and a 0% survival estimate stays in
+  the table instead of being removed as extrapolation.
+- **Time-point tables** are titled by what was asked (they read "1, 3, 5 year Survival" whatever the
+  cutpoints were), with the unit in the column. The events column is "Events since previous time", and
+  the sentence no longer presents that count as a running total.
+- **Confidence intervals:** Survival Analysis and Survival Analysis (continuous) now use log-log
+  (complementary log-log) intervals, as Single Arm does, so the same patients give the same intervals.
+  Point estimates are unchanged; intervals shift slightly and stay inside 0 to 1. Tables say which method
+  was used. **Time Type in Output** has one title across the four analyses.
+- **Pre-calculated times** carry a notice that they were not converted, and a warning above 50 years.
+- Variable names that clean to R keywords (`IF`, for example) or contain regular-expression characters
+  (`Age (years)`) work in all analyses.
+
+## Survival Analysis
+
+- Age interaction uses a joint likelihood-ratio verdict. The REMARK checklist was rebuilt from the
+  published 20 items (Altman et al. 2012). Calibration carries strata. Stale Cox and RMST results are
+  cleared. Time-zero records are disclosed.
+- Known limit: adjusted curves under a stratified Cox model are not stratified, and the output says so.
+
+## Survival Analysis (continuous)
+
+- Hazard ratio digits follow the width of the confidence interval, so most markers now show 3 decimals.
+- Incidence denominators are corrected, cut-offs print 6 significant digits, and quantile fallbacks
+  are reported.
+- Median follow-up no longer treats patients who died of another cause as still observed under
+  Cause Specific.
+- A marker column named `cutpoint`, `data` or `minprop` works.
+
+## Single Arm
+
+- Numeric dates use the shared check, and caveats about recoded outcomes and landmarks appear beside
+  every affected result.
+- Median follow-up uses the same reverse Kaplan-Meier denominator as the other analyses.
+- An event at time zero is counted with no follow-up time, as in the other analyses, and a note says so.
+  The person-time table used to be left empty.
+
+## Multivariable Survival
+
+- Competing risks with strata now runs. Standardized curves in a stratified model stop at the shortest
+  stratum. A subgroup hazard ratio states the fixed value of the other term, and an empty cross-cell reads
+  "not estimable". A single-level stratifier is refused.
+- Known limit: forest plots do not yet show the conditioning note for interaction terms.
+
+## Odds Ratio
+
+- Name collisions (level `2` of `grade` against a column `grade2`) and collinear predictors are refused.
+- Hosmer-Lemeshow reads "not applicable" for a saturated model. The table states the shared complete
+  cases. Outcome-window and cohort-sampling cautions are added. An infinite likelihood ratio gives an empty
+  cell with the reason. A column named `LP` works.
+
+## LASSO Cox
+
+- The output states the units of coefficients and always reports that selection depends on the fold split.
+  The coefficient-path plot has a caption.
+
+## Outcome Organizer
+
+- RFS, PFS, DFS and TTP work under Multiple Event Levels. Without a recurrence variable they are refused,
+  except DFS from vital status alone, which stays under Multiple Event Levels with a warning.
+- DFS built from vital status alone (no recurrence variable) counts Alive with Disease as an event,
+  matching Survival Analysis. With a recurrence variable, recurrence decides, and disagreements are
+  listed for checking.
+- A multi-level outcome with one Event Level warns and lists the levels coded 0 with their counts. A
+  recurrence variable with more than two levels warns and names the others.
+- Blank IDs no longer share events. A cut-off on a recurrence endpoint warns that Follow-up Time must be
+  the time to that event. A column already coded Censored/Event/Competing is refused as the outcome of
+  RFS, PFS or DFS. The saved status is an integer on every path.
+
+## Date-Time Converter and Comprehensive Time Interval Calculator
+
+- `DD/MM/YYYY HH:MM` reads correctly. The calculator gains `dmy`, `mdy` and `ymd` with hours and minutes
+  or seconds. Six-digit dates under Auto are dates, and Excel serials stay serials. "Always in the past"
+  works on packed two-digit years. A midnight daylight-saving gap (Istanbul, 1964-05-15) no longer
+  loses the date.
+- Year-month text is set to the 1st with a warning. An explicit impossible format leaves rows empty and
+  says why. The calculated column keeps its unit and landmark name.
+- The calculator withholds the copy-ready sentence and the Good grade while day/month order is unsettled.
+- **Time basis** now defaults to calendar months, the months the survival analyses compute from the
+  same dates. An exact year used to read 12.02 months here and 12 there. Standardized 30.44-day months
+  remain available.
+
+## Example data
+
+- `lassocox_lung_cancer`, `lassocox_genomic` and `lassocox_small_cohort` were regenerated with realistic
+  censoring. The first two had 2 censored patients and the third 3, and two had zero follow-up times,
+  so LASSO Cox could not fit them.
+
+## Earlier changes in this version
+
+### Behavior changes: saved analyses may produce different results
 
 - **Odds Ratio:** new **Negative Level** and **Predictor Negative Level** options name the
   reference outcome and the negative test result explicitly. Both outcome levels must be chosen;
   any other outcome levels are excluded instead of being pooled.
-- **Odds Ratio:** the Hosmer-Lemeshow test uses the number of risk groups actually formed (groups
-  - 2 degrees of freedom). It used 8 even when tied predictions formed only 3 groups, which made
+- **Odds Ratio:** the Hosmer-Lemeshow test uses the number of risk groups actually formed
+  (number of groups minus 2 degrees of freedom). It used 8 even when tied predictions formed only 3 groups, which made
   calibration look falsely reassuring for all-categorical models.
 - **Comprehensive Time Interval Calculator:** when two date formats read the dates equally well,
   auto-detect now drops readings whose years span more than 20 (the rule Date-Time Converter
   uses) instead of preferring the narrowest year range, which could pick day-month-year for
   year-month-day dates.
+- **Multivariable Survival:** the optimism-corrected C-index keeps bootstrap resamples whose Cox refit
+  only warned (for example monotone likelihood); dropping them biased the corrected C upward when
+  events per variable were low. The table says how many resamples were used and why any were
+  excluded.
+- **Survival Analysis:** with stratified Cox and age adjustment both on, the age table's unadjusted
+  hazard ratio now uses the same strata as the adjusted one. The calculated-time output column holds
+  every row's date-derived time, before any landmark shift.
+- **Date-Time Converter:** with a text date format selected, whole numbers are read as digits
+  (`150321` as 15-03-21, restoring a lost leading zero when that is the only valid reading) instead of
+  as Excel serial numbers. Dates converted from serial numbers that fall outside a plausible range are
+  flagged and not graded.
+- **Comprehensive Time Interval Calculator:** invalid data (for example an end date before its start
+  date) now stops the analysis with jamovi's error message instead of returning empty results with an
+  error banner. The data-quality grade accounts for mixed day/month order and other warnings.
 
-## New and fixed
+### New and fixed
+
+- **Survival Analysis:** a stratification variable whose name contains braces (for example
+  `Stage {I-IV}`) no longer breaks the model summary; such names were interpreted as code. Pairwise,
+  weighted log-rank and bootstrap titles name the variable instead of showing "NA". The copied R
+  syntax runs when optional event levels are unset.
+- **Odds Ratio, LASSO Cox and Outcome Organizer:** the copied R syntax runs when level options are
+  unset. Outcome Organizer's disease-free survival panel no longer mentions a category that does not
+  exist on that path.
+- **Survival Analysis (continuous) and Multivariable Survival:** remaining blank-instead-of-"NaN"
+  cases (time points beyond a group's follow-up, an RMST without a standard error, aliased interaction
+  terms); "Analysis complete" lists only steps that produced results.
+- **Panels that should be empty are cleared:** several analyses left the previous run's text on
+  screen when a run had nothing to report (jamovi does not redraw an empty panel).
+- **Single Arm:** a landmark that excludes nobody is still disclosed.
+- **Odds Ratio:** a saved analysis keeps only the drawn prediction nomogram (its axis scales), no
+  longer the patients' model data; the nomogram is redrawn from it when the file is reopened.
 
 - **Odds Ratio:** terms whose odds ratio is not estimable (separation) are left out of the forest
   plot, with a caption naming them. A table note names the confidence-interval method used in the

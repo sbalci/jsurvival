@@ -2,3 +2,23 @@ url: https://www.serdarbalci.com/jsurvival/
 template:
   bootstrap: 5
 
+articles:
+  - title: For clinicians
+    navbar: For clinicians
+    contents:
+      - 01-introduction-user-friendly
+      - 05-jamovi-workflow-user-friendly
+      - 14-comparing-survival-user-friendly
+      - 15-competing-survival-user-friendly
+      - 18-cox-brief-for-clinicians
+  - title: Guides
+    navbar: Guides
+    contents:
+      - 05-jamovi-workflow
+      - 11-data-preparation
+      - 02-person-time-analysis
+      - 03-clinical-examples
+      - 08-advanced-topics
+      - 09-lassocox-comprehensive
+      - jsurvival-03-multisurvival-interactions
+      - 07-use-in-r

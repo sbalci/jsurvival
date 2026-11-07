@@ -48,3 +48,4 @@ i18n-plans/
 tests/testthat/_problems/
 tests/testthat/testthat-problems.rds
 .claude/settings.local.json
+dist/
