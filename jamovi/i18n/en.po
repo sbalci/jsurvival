@@ -317,10 +317,6 @@ msgid ""
 msgstr ""
 
 #: R/singlearm.b.R
-msgid "{median} Analysis"
-msgstr ""
-
-#: R/singlearm.b.R
 msgid ""
 "{median} cannot be estimated: no events were observed, so the Kaplan-Meier "
 "event-free probability is 100% throughout the observed follow-up and the "
@@ -339,10 +335,6 @@ msgstr ""
 msgid ""
 "{median} was not reached: the Kaplan-Meier curve did not fall to 50% within "
 "the observed follow-up."
-msgstr ""
-
-#: R/singlearm.b.R
-msgid "{median}: Explanations"
 msgstr ""
 
 #: R/singlearm.b.R
@@ -471,10 +463,6 @@ msgstr ""
 
 #: R/singlearm.b.R
 msgid "{probability} at Selected Time Points ({unit})"
-msgstr ""
-
-#: R/singlearm.b.R
-msgid "{probability}: Explanations"
 msgstr ""
 
 #: R/singlearm.b.R
@@ -1399,7 +1387,6 @@ msgid "Adjusted p"
 msgstr ""
 
 #: multisurvival/ui[6].label
-#: multisurvival/results/adjustedSurvivalHeading.title
 msgid "Adjusted Probability Analysis"
 msgstr ""
 
@@ -1682,6 +1669,10 @@ msgid "Age interaction test suppressed: fewer than 10 events."
 msgstr ""
 
 #: R/survival.b.R
+msgid "Age interaction test unavailable"
+msgstr ""
+
+#: R/survival.b.R
 #: survival/options/age_standardization.title
 #: survival/ui[4][1][0]/age_standardization.label
 msgid "Age standardization (SMR)"
@@ -1695,6 +1686,10 @@ msgstr ""
 msgid "Age Standardization Interpretation"
 msgstr ""
 
+#: R/survival.b.R
+msgid "Age standardization unavailable"
+msgstr ""
+
 #: survival/results/ageTimeScaleInterpretation.title
 msgid "Age Time Scale Interpretation"
 msgstr ""
@@ -1703,7 +1698,7 @@ msgstr ""
 msgid "Age Variable"
 msgstr ""
 
-#: survival/ui[4][1][0][1][0].label
+#: survival/ui[0][6].label
 msgid "Age Variable (Continuous)"
 msgstr ""
 
@@ -1717,6 +1712,10 @@ msgstr ""
 
 #: survival/options/age_adjustment.title
 msgid "Age-adjusted analysis"
+msgstr ""
+
+#: R/survival.b.R
+msgid "Age-adjusted analysis unavailable"
 msgstr ""
 
 #: survival/results/ageAdjustedCoxHeading.title
@@ -1743,6 +1742,10 @@ msgstr ""
 
 #: R/survival.b.R
 msgid "Age-as-time-scale analysis failed: {message}"
+msgstr ""
+
+#: R/survival.b.R
+msgid "Age-as-time-scale analysis unavailable"
 msgstr ""
 
 #: R/survival.b.R
@@ -2343,6 +2346,10 @@ msgstr ""
 msgid "Bootstrap validation suppressed: fewer than 10 events."
 msgstr ""
 
+#: R/survival.b.R
+msgid "Bootstrap validation unavailable"
+msgstr ""
+
 #: R/oddsratio.b.R
 msgid ""
 "Borderline events-per-variable (EPV ≈ {epv}). Interpret odds ratios with "
@@ -2567,6 +2574,10 @@ msgstr ""
 msgid "Calibration Time Point"
 msgstr ""
 
+#: R/survival.b.R
+msgid "Calibration unavailable"
+msgstr ""
+
 #: lassocox/options/explanatory.title
 msgid "Candidate predictors"
 msgstr ""
@@ -2590,7 +2601,7 @@ msgstr ""
 msgid "Case-Level Cox Model Residuals"
 msgstr ""
 
-#: multisurvival/ui[6][0][0][1][0][0].label
+#: multisurvival/ui[0][6].label
 msgid "Categorical Model Variable"
 msgstr ""
 
@@ -3311,7 +3322,7 @@ msgid ""
 msgstr ""
 
 #: survival/options/rcs_variable.title
-#: survival/ui[4][3][0][1][0].label
+#: survival/ui[0][7].label
 msgid "Continuous Variable for Spline"
 msgstr ""
 
@@ -3553,17 +3564,12 @@ msgstr ""
 
 #: R/survivalcont.b.R
 #: survival/ui[4][0].label
-#: survival/results/coxRegressionHeading.title
 #: survivalcont/ui[6][0].label
 msgid "Cox Regression Analysis"
 msgstr ""
 
 #: R/survivalcont.b.R
 msgid "Cox regression analysis"
-msgstr ""
-
-#: survival/results/coxRegressionHeading3.title
-msgid "Cox Regression Analysis Explanations"
 msgstr ""
 
 #: R/survival.b.R
@@ -3765,10 +3771,6 @@ msgstr ""
 msgid ""
 "Cumulative incidence did not reach 50%. Median time to event not estimable. "
 "This is common in competing risk analyses with frequent competing events."
-msgstr ""
-
-#: R/singlearm.b.R
-msgid "Cumulative Incidence Explanations"
 msgstr ""
 
 #: singlearm/results/plot_cif.title
@@ -3990,12 +3992,6 @@ msgid ""
 "Date parsing failed. Start date valid: %d, End date valid: %d. Please verify "
 "date format matches selected type (%s) and check for missing/invalid date "
 "values."
-msgstr ""
-
-#: multisurvival/ui[1][0][0][1].label
-#: singlearm/ui[1][0][0][1].label
-#: survival/ui[2][0][0][1].label
-msgid "Date Variables"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -4224,10 +4220,6 @@ msgstr ""
 msgid "Descriptive data diagnostics"
 msgstr ""
 
-#: singlearm/results/dataQualityHeading.title
-msgid "Descriptive Data Diagnostics"
-msgstr ""
-
 #: singlearm/results/dataQualitySummary.title
 msgid "Descriptive Data Diagnostics Summary"
 msgstr ""
@@ -4297,9 +4289,11 @@ msgid "DFS built from vital status alone"
 msgstr ""
 
 #: multisurvival/options/dxdate.title
+#: multisurvival/ui[0][4].label
 #: singlearm/options/dxdate.title
+#: singlearm/ui[0][2].label
 #: survival/options/dxdate.title
-#: survival/ui[2][0][0][1][0][0].label
+#: survival/ui[0][3].label
 #: survivalcont/ui[0][3].label
 msgid "Diagnosis Date"
 msgstr ""
@@ -4384,7 +4378,7 @@ msgid ""
 "(-) are compared."
 msgstr ""
 
-#: oddsratio/ui[2]/diagnosticPredictorSupplier[0].label
+#: oddsratio/ui[0][2].label
 msgid "Diagnostic Predictor (binary)"
 msgstr ""
 
@@ -5379,7 +5373,7 @@ msgid "Explanatory Output"
 msgstr ""
 
 #: survival/options/explanatory.title
-#: survival/ui[1][2].label
+#: survival/ui[0][2].label
 msgid "Explanatory Variable"
 msgstr ""
 
@@ -5449,10 +5443,6 @@ msgstr ""
 
 #: lassocox/results/survival_plot.title
 msgid "Exploratory Development-Sample Risk-Group Curves"
-msgstr ""
-
-#: singlearm/results/baselineHazardHeading.title
-msgid "Exploratory Piecewise Hazard-Rate Analysis"
 msgstr ""
 
 #: lassocox/results/modelComparison.title
@@ -5698,13 +5688,18 @@ msgstr ""
 #: multisurvival/options/fudate.title
 #: singlearm/options/fudate.title
 #: survival/options/fudate.title
-#: survival/ui[2][0][0][1][0][1].label
 #: survivalcont/ui[0][4].label
 msgid "Follow-up Date"
 msgstr ""
 
 #: survivalcont/options/fudate.title
 msgid "Follow-up date"
+msgstr ""
+
+#: multisurvival/ui[0][5].label
+#: singlearm/ui[0][3].label
+#: survival/ui[0][4].label
+msgid "Follow-Up Date"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -6531,7 +6526,7 @@ msgstr ""
 msgid "Information"
 msgstr ""
 
-#: survival/ui[2][0][0][2][0]/timetypedata.label
+#: survival/ui[2][0][0][1][0]/timetypedata.label
 #: survivalcont/ui[2][0][0][1][0]/timetypedata.label
 msgid "Input time type"
 msgstr ""
@@ -7506,14 +7501,6 @@ msgstr ""
 msgid "Median Survival"
 msgstr ""
 
-#: survival/results/medianSurvivalHeading.title
-msgid "Median Survival Analysis"
-msgstr ""
-
-#: survival/results/medianSurvivalHeading3.title
-msgid "Median Survival Analysis Explanations"
-msgstr ""
-
 #: R/survival.b.R
 msgid "Median survival data could not be added to the clinical summary: {message}"
 msgstr ""
@@ -7557,19 +7544,7 @@ msgid "Median time to event of interest was %.1f %s"
 msgstr ""
 
 #: R/singlearm.b.R
-msgid "Median Time to Event of Interest: Explanations"
-msgstr ""
-
-#: R/singlearm.b.R
 msgid "Median Time to Event of Interest: Natural Language Summary"
-msgstr ""
-
-#: singlearm/results/medianHeading.title
-msgid "Median Time-to-Event Analysis"
-msgstr ""
-
-#: singlearm/results/medianHeading3.title
-msgid "Median Time-to-Event Explanations"
 msgstr ""
 
 #: singlearm/results/medianSummary.title
@@ -7746,6 +7721,10 @@ msgstr ""
 
 #: survival/ui[10][1].label
 msgid "Model Comparison and Plot"
+msgstr ""
+
+#: R/lassocox.b.R
+msgid "Model Comparison Incomplete"
 msgstr ""
 
 #: survival/ui[10][0].label
@@ -8019,10 +7998,6 @@ msgstr ""
 msgid "Multistate: Healthy (0), Disease (1), Death-disease (2), Death-other (3)"
 msgstr ""
 
-#: multisurvival/results/multivariableCoxHeading3.title
-msgid "Multivariable Cox Explanations"
-msgstr ""
-
 #: package/analyses/multisurvival.menuSubtitle
 #: multisurvival/options.menuSubtitle
 msgid "Multivariable Cox-regression, Adjusted Survival"
@@ -8042,10 +8017,6 @@ msgstr ""
 
 #: R/survival.b.R
 msgid "Multivariable Survival fits such a model."
-msgstr ""
-
-#: multisurvival/results/multivariableCoxHeading.title
-msgid "Multivariable Survival Model"
 msgstr ""
 
 #: singlearm/options/timetypedata/myd.title
@@ -8092,7 +8063,7 @@ msgstr ""
 msgid "Natural language summaries"
 msgstr ""
 
-#: multisurvival/results/multivariableCoxSummaryHeading.title
+#: multisurvival/results/multivariableCoxSummary.title
 msgid "Natural Language Summary"
 msgstr ""
 
@@ -8531,7 +8502,6 @@ msgid "Nomogram"
 msgstr ""
 
 #: R/multisurvival.b.R
-#: multisurvival/results/nomogramHeading.title
 msgid "Nomogram Analysis"
 msgstr ""
 
@@ -8539,7 +8509,7 @@ msgstr ""
 msgid "Nomogram calculation error: {message}"
 msgstr ""
 
-#: multisurvival/results/nomogramSummaryHeading.title
+#: multisurvival/results/nomogramSummary.title
 msgid "Nomogram Natural Language Summary"
 msgstr ""
 
@@ -9015,7 +8985,7 @@ msgid "Observed Records"
 msgstr ""
 
 #: singlearm/ui[3].label
-#: survival/ui[0].label
+#: survival/ui[1].label
 msgid "Observed-Time Competing Risks"
 msgstr ""
 
@@ -9295,7 +9265,7 @@ msgstr ""
 #: singlearm/options/outcome.title
 #: singlearm/ui[0][1].label
 #: survival/options/outcome.title
-#: survival/ui[1][1].label
+#: survival/ui[0][1].label
 #: survivalcont/options/outcome.title
 #: survivalcont/ui[0][1].label
 msgid "Outcome"
@@ -9617,10 +9587,6 @@ msgstr ""
 
 #: survival/ui[5][1][0]/pplot.label
 msgid "P-values"
-msgstr ""
-
-#: survival/results/pairwiseComparisonHeading.title
-msgid "Pairwise Comparison Analysis"
 msgstr ""
 
 #: survival/ui[4][4].label
@@ -9946,13 +9912,10 @@ msgid "Person-Time & Incidence Rate Analysis"
 msgstr ""
 
 #: multisurvival/ui[10].label
-#: multisurvival/results/personTimeHeading.title
 #: multisurvival/results/personTimeTable.title
 #: singlearm/ui[6].label
-#: singlearm/results/personTimeHeading.title
 #: singlearm/results/personTimeTable.title
 #: survival/ui[7].label
-#: survival/results/personTimeHeading.title
 #: survival/results/personTimeTable.title
 #: survivalcont/ui[7].label
 #: survivalcont/results/personTimeTable.title
@@ -9963,16 +9926,8 @@ msgstr ""
 msgid "Person-Time Analysis (rates per {m} person-{unit})"
 msgstr ""
 
-#: singlearm/results/personTimeHeading3.title
-msgid "Person-Time Analysis Explanations"
-msgstr ""
-
 #: R/singlearm.b.R
 msgid "Person-time analysis failed. Please check time intervals and event data."
-msgstr ""
-
-#: singlearm/results/personTimeHeading2.title
-msgid "Person-Time Analysis Natural Language Summary"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -10024,7 +9979,7 @@ msgstr ""
 msgid "Person-time metrics"
 msgstr ""
 
-#: multisurvival/results/personTimeSummaryHeading.title
+#: multisurvival/results/personTimeSummary.title
 msgid "Person-Time Natural Language Summary"
 msgstr ""
 
@@ -10119,10 +10074,6 @@ msgstr ""
 
 #: singlearm/options/baseline_hazard.title
 msgid "Piecewise hazard-rate analysis"
-msgstr ""
-
-#: singlearm/results/baselineHazardHeading3.title
-msgid "Piecewise Hazard-Rate Analysis Explanations"
 msgstr ""
 
 #: singlearm/results/baselineHazardSummary.title
@@ -10260,10 +10211,6 @@ msgstr ""
 msgid "Plots"
 msgstr ""
 
-#: singlearm/results/survivalPlotsHeading3.title
-msgid "Plots Explanations"
-msgstr ""
-
 #: R/multisurvival.b.R
 msgid "Points to Risk Conversion"
 msgstr ""
@@ -10390,7 +10337,7 @@ msgid "Predictor Level Modeling:"
 msgstr ""
 
 #: oddsratio/options/predictorNegativeLevel.title
-#: oddsratio/ui[2]/diagnosticPredictorSupplier[0]/predictorNegativeLevel.label
+#: oddsratio/ui[0][2]/predictorNegativeLevel.label
 msgid "Predictor Negative Level"
 msgstr ""
 
@@ -10407,7 +10354,7 @@ msgid ""
 msgstr ""
 
 #: oddsratio/options/predictorLevel.title
-#: oddsratio/ui[2]/diagnosticPredictorSupplier[0]/predictorLevel.label
+#: oddsratio/ui[0][2]/predictorLevel.label
 msgid "Predictor Positive Level"
 msgstr ""
 
@@ -10677,6 +10624,10 @@ msgstr ""
 #: R/survival.b.R
 #: R/survivalcont.b.R
 msgid "Rates are per {m} person-{unit}."
+msgstr ""
+
+#: R/survival.b.R
+msgid "RCS analysis unavailable"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -11137,7 +11088,6 @@ msgstr ""
 
 #: multisurvival/ui[5][0].label
 #: multisurvival/results/risk_score_analysis2.title
-#: multisurvival/results/riskScoreHeading.title
 msgid "Risk Score Analysis"
 msgstr ""
 
@@ -11151,10 +11101,6 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "Risk Score Model Performance:"
-msgstr ""
-
-#: multisurvival/results/riskScoreSummaryHeading.title
-msgid "Risk Score Natural Language Summary"
 msgstr ""
 
 #: multisurvival/ui[5][0][0][3].label
@@ -11218,10 +11164,6 @@ msgstr ""
 msgid "RMST"
 msgstr ""
 
-#: survival/results/rmstHeading.title
-msgid "RMST Analysis"
-msgstr ""
-
 #: survival/ui[4][6][0]/rmst_analysis.label
 #: survivalcont/ui[6][1][0]/rmst_analysis.label
 msgid "RMST analysis"
@@ -11232,6 +11174,10 @@ msgid ""
 "RMST and its Greenwood-based standard error are calculated from the "
 "Kaplan-Meier estimator using survival::survfit at a common observed time "
 "horizon. Wald 95% confidence intervals are shown."
+msgstr ""
+
+#: R/survival.b.R
+msgid "RMST calculation unavailable"
 msgstr ""
 
 #: R/survivalcont.b.R
@@ -11465,20 +11411,12 @@ msgstr ""
 msgid "Select a stratification variable to fit a stratified Cox model."
 msgstr ""
 
-#: multisurvival/ui[6][0][0][1].label
-msgid "Select Adjusted Variable"
-msgstr ""
-
 #: R/oddsratio.b.R
 msgid ""
 "Select one outcome variable, identify its positive (event) and negative "
 "(reference) levels, and add one or more categorical or continuous "
 "explanatory variables. The analysis reports logistic-regression odds ratios "
 "with confidence intervals and a matching forest plot."
-msgstr ""
-
-#: multisurvival/ui[7][0][1].label
-msgid "Select Stratification Variables"
 msgstr ""
 
 #: R/lassocox.b.R
@@ -12198,7 +12136,7 @@ msgid "Stratification Notes"
 msgstr ""
 
 #: survival/options/strata_variable.title
-#: survival/ui[4][0][0][4][0].label
+#: survival/ui[0][5].label
 #: survivalcont/ui[0][5].label
 msgid "Stratification Variable"
 msgstr ""
@@ -12214,9 +12152,9 @@ msgid ""
 msgstr ""
 
 #: multisurvival/options/stratvar.title
+#: multisurvival/ui[0][7].label
 #: multisurvival/ui[7].label
 #: multisurvival/ui[7][0].label
-#: multisurvival/ui[7][0][1][0][0].label
 msgid "Stratification Variables"
 msgstr ""
 
@@ -12555,14 +12493,8 @@ msgstr ""
 msgid "Survival plot"
 msgstr ""
 
-#: multisurvival/results/survivalPlotsHeading.title
 #: survival/ui[5].label
 msgid "Survival Plots"
-msgstr ""
-
-#: multisurvival/results/survivalPlotsHeading3.title
-#: survival/results/survivalPlotsHeading3.title
-msgid "Survival Plots Explanations"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -12594,16 +12526,8 @@ msgid ""
 "{message}"
 msgstr ""
 
-#: survival/results/survivalTablesHeading.title
-msgid "Survival Probability Tables"
-msgstr ""
-
 #: singlearm/ui[5][0].label
 msgid "Survival table"
-msgstr ""
-
-#: singlearm/results/survTableHeading3.title
-msgid "Survival Table Explanations"
 msgstr ""
 
 #: singlearm/results/survTableSummary.title
@@ -12614,10 +12538,6 @@ msgstr ""
 #: survival/ui[6].label
 #: survivalcont/ui[5].label
 msgid "Survival Tables"
-msgstr ""
-
-#: survival/results/survivalTablesHeading3.title
-msgid "Survival Tables Explanations"
 msgstr ""
 
 #: survival/options/survivalTestType.title
@@ -14309,7 +14229,7 @@ msgstr ""
 #: singlearm/options/elapsedtime.title
 #: singlearm/ui[0][0].label
 #: survival/options/elapsedtime.title
-#: survival/ui[1][0].label
+#: survival/ui[0][0].label
 #: survivalcont/ui[0][0].label
 msgid "Time Elapsed"
 msgstr ""
@@ -14460,8 +14380,8 @@ msgstr ""
 msgid "Time to Progression (TTP) Analysis"
 msgstr ""
 
-#: multisurvival/ui[1][0][0][2].label
-#: singlearm/ui[1][0][0][2].label
+#: multisurvival/ui[1][0][0][1].label
+#: singlearm/ui[1][0][0][1].label
 msgid "Time Type"
 msgstr ""
 
@@ -14474,13 +14394,13 @@ msgstr ""
 #: multisurvival/options/timetypeoutput.title
 #: singlearm/options/timetypeoutput.title
 #: survival/options/timetypeoutput.title
-#: survival/ui[2][0][0][2][0]/timetypeoutput.label
+#: survival/ui[2][0][0][1][0]/timetypeoutput.label
 #: survivalcont/options/timetypeoutput.title
 #: survivalcont/ui[2][1][0]/timetypeoutput.label
 msgid "Time Type in Output"
 msgstr ""
 
-#: survival/ui[2][0][0][2].label
+#: survival/ui[2][0][0][1].label
 msgid "Time Type Settings"
 msgstr ""
 
@@ -14548,7 +14468,6 @@ msgid ""
 "on 'All event types at selected times' to show them."
 msgstr ""
 
-#: singlearm/results/survTableHeading.title
 #: singlearm/results/survTable.title
 msgid "Time-Specific Probability Estimates"
 msgstr ""

@@ -166,9 +166,6 @@
             "{levels} were treated as censored. If any of these is a death or another terminal event, 1 minus Kaplan-Meier overstates absolute risk; use Multiple Event Levels with Competing Risk.": [
                 ""
             ],
-            "{median} Analysis": [
-                ""
-            ],
             "{median} cannot be estimated: no events were observed, so the Kaplan-Meier event-free probability is 100% throughout the observed follow-up and the curve never falls to 50%.": [
                 ""
             ],
@@ -179,9 +176,6 @@
                 ""
             ],
             "{median} was not reached: the Kaplan-Meier curve did not fall to 50% within the observed follow-up.": [
-                ""
-            ],
-            "{median}: Explanations": [
                 ""
             ],
             "{median}: Natural Language Summary": [
@@ -251,9 +245,6 @@
                 ""
             ],
             "{probability} at Selected Time Points ({unit})": [
-                ""
-            ],
-            "{probability}: Explanations": [
                 ""
             ],
             "{probability}: Natural Language Summary": [
@@ -910,6 +901,9 @@
             "Age interaction test suppressed: fewer than 10 events.": [
                 ""
             ],
+            "Age interaction test unavailable": [
+                ""
+            ],
             "Age standardization (SMR)": [
                 ""
             ],
@@ -917,6 +911,9 @@
                 ""
             ],
             "Age Standardization Interpretation": [
+                ""
+            ],
+            "Age standardization unavailable": [
                 ""
             ],
             "Age Time Scale Interpretation": [
@@ -937,6 +934,9 @@
             "Age-adjusted analysis": [
                 ""
             ],
+            "Age-adjusted analysis unavailable": [
+                ""
+            ],
             "Age-Adjusted Cox Regression": [
                 ""
             ],
@@ -953,6 +953,9 @@
                 ""
             ],
             "Age-as-time-scale analysis failed: {message}": [
+                ""
+            ],
+            "Age-as-time-scale analysis unavailable": [
                 ""
             ],
             "Age-as-time-scale Cox regression suppressed: fewer than 10 events.": [
@@ -1297,6 +1300,9 @@
             "Bootstrap validation suppressed: fewer than 10 events.": [
                 ""
             ],
+            "Bootstrap validation unavailable": [
+                ""
+            ],
             "Borderline events-per-variable (EPV ≈ {epv}). Interpret odds ratios with caution.": [
                 ""
             ],
@@ -1430,6 +1436,9 @@
                 ""
             ],
             "Calibration Time Point": [
+                ""
+            ],
+            "Calibration unavailable": [
                 ""
             ],
             "Candidate predictors": [
@@ -2017,9 +2026,6 @@
             "Cox regression analysis": [
                 ""
             ],
-            "Cox Regression Analysis Explanations": [
-                ""
-            ],
             "Cox regression data could not be added to the clinical summary: {message}": [
                 ""
             ],
@@ -2135,9 +2141,6 @@
                 ""
             ],
             "Cumulative incidence did not reach 50%. Median time to event not estimable. This is common in competing risk analyses with frequent competing events.": [
-                ""
-            ],
-            "Cumulative Incidence Explanations": [
                 ""
             ],
             "Cumulative Incidence Function": [
@@ -2281,9 +2284,6 @@
             "Date parsing failed. Start date valid: %d, End date valid: %d. Please verify date format matches selected type (%s) and check for missing/invalid date values.": [
                 ""
             ],
-            "Date Variables": [
-                ""
-            ],
             "Dates could not be read": [
                 ""
             ],
@@ -2408,9 +2408,6 @@
                 ""
             ],
             "Descriptive data diagnostics": [
-                ""
-            ],
-            "Descriptive Data Diagnostics": [
                 ""
             ],
             "Descriptive Data Diagnostics Summary": [
@@ -3085,9 +3082,6 @@
             "Exploratory Development-Sample Risk-Group Curves": [
                 ""
             ],
-            "Exploratory Piecewise Hazard-Rate Analysis": [
-                ""
-            ],
             "Exploratory Unpenalized Refit Comparison": [
                 ""
             ],
@@ -3239,6 +3233,9 @@
                 ""
             ],
             "Follow-up date": [
+                ""
+            ],
+            "Follow-Up Date": [
                 ""
             ],
             "Follow-up date occurs before diagnosis date": [
@@ -4276,12 +4273,6 @@
             "Median Survival": [
                 ""
             ],
-            "Median Survival Analysis": [
-                ""
-            ],
-            "Median Survival Analysis Explanations": [
-                ""
-            ],
             "Median survival data could not be added to the clinical summary: {message}": [
                 ""
             ],
@@ -4309,16 +4300,7 @@
             "Median time to event of interest was %.1f %s": [
                 ""
             ],
-            "Median Time to Event of Interest: Explanations": [
-                ""
-            ],
             "Median Time to Event of Interest: Natural Language Summary": [
-                ""
-            ],
-            "Median Time-to-Event Analysis": [
-                ""
-            ],
-            "Median Time-to-Event Explanations": [
                 ""
             ],
             "Median Time-to-Event Natural Language Summary": [
@@ -4427,6 +4409,9 @@
                 ""
             ],
             "Model Comparison and Plot": [
+                ""
+            ],
+            "Model Comparison Incomplete": [
                 ""
             ],
             "Model Configuration": [
@@ -4600,9 +4585,6 @@
             "Multistate: Healthy (0), Disease (1), Death-disease (2), Death-other (3)": [
                 ""
             ],
-            "Multivariable Cox Explanations": [
-                ""
-            ],
             "Multivariable Cox-regression, Adjusted Survival": [
                 ""
             ],
@@ -4613,9 +4595,6 @@
                 ""
             ],
             "Multivariable Survival fits such a model.": [
-                ""
-            ],
-            "Multivariable Survival Model": [
                 ""
             ],
             "myd": [
@@ -5524,9 +5503,6 @@
             "P-values": [
                 ""
             ],
-            "Pairwise Comparison Analysis": [
-                ""
-            ],
             "Pairwise Comparisons": [
                 ""
             ],
@@ -5719,13 +5695,7 @@
             "Person-Time Analysis (rates per {m} person-{unit})": [
                 ""
             ],
-            "Person-Time Analysis Explanations": [
-                ""
-            ],
             "Person-time analysis failed. Please check time intervals and event data.": [
-                ""
-            ],
-            "Person-Time Analysis Natural Language Summary": [
                 ""
             ],
             "Person-Time Analysis Summary": [
@@ -5812,9 +5782,6 @@
             "Piecewise hazard-rate analysis": [
                 ""
             ],
-            "Piecewise Hazard-Rate Analysis Explanations": [
-                ""
-            ],
             "Piecewise Hazard-Rate Analysis Summary": [
                 ""
             ],
@@ -5888,9 +5855,6 @@
                 ""
             ],
             "Plots": [
-                ""
-            ],
-            "Plots Explanations": [
                 ""
             ],
             "Points to Risk Conversion": [
@@ -6137,6 +6101,9 @@
                 ""
             ],
             "Rates are per {m} person-{unit}.": [
+                ""
+            ],
+            "RCS analysis unavailable": [
                 ""
             ],
             "Read across to the Points scale to determine points for that variable": [
@@ -6421,9 +6388,6 @@
             "Risk Score Model Performance:": [
                 ""
             ],
-            "Risk Score Natural Language Summary": [
-                ""
-            ],
             "Risk Score Output": [
                 ""
             ],
@@ -6460,13 +6424,13 @@
             "RMST": [
                 ""
             ],
-            "RMST Analysis": [
-                ""
-            ],
             "RMST analysis": [
                 ""
             ],
             "RMST and its Greenwood-based standard error are calculated from the Kaplan-Meier estimator using survival::survfit at a common observed time horizon. Wald 95% confidence intervals are shown.": [
+                ""
+            ],
+            "RMST calculation unavailable": [
                 ""
             ],
             "RMST could not be calculated because no follow-up horizon is supported in every group.": [
@@ -6601,13 +6565,7 @@
             "Select a stratification variable to fit a stratified Cox model.": [
                 ""
             ],
-            "Select Adjusted Variable": [
-                ""
-            ],
             "Select one outcome variable, identify its positive (event) and negative (reference) levels, and add one or more categorical or continuous explanatory variables. The analysis reports logistic-regression odds ratios with confidence intervals and a matching forest plot.": [
-                ""
-            ],
-            "Select Stratification Variables": [
                 ""
             ],
             "Select strictly positive follow-up time, a binary outcome with event and censored levels, and predictors that yield at least two usable encoded columns.": [
@@ -7192,9 +7150,6 @@
             "Survival Plots": [
                 ""
             ],
-            "Survival Plots Explanations": [
-                ""
-            ],
             "Survival plots stop at the Plot End Time ({end} {unit}) although follow-up extends to {max} {unit}. Increase Plot End Time under Plot Options to show the full curves; the tables are not affected.": [
                 ""
             ],
@@ -7213,22 +7168,13 @@
             "Survival probability data could not be added to the clinical summary: {message}": [
                 ""
             ],
-            "Survival Probability Tables": [
-                ""
-            ],
             "Survival table": [
-                ""
-            ],
-            "Survival Table Explanations": [
                 ""
             ],
             "Survival Table Natural Language Summary": [
                 ""
             ],
             "Survival Tables": [
-                ""
-            ],
-            "Survival Tables Explanations": [
                 ""
             ],
             "Survival Test Type": [

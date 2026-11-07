@@ -166,9 +166,6 @@
             "{levels} were treated as censored. If any of these is a death or another terminal event, 1 minus Kaplan-Meier overstates absolute risk; use Multiple Event Levels with Competing Risk.": [
                 "{levels} sansürlü olarak değerlendirildi. Bunlardan herhangi biri ölüm veya başka bir terminal olaysa, 1 eksi Kaplan-Meier mutlak riski olduğundan yüksek gösterir; Yarışan Risk ile birlikte Çoklu Olay Düzeyleri seçeneğini kullanın."
             ],
-            "{median} Analysis": [
-                "{median} Analizi"
-            ],
             "{median} cannot be estimated: no events were observed, so the Kaplan-Meier event-free probability is 100% throughout the observed follow-up and the curve never falls to 50%.": [
                 "{median} tahmin edilemiyor: hiç olay gözlenmedi, bu nedenle Kaplan-Meier olaysızlık olasılığı gözlemlenen takip süresi boyunca %100'dür ve eğri hiçbir zaman %50'ye düşmez."
             ],
@@ -180,9 +177,6 @@
             ],
             "{median} was not reached: the Kaplan-Meier curve did not fall to 50% within the observed follow-up.": [
                 "{median} değerine ulaşılamadı: Kaplan-Meier eğrisi gözlemlenen takip süresi içinde %50'ye düşmedi."
-            ],
-            "{median}: Explanations": [
-                "{median}: Açıklamalar"
             ],
             "{median}: Natural Language Summary": [
                 "{median}: Doğal Dil Özeti"
@@ -252,9 +246,6 @@
             ],
             "{probability} at Selected Time Points ({unit})": [
                 "Seçilen Zaman Noktalarında {probability} ({unit})"
-            ],
-            "{probability}: Explanations": [
-                "{probability}: Açıklamalar"
             ],
             "{probability}: Natural Language Summary": [
                 "{probability}: Doğal Dil Özeti"
@@ -910,6 +901,9 @@
             "Age interaction test suppressed: fewer than 10 events.": [
                 "Yaş etkileşim testi baskılandı: 10'dan az olay."
             ],
+            "Age interaction test unavailable": [
+                ""
+            ],
             "Age standardization (SMR)": [
                 "Yaş standardizasyonu (SMR)"
             ],
@@ -918,6 +912,9 @@
             ],
             "Age Standardization Interpretation": [
                 "Yaş Standardizasyonu Yorumu"
+            ],
+            "Age standardization unavailable": [
+                ""
             ],
             "Age Time Scale Interpretation": [
                 "Yaş Zaman Ölçeği Yorumu"
@@ -937,6 +934,9 @@
             "Age-adjusted analysis": [
                 "Yaşa göre düzeltilmiş analiz"
             ],
+            "Age-adjusted analysis unavailable": [
+                ""
+            ],
             "Age-Adjusted Cox Regression": [
                 "Yaşa Göre Düzeltilmiş Cox Regresyonu"
             ],
@@ -954,6 +954,9 @@
             ],
             "Age-as-time-scale analysis failed: {message}": [
                 "Zaman ölçeği olarak yaş analizi başarısız oldu: {message}"
+            ],
+            "Age-as-time-scale analysis unavailable": [
+                ""
             ],
             "Age-as-time-scale Cox regression suppressed: fewer than 10 events.": [
                 "Zaman ölçeği olarak yaşın kullanıldığı Cox regresyonu baskılandı: 10'dan az olay."
@@ -1297,6 +1300,9 @@
             "Bootstrap validation suppressed: fewer than 10 events.": [
                 "Önyükleme doğrulaması baskılandı: 10'dan az olay."
             ],
+            "Bootstrap validation unavailable": [
+                ""
+            ],
             "Borderline events-per-variable (EPV ≈ {epv}). Interpret odds ratios with caution.": [
                 "Sınırda değişken başına olay sayısı (EPV ≈ {epv}). Odds oranlarını dikkatle yorumlayın."
             ],
@@ -1431,6 +1437,9 @@
             ],
             "Calibration Time Point": [
                 "Kalibrasyon Zaman Noktası"
+            ],
+            "Calibration unavailable": [
+                ""
             ],
             "Candidate predictors": [
                 "Aday yordayıcılar"
@@ -2017,9 +2026,6 @@
             "Cox regression analysis": [
                 "Cox regresyon analizi"
             ],
-            "Cox Regression Analysis Explanations": [
-                "Cox Regresyon Analizi Açıklamaları"
-            ],
             "Cox regression data could not be added to the clinical summary: {message}": [
                 "Cox regresyon verileri klinik özete eklenemedi: {message}"
             ],
@@ -2136,9 +2142,6 @@
             ],
             "Cumulative incidence did not reach 50%. Median time to event not estimable. This is common in competing risk analyses with frequent competing events.": [
                 "Kümülatif insidans %50'ye ulaşmadı. Olaya kadar geçen medyan süre tahmin edilemez. Bu, sık yarışan olayların olduğu yarışan risk analizlerinde yaygındır."
-            ],
-            "Cumulative Incidence Explanations": [
-                "Kümülatif İnsidans Açıklamaları"
             ],
             "Cumulative Incidence Function": [
                 "Kümülatif İnsidans Fonksiyonu"
@@ -2281,9 +2284,6 @@
             "Date parsing failed. Start date valid: %d, End date valid: %d. Please verify date format matches selected type (%s) and check for missing/invalid date values.": [
                 "Tarih ayrıştırma başarısız oldu. Başlangıç tarihi geçerli: %d, Bitiş tarihi geçerli: %d. Lütfen tarih biçiminin seçilen türle eşleştiğini doğrulayın (%s) ve eksik/geçersiz tarih değerlerini kontrol edin."
             ],
-            "Date Variables": [
-                "Tarih Değişkenleri"
-            ],
             "Dates could not be read": [
                 "Tarihler okunamadı"
             ],
@@ -2409,9 +2409,6 @@
             ],
             "Descriptive data diagnostics": [
                 "Tanımlayıcı veri tanılamaları"
-            ],
-            "Descriptive Data Diagnostics": [
-                "Tanımlayıcı Veri Tanılamaları"
             ],
             "Descriptive Data Diagnostics Summary": [
                 "Tanımlayıcı Veri Tanılamaları Özeti"
@@ -3085,9 +3082,6 @@
             "Exploratory Development-Sample Risk-Group Curves": [
                 "Geliştirme örnekleminde keşifsel risk grubu eğrileri"
             ],
-            "Exploratory Piecewise Hazard-Rate Analysis": [
-                "Keşifsel Parçalı Tehlike Hızı Analizi"
-            ],
             "Exploratory Unpenalized Refit Comparison": [
                 "Keşifsel cezasız yeniden kurulum karşılaştırması"
             ],
@@ -3240,6 +3234,9 @@
             ],
             "Follow-up date": [
                 "Takip tarihi"
+            ],
+            "Follow-Up Date": [
+                ""
             ],
             "Follow-up date occurs before diagnosis date": [
                 "İzlem tarihi tanı tarihinden önce"
@@ -4276,12 +4273,6 @@
             "Median Survival": [
                 "Medyan Sağkalım"
             ],
-            "Median Survival Analysis": [
-                "Medyan Sağkalım Analizi"
-            ],
-            "Median Survival Analysis Explanations": [
-                "Medyan Sağkalım Analizi Açıklamaları"
-            ],
             "Median survival data could not be added to the clinical summary: {message}": [
                 "Medyan sağkalım verileri klinik özete eklenemedi: {message}"
             ],
@@ -4309,17 +4300,8 @@
             "Median time to event of interest was %.1f %s": [
                 "İlgilenilen olaya kadar geçen medyan süre %.1f %s idi"
             ],
-            "Median Time to Event of Interest: Explanations": [
-                "İlgilenilen Olaya Kadar Geçen Medyan Süre: Açıklamalar"
-            ],
             "Median Time to Event of Interest: Natural Language Summary": [
                 "İlgilenilen Olaya Kadar Geçen Medyan Süre: Doğal Dil Özeti"
-            ],
-            "Median Time-to-Event Analysis": [
-                "Olaya Kadar Geçen Medyan Süre Analizi"
-            ],
-            "Median Time-to-Event Explanations": [
-                "Olaya Kadar Geçen Medyan Süre Açıklamaları"
             ],
             "Median Time-to-Event Natural Language Summary": [
                 "Olaya Kadar Geçen Medyan Süre Doğal Dil Özeti"
@@ -4428,6 +4410,9 @@
             ],
             "Model Comparison and Plot": [
                 "Model Karşılaştırması ve Grafik"
+            ],
+            "Model Comparison Incomplete": [
+                ""
             ],
             "Model Configuration": [
                 "Model Yapılandırması"
@@ -4600,9 +4585,6 @@
             "Multistate: Healthy (0), Disease (1), Death-disease (2), Death-other (3)": [
                 "Çok Durumlu: Sağlıklı (0), Hastalık (1), Hastalıktan Ölüm (2), Diğer Ölüm (3)"
             ],
-            "Multivariable Cox Explanations": [
-                "Çok Değişkenli Cox Açıklamaları"
-            ],
             "Multivariable Cox-regression, Adjusted Survival": [
                 "Çok Değişkenli Cox Regresyonu, Düzeltilmiş Sağkalım"
             ],
@@ -4614,9 +4596,6 @@
             ],
             "Multivariable Survival fits such a model.": [
                 "Çok Değişkenli Sağkalım böyle bir model kurar."
-            ],
-            "Multivariable Survival Model": [
-                "Çok Değişkenli Sağkalım Modeli"
             ],
             "myd": [
                 "ayg"
@@ -5524,9 +5503,6 @@
             "P-values": [
                 "P-değerleri"
             ],
-            "Pairwise Comparison Analysis": [
-                "İkili Karşılaştırma Analizi"
-            ],
             "Pairwise Comparisons": [
                 "İkili Karşılaştırmalar"
             ],
@@ -5719,14 +5695,8 @@
             "Person-Time Analysis (rates per {m} person-{unit})": [
                 "Kişi-Zaman Analizi ({m} kişi-{unit} başına hızlar)"
             ],
-            "Person-Time Analysis Explanations": [
-                "Kişi-Zaman Analizi Açıklamaları"
-            ],
             "Person-time analysis failed. Please check time intervals and event data.": [
                 "Kişi-zaman analizi başarısız oldu. Lütfen zaman aralıklarını ve olay verilerini kontrol edin."
-            ],
-            "Person-Time Analysis Natural Language Summary": [
-                "Kişi-Zaman Analizi Doğal Dil Özeti"
             ],
             "Person-Time Analysis Summary": [
                 "Kişi-Zaman Analizi Özeti"
@@ -5812,9 +5782,6 @@
             "Piecewise hazard-rate analysis": [
                 "Parçalı hazard hızı analizi"
             ],
-            "Piecewise Hazard-Rate Analysis Explanations": [
-                "Parçalı Hazard Hızı Analizi Açıklamaları"
-            ],
             "Piecewise Hazard-Rate Analysis Summary": [
                 "Parçalı Hazard Hızı Analizi Özeti"
             ],
@@ -5889,9 +5856,6 @@
             ],
             "Plots": [
                 "Grafikler"
-            ],
-            "Plots Explanations": [
-                "Grafik Açıklamaları"
             ],
             "Points to Risk Conversion": [
                 "Puandan Riske Dönüşüm"
@@ -6138,6 +6102,9 @@
             ],
             "Rates are per {m} person-{unit}.": [
                 "Hızlar {m} kişi-{unit} başınadır."
+            ],
+            "RCS analysis unavailable": [
+                ""
             ],
             "Read across to the Points scale to determine points for that variable": [
                 "O değişkenin puanını belirlemek için Puan ölçeğine doğru okuyun"
@@ -6421,9 +6388,6 @@
             "Risk Score Model Performance:": [
                 "Risk Skoru Model Performansı:"
             ],
-            "Risk Score Natural Language Summary": [
-                "Risk Skoru Doğal Dil Özeti"
-            ],
             "Risk Score Output": [
                 "Risk Skoru Çıktısı"
             ],
@@ -6460,14 +6424,14 @@
             "RMST": [
                 "RMST"
             ],
-            "RMST Analysis": [
-                "RMST Analizi"
-            ],
             "RMST analysis": [
                 "RMST analizi"
             ],
             "RMST and its Greenwood-based standard error are calculated from the Kaplan-Meier estimator using survival::survfit at a common observed time horizon. Wald 95% confidence intervals are shown.": [
                 "RMST ve Greenwood tabanlı standart hatası, ortak gözlenen zaman ufkunda survival::survfit kullanılarak Kaplan-Meier tahmininden hesaplanır. Wald %95 güven aralıkları gösterilir."
+            ],
+            "RMST calculation unavailable": [
+                ""
             ],
             "RMST could not be calculated because no follow-up horizon is supported in every group.": [
                 "RMST hesaplanamadı çünkü her grupta desteklenen ortak bir takip ufku yoktur."
@@ -6601,14 +6565,8 @@
             "Select a stratification variable to fit a stratified Cox model.": [
                 "Tabakalı bir Cox modeli kurmak için bir tabakalama değişkeni seçin."
             ],
-            "Select Adjusted Variable": [
-                "Düzeltme Değişkenini Seçin"
-            ],
             "Select one outcome variable, identify its positive (event) and negative (reference) levels, and add one or more categorical or continuous explanatory variables. The analysis reports logistic-regression odds ratios with confidence intervals and a matching forest plot.": [
                 "Bir sonuç değişkeni seçin, pozitif (olay) ve negatif (referans) düzeylerini belirleyin ve bir veya daha fazla kategorik veya sürekli açıklayıcı değişken ekleyin. Analiz, güven aralıklarıyla lojistik regresyon odds oranlarını ve eşleşen bir orman grafiğini bildirir."
-            ],
-            "Select Stratification Variables": [
-                "Tabakalandırma Değişkenlerini Seçin"
             ],
             "Select strictly positive follow-up time, a binary outcome with event and censored levels, and predictors that yield at least two usable encoded columns.": [
                 "Kesin olarak pozitif izlem süresini, olay ve sansürlü düzeyleri bulunan ikili bir sonucu ve en az iki kullanılabilir kodlanmış sütun üreten öngördürücüleri seçin."
@@ -7192,9 +7150,6 @@
             "Survival Plots": [
                 "Sağkalım Grafikleri"
             ],
-            "Survival Plots Explanations": [
-                "Sağkalım Grafikleri Açıklamaları"
-            ],
             "Survival plots stop at the Plot End Time ({end} {unit}) although follow-up extends to {max} {unit}. Increase Plot End Time under Plot Options to show the full curves; the tables are not affected.": [
                 "Takip süresi {max} {unit} değerine kadar uzanmasına rağmen sağkalım grafikleri Grafik Bitiş Zamanında ({end} {unit}) duruyor. Eğrilerin tamamını göstermek için Grafik Seçenekleri altındaki Grafik Bitiş Zamanını artırın; tablolar bundan etkilenmez."
             ],
@@ -7213,23 +7168,14 @@
             "Survival probability data could not be added to the clinical summary: {message}": [
                 "Sağkalım olasılığı verileri klinik özete eklenemedi: {message}"
             ],
-            "Survival Probability Tables": [
-                "Sağkalım Olasılığı Tabloları"
-            ],
             "Survival table": [
                 "Sağkalım tablosu"
-            ],
-            "Survival Table Explanations": [
-                "Sağkalım Tablosu Açıklamaları"
             ],
             "Survival Table Natural Language Summary": [
                 "Sağkalım Tablosu Doğal Dil Özeti"
             ],
             "Survival Tables": [
                 "Sağkalım Tabloları"
-            ],
-            "Survival Tables Explanations": [
-                "Sağkalım Tabloları Açıklamaları"
             ],
             "Survival Test Type": [
                 "Sağkalım Testi Türü"
@@ -8765,7 +8711,7 @@
                 "Alt grup içi TO değerleri yalnızca iki yönlü etkileşimler için hesaplanır."
             ],
             "x 99th %ile": [
-                "x 99. persentil"
+                "x 99. %ile (yüzdelik)"
             ],
             "X-axis:": [
                 "X ekseni:"

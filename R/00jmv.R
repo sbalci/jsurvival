@@ -400,7 +400,8 @@
         `author`="R Core Team", 
         `year`=2026, 
         `title`="tools: Tools for Package Development (Base R)", 
-        `publisher`="[R base package]. R Foundation for Statistical Computing"), 
+        `publisher`="[R base package]. R Foundation for Statistical Computing", 
+        `url`="https://CRAN.R-project.org/"), 
     `tripod`=list(
         `type`="article", 
         `author`="Collins, G. S., Reitsma, J. B., Altman, D. G., & Moons, K. G. M.", 
