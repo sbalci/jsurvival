@@ -143,7 +143,9 @@ how results were labelled. **If you have reported results from an earlier versio
   stratification variable when **Stratified Cox regression** is enabled. Competing-risks mode hides the
   Kaplan-Meier survival table when a 3-level competing-risks outcome from Outcome Organizer is used
   directly, and adds an explanatory footnote when cumulative incidence does not reach 50%.
-- Known limit: adjusted curves under a stratified Cox model are not stratified, and the output says so.
+- Adjusted curves previously omitted Cox model stratification. This is repaired in this version;
+  see **Adjusted survival curves with stratification** above for details and guidance on recreating
+  earlier figures.
 
 ## Survival Analysis (continuous)
 
