@@ -1,5 +1,9 @@
 # jsurvival 1.1.3 (2026-11-07)
 
+- **Outcome Organizer maintenance:** Endpoint recoding, repeated-record hierarchy,
+  interval preparation, administrative censoring and final output assembly now run in
+  separate helpers. Event definitions, row handling, warnings and censoring behavior are unchanged.
+
 - **Module audit repairs (2026-11-08):** Configured fatal inputs now raise framework errors in
   DateTime Converter, Outcome Organizer, Single-Arm Survival and Continuous Survival. Untouched
   selections retain guidance. Nine native result grids replace computed HTML grids across six
