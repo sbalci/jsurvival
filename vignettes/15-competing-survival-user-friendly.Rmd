@@ -67,7 +67,7 @@ To compare groups:
 4.  Assign each outcome value to **Dead of Disease**, **Dead of Other Causes**, **Alive with Disease** or **Alive without Disease**.
 5.  Set **Analysis type** to **Competing Risk**.
 
-Survival Analysis gives the cumulative incidence table by group, with Gray's test as a note under the median table. It does not draw a cumulative incidence plot and fits no Cox model. Its survival curves panel shows a message instead of a Kaplan-Meier curve. For regression, Multivariable Survival Analysis fits a Fine-Gray model.
+Survival Analysis gives the cumulative incidence table by group, with Gray's test as a note under the median table, and draws group-specific cumulative incidence curves when **Survival curves** is ticked (tick **Overlay competing event CIF** to display the competing cause alongside the event of interest). It fits no cause-specific Cox model in competing-risks mode; for regression on cumulative incidence, Multivariable Survival Analysis fits a Fine-Gray subdistribution hazard model.
 
 # Step 3: Interpret the Results
 

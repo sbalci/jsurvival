@@ -1,8 +1,23 @@
-# jsurvival 1.1.3 (2026-10-30)
+# jsurvival 1.1.3 (2026-11-07)
+
+- **Module audit repairs (2026-11-08):** Configured fatal inputs now raise framework errors in
+  DateTime Converter, Outcome Organizer, Single-Arm Survival and Continuous Survival. Untouched
+  selections retain guidance. Nine native result grids replace computed HTML grids across six
+  analyses, preserving the estimates and counts. Turkish message extraction/catalog gaps and
+  the identified English median/nomogram narratives are localized. Seven long run methods are
+  split into ordered phases; the bootstrap formula fallback uses the shared safe parser.
+  Statistical methods, defaults and clinical thresholds are unchanged.
 
 This release follows an independent review of all nine analyses. Estimators agreed with reference
 calculations (`survival`, `cmprsk`, `glmnet`, `logistf`); the defects were in how data reached them and
 how results were labelled. **If you have reported results from an earlier version, read the first section.**
+
+- **Saved plot state:** odds-ratio forest plots and continuous-survival cutoff plots retain
+  metadata instead of patient records. Redraws and exports reconstruct the needed data from the
+  dataset, and legacy plot states are cleared when redrawn.
+- **R API input guidance:** survival-module wrappers accept a supplied data frame with no
+  selected variables and return guidance. Regression tests now provide their translation binding
+  and verify excluded-outcome counts against the fixture.
 
 ## Results from earlier versions that should be redone
 
@@ -73,6 +88,11 @@ how results were labelled. **If you have reported results from an earlier versio
 - Age interaction uses a joint likelihood-ratio verdict. The REMARK checklist was rebuilt from the
   published 20 items (Altman et al. 2012). Calibration carries strata. Stale Cox and RMST results are
   cleared. Time-zero records are disclosed.
+- RMST handles time horizons (`tau`) shorter than the earliest observed follow-up (`RMST = tau`, `SE = 0`)
+  and bounds confidence intervals to `[0, tau]`. Restricted cubic splines (`rcs_analysis`) include the
+  stratification variable when **Stratified Cox regression** is enabled. Competing-risks mode hides the
+  Kaplan-Meier survival table when a 3-level competing-risks outcome from Outcome Organizer is used
+  directly, and adds an explanatory footnote when cumulative incidence does not reach 50%.
 - Known limit: adjusted curves under a stratified Cox model are not stratified, and the output says so.
 
 ## Survival Analysis (continuous)
@@ -83,6 +103,9 @@ how results were labelled. **If you have reported results from an earlier versio
 - Median follow-up no longer treats patients who died of another cause as still observed under
   Cause Specific.
 - A marker column named `cutpoint`, `data` or `minprop` works.
+- **Add Redefined Outcome to Data** writes every source row before landmark filtering, and the median
+  and survival-table summaries report `"not reached"` instead of `"NA"` when a median or confidence
+  limit is not reached.
 
 ## Single Arm
 
@@ -97,6 +120,10 @@ how results were labelled. **If you have reported results from an earlier versio
 - Competing risks with strata now runs. Standardized curves in a stratified model stop at the shortest
   stratum. A subgroup hazard ratio states the fixed value of the other term, and an empty cross-cell reads
   "not estimable". A single-level stratifier is refused.
+- Fine-Gray competing-risks nomograms weight the covariate reference distribution (`datadist`) at the
+  patient level rather than by expanded Fine-Gray counting-process rows, and risk-group cumulative
+  incidence curves preserve `"Censored"` as the reference status level even when a risk group has zero
+  censored observations.
 - Known limit: forest plots do not yet show the conditioning note for interaction terms.
 
 ## Odds Ratio
@@ -123,6 +150,9 @@ how results were labelled. **If you have reported results from an earlier versio
 - Blank IDs no longer share events. A cut-off on a recurrence endpoint warns that Follow-up Time must be
   the time to that event. A column already coded Censored/Event/Competing is refused as the outcome of
   RFS, PFS or DFS. The saved status is an integer on every path.
+- Event hierarchy (`useHierarchy`) leaves missing outcomes (`NA`) as missing instead of recoding them
+  to censored (`0`) or the priority event, and censors undated duplicate priority rows after retaining
+  the dated priority event. Multi-state mode populates the Outcome Recode summary card.
 
 ## Date-Time Converter and Comprehensive Time Interval Calculator
 
@@ -130,6 +160,9 @@ how results were labelled. **If you have reported results from an earlier versio
   or seconds. Six-digit dates under Auto are dates, and Excel serials stay serials. "Always in the past"
   works on packed two-digit years. A midnight daylight-saving gap (Istanbul, 1964-05-15) no longer
   loses the date.
+- `Date` columns in Date-Time Converter preserve their calendar day across Western Hemisphere timezones
+  instead of shifting back by one day at UTC midnight, and implausible-year warnings (`< 1900` or future
+  years) apply to pre-formatted `Date` and `POSIXct` columns as well as text and numeric dates.
 - Year-month text is set to the 1st with a warning. An explicit impossible format leaves rows empty and
   says why. The calculated column keeps its unit and landmark name.
 - The calculator withholds the copy-ready sentence and the Good grade while day/month order is unsettled.

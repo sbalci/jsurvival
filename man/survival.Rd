@@ -395,6 +395,7 @@ A results object containing:
 \code{results$ageStandardizationInterpretation} \tab \tab \tab \tab \tab a html \cr
 \code{results$ageStratifiedKMPlot} \tab \tab \tab \tab \tab an image \cr
 \code{results$adjustedCurvesPlot} \tab \tab \tab \tab \tab an image \cr
+\code{results$remarkItems} \tab \tab \tab \tab \tab a table \cr
 \code{results$remarkChecklist} \tab \tab \tab \tab \tab a html \cr
 \code{results$cox_ph} \tab \tab \tab \tab \tab a preformatted \cr
 \code{results$phInterpretation} \tab \tab \tab \tab \tab a html \cr

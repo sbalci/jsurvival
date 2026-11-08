@@ -292,6 +292,7 @@ A results object containing:
 \code{results$strongWarnings} \tab \tab \tab \tab \tab a html \cr
 \code{results$warnings} \tab \tab \tab \tab \tab a html \cr
 \code{results$infoMessages} \tab \tab \tab \tab \tab a html \cr
+\code{results$fittedTable} \tab \tab \tab \tab \tab a table \cr
 \code{results$text} \tab \tab \tab \tab \tab a html \cr
 \code{results$text2} \tab \tab \tab \tab \tab a html \cr
 \code{results$interactionExplanation} \tab \tab \tab \tab \tab a html \cr
@@ -348,9 +349,9 @@ A results object containing:
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
 
-\code{results$interactionTest$asDF}
+\code{results$fittedTable$asDF}
 
-\code{as.data.frame(results$interactionTest)}
+\code{as.data.frame(results$fittedTable)}
 }
 \description{
 Performs multivariable survival analysis using Cox proportional hazards

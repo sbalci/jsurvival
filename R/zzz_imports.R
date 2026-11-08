@@ -8,7 +8,6 @@
 #' @importFrom glue glue
 #' @importFrom janitor clean_names
 #' @importFrom KMunicate KMunicate
-#' @importFrom knitr kable
 #' @importFrom labelled set_variable_labels
 #' @importFrom logistf logistf
 #' @importFrom lubridate ymd

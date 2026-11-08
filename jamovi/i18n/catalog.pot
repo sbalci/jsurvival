@@ -285,6 +285,10 @@ msgid ""
 "format that matches the text, or select Auto-detect."
 msgstr ""
 
+#: R/datetimeconverter.b.R
+msgid "{days} days ({years} years)"
+msgstr ""
+
 #: R/survival.b.R
 msgid "{dist} model - AIC {aic}, BIC {bic}, log-likelihood {loglik}{cov}"
 msgstr ""
@@ -461,6 +465,15 @@ msgid ""
 "column read in the wrong format still parses at a high rate."
 msgstr ""
 
+#: R/survivalcont.b.R
+msgid ""
+"{previous_text}<p><b>Landmark Analysis:</b> Analysis is conditional on "
+"remaining under observation and event-free through {time} {units}. This can "
+"address guarantee-time bias when the landmark is prespecified, but it "
+"changes the target population and does not remove ordinary confounding or "
+"lead-time bias.</p>"
+msgstr ""
+
 #: R/singlearm.b.R
 msgid "{probability} at Selected Time Points ({unit})"
 msgstr ""
@@ -479,6 +492,10 @@ msgstr ""
 msgid ""
 "{sig} out of {total} factors showed statistically significant associations "
 "with the outcome (p < 0.05)."
+msgstr ""
+
+#: R/survivalcont.b.R
+msgid "{tooltip}<p><b>Model Metrics:</b> {metrics}</p>"
 msgstr ""
 
 #: R/outcomeorganizer.b.R
@@ -945,6 +962,92 @@ msgstr ""
 msgid "<br><b>Landmark analysis at %s %s.</b>"
 msgstr ""
 
+#: R/oddsratio.b.R
+msgid ""
+"<div style=\"margin-bottom: 20px; padding: 15px; background-color: rgba(216, "
+"33, 50, 0.18); border-left: 4px solid #dc3545; color: inherit;\"> <h4 "
+"style=\"margin-top: 0; color: inherit;\">Understanding Prediction and "
+"Diagnostic Outputs</h4> <p><strong>Prediction nomogram:</strong> The plotted "
+"nomogram assigns points to all explanatory variables in the "
+"maximum-likelihood logistic regression model and maps total points to "
+"predicted outcome probability. It is not a Fagan nomogram and does not "
+"display pre-test-to-post-test probability conversion.</p> <h5 style=\"color: "
+"inherit;\">Prediction Nomogram Components:</h5> <ul> "
+"<li><strong>Points:</strong> Contribution assigned to each predictor "
+"value</li> <li><strong>Total Points:</strong> Sum of predictor "
+"contributions</li> <li><strong>Predicted Probability:</strong> Model-based "
+"probability corresponding to total points</li> </ul> "
+"<p><strong>Important:</strong> The plot is a visual representation of the "
+"fitted model, not evidence of calibration, discrimination, transportability, "
+"or clinical utility. Internal and external validation are required before "
+"clinical use. It is not generated when Firth regression is selected because "
+"that would mix different estimation methods. Predicted probabilities need a "
+"cohort sample with the real event rate: in a case-control sample the odds "
+"ratios hold but the predicted probabilities do not.</p> <hr style=\"margin: "
+"15px 0; border: none; border-top: 1px solid #f5c6cb;\"> <h5 style=\"color: "
+"inherit; margin-top: 15px;\">What is a Diagnostic Predictor?</h5> "
+"<p><strong>The diagnostic predictor is the single binary variable you want "
+"to evaluate as a diagnostic test.</strong></p> <div "
+"style=\"background-color: rgba(255, 202, 33, 0.23); padding: 10px; "
+"border-radius: 5px; margin: 10px 0; color: inherit;\"> "
+"<strong>Example:</strong> If you select \"LVI\" (Lymphovascular Invasion: "
+"Absent/Present) as the diagnostic predictor, the diagnostic table answers: "
+"<em>\"How well does LVI alone distinguish the selected outcome "
+"states?\"</em> </div> <p><strong>Requirements:</strong></p> <ul> <li> "
+"Compares two explicitly selected levels (<strong>Predictor Positive "
+"Level</strong> vs <strong>Predictor Negative Level</strong>): e.g., Yes/No, "
+"Present/Absent, Positive/Negative</li> <li> Examples: LVI (Absent/Present), "
+"an immunostain (Negative/Positive), a frozen-section call "
+"(Benign/Malignant)</li> <li> Cannot use continuous variables: Age, Tumor "
+"Size (infinite possible values)</li> <li> Multi-category variables (e.g., "
+"Grade 1/2/3): Only observations with the selected positive and negative "
+"levels are included in the 2×2 diagnostic table; unselected levels are "
+"excluded with a warning</li> </ul> <p><strong>Why Two Selected "
+"Levels?</strong></p> <p>Diagnostic test performance metrics (sensitivity, "
+"specificity, likelihood ratios) are calculated from a 2×2 contingency "
+"table:</p> <table style=\"border-collapse: collapse; margin: 10px 0; "
+"font-size: 0.9em;\"> <tr><th style=\"border: 1px solid #ddd; padding: "
+"5px;\"></th> <th style=\"border: 1px solid #ddd; padding: 5px;\">Outcome "
+"+</th> <th style=\"border: 1px solid #ddd; padding: 5px;\">Outcome "
+"-</th></tr> <tr><td style=\"border: 1px solid #ddd; padding: 5px;\">Test "
+"+</td> <td style=\"border: 1px solid #ddd; padding: 5px;\">True "
+"Positive</td> <td style=\"border: 1px solid #ddd; padding: 5px;\">False "
+"Positive</td></tr> <tr><td style=\"border: 1px solid #ddd; padding: "
+"5px;\">Test -</td> <td style=\"border: 1px solid #ddd; padding: 5px;\">False "
+"Negative</td> <td style=\"border: 1px solid #ddd; padding: 5px;\">True "
+"Negative</td></tr> </table> <p><small><em>Sensitivity = TP/(TP+FN), "
+"Specificity = TN/(TN+FP), LR+ = Sensitivity/(1-Specificity)</em></small></p> "
+"<p><strong>Selection Guidelines:</strong></p> <ul> <li><strong>Not "
+"specified:</strong> Uses the first explanatory variable automatically (in "
+"the jamovi GUI, select the variable in the Diagnostic Predictor box to "
+"enable the Predictor Positive Level and Predictor Negative Level "
+"dropdowns)</li> <li><strong>In your regression model:</strong> Diagnostic "
+"metrics are still unadjusted and use only its paired 2×2 table</li> "
+"<li><strong>Not in your model:</strong> Evaluates it independently using "
+"paired complete outcome/test observations</li> </ul> <div "
+"style=\"background-color: rgba(33, 163, 188, 0.21); padding: 10px; "
+"border-radius: 5px; margin: 10px 0; color: inherit;\"> <strong> Clinical "
+"Tip:</strong> If your first variable is continuous (e.g., Age), you must "
+"manually select a binary diagnostic predictor to obtain sensitivity, "
+"specificity, and likelihood ratios. The prediction nomogram can still be "
+"generated from the regression variables. </div> </div>"
+msgstr ""
+
+#: R/survivalcont.b.R
+msgid ""
+"<h4>Person-Time Analysis Summary</h4>\n"
+"                    <p>Total follow-up time: <b>{total_time_val} "
+"{units}</b></p>\n"
+"                    <p>Number of events: <b>{events}</b></p>\n"
+"                    <p>Overall incidence rate: <b>{rate}</b> per "
+"{multiplier} {units} {ci_str}</p>\n"
+"                    <p>{scope}</p>\n"
+"                    <p>This represents the rate at which events occurred in "
+"your study population. The incidence rate is calculated as the number of "
+"events divided by the total person-time at risk, accounting for varying "
+"follow-up durations across patients.</p>"
+msgstr ""
+
 #: lassocox/options/lambda/lambda.1se.title
 msgid "1-SE rule"
 msgstr ""
@@ -1340,6 +1443,12 @@ msgstr ""
 msgid ""
 "Adjusted curves are model-based survival or cumulative-incidence predictions "
 "under the selected standardization."
+msgstr ""
+
+#: R/multisurvival.b.R
+msgid ""
+"Adjusted curves require the selected variable to be part of the fitted "
+"model. Add it under Explanatory Variables or Stratification Variables."
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -2257,6 +2366,13 @@ msgstr ""
 msgid "Basic Outcome Settings"
 msgstr ""
 
+#: R/singlearm.b.R
+msgid ""
+"Because the curve changes in steps, it need not equal exactly 50%; this is a "
+"cohort-level estimate, not a prediction that exactly half of individual "
+"patients survive beyond that time."
+msgstr ""
+
 #: R/multisurvival.b.R
 msgid ""
 "Because the same patients underlie every curve, the curves differ "
@@ -2653,6 +2769,10 @@ msgid ""
 "Cause-specific survival typically requires distinguishing between disease "
 "deaths and other deaths. Consider enabling 'Multiple Event Types' or switch "
 "to 'Overall Survival'."
+msgstr ""
+
+#: R/lassocox.b.R
+msgid "Caution"
 msgstr ""
 
 #: R/survival.b.R
@@ -3162,6 +3282,10 @@ msgid ""
 "by age group."
 msgstr ""
 
+#: R/lassocox.b.R
+msgid "Concern"
+msgstr ""
+
 #: survival/results/rcsTestTable.columns.title
 msgid "Conclusion"
 msgstr ""
@@ -3348,6 +3472,10 @@ msgstr ""
 msgid "Conversion Preview"
 msgstr ""
 
+#: datetimeconverter/results/conversionRows.title
+msgid "Conversion Values"
+msgstr ""
+
 #: package/analyses/datetimeconverter.menuSubtitle
 #: datetimeconverter/options.menuSubtitle
 msgid "Convert datetime and extract components"
@@ -3361,6 +3489,10 @@ msgid ""
 "etc.). Features automatic format detection, quality assessment, and preview "
 "of converted data. Perfect for preparing datetime data for analysis and "
 "creating time-based variables."
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid "Converted DateTime"
 msgstr ""
 
 #: survival/results/copyReadySentencesExplanation.title
@@ -3474,7 +3606,9 @@ msgid ""
 "example DD-MM-YYYY or MM-DD-YYYY), or check the column for mixed formats."
 msgstr ""
 
+#: R/datetimeconverter.b.R
 #: R/outcomeorganizer.b.R
+#: R/timeinterval.b.R
 #: outcomeorganizer/results/outputTable.columns.title
 msgid "Count"
 msgstr ""
@@ -3484,6 +3618,13 @@ msgid ""
 "Counted from the spreadsheet epoch, {value} would be {date}; SAS and Stata "
 "count from 1960-01-01 and R from 1970-01-01, so the same digits mean a date "
 "decades apart depending on which program wrote them."
+msgstr ""
+
+#: R/timeinterval.b.R
+msgid ""
+"Counts below describe the data as supplied, before any filter or landmark is "
+"applied, so the total may exceed the number of observations in the "
+"statistical summary."
 msgstr ""
 
 #: multisurvival/results/modelContributionTable.columns.title
@@ -3570,6 +3711,13 @@ msgstr ""
 
 #: R/survivalcont.b.R
 msgid "Cox regression analysis"
+msgstr ""
+
+#: R/survivalcont.b.R
+msgid ""
+"Cox regression analysis failed. This may be due to insufficient data, "
+"convergence issues, or inappropriate data structure. Please check your "
+"variables and try again."
 msgstr ""
 
 #: R/survival.b.R
@@ -3767,6 +3915,10 @@ msgstr ""
 msgid "Cumulative Incidence by Risk Group"
 msgstr ""
 
+#: R/survival.b.R
+msgid "Cumulative incidence did not reach 50% within the observed follow-up."
+msgstr ""
+
 #: R/singlearm.b.R
 msgid ""
 "Cumulative incidence did not reach 50%. Median time to event not estimable. "
@@ -3858,7 +4010,6 @@ msgid "Data"
 msgstr ""
 
 #: R/multisurvival.b.R
-#: R/oddsratio.b.R
 #: R/outcomeorganizer.b.R
 msgid "Data contains no (complete) rows"
 msgstr ""
@@ -3908,6 +4059,7 @@ msgstr ""
 msgid "Data Quality & Statistics"
 msgstr ""
 
+#: R/timeinterval.b.R
 #: datetimeconverter/results/qualityAssessment.title
 #: timeinterval/results/qualityAssessment.title
 msgid "Data Quality Assessment"
@@ -3917,6 +4069,10 @@ msgstr ""
 #: timeinterval/options/include_quality_metrics.title
 #: timeinterval/ui[3]/include_quality_metrics.label
 msgid "Data quality assessment"
+msgstr ""
+
+#: timeinterval/results/qualityCounts.title
+msgid "Data Quality Counts"
 msgstr ""
 
 #: survival/results/residualsTable.columns.title
@@ -3953,6 +4109,10 @@ msgstr ""
 msgid ""
 "Dataset contains no complete rows. Please ensure your data is properly "
 "loaded and contains observations."
+msgstr ""
+
+#: R/survivalcont.b.R
+msgid "Dataset contains no rows."
 msgstr ""
 
 #: R/datetimeconverter.b.R
@@ -3992,6 +4152,10 @@ msgid ""
 "Date parsing failed. Start date valid: %d, End date valid: %d. Please verify "
 "date format matches selected type (%s) and check for missing/invalid date "
 "values."
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid "Date Range:"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -4034,11 +4198,13 @@ msgstr ""
 msgid "DateTime Variable"
 msgstr ""
 
+#: R/datetimeconverter.b.R
 #: datetimeconverter/options/extract_day.title
 #: datetimeconverter/results/day_out.title
 msgid "Day"
 msgstr ""
 
+#: R/datetimeconverter.b.R
 #: datetimeconverter/results/dayname_out.title
 msgid "Day Name"
 msgstr ""
@@ -4059,6 +4225,7 @@ msgstr ""
 msgid "Day of month"
 msgstr ""
 
+#: R/datetimeconverter.b.R
 #: datetimeconverter/results/dayofyear_out.title
 msgid "Day of Year"
 msgstr ""
@@ -4322,6 +4489,10 @@ msgstr ""
 
 #: R/singlearm.b.R
 msgid "Diagnosis/start date and follow-up/end date must be different variables."
+msgstr ""
+
+#: oddsratio/results/diagnosticContingency.title
+msgid "Diagnostic Contingency Table"
 msgstr ""
 
 #: outcomeorganizer/results/diagnosticsTable.title
@@ -4884,6 +5055,10 @@ msgstr ""
 
 #: R/timeinterval.b.R
 msgid "End dates are not valid date objects"
+msgstr ""
+
+#: R/timeinterval.b.R
+msgid "End dates missing or unreadable"
 msgstr ""
 
 #: singlearm/options/yend_plot.title
@@ -5489,6 +5664,10 @@ msgid ""
 "Hazard ratios are not directly comparable to cause-specific Cox models."
 msgstr ""
 
+#: datetimeconverter/results/componentRows.title
+msgid "Extracted Component Values"
+msgstr ""
+
 #: datetimeconverter/results/componentPreview.title
 msgid "Extracted Components Preview"
 msgstr ""
@@ -5515,6 +5694,10 @@ msgstr ""
 
 #: R/timeinterval.b.R
 msgid "Extreme threshold multiplier must be between 1.5 and 5."
+msgstr ""
+
+#: R/timeinterval.b.R
+msgid "Extreme Values"
 msgstr ""
 
 #: R/timeinterval.b.R
@@ -5553,6 +5736,14 @@ msgid ""
 "reference level is '{ref}'."
 msgstr ""
 
+#: R/datetimeconverter.b.R
+msgid "Failed"
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid "Failed Parsing:"
+msgstr ""
+
 #: R/timeinterval.b.R
 msgid "Fair"
 msgstr ""
@@ -5566,6 +5757,10 @@ msgid ""
 "Few events: only {nEv} of {nTotal} non-missing outcomes ({pct}%) are "
 "'{level}'. As a general rule of thumb (< 5 events), Kaplan-Meier and Cox "
 "estimates are unstable with fewer than 5 events."
+msgstr ""
+
+#: R/timeinterval.b.R
+msgid "Filters applied:"
 msgstr ""
 
 #: multisurvival/options/sty/t1.title
@@ -6203,6 +6398,7 @@ msgstr ""
 msgid "horizontal"
 msgstr ""
 
+#: R/datetimeconverter.b.R
 #: datetimeconverter/options/extract_hour.title
 #: datetimeconverter/options/hour_out.title
 #: datetimeconverter/ui[6][0][1][0]/hour_out.label
@@ -6792,6 +6988,7 @@ msgid ""
 "when the event probability is 50%."
 msgstr ""
 
+#: R/survival.b.R
 #: lassocox/results/reproducibility.columns.title
 msgid "Item"
 msgstr ""
@@ -6957,6 +7154,14 @@ msgstr ""
 msgid ""
 "Landmark analysis is on: rows with follow-up ending at or before the "
 "landmark time were excluded before this check."
+msgstr ""
+
+#: R/timeinterval.b.R
+msgid ""
+"Landmark analysis is switched on but the landmark time is 0, so nothing was "
+"excluded and no interval was shortened - these results are the same as with "
+"landmark analysis off. Set a landmark greater than zero, in the same unit as "
+"the results, or untick landmark analysis."
 msgstr ""
 
 #: R/singlearm.b.R
@@ -7360,6 +7565,10 @@ msgid ""
 "mis-specified functional form"
 msgstr ""
 
+#: R/datetimeconverter.b.R
+msgid "Maximum DateTime:"
+msgstr ""
+
 #: R/oddsratio.b.R
 msgid ""
 "Maximum-likelihood odds ratios could not be estimated due to separation for: "
@@ -7578,6 +7787,8 @@ msgstr ""
 msgid "Methodology Reference"
 msgstr ""
 
+#: R/datetimeconverter.b.R
+#: R/timeinterval.b.R
 #: lassocox/results/performance.columns.title
 #: multisurvival/results/survMetricsTable.columns.title
 #: multisurvival/results/cindexValidation.columns.title
@@ -7595,6 +7806,10 @@ msgstr ""
 
 #: lassocox/options/lambda/lambda.min.title
 msgid "Minimum CV error"
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid "Minimum DateTime:"
 msgstr ""
 
 #: survivalcont/options/min_group_size.title
@@ -7633,6 +7848,7 @@ msgid ""
 "analysis."
 msgstr ""
 
+#: R/datetimeconverter.b.R
 #: datetimeconverter/options/extract_minute.title
 #: datetimeconverter/options/minute_out.title
 #: datetimeconverter/ui[6][0][1][0]/minute_out.label
@@ -7685,6 +7901,10 @@ msgid ""
 "model."
 msgstr ""
 
+#: R/timeinterval.b.R
+msgid "Missing Values"
+msgstr ""
+
 #: R/survivalcont.b.R
 msgid "Missing Values in Explanatory Variable"
 msgstr ""
@@ -7723,16 +7943,16 @@ msgstr ""
 msgid "Model Comparison and Plot"
 msgstr ""
 
-#: R/lassocox.b.R
-msgid "Model Comparison Incomplete"
-msgstr ""
-
 #: survival/ui[10][0].label
 msgid "Model Configuration"
 msgstr ""
 
 #: multisurvival/ui[5][0][0][4].label
 msgid "Model Discrimination"
+msgstr ""
+
+#: multisurvival/results/fittedTable.title
+msgid "Model Estimates"
 msgstr ""
 
 #: R/survival.b.R
@@ -7860,6 +8080,7 @@ msgstr ""
 msgid "Moderate Parsing Success Rate"
 msgstr ""
 
+#: R/datetimeconverter.b.R
 #: datetimeconverter/options/extract_month.title
 #: datetimeconverter/results/month_out.title
 msgid "Month"
@@ -7875,6 +8096,7 @@ msgstr ""
 msgid "Month (number)"
 msgstr ""
 
+#: R/datetimeconverter.b.R
 #: datetimeconverter/results/monthname_out.title
 msgid "Month Name"
 msgstr ""
@@ -7912,6 +8134,10 @@ msgstr ""
 
 #: R/outcomeorganizer.b.R
 msgid "Most rows have no usable outcome"
+msgstr ""
+
+#: R/outcomeorganizer.b.R
+msgid "Multi-State Outcome Coding:"
 msgstr ""
 
 #: R/lassocox.b.R
@@ -8092,6 +8318,10 @@ msgid ""
 "Survival fits one."
 msgstr ""
 
+#: R/timeinterval.b.R
+msgid "Negative Intervals"
+msgstr ""
+
 #: oddsratio/options/outcomeNegativeLevel.title
 #: oddsratio/ui[0][1]/outcomeNegativeLevel.label
 msgid "Negative Level"
@@ -8168,6 +8398,12 @@ msgstr ""
 msgid ""
 "No complete records remain after applying the selected variables and "
 "landmark restriction."
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid ""
+"No components selected for extraction. Use the preview checkboxes or 'Add to "
+"Data' toggles in the left panel to extract datetime components."
 msgstr ""
 
 #: R/lassocox.b.R
@@ -8298,6 +8534,10 @@ msgstr ""
 
 #: R/timeinterval.b.R
 msgid "No interval exceeded the extreme threshold of {threshold} {unit} (0 removed)"
+msgstr ""
+
+#: R/lassocox.b.R
+msgid "No issue detected"
 msgstr ""
 
 #: R/lassocox.b.R
@@ -8621,6 +8861,10 @@ msgstr ""
 msgid "Not defined: the survival estimate has reached 0%."
 msgstr ""
 
+#: R/lassocox.b.R
+msgid "Not determined"
+msgstr ""
+
 #: R/survival.b.R
 msgid "Not enough events / observations to fit a parametric survival model."
 msgstr ""
@@ -8728,6 +8972,10 @@ msgid ""
 "alone would break model hierarchy: <i>{terms}</i>."
 msgstr ""
 
+#: R/survival.b.R
+msgid "Note"
+msgstr ""
+
 #: R/multisurvival.b.R
 msgid "Note:"
 msgstr ""
@@ -8776,6 +9024,10 @@ msgstr ""
 msgid ""
 "Null hypothesis: linear effect of {var}. Natural splines with {df} degrees "
 "of freedom."
+msgstr ""
+
+#: R/survival.b.R
+msgid "Number"
 msgstr ""
 
 #: singlearm/results/survTable.columns.title
@@ -9019,12 +9271,20 @@ msgstr ""
 msgid "Odds Ratio Table and Plot"
 msgstr ""
 
+#: oddsratio/results/fittedTable.title
+msgid "Odds Ratios"
+msgstr ""
+
 #: R/oddsratio.b.R
 msgid "Odds ratios interpretation (Positive vs Negative)"
 msgstr ""
 
 #: survival/options/spline_scale/odds.title
 msgid "Odds Scale"
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid "OK"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -9244,6 +9504,14 @@ msgstr ""
 
 #: lassocox/results/encoding.columns.title
 msgid "Original Predictor"
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid "Original Value"
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid "Originally Missing:"
 msgstr ""
 
 #: datetimeconverter/ui[7].label
@@ -9528,6 +9796,10 @@ msgstr ""
 msgid "Overall Log-rank Test (unadjusted)"
 msgstr ""
 
+#: R/timeinterval.b.R
+msgid "Overall Quality:"
+msgstr ""
+
 #: R/outcomeorganizer.b.R
 #: R/singlearm.b.R
 msgid "Overall Survival"
@@ -9672,6 +9944,10 @@ msgstr ""
 
 #: survival/options/parametric_survival_plots.title
 msgid "Parametric survival plots"
+msgstr ""
+
+#: datetimeconverter/results/qualityCounts.title
+msgid "Parsing Counts"
 msgstr ""
 
 #: R/datetimeconverter.b.R
@@ -9819,6 +10095,8 @@ msgstr ""
 msgid "Percent"
 msgstr ""
 
+#: R/datetimeconverter.b.R
+#: R/timeinterval.b.R
 #: outcomeorganizer/results/outputTable.columns.title
 msgid "Percentage"
 msgstr ""
@@ -10104,6 +10382,10 @@ msgstr ""
 msgid "Please install it using:"
 msgstr ""
 
+#: R/multisurvival.b.R
+msgid "Please select a variable for adjusted curves."
+msgstr ""
+
 #: R/oddsratio.b.R
 msgid ""
 "Please select both the 'Positive Level' (event, e.g., 'Dead', 'Event', "
@@ -10333,6 +10615,10 @@ msgid "Predictor Encoding"
 msgstr ""
 
 #: R/oddsratio.b.R
+msgid "Predictor level"
+msgstr ""
+
+#: R/oddsratio.b.R
 msgid "Predictor Level Modeling:"
 msgstr ""
 
@@ -10547,6 +10833,7 @@ msgstr ""
 msgid "Quantile-Based"
 msgstr ""
 
+#: R/datetimeconverter.b.R
 #: datetimeconverter/options/extract_quarter.title
 #: datetimeconverter/options/quarter_out.title
 #: datetimeconverter/ui[7][0][1][0]/quarter_out.label
@@ -10781,6 +11068,10 @@ msgstr ""
 msgid "REMARK reporting checklist"
 msgstr ""
 
+#: survival/results/remarkItems.title
+msgid "REMARK Reporting Items"
+msgstr ""
+
 #: R/multisurvival.b.R
 msgid "Remove any duplicate column names"
 msgstr ""
@@ -10852,6 +11143,10 @@ msgid ""
 "including numbers of missing values."
 msgstr ""
 
+#: R/survival.b.R
+msgid "Report in the manuscript"
+msgstr ""
+
 #: survivalcont/options/rmst_analysis.description
 msgid ""
 "Report Restricted Mean Survival Time (RMST) up to a specified horizon. "
@@ -10877,6 +11172,10 @@ msgid ""
 "Report these estimates alongside the number at risk and the follow-up "
 "duration; comparison with an external cohort is not a treatment-effect "
 "estimate."
+msgstr ""
+
+#: R/survival.b.R
+msgid "Reported in this output"
 msgstr ""
 
 #: lassocox/options/showReproducibility.title
@@ -11231,6 +11530,7 @@ msgstr ""
 msgid "Robust Wald test = {stat}, df = {df}, p = {p}"
 msgstr ""
 
+#: R/datetimeconverter.b.R
 #: R/timeinterval.b.R
 msgid "Row"
 msgstr ""
@@ -11252,6 +11552,10 @@ msgstr ""
 
 #: R/survival.b.R
 msgid "Run here: {methods}."
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid "Sample of Failed Values:"
 msgstr ""
 
 #: R/lassocox.b.R
@@ -11389,6 +11693,7 @@ msgstr ""
 msgid "se_rmean"
 msgstr ""
 
+#: R/datetimeconverter.b.R
 #: datetimeconverter/options/extract_second.title
 #: datetimeconverter/options/second_out.title
 #: datetimeconverter/ui[6][0][1][0]/second_out.label
@@ -11398,6 +11703,10 @@ msgstr ""
 
 #: datetimeconverter/ui[6][0][0][0]/extract_second.label
 msgid "Second (0-59)"
+msgstr ""
+
+#: R/survival.b.R
+msgid "Section"
 msgstr ""
 
 #: survival/options/rcs_variable.description
@@ -11639,6 +11948,10 @@ msgid ""
 "Showing {shown} of {total} paths on the original scale: selected columns "
 "first, then by summed absolute coefficient times column SD (not clinical "
 "importance). Long legend labels are abbreviated."
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid "Showing first {n} of {total} observations"
 msgstr ""
 
 #: R/survivalcont.b.R
@@ -12050,6 +12363,10 @@ msgstr ""
 msgid "Start dates are not valid date objects"
 msgstr ""
 
+#: R/timeinterval.b.R
+msgid "Start dates missing or unreadable"
+msgstr ""
+
 #: singlearm/options/ybegin_plot.title
 #: survivalcont/options/ybegin_plot.title
 msgid "Start y-axis"
@@ -12111,7 +12428,9 @@ msgstr ""
 msgid "statistically significant"
 msgstr ""
 
+#: R/datetimeconverter.b.R
 #: R/lassocox.b.R
+#: R/survival.b.R
 msgid "Status"
 msgstr ""
 
@@ -12302,6 +12621,14 @@ msgid ""
 "Successfully completed: %s. Results are displayed in the tables and plots "
 "below. Review all sections carefully, paying special attention to any "
 "warnings or clinical assumptions."
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid "Successfully Parsed:"
+msgstr ""
+
+#: lassocox/results/suitabilityChecks.title
+msgid "Suitability Checks"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -13122,6 +13449,13 @@ msgid ""
 msgstr ""
 
 #: R/singlearm.b.R
+msgid ""
+"The Kaplan-Meier median is the first time at which estimated event-free "
+"probability is 50% or lower; if the curve is exactly 50% over an interval, "
+"the midpoint of that interval is reported."
+msgstr ""
+
+#: R/singlearm.b.R
 msgid "The Kaplan-Meier survival plot"
 msgstr ""
 
@@ -13221,6 +13555,14 @@ msgid ""
 "whenever the competing event is frequent, since the cumulative incidence can "
 "plateau below 50%% however long follow-up continues; it is not a statement "
 "that outcomes were good"
+msgstr ""
+
+#: R/singlearm.b.R
+msgid ""
+"The median was not reached: the Kaplan-Meier curve did not reach 50% before "
+"follow-up ended, so no median time-to-event can be estimated from these "
+"data. This is not a statement that survival is good or poor - it reflects "
+"the number of events and the length of follow-up."
 msgstr ""
 
 #: singlearm/options/ybegin_plot.description
@@ -14573,6 +14915,14 @@ msgstr ""
 msgid "Total follow-up time: <b>{time} person-{unit}</b>"
 msgstr ""
 
+#: R/timeinterval.b.R
+msgid "Total Observations"
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid "Total Observations:"
+msgstr ""
+
 #: R/multisurvival.b.R
 msgid ""
 "Total observed follow-up is zero, so an incidence rate cannot be calculated. "
@@ -15084,6 +15434,12 @@ msgid ""
 "of the odds ratio model."
 msgstr ""
 
+#: R/survivalcont.b.R
+msgid ""
+"Using both optimal cut-off and multiple cut-offs may lead to overfitting. "
+"Consider validation in independent dataset or cross-validation."
+msgstr ""
+
 #: singlearm/options/tint.title
 #: survival/options/tint.title
 #: survivalcont/options/tint.title
@@ -15317,6 +15673,20 @@ msgstr ""
 msgid "Warnings"
 msgstr ""
 
+#: R/timeinterval.b.R
+msgid "Warnings:"
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid "Week #"
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid ""
+"Week # counts 7-day blocks from 1 January (lubridate::week), not ISO-8601 "
+"weeks."
+msgstr ""
+
 #: datetimeconverter/results/weeknum_out.title
 msgid "Week Number"
 msgstr ""
@@ -15383,6 +15753,26 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "What It Does:"
+msgstr ""
+
+#: R/survivalcont.b.R
+msgid "When {factor_val}, median survival is {median_val} {ci_str} {units}."
+msgstr ""
+
+#: R/survivalcont.b.R
+msgid ""
+"When {factor_val}, median survival was not reached during the observation "
+"period (the survival curve does not drop below 1/2)."
+msgstr ""
+
+#: R/survivalcont.b.R
+msgid "When {strata_val}, {time_val} {units} survival is {survival} {ci_str}."
+msgstr ""
+
+#: R/survivalcont.b.R
+msgid ""
+"When {strata_val}, {time_val} {units} survival is not estimable (exceeds "
+"maximum observed follow-up in this group)."
 msgstr ""
 
 #: R/survivalcont.b.R
@@ -15539,6 +15929,7 @@ msgstr ""
 msgid "ydm"
 msgstr ""
 
+#: R/datetimeconverter.b.R
 #: datetimeconverter/options/extract_year.title
 #: datetimeconverter/options/year_out.title
 #: datetimeconverter/ui[5][0][1][0]/year_out.label
@@ -15617,6 +16008,10 @@ msgid ""
 "Zero cells detected in the 2x2 table. Sensitivity or specificity may be "
 "exactly 0 or 1, a likelihood ratio may be undefined, and confidence "
 "intervals are less reliable."
+msgstr ""
+
+#: R/timeinterval.b.R
+msgid "Zero Intervals"
 msgstr ""
 
 #~ msgid ""

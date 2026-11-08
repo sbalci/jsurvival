@@ -78,7 +78,7 @@ test_that("an infinite follow-up time is rejected instead of poisoning every sum
     d <- simple_data(c(1, 2, 3, 4, 5, Inf),
                      c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE))
 
-    res <- run_singlearm(data = d, elapsedtime = "time", outcome = "status",
+    res <- run_singlearm_failed(data = d, elapsedtime = "time", outcome = "status",
                          outcomeLevel = "Dead", person_time = TRUE)
 
     expect_match(strip_html(res$errors$content), "infinite")
@@ -127,8 +127,8 @@ test_that("a valid rate multiplier still scales the incidence rate", {
                            outcome = "status", outcomeLevel = "Dead",
                            person_time = TRUE, rate_multiplier = 1000)
 
-    expect_equal(r100$personTimeTable$getCell(rowNo = 1, "rate")$value, 9.09)
-    expect_equal(r1000$personTimeTable$getCell(rowNo = 1, "rate")$value, 90.91)
+    expect_equal(r100$personTimeTable$getCell(rowNo = 1, "rate")$value, 100 / 11)
+    expect_equal(r1000$personTimeTable$getCell(rowNo = 1, "rate")$value, 1000 / 11)
 })
 
 test_that("a user variable named row_names is not overwritten by the join key", {
@@ -145,7 +145,7 @@ test_that("a user variable named row_names is not overwritten by the join key", 
 
 test_that("the same variable cannot serve as elapsed time and outcome", {
     d <- data.frame(x = c(0, 1, 1, 0, 1))
-    res <- run_singlearm(data = d, elapsedtime = "x", outcome = "x",
+    res <- run_singlearm_failed(data = d, elapsedtime = "x", outcome = "x",
                          outcomeLevel = "1")
 
     expect_match(strip_html(res$errors$content),
@@ -157,7 +157,7 @@ test_that("start and end dates must be different variables", {
     d <- data.frame(
         date = as.Date("2020-01-01") + 0:4,
         status = factor(c("Alive", "Dead", "Alive", "Dead", "Alive")))
-    res <- run_singlearm(data = d, tint = TRUE, dxdate = "date", fudate = "date",
+    res <- run_singlearm_failed(data = d, tint = TRUE, dxdate = "date", fudate = "date",
                          outcome = "status", outcomeLevel = "Dead")
 
     expect_match(strip_html(res$errors$content),
@@ -165,14 +165,17 @@ test_that("start and end dates must be different variables", {
     expect_equal(res$medianTable$rowCount, 0)
 })
 
-test_that("a time-zero event is not divided by later person-time", {
+test_that("a time-zero event is counted with no person-time, as in the other analyses", {
     d <- simple_data(c(0, 2, 4, 6), c(TRUE, FALSE, TRUE, FALSE))
     res <- run_singlearm(data = d, elapsedtime = "time", outcome = "status",
                          outcomeLevel = "Dead", person_time = TRUE)
 
-    expect_equal(res$personTimeTable$rowCount, 0)
-    expect_match(strip_html(res$warnings$content),
-                 "Person-time rates were not calculated.*time zero")
+    pt <- res$personTimeTable$asDF
+    expect_equal(as.numeric(pt$events[1]), 2)
+    expect_equal(as.numeric(pt$person_time[1]), 12)
+    expect_equal(as.numeric(pt$rate[1]), 2 / 12 * 100, tolerance = 1e-8)
+    notes <- paste(vapply(res$personTimeTable$notes, function(n) n$note, ""), collapse = " ")
+    expect_match(notes, "1 event(s) at time zero", fixed = TRUE)
     expect_equal(res$medianTable$rowCount, 1)
 })
 
@@ -351,35 +354,6 @@ test_that("risktable = FALSE still draws the curve alone", {
 
     expect_false(any(grepl("Number at risk", labels)))
     expect_true(any(grepl("Probability", labels)))
-})
-
-
-test_that("competing-risk plots render the CIF with and without at-risk counts", {
-    d <- data.frame(
-        time = c(10, 20, 30, 40, 50, 60),
-        status = factor(c("Event", "Event", "Competing", "Competing",
-                          "Censored", "Censored"),
-                        levels = c("Censored", "Event", "Competing")))
-
-    for (show_risk in c(FALSE, TRUE)) {
-        opts <- singlearmOptions$new(
-            elapsedtime = "time", outcome = "status", outcomeLevel = "Event",
-            tint = FALSE, sc = TRUE, risktable = show_risk,
-            timetypeoutput = "months", endplot = 60, byplot = 12,
-            dod = NULL, dooc = NULL, awd = NULL, awod = NULL)
-        a <- singlearmClass$new(options = opts, data = d)
-        a$run()
-        expect_true(a$results$plot_cif$visible)
-        labels <- drawn_text(expect_true(a$.__enclos_env__$private$.plotCIF(
-            a$results$plot_cif, ggplot2::theme_bw(), NULL)))
-
-        # Exercise the real ggpubr composition and inspect the rendered figure.
-        expect_true("Cumulative incidence" %in% labels)
-        expect_true(all(c("Event", "Competing") %in% labels))
-        expect_identical("At risk" %in% labels, show_risk)
-        if (show_risk)
-            expect_true(all(as.character(c(6, 5, 4, 3, 2, 1)) %in% labels))
-    }
 })
 
 

@@ -38,7 +38,6 @@ Imports:
     janitor,
     jmvcore,
     KMunicate,
-    knitr,
     labelled,
     logistf,
     lubridate,
@@ -60,7 +59,11 @@ Imports:
     utils,
     withr,
     pROC
-Suggests: rmarkdown, testthat, yaml
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat,
+    yaml
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
