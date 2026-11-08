@@ -4,9 +4,8 @@
 
 Person-time analysis is a fundamental concept in epidemiology and
 survival analysis that accounts for the varying observation periods of
-study participants. The jSurvival module in ClinicoPath provides
-comprehensive person-time calculations and incidence rate analysis
-across its survival analysis functions.
+study participants. The jSurvival module provides person-time
+calculations and incidence rates across its survival analysis functions.
 
 ### What is Person-Time?
 
@@ -22,8 +21,8 @@ denominators for rate calculations.
 - **Incidence Rate**: Number of events ÷ Total person-time  
 - **Time Units**: Typically expressed as person-days, person-months, or
   person-years
-- **Censoring**: Properly accounts for participants leaving the study
-  early
+- **Censoring**: Counts observed exposure up to the endpoint or
+  censoring; informative loss to follow-up can still bias comparisons
 - **Varying Follow-up**: Handles different observation periods for each
   participant
 
@@ -31,20 +30,17 @@ denominators for rate calculations.
 
 1.  **Accurate Rate Calculations**: Provides proper denominators for
     incidence rates
-2.  **Comparison Across Studies**: Enables valid comparisons between
-    populations with different follow-up patterns
+2.  **Comparison Across Studies**: Expresses counts on a common exposure
+    scale; differences in case mix, follow-up period and ascertainment
+    still require assessment
 3.  **Adjustment for Time**: Accounts for varying exposure periods in
     survival analysis
-4.  **Kaplan-Meier Foundation**: Forms the basis for survival curve
-    estimation
-5.  **Cox Model Integration**: Essential for hazard ratio calculations
 
 ## Person-Time in jSurvival Modules
 
-The ClinicoPath jSurvival module includes person-time analysis in four
-key functions:
+The jSurvival module includes person-time analysis in five functions:
 
-### 1. Time Interval Calculator
+### 1. Comprehensive Time Interval Calculator
 
 **Purpose**: Calculate time intervals that form the basis of person-time
 analysis
@@ -55,7 +51,7 @@ Landmark analysis support
 
 **Usage**:
 
-    Analyses → Survival → Data Preparation → Time Interval Calculator
+    Analyses → Survival → Data Preparation → Comprehensive Time Interval Calculator
 
 **Key Outputs**: - Time interval summary with total person-time -
 Educational information about person-time concepts - Calculated time
@@ -73,7 +69,7 @@ methods - Rate multiplier options (per 100, 1000 person-time units)
 **Usage**:
 
     Analyses → Survival → ClinicoPath Survival → Single Arm Survival
-    Enable: "Calculate Person-Time Metrics"
+    Enable: "Person-time metrics"
 
 **Key Outputs**: - Person-time analysis table with rates and confidence
 intervals - Time-interval stratified analysis - Summary with
@@ -84,14 +80,13 @@ interpretation
 **Purpose**: Compare survival between groups with group-specific
 person-time analysis
 
-**Features**: - Group-specific person-time calculations - Incidence rate
-comparisons between groups - Time-stratified analysis by group - Rate
-ratio calculations
+**Features**: - Group-specific person-time calculations - Incidence
+rates per group, shown side by side - Time-stratified analysis
 
 **Usage**:
 
     Analyses → Survival → ClinicoPath Survival → Survival Analysis
-    Enable: "Calculate Person-Time Metrics"
+    Enable: "Person-time rates"
 
 **Key Outputs**: - Person-time table by group - Group-specific incidence
 rates - Confidence intervals for each group - Overall and stratified
@@ -99,29 +94,38 @@ summaries
 
 ### 4. Multivariable Survival
 
-**Purpose**: Analyze survival with multiple covariates and person-time
-adjustment
+**Purpose**: Report person-time rates alongside a model with multiple
+covariates. The rates are crude, not adjusted by the model
 
-**Features**: - Overall person-time with covariate stratification -
-Adjusted incidence rates - Person-time summary with multiple
-predictors - Integration with Cox model results
+**Features**: - Overall person-time, and crude rates per covariate
+level - Person-time summary with multiple predictors
 
 **Usage**:
 
     Analyses → Survival → ClinicoPath Survival → Multivariable Survival Analysis
-    Enable: "Calculate Person-Time Metrics"
+    Enable: "Person-time metrics"
 
-**Key Outputs**: - Overall person-time summary - Stratified person-time
-by covariates - Incidence rates adjusted for multiple factors
+**Key Outputs**: - Overall person-time summary - Person-time and crude
+rates per covariate level - Time-interval stratified rates
+
+### 5. Survival Analysis for Continuous Explanatory Variable
+
+**Purpose**: Report person-time rates alongside the analysis of a
+continuous predictor
+
+**Usage**:
+
+    Analyses → Survival → ClinicoPath Survival → Survival Analysis for Continuous Explanatory Variable
+    Enable: "Person-time rates (events per time unit)"
 
 ## Getting Started with Person-Time Analysis
 
 ### Step 1: Prepare Your Data
 
 Your dataset should include: - **Time variable**: Follow-up duration
-(numeric) - **Event variable**: Event indicator (0/1 or factor) -
-**Group variables**: For comparisons (optional) - **Date variables**:
-For time calculation (optional)
+(numeric) - **Event variable**: Event indicator, in any coding; you
+select the Event Level - **Group variables**: For comparisons
+(optional) - **Date variables**: For time calculation (optional)
 
 Example data structure:
 
@@ -131,27 +135,28 @@ Example data structure:
 
 ### Step 2: Choose the Appropriate Analysis
 
-**Time Interval Calculator**: If you need to calculate follow-up times
-from dates - Input: Start and end dates - Output: Time intervals and
-person-time concepts
+**Comprehensive Time Interval Calculator**: If you need to calculate
+follow-up times from dates - Input: Start and end dates - Output: Time
+intervals and person-time concepts
 
 **Single Arm Survival**: For overall cohort analysis - Input: Time,
 event variables - Output: Overall incidence rates and time-stratified
 analysis
 
 **Survival Analysis**: For group comparisons - Input: Time, event,
-grouping variables - Output: Group-specific rates and comparisons
+grouping variables - Output: Group-specific rates
 
-**Multivariable Survival**: For adjusted analysis - Input: Time, event,
-multiple covariates - Output: Adjusted rates and Cox model integration
+**Multivariable Survival**: For a Cox model with multiple covariates -
+Input: Time, event, multiple covariates - Output: Crude rates per
+covariate level, alongside the Cox model
 
 ### Step 3: Configure Person-Time Options
 
-1.  **Enable person-time analysis**: Check “Calculate Person-Time
-    Metrics”
+1.  **Enable person-time analysis**: Tick the person-time option named
+    above for your analysis
 2.  **Set time intervals**: Specify intervals for stratified analysis
     (e.g., “12, 36, 60”)
-3.  **Choose rate multiplier**: Select 100 or 1000 for rate presentation
+3.  **Choose rate multiplier**: Enter 100 or 1000 for rate presentation
 4.  **Configure time units**: Ensure consistent units throughout
 
 ### Step 4: Interpret Results
@@ -162,17 +167,22 @@ multiple covariates - Output: Adjusted rates and Cox model integration
 - **Events**: Number of events in the interval
 - **Person-Time**: Total observation time in the interval
 - **Incidence Rate**: Events per person-time unit
-- **95% CI**: Confidence interval for the rate (Poisson exact)
+- **Lower** and **Upper**: 95% confidence interval for the rate (Poisson
+  exact)
 
 #### Key Metrics to Report
 
 1.  **Total Person-Time**: Overall observation time
 2.  **Overall Incidence Rate**: Events per 100 person-time units
 3.  **Time-Specific Rates**: Rates in different follow-up periods
-4.  **Group Comparisons**: Rate differences between groups
+4.  **Group Rates**: The rate in each group
 5.  **Confidence Intervals**: Precision of rate estimates
 
 ## Clinical Applications
+
+The counts in these examples are made up to show the arithmetic. The
+module reports rates and their confidence intervals; it does not report
+rate ratios or differences, so compute those by hand.
 
 ### Example 1: Cancer Survival Study
 
@@ -183,14 +193,13 @@ treatment_group, survival_months, death_status - Enable: Person-time
 metrics
 
 **Expected Results**: - Person-time by treatment group - Group-specific
-incidence rates - Rate ratios between treatments - Time-stratified
-analysis
+incidence rates - Time-stratified analysis
 
 **Interpretation**:
 
     Standard Treatment: 45 deaths in 2,400 person-months (1.88 per 100 person-months)
     New Treatment: 32 deaths in 2,200 person-months (1.45 per 100 person-months)
-    Rate Ratio: 0.77 (23% reduction in death rate)
+    Rate Ratio, by hand: 0.78 (22% lower death rate)
 
 ### Example 2: Epidemiological Cohort Study
 
@@ -201,14 +210,14 @@ analysis
 Person-time metrics
 
 **Expected Results**: - Exposure-specific person-time - Incidence rates
-by exposure - Time trends in incidence - Rate differences and ratios
+by exposure - Time trends in incidence
 
 **Interpretation**:
 
     Exposed Group: 15 cases in 850 person-years (1.76 per 100 person-years)
     Unexposed Group: 8 cases in 920 person-years (0.87 per 100 person-years)
-    Rate Difference: 0.89 per 100 person-years
-    Relative Risk: 2.03
+    Rate Difference, by hand: 0.90 per 100 person-years
+    Rate Ratio, by hand: 2.03
 
 ### Example 3: Drug Safety Monitoring
 
@@ -233,12 +242,11 @@ rates (early vs. late) - Confidence intervals for safety assessment
 ### Time-Stratified Analysis
 
 Person-time analysis can be stratified by time intervals to detect: -
-Changing hazards over time - Early vs. late event patterns - Treatment
-effect modifications - Time-dependent risk factors
+Changing hazards over time - Early vs. late event patterns
 
 **Setup**: Specify intervals in “Time Interval Stratification” option
 
-    Example: "6, 12, 24" creates intervals: 0-6, 6-12, 12-24, 24+ months
+    Example: "6, 12, 24" creates intervals: 0-6, 6-12, 12-24 months and the remaining follow-up
 
 ### Rate Multipliers
 
@@ -250,9 +258,10 @@ For very rare events
 ### Confidence Intervals
 
 Person-time rates use Poisson exact confidence intervals: - **Exact
-method**: Based on Poisson distribution of event counts - **Conservative
-approach**: Provides accurate coverage - **Asymmetric intervals**:
-Reflects the nature of count data
+method**: Based on Poisson distribution of event counts - **Coverage**:
+Exact count limits under a Poisson model; they do not correct
+informative censoring, confounding or dependence between patients -
+**Asymmetric intervals**: Reflects the nature of count data
 
 ### Integration with Survival Analysis
 
@@ -260,7 +269,7 @@ Person-time analysis complements traditional survival methods: -
 **Kaplan-Meier curves**: Show survival probability over time - **Cox
 regression**: Models hazard rates (instantaneous person-time rates) -
 **Log-rank tests**: Compare survival distributions - **Person-time
-rates**: Provide absolute risk measures
+rates**: Provide absolute event rates
 
 ## Quality Assurance
 
@@ -269,7 +278,7 @@ rates**: Provide absolute risk measures
 Before person-time analysis:
 
 1.  **Check time variables**: Ensure positive, numeric values
-2.  **Validate event coding**: Confirm 0/1 or appropriate factor levels
+2.  **Validate event coding**: Confirm the Event Level
 3.  **Review missingness**: Address missing time or event data
 4.  **Assess outliers**: Investigate extremely long or short follow-up
     times
@@ -287,8 +296,10 @@ When reviewing person-time results:
 
 #### Issue 1: Zero Events in Intervals
 
-**Problem**: Some time intervals have no events **Solution**: Consider
-combining intervals or using exact Poisson methods
+**Problem**: Some time intervals have no events **Solution**: Retain
+prespecified intervals and report the zero rate with its upper
+confidence limit. A zero count does not establish zero hazard; no rate
+is defined if exposure is also zero.
 
 #### Issue 2: Very Unequal Follow-up
 
@@ -297,8 +308,9 @@ time-stratified analysis and report median follow-up
 
 #### Issue 3: Competing Risks
 
-**Problem**: Multiple event types affecting person-time **Solution**:
-Use competing risks analysis with event-specific person-time
+**Problem**: Multiple event types affecting person-time **Note**:
+jSurvival has no event-specific person-time. Use cumulative incidence in
+competing-risk mode for these data
 
 ## Reporting Person-Time Results
 
@@ -317,13 +329,14 @@ Use competing risks analysis with event-specific person-time
     A total of [N] participants contributed [total person-time] [time units] of 
     follow-up (median [median], range [range]). [Number] events occurred during 
     the observation period, yielding an overall incidence rate of [rate] per 
-    [multiplier] [time units] (95% CI: [CI]). Incidence rates differed significantly 
-    between [groups]: [group 1] [rate 1] vs. [group 2] [rate 2] per [multiplier] 
-    [time units] (rate ratio [RR], 95% CI: [CI], p=[p-value]).
+    [multiplier] [time units] (95% CI: [CI]). Incidence rates were [rate 1] in 
+    [group 1] and [rate 2] in [group 2] per [multiplier] [time units].
 
 ### Tables and Figures
 
 #### Table: Person-Time Analysis Results
+
+A layout example with made-up counts:
 
     Group           N    Events   Person-Time   Rate/100 PT   95% CI
     Control        150    25       4,200        0.60         0.39-0.88
@@ -338,30 +351,20 @@ Use competing risks analysis with event-specific person-time
 
 ## Conclusion
 
-Person-time analysis is essential for proper epidemiological and
-survival analysis. The jSurvival module provides comprehensive
-person-time functionality that:
+Person-time analysis gives event rates that account for varying
+follow-up. The jSurvival module:
 
-1.  **Educates users** about person-time concepts
-2.  **Calculates accurate rates** with appropriate confidence
-    intervals  
-3.  **Enables group comparisons** with rate ratios and differences
+1.  **Explains** person-time concepts
+2.  **Calculates rates** with exact confidence intervals
+3.  **Reports rates per group**, for crude comparison by hand
 4.  **Supports time-stratified analysis** for detecting temporal
     patterns
-5.  **Integrates with survival methods** for comprehensive analysis
 
 By incorporating person-time analysis into your survival studies, you
-can: - Provide more accurate and interpretable results - Enable valid
-comparisons across studies and populations - Better understand temporal
-patterns in your data - Meet epidemiological standards for rate-based
-analysis
+can: - Provide more accurate and interpretable results - Put study rates
+on a common exposure scale while assessing comparability of
+populations - Better understand temporal patterns in your data - Meet
+epidemiological standards for rate-based analysis
 
-### Further Resources
-
-- **ClinicoPath Documentation**: Complete module reference
-- **Epidemiological Methods**: Texts on person-time analysis
-- **Survival Analysis**: Integration with traditional survival methods
-- **Statistical Software**: Comparison with other implementations
-
-For questions about person-time analysis in ClinicoPath, please refer to
-the module documentation or contact the development team.
+For questions about person-time analysis, see the [jsurvival
+website](https://www.serdarbalci.com/jsurvival/).

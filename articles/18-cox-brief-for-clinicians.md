@@ -1,19 +1,12 @@
 # Cox Regression, Briefly: A Clinician’s Guide
 
-> **Not yet released.** The `coxdiagnostics` analysis is not part of
-> jsurvival 1.0.4. It is on a development or test menu route in the
-> umbrella ClinicoPath module and does not appear in any jamovi menu
-> yet. It is documented here ahead of a future release, so its options,
-> defaults and output may still change. For the analyses jsurvival ships
-> today see the [jsurvival articles
-> index](https://www.serdarbalci.com/jsurvival/articles/).
-
 ## What is Cox Regression?
 
-- Purpose: Compare risk between groups while adjusting for multiple
-  factors (age, stage, etc.).
-- Output: Hazard Ratio (HR). HR \< 1 means lower risk; HR \> 1 means
-  higher risk.
+- Purpose: Compare the hazard of an event between groups while adjusting
+  for multiple factors (age, stage, etc.).
+- Output: Hazard Ratio (HR). HR \< 1 means a lower hazard; HR \> 1 means
+  a higher hazard. The HR is an association, not proof of a causal
+  effect.
 
 ## When to Use
 
@@ -26,21 +19,40 @@
 - HR and 95% CI: Magnitude and uncertainty of effect.
 - p‑value: Evidence against “no effect”, but prioritize effect size and
   CI.
-- Example: HR = 0.72 (95% CI 0.55–0.95, p = 0.02) → 28% lower hazard
-  after adjustment.
+- Example from the `histopathology` data, adjusted for perineural
+  invasion and age: lymphovascular invasion present against absent, HR =
+  2.50 (95% CI 1.81 to 3.45, p \< 0.001), so about 2.5 times the hazard
+  of death at any given time.
 
 ## Key Assumption: Proportional Hazards (PH)
 
 - Meaning: The HR between groups is roughly constant over time.
-- Check: Schoenfeld residual plots/tests in jSurvival (Cox Diagnostics).
+- Check: Schoenfeld residual plots/tests in jSurvival (Proportional
+  hazards assumption option).
 - If violated: Consider stratification, time‑varying effects, or RMST.
 
 ## Practical Tips
 
-- Coding: Ensure event = 1 and time \> 0 with consistent units
-  (months/days).
-- Collinearity: Avoid highly correlated predictors; use VIF checks.
-- Sample size: Aim for \>=10 events per covariate for stable estimates.
+- Coding: Set the Event Level to the event value. Check nonnegative
+  times and consistent units. Review events at time zero; LASSO Cox
+  requires strictly positive times, while the standard survival analyses
+  can retain zero-time events with a disclosure.
+- Collinearity: Avoid highly correlated predictors; check their
+  correlation before modeling.
+- Sample size: Count all candidate parameters, including factor levels,
+  spline terms and interactions. A fixed ten-events rule does not
+  establish adequacy; use context-specific planning ([Riley et al.,
+  2020](https://www.bmj.com/content/368/bmj.m441.short)).
+
+An HR describes relative instantaneous hazard, not a risk ratio or the
+probability of an event by a specified time. In a Fine-Gray model,
+report a **subdistribution** HR and use cumulative incidence for event
+probabilities. An interaction main effect is conditional on the
+reference or zero value of the other interacting predictor. Interaction
+forest plots show those conditioning values and flag zero values outside
+the observed range. An interaction row is a ratio of hazard ratios, not
+a within-subgroup HR. Retain the caption when exporting or reporting the
+figure.
 
 ## Reporting Checklist
 
@@ -53,22 +65,9 @@
 
 ## In jamovi (jSurvival)
 
-- Analyses → jSurvival → Cox Diagnostics.
-- Assign Time and Outcome; add covariates.
-- Enable PH tests (Schoenfeld), residuals, and VIF as needed.
-
-``` r
-
-# Example (R API)
-library(ClinicoPath)
-data(histopathology)
-coxdiagnostics(
-  data = histopathology,
-  time = "OverallTime",
-  event = "Outcome",
-  covariates = c("Age", "Sex", "Grade", "TStage"),
-  show_schoenfeld = TRUE,
-  show_vif = TRUE,
-  show_model_summary = TRUE
-)
-```
+- **Survival \> ClinicoPath Survival \> Multivariable Survival
+  Analysis**.
+- Assign Time Elapsed, Outcome and Event Level; add Explanatory
+  Variables and Continuous Explanatory Variable.
+- Under **Plots**, tick **Proportional hazards assumption** for the test
+  and Schoenfeld plots.

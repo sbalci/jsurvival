@@ -18,6 +18,8 @@ internally by the jamovi analysis wrapper and not called directly.
 
 ### Public methods
 
+- [`singlearmClass$init()`](#method-singlearmClass-init)
+
 - [`singlearmClass$clone()`](#method-singlearmClass-clone)
 
 Inherited methods
@@ -40,7 +42,6 @@ Inherited methods
 - [`jmvcore::Analysis$asProtoBuf()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-asProtoBuf)
 - [`jmvcore::Analysis$asSource()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-asSource)
 - [`jmvcore::Analysis$check()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-check)
-- [`jmvcore::Analysis$init()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-init)
 - [`jmvcore::Analysis$optionsChangedHandler()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-optionsChangedHandler)
 - [`jmvcore::Analysis$postInit()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-postInit)
 - [`jmvcore::Analysis$print()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-print)
@@ -51,6 +52,22 @@ Inherited methods
 - [`jmvcore::Analysis$setStatus()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-setStatus)
 - [`jmvcore::Analysis$translate()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-translate)
 - `singlearmBase$initialize()`
+
+------------------------------------------------------------------------
+
+### `singlearmClass$init()`
+
+Initialize safely when the supplied data has no selected variables.
+
+#### Usage
+
+    singlearmClass$init(noThrow = FALSE)
+
+#### Arguments
+
+- `noThrow`:
+
+  Whether initialization errors are stored in the results.
 
 ------------------------------------------------------------------------
 

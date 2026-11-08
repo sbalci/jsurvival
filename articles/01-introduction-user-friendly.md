@@ -36,8 +36,8 @@ for each patient:
 1.  **Time:** The duration of follow-up for each patient. This could be
     in days, months, or years.
 2.  **Event:** Whether the event of interest occurred during the
-    follow-up time. This is usually recorded as a “1” if the event
-    happened and a “0” if it did not.
+    follow-up time. This is recorded in one column; any coding works,
+    because you tell jamovi which value is the event.
 
 #### What is “Censoring”?
 
@@ -46,11 +46,15 @@ patient. This can happen for several reasons:
 
 - The study ends before the event has occurred for all patients.
 - A patient is lost to follow-up.
-- A patient dies from a cause other than the one being studied.
+- A patient dies from a cause other than the one being studied (this is
+  a competing event, not ordinary censoring; see the competing risks
+  guide).
 
-When we have a follow-up time for a patient, but the event has not
-occurred, we call this “censored” data. The jSurvival module is
-specifically designed to handle censored data correctly.
+When observation ends while a patient is known to be event-free, their
+time is censored. Kaplan-Meier inference assumes non-informative
+censoring for the population being estimated. Loss to follow-up related
+to prognosis can violate that assumption. Unknown vital status or a
+missing death date must not automatically be recoded as alive.
 
 ## Performing a Survival Analysis in jamovi
 
@@ -60,13 +64,8 @@ the survival of patients with and without a specific gene mutation.
 **Step 1: Open the jSurvival Module**
 
 1.  Open your data in jamovi.
-2.  Click on the “Analyses” tab in the top ribbon.
-3.  Find the “jSurvival” module and click on it.
-4.  Select “Survival Analysis.”
-
-![Navigate to jSurvival in jamovi](images/intro-nav-jSurvival.png)
-
-Navigate to jSurvival in jamovi
+2.  In the **Analyses** tab, click **Survival**, then choose **Survival
+    Analysis** under *ClinicoPath Survival*.
 
 **Step 2: Assign Your Variables**
 
@@ -74,23 +73,21 @@ Now, you will see the user interface for the survival analysis. You need
 to tell jamovi which columns in your data correspond to the time and
 event variables.
 
-1.  **Time Elapsed:** Drag and drop the column containing the follow-up
-    time into this box.
-2.  **Outcome:** Drag and drop the column containing the event
-    information into this box.
-3.  **Explanatory Variable:** Drag and drop the column that defines your
-    groups (e.g., “Gene Mutation Status”) into this box.
-
-![Assign variables (Time, Outcome,
-Group)](images/intro-assign-variables.png)
-
-Assign variables (Time, Outcome, Group)
+1.  **Time Elapsed:** the column with follow-up time.
+2.  **Outcome:** the column with the event information.
+3.  **Event Level:** the value in that column that means the event
+    happened (for example “Dead” or 1). jamovi never guesses this.
+4.  **Explanatory Variable:** the column that defines your groups (e.g.,
+    “Gene Mutation Status”).
+5.  Open **Survival Plots**, then tick **Survival curves**, **P-values**
+    and **Censored points**.
 
 **Step 3: Interpret the Results**
 
-Once you have assigned your variables, jamovi will automatically
-generate the results. The key components of the output are the
-Kaplan-Meier plot and the statistical tests.
+Once you have assigned your variables, jamovi generates the results
+without a Run button. The key components of the output are the
+Kaplan-Meier plot, the median survival table and the log-rank test
+printed on the plot.
 
 ### The Kaplan-Meier Plot
 
@@ -102,14 +99,10 @@ over time.
 - The **x-axis** shows the time.
 - You will see a separate line for each of your groups.
 
-![Kaplan–Meier plot example](images/intro-km-example.png)
-
-Kaplan–Meier plot example
-
 **How to Read the Plot:**
 
-- At the beginning (time = 0), the survival probability is 100% for all
-  groups.
+- Before the first event, survival is 100%. Recorded events at time zero
+  can cause an immediate drop and need source review.
 - As time goes on, the lines on the plot will go down as more patients
   experience the event.
 - If one line is consistently above another, it means that group has a
@@ -119,13 +112,17 @@ Kaplan–Meier plot example
 
 #### Interpretation (example wording)
 
-- Patients with Mutation A show better survival than those without, as
-  the Mutation A curve remains higher over time.
-- The log-rank p-value of 0.02 suggests the difference is unlikely due
-  to chance.
-- Median survival is 18 months in Mutation A vs 12 months in Mutation B.
-  Consider whether a 6‑month difference is clinically meaningful in this
-  disease.
+These numbers come from the `histopathology` example data, with
+OverallTime as Time Elapsed, Outcome as Outcome, Event Level 1, and
+lymphovascular invasion (LVI) as the Explanatory Variable:
+
+- Median survival was 26.0 months (95% CI 20.1 to 32.3) without LVI and
+  9.3 months (95% CI 8.8 to 10.6) with LVI.
+- The log-rank p-value was below 0.001, providing evidence against equal
+  survival under the test’s assumptions.
+- This is an association in observational data. It does not show that
+  LVI causes the shorter survival. Consider whether the difference is
+  clinically meaningful in this disease.
 
 ### Statistical Significance: The Log-Rank Test
 
@@ -133,19 +130,16 @@ The Kaplan-Meier plot gives you a visual representation of the survival
 difference between your groups. But is this difference “statistically
 significant”? To answer this, we use the **log-rank test**.
 
-The log-rank test gives you a **p-value**.
+The log-rank test gives you a **p-value**, which appears on the plot
+when **P-values** is ticked.
 
-- **A small p-value (typically less than 0.05)** suggests that the
-  difference in survival between the groups is unlikely to be due to
-  chance. In this case, you can conclude that there is a statistically
-  significant difference in survival.
+- **A small p-value (typically less than 0.05)** means that a test
+  statistic at least this extreme would be unusual under equal survival
+  and the test assumptions. It is not the probability that chance caused
+  the observed difference or that the null hypothesis is true.
 - **A large p-value (greater than 0.05)** suggests that there is not
   enough evidence to say that there is a difference in survival between
   the groups.
-
-![Log-rank test output](images/intro-logrank-output.png)
-
-Log-rank test output
 
 ## Conclusion
 
@@ -156,7 +150,7 @@ jamovi.
 **Key Takeaways:**
 
 - Survival analysis is used to study “time-to-event” data.
-- The Kaplan-Meier plot is a powerful way to visualize survival data.
+- The Kaplan-Meier plot is the standard way to display survival data.
 - The log-rank test tells you if the difference in survival between
   groups is statistically significant.
 
@@ -167,7 +161,8 @@ analyses.
 
 ### Common Pitfalls
 
-- Event coding mismatches: Confirm event = 1, no event/censored = 0.
+- Event coding mismatches: Confirm that the Event Level you chose is the
+  event.
 - Time unit confusion: Keep a consistent unit (months or days) across
   variables and reports.
 - Negative/implausible times: When deriving time from dates, check for

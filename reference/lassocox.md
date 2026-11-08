@@ -106,7 +106,9 @@ lassocox(
   full-cohort means and standard deviations. Displayed coefficients are
   back-transformed by glmnet to the original design-column scale. Factor
   indicators are still penalized and selected separately rather than as
-  a grouped factor.
+  a grouped factor. When this is off, selection depends on the units of
+  each predictor; changing a unit can change which predictors are
+  selected.
 
 - suitabilityCheck:
 
@@ -134,8 +136,8 @@ lassocox(
 
   Plot coefficients across the fitted log-lambda path with both CV
   choices and counts of nonzero columns. For readability, at most 30
-  paths are displayed, ranked by their summed absolute coefficients
-  across the path.
+  paths are displayed: selected columns first, then by summed absolute
+  coefficient times column SD across the path.
 
 - showEncoding:
 
@@ -194,6 +196,7 @@ A results object containing:
 |                                         |     |     |     |     |           |
 |-----------------------------------------|-----|-----|-----|-----|-----------|
 | `results$todo`                          |     |     |     |     | a html    |
+| `results$suitabilityChecks`             |     |     |     |     | a table   |
 | `results$suitabilityReport`             |     |     |     |     | a html    |
 | `results$modelSummary`                  |     |     |     |     | a table   |
 | `results$coefficients`                  |     |     |     |     | a table   |
@@ -220,9 +223,9 @@ Tables can be converted to data frames with `asDF` or
 [`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html). For
 example:
 
-`results$modelSummary$asDF`
+`results$suitabilityChecks$asDF`
 
-`as.data.frame(results$modelSummary)`
+`as.data.frame(results$suitabilityChecks)`
 
 ## Examples
 

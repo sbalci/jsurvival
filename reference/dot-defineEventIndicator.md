@@ -53,11 +53,22 @@ drifted apart in their validation.
 ## Value
 
 A list with `status` (0/1 or 0/1/2, `NA` preserved), `status_factor`
-(Censored/Event/Competing, only when competing), the counts `n_event`,
-`n_censored`, `n_competing`, `n_missing`, the labels `event_label` and
-`censored_labels`, `competing_labels`, `n_levels`, `has_competing`,
-`estimand`, and `error` (`NULL`, or a ready-to-display message the
-caller should reject with).
+(Censored/Event/Competing, only when competing), `alive` (see below),
+the counts `n_event`, `n_censored`, `n_competing`, `n_missing`, `n_awd`
+(Alive with Disease rows, `NA` outside multievent), the labels
+`event_label` and `censored_labels`, `competing_labels`, `n_levels`,
+`has_competing`, `estimand`, and `error` (`NULL`, or a ready-to-display
+message the caller should reject with).
+
+`alive` is the censoring indicator for
+[`.medianFollowUp()`](https://www.serdarbalci.com/jsurvival/reference/dot-medianFollowUp.md):
+TRUE where the subject was alive at last contact, `NA` where the outcome
+is missing. It differs from `status == 0` in one case: Cause Specific
+codes Dead of Other Causes as 0 for the event, but that patient was not
+still under observation. A single-level recode cannot tell a death from
+any other level, so there every status 0 counts as alive and
+[`.describeEventIndicator()`](https://www.serdarbalci.com/jsurvival/reference/dot-describeEventIndicator.md)
+says so.
 
 ## Details
 

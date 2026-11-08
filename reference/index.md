@@ -35,3 +35,7 @@
   : Survival Analysis for Continuous Explanatory Variable
 - [`survivalcontClass`](https://www.serdarbalci.com/jsurvival/reference/survivalcontClass.md)
   : Survival Analysis for Continuous Explanatory Variable
+- [`timeinterval()`](https://www.serdarbalci.com/jsurvival/reference/timeinterval.md)
+  : Comprehensive Time Interval Calculator
+- [`timeintervalClass`](https://www.serdarbalci.com/jsurvival/reference/timeintervalClass.md)
+  : Comprehensive Time Interval Calculator for Survival Analysis

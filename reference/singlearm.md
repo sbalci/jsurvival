@@ -88,23 +88,19 @@ singlearm(
 - dxdate:
 
   The date of diagnosis or study entry. Accepts: (1) Date/datetime text
-  (e.g., "2024-01-15"), (2) Numeric values. Each bare numeric date
-  column is classified by its overall magnitude: values below 100000
-  indicate DAYS since 1970-01-01 (the R Date encoding), whereas values
-  at or above 100000 indicate Unix epoch SECONDS (the DateTime
-  Converter's corrected_datetime_numeric output). Columns with
-  inconsistent scales or values on both sides of this boundary are
-  rejected. Time intervals are calculated as the difference from the
+  (e.g., "2024-01-15"), (2) Numeric values, which must be Unix epoch
+  SECONDS since 1970 (the DateTime Converter's
+  corrected_datetime_numeric output). Day counts, Excel serials,
+  YYYYMMDD numbers and years are refused, because a bare number has no
+  unit. Time intervals are calculated as the difference from the
   follow-up date.
 
 - fudate:
 
   The date of last follow-up or event. Accepts: (1) Date/datetime text
-  (e.g., "2024-01-15"), (2) Numeric values, classified by column
-  magnitude exactly as for the diagnosis date (below 100000 = days since
-  1970-01-01; at or above 100000 = Unix epoch seconds). Mixed values
-  within a column and inconsistent numeric encodings between columns are
-  rejected. Must be in the same format as the diagnosis date.
+  (e.g., "2024-01-15"), (2) Numeric values, which must be Unix epoch
+  SECONDS since 1970, as for the diagnosis date. Must be in the same
+  format as the diagnosis date.
 
 - outcome:
 
@@ -180,7 +176,7 @@ singlearm(
   possible (the column carries no unit), so this option DECLARES the
   unit that variable is already recorded in. Either way it determines
   how cutpoints and plausibility checks are interpreted, and how axes
-  are labelled - so selecting the wrong unit for pre-calculated time
+  are labeled, so selecting the wrong unit for pre-calculated time
   changes the reported results, not just the labels.
 
 - uselandmark:
@@ -221,7 +217,8 @@ singlearm(
   running count of events: a raw count ignores censoring and is not
   comparable between cohorts of different size or follow-up. Read it as
   "the estimated proportion of the cohort that had had the event by time
-  t".
+  t", except under Cause Specific survival, where other-cause deaths are
+  censored and 1 - S(t) overstates that proportion.
 
 - ch:
 
@@ -376,38 +373,27 @@ A results object containing:
 | `results$errors`                         |     |     |     |     | a html         |
 | `results$warnings`                       |     |     |     |     | a html         |
 | `results$info`                           |     |     |     |     | a html         |
-| `results$medianHeading`                  |     |     |     |     | a preformatted |
 | `results$medianTable`                    |     |     |     |     | a table        |
 | `results$clinicalSummary`                |     |     |     |     | a html         |
 | `results$medianSummary`                  |     |     |     |     | a preformatted |
-| `results$medianHeading3`                 |     |     |     |     | a preformatted |
 | `results$medianSurvivalExplanation`      |     |     |     |     | a html         |
-| `results$survTableHeading`               |     |     |     |     | a preformatted |
 | `results$survTable`                      |     |     |     |     | a table        |
 | `results$survTableSummary`               |     |     |     |     | a preformatted |
-| `results$survTableHeading3`              |     |     |     |     | a preformatted |
 | `results$survivalProbabilityExplanation` |     |     |     |     | a html         |
-| `results$personTimeHeading`              |     |     |     |     | a preformatted |
 | `results$personTimeTable`                |     |     |     |     | a table        |
-| `results$personTimeHeading2`             |     |     |     |     | a preformatted |
 | `results$personTimeSummary`              |     |     |     |     | a html         |
-| `results$personTimeHeading3`             |     |     |     |     | a preformatted |
 | `results$personTimeExplanation`          |     |     |     |     | a html         |
 | `results$plot`                           |     |     |     |     | an image       |
 | `results$plot_cif`                       |     |     |     |     | an image       |
 | `results$plot6`                          |     |     |     |     | an image       |
 | `results$plot2`                          |     |     |     |     | an image       |
 | `results$plot3`                          |     |     |     |     | an image       |
-| `results$survivalPlotsHeading3`          |     |     |     |     | a preformatted |
 | `results$survivalPlotsExplanation`       |     |     |     |     | a html         |
-| `results$baselineHazardHeading`          |     |     |     |     | a preformatted |
 | `results$baselineHazardTable`            |     |     |     |     | a table        |
 | `results$baselineHazardPlot`             |     |     |     |     | an image       |
 | `results$smoothedHazardPlot`             |     |     |     |     | an image       |
 | `results$baselineHazardSummary`          |     |     |     |     | a html         |
-| `results$baselineHazardHeading3`         |     |     |     |     | a preformatted |
 | `results$baselineHazardExplanation`      |     |     |     |     | a html         |
-| `results$dataQualityHeading`             |     |     |     |     | a preformatted |
 | `results$dataQualityTable`               |     |     |     |     | a table        |
 | `results$dataQualitySummary`             |     |     |     |     | a html         |
 | `results$calculatedtime`                 |     |     |     |     | an output      |

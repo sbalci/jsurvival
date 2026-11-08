@@ -1,6 +1,10 @@
 # Survival Analysis for Continuous Explanatory Variable
 
-Survival Analysis for Continuous Explanatory Variable
+Survival analysis for one continuous explanatory variable: Cox
+regression on the continuous scale, and optional data-derived cut-offs
+with Kaplan-Meier groups. A cut-off chosen from the same data overstates
+the effect and needs independent validation. These methods describe
+associations and do not establish causality.
 
 ## Usage
 
@@ -132,7 +136,7 @@ survivalcont(
   events; Cause Specific treats other-cause death as censored;
   Disease-Free counts disease, recurrence, and death categories as
   events according to the selected mapping. Competing-risk coding is
-  retained for compatibility but is not analysed by this continuous
+  retained for compatibility but is not analyzed by this continuous
   cut-off function; select it to receive guidance to a competing-risk
   analysis.
 
@@ -151,7 +155,14 @@ survivalcont(
 
 - timetypeoutput:
 
-  select the time type in output
+  The time unit used throughout the analysis. When survival time is
+  calculated from dates, dates are CONVERTED to this unit. When a
+  pre-calculated elapsed-time variable is supplied, no conversion is
+  possible (the column carries no unit), so this option DECLARES the
+  unit that variable is already recorded in. Either way it determines
+  how cutpoints and plausibility checks are interpreted, and how axes
+  are labeled, so selecting the wrong unit for pre-calculated time
+  changes the reported results, not just the labels.
 
 - uselandmark:
 
@@ -161,8 +172,9 @@ survivalcont(
 - landmark:
 
   Specify the landmark time at which to evaluate survival probabilities
-  in landmark analysis. This option is only available if you enable the
-  "Use Landmark Time" option.
+  in landmark analysis. Patients with an event or censoring at or before
+  this time are excluded. This option is only available if you enable
+  the "Use Landmark Time" option.
 
 - sc:
 
@@ -323,7 +335,7 @@ survivalcont(
   Categorical variable used for stratification in Cox regression,
   allowing a different baseline hazard in each stratum. Must be a factor
   with a small number of reasonably sized groups (for example treating
-  centre or stage). A near-continuous variable would give one stratum
+  center or stage). A near-continuous variable would give one stratum
   per patient and no estimable hazard ratio.
 
 - loglog:
@@ -362,27 +374,21 @@ A results object containing:
 | `results$strongWarnings`                 |     |     |     |     | a html         |
 | `results$warnings`                       |     |     |     |     | a html         |
 | `results$infoMessages`                   |     |     |     |     | a html         |
-| `results$coxRegressionHeading`           |     |     |     |     | a preformatted |
 | `results$coxSummary`                     |     |     |     |     | a html         |
 | `results$coxTable`                       |     |     |     |     | a table        |
 | `results$stratifiedCoxTable`             |     |     |     |     | a table        |
 | `results$tCoxtext2`                      |     |     |     |     | a html         |
-| `results$coxRegressionHeading3`          |     |     |     |     | a preformatted |
 | `results$coxRegressionExplanation`       |     |     |     |     | a html         |
-| `results$personTimeHeading`              |     |     |     |     | a preformatted |
 | `results$personTimeTable`                |     |     |     |     | a table        |
 | `results$personTimeSummary`              |     |     |     |     | a html         |
 | `results$personTimeExplanation`          |     |     |     |     | a html         |
-| `results$rmstHeading`                    |     |     |     |     | a preformatted |
 | `results$rmstTable`                      |     |     |     |     | a table        |
 | `results$rmstSummary`                    |     |     |     |     | a preformatted |
 | `results$rmstExplanation`                |     |     |     |     | a html         |
 | `results$residualsTable`                 |     |     |     |     | a table        |
 | `results$schoenfeldResidualsTable`       |     |     |     |     | a table        |
 | `results$residualDiagnosticsExplanation` |     |     |     |     | a html         |
-| `results$cutoffAnalysisHeading`          |     |     |     |     | a preformatted |
 | `results$rescutTable`                    |     |     |     |     | a table        |
-| `results$cutoffAnalysisHeading3`         |     |     |     |     | a preformatted |
 | `results$cutoffAnalysisExplanation`      |     |     |     |     | a html         |
 | `results$plot4`                          |     |     |     |     | an image       |
 | `results$plot5`                          |     |     |     |     | an image       |
@@ -393,7 +399,6 @@ A results object containing:
 | `results$plot2`                          |     |     |     |     | an image       |
 | `results$plot3`                          |     |     |     |     | an image       |
 | `results$plot6`                          |     |     |     |     | an image       |
-| `results$survivalPlotsHeading3`          |     |     |     |     | a preformatted |
 | `results$survivalPlotsExplanation`       |     |     |     |     | a html         |
 | `results$plot7`                          |     |     |     |     | an image       |
 | `results$loglogPlotExplanation`          |     |     |     |     | a html         |

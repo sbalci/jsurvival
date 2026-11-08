@@ -25,8 +25,8 @@ for continuous explanatory variables. It includes:
 
 - Date-based time calculation with multiple format support
 
-- Multiple event level support (overall, cause-specific, competing
-  risks)
+- Multiple event level support (overall, cause-specific, and
+  disease-free survival)
 
 - Landmark analysis for time-dependent effects
 
@@ -67,7 +67,7 @@ Methodology, 13(1), 152.
 
 Morris, T. P., et al. (2019). Proposals on Kaplan-Meier plots in medical
 research and a survey of stakeholder views: KMunicate. BMJ Open, 9(9),
-e030874.
+e030215.
 
 ## Super classes
 
@@ -77,6 +77,8 @@ e030874.
 ## Methods
 
 ### Public methods
+
+- [`survivalcontClass$init()`](#method-survivalcontClass-init)
 
 - [`survivalcontClass$asSource()`](#method-survivalcontClass-asSource)
 
@@ -101,7 +103,6 @@ Inherited methods
 - [`jmvcore::Analysis$addAddon()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-addAddon)
 - [`jmvcore::Analysis$asProtoBuf()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-asProtoBuf)
 - [`jmvcore::Analysis$check()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-check)
-- [`jmvcore::Analysis$init()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-init)
 - [`jmvcore::Analysis$optionsChangedHandler()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-optionsChangedHandler)
 - [`jmvcore::Analysis$postInit()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-postInit)
 - [`jmvcore::Analysis$print()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-print)
@@ -112,6 +113,22 @@ Inherited methods
 - [`jmvcore::Analysis$setStatus()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-setStatus)
 - [`jmvcore::Analysis$translate()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-translate)
 - `survivalcontBase$initialize()`
+
+------------------------------------------------------------------------
+
+### `survivalcontClass$init()`
+
+Initialize safely when the supplied data has no selected variables.
+
+#### Usage
+
+    survivalcontClass$init(noThrow = FALSE)
+
+#### Arguments
+
+- `noThrow`:
+
+  Whether initialization errors are stored in the results.
 
 ------------------------------------------------------------------------
 

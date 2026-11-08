@@ -9,8 +9,8 @@ example, a patient with cancer could die from heart disease before they
 die from the cancer. This is what we call a **competing risk**.
 
 When competing risks are present, standard survival analysis methods
-(like the Kaplan-Meier method) can be misleading. The jSurvival module
-provides a specific tool for analyzing data with competing risks.
+(like the Kaplan-Meier method) can be misleading. In the jSurvival
+module, this is a mode of Single Arm Survival and Survival Analysis.
 
 **Learning Objectives:**
 
@@ -23,15 +23,21 @@ By the end of this guide, you will be able to:
 
 ## Why Do We Need a Special Analysis for Competing Risks?
 
-Let’s imagine we are studying deaths from breast cancer. If we only use
-the standard Kaplan-Meier method, we would treat deaths from other
-causes (like heart disease) as “censored.” This assumes that these
-patients are still at risk of dying from breast cancer, which is not
-true. This can lead to an overestimation of the survival probability
-from breast cancer.
+Suppose we study deaths from breast cancer and treat deaths from other
+causes as censored in Kaplan-Meier. One minus that estimate is a net,
+cause-specific quantity; it is not the probability of breast-cancer
+death in a population where other deaths also occur. Cumulative
+incidence estimates that probability using all event types.
+Cause-specific Cox models can still address associations with
+cause-specific hazard; that is a different question from absolute event
+probability. See the survival authors’ [competing-risk
+guide](https://stat.ethz.ch/R-manual/R-devel/library/survival/doc/compete.pdf).
 
-Competing risks analysis solves this problem by modeling the probability
-of each event type separately.
+Competing risks analysis solves this problem by estimating the
+probability of each event type, allowing for the others. In the
+`melanoma` data set of the R package, death from melanoma by 1825 days
+is 22.4% by cumulative incidence and 23.1% by one minus Kaplan-Meier;
+the gap grows as competing events become more common.
 
 ## Performing a Competing Risks Analysis in jamovi
 
@@ -51,26 +57,44 @@ least three levels:
 
 **Step 2: Set up the Analysis**
 
-1.  Go to **Analyses \> jSurvival \> Competing Risks Survival
-    Analysis**.
-2.  Assign your **Time Elapsed** variable.
-3.  Assign your multi-level **Outcome** variable.
-4.  You will need to tell jamovi which level of your outcome variable
-    corresponds to which event type.
+To see the whole cohort, with the cumulative incidence plot:
 
-![Competing risks setup in jSurvival](images/competing-setup.png)
+1.  Go to **Survival \> ClinicoPath Survival \> Single Arm Survival**.
+2.  Assign **Time Elapsed** and **Outcome**.
+3.  Open **Analysis with Multiple Outcomes** and tick **Multiple event
+    levels**.
+4.  Assign each outcome value to **Dead of Disease**, **Dead of Other**,
+    **Alive w Disease** or **Alive w/o Disease**.
+5.  Set **Survival Type** to **Competing Risk**.
+6.  Open **Plots** and tick **Survival / cumulative-incidence plot**. A
+    table of event-free, event-of-interest and competing-event estimates
+    at your **Cutpoints** appears at the top of the results.
 
-Competing risks setup in jSurvival
+To compare groups:
+
+1.  Go to **Survival \> ClinicoPath Survival \> Survival Analysis**.
+2.  Assign **Time Elapsed**, **Outcome** and **Explanatory Variable**,
+    which this analysis requires.
+3.  Open **Analysis with Multiple Outcomes** and tick **Multiple event
+    analysis**.
+4.  Assign each outcome value to **Dead of Disease**, **Dead of Other
+    Causes**, **Alive with Disease** or **Alive without Disease**.
+5.  Set **Analysis type** to **Competing Risk**.
+
+Survival Analysis gives the cumulative incidence table by group, with
+Gray’s test as a note under the median table, and draws group-specific
+cumulative incidence curves when **Survival curves** is ticked (tick
+**Overlay competing event CIF** to display the competing cause alongside
+the event of interest). It fits no cause-specific Cox model in
+competing-risks mode; for regression on cumulative incidence,
+Multivariable Survival Analysis fits a Fine-Gray subdistribution hazard
+model.
 
 ## Step 3: Interpret the Results
 
-The main output of a competing risks analysis is the **cumulative
-incidence function (CIF) plot**.
-
-![Cumulative incidence (CIF) plot
-example](images/competing-cif-example.png)
-
-Cumulative incidence (CIF) plot example
+The main outputs of a competing risks analysis are the **cumulative
+incidence function (CIF) plot** in Single Arm Survival and the
+cumulative incidence table in both analyses.
 
 **How to Read the CIF Plot:**
 
@@ -81,10 +105,16 @@ Cumulative incidence (CIF) plot example
 
 #### Interpretation (example wording)
 
-- By 24 months, disease‑specific death reaches 18%, while death from
-  other causes is 10%.
-- This indicates a meaningful burden from competing events; report both
-  CIFs rather than a single KM estimate.
+From the `melanoma` data set in the R package (Time Elapsed in days):
+
+- By 1825 days (5 years), cumulative incidence was 22.4% (95% CI 16.9 to
+  28.3) for death from melanoma and 4.4% (95% CI 2.2 to 7.9) for death
+  from other causes.
+- The cumulative incidence of death from melanoma was 17.0% for sex = 0
+  and 31.0% for sex = 1 (Gray’s test p = 0.016). This is an association,
+  not a causal effect.
+- Report both cumulative incidences rather than a single Kaplan-Meier
+  estimate.
 
 For example, the curve for “Death from Prostate Cancer” will show you
 the probability of a patient dying from prostate cancer by a certain
@@ -101,9 +131,8 @@ time, taking into account that they could have died from other causes.
 
 Competing risks are a common issue in clinical research, especially when
 studying elderly populations or diseases with multiple causes of death.
-The jSurvival module in jamovi provides a user-friendly way to perform a
-competing risks analysis and get a more accurate understanding of the
-probability of your event of interest.
+The jSurvival module estimates the probability of your event of interest
+while allowing for the competing events.
 
 **Key Takeaways:**
 
@@ -116,9 +145,13 @@ probability of your event of interest.
 
 ### Common Pitfalls
 
-- Treating competing events as censored in KM analyses overestimates
-  disease‑specific survival.
-- Outcome labelling: Ensure outcome levels are clearly mapped (no event,
+- One minus cause-specific Kaplan-Meier is not cumulative incidence when
+  competing events occur. Select the estimand before choosing a curve or
+  regression model.
+- Ordinary loss to follow-up must still satisfy the censoring
+  assumptions of the competing-risk estimator; identifying competing
+  events does not solve informative censoring.
+- Outcome labeling: Ensure outcome levels are clearly mapped (no event,
   event of interest, competing event\[s\]).
 - Interpretation: CIF curves go up (probability of event), unlike KM
   curves which go down (probability of survival).

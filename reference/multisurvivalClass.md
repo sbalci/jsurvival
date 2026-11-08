@@ -69,6 +69,8 @@ for the main user interface function
 
 ### Public methods
 
+- [`multisurvivalClass$init()`](#method-multisurvivalClass-init)
+
 - [`multisurvivalClass$clone()`](#method-multisurvivalClass-clone)
 
 Inherited methods
@@ -91,7 +93,6 @@ Inherited methods
 - [`jmvcore::Analysis$asProtoBuf()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-asProtoBuf)
 - [`jmvcore::Analysis$asSource()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-asSource)
 - [`jmvcore::Analysis$check()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-check)
-- [`jmvcore::Analysis$init()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-init)
 - [`jmvcore::Analysis$optionsChangedHandler()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-optionsChangedHandler)
 - [`jmvcore::Analysis$postInit()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-postInit)
 - [`jmvcore::Analysis$print()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-print)
@@ -102,6 +103,22 @@ Inherited methods
 - [`jmvcore::Analysis$setStatus()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-setStatus)
 - [`jmvcore::Analysis$translate()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-translate)
 - `multisurvivalBase$initialize()`
+
+------------------------------------------------------------------------
+
+### `multisurvivalClass$init()`
+
+Initialize safely when the supplied data has no selected variables.
+
+#### Usage
+
+    multisurvivalClass$init(noThrow = FALSE)
+
+#### Arguments
+
+- `noThrow`:
+
+  Whether initialization errors are stored in the results.
 
 ------------------------------------------------------------------------
 

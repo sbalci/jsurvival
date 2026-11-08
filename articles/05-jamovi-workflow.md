@@ -3,26 +3,17 @@
 ## Overview
 
 This vignette demonstrates how to use the jSurvival module within jamovi
-for comprehensive survival analysis. The jSurvival module is part of the
-ClinicoPath suite and provides a user-friendly interface for conducting
-survival analyses without programming.
+for survival analysis. The jSurvival module is part of the ClinicoPath
+suite and provides an interface for survival analysis without
+programming.
 
 ## Installation in jamovi
-
-### Option 1: jamovi Library (Recommended)
 
 1.  Open jamovi
 2.  Click on the **+** button in the top-right corner
 3.  Select **jamovi library**
-4.  Search for “ClinicoPath” or “jSurvival”
+4.  Search for “jsurvival”
 5.  Click **Install**
-
-### Option 2: Manual Installation
-
-1.  Download the latest `.jmo` file from
-    [releases](https://github.com/sbalci/jsurvival/releases)
-2.  Open jamovi
-3.  Click **+** → **Sideload** → Select the `.jmo` file
 
 ## Data Preparation
 
@@ -31,8 +22,8 @@ survival analyses without programming.
 For survival analysis, you need at minimum:
 
 - **Time variable**: Time from start of study to event or censoring
-- **Event indicator**: Binary variable indicating whether event occurred
-  (1 = event, 0 = censored)
+- **Event indicator**: A column recording whether the event occurred.
+  Any coding works, because you choose the value that means the event
 
 ### Optional Variables
 
@@ -56,16 +47,18 @@ population
 
 **Steps**: 1. Navigate to **Survival** → **ClinicoPath Survival** →
 **Single Arm Survival** 2. Assign variables: - **Time Elapsed**: Your
-time variable - **Outcome**: Your event indicator - **Outcome Level**:
-Select the level that indicates an event (usually “1”) 3. Configure
-options: - **Cut Points**: Time points for survival estimates (e.g.,
-“12, 36, 60” for 1, 3, 5 years) - **Time Type Output**: Choose months or
-years - **Confidence Intervals**: Enable 95% CI - **Risk Table**: Show
-numbers at risk 4. Click **Run**
+time variable - **Outcome**: Your event indicator - **Event Level**:
+Select the level that indicates an event (for example “1”) 3. Configure
+options: - **Cutpoints** (under Survival Tables): Time points for
+survival estimates (e.g., “12, 36, 60” for 1, 3, 5 years) - **Time Type
+in Output** (under Advanced Elapsed Time Options): The unit of your time
+variable, or the unit for time calculated from dates - **Survival /
+cumulative-incidence plot** (under Plots) - **95 percent CI**: Enable
+the confidence band - **Risk table**: Show numbers at risk
 
-**Output includes**: - Overall survival curve - Median survival time
-with 95% CI - Survival rates at specified time points - Natural language
-summary
+**Output includes**: - Median survival time with 95% CI - Survival rates
+at specified time points - Overall survival curve, if ticked - Natural
+language summary, if **Natural language summaries** is ticked
 
 ### 2. Survival Analysis (Group Comparisons)
 
@@ -73,34 +66,49 @@ summary
 
 **Steps**: 1. Navigate to **Survival** → **ClinicoPath Survival** →
 **Survival Analysis** 2. Assign variables: - **Time Elapsed**: Your time
-variable - **Explanatory**: Grouping variable (e.g., treatment, stage) -
-**Outcome**: Your event indicator - **Outcome Level**: Event level 3.
-Configure analysis: - **Analysis Type**: Choose overall, pairwise, or
-combination - **P-value Adjustment**: Method for multiple comparisons -
-**Proportional Hazards**: Enable Cox regression 4. Plotting options: -
-**Risk Table**: Show numbers at risk - **Censored Points**: Mark
-censored observations - **Confidence Intervals**: Display CI bands -
-**End Plot**: Set maximum time for plot
+variable - **Explanatory Variable**: Grouping variable (e.g., treatment,
+stage) - **Outcome**: Your event indicator - **Event Level**: The level
+that indicates an event 3. Configure analysis (under Statistical
+Analysis): - **Pairwise comparisons**: Tick for all pairs of groups -
+**P-value adjustment method**: Method for multiple comparisons -
+**Proportional hazards test**: Test and plot; the Cox model always runs
+4. Plotting options (under Survival Plots): - **Survival curves**:
+Kaplan-Meier plot - **P-values**: Print the log-rank p-value on the
+plot - **Risk table**: Show numbers at risk - **Censored points**: Mark
+censored observations - **95% confidence intervals**: Display CI bands -
+**Plot End Time**: Set maximum time for plot
 
-**Output includes**: - Kaplan-Meier curves by group - Log-rank test
-results - Cox regression hazard ratios - Pairwise comparisons (if
-selected) - Survival tables by group
+**Output includes**: - Median survival table - Cox regression hazard
+ratios - Survival tables by group - Kaplan-Meier curves by group and the
+log-rank p-value, if ticked - Pairwise comparisons, if selected
 
 ### 3. Continuous Variable Survival Analysis
 
-**Use case**: Find optimal cut-point for a continuous biomarker
+**Use case**: Analyze a continuous biomarker on its own scale and, if
+needed, derive a candidate cut-off
 
 **Steps**: 1. Navigate to **Survival** → **ClinicoPath Survival** →
-**Survival Analysis for Continuous Variable** 2. Assign variables: -
-**Time Elapsed**: Your time variable - **Continuous Explanatory**: Your
-continuous predictor - **Outcome**: Your event indicator 3. Cut-point
-options: - **Find Cut-point**: Let algorithm find optimal threshold -
-**Manual Cut-point**: Specify your own threshold 4. Configure analysis
-similar to group comparisons
+**Survival Analysis for Continuous Explanatory Variable** 2. Assign
+variables: - **Time Elapsed**: Your time variable - **Continuous
+explanatory variable**: Your continuous predictor - **Outcome**: Your
+event indicator - **Event level**: The level that indicates an event 3.
+Cut-off options (under Finding Cut-off): - **Optimal cut-off**: One
+data-derived threshold, by the maximally selected rank statistic -
+**Multiple cut-offs**: Two to four thresholds, with **Number of
+cut-offs** and **Multiple cut-off method** 4. Configure analysis similar
+to group comparisons
 
-**Output includes**: - Optimal cut-point determination - Survival curves
-for high/low groups - Hazard ratio for dichotomized variable - ROC
-analysis for cut-point validation
+**Output includes**: - Cox regression hazard ratio per one-unit increase
+in the predictor - Data-derived cut-off, with an **Adjusted p** that
+allows for the search over cut-offs - Median survival and survival
+tables for the groups it creates - Survival curves for those groups, if
+**Survival curves (Kaplan-Meier)** is ticked
+
+A cut-off chosen from the same data overstates the difference between
+the groups, so a data-derived cut-off needs validation in independent
+data. With several cut-offs chosen from the outcome, no adjusted p-value
+exists: the p-value is labeled unadjusted and is not printed on the
+plot.
 
 ### 4. Multivariable Survival Analysis
 
@@ -108,38 +116,42 @@ analysis for cut-point validation
 
 **Steps**: 1. Navigate to **Survival** → **ClinicoPath Survival** →
 **Multivariable Survival Analysis** 2. Assign variables: - **Time
-Elapsed**: Your time variable - **Explanatory**: Multiple explanatory
-variables - **Outcome**: Your event indicator 3. Model options: -
-**Model Type**: Choose Cox proportional hazards - **Variable
-Selection**: Manual or automated selection - **Interaction Terms**:
-Include interactions if needed
+Elapsed**: Your time variable - **Explanatory Variables**: Categorical
+variables - **Continuous Explanatory Variable**: Continuous variables -
+**Outcome**: Your event indicator - **Event Level**: The level that
+indicates an event 3. Model options: - **Interaction Terms**: Include
+interactions if needed
 
 **Output includes**: - Multivariable Cox regression table - Adjusted
-hazard ratios with 95% CI - Model fit statistics - Adjusted survival
-curves
+hazard ratios with 95% CI - Model fit statistics, which are apparent and
+therefore optimistic - Adjusted survival curves, if **Adjusted
+probability curve** is ticked
 
 ### 5. Odds Ratio Analysis
 
 **Use case**: Binary outcome analysis (case-control studies)
 
-**Steps**: 1. Navigate to **Survival** → **ClinicoPath Survival** →
-**Odds Ratio Table and Plot** 2. Assign variables: - **Outcome**: Binary
-outcome variable - **Explanatory**: Risk factors 3. Configure: -
-**Reference Level**: Choose reference category - **Confidence Level**:
-Usually 95%
+**Steps**: 1. Navigate to **Survival** → **General Statistics** → **Odds
+Ratio Table and Plot** 2. Assign variables: - **Explanatory Variables**:
+risk factors - **Outcome Variable**: the binary outcome - **Positive
+Level** and **Negative Level**: name both outcome levels. Any other
+outcome levels are excluded, not pooled. 3. Optional: **Firth penalized
+logistic regression**; **Diagnostic Predictor (binary)** with
+**Predictor Positive Level** and **Predictor Negative Level** for
+likelihood ratios.
 
-**Output includes**: - Odds ratio table - Forest plot - Chi-square test
-results
+**Output includes**: - Odds ratio table - Forest plot - Optional
+prediction nomogram and diagnostic metrics
 
 ### 6. Time Interval Calculator
 
 **Use case**: Calculate time differences from dates
 
-**Steps**: 1. Navigate to **Survival** → **Data Preparation** → **Time
-Interval Calculator** 2. Assign variables: - **Start Date**: Beginning
-date - **End Date**: End date or follow-up date 3. Options: - **Output
-Unit**: Days, months, or years - **Handle Missing**: How to treat
-missing dates
+**Steps**: 1. Navigate to **Survival** → **Data Preparation** →
+**Comprehensive Time Interval Calculator** 2. Assign variables: -
+**Start Date Variable**: Beginning date - **End Date Variable**: End
+date or follow-up date 3. Options: - **Time unit for results**: Days,
+weeks, months, or years
 
 ## Interpretation Guidelines
 
@@ -155,12 +167,14 @@ missing dates
 
 - **Log-rank test**: Compares overall survival distributions
 - **p \< 0.05**: Statistically significant difference between groups
-- **Hazard Ratio \> 1**: Increased risk of event
-- **Hazard Ratio \< 1**: Decreased risk of event (protective factor)
+- **Hazard Ratio \> 1**: Higher hazard of the event
+- **Hazard Ratio \< 1**: Lower hazard of the event
+- A hazard ratio is an association; it does not show that the variable
+  causes the difference
 
 ### Clinical Interpretation
 
-- **Median survival**: Time when 50% of subjects have experienced the
+- **Median survival**: Time by which half of the subjects have had the
   event
 - **5-year survival rate**: Percentage alive at 5 years
 - **Confidence intervals**: Uncertainty range around estimates
@@ -171,13 +185,16 @@ missing dates
 ### Data Quality
 
 1.  **Check for data completeness**: Missing time or event data
-2.  **Validate event coding**: Ensure consistent coding (0/1 or No/Yes)
+2.  **Validate event coding**: Ensure consistent coding, and confirm the
+    Event Level you selected
 3.  **Review follow-up times**: Check for unrealistic or negative times
 4.  **Assess censoring pattern**: High censoring rates may bias results
 
 ### Analysis Considerations
 
-1.  **Sample size**: Minimum 10 events per variable in Cox regression
+1.  **Sample size**: Plan for the number of candidate parameters, event
+    frequency and intended precision; ten events per parameter does not
+    establish adequacy
 2.  **Proportional hazards**: Check assumption using Schoenfeld
     residuals
 3.  **Multiple comparisons**: Adjust p-values when testing multiple
@@ -187,8 +204,8 @@ missing dates
 
 ### Reporting
 
-1.  **CONSORT guidelines**: Follow reporting standards for survival
-    studies
+1.  **Reporting**: CONSORT for randomized trials, STROBE for
+    observational cohorts, REMARK for tumor marker studies
 2.  **Number at risk tables**: Always include in survival plots
 3.  **Confidence intervals**: Report alongside point estimates
 4.  **Effect sizes**: Focus on hazard ratios and median survival

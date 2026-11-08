@@ -3,8 +3,14 @@
 ## Overview
 
 Proper data preparation is crucial for reliable survival analysis. This
-vignette provides comprehensive guidance on preparing data for use with
-jSurvival, covering common data issues and their solutions.
+vignette provides guidance on preparing data for use with jSurvival,
+covering common data issues and their solutions.
+
+Use one row per independent patient for the survival analyses in this
+module. Define the endpoint, time origin, ascertainment rules and
+censoring date before recoding. Repeated visits, recurrent events and
+delayed entry need methods designed for those data. The examples below
+are instructional code; most chunks are not executed during site builds.
 
 ## Essential Data Components
 
@@ -13,8 +19,8 @@ jSurvival, covering common data issues and their solutions.
 Every survival analysis requires at minimum:
 
 1.  **Time variable**: Time from study entry to event or censoring
-2.  **Event indicator**: Binary variable indicating whether event
-    occurred
+2.  **Event indicator**: A column recording whether the event occurred;
+    you select the value that means the event as the Event Level
 
 ### Optional Variables
 
@@ -37,6 +43,8 @@ not parse rather than silently dropping rows.
 
 ``` r
 
+library(jsurvival)
+
 visits <- data.frame(
   id = 1:6,
   visit = c("2024-01-15 09:30:00", "2024-03-02 14:05:10", "2024-06-30 23:59:59",
@@ -58,19 +66,29 @@ converted <- datetimeconverter(
 The Quality Assessment panel on that example reports **6 observations, 5
 successfully parsed (83.33%), 1 failed**, with the range 2024-01-15 to
 2025-02-28 (410.1 days). The failing row is listed by row number in the
-preview table rather than quietly becoming `NA` — which matters, because
-a date that fails to parse becomes a dropped case in every downstream
+preview table rather than quietly becoming `NA`. This matters, because a
+date that fails to parse becomes a dropped case in every downstream
 survival model.
 
 #### Formats
 
-`datetime_format` accepts `auto`, `excel_serial`, `unix_epoch`,
-`ymdhms`, `ymd`, `dmy`, `mdy`, `dmyhms` and `mdyhms`. Prefer naming the
+`datetime_format` accepts `auto`, `excel_serial`, `excel_serial_1904`,
+`unix_epoch`, `ymdhms`, `ymd`, `dmy`, `mdy`, `dmyhms`, `mdyhms`,
+`dmyhm`, `mdyhm`, `ymdhm`, `ydm`, `myd` and `dym`. Prefer naming the
 format explicitly over `auto` when your data mixes conventions:
 `03/04/2024` is a different date under `dmy` than under `mdy`, and
 nothing in the value itself says which was intended. `timezone` defaults
-to the system zone — the analysis states which zone it used, so check
+to the system zone. The analysis states which zone it used, so check
 that line if your times matter to the hour.
+
+A numeric column is not automatically a date. `auto` reads numbers as
+Excel serials or Unix epoch values and warns when the result is
+implausible, so a column of clock times such as `930` is read as a date
+in 1902 with a warning: check the warning and the preview. The
+Comprehensive Time Interval Calculator refuses numbers it cannot read
+unambiguously, such as five-digit day counts whose date depends on the
+program that exported them. Format such a column as a date in the source
+file and re-import it.
 
 #### Extracting Components
 
@@ -79,14 +97,14 @@ Each `extract_*` switch adds a calendar component: `extract_year`,
 `extract_minute`, `extract_second`, `extract_dayname`,
 `extract_weeknum`, `extract_quarter` and `extract_dayofyear`. These are
 useful for checking accrual patterns and for spotting data-entry
-artefacts, such as every visit falling on the first of the month.
+artifacts, such as every visit falling on the first of the month.
 
 #### Writing Results Back to the Spreadsheet
 
-The thirteen `*_out` options — `corrected_datetime_char`,
+The thirteen `*_out` options (`corrected_datetime_char`,
 `corrected_datetime_numeric`, `year_out`, `month_out`, `monthname_out`,
 `day_out`, `hour_out`, `minute_out`, `second_out`, `dayname_out`,
-`weeknum_out`, `quarter_out` and `dayofyear_out` — are `type: Output`
+`weeknum_out`, `quarter_out` and `dayofyear_out`) are `type: Output`
 options. They add columns to the jamovi spreadsheet, and jamovi’s
 compiler does not turn Output options into arguments of the generated R
 function, so they are available **from the jamovi interface only**. From
@@ -94,17 +112,17 @@ R, read the values off the results object instead.
 
 ### Calculating Time from Dates
 
-#### Using Built-in Time Interval Calculator
+#### Using the Comprehensive Time Interval Calculator
 
 The jSurvival module includes a time interval calculator:
 
 ``` r
 
-# In jamovi: Survival → Data Preparation → Time Interval Calculator
+# In jamovi: Survival → Data Preparation → Comprehensive Time Interval Calculator
 # Assign:
-# - Start Date: Study entry date (e.g., diagnosis_date)
-# - End Date: Event/censoring date (e.g., death_date or last_followup_date)
-# - Output Unit: months or years
+# - Start Date Variable: Study entry date (e.g., diagnosis_date)
+# - End Date Variable: Event/censoring date (e.g., death_date or last_followup_date)
+# - Time unit for results: months or years
 
 # This creates a new variable with calculated time intervals
 ```
@@ -113,17 +131,19 @@ The jSurvival module includes a time interval calculator:
 
 ``` r
 
-library(lubridate)
-
-# Example data with dates
+# Simulated example data with dates
+set.seed(1)
 clinical_data <- data.frame(
   patient_id = 1:100,
   diagnosis_date = as.Date("2020-01-01") + sample(0:365, 100, replace = TRUE),
   death_date = as.Date("2020-01-01") + sample(200:1000, 100, replace = TRUE),
   last_followup_date = as.Date("2023-12-31")
 )
+clinical_data$death_date[sample(100, 35)] <- NA # these patients are alive at last follow-up
 
-# Calculate time to death or censoring
+# In this simulation only, a missing death date means verified alive at last follow-up.
+# In a clinical export, a missing death date alone does not establish vital status.
+# Calculate time to death or verified censoring
 clinical_data$death_occurred <- !is.na(clinical_data$death_date)
 clinical_data$event_date <- ifelse(clinical_data$death_occurred,
   clinical_data$death_date,
@@ -134,7 +154,7 @@ clinical_data$event_date <- as.Date(clinical_data$event_date, origin = "1970-01-
 # Time in months
 clinical_data$time_months <- as.numeric(
   difftime(clinical_data$event_date, clinical_data$diagnosis_date, units = "days")
-) / 30.44 # Average days per month
+) / (365.25 / 12) # Fixed-duration months, not calendar months
 
 # Time in years
 clinical_data$time_years <- as.numeric(
@@ -142,18 +162,33 @@ clinical_data$time_years <- as.numeric(
 ) / 365.25 # Accounting for leap years
 ```
 
+These divisions use fixed-duration units. The Time Interval Calculator
+defaults to calendar intervals for months and years and also offers a
+standardized-duration basis; dates around month ends or leap days can
+therefore give different fractional values. Choose and report one
+convention. Precalculated times in the survival analyses are used as
+supplied: selecting an output unit does not convert them.
+
 ### Handling Time Zero Issues
 
-#### Left Truncation
+#### Landmark Analysis
+
+Use **Landmark time** in the analysis instead of shifting by hand; do
+not do both, or time is shifted twice. The analysis keeps patients whose
+time is greater than the landmark, so a patient whose time equals the
+landmark exactly is excluded, and a negative landmark is refused. Left
+truncation, or delayed entry, is a different problem, and Multivariable
+Survival does not handle it.
+
+If you do need a landmark dataset outside jamovi:
 
 ``` r
 
-# Patients entering study at different times
-# Example: analyzing from landmark time (e.g., 3 months post-diagnosis)
-
-# Include only patients who survived to landmark
+# Example: analyzing from a landmark 3 months after diagnosis
 landmark_time <- 3 # months
-eligible_data <- subset(clinical_data, time_months >= landmark_time)
+
+# Include only patients still under observation after the landmark
+eligible_data <- subset(clinical_data, time_months > landmark_time)
 
 # Adjust time origin to landmark
 eligible_data$time_from_landmark <- eligible_data$time_months - landmark_time
@@ -168,19 +203,38 @@ negative_times <- clinical_data$time_months < 0
 if (any(negative_times, na.rm = TRUE)) {
   print(paste("Found", sum(negative_times, na.rm = TRUE), "negative time values"))
 
-  # Options:
-  # 1. Exclude these patients
-  clinical_data <- clinical_data[!negative_times | is.na(negative_times), ]
-
-  # 2. Set to small positive value
-  # clinical_data$time_months[negative_times] <- 0.001
-
-  # 3. Investigate data entry errors
-  # View(clinical_data[negative_times, ])
+  # Review source records before correcting or excluding any observation.
+  records_to_review <- clinical_data[which(negative_times), ]
 }
 ```
 
 ## Event Indicator Preparation
+
+The chunks from here on assume a fuller dataset than the dates above.
+This code adds the columns they use:
+
+``` r
+
+library(dplyr)
+
+n <- nrow(clinical_data)
+alive <- is.na(clinical_data$death_date)
+clinical_data$vital_status <- ifelse(alive, "Alive", "Dead")
+clinical_data$death_cause <- ifelse(alive, NA,
+  sample(c("Cancer", "Cardiovascular", "Other"), n, replace = TRUE))
+clinical_data$progression_status <- sample(c("Stable Disease", "Progressive Disease"),
+  n, replace = TRUE)
+clinical_data$recurrence_date <- clinical_data$diagnosis_date + 180
+clinical_data$recurrence_date[sample(n, 60)] <- NA
+clinical_data$age_at_diagnosis <- round(rnorm(n, 62, 10))
+clinical_data$sex <- sample(c("Female", "Male"), n, replace = TRUE)
+clinical_data$tumor_grade <- sample(paste("Grade", 1:4), n, replace = TRUE)
+clinical_data$stage <- sample(paste("Stage", c("I", "II", "III", "IV")), n, replace = TRUE)
+clinical_data$treatment <- sample(c("Standard", "Experimental"), n, replace = TRUE)
+clinical_data$histology <- sample(c("Adenocarcinoma", "Squamous", "Small cell"), n,
+  replace = TRUE, prob = c(0.55, 0.40, 0.05))
+clinical_data$biomarker_value <- rlnorm(n, meanlog = 2, sdlog = 0.6)
+```
 
 ### Creating Binary Event Variables
 
@@ -191,8 +245,8 @@ if (any(negative_times, na.rm = TRUE)) {
 # From death status variable
 clinical_data$death_binary <- ifelse(clinical_data$vital_status == "Dead", 1, 0)
 
-# From death date
-clinical_data$death_binary <- ifelse(is.na(clinical_data$death_date), 0, 1)
+# A death date can corroborate the indicator. Do not overwrite unknown status
+# with 0 simply because its death date is missing.
 
 # Verify coding
 table(clinical_data$death_binary, clinical_data$vital_status, useNA = "always")
@@ -207,13 +261,15 @@ clinical_data$progression <- ifelse(clinical_data$progression_status == "Progres
 
 # Recurrence
 clinical_data$recurrence <- ifelse(!is.na(clinical_data$recurrence_date), 1, 0)
-
-# Composite endpoint (death or progression, whichever comes first)
-clinical_data$death_or_progression <- pmax(clinical_data$death_binary,
-  clinical_data$progression,
-  na.rm = TRUE
-)
 ```
+
+A composite needs the time of the FIRST event as well as the indicator.
+**Outcome Organizer** (Survival \> Data Preparation) recodes the status
+for RFS, PFS, DFS and TTP. These need a **Recurrence/Progression
+Variable**; DFS from vital status alone is available only under
+**Multiple event levels**, with a warning. Outcome Organizer does not
+compute the time, so derive that from the earliest of the event dates
+with the Comprehensive Time Interval Calculator.
 
 ### Multiple Event Types
 
@@ -244,7 +300,7 @@ table(
 
 ``` r
 
-# Function to perform comprehensive data quality checks
+# Function to perform data quality checks
 check_survival_data <- function(data, time_var, event_var) {
   checks <- list()
 
@@ -311,15 +367,13 @@ if (sum(outliers, na.rm = TRUE) > 0) {
 ``` r
 
 # Assess missing data patterns
-library(VIM) # Visualization and Imputation of Missing values
-
 # Create missingness indicator
 clinical_data$time_missing <- is.na(clinical_data$time_months)
 clinical_data$event_missing <- is.na(clinical_data$death_binary)
 
 # Missing data summary
 missing_summary <- clinical_data %>%
-  summarise(
+  summarize(
     n_total = n(),
     time_missing = sum(time_missing),
     event_missing = sum(event_missing),
@@ -343,24 +397,24 @@ complete_data <- clinical_data[!is.na(clinical_data$time_months) &
 print(paste("Complete cases:", nrow(complete_data), "of", nrow(clinical_data)))
 ```
 
-#### Administrative Censoring
+#### Missing Vital Status
+
+Keep unknown vital status missing until source review establishes event
+status or a date at which the patient was verified event-free. A
+last-contact date alone does not establish that status. Censoring at the
+last verified event-free date assumes that the subsequent censoring is
+non-informative for the estimand, conditional on modeled covariates
+where applicable. Review loss to follow-up and perform appropriate
+sensitivity analyses. Administrative censoring applies a fixed study-end
+date and retains earlier observed events; it does not mean that everyone
+is assigned a censored outcome.
 
 ``` r
 
-# For missing death dates, censor at last known follow-up
-clinical_data$time_months_imputed <- clinical_data$time_months
-clinical_data$death_binary_imputed <- clinical_data$death_binary
-
-# If death status missing but last follow-up available, assume alive
-missing_death <- is.na(clinical_data$death_binary) & !is.na(clinical_data$last_followup_date)
-if (any(missing_death)) {
-  clinical_data$death_binary_imputed[missing_death] <- 0
-  clinical_data$time_months_imputed[missing_death] <-
-    as.numeric(difftime(clinical_data$last_followup_date[missing_death],
-      clinical_data$diagnosis_date[missing_death],
-      units = "days"
-    )) / 30.44
-}
+# Flag unknown status for review; do not impute an event-free outcome.
+unknown_status <- is.na(clinical_data$death_binary)
+records_needing_status_review <- clinical_data[unknown_status, ]
+sum(unknown_status)
 ```
 
 ## Explanatory Variable Preparation
@@ -391,10 +445,10 @@ clinical_data$treatment <- relevel(clinical_data$treatment, ref = "Standard")
 
 ``` r
 
-# Combine rare categories to ensure adequate sample sizes
+# Inspect sparse categories before specifying a clinically justified grouping.
 table(clinical_data$histology)
 
-# Combine categories with <10 patients
+# Illustration only: a count threshold cannot justify combining different diseases.
 rare_histologies <- names(table(clinical_data$histology))[table(clinical_data$histology) < 10]
 clinical_data$histology_grouped <- as.character(clinical_data$histology)
 clinical_data$histology_grouped[clinical_data$histology_grouped %in% rare_histologies] <- "Other"
@@ -419,8 +473,8 @@ clinical_data$age_group <- cut(clinical_data$age_at_diagnosis,
   include.lowest = TRUE
 )
 
-# Age as decades
-clinical_data$age_decades <- floor(clinical_data$age_at_diagnosis / 10) * 10
+# Continuous age per ten-year increase; preserves all age information.
+clinical_data$age_decades <- clinical_data$age_at_diagnosis / 10
 ```
 
 #### Biomarker Preparation
@@ -500,7 +554,10 @@ cat("Final analysis dataset:\n")
 cat("N =", nrow(analysis_data), "\n")
 cat("Events =", sum(analysis_data$death_binary), "\n")
 cat("Event rate =", round(mean(analysis_data$death_binary) * 100, 1), "%\n")
-cat("Median follow-up =", round(median(analysis_data$time_months), 1), "months\n")
+
+# Median follow-up by reverse Kaplan-Meier: median(time) would be shortened by deaths
+followup_fit <- survival::survfit(survival::Surv(time_months, 1 - death_binary) ~ 1, data = analysis_data)
+followup_fit
 ```
 
 ## Export for jamovi
@@ -552,9 +609,10 @@ write.csv(data_dictionary, "data_dictionary.csv", row.names = FALSE)
 
 Before proceeding with survival analysis, verify:
 
-Time variable contains no negative or zero values
+Time variable contains no negative values; review zero values
 
-Event indicator is properly coded (0/1 or No/Yes)
+Event indicator has a clear event value, which you select as the Event
+Level; any coding works
 
 Missing data patterns have been assessed and addressed
 
@@ -564,7 +622,10 @@ Continuous variables have been checked for outliers
 
 Data types are correct (numeric, factor, date)
 
-Sample size is adequate (rule of thumb: 10 events per variable)
+Sample size planning accounts for candidate parameters, event frequency
+and anticipated performance; a fixed events-per-variable rule does not
+establish adequacy ([Riley et al.,
+2020](https://www.bmj.com/content/368/bmj.m441.short))
 
 Follow-up time is sufficient for meaningful analysis
 
@@ -572,10 +633,13 @@ Follow-up time is sufficient for meaningful analysis
 
 1.  **Incorrect time calculation**: Using calendar time instead of time
     from study entry
-2.  **Wrong event coding**: Mixing up 0 and 1 for events and censoring
+2.  **Wrong event coding**: Selecting the censored value as the Event
+    Level
 3.  **Including impossible values**: Negative times, events after last
     follow-up
-4.  **Ignoring competing risks**: Treating all deaths as same event type
+4.  **Wrong endpoint definition**: Overall survival counts all deaths;
+    cause-specific cumulative incidence retains other causes as
+    competing events
 5.  **Improper handling of missing data**: Excluding too many patients
     without justification
 6.  **Not checking assumptions**: Ignoring data distribution and
@@ -589,7 +653,7 @@ results. Key principles include:
 1.  **Careful time calculation** with appropriate handling of dates and
     time zero
 2.  **Consistent event coding** with validation against source data
-3.  **Comprehensive quality checks** to identify and resolve data issues
+3.  **Quality checks** to identify and resolve data issues
 4.  **Appropriate handling of missing data** based on missingness
     patterns
 5.  **Proper preparation of explanatory variables** with attention to

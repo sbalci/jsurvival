@@ -16,6 +16,8 @@ used internally by the jamovi analysis wrapper and not called directly.
 
 ### Public methods
 
+- [`outcomeorganizerClass$init()`](#method-outcomeorganizerClass-init)
+
 - [`outcomeorganizerClass$clone()`](#method-outcomeorganizerClass-clone)
 
 Inherited methods
@@ -38,7 +40,6 @@ Inherited methods
 - [`jmvcore::Analysis$asProtoBuf()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-asProtoBuf)
 - [`jmvcore::Analysis$asSource()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-asSource)
 - [`jmvcore::Analysis$check()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-check)
-- [`jmvcore::Analysis$init()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-init)
 - [`jmvcore::Analysis$optionsChangedHandler()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-optionsChangedHandler)
 - [`jmvcore::Analysis$postInit()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-postInit)
 - [`jmvcore::Analysis$print()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-print)
@@ -49,6 +50,22 @@ Inherited methods
 - [`jmvcore::Analysis$setStatus()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-setStatus)
 - [`jmvcore::Analysis$translate()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-translate)
 - `outcomeorganizerBase$initialize()`
+
+------------------------------------------------------------------------
+
+### `outcomeorganizerClass$init()`
+
+Initialize the analysis, guarding against an empty variable selection.
+
+#### Usage
+
+    outcomeorganizerClass$init(noThrow = FALSE)
+
+#### Arguments
+
+- `noThrow`:
+
+  Whether initialization errors are stored in the results.
 
 ------------------------------------------------------------------------
 

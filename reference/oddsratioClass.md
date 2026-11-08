@@ -34,10 +34,12 @@ explanatory variables only.
 
 ## International Usage
 
-For international users, the function includes an outcomeLevel parameter
-to explicitly specify which outcome level represents the positive case.
-This is important for correct interpretation of likelihood ratios and
-diagnostic metrics.
+For international users, the function includes `outcomeLevel` and
+`outcomeNegativeLevel` parameters to explicitly specify which outcome
+levels represent the positive (event) and negative (reference/non-event)
+cases. Any other outcome levels are excluded with a warning. This is
+essential for unambiguous interpretation of odds ratios, likelihood
+ratios, and diagnostic metrics.
 
 ## Nomogram Features
 
@@ -46,8 +48,9 @@ When showNomogram is enabled, the function generates:
 - Prediction nomogram based on the fitted logistic model
 
 - Diagnostic metrics (sensitivity, specificity, likelihood ratios) for
-  the chosen `predictorLevel`; with `predictorLevel = NULL` they wait
-  for that choice and the model and nomogram still run
+  the chosen `predictorLevel` and `predictorNegativeLevel`; with either
+  set to `NULL` they wait for those choices while the model and nomogram
+  still run
 
 - Contingency table analysis
 
@@ -77,6 +80,8 @@ ClinicoPath Development Team
 
 ### Public methods
 
+- [`oddsratioClass$init()`](#method-oddsratioClass-init)
+
 - [`oddsratioClass$clone()`](#method-oddsratioClass-clone)
 
 Inherited methods
@@ -99,7 +104,6 @@ Inherited methods
 - [`jmvcore::Analysis$asProtoBuf()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-asProtoBuf)
 - [`jmvcore::Analysis$asSource()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-asSource)
 - [`jmvcore::Analysis$check()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-check)
-- [`jmvcore::Analysis$init()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-init)
 - [`jmvcore::Analysis$optionsChangedHandler()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-optionsChangedHandler)
 - [`jmvcore::Analysis$postInit()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-postInit)
 - [`jmvcore::Analysis$print()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-print)
@@ -110,6 +114,22 @@ Inherited methods
 - [`jmvcore::Analysis$setStatus()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-setStatus)
 - [`jmvcore::Analysis$translate()`](https://rdrr.io/pkg/jmvcore/man/Analysis.html#method-translate)
 - `oddsratioBase$initialize()`
+
+------------------------------------------------------------------------
+
+### `oddsratioClass$init()`
+
+Initialize safely when the supplied data has no selected variables.
+
+#### Usage
+
+    oddsratioClass$init(noThrow = FALSE)
+
+#### Arguments
+
+- `noThrow`:
+
+  Whether initialization errors are stored in the results.
 
 ------------------------------------------------------------------------
 
@@ -137,16 +157,21 @@ result <- oddsratio(
   explanatory = c("age", "gender", "smoking"),
   outcome = "mortality",
   outcomeLevel = "Yes",
-  predictorLevel = NULL
+  outcomeNegativeLevel = "No",
+  predictorLevel = NULL,
+  predictorNegativeLevel = NULL
 )
 
-# With nomogram and specified outcome level
+# With nomogram and specified outcome and predictor levels
 result <- oddsratio(
   data = clinical_data,
   explanatory = c("age", "treatment"),
   outcome = "recurrence",
   outcomeLevel = "Yes",
-  predictorLevel = NULL,
+  outcomeNegativeLevel = "No",
+  diagnosticPredictor = "treatment",
+  predictorLevel = "Treated",
+  predictorNegativeLevel = "Control",
   showNomogram = TRUE
 )
 } # }

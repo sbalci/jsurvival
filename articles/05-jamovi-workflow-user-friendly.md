@@ -2,6 +2,14 @@
 
 ## Introduction
 
+For a ready-to-run starting point, open `data/survival_example.omv` from
+the source repository, or choose **Survival Analysis: groups and age
+adjustment** in the updated module’s Data Library. It contains 150
+simulated patients and a saved analysis with age adjustment, plots and
+RMST. Every analysis has a separate `*_example.omv` file in `data/`;
+`GUI_EXAMPLES.md` describes their saved settings and tested options.
+Install a rebuilt module to see the new library entries.
+
 This guide will walk you through a complete survival analysis workflow
 using the jSurvival module in jamovi. We will start with a simple
 research question and go through all the steps, from preparing the data
@@ -27,24 +35,17 @@ columns:
 - `Age`: The patient’s age at the start of the study.
 - `Tumor_Grade`: The grade of the patient’s tumor (“I”, “II”, or “III”).
 
-![Example dataset in jamovi](images/workflow-data-table.png)
-
-Example dataset in jamovi
-
 ## Step 2: Single-Arm Survival Analysis
 
 Before we compare the treatment groups, let’s first look at the overall
 survival of all patients in our study. This is called a “single-arm”
 survival analysis.
 
-1.  Go to **Analyses \> jSurvival \> Survival Analysis**.
+1.  Go to **Survival \> ClinicoPath Survival \> Single Arm Survival**.
 2.  In the **Time Elapsed** box, put the `Months_Followup` variable.
 3.  In the **Outcome** box, put the `Event_Status` variable.
-4.  For **Outcome Level**, select “Deceased” as the event.
-
-![Single-arm survival setup](images/workflow-singlearm-setup.png)
-
-Single-arm survival setup
+4.  For **Event Level**, select “Deceased”.
+5.  Open **Plots** and tick **Survival / cumulative-incidence plot**.
 
 **Interpretation:**
 
@@ -58,70 +59,73 @@ your study population.
 Now, let’s address our main research question: does the new drug improve
 survival?
 
-1.  In the same analysis window, add the `Treatment_Group` variable to
-    the **Explanatory Variable** box.
-
-![Two-group survival setup](images/workflow-2-group-setup.png)
-
-Two-group survival setup
+1.  Go to **Survival \> ClinicoPath Survival \> Survival Analysis** and
+    add `Treatment_Group` to **Explanatory Variable**, with the same
+    Time Elapsed, Outcome and Event Level.
+2.  Open **Survival Plots**, then tick **Survival curves** and
+    **P-values**.
 
 **Interpretation:**
 
 - **The Plot:** You will now see two survival curves on the Kaplan-Meier
   plot, one for each treatment group. Is the curve for the “New Drug”
   group above the curve for the “Standard Care” group?
-- **The p-value:** The log-rank test will give you a p-value. If it’s
-  less than 0.05, you can conclude that there is a statistically
-  significant difference in survival between the two treatments.
+- **The p-value:** With **P-values** ticked, the log-rank p-value is
+  printed on the plot. A small p-value is evidence against equal
+  survival under the test assumptions. Report the estimate and its
+  uncertainty; the p-value does not establish treatment benefit or the
+  size of a difference.
 - **Median Survival:** Compare the median survival times for the two
   groups. How big is the difference? Is it clinically meaningful?
 
 #### Interpretation (example wording)
 
-- New Drug shows higher survival with log‑rank p = 0.04. Median OS
-  improves from 11 to 15 months (+4 months). Weigh benefits against
-  adverse effects and cost.
+Fill in the values from your own output:
+
+- New Drug is associated with longer survival (log-rank p = \[p\]).
+  Median overall survival was \[median 1\] months with Standard Care and
+  \[median 2\] months with New Drug. Weigh this against adverse effects
+  and cost.
 
 ## Step 4: Adjusting for Other Factors (Multivariable Analysis)
 
-It’s possible that the difference in survival we see between the
-treatment groups is not just due to the treatment itself, but also due
-to other factors, such as the age of the patients or their tumor grade.
-For example, if the patients in the “New Drug” group were younger on
-average, this could be confounding the results.
+The difference in survival between the treatment groups may reflect
+other factors, such as the age of the patients or their tumor grade, and
+not only the treatment. For example, if the patients in the “New Drug”
+group were younger on average, this could be confounding the results.
 
 To account for this, we can perform a **multivariable Cox regression
 analysis**. This allows us to look at the effect of the treatment while
 simultaneously adjusting for other variables.
 
-1.  Go to **Analyses \> jSurvival \> Cox Proportional Hazards
-    Regression**.
-2.  Assign your **Time Elapsed** and **Outcome** variables as before.
-3.  In the **Covariates** box, add `Treatment_Group`, `Age`, and
-    `Tumor_Grade`.
-
-![Cox regression setup in jSurvival](images/workflow-cox-setup.png)
-
-Cox regression setup in jSurvival
+1.  Go to **Survival \> ClinicoPath Survival \> Multivariable Survival
+    Analysis**.
+2.  Set **Time Elapsed**, **Outcome** and **Event Level** as before.
+3.  Put `Treatment_Group` and `Tumor_Grade` in **Explanatory
+    Variables**, and `Age` in **Continuous Explanatory Variable**.
 
 **Interpretation:**
 
 The main output of the Cox regression is the **Hazard Ratio (HR)**.
 
-- **Hazard Ratio for Treatment:** Look at the hazard ratio for the
-  `Treatment_Group`. A hazard ratio of less than 1 for the “New Drug”
-  group would suggest that the new drug is associated with a lower risk
-  of death, even after adjusting for age and tumor grade.
+- **Hazard Ratio for Treatment:** The table compares each level with the
+  reference, which is the first level of the variable (alphabetical
+  unless you reorder the levels in the data tab). Here the row reads
+  *Standard Care* against *New Drug*, so an HR above 1 favors the new
+  drug. To read it the other way, move Standard Care to the top of the
+  variable’s levels. An adjusted HR is an association after adjustment
+  for the variables in the model, not proof of a treatment effect.
 - **Other Variables:** You can also look at the hazard ratios for `Age`
   and `Tumor_Grade` to see if they are also significantly associated
   with survival.
 
 #### Interpretation (Cox model)
 
-- Treatment HR = 0.72 (95% CI 0.55–0.95, p = 0.02): 28% lower hazard
-  after adjusting for age and grade.
+- Standard Care against New Drug: HR = \[HR\] (95% CI \[lower\] to
+  \[upper\], p = \[p\]), adjusted for age and grade. An HR of 1.25, for
+  example, means a 25% higher hazard of death at any given time.
 - Confirm proportional hazards; if violated, consider stratification or
-  time‑varying effects.
+  time-varying effects.
 
 ## Step 5: Checking the Proportional Hazards Assumption
 
@@ -131,14 +135,12 @@ covariates (e.g., treatment, age) on survival is constant over time. If
 this assumption is violated, the results of the Cox regression may not
 be reliable.
 
-The jSurvival module provides tools to check this assumption.
+The jSurvival module provides a check of this assumption.
 
-1.  In the Cox regression analysis window, under **Assumption Checks**,
-    select **Schoenfeld Residuals Plot**.
-
-![Schoenfeld residuals plot](images/workflow-schoenfeld-plot.png)
-
-Schoenfeld residuals plot
+1.  In **Multivariable Survival Analysis**, open **Plots** and tick
+    **Proportional hazards assumption**; it reports the test and draws
+    the Schoenfeld plots. (In Survival Analysis the same option is
+    labeled **Proportional hazards test**.)
 
 **Interpretation:**
 
@@ -166,7 +168,8 @@ questions.
 ### Common Pitfalls
 
 - Confounding: Apparent group differences may be explained by age,
-  stage, or other factors—verify with Cox regression.
+  stage, or other factors. Adjust with Cox regression; adjustment covers
+  only the factors you measured.
 - Proportional hazards: Check assumptions; if violated, consider
   stratification, time‑varying effects, or RMST.
 - Data preparation: Validate event coding and time derivations when

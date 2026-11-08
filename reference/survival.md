@@ -295,8 +295,9 @@ survival(
 
 - rate_multiplier:
 
-  Specify the multiplier for incidence rates (e.g., 100 for rates per
-  100 person-years, 1000 for rates per 1000 person-years).
+  Specify the multiplier for incidence rates. Rates are per this many
+  person-units of the selected time type, for example per 100
+  person-months when time is in months.
 
 - rmst_analysis:
 
@@ -349,13 +350,15 @@ survival(
 - age_group_cutpoints:
 
   Comma-separated age cutpoints for creating age groups. For example,
-  50, 65, 75 creates groups less than 50, 50-64, 65-74, 75 and above.
+  50, 65, 75 creates groups 50 or younger, over 50 to 65, over 65 to 75,
+  and over 75. Each upper cutpoint is included in the preceding group.
 
 - age_time_scale:
 
-  Use biological age as the time axis instead of follow-up time. The Cox
-  model becomes Surv(age_at_entry, age_at_event, event). Most rigorous
-  for cancer epidemiology where age drives risk.
+  Use chronological age as the time axis instead of follow-up time. The
+  Cox model becomes Surv(age_at_entry, age_at_event, event). Suited to
+  cohorts followed for disease onset; for patients timed from diagnosis
+  it is a sensitivity analysis.
 
 - age_standardization:
 
@@ -375,15 +378,19 @@ survival(
 
 - adjusted_curves:
 
-  Show Kaplan-Meier-style survival curves adjusted for age using the Cox
-  model. Displays what the survival curves would look like after
-  removing the effect of age differences between groups.
+  Show survival curves standardized for age with the Cox model (direct
+  standardization). Every patient is assigned to each group in turn, so
+  all groups share the age distribution of the model cohort. Uses the
+  same fitted model as the age-adjusted table, retaining baseline and
+  age-group stratification when requested. Stratified curves stop at the
+  shortest observed stratum follow-up; standardized confidence bands are
+  not provided.
 
 - remark_checklist:
 
-  Display a REMARK (REporting recommendations for tumor MARKer
-  prognostic studies) checklist showing which reporting items are
-  addressed by the current analysis configuration.
+  Display the 20-item REMARK (REporting recommendations for tumor MARKer
+  prognostic studies) checklist, marking the items reported in this
+  output and those to report in the manuscript.
 
 - residual_diagnostics:
 
@@ -432,8 +439,8 @@ survival(
 
 - spline_scale:
 
-  Scale for spline-based models. Hazard scale models log hazard
-  function, odds scale models log cumulative odds, normal scale models
+  Scale for spline-based models. Hazard scale models log cumulative
+  hazard, odds scale models log cumulative odds, normal scale models
   normal scores.
 
 - compare_distributions:
@@ -481,15 +488,16 @@ survival(
   Select a continuous predictor variable to assess for non-linear
   effects. The variable will be modeled with restricted cubic splines
   and compared to a linear model. Common candidates include age, tumor
-  size, biomarker levels, and follow-up duration.
+  size and biomarker levels.
 
 - rcs_knots:
 
   Number of knots for restricted cubic splines. 3 knots = 2 df
   (simplest), 4 knots = 3 df (recommended default), 5 knots = 4 df (more
-  flexible). Knots are placed at Harrell-recommended percentiles. More
-  knots allow detection of complex non-linear patterns but may overfit
-  with small samples.
+  flexible). Uses natural splines with interior knots at equally spaced
+  quantiles and boundary knots at the observed minimum and maximum, as
+  in splines::ns(). More knots allow detection of complex non-linear
+  patterns but may overfit with small samples.
 
 - bootstrapValidation:
 
@@ -504,7 +512,7 @@ survival(
 
   Random seed for the reproducible bootstrap internal validation. Change
   this value to obtain a different bootstrap draw; the default (42)
-  reproduces the previous fixed behaviour.
+  reproduces the previous fixed behavior.
 
 ## Value
 
@@ -519,16 +527,12 @@ A results object containing:
 | `results$strongWarnings`                    |     |     |     |     | a html         |
 | `results$warnings`                          |     |     |     |     | a html         |
 | `results$infoMessages`                      |     |     |     |     | a html         |
-| `results$medianSurvivalHeading`             |     |     |     |     | a preformatted |
 | `results$medianSummary`                     |     |     |     |     | a preformatted |
 | `results$medianTable`                       |     |     |     |     | a table        |
-| `results$medianSurvivalHeading3`            |     |     |     |     | a preformatted |
 | `results$medianSurvivalExplanation`         |     |     |     |     | a html         |
-| `results$coxRegressionHeading`              |     |     |     |     | a preformatted |
 | `results$coxSummary`                        |     |     |     |     | a preformatted |
 | `results$coxTable`                          |     |     |     |     | a table        |
 | `results$tCoxtext2`                         |     |     |     |     | a html         |
-| `results$coxRegressionHeading3`             |     |     |     |     | a preformatted |
 | `results$coxRegressionExplanation`          |     |     |     |     | a html         |
 | `results$ageAdjustedCoxHeading`             |     |     |     |     | a preformatted |
 | `results$ageAdjustedCoxTable`               |     |     |     |     | a table        |
@@ -541,20 +545,17 @@ A results object containing:
 | `results$ageStandardizationInterpretation`  |     |     |     |     | a html         |
 | `results$ageStratifiedKMPlot`               |     |     |     |     | an image       |
 | `results$adjustedCurvesPlot`                |     |     |     |     | an image       |
+| `results$remarkItems`                       |     |     |     |     | a table        |
 | `results$remarkChecklist`                   |     |     |     |     | a html         |
 | `results$cox_ph`                            |     |     |     |     | a preformatted |
 | `results$phInterpretation`                  |     |     |     |     | a html         |
 | `results$plot8`                             |     |     |     |     | an image       |
-| `results$survivalTablesHeading`             |     |     |     |     | a preformatted |
 | `results$survTableSummary`                  |     |     |     |     | a preformatted |
 | `results$survTable`                         |     |     |     |     | a table        |
-| `results$survivalTablesHeading3`            |     |     |     |     | a preformatted |
 | `results$survivalTablesExplanation`         |     |     |     |     | a html         |
-| `results$personTimeHeading`                 |     |     |     |     | a preformatted |
 | `results$personTimeTable`                   |     |     |     |     | a table        |
 | `results$personTimeSummary`                 |     |     |     |     | a html         |
 | `results$personTimeExplanation`             |     |     |     |     | a html         |
-| `results$rmstHeading`                       |     |     |     |     | a preformatted |
 | `results$rmstTable`                         |     |     |     |     | a table        |
 | `results$rmstSummary`                       |     |     |     |     | a preformatted |
 | `results$rmstExplanation`                   |     |     |     |     | a html         |
@@ -562,7 +563,6 @@ A results object containing:
 | `results$residualsTable`                    |     |     |     |     | a table        |
 | `results$export_survival_data`              |     |     |     |     | an output      |
 | `results$survivalExportSummary`             |     |     |     |     | a html         |
-| `results$pairwiseComparisonHeading`         |     |     |     |     | a preformatted |
 | `results$pairwiseTable`                     |     |     |     |     | a table        |
 | `results$pairwiseSummary`                   |     |     |     |     | a preformatted |
 | `results$weightedLogRankTable`              |     |     |     |     | a table        |
@@ -571,7 +571,6 @@ A results object containing:
 | `results$plot2`                             |     |     |     |     | an image       |
 | `results$plot3`                             |     |     |     |     | an image       |
 | `results$plot6`                             |     |     |     |     | an image       |
-| `results$survivalPlotsHeading3`             |     |     |     |     | a preformatted |
 | `results$survivalPlotsExplanation`          |     |     |     |     | a html         |
 | `results$plot7`                             |     |     |     |     | an image       |
 | `results$residualsPlot`                     |     |     |     |     | an image       |

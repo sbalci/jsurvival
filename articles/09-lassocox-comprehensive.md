@@ -1,13 +1,5 @@
 # Lasso-Cox Regression for Variable Selection in Survival Analysis
 
-> **Not yet released.** The `lassocox` analysis is not part of jsurvival
-> 1.0.4. It is on a development or test menu route in the umbrella
-> ClinicoPath module and does not appear in any jamovi menu yet. It is
-> documented here ahead of a future release, so its options, defaults
-> and output may still change. For the analyses jsurvival ships today
-> see the [jsurvival articles
-> index](https://www.serdarbalci.com/jsurvival/articles/).
-
 ## Introduction to Lasso-Cox Regression
 
 ### What is Lasso-Cox Regression?
@@ -20,7 +12,7 @@ when:
 - You have many potential predictors (high-dimensional data)
 - The number of variables approaches or exceeds the sample size
 - You want to identify the most important prognostic factors
-- You need to prevent overfitting in survival models
+- You need to reduce overfitting in survival models
 
 #### Key Advantages
 
@@ -28,8 +20,8 @@ when:
     important variables to exactly zero
 2.  **Handles High-Dimensional Data**: Works even when p \>= n (more
     variables than observations)
-3.  **Prevents Overfitting**: Regularization improves model
-    generalizability
+3.  **Reduces Overfitting**: Regularization shrinks coefficients, which
+    can improve performance in new patients
 4.  **Clinical Interpretability**: Produces sparse models with selected
     key variables
 5.  **Cross-Validation**: Optimal tuning parameter selection through CV
@@ -50,7 +42,11 @@ when:
 
 - **Survival Outcome**: Time-to-event data with censoring
 - **Multiple Predictors**: At least 2 variables (typically many more)
-- **Adequate Events**: At least 5-10 events for reliable estimation
+- **Adequate Events**: Enough events to estimate the model; for planning
+  a prediction model use a formal sample size calculation (Riley et al.,
+  [Stat Med 2019](https://doi.org/10.1002/sim.7992); [BMJ
+  2020](https://doi.org/10.1136/bmj.m441)) rather than an
+  events-per-variable rule
 - **No Perfect Separation**: Variables shouldn’t perfectly predict
   outcomes
 
@@ -58,7 +54,9 @@ when:
 
 ### The Lasso-Cox Model
 
-The Lasso-Cox regression minimizes the penalized partial log-likelihood:
+The Lasso-Cox regression maximizes the penalized partial log-likelihood
+(equivalently, it minimizes
+$`-\ell(\beta) + \lambda \sum_{j=1}^p |\beta_j|`$):
 
 ``` math
 \ell(\beta) - \lambda \sum_{j=1}^p |\beta_j|
@@ -82,21 +80,21 @@ $`\sum_{j=1}^p |\beta_j|`$ is the L1 penalty (Lasso)
 #### Concordance Index (C-index)
 
 - Measures discriminative ability
-- Range: 0.5 (random) to 1.0 (perfect)
-- Interpretation:
-  - \< 0.6: Poor discrimination
-
-  - 0.6-0.7: Fair discrimination
-
-  - 0.7-0.8: Good discrimination
-
-  - > 0.8: Excellent discrimination
+- Range: 0 to 1 among comparable pairs; 0.5 corresponds to chance
+  ordering and values below 0.5 indicate reversed ordering. It can be
+  undefined when no pairs are comparable.
+- Higher values indicate better ordering of event times. There are no
+  universal clinical acceptance bands. The displayed C-index is apparent
+  performance in the development patients and does not establish
+  calibration or usefulness for a clinical decision.
 
 #### Risk Stratification
 
-- **Log-rank Test**: Tests survival differences between risk groups
-- **Hazard Ratio**: Compares high vs. low risk groups
 - **Survival Curves**: Visual assessment of risk group separation
+
+The groups are formed from the same patients used to fit the model, so
+their separation is optimistic. The analysis reports no log-rank p-value
+or group hazard ratio for this reason.
 
 ## Clinical Examples
 
@@ -107,8 +105,8 @@ from clinical variables.
 
 ``` r
 
-# Load example data (would be provided in package)
-# For this example, we'll simulate realistic lung cancer data
+# For this example, we simulate lung cancer data
+library(jsurvival)
 set.seed(123)
 n <- 180
 lung_data <- data.frame(
@@ -142,8 +140,7 @@ str(lung_data)
 
 ``` r
 
-# In jamovi, you would select:
-# Analyses → ClinicoPath Survival → Lasso-Cox Regression
+# In jamovi: Survival > Penalized Cox Regression > LASSO Cox
 
 # Programmatically (if running in R):
 lung_result <- lassocox(
@@ -151,6 +148,7 @@ lung_result <- lassocox(
   elapsedtime = "follow_up_months",
   outcome = "progression",
   outcomeLevel = "Yes",
+  censorLevel = "No",
   explanatory = c("age", "gender", "stage", "histology", "smoking_status", 
                   "tumor_size_cm", "ecog_ps", "hemoglobin", "wbc_count", "creatinine"),
   lambda = "lambda.1se",  # Use 1-SE rule for more parsimonious model
@@ -159,21 +157,12 @@ lung_result <- lassocox(
 )
 ```
 
-#### Expected Results Interpretation
+#### Results
 
-1.  **Model Summary**:
-    - Total variables: 10
-    - Selected variables: 3-5 (with lambda.1se)
-    - Selection proportion: 30-50%
-2.  **Selected Variables** (typical results):
-    - `stage`: Strong prognostic factor (HR \> 1)
-    - `ecog_ps`: Performance status effect
-    - `age`: Age-related risk
-    - `tumor_size_cm`: Tumor burden effect
-3.  **Performance Metrics**:
-    - C-index: 0.65-0.75 (fair to good discrimination)
-    - Log-rank p-value: \< 0.05 (significant stratification)
-    - Hazard ratio: 2.0-3.0 (moderate to strong risk stratification)
+These predictors are simulated independently of the outcome. LASSO may
+retain no predictors or select noise, depending on the generated sample
+and fold allocation. An empty model has an apparent C-index of 0.5; a
+nonempty model can look better by chance.
 
 ### Example 2: High-Dimensional Genomic Study
 
@@ -216,32 +205,33 @@ cat("\nEvents:", sum(genomic_data$death == "Yes"), "deaths")
 ``` r
 
 # For high-dimensional data, consider:
-genomic_result <- lassocox(
+# explanatory reads the names written in the call, so a stored vector of
+# names goes through do.call()
+genomic_predictors <- c("age", "stage", paste0("GENE_", sprintf("%03d", 1:n_genes)))
+
+genomic_result <- do.call(lassocox, list(
   data = genomic_data,
   elapsedtime = "survival_months",
   outcome = "death",
   outcomeLevel = "Yes",
-  explanatory = c("age", "stage", paste0("GENE_", sprintf("%03d", 1:n_genes))),
+  censorLevel = "No",
+  explanatory = genomic_predictors,
   lambda = "lambda.1se",  # Prefer 1-SE rule for high-dimensional data
   nfolds = 5,             # Reduce folds for small samples
   standardize = TRUE      # Essential for genomic data
-)
+))
 ```
 
-#### Expected High-Dimensional Results
+#### High-Dimensional Results
 
-1.  **Variable Selection**:
-    - Out of 502 variables, typically 5-15 selected
-    - Selection proportion: 1-3%
-    - Identifies sparse prognostic signature
-2.  **Clinical Interpretation**:
-    - Usually includes key clinical variables (age, stage)
-    - Selects few high-impact genes
-    - Creates interpretable prognostic model
+The gene columns are pure noise here, so any selected gene is a false
+positive. This example shows the shape of the call, not a signature.
 
 ### Example 3: Cardiovascular Risk Prediction
 
-Analyzing cardiovascular risk factors with correlated predictors.
+Analyzing cardiovascular risk factors. Clinically these predictors are
+correlated, but in this simulation each is drawn independently of the
+others and of the outcome.
 
 ``` r
 
@@ -289,10 +279,11 @@ cvd_result <- lassocox(
   elapsedtime = "time_to_event_years",
   outcome = "cv_event",
   outcomeLevel = "Event",
+  censorLevel = "No Event",
   explanatory = c("age", "gender", "bmi", "systolic_bp", "diastolic_bp",
                   "total_cholesterol", "hdl_cholesterol", "ldl_cholesterol",
                   "diabetes", "hypertension", "smoking", "statin_use"),
-  lambda = "lambda.min",  # Use lambda.min for established risk factors
+  lambda = "lambda.min",
   nfolds = 10
 )
 ```
@@ -303,30 +294,56 @@ cvd_result <- lassocox(
 
 #### 1. Model Summary Table
 
-- **Total Variables**: Number of candidate predictors
-- **Selected Variables**: Variables with non-zero coefficients
-- **Selection Proportion**: Percentage of variables retained
-- **Optimal Lambda**: Selected regularization parameter
-- **Sample Size & Events**: Data characteristics
+- **Encoded Predictor Columns**: Number of candidate columns after
+  factors are expanded
+- **Selected Predictor Columns**: Columns with non-zero coefficients
+- **Column Selection Proportion**: Percentage of columns retained
+- **Optimal Lambda** and **Penalty Selected By**: The selected penalty
+  and the rule used
+- **Sample Size**, **Number of Events** and **Censoring Rate**: Data
+  characteristics
+- **Original Candidate Predictors** and **Selected Original
+  Predictors**: The same counts before encoding
 
-#### 2. Coefficients Table
+#### 2. Penalized Coefficients Table
 
 - **Variable**: Selected predictor names
-- **Coefficient**: Log hazard ratio (β)
-- **Hazard Ratio**: exp(β), interpretable effect size
-- **Importance**: Absolute coefficient value (variable importance)
+- **Penalized Coefficient**: Shrunken log hazard ratio (β), without a
+  confidence interval
+- **Penalized Hazard Ratio**: exp(β), shrunken and without a confidence
+  interval
+- **Scale-Adjusted Magnitude \|beta\| x SD**: Absolute change in the
+  linear predictor per 1 SD of that column. This is descriptive, not a
+  causal importance.
 
-#### 3. Performance Table
+#### 3. Apparent Development Performance Table
 
-- **C-index**: Discriminative ability measure
-- **Log-rank p-value**: Risk stratification significance
-- **Hazard Ratio**: High vs. low risk group comparison
+- **Apparent C-index**: Discrimination in the same patients used to fit
+  the model, which is optimistic
 
 ### Clinical Interpretation Guidelines
 
 #### Coefficient Interpretation
 
+A penalized coefficient is shrunken toward zero and depends on the unit
+of the predictor, so do not grade it as a strong or weak effect. A
+positive coefficient means a higher hazard with higher values of that
+column, and a negative coefficient a lower hazard. These are
+associations, not causal effects.
+
 #### C-index Interpretation
+
+A C-index describes ordering among comparable patient pairs, with tied
+predictions receiving half credit. Values range from 0 to 1 when
+comparable pairs exist; 0.5 is chance ordering and values below 0.5
+indicate reversed ordering. It is undefined when no pairs are
+comparable. There are no universal cutoffs for clinical usefulness.
+Interpret discrimination alongside its uncertainty, case mix, censoring,
+calibration and the decisions the model would inform. The displayed
+development-sample estimate is apparent performance; lambda
+cross-validation does not validate that estimate. See the [survival
+concordance
+reference](https://stat.ethz.ch/R-manual/R-devel/library/survival/html/concordance.html).
 
 ### Visualization Interpretation
 
@@ -340,16 +357,24 @@ cvd_result <- lassocox(
 
 #### 2. Coefficient Plot
 
-- **Red bars**: Risk factors (positive coefficients)
-- **Blue bars**: Protective factors (negative coefficients)
-- **Bar length**: Coefficient magnitude (effect size)
+- **Red bars**: Higher hazard (positive coefficients)
+- **Blue bars**: Lower hazard (negative coefficients)
+- **Bar length**: Penalized coefficient on its original predictor scale;
+  lengths cannot rank clinical importance across different units.
 
 #### 3. Survival Curves
 
-- **Separation**: Better separation indicates stronger risk
-  stratification
-- **P-value**: Log-rank test significance
+- **Separation**: Describes the development patients after fitting and
+  grouping on those same patients; separation is optimistic and does not
+  establish predictive performance in new patients.
 - **Risk tables**: Numbers at risk over time
+
+#### Cardiovascular Results
+
+With `lambda.min`, a weaker penalty than `lambda.1se`, this run still
+selects no predictor and reports an apparent C-index of 0.5, as expected
+for noise. A different seed could select a few, and they would be false
+positives.
 
 ## Clinical Applications
 
@@ -357,27 +382,11 @@ cvd_result <- lassocox(
 
 #### Genomic Profiling
 
-``` r
+The call is the one in Example 2: `lambda.1se`, with every gene as a
+candidate predictor.
 
-# Typical biomarker discovery workflow
-biomarker_analysis <- lassocox(
-  data = genomic_data,
-  elapsedtime = "survival_time",
-  outcome = "progression",
-  outcomeLevel = "Yes",
-  explanatory = gene_variables,  # Hundreds of genes
-  lambda = "lambda.1se",         # Prefer sparse models
-  standardize = TRUE            # Essential for genomic data
-)
-
-# Expected outcome: 3-10 key genes selected from hundreds
-```
-
-#### Clinical Applications:
-
-- **Cancer Prognosis**: Identify prognostic gene signatures
-- **Drug Development**: Biomarker-driven patient stratification
-- **Personalized Medicine**: Tailored treatment selection
+Any signature found this way is a candidate. It needs validation in
+independent patients before it means anything clinically.
 
 ### 2. Clinical Risk Prediction
 
@@ -385,44 +394,32 @@ biomarker_analysis <- lassocox(
 
 ``` r
 
-# Clinical risk model development
+# Clinical risk model development on the bundled lassocox_breast_cancer data
+data("lassocox_breast_cancer", package = "jsurvival")
+
 risk_model <- lassocox(
-  data = clinical_data,
-  elapsedtime = "follow_up_time",
+  data = lassocox_breast_cancer,
+  elapsedtime = "survival_months",
   outcome = "death",
-  outcomeLevel = "Yes",
-  explanatory = clinical_variables,  # 10-50 clinical factors
+  outcomeLevel = "Dead",
+  censorLevel = "Alive",
+  explanatory = c("age", "tumor_size_cm", "grade", "stage", "lymph_nodes_positive",
+                  "er_status", "pr_status", "her2_status", "ki67_percent", "lvi"),
   lambda = "lambda.min",            # Retain more clinical variables
   nfolds = 10
 )
-
-# Creates parsimonious clinical risk score
 ```
 
-#### Applications:
+This run excludes 5 of 250 rows for missing data and selects one column,
+`ki67_percent`, with a penalized hazard ratio of 1.01 per percentage
+point and an apparent C-index of 0.62. Both figures are optimistic until
+validated, and the shrunken hazard ratio has no confidence interval.
 
-- **ICU Prognosis**: Predict mortality in critical care
-- **Surgical Risk**: Pre-operative risk stratification
-- **Chronic Disease**: Long-term outcome prediction
+### 3. Treatment Effect
 
-### 3. Treatment Response Prediction
-
-#### Precision Medicine
-
-``` r
-
-# Treatment response prediction
-treatment_model <- lassocox(
-  data = treatment_data,
-  elapsedtime = "time_to_progression",
-  outcome = "progression",
-  outcomeLevel = "Yes",
-  explanatory = c(baseline_factors, biomarkers),
-  lambda = "lambda.1se"
-)
-
-# Identifies predictors of treatment response
-```
+A main-effects LASSO Cox model selects prognostic variables. It does not
+show which patients benefit from a treatment, because that requires a
+treatment-by-marker interaction, preferably in a randomized trial.
 
 ## Advanced Topics
 
@@ -430,28 +427,22 @@ treatment_model <- lassocox(
 
 #### Cross-Validation Strategy
 
-1.  **Internal Validation**: Built-in cross-validation for λ selection
+1.  **Tuning**: Built-in cross-validation selects λ; the displayed
+    C-index is still apparent performance
 2.  **External Validation**: Test on independent dataset
 3.  **Bootstrap Validation**: Assess model stability
 4.  **Temporal Validation**: Validate on more recent data
 
-#### Validation Metrics
+#### Validation Designs
 
-``` r
+- **Split-sample**: Fit on one part of the data and test on the rest.
+  This uses the data less efficiently than the options below.
+- **Time-based**: Fit on patients enrolled earlier and test on those
+  enrolled later.
+- **Multi-center**: Fit in some centers and test in another.
 
-# Key validation approaches:
-# 1. Split-sample validation
-train_data <- sample_frac(full_data, 0.7)
-test_data <- anti_join(full_data, train_data)
-
-# 2. Time-based validation
-early_cohort <- filter(full_data, enrollment_year <= 2015)
-recent_cohort <- filter(full_data, enrollment_year > 2015)
-
-# 3. Multi-center validation
-center_A <- filter(full_data, center == "A")
-other_centers <- filter(full_data, center != "A")
-```
+These checks are done outside this analysis. Apply the frozen
+coefficients to the new patients; do not refit the model there.
 
 ### Dealing with Missing Data
 
@@ -459,48 +450,27 @@ other_centers <- filter(full_data, center != "A")
 
 1.  **Complete Case Analysis**: Default approach
 2.  **Multiple Imputation**: For missing at random data
-3.  **Indicator Variables**: For missing not at random
-4.  **Domain Knowledge**: Clinical expertise for imputation
+3.  **Sensitivity Analysis**: Missing-not-at-random mechanisms need
+    explicit assumptions and sensitivity analyses; a missingness
+    indicator alone does not resolve the bias
+4.  **Domain Knowledge**: Prespecify imputation models with clinical and
+    statistical input
 
-#### Missing Data Patterns
+The analysis drops rows with a missing value in any selected variable,
+and **Rows Excluded (Missing Data)** in the Model Summary reports how
+many. Multiple imputation is done with other tools before this analysis.
 
-``` r
-
-# Check missing data patterns
-library(VIM)
-missing_pattern <- aggr(clinical_data, col = c('navyblue', 'red'), 
-                        numbers = TRUE, sortVars = TRUE)
-
-# Handle missing data before Lasso-Cox
-# Option 1: Multiple imputation
-library(mice)
-imputed_data <- mice(clinical_data, m = 5, method = 'pmm')
-complete_data <- complete(imputed_data)
-
-# Option 2: Domain-specific imputation
-clinical_data$biomarker[is.na(clinical_data$biomarker)] <- median(clinical_data$biomarker, na.rm = TRUE)
-```
+For performance assessment, fit learned imputation and other learned
+preprocessing within each training resample. jsurvival does not pool
+LASSO fits across multiply imputed datasets.
 
 ### Feature Engineering
 
 #### Variable Transformation
 
-``` r
-
-# Log transformation for skewed variables
-clinical_data$log_biomarker <- log(clinical_data$biomarker + 1)
-
-# Polynomial terms for non-linear effects
-clinical_data$age_squared <- clinical_data$age^2
-
-# Interaction terms
-clinical_data$age_stage <- clinical_data$age * as.numeric(clinical_data$stage)
-
-# Binning continuous variables
-clinical_data$age_group <- cut(clinical_data$age, 
-                              breaks = c(0, 50, 65, 80, 100),
-                              labels = c("Young", "Middle", "Elderly", "Very Elderly"))
-```
+Log-transform a skewed biomarker before adding it as a candidate. Add
+polynomial or interaction columns only when they are planned in advance.
+Avoid binning a continuous predictor, because it discards information.
 
 ## Troubleshooting Common Issues
 
@@ -510,40 +480,20 @@ clinical_data$age_group <- cut(clinical_data$age,
 
 **Solutions**:
 
-``` r
-
-# Try lambda.min instead of lambda.1se
-result <- lassocox(..., lambda = "lambda.min")
-
-# Reduce regularization strength manually
-result <- lassocox(..., alpha = 0.5)  # Elastic net (if supported)
-
-# Check for high correlation among predictors
-cor_matrix <- cor(predictors, use = "complete.obs")
-high_cor <- which(abs(cor_matrix) > 0.9 & cor_matrix != 1, arr.ind = TRUE)
-```
+- Check whether this is the right answer: with no real signal, selecting
+  nothing is correct.
+- Set **Lambda selection rule** to **Minimum CV error** instead of
+  **1-SE rule**.
+- Review predictors that are highly correlated with each other.
 
 ### 2. Too Many Variables Selected
 
-**Problem**: Model selects too many variables (underfitting)
+**Problem**: Model selects too many variables (overfitting)
 
 **Solutions**:
 
-``` r
-
-# Use lambda.1se for more regularization
-result <- lassocox(..., lambda = "lambda.1se")
-
-# Increase number of CV folds
-result <- lassocox(..., nfolds = 10)
-
-# Pre-filter variables by univariate significance
-univariate_p <- sapply(predictors, function(x) {
-  cox_fit <- coxph(Surv(time, event) ~ x)
-  summary(cox_fit)$coefficients[, "Pr(>|z|)"]
-})
-significant_vars <- names(univariate_p)[univariate_p < 0.1]
-```
+- Set **Lambda selection rule** to **1-SE rule** for more
+  regularization.
 
 ### 3. Poor Model Performance
 
@@ -551,21 +501,12 @@ significant_vars <- names(univariate_p)[univariate_p < 0.1]
 
 **Solutions**:
 
-``` r
-
-# Check data quality
-summary(survival_data)
-plot(survfit(Surv(time, event) ~ 1))  # Overall survival curve
-
-# Ensure adequate events
-table(survival_data$event)  # Need at least 5-10 events per variable
-
-# Consider interaction terms
-clinical_data$age_stage_interaction <- clinical_data$age * as.numeric(clinical_data$stage)
-
-# Try different time scales
-clinical_data$log_time <- log(clinical_data$time + 1)
-```
+- Check data quality, including the follow-up times and the event
+  coding.
+- Check that there are enough events; **Number of Events** is in the
+  Model Summary.
+- Consider whether the candidate predictors carry prognostic information
+  at all. A low C-index may be the correct result.
 
 ### 4. Convergence Issues
 
@@ -573,20 +514,18 @@ clinical_data$log_time <- log(clinical_data$time + 1)
 
 **Solutions**:
 
-``` r
+- Keep **Internal standardization** ticked.
+- Investigate extreme values; correct errors, and do not delete a value
+  only because it is extreme.
+- Check for a predictor that almost perfectly separates events from
+  non-events.
 
-# Standardize variables
-result <- lassocox(..., standardize = TRUE)
-
-# Remove extreme outliers
-Q1 <- quantile(continuous_var, 0.25, na.rm = TRUE)
-Q3 <- quantile(continuous_var, 0.75, na.rm = TRUE)
-IQR <- Q3 - Q1
-outliers <- which(continuous_var < (Q1 - 1.5*IQR) | continuous_var > (Q3 + 1.5*IQR))
-
-# Check for perfect separation
-table(survival_data$event, survival_data$categorical_predictor)
-```
+With few events per column, the penalty search can stop early. The
+analysis then warns that it stopped after some of the lambda values,
+because smaller penalties gave a patient a linear predictor above 30,
+where glmnet 5.0 cannot compute the cross-validation curve correctly.
+The **Lambda values used / searched** row in **Reproducibility details**
+shows how many were kept.
 
 ## Best Practices
 
@@ -594,40 +533,22 @@ table(survival_data$event, survival_data$categorical_predictor)
 
 #### Sample Size Planning
 
-1.  **Events per Variable**: Aim for 5-10 events per candidate variable
+1.  **Formal Calculation**: Use a sample size calculation for prediction
+    models (Riley et al., [Stat Med
+    2019](https://doi.org/10.1002/sim.7992); [BMJ
+    2020](https://doi.org/10.1136/bmj.m441)) rather than an
+    events-per-variable rule
 2.  **Total Sample Size**: Consider expected censoring rate
 3.  **Effect Size**: Larger effects require smaller samples
 4.  **Multiple Testing**: Account for variable selection process
 
 #### Variable Selection
 
-``` r
-
-# Pre-selection strategies:
-# 1. Clinical relevance
-clinical_vars <- c("age", "stage", "grade", "treatment")
-
-# 2. Univariate screening (liberal p-value)
-univariate_screen <- function(data, time_var, event_var, predictors, p_threshold = 0.2) {
-  significant_vars <- c()
-  for (var in predictors) {
-    formula <- as.formula(paste("Surv(", time_var, ",", event_var, ") ~", var))
-    cox_fit <- coxph(formula, data = data)
-    p_value <- summary(cox_fit)$coefficients[, "Pr(>|z|)"]
-    if (p_value < p_threshold) {
-      significant_vars <- c(significant_vars, var)
-    }
-  }
-  return(significant_vars)
-}
-
-# 3. Correlation filtering
-remove_high_correlation <- function(data, threshold = 0.9) {
-  cor_matrix <- cor(data, use = "complete.obs")
-  high_cor <- findCorrelation(cor_matrix, cutoff = threshold)
-  return(names(data)[-high_cor])
-}
-```
+Choose candidates on clinical grounds, before looking at the outcome. Do
+not pre-filter by univariable p-values: that happens outside the
+cross-validation, defeats the penalty and biases selection. Among highly
+correlated predictors, LASSO picks one almost arbitrarily, so do not
+read a dropped predictor as unimportant.
 
 ### Reporting Standards
 
@@ -652,35 +573,23 @@ remove_high_correlation <- function(data, threshold = 0.9) {
 
 #### Reproducibility Checklist
 
-``` r
-
-# Reproducibility essentials:
-set.seed(123)  # For consistent CV folds
-
-# Document software versions
-sessionInfo()
-
-# Save model objects for future use
-save(lasso_model, file = "lasso_cox_model.RData")
-
-# Provide clear variable definitions
-variable_dictionary <- data.frame(
-  Variable = names(clinical_data),
-  Description = c("Patient age in years", "Tumor stage", ...),
-  Type = c("Continuous", "Categorical", ...),
-  Units = c("Years", "I-IV", ...)
-)
-```
+- Record the **Random seed**, which fixes the cross-validation folds.
+- Tick **Reproducibility details** for the lambda values, software
+  versions and fold counts.
+- Tick **Reproducible R code** to keep the code for the fit.
+- Keep a dictionary of variable definitions, units and level coding.
 
 ## Conclusion
 
-Lasso-Cox regression is a powerful tool for variable selection in
-survival analysis, particularly valuable for:
+Lasso-Cox regression is a method for variable selection in survival
+analysis, used for:
 
 1.  **High-dimensional data** where traditional methods fail
 2.  **Biomarker discovery** in genomic and proteomic studies
 3.  **Clinical risk modeling** with many potential predictors
 4.  **Exploratory analysis** to identify key prognostic factors
+
+The `lassocox` function in jsurvival fits this model from jamovi or R.
 
 ### Key Takeaways
 
@@ -693,19 +602,7 @@ survival analysis, particularly valuable for:
 - **Report transparently**: Include all analysis decisions and
   limitations
 
-### Future Directions
-
-- **Elastic Net Extensions**: Combining L1 and L2 penalties
-- **Time-varying Effects**: Allowing coefficients to change over time
-- **Competing Risks**: Extending to multiple event types
-- **Machine Learning Integration**: Combining with other ML approaches
-
-The `lassocox` function in ClinicoPath provides a user-friendly
-interface for performing these sophisticated analyses, making advanced
-survival modeling accessible to clinical researchers and
-biostatisticians.
-
 ------------------------------------------------------------------------
 
-*For more information about ClinicoPath and survival analysis tools,
-visit the package documentation and tutorials.*
+*For more information about jsurvival, visit the [jsurvival
+website](https://www.serdarbalci.com/jsurvival/).*

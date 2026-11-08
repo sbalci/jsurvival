@@ -5,8 +5,8 @@
 In clinical practice, we often want to compare the outcomes of different
 groups of patients. For example, does a new treatment improve survival
 compared to the standard treatment? Does the presence of a specific
-biomarker affect patient prognosis? The **Comparing Survival** feature
-in the jSurvival module is designed to help you answer these types of
+biomarker affect patient prognosis? **Survival Analysis** in the
+jSurvival module is designed to help you answer these types of
 questions.
 
 **Learning Objectives:**
@@ -28,20 +28,21 @@ who received a new treatment to those who received a placebo.
 **Step 1: Set up Your Analysis**
 
 1.  Open your data in jamovi.
-2.  Navigate to **Analyses \> jSurvival \> Survival Analysis**.
-3.  Assign your **Time Elapsed**, **Outcome**, and **Explanatory
-    Variable** (e.g., “Treatment Group”).
-
-![Two-group setup in jSurvival](images/compare-setup-2-group.png)
-
-Two-group setup in jSurvival
+2.  Navigate to **Survival \> ClinicoPath Survival \> Survival
+    Analysis**.
+3.  Assign your **Time Elapsed**, **Outcome**, **Event Level** and
+    **Explanatory Variable** (e.g., “Treatment Group”).
+4.  Open **Survival Plots**, then tick **Survival curves** and
+    **P-values**.
 
 **Step 2: Examine the Output**
 
 The output will look familiar to what you saw in the introductory guide.
 You will see a Kaplan-Meier plot with two survival curves (one for the
-treatment group and one for the placebo group) and a log-rank test with
-a p-value.
+treatment group and one for the placebo group) and the log-rank p-value
+printed on the plot. To see the log-rank test in a table, tick
+**Weighted log-rank tests** under **Statistical Analysis**; its first
+row is the standard log-rank test.
 
 **Interpreting the Results:**
 
@@ -49,17 +50,22 @@ a p-value.
   separation between the two curves? If the curve for the treatment
   group is consistently above the curve for the placebo group, this
   suggests that the treatment is associated with better survival.
-- **The p-value:** Look at the p-value from the log-rank test. If the
-  p-value is less than 0.05, you can conclude that there is a
-  statistically significant difference in survival between the two
-  groups.
+- **The p-value:** Look at the p-value from the log-rank test. A small
+  p-value provides evidence against equal survival under the test
+  assumptions. It does not identify the size of a difference or
+  establish a treatment benefit.
 
 #### Interpretation (two groups)
 
-- The new treatment group shows higher survival over time; the log‑rank
-  p = 0.03 supports a true difference.
-- Median survival improved from 10 to 14 months (absolute +4 months).
-  Assess clinical importance given toxicity and cost.
+From the `histopathology` example data, comparing lymphovascular
+invasion (LVI) absent and present:
+
+- Patients with LVI had lower survival over time (log-rank p \< 0.001).
+  This is an association in observational data, not proof of a causal
+  effect.
+- Median survival was 26.0 months without LVI and 9.3 months with LVI,
+  an absolute difference of 16.7 months. Assess its clinical importance
+  in context.
 
 ## Comparing Multiple Groups
 
@@ -69,10 +75,6 @@ want to compare the survival of patients with different tumor grades
 
 The process in jamovi is the same. Simply use your multi-level grouping
 variable (e.g., “Tumor Grade”) as the **Explanatory Variable**.
-
-![Three-group Kaplan–Meier plot](images/compare-km-3-groups.png)
-
-Three-group Kaplan–Meier plot
 
 **Interpreting the Results with Multiple Groups:**
 
@@ -89,29 +91,31 @@ Grade 2, Grade 1 and Grade 3, or Grade 2 and Grade 3.
 **Pairwise Comparisons**
 
 To find out which specific groups are different, you can perform
-**pairwise comparisons**. In the jSurvival module, you can select the
-option for “Pairwise comparisons” to get p-values for each pair of
-groups.
-
-![Pairwise comparisons table](images/compare-pairwise-table.png)
-
-Pairwise comparisons table
+**pairwise comparisons**. In the jSurvival module, tick **Pairwise
+comparisons** under **Statistical Analysis** to get a p-value for each
+pair of groups. **P-value adjustment method** sets the correction for
+testing several pairs (Holm by default).
 
 #### Interpretation (multiple groups)
 
-- Overall p = 0.02 indicates at least one group differs. Pairwise tests
-  show Grade 3 vs Grade 1 (p = 0.01) and Grade 3 vs Grade 2 (p = 0.04)
-  differ; Grade 1 vs Grade 2 does not (p = 0.20).
-- Report adjusted p‑values if multiple comparisons are performed.
+From the `histopathology` example data, comparing T stages 1 to 4:
+
+- The overall log-rank p-value was 0.52, so these data give no evidence
+  that survival differs across T stage.
+- The Holm-adjusted pairwise p-values ranged from 0.76 to 1.00, which
+  agrees with the overall test. A large p-value does not prove that the
+  groups have the same survival.
+- Report adjusted p-values when multiple comparisons are performed.
 
 ## Clinical Significance vs. Statistical Significance
 
 It’s important to understand the difference between clinical
 significance and statistical significance.
 
-- **Statistical Significance:** This is determined by the p-value. A
-  statistically significant result means that the observed difference is
-  unlikely to be due to random chance.
+- **Statistical Significance:** A small p-value provides evidence
+  against equal survival under the test assumptions. It does not measure
+  the probability that a result arose by chance, the size of the effect
+  or the probability that a treatment works.
 - **Clinical Significance:** This refers to the practical importance of
   the result. Is the difference in survival large enough to be
   meaningful to patients and clinicians? Will it change clinical
@@ -127,7 +131,7 @@ matter of clinical judgment.
 
 - **Look at the Median Survival:** The jSurvival module will report the
   median survival time for each group. The median survival is the time
-  at which 50% of the patients are still alive. Comparing the median
+  by which half of the patients have had the event. Comparing the median
   survival times between groups can give you a sense of the magnitude of
   the difference.
 - **Consider the Context:** The clinical context is crucial. A small
@@ -142,21 +146,15 @@ publication.
 
 You can:
 
-- Add a risk table to show the number of patients at risk at different
-  time points.
-- Display confidence intervals for the survival curves.
-- Add the p-value from the log-rank test directly to the plot.
-
-![Publication-ready KM plot with risk
-table](images/compare-publication-km.png)
-
-Publication-ready KM plot with risk table
+- Add a **Risk table** to show the number of patients at risk at
+  different time points.
+- Display **95% confidence intervals** for the survival curves.
+- Add the log-rank p-value to the plot with **P-values**.
 
 ## Conclusion
 
 Comparing survival outcomes is a core task in clinical research. The
-jSurvival module in jamovi provides a user-friendly way to perform these
-comparisons and generate publication-quality plots.
+jSurvival module in jamovi performs these comparisons without code.
 
 **Key Takeaways:**
 
@@ -175,8 +173,10 @@ regression for multivariable analysis.
 
 - Multiple testing: Use adjusted p‑values when doing many pairwise
   comparisons.
-- Follow-up imbalance: Large differences in follow-up time can bias
-  comparisons; consider RMST or adjusted analyses.
+- Follow-up imbalance: Check censoring mechanisms and support at
+  reported times. Different lengths of non-informative follow-up alone
+  do not invalidate KM or Cox. RMST and adjusted models also require
+  suitable censoring assumptions.
 - Sparse strata: Very small subgroups produce unstable estimates and
   misleading curves/tables.
 - Clinical vs statistical significance: A small p‑value does not

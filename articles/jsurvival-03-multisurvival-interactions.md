@@ -52,16 +52,24 @@ construction - you cannot add `Treatment:Biomarker` without both
 
 **1. The standard outputs, extended.** Interaction terms appear as
 additional rows in the main hazard-ratio table and in the forest plot,
-alongside the main effects - no separate step needed.
+alongside the main effects. Both forest styles use a coefficient display
+for interaction models, retaining every fitted coefficient and its
+confidence interval. Main-effect labels state the other terms’
+reference/zero values. Interaction rows are labelled as ratios of hazard
+ratios. Keep the caption, including warnings about conditioning values
+outside the observed range, with exported figures.
 
 **2. Interaction (Effect-Modification) Test.** A dedicated table with
-one row per interaction term: hazard ratio, 95% CI, and the interaction
-p-value. A significant p indicates the focal effect genuinely differs
-across levels of the moderator (effect modification) - this is the
-formal test biomarker-by-treatment analyses report.
+one row per interaction coefficient: ratio of hazard ratios, 95% CI, and
+its Wald p-value. A coefficient p-value assesses evidence against that
+particular interaction coefficient being zero on the log-hazard scale.
+It does not establish clinical benefit in a subgroup. A multi-level or
+higher-order interaction can have several coefficients; use a joint test
+for a claim about the entire interaction, rather than selecting its
+smallest p-value.
 
 **3. Within-Subgroup Hazard Ratios.** For each two-way interaction whose
-moderator is **categorical**, `multisurvival` releveles the data to each
+moderator is **categorical**, `multisurvival` relevels the data to each
 moderator level in turn and refits the *same full* Cox model (all
 covariates and interactions, unchanged), then reports the focal
 variable’s hazard ratio within that subgroup. This gives the

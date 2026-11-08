@@ -10,8 +10,8 @@
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Survival Module of ClinicoPath for jamovi">
-<meta name="description" content="Survival Module of ClinicoPath for jamovi ClinicoPath help researchers to generate natural language summaries of their dataset, generate cross tables with statistical tests, and survival analysis with survival tables, survival plots, and natural language summaries. For comments, suggestions, feature requests or reporting bugs, please open an issue at &lt;https://github.com/sbalci/ClinicoPathJamoviModule/issues/&gt;.">
-<meta property="og:description" content="Survival Module of ClinicoPath for jamovi ClinicoPath help researchers to generate natural language summaries of their dataset, generate cross tables with statistical tests, and survival analysis with survival tables, survival plots, and natural language summaries. For comments, suggestions, feature requests or reporting bugs, please open an issue at &lt;https://github.com/sbalci/ClinicoPathJamoviModule/issues/&gt;.">
+<meta name="description" content="Time-to-event analysis for clinicopathological research in jamovi: Kaplan-Meier estimates, log-rank tests, Cox regression, competing-risk cumulative incidence, cut-off analysis of continuous markers, multivariable and LASSO Cox models, odds ratios, and preparation of dates and outcomes for survival analysis. Part of the ClinicoPath suite. For comments, suggestions, feature requests or reporting bugs, please open an issue at &lt;https://github.com/sbalci/ClinicoPathJamoviModule/issues/&gt;.">
+<meta property="og:description" content="Time-to-event analysis for clinicopathological research in jamovi: Kaplan-Meier estimates, log-rank tests, Cox regression, competing-risk cumulative incidence, cut-off analysis of continuous markers, multivariable and LASSO Cox models, odds ratios, and preparation of dates and outcomes for survival analysis. Part of the ClinicoPath suite. For comments, suggestions, feature requests or reporting bugs, please open an issue at &lt;https://github.com/sbalci/ClinicoPathJamoviModule/issues/&gt;.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="index.html">jsurvival</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,41 +34,24 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/01-introduction-user-friendly.html">A Clinician's Guide to Survival Analysis with jSurvival in jamovi</a></li>
-    <li><a class="dropdown-item" href="articles/01-introduction.html">jSurvival 01: Introduction to Survival Analysis for Pathologists</a></li>
-    <li><a class="dropdown-item" href="articles/01-multisurvival-time-dependent-comprehensive.html">Time-Dependent Covariates in Multisurvival Analysis</a></li>
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>For clinicians</h6></li>
+    <li><a class="dropdown-item" href="articles/01-introduction-user-friendly.html">A Clinician's Guide to Survival Analysis with jSurvival in jamovi</a></li>
+    <li><a class="dropdown-item" href="articles/05-jamovi-workflow-user-friendly.html">A Step-by-Step Guide to Survival Analysis in jamovi with jSurvival</a></li>
+    <li><a class="dropdown-item" href="articles/14-comparing-survival-user-friendly.html">Comparing Survival Outcomes Between Groups: A Clinician's Guide</a></li>
+    <li><a class="dropdown-item" href="articles/15-competing-survival-user-friendly.html">Understanding Competing Risks in Survival Analysis: A Simple Guide</a></li>
+    <li><a class="dropdown-item" href="articles/18-cox-brief-for-clinicians.html">Cox Regression, Briefly: A Clinician’s Guide</a></li>
+    <li><a class="dropdown-item" href="articles/19-methods-and-reporting.html">Methods, estimands and reporting</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Guides</h6></li>
+    <li><a class="dropdown-item" href="articles/05-jamovi-workflow.html">Using jSurvival in jamovi: Complete Workflow</a></li>
+    <li><a class="dropdown-item" href="articles/11-data-preparation.html">Data Preparation for Survival Analysis</a></li>
     <li><a class="dropdown-item" href="articles/02-person-time-analysis.html">Person-Time Analysis in jSurvival Module</a></li>
     <li><a class="dropdown-item" href="articles/03-clinical-examples.html">Clinical Research Examples with jSurvival</a></li>
-    <li><a class="dropdown-item" href="articles/03-treatment-response.html">Treatment Response Analysis in Oncology</a></li>
-    <li><a class="dropdown-item" href="articles/04-stage-migration-analysis.html">Stage Migration Analysis: Understanding the Will Rogers Phenomenon</a></li>
-    <li><a class="dropdown-item" href="articles/05-jamovi-workflow-user-friendly.html">A Step-by-Step Guide to Survival Analysis in jamovi with jSurvival</a></li>
-    <li><a class="dropdown-item" href="articles/05-jamovi-workflow.html">Using jSurvival in jamovi: Complete Workflow</a></li>
-    <li><a class="dropdown-item" href="articles/05-treatment-pathway-visualization.html">Treatment Pathway Visualization with alluvialSurvival</a></li>
-    <li><a class="dropdown-item" href="articles/07-use-in-r.html">Use jSurvival in R</a></li>
     <li><a class="dropdown-item" href="articles/08-advanced-topics.html">Advanced Survival Analysis with jSurvival</a></li>
-    <li><a class="dropdown-item" href="articles/08-groupedforest-comprehensive.html">Grouped Hazard Forest Plots for Subgroup Analysis</a></li>
-    <li><a class="dropdown-item" href="articles/legacy/08-stage-migration-analysis-legacy.html">Stage Migration Analysis: Understanding the Will Rogers Phenomenon</a></li>
     <li><a class="dropdown-item" href="articles/09-lassocox-comprehensive.html">Lasso-Cox Regression for Variable Selection in Survival Analysis</a></li>
-    <li><a class="dropdown-item" href="articles/1-stagemigration-comprehensive.html">Advanced TNM Stage Migration Analysis: A Comprehensive Guide</a></li>
-    <li><a class="dropdown-item" href="articles/legacy/10-introduction-legacy.html">jsurvival: Introduction to Survival Analysis for Clinical Research</a></li>
-    <li><a class="dropdown-item" href="articles/11-data-preparation.html">Data Preparation for Survival Analysis</a></li>
-    <li><a class="dropdown-item" href="articles/legacy/11-person-time-analysis-legacy.html">Person-Time Analysis in jsurvival Module</a></li>
-    <li><a class="dropdown-item" href="articles/legacy/12-treatment-response-analysis-legacy.html">Treatment Response Analysis in Oncology</a></li>
-    <li><a class="dropdown-item" href="articles/legacy/13-use-in-r-legacy.html">Use jsurvival in R</a></li>
-    <li><a class="dropdown-item" href="articles/14-comparing-survival-user-friendly.html">Comparing Survival Outcomes Between Groups: A Clinician's Guide</a></li>
-    <li><a class="dropdown-item" href="articles/14-comparing-survival.html">jSurvival 14: Comparing Survival Outcomes Between Groups</a></li>
-    <li><a class="dropdown-item" href="articles/15-competing-survival-user-friendly.html">Understanding Competing Risks in Survival Analysis: A Simple Guide</a></li>
-    <li><a class="dropdown-item" href="articles/15-competing-survival.html">jSurvival 15: Competing Survival Analysis</a></li>
-    <li><a class="dropdown-item" href="articles/16-cox-model-diagnostics.html">jSurvival 16: Cox Proportional Hazards Model Diagnostics</a></li>
-    <li><a class="dropdown-item" href="articles/17-jiwillsurvive-comprehensive.html">Intuitive Survival Analysis with jiwillsurvive</a></li>
-    <li><a class="dropdown-item" href="articles/18-cox-brief-for-clinicians.html">Cox Regression, Briefly: A Clinician’s Guide</a></li>
-    <li><a class="dropdown-item" href="articles/legacy/19-clinical-examples-legacy.html">Clinical Research Examples with jsurvival</a></li>
-    <li><a class="dropdown-item" href="articles/legacy/22-advanced-topics-legacy.html">Advanced Survival Analysis with jsurvival</a></li>
-    <li><a class="dropdown-item" href="articles/legacy/23-data-preparation-legacy.html">Data Preparation for Survival Analysis</a></li>
-    <li><a class="dropdown-item" href="articles/legacy/26-jamovi-workflow-legacy.html">Using jsurvival in jamovi: Complete Workflow</a></li>
-    <li><a class="dropdown-item" href="articles/jsurvival-01-oncodatasets-examples.html">jSurvival: Survival Analysis with Oncology Data</a></li>
-    <li><a class="dropdown-item" href="articles/jsurvival-02-comprehensive-survival-power-analysis.html">Comprehensive Survival Power Analysis with ClinicoPath</a></li>
     <li><a class="dropdown-item" href="articles/jsurvival-03-multisurvival-interactions.html">Interaction terms in Multivariable Survival Analysis</a></li>
+    <li><a class="dropdown-item" href="articles/07-use-in-r.html">Use jSurvival in R</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -92,7 +75,7 @@
 <div class="section level2">
 <h2 id="abstract">Abstract<a class="anchor" aria-label="anchor" href="#abstract"></a>
 </h2>
-<p><strong>jsurvival</strong> is a comprehensive time-to-event and clinical survival analysis module for jamovi and R. As the survival analysis engine of the <strong>ClinicoPath</strong> ecosystem, it bridges advanced biostatistical methods and clinical research practice. It provides publication-ready survival curves, Cox proportional hazards modeling, regularized high-dimensional feature selection (LASSO-Cox), date interval calculators, and natural language clinical interpretations—all without requiring programming expertise.</p>
+<p><strong>jsurvival</strong> provides time-to-event analyses and data preparation in jamovi and R, as part of the <strong>ClinicoPath</strong> suite. Its nine analyses cover Kaplan-Meier estimation, Cox and Fine-Gray regression, exploratory LASSO Cox modeling, odds ratios, dates and endpoint recoding. Results support research analysis; clinical interpretation depends on the endpoint definition, study design, data quality and model assumptions.</p>
 <hr>
 </div>
 <div class="section level2">
@@ -123,25 +106,25 @@
 <td align="left"><strong>Single Arm Survival</strong></td>
 <td align="left"><code>singlearm</code></td>
 <td align="left">Cohort Follow-up</td>
-<td align="left">Cohort-wide survival analysis for single-arm clinical trials or registry cohorts without an explanatory group; includes guided setup, milestone survival rates, and person-time metrics.</td>
+<td align="left">Cohort-wide survival analysis for single-arm clinical trials or registry cohorts without an explanatory group; includes milestone survival rates, and person-time metrics.</td>
 </tr>
 <tr>
 <td align="left"><strong>Multivariable Survival</strong></td>
 <td align="left"><code>multisurvival</code></td>
 <td align="left">Advanced Modeling</td>
-<td align="left">Multivariable Cox proportional hazards modeling with covariate adjustment, hazard ratio forest plots, model diagnostics, and adjusted survival curve visualization.</td>
+<td align="left">Multivariable Cox proportional hazards modeling with covariate adjustment, Fine-Gray regression for competing events, hazard ratio forest plots, model diagnostics, and adjusted survival curves.</td>
 </tr>
 <tr>
 <td align="left"><strong>Continuous Survival</strong></td>
 <td align="left"><code>survivalcont</code></td>
 <td align="left">Biomarker Thresholds</td>
-<td align="left">Survival analysis for continuous variables and biomarkers; features automated optimal cut-point detection (maxstat), median/tertile/quartile splits, and stratified Kaplan-Meier plots.</td>
+<td align="left">Survival analysis for continuous variables and biomarkers; features a data-derived cut-off (maximally selected rank statistic, with a p-value adjusted for the search; it needs independent validation), multiple cut-offs by quantile, recursive, tree or minimum-p methods, and Kaplan-Meier plots by group.</td>
 </tr>
 <tr>
 <td align="left"><strong>Odds Ratio Analysis</strong></td>
 <td align="left"><code>oddsratio</code></td>
 <td align="left">Association Studies</td>
-<td align="left">Binary outcome evaluation with 2x2 contingency tables, odds ratio calculations with exact/Wald confidence intervals, and publication-ready forest plots.</td>
+<td align="left">Logistic-regression odds ratios with profile-likelihood confidence intervals, optional Firth penalized estimation, forest plot, prediction nomogram and optional diagnostic metrics. Both outcome levels are named explicitly.</td>
 </tr>
 <tr>
 <td align="left"><strong>LASSO-Cox Regression</strong></td>
@@ -153,7 +136,7 @@
 <td align="left"><strong>Time Interval Calculator</strong></td>
 <td align="left"><code>timeinterval</code></td>
 <td align="left">Clinical Data Prep</td>
-<td align="left">Robust calculation of follow-up durations from diagnosis and event/censoring dates, supporting days, months, and years with date sequence and consistency checks.</td>
+<td align="left">Robust calculation of follow-up durations from diagnosis and event/censoring dates, supporting days, weeks, months, and years with date sequence and consistency checks.</td>
 </tr>
 <tr>
 <td align="left"><strong>DateTime Converter</strong></td>
@@ -165,7 +148,7 @@
 <td align="left"><strong>Outcome Organizer</strong></td>
 <td align="left"><code>outcomeorganizer</code></td>
 <td align="left">Endpoint Derivation</td>
-<td align="left">Clinical endpoint mapping and standardization, transforming disparate event statuses and dates into standardized time-to-event and censoring indicators (OS, DFS, PFS).</td>
+<td align="left">Clinical endpoint mapping and standardization, recoding event statuses into analysis-ready indicators for OS, cause-specific, competing-risk, RFS, PFS, DFS, TTP and multistate analyses.</td>
 </tr>
 </tbody>
 </table>
@@ -175,14 +158,14 @@
 <h2 id="rocket-installation">🚀 Installation<a class="anchor" aria-label="anchor" href="#rocket-installation"></a>
 </h2>
 <div class="section level3">
-<h3 id="in-jamovi-recommended">In jamovi (Recommended)<a class="anchor" aria-label="anchor" href="#in-jamovi-recommended"></a>
+<h3 id="in-jamovi">In jamovi<a class="anchor" aria-label="anchor" href="#in-jamovi"></a>
 </h3>
 <ol style="list-style-type: decimal">
-<li>Open <strong>jamovi</strong> (&gt;= 2.6).</li>
+<li>Open <strong>jamovi</strong> (&gt;= 2.7.27).</li>
 <li>Click the <strong>+</strong> button in the top-right corner → <strong>jamovi library</strong>.</li>
-<li>Search for <strong>jsurvival</strong> (or browse under <strong>Survival</strong>).</li>
-<li>Click <strong>Install</strong>.</li>
+<li>Search for <strong>jsurvival</strong> and install the available library version.</li>
 </ol>
+<p>For a release candidate supplied by the maintainer, use <strong>Sideload</strong> in the module library and select its <code>.jmo</code> file. A local candidate may differ from the library version.</p>
 </div>
 <div class="section level3">
 <h3 id="as-an-r-package">As an R Package<a class="anchor" aria-label="anchor" href="#as-an-r-package"></a>
@@ -198,36 +181,56 @@
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sbalci/ClinicoPathJamoviModule/" class="external-link">jsurvival</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Load included melanoma survival dataset</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"melanoma"</span>, package <span class="op">=</span> <span class="st">"jsurvival"</span><span class="op">)</span></span>
+<span><span class="co"># status: 1 = died of melanoma, 2 = alive, 3 = died of other causes. time is in days.</span></span>
+<span><span class="co"># Only status 1 is an event here, so other-cause deaths are censored (cause-specific).</span></span>
 <span></span>
-<span><span class="co"># 1. Univariate Kaplan-Meier &amp; Cox survival analysis</span></span>
+<span><span class="co"># 1. Kaplan-Meier, log-rank and Cox by group</span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">jsurvival</span><span class="fu">::</span><span class="fu"><a href="reference/survival.html">survival</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">melanoma</span>,</span>
-<span>  elapsedtime <span class="op">=</span> <span class="st">"time"</span>,</span>
-<span>  outcome <span class="op">=</span> <span class="st">"status"</span>,</span>
-<span>  outcomeLevel <span class="op">=</span> <span class="st">"1"</span>,</span>
-<span>  explanatory <span class="op">=</span> <span class="st">"sex"</span></span>
+<span>  data <span class="op">=</span> <span class="va">melanoma</span>, elapsedtime <span class="op">=</span> <span class="st">"time"</span>,</span>
+<span>  outcome <span class="op">=</span> <span class="st">"status"</span>, outcomeLevel <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>  dod <span class="op">=</span> <span class="cn">NULL</span>, dooc <span class="op">=</span> <span class="cn">NULL</span>, awd <span class="op">=</span> <span class="cn">NULL</span>, awod <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  explanatory <span class="op">=</span> <span class="st">"sex"</span>,</span>
+<span>  timetypeoutput <span class="op">=</span> <span class="st">"days"</span>, cutp <span class="op">=</span> <span class="st">"365, 1095, 1825"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># 2. Continuous biomarker threshold survival analysis</span></span>
+<span><span class="co"># 2. Continuous variable, with a data-derived cut-off</span></span>
 <span><span class="va">cut_fit</span> <span class="op">&lt;-</span> <span class="fu">jsurvival</span><span class="fu">::</span><span class="fu"><a href="reference/survivalcont.html">survivalcont</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">melanoma</span>,</span>
-<span>  elapsedtime <span class="op">=</span> <span class="st">"time"</span>,</span>
-<span>  outcome <span class="op">=</span> <span class="st">"status"</span>,</span>
-<span>  outcomeLevel <span class="op">=</span> <span class="st">"1"</span>,</span>
-<span>  contexplan <span class="op">=</span> <span class="st">"age"</span></span>
+<span>  data <span class="op">=</span> <span class="va">melanoma</span>, elapsedtime <span class="op">=</span> <span class="st">"time"</span>,</span>
+<span>  outcome <span class="op">=</span> <span class="st">"status"</span>, outcomeLevel <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>  dod <span class="op">=</span> <span class="cn">NULL</span>, dooc <span class="op">=</span> <span class="cn">NULL</span>, awd <span class="op">=</span> <span class="cn">NULL</span>, awod <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  contexpl <span class="op">=</span> <span class="st">"age"</span>, findcut <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  timetypeoutput <span class="op">=</span> <span class="st">"days"</span>, cutp <span class="op">=</span> <span class="st">"365, 1095, 1825"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># 3. High-dimensional LASSO-Cox regression</span></span>
+<span><span class="co"># 3. LASSO Cox</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"lassocox_breast_cancer"</span>, package <span class="op">=</span> <span class="st">"jsurvival"</span><span class="op">)</span></span>
 <span><span class="va">lasso_fit</span> <span class="op">&lt;-</span> <span class="fu">jsurvival</span><span class="fu">::</span><span class="fu"><a href="reference/lassocox.html">lassocox</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">lassocox_breast_cancer</span>,</span>
-<span>  time <span class="op">=</span> <span class="st">"time"</span>,</span>
-<span>  status <span class="op">=</span> <span class="st">"status"</span>,</span>
-<span>  predictors <span class="op">=</span> <span class="fu">vars</span><span class="op">(</span><span class="va">ER</span>, <span class="va">PR</span>, <span class="va">HER2</span>, <span class="va">Grade</span>, <span class="va">NodeStatus</span>, <span class="va">Ki67</span><span class="op">)</span></span>
+<span>  data <span class="op">=</span> <span class="va">lassocox_breast_cancer</span>, elapsedtime <span class="op">=</span> <span class="st">"survival_months"</span>,</span>
+<span>  outcome <span class="op">=</span> <span class="st">"death"</span>, outcomeLevel <span class="op">=</span> <span class="st">"Dead"</span>, censorLevel <span class="op">=</span> <span class="st">"Alive"</span>,</span>
+<span>  explanatory <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"tumor_size_cm"</span>, <span class="st">"grade"</span>, <span class="st">"stage"</span>, <span class="st">"lymph_nodes_positive"</span>,</span>
+<span>                  <span class="st">"er_status"</span>, <span class="st">"pr_status"</span>, <span class="st">"her2_status"</span>, <span class="st">"ki67_percent"</span>, <span class="st">"lvi"</span><span class="op">)</span>,</span>
+<span>  lambda <span class="op">=</span> <span class="st">"lambda.min"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="before-reporting-results">Before reporting results<a class="anchor" aria-label="anchor" href="#before-reporting-results"></a>
+</h2>
+<ul>
+<li>Use one row per independent patient. Recurrent events, repeated visits, delayed entry and time-dependent covariates require analyses designed for those data.</li>
+<li>DateTime Converter parsing-count percentages use all observations; its separate parse rate excludes originally missing values. Successful parsing does not establish that the chosen date order is correct.</li>
+<li>Confirm the event value and censoring rule. Missing status or a missing death date does not establish that a patient is alive. Composite endpoints need time to the <strong>first</strong> qualifying event; Outcome Organizer produces the status, not that time.</li>
+<li>Precalculated follow-up is used in its supplied unit. Changing <strong>Time Type in Output</strong> does not convert it. Landmark analyses retain only times strictly greater than the landmark.</li>
+<li>Use cumulative incidence for absolute event risk with competing events. A Cox HR, Fine-Gray subdistribution HR, odds ratio, rate and probability have different meanings.</li>
+<li>Treat data-derived cutoffs and LASSO selection as exploratory. Preserve the exact cutoff (<strong>Low ≤ cutoff; High &gt; cutoff</strong>). Lambda cross-validation tunes the penalty; displayed C-indices and same-data risk groups do not establish validated predictive performance.</li>
+</ul>
+<p>The <a href="vignettes/19-methods-and-reporting.Rmd">methods and reporting guide</a> includes executable arithmetic checks and a reporting checklist. Read the <a href="NEWS.html">1.1.3 corrections</a> before reusing results from earlier versions. Known limits include exploratory cutoff selection and apparent model performance. Multivariable Survival interaction forests show every fitted coefficient, conditioning values and a caption; interaction rows are ratios of hazard ratios, not subgroup HRs. Both forest styles use this coefficient display for interaction models. Survival Analysis adjusted curves use the age-adjusted table’s fitted model, retaining requested baseline and age-group strata. Stratified standardized curves end at the shortest observed stratum follow-up; confidence bands for these averages are not provided.</p>
+</div>
+<div class="section level2">
+<h2 id="example-data">Example data<a class="anchor" aria-label="anchor" href="#example-data"></a>
+</h2>
+<p>In jamovi, open ☰ → Open → Data Library → jsurvival → <em>histopathology including analysis</em>. It holds a simulated cohort, with invented patient names, and a saved analysis: Time Elapsed = OverallTime (months), Outcome = Outcome, Event Level = 1. From R, <code>histopathology</code>, <code>melanoma</code> and six <code>lassocox_*</code> datasets are available.</p>
+<p>Nine additional <code>.omv</code> examples, one for every analysis, are saved in <a href="data"><code>data/</code></a> and registered in <code>jamovi/0000.yaml</code>. Each contains synthetic data and an analysis configured and saved in the jamovi GUI. The <a href="GUI_EXAMPLES.html">example guide</a> lists the files, saved arguments, checks and known display limitation. Open a file directly, or select its descriptive title in the module’s Data Library after rebuilding/installing the updated module. The odds-ratio example deliberately demonstrates the Firth nomogram safeguard; it is not a survival-risk analysis.</p>
 <hr>
 </div>
 <div class="section level2">
@@ -235,13 +238,13 @@
 </h2>
 <ul>
 <li>
-<strong>Module Website &amp; Vignettes</strong>: <a href="https://www.serdarbalci.com/jsurvival/">https://www.serdarbalci.com/jsurvival/</a>
+<strong>Module Website &amp; Vignettes</strong>: <a href="https://www.serdarbalci.com/jsurvival/" class="uri">https://www.serdarbalci.com/jsurvival/</a>
 </li>
 <li>
-<strong>ClinicoPath Umbrella Ecosystem</strong>: <a href="https://www.serdarbalci.com/ClinicoPathJamoviModule/" class="external-link">https://www.serdarbalci.com/ClinicoPathJamoviModule/</a>
+<strong>ClinicoPath Umbrella Ecosystem</strong>: <a href="https://www.serdarbalci.com/ClinicoPathJamoviModule/" class="external-link uri">https://www.serdarbalci.com/ClinicoPathJamoviModule/</a>
 </li>
 <li>
-<strong>GitHub Repository</strong>: <a href="https://github.com/sbalci/jsurvival/" class="external-link">https://github.com/sbalci/jsurvival/</a>
+<strong>GitHub Repository</strong>: <a href="https://github.com/sbalci/jsurvival/" class="external-link uri">https://github.com/sbalci/jsurvival/</a>
 </li>
 <li>
 <strong>Issue Tracker</strong>: <a href="https://github.com/sbalci/ClinicoPathJamoviModule/issues" class="external-link">GitHub Issues</a>

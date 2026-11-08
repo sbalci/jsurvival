@@ -1,14 +1,18 @@
 # Multivariable Survival Analysis
 
 Performs multivariable survival analysis using Cox proportional hazards
-regression. In multivariable survival analysis, person-time follow-up is
-crucial for properly adjusting for covariates while accounting for
+regression. With competing events it fits a Fine-Gray subdistribution
+hazard model. In multivariable survival analysis, person-time follow-up
+is crucial for properly adjusting for covariates while accounting for
 varying observation periods. The Cox proportional hazards model
 incorporates person-time by modeling the hazard function, which
 represents the instantaneous event rate per unit of person-time. When
 stratifying analyses or examining multiple predictors, the model
 accounts for how these factors influence event rates relative to the
-person-time at risk in each subgroup.
+person-time at risk in each subgroup. Each row must represent one
+independent patient with one event or censoring time. Repeated visits,
+recurrent events, delayed entry, clustering and time-dependent
+covariates require a different analysis designed for those data.
 
 ## Usage
 
@@ -94,17 +98,18 @@ multisurvival(
 - dxdate:
 
   Date of diagnosis. Required if `tint` = true. Accepts: (1)
-  Date/datetime text, (2) Numeric Unix epoch seconds (from DateTime
-  Converter's corrected_datetime_numeric output), (3) Numeric datetime
-  values from R. Time intervals calculated as difference from follow-up
-  date.
+  Date/datetime text, or (2) Numeric Unix epoch seconds (from DateTime
+  Converter's corrected_datetime_numeric output). Other numeric dates
+  (day counts, Excel serials, YYYYMMDD, years) are refused. Time
+  intervals calculated as difference from follow-up date.
 
 - fudate:
 
   Follow-up date or date of last observation. Required if `tint` = true.
-  Accepts: (1) Date/datetime text, (2) Numeric Unix epoch seconds (from
-  DateTime Converter's corrected_datetime_numeric output), (3) Numeric
-  datetime values from R. Must be in same format as diagnosis date.
+  Accepts: (1) Date/datetime text, or (2) Numeric Unix epoch seconds
+  (from DateTime Converter's corrected_datetime_numeric output). Other
+  numeric dates (day counts, Excel serials, YYYYMMDD, years) are
+  refused. Must be in same format as diagnosis date.
 
 - timetypedata:
 
@@ -126,7 +131,9 @@ multisurvival(
 - landmark:
 
   The time point (in the units defined by `timetypeoutput`) at which to
-  start landmark analyses. Only used if `uselandmark` = true.
+  start landmark analyses. Patients whose time is at or before it are
+  excluded, and the rest are timed from it. Only used if `uselandmark` =
+  true.
 
 - outcome:
 
@@ -195,8 +202,10 @@ multisurvival(
 
 - hr:
 
-  If true, generates a plot of hazard ratios for each explanatory
-  variable in the Cox model.
+  If true, generates a plot of fitted Cox coefficients. Interaction
+  models use a coefficient forest in both styles: main effects include
+  their conditioning values, and interaction coefficients are labelled
+  as ratios of hazard ratios.
 
 - sty:
 
@@ -306,7 +315,7 @@ multisurvival(
 
 - ac_method:
 
-  Estimand for the adjusted survival curves. "Standardised over cohort"
+  Estimand for the adjusted survival curves. "Standardized over cohort"
   sets every observed patient to each level in turn and averages the
   model-predicted curves (g-computation), so the curves differ only by
   the adjustment variable. "At reference covariate profile" predicts a
@@ -398,83 +407,72 @@ multisurvival(
 
 A results object containing:
 
-|                                          |     |     |     |     |                |
-|------------------------------------------|-----|-----|-----|-----|----------------|
-| `results$eventRecodeInfo`                |     |     |     |     | a html         |
-| `results$todo`                           |     |     |     |     | a html         |
-| `results$errors`                         |     |     |     |     | a html         |
-| `results$strongWarnings`                 |     |     |     |     | a html         |
-| `results$warnings`                       |     |     |     |     | a html         |
-| `results$infoMessages`                   |     |     |     |     | a html         |
-| `results$multivariableCoxHeading`        |     |     |     |     | a preformatted |
-| `results$text`                           |     |     |     |     | a html         |
-| `results$text2`                          |     |     |     |     | a html         |
-| `results$interactionExplanation`         |     |     |     |     | a html         |
-| `results$interactionTest`                |     |     |     |     | a table        |
-| `results$subgroupHR`                     |     |     |     |     | a table        |
-| `results$multivariableCoxSummaryHeading` |     |     |     |     | a preformatted |
-| `results$multivariableCoxSummary`        |     |     |     |     | a html         |
-| `results$glossaryPanel`                  |     |     |     |     | a html         |
-| `results$assumptionsPanel`               |     |     |     |     | a html         |
-| `results$survMetricsTable`               |     |     |     |     | a table        |
-| `results$survMetricsSummary`             |     |     |     |     | a html         |
-| `results$survMetricsPlot`                |     |     |     |     | an image       |
-| `results$personTimeHeading`              |     |     |     |     | a preformatted |
-| `results$personTimeTable`                |     |     |     |     | a table        |
-| `results$personTimeSummaryHeading`       |     |     |     |     | a preformatted |
-| `results$personTimeSummary`              |     |     |     |     | a html         |
-| `results$survivalPlotsHeading`           |     |     |     |     | a preformatted |
-| `results$plot`                           |     |     |     |     | an image       |
-| `results$plot3`                          |     |     |     |     | an image       |
-| `results$cox_phTable`                    |     |     |     |     | a table        |
-| `results$cox_ph`                         |     |     |     |     | a preformatted |
-| `results$plot8`                          |     |     |     |     | an image       |
-| `results$plotKM`                         |     |     |     |     | an image       |
-| `results$risk_score_analysis2`           |     |     |     |     | a html         |
-| `results$riskScoreHeading`               |     |     |     |     | a preformatted |
-| `results$riskScoreSummaryHeading`        |     |     |     |     | a preformatted |
-| `results$riskScoreTable`                 |     |     |     |     | a table        |
-| `results$riskScoreSummary`               |     |     |     |     | a html         |
-| `results$riskScoreMetrics`               |     |     |     |     | a html         |
-| `results$riskGroupPlot`                  |     |     |     |     | an image       |
-| `results$cindexValidation`               |     |     |     |     | a table        |
-| `results$stratificationExplanation`      |     |     |     |     | a html         |
-| `results$calculatedtime`                 |     |     |     |     | an output      |
-| `results$outcomeredefined`               |     |     |     |     | an output      |
-| `results$addRiskScore`                   |     |     |     |     | an output      |
-| `results$addRiskGroup`                   |     |     |     |     | an output      |
-| `results$adjustedSurvivalHeading`        |     |     |     |     | a preformatted |
-| `results$adjustedEstimandPanel`          |     |     |     |     | a html         |
-| `results$plot_adj`                       |     |     |     |     | an image       |
-| `results$nomogramHeading`                |     |     |     |     | a preformatted |
-| `results$plot_nomogram`                  |     |     |     |     | an image       |
-| `results$nomogram_display`               |     |     |     |     | a html         |
-| `results$nomogramSummaryHeading`         |     |     |     |     | a preformatted |
-| `results$nomogramSummary`                |     |     |     |     | a html         |
-| `results$adjustedSurvTable`              |     |     |     |     | a table        |
-| `results$adjustedSurvTableSummary`       |     |     |     |     | a html         |
-| `results$adjustedMedianTable`            |     |     |     |     | a table        |
-| `results$adjustedMedianSummary`          |     |     |     |     | a html         |
-| `results$adjustedCoxTable`               |     |     |     |     | a table        |
-| `results$adjustedCoxText`                |     |     |     |     | a html         |
-| `results$adjustedCoxSummary`             |     |     |     |     | a html         |
-| `results$adjustedCoxPH`                  |     |     |     |     | a preformatted |
-| `results$modelContributionTable`         |     |     |     |     | a table        |
-| `results$modelContributionSummary`       |     |     |     |     | a html         |
-| `results$multivariableCoxExplanation`    |     |     |     |     | a html         |
-| `results$multivariableCoxHeading3`       |     |     |     |     | a preformatted |
-| `results$adjustedSurvivalExplanation`    |     |     |     |     | a html         |
-| `results$riskScoreExplanation`           |     |     |     |     | a html         |
-| `results$nomogramExplanation`            |     |     |     |     | a html         |
-| `results$personTimeExplanation`          |     |     |     |     | a html         |
-| `results$stratifiedAnalysisExplanation`  |     |     |     |     | a html         |
-| `results$survivalPlotsHeading3`          |     |     |     |     | a preformatted |
-| `results$survivalPlotsExplanation`       |     |     |     |     | a html         |
+|                                         |     |     |     |     |                |
+|-----------------------------------------|-----|-----|-----|-----|----------------|
+| `results$eventRecodeInfo`               |     |     |     |     | a html         |
+| `results$todo`                          |     |     |     |     | a html         |
+| `results$errors`                        |     |     |     |     | a html         |
+| `results$strongWarnings`                |     |     |     |     | a html         |
+| `results$warnings`                      |     |     |     |     | a html         |
+| `results$infoMessages`                  |     |     |     |     | a html         |
+| `results$fittedTable`                   |     |     |     |     | a table        |
+| `results$text`                          |     |     |     |     | a html         |
+| `results$text2`                         |     |     |     |     | a html         |
+| `results$interactionExplanation`        |     |     |     |     | a html         |
+| `results$interactionTest`               |     |     |     |     | a table        |
+| `results$subgroupHR`                    |     |     |     |     | a table        |
+| `results$multivariableCoxSummary`       |     |     |     |     | a html         |
+| `results$glossaryPanel`                 |     |     |     |     | a html         |
+| `results$assumptionsPanel`              |     |     |     |     | a html         |
+| `results$survMetricsTable`              |     |     |     |     | a table        |
+| `results$survMetricsSummary`            |     |     |     |     | a html         |
+| `results$survMetricsPlot`               |     |     |     |     | an image       |
+| `results$personTimeTable`               |     |     |     |     | a table        |
+| `results$personTimeSummary`             |     |     |     |     | a html         |
+| `results$plot`                          |     |     |     |     | an image       |
+| `results$plot3`                         |     |     |     |     | an image       |
+| `results$cox_phTable`                   |     |     |     |     | a table        |
+| `results$cox_ph`                        |     |     |     |     | a preformatted |
+| `results$plot8`                         |     |     |     |     | an image       |
+| `results$plotKM`                        |     |     |     |     | an image       |
+| `results$risk_score_analysis2`          |     |     |     |     | a html         |
+| `results$riskScoreTable`                |     |     |     |     | a table        |
+| `results$riskScoreSummary`              |     |     |     |     | a html         |
+| `results$riskScoreMetrics`              |     |     |     |     | a html         |
+| `results$riskGroupPlot`                 |     |     |     |     | an image       |
+| `results$cindexValidation`              |     |     |     |     | a table        |
+| `results$stratificationExplanation`     |     |     |     |     | a html         |
+| `results$calculatedtime`                |     |     |     |     | an output      |
+| `results$outcomeredefined`              |     |     |     |     | an output      |
+| `results$addRiskScore`                  |     |     |     |     | an output      |
+| `results$addRiskGroup`                  |     |     |     |     | an output      |
+| `results$adjustedEstimandPanel`         |     |     |     |     | a html         |
+| `results$plot_adj`                      |     |     |     |     | an image       |
+| `results$plot_nomogram`                 |     |     |     |     | an image       |
+| `results$nomogram_display`              |     |     |     |     | a html         |
+| `results$nomogramSummary`               |     |     |     |     | a html         |
+| `results$adjustedSurvTable`             |     |     |     |     | a table        |
+| `results$adjustedSurvTableSummary`      |     |     |     |     | a html         |
+| `results$adjustedMedianTable`           |     |     |     |     | a table        |
+| `results$adjustedMedianSummary`         |     |     |     |     | a html         |
+| `results$adjustedCoxTable`              |     |     |     |     | a table        |
+| `results$adjustedCoxText`               |     |     |     |     | a html         |
+| `results$adjustedCoxSummary`            |     |     |     |     | a html         |
+| `results$adjustedCoxPH`                 |     |     |     |     | a preformatted |
+| `results$modelContributionTable`        |     |     |     |     | a table        |
+| `results$modelContributionSummary`      |     |     |     |     | a html         |
+| `results$multivariableCoxExplanation`   |     |     |     |     | a html         |
+| `results$adjustedSurvivalExplanation`   |     |     |     |     | a html         |
+| `results$riskScoreExplanation`          |     |     |     |     | a html         |
+| `results$nomogramExplanation`           |     |     |     |     | a html         |
+| `results$personTimeExplanation`         |     |     |     |     | a html         |
+| `results$stratifiedAnalysisExplanation` |     |     |     |     | a html         |
+| `results$survivalPlotsExplanation`      |     |     |     |     | a html         |
 
 Tables can be converted to data frames with `asDF` or
 [`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html). For
 example:
 
-`results$interactionTest$asDF`
+`results$fittedTable$asDF`
 
-`as.data.frame(results$interactionTest)`
+`as.data.frame(results$fittedTable)`
