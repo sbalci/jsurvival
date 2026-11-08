@@ -48,7 +48,10 @@ In many clinical studies, we don't get to observe the event for every patient. T
 *   A patient is lost to follow-up.
 *   A patient dies from a cause other than the one being studied (this is a competing event, not ordinary censoring; see the competing risks guide).
 
-When we have a follow-up time for a patient, but the event has not occurred, we call this "censored" data. The jSurvival module is specifically designed to handle censored data correctly.
+When observation ends while a patient is known to be event-free, their time is censored.
+Kaplan-Meier inference assumes non-informative censoring for the population being estimated.
+Loss to follow-up related to prognosis can violate that assumption. Unknown vital status
+or a missing death date must not automatically be recoded as alive.
 
 # Performing a Survival Analysis in jamovi
 
@@ -83,7 +86,7 @@ The Kaplan-Meier plot is a graph that shows the probability of survival over tim
 
 **How to Read the Plot:**
 
-*   At the beginning (time = 0), the survival probability is 100% for all groups.
+*   Before the first event, survival is 100%. Recorded events at time zero can cause an immediate drop and need source review.
 *   As time goes on, the lines on the plot will go down as more patients experience the event.
 *   If one line is consistently above another, it means that group has a better survival probability.
 *   The small vertical ticks on the lines represent the "censored" patients.
@@ -93,7 +96,7 @@ The Kaplan-Meier plot is a graph that shows the probability of survival over tim
 These numbers come from the `histopathology` example data, with OverallTime as Time Elapsed, Outcome as Outcome, Event Level 1, and lymphovascular invasion (LVI) as the Explanatory Variable:
 
 - Median survival was 26.0 months (95% CI 20.1 to 32.3) without LVI and 9.3 months (95% CI 8.8 to 10.6) with LVI.
-- The log-rank p-value was below 0.001, so a difference this large is unlikely to be due to chance alone.
+- The log-rank p-value was below 0.001, providing evidence against equal survival under the test's assumptions.
 - This is an association in observational data. It does not show that LVI causes the shorter survival. Consider whether the difference is clinically meaningful in this disease.
 
 ## Statistical Significance: The Log-Rank Test
@@ -102,7 +105,7 @@ The Kaplan-Meier plot gives you a visual representation of the survival differen
 
 The log-rank test gives you a **p-value**, which appears on the plot when **P-values** is ticked.
 
-*   **A small p-value (typically less than 0.05)** suggests that the difference in survival between the groups is unlikely to be due to chance. In this case, you can conclude that there is a statistically significant difference in survival.
+*   **A small p-value (typically less than 0.05)** means that a test statistic at least this extreme would be unusual under equal survival and the test assumptions. It is not the probability that chance caused the observed difference or that the null hypothesis is true.
 *   **A large p-value (greater than 0.05)** suggests that there is not enough evidence to say that there is a difference in survival between the groups.
 
 # Conclusion

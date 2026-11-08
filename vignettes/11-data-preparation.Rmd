@@ -19,6 +19,11 @@ knitr::opts_chunk$set(
 
 Proper data preparation is crucial for reliable survival analysis. This vignette provides guidance on preparing data for use with jSurvival, covering common data issues and their solutions.
 
+Use one row per independent patient for the survival analyses in this module. Define the
+endpoint, time origin, ascertainment rules and censoring date before recoding. Repeated
+visits, recurrent events and delayed entry need methods designed for those data. The
+examples below are instructional code; most chunks are not executed during site builds.
+
 # Essential Data Components
 
 ## Required Variables
@@ -131,7 +136,9 @@ clinical_data <- data.frame(
 )
 clinical_data$death_date[sample(100, 35)] <- NA # these patients are alive at last follow-up
 
-# Calculate time to death or censoring
+# In this simulation only, a missing death date means verified alive at last follow-up.
+# In a clinical export, a missing death date alone does not establish vital status.
+# Calculate time to death or verified censoring
 clinical_data$death_occurred <- !is.na(clinical_data$death_date)
 clinical_data$event_date <- ifelse(clinical_data$death_occurred,
   clinical_data$death_date,
@@ -142,13 +149,18 @@ clinical_data$event_date <- as.Date(clinical_data$event_date, origin = "1970-01-
 # Time in months
 clinical_data$time_months <- as.numeric(
   difftime(clinical_data$event_date, clinical_data$diagnosis_date, units = "days")
-) / 30.44 # Average days per month
+) / (365.25 / 12) # Fixed-duration months, not calendar months
 
 # Time in years
 clinical_data$time_years <- as.numeric(
   difftime(clinical_data$event_date, clinical_data$diagnosis_date, units = "days")
 ) / 365.25 # Accounting for leap years
 ```
+
+These divisions use fixed-duration units. The Time Interval Calculator defaults to calendar
+intervals for months and years and also offers a standardized-duration basis; dates around month ends or leap days can therefore give
+different fractional values. Choose and report one convention. Precalculated times in
+the survival analyses are used as supplied: selecting an output unit does not convert them.
 
 ## Handling Time Zero Issues
 
@@ -177,12 +189,8 @@ negative_times <- clinical_data$time_months < 0
 if (any(negative_times, na.rm = TRUE)) {
   print(paste("Found", sum(negative_times, na.rm = TRUE), "negative time values"))
 
-  # Options:
-  # 1. Exclude these patients
-  clinical_data <- clinical_data[!negative_times | is.na(negative_times), ]
-
-  # 2. Investigate data entry errors: a negative time is a data error
-  # View(clinical_data[negative_times, ])
+  # Review source records before correcting or excluding any observation.
+  records_to_review <- clinical_data[which(negative_times), ]
 }
 ```
 
@@ -220,8 +228,8 @@ clinical_data$biomarker_value <- rlnorm(n, meanlog = 2, sdlog = 0.6)
 # From death status variable
 clinical_data$death_binary <- ifelse(clinical_data$vital_status == "Dead", 1, 0)
 
-# From death date
-clinical_data$death_binary <- ifelse(is.na(clinical_data$death_date), 0, 1)
+# A death date can corroborate the indicator. Do not overwrite unknown status
+# with 0 simply because its death date is missing.
 
 # Verify coding
 table(clinical_data$death_binary, clinical_data$vital_status, useNA = "always")
@@ -362,23 +370,19 @@ print(paste("Complete cases:", nrow(complete_data), "of", nrow(clinical_data)))
 
 ### Missing Vital Status
 
-Assuming alive is an assumption, not a fact: run a sensitivity analysis. It is informative if unknown status relates to the outcome. Administrative censoring means censoring everyone at a fixed study-end date; see Outcome Organizer's **Administrative censoring**.
+Keep unknown vital status missing until source review establishes event status or a date
+at which the patient was verified event-free. A last-contact date alone does not establish
+that status. Censoring at the last verified event-free date assumes that the subsequent
+censoring is non-informative for the estimand, conditional on modeled covariates where
+applicable. Review loss to follow-up and perform appropriate sensitivity analyses.
+Administrative censoring applies a fixed study-end date and retains earlier observed
+events; it does not mean that everyone is assigned a censored outcome.
 
 ```{r admin-censoring}
-# For missing death dates, censor at last known follow-up
-clinical_data$time_months_imputed <- clinical_data$time_months
-clinical_data$death_binary_imputed <- clinical_data$death_binary
-
-# If death status missing but last follow-up available, assume alive
-missing_death <- is.na(clinical_data$death_binary) & !is.na(clinical_data$last_followup_date)
-if (any(missing_death)) {
-  clinical_data$death_binary_imputed[missing_death] <- 0
-  clinical_data$time_months_imputed[missing_death] <-
-    as.numeric(difftime(clinical_data$last_followup_date[missing_death],
-      clinical_data$diagnosis_date[missing_death],
-      units = "days"
-    )) / 30.44
-}
+# Flag unknown status for review; do not impute an event-free outcome.
+unknown_status <- is.na(clinical_data$death_binary)
+records_needing_status_review <- clinical_data[unknown_status, ]
+sum(unknown_status)
 ```
 
 # Explanatory Variable Preparation
@@ -407,10 +411,10 @@ clinical_data$treatment <- relevel(clinical_data$treatment, ref = "Standard")
 ### Handling Rare Categories
 
 ```{r rare-categories}
-# Combine rare categories to ensure adequate sample sizes
+# Inspect sparse categories before specifying a clinically justified grouping.
 table(clinical_data$histology)
 
-# Combine categories with <10 patients
+# Illustration only: a count threshold cannot justify combining different diseases.
 rare_histologies <- names(table(clinical_data$histology))[table(clinical_data$histology) < 10]
 clinical_data$histology_grouped <- as.character(clinical_data$histology)
 clinical_data$histology_grouped[clinical_data$histology_grouped %in% rare_histologies] <- "Other"
@@ -434,8 +438,8 @@ clinical_data$age_group <- cut(clinical_data$age_at_diagnosis,
   include.lowest = TRUE
 )
 
-# Age as decades
-clinical_data$age_decades <- floor(clinical_data$age_at_diagnosis / 10) * 10
+# Continuous age per ten-year increase; preserves all age information.
+clinical_data$age_decades <- clinical_data$age_at_diagnosis / 10
 ```
 
 ### Biomarker Preparation
@@ -572,7 +576,7 @@ Before proceeding with survival analysis, verify:
 - [ ] Categorical variables have appropriate reference levels
 - [ ] Continuous variables have been checked for outliers
 - [ ] Data types are correct (numeric, factor, date)
-- [ ] Sample size is adequate (rule of thumb: 10 events per variable)
+- [ ] Sample size planning accounts for candidate parameters, event frequency and anticipated performance; a fixed events-per-variable rule does not establish adequacy ([Riley et al., 2020](https://www.bmj.com/content/368/bmj.m441.short))
 - [ ] Follow-up time is sufficient for meaningful analysis
 
 ## Common Data Preparation Mistakes
@@ -580,7 +584,7 @@ Before proceeding with survival analysis, verify:
 1. **Incorrect time calculation**: Using calendar time instead of time from study entry
 2. **Wrong event coding**: Selecting the censored value as the Event Level
 3. **Including impossible values**: Negative times, events after last follow-up
-4. **Ignoring competing risks**: Treating all deaths as same event type
+4. **Wrong endpoint definition**: Overall survival counts all deaths; cause-specific cumulative incidence retains other causes as competing events
 5. **Improper handling of missing data**: Excluding too many patients without justification
 6. **Not checking assumptions**: Ignoring data distribution and outliers
 

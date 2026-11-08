@@ -32,7 +32,13 @@ By the end of this guide, you will be able to:
 
 # Why Do We Need a Special Analysis for Competing Risks?
 
-Let's imagine we are studying deaths from breast cancer. If we only use the standard Kaplan-Meier method, we would treat deaths from other causes (like heart disease) as "censored." This treats these patients as if they could still die from breast cancer, which they cannot. As a result, one minus the Kaplan-Meier estimate overstates the probability of dying from breast cancer.
+Suppose we study deaths from breast cancer and treat deaths from other causes as
+censored in Kaplan-Meier. One minus that estimate is a net, cause-specific quantity;
+it is not the probability of breast-cancer death in a population where other deaths
+also occur. Cumulative incidence estimates that probability using all event types.
+Cause-specific Cox models can still address associations with cause-specific hazard;
+that is a different question from absolute event probability. See the survival authors'
+[competing-risk guide](https://stat.ethz.ch/R-manual/R-devel/library/survival/doc/compete.pdf).
 
 Competing risks analysis solves this problem by estimating the probability of each event type, allowing for the others. In the `melanoma` data set of the R package, death from melanoma by 1825 days is 22.4% by cumulative incidence and 23.1% by one minus Kaplan-Meier; the gap grows as competing events become more common.
 
@@ -106,6 +112,9 @@ Competing risks are a common issue in clinical research, especially when studyin
 
 ## Common Pitfalls
 
-- Treating competing events as censored in KM analyses makes one minus KM overstate the cumulative incidence of the event of interest.
+- One minus cause-specific Kaplan-Meier is not cumulative incidence when competing
+  events occur. Select the estimand before choosing a curve or regression model.
+- Ordinary loss to follow-up must still satisfy the censoring assumptions of the
+  competing-risk estimator; identifying competing events does not solve informative censoring.
 - Outcome labeling: Ensure outcome levels are clearly mapped (no event, event of interest, competing event[s]).
 - Interpretation: CIF curves go up (probability of event), unlike KM curves which go down (probability of survival).

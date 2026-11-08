@@ -185,7 +185,7 @@ train_cutpoint <- survivalcont(
 
 # Apply cut-point to test data
 optimal_cutpoint <- train_cutpoint$rescutTable$asDF$cutpoint[1]
-test_data$biomarker_high <- ifelse(test_data$biomarker_value >= optimal_cutpoint, 
+test_data$biomarker_high <- ifelse(test_data$biomarker_value > optimal_cutpoint,
                                    "High", "Low")
 
 validation_result <- survival(
@@ -197,6 +197,11 @@ validation_result <- survival(
   explanatory = biomarker_high
 )
 ```
+
+The fitted cutoff convention is **Low ≤ cutoff; High > cutoff**. Freeze the exact cutoff
+and its equality rule before testing held-out patients. A random split from one source is
+internal validation, not external validation. For small cohorts it is inefficient; use
+resampling that repeats the entire selection process when assessing optimism.
 
 ## Alternative Approaches to Dichotomization
 
@@ -399,8 +404,9 @@ print(data_checks)
 ```{r model-diagnostics}
 # Concordance index (C-index)
 # Measures discriminative ability of the model
-# Values >0.7 generally considered good, but the apparent value from the
-# same data used to fit the model is optimistic
+# No universal C-index threshold establishes clinical usefulness.
+# Evaluate discrimination, uncertainty, calibration and decision consequences.
+# The apparent value from the model-development patients is optimistic.
 
 # Calibration assessment
 # Agreement between predicted and observed survival
@@ -415,18 +421,22 @@ print(data_checks)
 
 ```{r effect-interpretation}
 # Hazard Ratio Interpretation:
-# HR = 0.50: 50% reduction in hazard (strong effect)
-# HR = 0.75: 25% reduction in hazard (moderate effect)
-# HR = 0.90: 10% reduction in hazard (small effect)
-# HR = 1.00: No effect
-# HR = 1.25: 25% increase in hazard (moderate harm)
-# HR = 2.00: 100% increase in hazard (strong harm)
+# HR = 0.50: 50% lower fitted hazard relative to the reference
+# HR = 0.75: 25% lower fitted hazard relative to the reference
+# HR = 0.90: 10% lower fitted hazard relative to the reference
+# HR = 1.00: Equal fitted hazards
+# HR = 1.25: 25% higher fitted hazard relative to the reference
+# HR = 2.00: 100% higher fitted hazard relative to the reference
+# These are relative associations. Clinical importance depends on baseline
+# risk, time horizon, uncertainty, adverse outcomes and study design.
 
-# Number Needed to Treat (NNT) calculation
-survival_control <- 0.60  # 5-year survival in control
-survival_treatment <- 0.70  # 5-year survival in treatment
+# Hypothetical causal survival contrast at the same five-year horizon:
+survival_control <- 0.60
+survival_treatment <- 0.70
 absolute_benefit <- survival_treatment - survival_control
-nnt <- 1 / absolute_benefit  # Number needed to treat
+nnt <- 1 / absolute_benefit  # 10 at five years, for these illustrative values
+# A treatment NNT needs a defensible causal comparison and uncertainty.
+# Do not infer it from an observational HR or from these invented values.
 ```
 
 ## Confidence Interval Interpretation
@@ -434,11 +444,12 @@ nnt <- 1 / absolute_benefit  # Number needed to treat
 ```{r ci-interpretation}
 # HR = 0.75 (95% CI: 0.60-0.95)
 # Interpretation:
-# - Point estimate suggests 25% reduction in hazard
-# - The 95% CI for the HR is 0.60 to 0.95
-# - Since CI excludes 1.0, result is statistically significant
-# - Minimum plausible benefit is 5% (HR=0.95)
-# - Maximum plausible benefit is 40% (HR=0.60)
+# - Point estimate is a 25% lower fitted hazard relative to the reference
+# - HR interval endpoints correspond to 5% to 40% lower relative hazard
+# - These endpoints are not bounds on absolute benefit or all plausible effects
+# - The interval excludes 1 for the stated model and confidence procedure
+# - Repeated use of that procedure covers the true parameter in 95% of studies,
+#   under its assumptions; it assigns no probability to this fixed interval.
 ```
 
 # Conclusion
@@ -467,9 +478,13 @@ Every call below was run against the bundled `histopathology` data before being 
 
 ## Weighted Log-Rank Tests
 
-The standard log-rank test weights every event equally, which makes it least sensitive exactly
-where survival curves often separate first. `weightedLogRank = TRUE` adds the Fleming-Harrington
-family alongside it, so you can see whether a conclusion depends on the weighting.
+The standard log-rank test gives each event time weight 1 and is well suited to
+proportional-hazards alternatives. `weightedLogRank = TRUE` also reports the
+`survival::survdiff()` G-rho tests, which weight event times by pooled survival
+raised to rho. Positive rho emphasizes earlier events relative to later events;
+it does not guarantee greater power for every early difference. These options do
+not implement the full two-parameter late-effect or MaxCombo family. See the
+[survdiff reference](https://stat.ethz.ch/R-manual/R-patched/library/survival/html/survdiff.html).
 
 ```{r weighted-logrank}
 res <- survival(
@@ -494,8 +509,9 @@ looking at the results. Picking the smallest p-value from three tests is not a t
 
 ## Age-Adjusted Analysis
 
-Age is the dominant prognostic variable in most clinical cohorts, and an unadjusted group
-comparison can be reporting age rather than treatment. Seven options cover this:
+Age can confound a group comparison when it is associated with both group and outcome.
+Select adjustment variables from the study question and design; age is not automatically
+the dominant predictor. The age options include the following:
 
 ```{r age-adjusted}
 res_age <- survival(

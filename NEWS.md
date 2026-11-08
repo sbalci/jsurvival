@@ -1,4 +1,50 @@
-# jsurvival 1.1.3 (2026-11-07)
+# jsurvival 1.1.3 (2026-11-08)
+
+- **GUI examples for all nine analyses:** Added synthetic `.omv` files in `data/`,
+  each with a GUI-configured saved analysis, and registered descriptive names,
+  coding, units and tags in the module's Data Library. Includes exported date,
+  interval, outcome and cut-off columns; Kaplan-Meier and Cox displays; LASSO
+  tuning; and a Firth nomogram safeguard example. See `GUI_EXAMPLES.md` for the
+  exercised options, archive checks and the remaining DateTime missing-component
+  display limitation. These examples do not establish clinical validity or full
+  desktop release acceptance. Rebuild the module to include them in its library.
+
+- **DateTime parsing counts:** Every native percentage now uses all observations
+  as its denominator, including originally missing and failed values. The header names
+  this denominator. This replaces undefined `NaN` cells and prevents the parsed share
+  from being confused with the separate parse rate among non-missing values.
+
+- **Interaction forest plots:** Both styles now show all fitted Cox coefficients with
+  confidence intervals, explicit conditioning values and the model-table conditioning
+  warning. Interaction rows are labelled as ratios of hazard ratios; non-estimable
+  coefficients are labelled without a point or interval. Non-interaction forests retain
+  their existing style. Recreate earlier interaction forest figures: a main-effect HR
+  is conditional, and an interaction coefficient is not a subgroup HR. Model estimates,
+  statistical methods and defaults are unchanged.
+
+- **Adjusted survival curves with stratification:** Curves now use the exact Cox fit
+  reported by the age-adjusted table, retaining the selected baseline strata, age
+  strata or both. Every model-cohort patient is assigned to each group and predictions
+  are averaged on a common time grid, ending at the shortest stratum follow-up.
+  Drawing state contains aggregate coordinates and is invalidated by every
+  stratification control. Saved curves from an earlier candidate require recalculation.
+  **Recreate earlier adjusted-curve figures made with stratification selected.**
+  The HR estimates and the existing adjustment choices are unchanged.
+
+- **Further pre-submission review (2026-11-08):** Removed universal C-index grades and
+  hazard-ratio benefit/harm labels; qualified the illustrative NNT and confidence-interval
+  wording. Corrected weighted log-rank guidance to the implemented G-rho family. Clarified
+  the adjusted-curve model mismatch and interaction-forest conditioning limitation, both
+  subsequently repaired above. Refreshed release evidence and maintainer instructions.
+  This documentation pass itself did not change estimates or statistical defaults.
+
+- **Documentation review (2026-11-08):** Corrected missing-vital-status guidance,
+  continuous age scaling per decade, the cutoff equality rule in validation examples,
+  C-index range and interpretation, and distinctions between tuning and performance
+  validation. Clarified composite endpoint times, fixed-duration versus calendar time,
+  competing-risk estimands and model limitations. Added an executable methods/reporting
+  vignette and release-review evidence. Analysis code, defaults and estimators are unchanged
+  by this documentation pass.
 
 - **Outcome Organizer maintenance:** Endpoint recoding, repeated-record hierarchy,
   interval preparation, administrative censoring and final output assembly now run in
@@ -128,7 +174,8 @@ how results were labelled. **If you have reported results from an earlier versio
   patient level rather than by expanded Fine-Gray counting-process rows, and risk-group cumulative
   incidence curves preserve `"Censored"` as the reference status level even when a risk group has zero
   censored observations.
-- Known limit: forest plots do not yet show the conditioning note for interaction terms.
+- Interaction forest plots retain conditioning notes, reference values and all fitted
+  coefficient rows; interaction coefficients are identified as ratios of hazard ratios.
 
 ## Odds Ratio
 

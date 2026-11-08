@@ -146,8 +146,10 @@ first variable is the focal effect and the second is the moderator.}
 \item{multievent}{If true, multiple event levels will be considered for
 competing risks analysis. Requires specifying \code{dod}, \code{dooc}, etc.}
 
-\item{hr}{If true, generates a plot of hazard ratios for each explanatory
-variable in the Cox model.}
+\item{hr}{If true, generates a plot of fitted Cox coefficients. Interaction
+models use a coefficient forest in both styles: main effects include their
+conditioning values, and interaction coefficients are labelled as ratios of
+hazard ratios.}
 
 \item{sty}{The style of the hazard ratio (forest) plot. "finalfit" or
 "survminer forestplot".}

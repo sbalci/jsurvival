@@ -33,9 +33,17 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
 
 # Practical Tips
 
-- Coding: Set the Event Level to the value that means the event happened. Keep time > 0 with consistent units (months/days).
+- Coding: Set the Event Level to the event value. Check nonnegative times and consistent units. Review events at time zero; LASSO Cox requires strictly positive times, while the standard survival analyses can retain zero-time events with a disclosure.
 - Collinearity: Avoid highly correlated predictors; check their correlation before modeling.
-- Sample size: As a rough guide, aim for at least 10 events per model parameter. A factor with k levels uses k - 1 parameters.
+- Sample size: Count all candidate parameters, including factor levels, spline terms and interactions. A fixed ten-events rule does not establish adequacy; use context-specific planning ([Riley et al., 2020](https://www.bmj.com/content/368/bmj.m441.short)).
+
+An HR describes relative instantaneous hazard, not a risk ratio or the probability of an
+event by a specified time. In a Fine-Gray model, report a **subdistribution** HR and use
+cumulative incidence for event probabilities. An interaction main effect is conditional
+on the reference or zero value of the other interacting predictor. Interaction forest
+plots show those conditioning values and flag zero values outside the observed range.
+An interaction row is a ratio of hazard ratios, not a within-subgroup HR. Retain the
+caption when exporting or reporting the figure.
 
 # Reporting Checklist
 

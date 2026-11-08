@@ -212,7 +212,7 @@ A cut-off chosen from the same data overstates the difference between the groups
 
 ## Analysis Considerations
 
-1. **Sample size**: As a rough guide, at least 10 events per model parameter in Cox regression
+1. **Sample size**: Plan for the number of candidate parameters, event frequency and intended precision; ten events per parameter does not establish adequacy
 2. **Proportional hazards**: Check assumption using Schoenfeld residuals
 3. **Multiple comparisons**: Adjust p-values when testing multiple groups
 4. **Clinical relevance**: Statistical significance vs. clinical importance

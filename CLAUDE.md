@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **Main website**: https://www.serdarbalci.com/jsurvival/
 - **ClinicoPath suite**: https://sbalci.github.io/ClinicoPathJamoviModule/
-- **Current version**: 0.0.3.90
+- **Current version**: read `DESCRIPTION` and `jamovi/0000.yaml` (1.1.3 on 2026-11-08).
 
 ## Development Commands
 
@@ -30,12 +30,12 @@ pkgdown::preview_site()     # Preview in browser
 
 ### Testing Commands
 ```r
-# Run existing tests (limited to stagemigration currently)
+# Run the shipped survival regression suite in a clean session
 devtools::test()            # Run all tests
 devtools::test_active_file() # Run current test file
 
 # Run single test
-testthat::test_file("tests/testthat/test-stagemigration.R")
+testthat::test_local(filter = "event-indicator", reporter = "summary")
 
 # To add new tests
 usethis::use_test("function-name")  # Create test file template
@@ -47,7 +47,7 @@ usethis::use_test("function-name")  # Create test file template
 R -e "jmvtools::install()"
 
 # The .jmo file will be created in the build directory
-# Current build: jsurvival_0.0.3.90-mac.jmo
+# Read the current candidate name and platform from the build output; verify its digest.
 ```
 
 ## Architecture
@@ -74,8 +74,13 @@ The project follows jamovi's R6-based architecture with paired files:
    - `multisurvival`: Multivariable Cox regression
    - `oddsratio`: Odds ratio for binary outcomes
    - `timeinterval`: Time interval calculations (hidden in menu)
-   - `stagemigration`: Stage migration analysis (in development)
-   - `outcomeorganizer`: Outcome data organization (in development)
+   - `lassocox`: Exploratory penalized Cox regression and lambda tuning
+   - `datetimeconverter`: Date/time conversion and component extraction
+   - `outcomeorganizer`: Outcome recoding and endpoint preparation
+
+   The nine shipped analyses are derived from `jamovi/0000.yaml`. Stage migration
+   is not shipped here. Outcome Organizer prepares codes; it does not fit a multistate
+   model or infer time to a composite endpoint's first event.
 
 ### Key Dependencies
 
@@ -157,19 +162,28 @@ The project follows jamovi's R6-based architecture with paired files:
 options(jmv.debug = TRUE)
 
 # Test analysis directly
-analysis <- jsurvival::survival(
-    data = your_data,
-    elapsedtime = "time_var",
-    outcome = "status_var",
-    explanatory = "group_var"
+data("histopathology", package = "jsurvival")
+result <- jsurvival::survival(
+    data = histopathology,
+    elapsedtime = "OverallTime",
+    outcome = "Outcome", outcomeLevel = "1",
+    explanatory = "LVI",
+    dod = NULL, dooc = NULL, awd = NULL, awod = NULL
 )
-analysis$run()
+result$coxTable$asDF
 ```
 
 ## Testing Data
 The package includes several test datasets in `/data/`:
 - `histopathology.rda`: Example pathology data with survival
 - `melanoma.rda`: Melanoma survival dataset
-- `stagemigration_*.rda`: Various stage migration test cases
+- Six `lassocox_*.rda` synthetic model-development datasets
 
 Load test data with: `data("dataset_name", package = "jsurvival")`
+
+## Release evidence
+
+Read `RELEASE_CHECKLIST.md` and the current review under `docs/audit/` before submission.
+A green static gate, function-body parity or numerical fixture does not establish desktop
+save/reopen/export acceptance or clinical validation. Preserve pre-existing working-tree
+changes and regenerate headers/help only through the maintained tooling.

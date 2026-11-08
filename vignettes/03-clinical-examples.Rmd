@@ -167,8 +167,11 @@ validation_data <- data.frame(
   Death = rbinom(120, 1, 0.6),
   Biomarker_X = rlnorm(120, meanlog = 2.5, sdlog = 0.5)
 )
-# (Assuming cut-point = 15.2 was identified in the discovery data)
-validation_data$Biomarker_High <- ifelse(validation_data$Biomarker_X >= 15.2, "High", "Low")
+# Freeze the exact discovery cutoff, including its equality convention.
+discovery_cutoff <- biomarker_result$rescutTable$asDF$cutpoint[1]
+stopifnot(length(discovery_cutoff) == 1L, is.finite(discovery_cutoff))
+validation_data$Biomarker_High <- ifelse(
+  validation_data$Biomarker_X > discovery_cutoff, "High", "Low")
 
 validation_result <- survival(
   data = validation_data,
@@ -184,7 +187,7 @@ validation_result <- survival(
 ## Clinical Translation
 
 **If optimal cut-point = 15.2 ng/mL, HR = 2.1 (95% CI: 1.4-3.2)**:
-- Patients with biomarker >=15.2 ng/mL have a 2.1 times higher hazard of death in this dataset; a data-derived cut-off overstates this
+- Patients with biomarker >15.2 ng/mL have 2.1 times the fitted hazard compared with those at or below 15.2 in this hypothetical grouped analysis. This group contrast differs from the HR per one-unit biomarker increase; a discovery-cohort group HR is optimistic.
 - Validate the threshold in an independent cohort before any clinical use
 - This is an association, not a causal effect
 

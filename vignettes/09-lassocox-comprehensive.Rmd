@@ -79,12 +79,11 @@ Where:
 
 ### Concordance Index (C-index)
 - Measures discriminative ability
-- Range: 0.5 (random) to 1.0 (perfect)
-- Interpretation:
-  - < 0.6: Poor discrimination
-  - 0.6-0.7: Fair discrimination
-  - 0.7-0.8: Good discrimination
-  - > 0.8: Excellent discrimination
+- Range: 0 to 1 among comparable pairs; 0.5 corresponds to chance ordering and values
+  below 0.5 indicate reversed ordering. It can be undefined when no pairs are comparable.
+- Higher values indicate better ordering of event times. There are no universal clinical
+  acceptance bands. The displayed C-index is apparent performance in the development
+  patients and does not establish calibration or usefulness for a clinical decision.
 
 ### Risk Stratification
 - **Survival Curves**: Visual assessment of risk group separation
@@ -151,7 +150,9 @@ lung_result <- lassocox(
 
 ### Results
 
-These predictors are simulated independently of the outcome, so the correct result is that LASSO selects nothing and the apparent C-index is 0.5. That is what the analysis reports.
+These predictors are simulated independently of the outcome. LASSO may retain no predictors
+or select noise, depending on the generated sample and fold allocation. An empty model has
+an apparent C-index of 0.5; a nonempty model can look better by chance.
 
 ## Example 2: High-Dimensional Genomic Study
 
@@ -298,12 +299,14 @@ A penalized coefficient is shrunken toward zero and depends on the unit of the p
 
 ### C-index Interpretation
 
-| C-index Range | Discrimination | Note |
-|---|---|---|
-| 0.50 - 0.60 | Poor | Apparent values are optimistic; validate externally before any clinical use |
-| 0.60 - 0.70 | Fair | Apparent values are optimistic; validate externally before any clinical use |
-| 0.70 - 0.80 | Good | Apparent values are optimistic; validate externally before any clinical use |
-| 0.80 - 1.00 | Excellent | Apparent values are optimistic; validate externally before any clinical use |
+A C-index describes ordering among comparable patient pairs, with tied predictions
+receiving half credit. Values range from 0 to 1 when comparable pairs exist; 0.5 is
+chance ordering and values below 0.5 indicate reversed ordering. It is undefined when
+no pairs are comparable. There are no universal cutoffs for clinical usefulness.
+Interpret discrimination alongside its uncertainty, case mix, censoring, calibration
+and the decisions the model would inform. The displayed development-sample estimate
+is apparent performance; lambda cross-validation does not validate that estimate.
+See the [survival concordance reference](https://stat.ethz.ch/R-manual/R-devel/library/survival/html/concordance.html).
 
 ## Visualization Interpretation
 
@@ -317,10 +320,10 @@ A penalized coefficient is shrunken toward zero and depends on the unit of the p
 ### 2. Coefficient Plot
 - **Red bars**: Higher hazard (positive coefficients)
 - **Blue bars**: Lower hazard (negative coefficients)
-- **Bar length**: Coefficient magnitude (effect size)
+- **Bar length**: Penalized coefficient on its original predictor scale; lengths cannot rank clinical importance across different units.
 
 ### 3. Survival Curves
-- **Separation**: Better separation indicates stronger risk stratification
+- **Separation**: Describes the development patients after fitting and grouping on those same patients; separation is optimistic and does not establish predictive performance in new patients.
 - **Risk tables**: Numbers at risk over time
 
 ### Cardiovascular Results
@@ -367,7 +370,7 @@ A main-effects LASSO Cox model selects prognostic variables. It does not show wh
 ## Model Validation
 
 ### Cross-Validation Strategy
-1. **Internal Validation**: Built-in cross-validation for λ selection
+1. **Tuning**: Built-in cross-validation selects λ; the displayed C-index is still apparent performance
 2. **External Validation**: Test on independent dataset
 3. **Bootstrap Validation**: Assess model stability
 4. **Temporal Validation**: Validate on more recent data
@@ -384,10 +387,13 @@ These checks are done outside this analysis. Apply the frozen coefficients to th
 ### Preprocessing Strategies
 1. **Complete Case Analysis**: Default approach
 2. **Multiple Imputation**: For missing at random data
-3. **Indicator Variables**: For missing not at random
-4. **Domain Knowledge**: Clinical expertise for imputation
+3. **Sensitivity Analysis**: Missing-not-at-random mechanisms need explicit assumptions and sensitivity analyses; a missingness indicator alone does not resolve the bias
+4. **Domain Knowledge**: Prespecify imputation models with clinical and statistical input
 
 The analysis drops rows with a missing value in any selected variable, and **Rows Excluded (Missing Data)** in the Model Summary reports how many. Multiple imputation is done with other tools before this analysis.
+
+For performance assessment, fit learned imputation and other learned preprocessing within
+each training resample. jsurvival does not pool LASSO fits across multiply imputed datasets.
 
 ## Feature Engineering
 

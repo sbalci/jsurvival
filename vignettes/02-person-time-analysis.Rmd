@@ -30,13 +30,13 @@ Person-time analysis is a fundamental concept in epidemiology and survival analy
 - **Total Person-Time**: Sum of all individual follow-up periods
 - **Incidence Rate**: Number of events ÷ Total person-time  
 - **Time Units**: Typically expressed as person-days, person-months, or person-years
-- **Censoring**: Properly accounts for participants leaving the study early
+- **Censoring**: Counts observed exposure up to the endpoint or censoring; informative loss to follow-up can still bias comparisons
 - **Varying Follow-up**: Handles different observation periods for each participant
 
 ### Why Person-Time Matters
 
 1. **Accurate Rate Calculations**: Provides proper denominators for incidence rates
-2. **Comparison Across Studies**: Enables valid comparisons between populations with different follow-up patterns
+2. **Comparison Across Studies**: Expresses counts on a common exposure scale; differences in case mix, follow-up period and ascertainment still require assessment
 3. **Adjustment for Time**: Accounts for varying exposure periods in survival analysis
 
 # Person-Time in jSurvival Modules
@@ -287,7 +287,7 @@ Choose appropriate multipliers based on event frequency:
 
 Person-time rates use Poisson exact confidence intervals:
 - **Exact method**: Based on Poisson distribution of event counts
-- **Conservative approach**: Provides accurate coverage
+- **Coverage**: Exact count limits under a Poisson model; they do not correct informative censoring, confounding or dependence between patients
 - **Asymmetric intervals**: Reflects the nature of count data
 
 ## Integration with Survival Analysis
@@ -322,7 +322,7 @@ When reviewing person-time results:
 
 ### Issue 1: Zero Events in Intervals
 **Problem**: Some time intervals have no events
-**Solution**: Consider combining intervals or using exact Poisson methods
+**Solution**: Retain prespecified intervals and report the zero rate with its upper confidence limit. A zero count does not establish zero hazard; no rate is defined if exposure is also zero.
 
 ### Issue 2: Very Unequal Follow-up
 **Problem**: Large variation in follow-up times
@@ -385,7 +385,7 @@ Person-time analysis gives event rates that account for varying follow-up. The j
 
 By incorporating person-time analysis into your survival studies, you can:
 - Provide more accurate and interpretable results
-- Enable valid comparisons across studies and populations
+- Put study rates on a common exposure scale while assessing comparability of populations
 - Better understand temporal patterns in your data
 - Meet epidemiological standards for rate-based analysis
 

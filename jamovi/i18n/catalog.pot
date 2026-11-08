@@ -293,6 +293,10 @@ msgstr ""
 msgid "{dist} model - AIC {aic}, BIC {bic}, log-likelihood {loglik}{cov}"
 msgstr ""
 
+#: R/multisurvival.b.R
+msgid "{effect}, at {conditions}"
+msgstr ""
+
 #: R/survival-competingrisks.R
 msgid ""
 "{feature} is not available for competing-risks analysis. It assumes a single "
@@ -542,10 +546,23 @@ msgid ""
 msgstr ""
 
 #: R/multisurvival.b.R
+msgid "{variable} ({contrast} contrast)"
+msgstr ""
+
+#: R/multisurvival.b.R
+msgid "{variable} (per 1-unit increase)"
+msgstr ""
+
+#: R/multisurvival.b.R
+msgid "{variable} (ratio of hazard ratios)"
+msgstr ""
+
+#: R/multisurvival.b.R
 msgid "{variable} was associated with {effect} (hazard ratio = {hr})."
 msgstr ""
 
 #: R/lassocox.b.R
+#: R/multisurvival.b.R
 msgid "{variable}: {level} (vs {reference})"
 msgstr ""
 
@@ -1452,6 +1469,7 @@ msgid ""
 msgstr ""
 
 #: R/multisurvival.b.R
+#: R/survival.b.R
 msgid "Adjusted curves unavailable"
 msgstr ""
 
@@ -3326,6 +3344,7 @@ msgid ""
 msgstr ""
 
 #: R/multisurvival.b.R
+#: R/survival.b.R
 msgid ""
 "Confidence intervals for standardized curves are not implemented here and "
 "are left blank. Appropriate uncertainty estimation, such as patient-level "
@@ -3418,6 +3437,10 @@ msgstr ""
 
 #: survivalcont/options/contexpl.title
 msgid "Continuous explanatory variable"
+msgstr ""
+
+#: package/datasets/ContinuousMarkerSurvival:exploratorycut-off.name
+msgid "Continuous Marker Survival: exploratory cut-off"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -3655,6 +3678,10 @@ msgstr ""
 
 #: R/multisurvival.b.R
 msgid "Cox Model Assumptions and Caveats"
+msgstr ""
+
+#: R/multisurvival.b.R
+msgid "Cox model coefficients"
 msgstr ""
 
 #: R/multisurvival.b.R
@@ -4180,6 +4207,10 @@ msgstr ""
 #: datetimeconverter/ui.title
 #: datetimeconverter/results.title
 msgid "DateTime Converter"
+msgstr ""
+
+#: package/datasets/DateTimeConverter:ISOdatesandmissingvalues.name
+msgid "DateTime Converter: ISO dates and missing values"
 msgstr ""
 
 #: datetimeconverter/options/datetime_format.title
@@ -4874,6 +4905,15 @@ msgid ""
 "Effects are Fine-Gray subdistribution hazard ratios for the event of "
 "interest; they are not cause-specific hazard ratios or cumulative-risk "
 "ratios."
+msgstr ""
+
+#: package/datasets/DateTimeConverter:ISOdatesandmissingvalues.description
+msgid ""
+"Eight synthetic rows with ISO dates, a missing value, alternative mixed text "
+"and Excel serial-date columns. Saved analysis converts iso_date using YMD "
+"and UTC, previews ten rows, extracts year/month/day and exports year. Seven "
+"values parse and one is originally missing. Alternative columns allow manual "
+"checks of malformed input and Excel dates. Demonstration only."
 msgstr ""
 
 #: R/singlearm.b.R
@@ -5629,6 +5669,10 @@ msgid "Exponential"
 msgstr ""
 
 #: R/multisurvival.b.R
+msgid "Exponentiated coefficient (95% CI, log scale)"
+msgstr ""
+
+#: R/multisurvival.b.R
 msgid "Exponentiated, centered coefficient-weighted linear predictor"
 msgstr ""
 
@@ -6259,6 +6303,10 @@ msgid "hazard ratio"
 msgstr ""
 
 #: R/multisurvival.b.R
+msgid "Hazard ratio"
+msgstr ""
+
+#: R/multisurvival.b.R
 msgid "Hazard Ratio (HR)"
 msgstr ""
 
@@ -6782,6 +6830,12 @@ msgstr ""
 msgid "Interaction (Effect-Modification) Test."
 msgstr ""
 
+#: R/multisurvival.b.R
+msgid ""
+"Interaction rows show ratios of hazard ratios, not subgroup hazard ratios. "
+"Main-effect rows are conditional on the values shown."
+msgstr ""
+
 #: multisurvival/options/interactions.title
 #: multisurvival/ui[12].label
 msgid "Interaction Terms"
@@ -7275,6 +7329,10 @@ msgid ""
 "LASSO Cox regression was performed on {nObs} observations ({nEvents} events) "
 "with {nTotal} encoded predictor columns using {lambdaMethod} for lambda "
 "selection."
+msgstr ""
+
+#: package/datasets/LASSOCox:reproduciblepenaltyselection.name
+msgid "LASSO Cox: reproducible penalty selection"
 msgstr ""
 
 #: package/analyses/lassocox.title
@@ -8245,6 +8303,10 @@ msgstr ""
 msgid "Multivariable Survival fits such a model."
 msgstr ""
 
+#: package/datasets/MultivariableSurvival:categoricalandcontinuouspredictors.name
+msgid "Multivariable Survival: categorical and continuous predictors"
+msgstr ""
+
 #: singlearm/options/timetypedata/myd.title
 #: survival/options/timetypedata/myd.title
 #: survivalcont/options/timetypedata/myd.title
@@ -8869,6 +8931,7 @@ msgstr ""
 msgid "Not enough events / observations to fit a parametric survival model."
 msgstr ""
 
+#: R/multisurvival.b.R
 #: R/survival.b.R
 msgid "Not estimable"
 msgstr ""
@@ -9279,6 +9342,10 @@ msgstr ""
 msgid "Odds ratios interpretation (Positive vs Negative)"
 msgstr ""
 
+#: package/datasets/OddsRatios:Firthfitandnomogramsafeguard.name
+msgid "Odds Ratios: Firth fit and nomogram safeguard"
+msgstr ""
+
 #: survival/options/spline_scale/odds.title
 msgid "Odds Scale"
 msgstr ""
@@ -9609,6 +9676,10 @@ msgstr ""
 #: outcomeorganizer/options.title
 #: outcomeorganizer/ui.title
 msgid "Outcome Organizer for Survival Analysis"
+msgstr ""
+
+#: package/datasets/OutcomeOrganizer:explicitvital-statusmapping.name
+msgid "Outcome Organizer: explicit vital-status mapping"
 msgstr ""
 
 #: R/oddsratio.b.R
@@ -10095,10 +10166,13 @@ msgstr ""
 msgid "Percent"
 msgstr ""
 
-#: R/datetimeconverter.b.R
 #: R/timeinterval.b.R
 #: outcomeorganizer/results/outputTable.columns.title
 msgid "Percentage"
+msgstr ""
+
+#: R/datetimeconverter.b.R
+msgid "Percentage of all observations"
 msgstr ""
 
 #: R/oddsratio.b.R
@@ -10913,6 +10987,10 @@ msgstr ""
 msgid "Rates are per {m} person-{unit}."
 msgstr ""
 
+#: R/multisurvival.b.R
+msgid "Ratio of hazard ratios"
+msgstr ""
+
 #: R/survival.b.R
 msgid "RCS analysis unavailable"
 msgstr ""
@@ -11587,6 +11665,12 @@ msgstr ""
 msgid "Save variables"
 msgstr ""
 
+#: R/survival.b.R
+msgid ""
+"Saved adjusted curves need recalculation. Re-run the analysis to use the "
+"current model."
+msgstr ""
+
 #: R/lassocox.b.R
 msgid ""
 "Saved scores align with the original rows; excluded observations receive "
@@ -11936,7 +12020,10 @@ msgstr ""
 msgid ""
 "Show survival curves standardized for age with the Cox model (direct "
 "standardization). Every patient is assigned to each group in turn, so all "
-"groups share the age distribution of the whole cohort."
+"groups share the age distribution of the model cohort. Uses the same fitted "
+"model as the age-adjusted table, retaining baseline and age-group "
+"stratification when requested. Stratified curves stop at the shortest "
+"observed stratum follow-up; standardized confidence bands are not provided."
 msgstr ""
 
 #: R/survival.b.R
@@ -11987,6 +12074,10 @@ msgstr ""
 #: singlearm/ui.title
 #: singlearm/results.title
 msgid "Single Arm Survival"
+msgstr ""
+
+#: package/datasets/SingleArmSurvival:Kaplan-Meierandperson-time.name
+msgid "Single Arm Survival: Kaplan-Meier and person-time"
 msgstr ""
 
 #: survivalcont/ui[1][0].label
@@ -12337,6 +12428,7 @@ msgid "Standardized (30.4375-day months, 365.25-day years)"
 msgstr ""
 
 #: R/multisurvival.b.R
+#: R/survival.b.R
 msgid ""
 "Standardized curves end at {end} {unit}, the shortest follow-up among the "
 "strata they average over; a stratum has no estimate after its own follow-up "
@@ -12733,6 +12825,10 @@ msgstr ""
 msgid "Survival Analysis Type"
 msgstr ""
 
+#: package/datasets/SurvivalAnalysis:groupsandageadjustment.name
+msgid "Survival Analysis: groups and age adjustment"
+msgstr ""
+
 #: R/survival.b.R
 msgid ""
 "Survival at {time} {unit} for the {group} group was {survival}% (95% CI: "
@@ -12836,6 +12932,7 @@ msgid "survival probabilities"
 msgstr ""
 
 #: R/lassocox.b.R
+#: R/survival.b.R
 msgid "Survival Probability"
 msgstr ""
 
@@ -12952,6 +13049,81 @@ msgstr ""
 msgid ""
 "survminer is unavailable. Survival curves use the base-R fallback without a "
 "risk table."
+msgstr ""
+
+#: package/datasets/OddsRatios:Firthfitandnomogramsafeguard.description
+msgid ""
+"Synthetic binary-outcome example (150 rows): event 1 = positive, 0 = "
+"negative; predictors are group, age and marker. Saved Firth logistic fit "
+"includes explanations and deliberately requests prediction/diagnostic output "
+"to demonstrate the Firth nomogram safeguard. No nomogram is produced; "
+"diagnostic metrics await explicit predictor-level coding. This illustrates "
+"binary associations, not censoring-aware survival risks or clinical accuracy."
+msgstr ""
+
+#: package/datasets/SingleArmSurvival:Kaplan-Meierandperson-time.description
+msgid ""
+"Synthetic cohort of 150 independent patients, with a saved single-cohort "
+"Kaplan-Meier analysis, confidence intervals, risk table, censor marks and "
+"person-time rates. time is in months; event 1 = observed event, 0 = "
+"right-censored (106 events, 44 censored). Demonstration only."
+msgstr ""
+
+#: package/datasets/LASSOCox:reproduciblepenaltyselection.description
+msgid ""
+"Synthetic cohort of 150 patients with group, stage, age and marker as "
+"candidate predictors. Saved LASSO Cox analysis uses five-fold "
+"cross-validation, lambda.min, seed 123456 and internal standardization, with "
+"coefficient, CV and development-sample risk-group plots. time is in months; "
+"event 1 = event, 0 = censored. Displayed performance is apparent, not "
+"externally validated."
+msgstr ""
+
+#: package/datasets/OutcomeOrganizer:explicitvital-statusmapping.description
+msgid ""
+"Synthetic cohort of 150 patients. AWOD = alive without disease, AWD = alive "
+"with disease, DOD = death of disease, DOOC = death of other causes. Saved "
+"overall-survival mapping counts both death categories as events and exports "
+"the recoded outcome, with diagnostics and visualization. followup is in "
+"months; patient_id contains invented identifiers. Competing-risk mapping can "
+"be explored by changing analysis type without discarding other-cause deaths."
+msgstr ""
+
+#: package/datasets/ContinuousMarkerSurvival:exploratorycut-off.description
+msgid ""
+"Synthetic cohort of 150 patients. Saved continuous-marker Cox analysis, "
+"exploratory optimal cut-off, grouped Kaplan-Meier plot, confidence "
+"intervals, risk table and exported cut-off groups. time is in months; event "
+"1 = observed event, 0 = right-censored. The data-derived cut-off requires "
+"independent validation and is not a clinical threshold."
+msgstr ""
+
+#: package/datasets/MultivariableSurvival:categoricalandcontinuouspredictors.description
+msgid ""
+"Synthetic cohort of 150 patients. Saved Cox model includes group, stage, age "
+"and marker, with a hazard-ratio forest plot and proportional-hazards "
+"diagnostics. time is in months; event 1 = observed event, 0 = "
+"right-censored. No interaction terms are fitted in this example. "
+"Associations are illustrative."
+msgstr ""
+
+#: package/datasets/SurvivalAnalysis:groupsandageadjustment.description
+msgid ""
+"Synthetic cohort of 150 patients. Saved group comparison with Kaplan-Meier "
+"curves, confidence intervals, risk table, proportional-hazards diagnostics, "
+"age adjustment, adjusted curves and RMST with an automatic horizon. time is "
+"in months; event 1 = observed event, 0 = right-censored. Group labels are "
+"illustrative and do not establish treatment effects."
+msgstr ""
+
+#: package/datasets/TimeIntervals:standardizedmonths.description
+msgid ""
+"Synthetic start/end ISO dates for 150 patients. Saved analysis calculates "
+"standardized months (elapsed days / 30.4375), exports calculated time, and "
+"displays quality metrics and summary. There are no missing or negative "
+"intervals. Calendar and standardized durations have different meanings; "
+"select the time basis explicitly before using the output in survival "
+"analysis."
 msgstr ""
 
 #: datetimeconverter/options/timezone.default
@@ -13586,6 +13758,7 @@ msgid ""
 msgstr ""
 
 #: R/multisurvival.b.R
+#: R/survival.b.R
 msgid "The model could not be evaluated under this adjustment method."
 msgstr ""
 
@@ -14654,6 +14827,10 @@ msgid ""
 "non-numeric boundaries are ignored with a warning. Boundaries at or beyond "
 "the longest observed follow-up are also omitted because person-time cannot "
 "accrue before the start of observation or after the last one."
+msgstr ""
+
+#: package/datasets/TimeIntervals:standardizedmonths.name
+msgid "Time Intervals: standardized months"
 msgstr ""
 
 #: survival/ui[4][2][0]/calibration_timepoint.label

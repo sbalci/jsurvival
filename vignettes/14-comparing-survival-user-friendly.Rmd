@@ -47,7 +47,7 @@ The output will look familiar to what you saw in the introductory guide. You wil
 **Interpreting the Results:**
 
 *   **The Plot:** Visually inspect the Kaplan-Meier plot. Is there a clear separation between the two curves? If the curve for the treatment group is consistently above the curve for the placebo group, this suggests that the treatment is associated with better survival.
-*   **The p-value:** Look at the p-value from the log-rank test. If the p-value is less than 0.05, you can conclude that there is a statistically significant difference in survival between the two groups.
+*   **The p-value:** Look at the p-value from the log-rank test. A small p-value provides evidence against equal survival under the test assumptions. It does not identify the size of a difference or establish a treatment benefit.
 
 ### Interpretation (two groups)
 
@@ -84,7 +84,7 @@ From the `histopathology` example data, comparing T stages 1 to 4:
 
 It's important to understand the difference between clinical significance and statistical significance.
 
-*   **Statistical Significance:** This is determined by the p-value. A statistically significant result means that the observed difference is unlikely to be due to random chance.
+*   **Statistical Significance:** A small p-value provides evidence against equal survival under the test assumptions. It does not measure the probability that a result arose by chance, the size of the effect or the probability that a treatment works.
 *   **Clinical Significance:** This refers to the practical importance of the result. Is the difference in survival large enough to be meaningful to patients and clinicians? Will it change clinical practice?
 
 A result can be statistically significant but not clinically significant. For example, a new treatment might result in a statistically significant increase in survival, but the actual increase might only be a few days. Whether this is clinically meaningful is a matter of clinical judgment.
@@ -119,6 +119,6 @@ Now that you know how to compare survival between groups, you are ready to explo
 ## Common Pitfalls
 
 - Multiple testing: Use adjusted p‑values when doing many pairwise comparisons.
-- Follow-up imbalance: Large differences in follow-up time can bias comparisons; consider RMST or adjusted analyses.
+- Follow-up imbalance: Check censoring mechanisms and support at reported times. Different lengths of non-informative follow-up alone do not invalidate KM or Cox. RMST and adjusted models also require suitable censoring assumptions.
 - Sparse strata: Very small subgroups produce unstable estimates and misleading curves/tables.
 - Clinical vs statistical significance: A small p‑value does not guarantee a meaningful effect size for patients.

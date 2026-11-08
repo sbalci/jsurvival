@@ -18,6 +18,13 @@ knitr::opts_chunk$set(
 
 # Introduction
 
+For a ready-to-run starting point, open `data/survival_example.omv` from the source
+repository, or choose **Survival Analysis: groups and age adjustment** in the
+updated module's Data Library. It contains 150 simulated patients and a saved
+analysis with age adjustment, plots and RMST. Every analysis has a separate
+`*_example.omv` file in `data/`; `GUI_EXAMPLES.md` describes their saved settings
+and tested options. Install a rebuilt module to see the new library entries.
+
 This guide will walk you through a complete survival analysis workflow using the jSurvival module in jamovi. We will start with a simple research question and go through all the steps, from preparing the data to interpreting the final results. Our goal is to provide a practical, hands-on example of how to use jSurvival for your own research.
 
 **Our Research Question:**
@@ -59,7 +66,7 @@ Now, let's address our main research question: does the new drug improve surviva
 **Interpretation:**
 
 *   **The Plot:** You will now see two survival curves on the Kaplan-Meier plot, one for each treatment group. Is the curve for the "New Drug" group above the curve for the "Standard Care" group?
-*   **The p-value:** With **P-values** ticked, the log-rank p-value is printed on the plot. If it's less than 0.05, you can conclude that there is a statistically significant difference in survival between the two treatments.
+*   **The p-value:** With **P-values** ticked, the log-rank p-value is printed on the plot. A small p-value is evidence against equal survival under the test assumptions. Report the estimate and its uncertainty; the p-value does not establish treatment benefit or the size of a difference.
 *   **Median Survival:** Compare the median survival times for the two groups. How big is the difference? Is it clinically meaningful?
 
 ### Interpretation (example wording)

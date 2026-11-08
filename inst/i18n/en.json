@@ -157,6 +157,9 @@
             "{dist} model - AIC {aic}, BIC {bic}, log-likelihood {loglik}{cov}": [
                 ""
             ],
+            "{effect}, at {conditions}": [
+                "{effect}, at {conditions}"
+            ],
             "{feature} is not available for competing-risks analysis. It assumes a single event type, and the competing-risk outcome is coded 0/1/2. Use the cumulative incidence output instead, or supply an outcome with one event type.": [
                 ""
             ],
@@ -285,6 +288,15 @@
             ],
             "{var}: no analyzed patient has {levels}, so that level was dropped. Hazard ratios are compared with {reference}, not with {old}.": [
                 ""
+            ],
+            "{variable} ({contrast} contrast)": [
+                "{variable} ({contrast} contrast)"
+            ],
+            "{variable} (per 1-unit increase)": [
+                "{variable} (per 1-unit increase)"
+            ],
+            "{variable} (ratio of hazard ratios)": [
+                "{variable} (ratio of hazard ratios)"
             ],
             "{variable} was associated with {effect} (hazard ratio = {hr}).": [
                 ""
@@ -1879,6 +1891,9 @@
             "Continuous explanatory variable": [
                 ""
             ],
+            "Continuous Marker Survival: exploratory cut-off": [
+                ""
+            ],
             "Continuous predictor with few distinct values": [
                 ""
             ],
@@ -2022,6 +2037,9 @@
             ],
             "Cox Model Assumptions and Caveats": [
                 ""
+            ],
+            "Cox model coefficients": [
+                "Cox model coefficients"
             ],
             "Cox model convergence problem": [
                 ""
@@ -2345,6 +2363,9 @@
                 ""
             ],
             "DateTime Converter": [
+                ""
+            ],
+            "DateTime Converter: ISO dates and missing values": [
                 ""
             ],
             "DateTime Format": [
@@ -2723,6 +2744,9 @@
                 ""
             ],
             "Effects are Fine-Gray subdistribution hazard ratios for the event of interest; they are not cause-specific hazard ratios or cumulative-risk ratios.": [
+                ""
+            ],
+            "Eight synthetic rows with ISO dates, a missing value, alternative mixed text and Excel serial-date columns. Saved analysis converts iso_date using YMD and UTC, previews ten rows, extracts year/month/day and exports year. Seven values parse and one is originally missing. Alternative columns allow manual checks of malformed input and Excel dates. Demonstration only.": [
                 ""
             ],
             "Elapsed time and outcome must be different variables.": [
@@ -3145,6 +3169,9 @@
             "Exponential": [
                 ""
             ],
+            "Exponentiated coefficient (95% CI, log scale)": [
+                "Exponentiated coefficient (95% CI, log scale)"
+            ],
             "Exponentiated, centered coefficient-weighted linear predictor": [
                 ""
             ],
@@ -3508,6 +3535,9 @@
             "hazard ratio": [
                 ""
             ],
+            "Hazard ratio": [
+                "Hazard ratio"
+            ],
             "Hazard Ratio (HR)": [
                 ""
             ],
@@ -3814,6 +3844,9 @@
             "Interaction (Effect-Modification) Test.": [
                 ""
             ],
+            "Interaction rows show ratios of hazard ratios, not subgroup hazard ratios. Main-effect rows are conditional on the values shown.": [
+                "Interaction rows show ratios of hazard ratios, not subgroup hazard ratios. Main-effect rows are conditional on the values shown."
+            ],
             "Interaction Terms": [
                 ""
             ],
@@ -4100,6 +4133,9 @@
                 ""
             ],
             "LASSO Cox regression was performed on {nObs} observations ({nEvents} events) with {nTotal} encoded predictor columns using {lambdaMethod} for lambda selection.": [
+                ""
+            ],
+            "LASSO Cox: reproducible penalty selection": [
                 ""
             ],
             "Lasso-Cox Regression": [
@@ -4682,6 +4718,9 @@
                 ""
             ],
             "Multivariable Survival fits such a model.": [
+                ""
+            ],
+            "Multivariable Survival: categorical and continuous predictors": [
                 ""
             ],
             "myd": [
@@ -5296,6 +5335,9 @@
             "Odds ratios interpretation (Positive vs Negative)": [
                 ""
             ],
+            "Odds Ratios: Firth fit and nomogram safeguard": [
+                ""
+            ],
             "Odds Scale": [
                 ""
             ],
@@ -5480,6 +5522,9 @@
                 ""
             ],
             "Outcome Organizer for Survival Analysis": [
+                ""
+            ],
+            "Outcome Organizer: explicit vital-status mapping": [
                 ""
             ],
             "Outcome positive and negative levels must be different (both set to '{level}').": [
@@ -5778,6 +5823,9 @@
             ],
             "Percentage": [
                 ""
+            ],
+            "Percentage of all observations": [
+                "Percentage of all observations"
             ],
             "Perfect collinearity: {variables} is fully determined by the other explanatory variables, so its odds ratio cannot be estimated. Remove it, or the variable it duplicates.": [
                 ""
@@ -6232,6 +6280,9 @@
             "Rates are per {m} person-{unit}.": [
                 ""
             ],
+            "Ratio of hazard ratios": [
+                "Ratio of hazard ratios"
+            ],
             "RCS analysis unavailable": [
                 ""
             ],
@@ -6637,6 +6688,9 @@
             "Save variables": [
                 ""
             ],
+            "Saved adjusted curves need recalculation. Re-run the analysis to use the current model.": [
+                "Saved adjusted curves need recalculation. Re-run the analysis to use the current model."
+            ],
             "Saved scores align with the original rows; excluded observations receive missing values. A valid empty model produces zero scores.": [
                 ""
             ],
@@ -6817,8 +6871,8 @@
             "Show numbers at risk and cumulative event and censoring counts with the all-event cumulative incidence table. A late plateau does not establish cure.": [
                 ""
             ],
-            "Show survival curves standardized for age with the Cox model (direct standardization). Every patient is assigned to each group in turn, so all groups share the age distribution of the whole cohort.": [
-                ""
+            "Show survival curves standardized for age with the Cox model (direct standardization). Every patient is assigned to each group in turn, so all groups share the age distribution of the model cohort. Uses the same fitted model as the age-adjusted table, retaining baseline and age-group stratification when requested. Stratified curves stop at the shortest observed stratum follow-up; standardized confidence bands are not provided.": [
+                "Show survival curves standardized for age with the Cox model (direct standardization). Every patient is assigned to each group in turn, so all groups share the age distribution of the model cohort. Uses the same fitted model as the age-adjusted table, retaining baseline and age-group stratification when requested. Stratified curves stop at the shortest observed stratum follow-up; standardized confidence bands are not provided."
             ],
             "Show the relation of the marker to standard prognostic variables.": [
                 ""
@@ -6848,6 +6902,9 @@
                 ""
             ],
             "Single Arm Survival": [
+                ""
+            ],
+            "Single Arm Survival: Kaplan-Meier and person-time": [
                 ""
             ],
             "Single Cut-off Detection": [
@@ -7246,6 +7303,9 @@
             "Survival Analysis Type": [
                 ""
             ],
+            "Survival Analysis: groups and age adjustment": [
+                ""
+            ],
             "Survival at {time} {unit} for the {group} group was {survival}% (95% CI: {lower}% to {upper}%).": [
                 ""
             ],
@@ -7379,6 +7439,30 @@
                 ""
             ],
             "survminer is unavailable. Survival curves use the base-R fallback without a risk table.": [
+                ""
+            ],
+            "Synthetic binary-outcome example (150 rows): event 1 = positive, 0 = negative; predictors are group, age and marker. Saved Firth logistic fit includes explanations and deliberately requests prediction/diagnostic output to demonstrate the Firth nomogram safeguard. No nomogram is produced; diagnostic metrics await explicit predictor-level coding. This illustrates binary associations, not censoring-aware survival risks or clinical accuracy.": [
+                ""
+            ],
+            "Synthetic cohort of 150 independent patients, with a saved single-cohort Kaplan-Meier analysis, confidence intervals, risk table, censor marks and person-time rates. time is in months; event 1 = observed event, 0 = right-censored (106 events, 44 censored). Demonstration only.": [
+                ""
+            ],
+            "Synthetic cohort of 150 patients with group, stage, age and marker as candidate predictors. Saved LASSO Cox analysis uses five-fold cross-validation, lambda.min, seed 123456 and internal standardization, with coefficient, CV and development-sample risk-group plots. time is in months; event 1 = event, 0 = censored. Displayed performance is apparent, not externally validated.": [
+                ""
+            ],
+            "Synthetic cohort of 150 patients. AWOD = alive without disease, AWD = alive with disease, DOD = death of disease, DOOC = death of other causes. Saved overall-survival mapping counts both death categories as events and exports the recoded outcome, with diagnostics and visualization. followup is in months; patient_id contains invented identifiers. Competing-risk mapping can be explored by changing analysis type without discarding other-cause deaths.": [
+                ""
+            ],
+            "Synthetic cohort of 150 patients. Saved continuous-marker Cox analysis, exploratory optimal cut-off, grouped Kaplan-Meier plot, confidence intervals, risk table and exported cut-off groups. time is in months; event 1 = observed event, 0 = right-censored. The data-derived cut-off requires independent validation and is not a clinical threshold.": [
+                ""
+            ],
+            "Synthetic cohort of 150 patients. Saved Cox model includes group, stage, age and marker, with a hazard-ratio forest plot and proportional-hazards diagnostics. time is in months; event 1 = observed event, 0 = right-censored. No interaction terms are fitted in this example. Associations are illustrative.": [
+                ""
+            ],
+            "Synthetic cohort of 150 patients. Saved group comparison with Kaplan-Meier curves, confidence intervals, risk table, proportional-hazards diagnostics, age adjustment, adjusted curves and RMST with an automatic horizon. time is in months; event 1 = observed event, 0 = right-censored. Group labels are illustrative and do not establish treatment effects.": [
+                ""
+            ],
+            "Synthetic start/end ISO dates for 150 patients. Saved analysis calculates standardized months (elapsed days / 30.4375), exports calculated time, and displays quality metrics and summary. There are no missing or negative intervals. Calendar and standardized durations have different meanings; select the time basis explicitly before using the output in survival analysis.": [
                 ""
             ],
             "system": [
@@ -8183,6 +8267,9 @@
                 ""
             ],
             "Time intervals for stratified person-time analysis, as a comma-separated list in the selected Time Unit. For example \"12, 36, 60\" creates the intervals 0-12, 12-36, 36-60 and 60+. Values are always interpreted in the selected Time Unit; the built-in text is 12, 36 and 60 of that unit and is not silently rescaled. A zero boundary is silently treated as the origin because the analysis already starts at zero. Negative, non-finite, or non-numeric boundaries are ignored with a warning. Boundaries at or beyond the longest observed follow-up are also omitted because person-time cannot accrue before the start of observation or after the last one.": [
+                ""
+            ],
+            "Time Intervals: standardized months": [
                 ""
             ],
             "Time Point (0 = median)": [

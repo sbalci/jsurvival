@@ -157,6 +157,9 @@
             "{dist} model - AIC {aic}, BIC {bic}, log-likelihood {loglik}{cov}": [
                 "{dist} modeli - AIC {aic}, BIC {bic}, log-olabilirlik {loglik}{cov}"
             ],
+            "{effect}, at {conditions}": [
+                "{effect}, {conditions} koşulunda"
+            ],
             "{feature} is not available for competing-risks analysis. It assumes a single event type, and the competing-risk outcome is coded 0/1/2. Use the cumulative incidence output instead, or supply an outcome with one event type.": [
                 "{feature} yarışan riskler analizi için kullanılamaz. Tek bir olay türü varsayar ve yarışan risk sonucu 0/1/2 olarak kodlanmıştır. Bunun yerine kümülatif insidans çıktısını kullanın veya tek olay türü içeren bir sonuç değişkeni sağlayın."
             ],
@@ -285,6 +288,15 @@
             ],
             "{var}: no analyzed patient has {levels}, so that level was dropped. Hazard ratios are compared with {reference}, not with {old}.": [
                 "{var}: analiz edilen hiçbir hastada {levels} yok; bu nedenle bu düzey çıkarıldı. Tehlike oranları {old} ile değil, {reference} ile karşılaştırılmıştır."
+            ],
+            "{variable} ({contrast} contrast)": [
+                "{variable} ({contrast} karşıtlığı)"
+            ],
+            "{variable} (per 1-unit increase)": [
+                "{variable} (1 birim artış başına)"
+            ],
+            "{variable} (ratio of hazard ratios)": [
+                "{variable} (hazard oranlarının oranı)"
             ],
             "{variable} was associated with {effect} (hazard ratio = {hr}).": [
                 "{variable}, {effect} ile ilişkiliydi (tehlike oranı = {hr})."
@@ -1879,6 +1891,9 @@
             "Continuous explanatory variable": [
                 "Sürekli açıklayıcı değişken"
             ],
+            "Continuous Marker Survival: exploratory cut-off": [
+                ""
+            ],
             "Continuous predictor with few distinct values": [
                 "Az sayıda farklı değeri olan sürekli öngördürücü"
             ],
@@ -2022,6 +2037,9 @@
             ],
             "Cox Model Assumptions and Caveats": [
                 "Cox Modeli Varsayımları ve Uyarılar"
+            ],
+            "Cox model coefficients": [
+                "Cox modeli katsayıları"
             ],
             "Cox model convergence problem": [
                 "Cox modeli yakınsama sorunu"
@@ -2346,6 +2364,9 @@
             ],
             "DateTime Converter": [
                 "Tarih-Saat Dönüştürücü"
+            ],
+            "DateTime Converter: ISO dates and missing values": [
+                ""
             ],
             "DateTime Format": [
                 "Tarih-Saat Biçimi"
@@ -2724,6 +2745,9 @@
             ],
             "Effects are Fine-Gray subdistribution hazard ratios for the event of interest; they are not cause-specific hazard ratios or cumulative-risk ratios.": [
                 "Etkiler ilgilenilen olay için Fine-Gray alt dağılım tehlike oranlarıdır; nedene özgü tehlike oranları veya kümülatif risk oranları değildir."
+            ],
+            "Eight synthetic rows with ISO dates, a missing value, alternative mixed text and Excel serial-date columns. Saved analysis converts iso_date using YMD and UTC, previews ten rows, extracts year/month/day and exports year. Seven values parse and one is originally missing. Alternative columns allow manual checks of malformed input and Excel dates. Demonstration only.": [
+                ""
             ],
             "Elapsed time and outcome must be different variables.": [
                 "Geçen süre ve sonuç farklı değişkenler olmalıdır."
@@ -3145,6 +3169,9 @@
             "Exponential": [
                 "Üstel (Eksponansiyel)"
             ],
+            "Exponentiated coefficient (95% CI, log scale)": [
+                "Üstel katsayı (%95 GA, logaritmik ölçek)"
+            ],
             "Exponentiated, centered coefficient-weighted linear predictor": [
                 "Merkezlenmiş, katsayı ağırlıklı doğrusal öngördürücünün üstel değeri"
             ],
@@ -3508,6 +3535,9 @@
             "hazard ratio": [
                 "tehlike oranı"
             ],
+            "Hazard ratio": [
+                "Hazard oranı"
+            ],
             "Hazard Ratio (HR)": [
                 "Tehlike Oranı (TO)"
             ],
@@ -3814,6 +3844,9 @@
             "Interaction (Effect-Modification) Test.": [
                 "Etkileşim (Etki Değişimi) Testi."
             ],
+            "Interaction rows show ratios of hazard ratios, not subgroup hazard ratios. Main-effect rows are conditional on the values shown.": [
+                "Etkileşim satırları alt grup hazard oranlarını değil, hazard oranlarının oranlarını gösterir. Ana etki satırları gösterilen değerlere koşulludur."
+            ],
             "Interaction Terms": [
                 "Etkileşim Terimleri"
             ],
@@ -4101,6 +4134,9 @@
             ],
             "LASSO Cox regression was performed on {nObs} observations ({nEvents} events) with {nTotal} encoded predictor columns using {lambdaMethod} for lambda selection.": [
                 "LASSO Cox regresyonu, lambda seçimi için {lambdaMethod} kullanılarak {nTotal} kodlanmış yordayıcı sütunuyla {nObs} gözlemde ({nEvents} olay) yapıldı."
+            ],
+            "LASSO Cox: reproducible penalty selection": [
+                ""
             ],
             "Lasso-Cox Regression": [
                 "LASSO-Cox regresyonu"
@@ -4683,6 +4719,9 @@
             ],
             "Multivariable Survival fits such a model.": [
                 "Çok Değişkenli Sağkalım böyle bir model kurar."
+            ],
+            "Multivariable Survival: categorical and continuous predictors": [
+                ""
             ],
             "myd": [
                 "ayg"
@@ -5296,6 +5335,9 @@
             "Odds ratios interpretation (Positive vs Negative)": [
                 "Odds oranlarının yorumu (Pozitif - Negatif karşılaştırması)"
             ],
+            "Odds Ratios: Firth fit and nomogram safeguard": [
+                ""
+            ],
             "Odds Scale": [
                 "Odds Ölçeği"
             ],
@@ -5481,6 +5523,9 @@
             ],
             "Outcome Organizer for Survival Analysis": [
                 "Sağkalım Analizi İçin Sonuç Düzenleyici"
+            ],
+            "Outcome Organizer: explicit vital-status mapping": [
+                ""
             ],
             "Outcome positive and negative levels must be different (both set to '{level}').": [
                 "Sonuç pozitif ve negatif düzeyleri farklı olmalıdır (ikisi de '{level}' olarak ayarlı)."
@@ -5778,6 +5823,9 @@
             ],
             "Percentage": [
                 "Yüzde"
+            ],
+            "Percentage of all observations": [
+                "Tüm gözlemlerin yüzdesi"
             ],
             "Perfect collinearity: {variables} is fully determined by the other explanatory variables, so its odds ratio cannot be estimated. Remove it, or the variable it duplicates.": [
                 "Tam çoklu bağlantı: {variables} diğer açıklayıcı değişkenler tarafından tamamen belirleniyor, bu nedenle odds oranı tahmin edilemez. Bu değişkeni veya yinelediği değişkeni çıkarın."
@@ -6232,6 +6280,9 @@
             "Rates are per {m} person-{unit}.": [
                 "Hızlar {m} kişi-{unit} başınadır."
             ],
+            "Ratio of hazard ratios": [
+                "Hazard oranlarının oranı"
+            ],
             "RCS analysis unavailable": [
                 "Kısıtlı kübik spline analizi kullanılamıyor"
             ],
@@ -6637,6 +6688,9 @@
             "Save variables": [
                 "Değişkenleri kaydet"
             ],
+            "Saved adjusted curves need recalculation. Re-run the analysis to use the current model.": [
+                "Kaydedilmiş düzeltilmiş eğrilerin yeniden hesaplanması gerekiyor. Güncel modeli kullanmak için analizi yeniden çalıştırın."
+            ],
             "Saved scores align with the original rows; excluded observations receive missing values. A valid empty model produces zero scores.": [
                 "Kaydedilen skorlar özgün satırlarla hizalıdır; dışlanan gözlemler eksik değer alır. Geçerli bir boş model sıfır skorlar üretir."
             ],
@@ -6817,8 +6871,8 @@
             "Show numbers at risk and cumulative event and censoring counts with the all-event cumulative incidence table. A late plateau does not establish cure.": [
                 "Tüm olaylar kümülatif insidans tablosuyla birlikte risk altındaki sayıları ve kümülatif olay ve sansürleme sayılarını gösterin. Geç dönemdeki bir plato tam iyileşmeyi (kür) kanıtlamaz."
             ],
-            "Show survival curves standardized for age with the Cox model (direct standardization). Every patient is assigned to each group in turn, so all groups share the age distribution of the whole cohort.": [
-                "Cox modeliyle yaşa göre standardize edilmiş sağkalım eğrilerini gösterin (doğrudan standardizasyon). Her hasta sırayla her gruba atanır; böylece tüm gruplar tüm kohortun yaş dağılımını paylaşır."
+            "Show survival curves standardized for age with the Cox model (direct standardization). Every patient is assigned to each group in turn, so all groups share the age distribution of the model cohort. Uses the same fitted model as the age-adjusted table, retaining baseline and age-group stratification when requested. Stratified curves stop at the shortest observed stratum follow-up; standardized confidence bands are not provided.": [
+                "Cox modeliyle yaşa göre standardize edilmiş sağkalım eğrilerini gösterir (doğrudan standardizasyon). Her hasta sırayla her gruba atanır; böylece tüm gruplar model kohortunun yaş dağılımını paylaşır. İstendiğinde başlangıç ve yaş grubu tabakalandırmasını koruyarak yaşa göre düzeltilmiş tabloyla aynı modeli kullanır. Tabakalı eğriler, gözlenen en kısa tabaka takibinde sona erer; standardize güven bantları sağlanmaz."
             ],
             "Show the relation of the marker to standard prognostic variables.": [
                 "Belirtecin standart prognostik değişkenlerle ilişkisini gösterin."
@@ -6849,6 +6903,9 @@
             ],
             "Single Arm Survival": [
                 "Tek Kollu Sağkalım"
+            ],
+            "Single Arm Survival: Kaplan-Meier and person-time": [
+                ""
             ],
             "Single Cut-off Detection": [
                 "Tekli Kesim Noktası Tespiti"
@@ -7246,6 +7303,9 @@
             "Survival Analysis Type": [
                 "Sağkalım Analizi Türü"
             ],
+            "Survival Analysis: groups and age adjustment": [
+                ""
+            ],
             "Survival at {time} {unit} for the {group} group was {survival}% (95% CI: {lower}% to {upper}%).": [
                 "{group} grubu için {time} {unit} zamanındaki sağkalım %{survival} idi (%95 GA: %{lower} ila %{upper})."
             ],
@@ -7380,6 +7440,30 @@
             ],
             "survminer is unavailable. Survival curves use the base-R fallback without a risk table.": [
                 "survminer mevcut değil. Sağkalım eğrileri risk tablosu olmadan temel R grafiğiyle gösterilir."
+            ],
+            "Synthetic binary-outcome example (150 rows): event 1 = positive, 0 = negative; predictors are group, age and marker. Saved Firth logistic fit includes explanations and deliberately requests prediction/diagnostic output to demonstrate the Firth nomogram safeguard. No nomogram is produced; diagnostic metrics await explicit predictor-level coding. This illustrates binary associations, not censoring-aware survival risks or clinical accuracy.": [
+                ""
+            ],
+            "Synthetic cohort of 150 independent patients, with a saved single-cohort Kaplan-Meier analysis, confidence intervals, risk table, censor marks and person-time rates. time is in months; event 1 = observed event, 0 = right-censored (106 events, 44 censored). Demonstration only.": [
+                ""
+            ],
+            "Synthetic cohort of 150 patients with group, stage, age and marker as candidate predictors. Saved LASSO Cox analysis uses five-fold cross-validation, lambda.min, seed 123456 and internal standardization, with coefficient, CV and development-sample risk-group plots. time is in months; event 1 = event, 0 = censored. Displayed performance is apparent, not externally validated.": [
+                ""
+            ],
+            "Synthetic cohort of 150 patients. AWOD = alive without disease, AWD = alive with disease, DOD = death of disease, DOOC = death of other causes. Saved overall-survival mapping counts both death categories as events and exports the recoded outcome, with diagnostics and visualization. followup is in months; patient_id contains invented identifiers. Competing-risk mapping can be explored by changing analysis type without discarding other-cause deaths.": [
+                ""
+            ],
+            "Synthetic cohort of 150 patients. Saved continuous-marker Cox analysis, exploratory optimal cut-off, grouped Kaplan-Meier plot, confidence intervals, risk table and exported cut-off groups. time is in months; event 1 = observed event, 0 = right-censored. The data-derived cut-off requires independent validation and is not a clinical threshold.": [
+                ""
+            ],
+            "Synthetic cohort of 150 patients. Saved Cox model includes group, stage, age and marker, with a hazard-ratio forest plot and proportional-hazards diagnostics. time is in months; event 1 = observed event, 0 = right-censored. No interaction terms are fitted in this example. Associations are illustrative.": [
+                ""
+            ],
+            "Synthetic cohort of 150 patients. Saved group comparison with Kaplan-Meier curves, confidence intervals, risk table, proportional-hazards diagnostics, age adjustment, adjusted curves and RMST with an automatic horizon. time is in months; event 1 = observed event, 0 = right-censored. Group labels are illustrative and do not establish treatment effects.": [
+                ""
+            ],
+            "Synthetic start/end ISO dates for 150 patients. Saved analysis calculates standardized months (elapsed days / 30.4375), exports calculated time, and displays quality metrics and summary. There are no missing or negative intervals. Calendar and standardized durations have different meanings; select the time basis explicitly before using the output in survival analysis.": [
+                ""
             ],
             "system": [
                 "sistem"
@@ -8184,6 +8268,9 @@
             ],
             "Time intervals for stratified person-time analysis, as a comma-separated list in the selected Time Unit. For example \"12, 36, 60\" creates the intervals 0-12, 12-36, 36-60 and 60+. Values are always interpreted in the selected Time Unit; the built-in text is 12, 36 and 60 of that unit and is not silently rescaled. A zero boundary is silently treated as the origin because the analysis already starts at zero. Negative, non-finite, or non-numeric boundaries are ignored with a warning. Boundaries at or beyond the longest observed follow-up are also omitted because person-time cannot accrue before the start of observation or after the last one.": [
                 "Seçilen Zaman Biriminde virgülle ayrılmış bir liste olarak tabakalı kişi-zamanı analizi için zaman aralıkları. Örneğin \"12, 36, 60\" 0-12, 12-36, 36-60 ve 60+ aralıklarını oluşturur. Değerler her zaman seçilen Zaman Biriminde yorumlanır; yerleşik metin o birimin 12, 36 ve 60'ıdır ve sessizce yeniden ölçeklendirilmez. Sıfır sınırı sessizce başlangıç noktası olarak değerlendirilir çünkü analiz zaten sıfırdan başlar. Negatif, sonlu olmayan veya sayısal olmayan sınırlar bir uyarıyla yok sayılır. Gözlemlenen en uzun takibe eşit veya bunun ötesindeki sınırlar da atlanır çünkü kişi-zamanı gözlem başlamadan önce veya sonuncusundan sonra birikemez."
+            ],
+            "Time Intervals: standardized months": [
+                ""
             ],
             "Time Point (0 = median)": [
                 "Zaman Noktası (0 = medyan)"

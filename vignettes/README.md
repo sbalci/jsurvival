@@ -10,6 +10,7 @@ Recommended learning path
 - Comparing groups: 14-comparing-survival-user-friendly.Rmd
 - Competing risks: 15-competing-survival-user-friendly.Rmd
 - Cox regression, briefly: 18-cox-brief-for-clinicians.Rmd
+- Methods, estimands and reporting (with executable arithmetic checks): 19-methods-and-reporting.Rmd
 
 What you’ll learn
 -----------------
@@ -43,6 +44,9 @@ Common pitfalls to avoid
 - Missing dates: Check for impossible/negative times when deriving time
 - Multiple groups: Use pairwise comparisons after overall log-rank
 - Non-PH in Cox: Check assumptions; consider stratification or alternatives
+- Unknown vital status: Do not infer alive from a missing death date
+- Selected cutoffs: Low includes equality; High is strictly greater than the exact cutoff
+- LASSO: Cross-validation tunes lambda; the reported C-index is apparent performance
 
 jamovi navigation (at a glance)
 -------------------------------
@@ -50,3 +54,14 @@ jamovi navigation (at a glance)
 - Comparing groups: Survival > ClinicoPath Survival > Survival Analysis
 - Competing risks: Single Arm Survival or Survival Analysis, under Analysis with Multiple Outcomes
 - Cox model and proportional hazards check: Survival > ClinicoPath Survival > Multivariable Survival Analysis
+
+Release interpretation
+----------------------
+- Survival Analysis adjusted curves use the table's fitted model, preserving baseline
+  and age-group strata and stopping at the shortest observed stratum follow-up.
+  Recalculate saved adjusted curves from earlier candidates.
+- Retain the interaction forest caption and conditioning labels with exported figures;
+  interaction coefficients are ratios of hazard ratios, not subgroup HRs.
+- C-index values have no universal clinical-use grades. Assess calibration, uncertainty,
+  case mix and independent validation as well as discrimination.
+- Maintainers: see `../RELEASE_CHECKLIST.md` before library submission.

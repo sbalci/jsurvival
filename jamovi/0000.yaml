@@ -6,7 +6,7 @@ jms: '1.0'
 authors:
   - Serdar Balci
 maintainer: Serdar Balci <serdarbalci@serdarbalci.com>
-date: '2026-11-07'
+date: '2026-11-08'
 type: R
 description: >-
   Time-to-event analysis for clinicopathological research in 'jamovi':
@@ -161,6 +161,127 @@ datasets:
     tags:
       - Survival
       - Natural Language
+  - name: 'DateTime Converter: ISO dates and missing values'
+    path: datetimeconverter_example.omv
+    description: >-
+      Eight synthetic rows with ISO dates, a missing value, alternative mixed
+      text and Excel serial-date columns. Saved analysis converts iso_date using
+      YMD and UTC, previews ten rows, extracts year/month/day and exports year.
+      Seven values parse and one is originally missing. Alternative columns
+      allow manual checks of malformed input and Excel dates. Demonstration
+      only.
+    tags:
+      - Data preparation
+      - Dates
+      - Missing values
+  - name: 'LASSO Cox: reproducible penalty selection'
+    path: lassocox_example.omv
+    description: >-
+      Synthetic cohort of 150 patients with group, stage, age and marker as
+      candidate predictors. Saved LASSO Cox analysis uses five-fold
+      cross-validation, lambda.min, seed 123456 and internal standardization,
+      with coefficient, CV and development-sample risk-group plots. time is in
+      months; event 1 = event, 0 = censored. Displayed performance is apparent,
+      not externally validated.
+    tags:
+      - Survival
+      - LASSO
+      - Cox regression
+      - Cross-validation
+  - name: 'Multivariable Survival: categorical and continuous predictors'
+    path: multisurvival_example.omv
+    description: >-
+      Synthetic cohort of 150 patients. Saved Cox model includes group, stage,
+      age and marker, with a hazard-ratio forest plot and proportional-hazards
+      diagnostics. time is in months; event 1 = observed event, 0 =
+      right-censored. No interaction terms are fitted in this example.
+      Associations are illustrative.
+    tags:
+      - Survival
+      - Cox regression
+      - Multivariable
+      - Forest plot
+  - name: 'Odds Ratios: Firth fit and nomogram safeguard'
+    path: oddsratio_example.omv
+    description: >-
+      Synthetic binary-outcome example (150 rows): event 1 = positive, 0 =
+      negative; predictors are group, age and marker. Saved Firth logistic fit
+      includes explanations and deliberately requests prediction/diagnostic
+      output to demonstrate the Firth nomogram safeguard. No nomogram is
+      produced; diagnostic metrics await explicit predictor-level coding. This
+      illustrates binary associations, not censoring-aware survival risks or
+      clinical accuracy.
+    tags:
+      - Logistic regression
+      - Odds ratio
+      - Firth
+      - Model safeguards
+  - name: 'Outcome Organizer: explicit vital-status mapping'
+    path: outcomeorganizer_example.omv
+    description: >-
+      Synthetic cohort of 150 patients. AWOD = alive without disease, AWD =
+      alive with disease, DOD = death of disease, DOOC = death of other causes.
+      Saved overall-survival mapping counts both death categories as events and
+      exports the recoded outcome, with diagnostics and visualization. followup
+      is in months; patient_id contains invented identifiers. Competing-risk
+      mapping can be explored by changing analysis type without discarding
+      other-cause deaths.
+    tags:
+      - Data preparation
+      - Outcomes
+      - Overall survival
+      - Competing risks
+  - name: 'Single Arm Survival: Kaplan-Meier and person-time'
+    path: singlearm_example.omv
+    description: >-
+      Synthetic cohort of 150 independent patients, with a saved single-cohort
+      Kaplan-Meier analysis, confidence intervals, risk table, censor marks and
+      person-time rates. time is in months; event 1 = observed event, 0 =
+      right-censored (106 events, 44 censored). Demonstration only.
+    tags:
+      - Survival
+      - Kaplan-Meier
+      - Person-time
+  - name: 'Survival Analysis: groups and age adjustment'
+    path: survival_example.omv
+    description: >-
+      Synthetic cohort of 150 patients. Saved group comparison with Kaplan-Meier
+      curves, confidence intervals, risk table, proportional-hazards
+      diagnostics, age adjustment, adjusted curves and RMST with an automatic
+      horizon. time is in months; event 1 = observed event, 0 = right-censored.
+      Group labels are illustrative and do not establish treatment effects.
+    tags:
+      - Survival
+      - Kaplan-Meier
+      - Cox regression
+      - RMST
+  - name: 'Continuous Marker Survival: exploratory cut-off'
+    path: survivalcont_example.omv
+    description: >-
+      Synthetic cohort of 150 patients. Saved continuous-marker Cox analysis,
+      exploratory optimal cut-off, grouped Kaplan-Meier plot, confidence
+      intervals, risk table and exported cut-off groups. time is in months;
+      event 1 = observed event, 0 = right-censored. The data-derived cut-off
+      requires independent validation and is not a clinical threshold.
+    tags:
+      - Survival
+      - Continuous marker
+      - Cut-off
+      - Cox regression
+  - name: 'Time Intervals: standardized months'
+    path: timeinterval_example.omv
+    description: >-
+      Synthetic start/end ISO dates for 150 patients. Saved analysis calculates
+      standardized months (elapsed days / 30.4375), exports calculated time, and
+      displays quality metrics and summary. There are no missing or negative
+      intervals. Calendar and standardized durations have different meanings;
+      select the time basis explicitly before using the output in survival
+      analysis.
+    tags:
+      - Data preparation
+      - Dates
+      - Time intervals
+      - Person-time
 usesNative: true
 minApp: 2.7.27
 

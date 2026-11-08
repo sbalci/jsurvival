@@ -1,23 +1,31 @@
+
 # jsurvival
 
 [![R-CMD-check](https://github.com/sbalci/jsurvival/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sbalci/jsurvival/actions/workflows/R-CMD-check.yaml)
 [![pkgdown](https://github.com/sbalci/jsurvival/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/sbalci/jsurvival/actions/workflows/pkgdown.yaml)
-[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![Lifecycle:
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![jamovi](https://img.shields.io/badge/jamovi-module-blue)](https://www.jamovi.org)
 [![ClinicoPath](https://img.shields.io/badge/ClinicoPath-survival-orange)](https://www.serdarbalci.com/ClinicoPathJamoviModule/)
 
 ## Abstract
 
-**jsurvival** is a comprehensive time-to-event and clinical survival analysis module for jamovi and R. As the survival analysis engine of the **ClinicoPath** ecosystem, it bridges advanced biostatistical methods and clinical research practice. It provides publication-ready survival curves, Cox proportional hazards modeling, regularized high-dimensional feature selection (LASSO-Cox), date interval calculators, and natural language clinical interpretations—all without requiring programming expertise.
+**jsurvival** provides time-to-event analyses and data preparation in
+jamovi and R, as part of the **ClinicoPath** suite. Its nine analyses
+cover Kaplan-Meier estimation, Cox and Fine-Gray regression, exploratory
+LASSO Cox modeling, odds ratios, dates and endpoint recoding. Results
+support research analysis; clinical interpretation depends on the
+endpoint definition, study design, data quality and model assumptions.
 
----
+------------------------------------------------------------------------
 
 ## 🎯 Key Features & Analysis Suite (9 Analyses)
 
-jsurvival provides **9 dedicated analyses** under the **Survival** menu in jamovi:
+jsurvival provides **9 dedicated analyses** under the **Survival** menu
+in jamovi:
 
 | Analysis | Function | Category | Key Clinical Features |
-| :--- | :--- | :--- | :--- |
+|:---|:---|:---|:---|
 | **Survival Analysis** | `survival` | Core Time-to-Event | Kaplan-Meier estimation, log-rank comparisons between groups, Cox proportional hazards regression, median survival with CIs, 1-, 3-, and 5-year survival rates, person-time calculations, and publication-ready risk tables. |
 | **Single Arm Survival** | `singlearm` | Cohort Follow-up | Cohort-wide survival analysis for single-arm clinical trials or registry cohorts without an explanatory group; includes milestone survival rates, and person-time metrics. |
 | **Multivariable Survival** | `multisurvival` | Advanced Modeling | Multivariable Cox proportional hazards modeling with covariate adjustment, Fine-Gray regression for competing events, hazard ratio forest plots, model diagnostics, and adjusted survival curves. |
@@ -28,29 +36,32 @@ jsurvival provides **9 dedicated analyses** under the **Survival** menu in jamov
 | **DateTime Converter** | `datetimeconverter` | Clinical Data Prep | Flexible date and timestamp parsing, standardization, and conversion into standardized temporal formats required for time-to-event analysis. |
 | **Outcome Organizer** | `outcomeorganizer` | Endpoint Derivation | Clinical endpoint mapping and standardization, recoding event statuses into analysis-ready indicators for OS, cause-specific, competing-risk, RFS, PFS, DFS, TTP and multistate analyses. |
 
----
+------------------------------------------------------------------------
 
 ## 🚀 Installation
 
-### In jamovi (Recommended)
+### In jamovi
 
-1. Open **jamovi** (>= 2.7.27).
-2. Click the **+** button in the top-right corner → **jamovi library**.
-3. Search for **jsurvival** (or browse under **Survival**).
-4. Click **Install**.
+1.  Open **jamovi** (\>= 2.7.27).
+2.  Click the **+** button in the top-right corner → **jamovi library**.
+3.  Search for **jsurvival** and install the available library version.
+
+For a release candidate supplied by the maintainer, use **Sideload** in
+the module library and select its `.jmo` file. A local candidate may
+differ from the library version.
 
 ### As an R Package
 
-```r
+``` r
 # Install from GitHub
 remotes::install_github("sbalci/jsurvival")
 ```
 
----
+------------------------------------------------------------------------
 
 ## 💡 Quick Start (R Interface)
 
-```r
+``` r
 library(jsurvival)
 data("melanoma", package = "jsurvival")
 # status: 1 = died of melanoma, 2 = alive, 3 = died of other causes. time is in days.
@@ -85,29 +96,80 @@ lasso_fit <- jsurvival::lassocox(
 )
 ```
 
+## Before reporting results
+
+- Use one row per independent patient. Recurrent events, repeated
+  visits, delayed entry and time-dependent covariates require analyses
+  designed for those data.
+- DateTime Converter parsing-count percentages use all observations; its
+  separate parse rate excludes originally missing values. Successful
+  parsing does not establish that the chosen date order is correct.
+- Confirm the event value and censoring rule. Missing status or a
+  missing death date does not establish that a patient is alive.
+  Composite endpoints need time to the **first** qualifying event;
+  Outcome Organizer produces the status, not that time.
+- Precalculated follow-up is used in its supplied unit. Changing **Time
+  Type in Output** does not convert it. Landmark analyses retain only
+  times strictly greater than the landmark.
+- Use cumulative incidence for absolute event risk with competing
+  events. A Cox HR, Fine-Gray subdistribution HR, odds ratio, rate and
+  probability have different meanings.
+- Treat data-derived cutoffs and LASSO selection as exploratory.
+  Preserve the exact cutoff (**Low ≤ cutoff; High \> cutoff**). Lambda
+  cross-validation tunes the penalty; displayed C-indices and same-data
+  risk groups do not establish validated predictive performance.
+
+The [methods and reporting
+guide](vignettes/19-methods-and-reporting.Rmd) includes executable
+arithmetic checks and a reporting checklist. Read the [1.1.3
+corrections](NEWS.md) before reusing results from earlier versions.
+Known limits include exploratory cutoff selection and apparent model
+performance. Multivariable Survival interaction forests show every
+fitted coefficient, conditioning values and a caption; interaction rows
+are ratios of hazard ratios, not subgroup HRs. Both forest styles use
+this coefficient display for interaction models. Survival Analysis
+adjusted curves use the age-adjusted table’s fitted model, retaining
+requested baseline and age-group strata. Stratified standardized curves
+end at the shortest observed stratum follow-up; confidence bands for
+these averages are not provided.
+
 ## Example data
 
-In jamovi, open ☰ → Open → Data Library → jsurvival → *histopathology including analysis*. It holds a
-simulated cohort, with invented patient names, and a saved analysis: Time Elapsed = OverallTime (months),
-Outcome = Outcome, Event Level = 1. From R, `histopathology`, `melanoma` and six `lassocox_*` datasets are
-available.
+In jamovi, open ☰ → Open → Data Library → jsurvival → *histopathology
+including analysis*. It holds a simulated cohort, with invented patient
+names, and a saved analysis: Time Elapsed = OverallTime (months),
+Outcome = Outcome, Event Level = 1. From R, `histopathology`, `melanoma`
+and six `lassocox_*` datasets are available.
 
----
+Nine additional `.omv` examples, one for every analysis, are saved in
+[`data/`](data) and registered in `jamovi/0000.yaml`. Each contains
+synthetic data and an analysis configured and saved in the jamovi GUI.
+The [example guide](GUI_EXAMPLES.md) lists the files, saved arguments,
+checks and known display limitation. Open a file directly, or select its
+descriptive title in the module’s Data Library after
+rebuilding/installing the updated module. The odds-ratio example
+deliberately demonstrates the Firth nomogram safeguard; it is not a
+survival-risk analysis.
+
+------------------------------------------------------------------------
 
 ## 📖 Documentation & Resources
 
-- **Module Website & Vignettes**: [https://www.serdarbalci.com/jsurvival/](https://www.serdarbalci.com/jsurvival/)
-- **ClinicoPath Umbrella Ecosystem**: [https://www.serdarbalci.com/ClinicoPathJamoviModule/](https://www.serdarbalci.com/ClinicoPathJamoviModule/)
-- **GitHub Repository**: [https://github.com/sbalci/jsurvival/](https://github.com/sbalci/jsurvival/)
-- **Issue Tracker**: [GitHub Issues](https://github.com/sbalci/ClinicoPathJamoviModule/issues)
+- **Module Website & Vignettes**:
+  <https://www.serdarbalci.com/jsurvival/>
+- **ClinicoPath Umbrella Ecosystem**:
+  <https://www.serdarbalci.com/ClinicoPathJamoviModule/>
+- **GitHub Repository**: <https://github.com/sbalci/jsurvival/>
+- **Issue Tracker**: [GitHub
+  Issues](https://github.com/sbalci/ClinicoPathJamoviModule/issues)
 
----
+------------------------------------------------------------------------
 
 ## 📝 Citation
 
 If you use jsurvival in your research or publications, please cite:
 
-```bibtex
+``` bibtex
 @manual{balci2026clinicopath,
   title  = {ClinicoPath: jamovi Module for Clinicopathological Research},
   author = {Serdar Balci},
@@ -119,4 +181,5 @@ If you use jsurvival in your research or publications, please cite:
 
 ## 📄 License
 
-This project is licensed under the GPL (>= 2) License — see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the GPL (\>= 2) License — see the
+[LICENSE.md](LICENSE.md) file for details.

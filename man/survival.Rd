@@ -272,7 +272,11 @@ explanatory variable.}
 
 \item{adjusted_curves}{Show survival curves standardized for age with the
 Cox model (direct standardization). Every patient is assigned to each group
-in turn, so all groups share the age distribution of the whole cohort.}
+in turn, so all groups share the age distribution of the model cohort. Uses
+the same fitted model as the age-adjusted table, retaining baseline and
+age-group stratification when requested. Stratified curves stop at the
+shortest observed stratum follow-up; standardized confidence bands are not
+provided.}
 
 \item{remark_checklist}{Display the 20-item REMARK (REporting
 recommendations for tumor MARKer prognostic studies) checklist, marking the

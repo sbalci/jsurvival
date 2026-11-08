@@ -1,0 +1,163 @@
+---
+title: "Methods, estimands and reporting"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Methods, estimands and reporting}
+  %\VignetteEngine{rmarkdown::html_vignette}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(jsurvival)
+```
+
+This guide describes the research methods in jsurvival 1.1.3. The small numerical
+examples execute when this article is rendered. They check specific arithmetic and
+output contracts; they do not validate every option or a clinical application.
+
+## Choose the quantity before choosing the analysis
+
+| Question | Quantity and analysis | Interpretation |
+|---|---|---|
+| How long until death from any cause? | Overall-survival Kaplan-Meier; Single Arm or Survival Analysis | Survival probability at a stated time |
+| How often does one terminal cause occur with other terminal causes present? | Cumulative incidence in competing-risk mode | Probability of the specified cause by a stated time |
+| Which baseline covariates are associated with hazard? | Multivariable Cox | Conditional hazard ratios, under proportional hazards |
+| Which covariates are associated with cumulative incidence? | Multivariable Fine-Gray | Subdistribution hazard ratios, not probability ratios |
+| How many events per observation time? | Person-time table | Crude events per person-time; no covariate adjustment |
+| Which candidate predictors survive an L1 penalty? | LASSO Cox | Exploratory penalized coefficients and apparent performance |
+| Which factors are associated with a binary endpoint? | Odds Ratio | Odds ratios; requires a defined outcome window and sampling design |
+
+Kaplan-Meier and cumulative incidence are different estimands in the presence of competing
+events. One minus cause-specific Kaplan-Meier is not the real-world probability of the
+cause. See the survival authors' [competing-risk guide](https://stat.ethz.ch/R-manual/R-devel/library/survival/doc/compete.pdf).
+
+DateTime Converter's native parsing-count percentages use all observations. For four
+rows containing two valid dates, one missing value and one unparseable string, the
+parsed share is 50%, missing is 25%, and failed is 25%. The separate parse rate among
+non-missing values is 2/3 (66.7%). A high parse rate cannot verify the date order.
+
+## Check the risk sets and rate denominator
+
+Six independent patients have the following times. At time 2, an event and a censoring
+occur together; both patients belong to the risk set just before that time. The survival
+probabilities are `(5/6)`, `(5/6)*(4/5)` and `(5/6)*(4/5)*(1/2)` at times 1, 2 and 4.
+
+```{r hand-km}
+cohort <- data.frame(
+  time = c(1, 2, 2, 3, 4, 5),
+  event = c(1, 1, 0, 0, 1, 0)
+)
+result <- jsurvival::singlearm(
+  data = cohort, elapsedtime = "time", outcome = "event", outcomeLevel = "1",
+  dod = NULL, dooc = NULL, awd = NULL, awod = NULL,
+  timetypeoutput = "months", cutp = "1, 2, 4", person_time = TRUE
+)
+km <- result$survTable$asDF
+stopifnot(isTRUE(all.equal(km$surv, c(5/6, 2/3, 1/3))))
+km
+```
+
+Total follow-up is 17 person-months and there are three events. The crude rate is
+`100 * 3/17`, or about 17.65 per 100 person-months. This is not a percentage risk.
+Exact Poisson limits concern the count/rate model and do not remove informative censoring
+or population differences. A zero-event interval can have a positive upper confidence limit.
+
+```{r hand-rate}
+rate <- result$personTimeTable$asDF
+expected_ci <- c(stats::qchisq(.025, 2 * 3),
+                 stats::qchisq(.975, 2 * (3 + 1))) / (2 * 17) * 100
+stopifnot(
+  rate$events[1] == 3,
+  rate$person_time[1] == 17,
+  isTRUE(all.equal(rate$rate[1], 100 * 3/17)),
+  isTRUE(all.equal(c(rate$rate_ci_lower[1], rate$rate_ci_upper[1]), expected_ci))
+)
+rate
+```
+
+Report the multiplier and time unit, the eligible cohort and censoring rules. Different
+follow-up patterns and case mixes can change crude rate comparisons even when the rate
+denominators are arithmetically correct. Median follow-up uses reverse Kaplan-Meier;
+it is distinct from median survival and median observed time.
+
+## Prepare endpoints and times together
+
+Define which events count for OS, PFS, DFS, RFS or TTP in the study protocol; these names
+alone do not specify every clinical rule. Outcome Organizer combines indicators but
+cannot derive the earliest recurrence/death time. A composite indicator must be paired
+with time to its first qualifying event. Do not pair recurrence-or-death status with
+time to death when recurrence occurred earlier.
+
+An unknown vital status stays unknown until verified. Administrative censoring truncates
+follow-up at a fixed date and keeps qualifying events on or before that date. Check the
+origin, date convention, timezone, last verified event-free assessment and follow-up end.
+The interval calculator defaults to calendar months/years and also offers standardized
+durations. Fixed divisions of days by 365.25 or 30.4375 use the latter convention.
+Precalculated times are never converted just by
+changing the output-unit selector.
+
+Landmark analyses condition on observation beyond the landmark, exclude exact ties, and
+subtract the landmark from retained times. They answer a conditional question and do not
+implement delayed entry. Standard survival analyses disclose zero-time events; LASSO Cox
+requires strictly positive follow-up. Do not add an arbitrary constant to make data fit.
+
+## Preserve scaling and cutoff definitions
+
+Continuous age per decade is `age / 10`, so its HR refers to a ten-year increase. Rounding
+age down to a decade changes the predictor into bins. Ordinal factors in the standard
+Cox analyses are represented as level comparisons; that is not an assumed linear trend.
+
+For a cutoff selected by `survivalcont`, the grouping rule is **Low ≤ cutoff; High > cutoff**.
+Use the unrounded value and the same equality rule for a held-out cohort:
+
+```{r cutoff-equality}
+cutoff <- 15.2
+marker <- c(15.1, 15.2, 15.3, NA_real_)
+group <- ifelse(marker > cutoff, "High", "Low")
+stopifnot(identical(group, c("Low", "Low", "High", NA_character_)))
+```
+
+The single optimal-cutoff table includes a search-adjusted p-value. That adjustment does
+not correct the optimism of the selected group HR. Outcome-guided multiple cutoffs have
+unadjusted inferential comparisons. Keep a continuous model when it answers the research
+question, and validate a selected threshold in patients who did not influence its selection.
+
+## Separate model fitting, tuning and validation
+
+A Cox HR is a relative instantaneous hazard. An interaction main effect applies at the
+reference/zero value of the other term; it is not an overall average effect. Assess PH
+and the functional form of continuous predictors. Sparse events, missingness, collinearity
+and overfitting can undermine a numerically successful fit.
+
+LASSO cross-validation selects lambda. The displayed C-index and risk groups use the
+development patients and are apparent performance. The C-index ranges from 0 to 1 when
+comparable pairs exist, with chance ordering at 0.5; it measures ordering, not calibration.
+An empty LASSO model is a valid result. Conventional post-selection p-values and confidence
+intervals are withheld. For performance validation repeat preprocessing, selection and
+tuning within resampling, then assess the frozen model externally. Fixed event-count rules
+do not establish sufficient sample size ([Riley et al., 2020](https://www.bmj.com/content/368/bmj.m441.short)).
+
+Survival Analysis adjusted curves use the same fitted model and complete-case cohort
+as the age-adjusted table. Baseline strata and age-group strata are retained under
+every group assignment. Patient predictions are aligned on a common time grid before
+averaging; curves end at the shortest observed stratum follow-up, so an unsupported
+late plateau does not enter the average. Confidence bands for these standardized
+averages are not provided. Recalculate saved adjusted curves from earlier candidates.
+
+Multivariable Survival interaction forest plots show all fitted coefficients with their
+95% confidence intervals, conditioning values and a caption. Both styles use this
+coefficient display when interactions are present. A main effect applies at the stated
+reference/zero values; an interaction row is a ratio of hazard ratios. Retain the caption
+with the figure, including any warning that a conditioning value is outside the data.
+Non-estimable coefficients are labelled without an estimate or interval.
+
+## Reporting checklist
+
+- Cohort, exclusions, missingness, number of patients and events, and unit of analysis.
+- Endpoint definition, event/censor coding, time origin, unit/convention, and landmark if used.
+- Estimand and estimator, uncertainty method, risk sets and follow-up support at reported times.
+- Covariate units, factor references, interactions, PH assessment and adjustment variables.
+- Whether cutoffs were prespecified or selected, search correction, exact threshold and tie rule.
+- Model candidate set, penalty rule, seed/folds, apparent versus validated performance, and limitations.
+- Module version and reproducible options; interpretation in the study's clinical context.
