@@ -1,3 +1,13 @@
+# jsurvival 1.1.4
+
+- **Guided jamovi workbooks (2026-11-18):** Ten synthetic workbooks now contain
+  thirteen saved analyses covering all nine functions, with native teaching notes.
+  Added a 240-patient binary pathology example with logistic regression, prediction
+  nomogram and explicitly coded diagnostic test. Saved comparisons demonstrate
+  LASSO penalty selection, overall-survival/competing-risk recoding and both month
+  conventions. All ten files were reopened and saved in jamovi; 252 archive and
+  independent numerical checks pass. See `GUI_EXAMPLES.md` for coverage and limits.
+
 # jsurvival 1.1.3 (2026-11-08)
 
 - **GUI examples for all nine analyses:** Added synthetic `.omv` files in `data/`,

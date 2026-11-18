@@ -1,0 +1,152 @@
+{
+  "date": "2026-11-18",
+  "purpose": "Local build-only candidate bundling saved synthetic teaching examples; not installed or submitted.",
+  "candidate": "jsurvival_1.1.4_examples_20261118.jmo",
+  "sha256": "89ec47d8c08bf17110e2ad06bb5c510663ff7b457f65273208d003fa2efd466a",
+  "bytes": 52825065,
+  "module_version": "1.1.4",
+  "platform": "macos-arm64",
+  "jamovi_version_assumed": "28.17.0",
+  "r_version": "4.6.0",
+  "compiler": "jmvtools bundled jamovi-compiler",
+  "command": [
+    "/opt/homebrew/bin/node",
+    "/Library/Frameworks/R.framework/Versions/4.6/Resources/library/jmvtools/node_modules/jamovi-compiler/index.js",
+    "--build",
+    "/private/tmp/jsurvival-examples-build-20261118/source",
+    "--home",
+    "/Applications/jamovi.app",
+    "--assume-app-version",
+    "28.17.0",
+    "--skip-deps",
+    "--skip-remotes",
+    "--jmo",
+    "/private/tmp/jsurvival-examples-build-20261118/jsurvival_1.1.4_examples_20261118.jmo"
+  ],
+  "build_log": "/private/tmp/jsurvival-examples-build-20261118/build.log",
+  "checks_passed": 30,
+  "zip_crc": "pass",
+  "metadata_catalogs_equal_source": true,
+  "registered_dataset_count": 11,
+  "workbook_copy_count": 22,
+  "registered_paths": [
+    "histopathologySurvival.omv",
+    "datetimeconverter_example.omv",
+    "lassocox_example.omv",
+    "multisurvival_example.omv",
+    "oddsratio_example.omv",
+    "outcomeorganizer_example.omv",
+    "singlearm_example.omv",
+    "survival_example.omv",
+    "survivalcont_example.omv",
+    "timeinterval_example.omv",
+    "oddsratio_binary_example.omv"
+  ],
+  "source_workbooks": [
+    {
+      "path": "histopathologySurvival.omv",
+      "sha256": "20e038787d0604e32fd3863f9d76e462bdd862dd7707e39687e2d2431a61ee47",
+      "bytes": 878138,
+      "archive_members": [
+        "jsurvival/data/histopathologySurvival.omv",
+        "jsurvival/R/jsurvival/data/histopathologySurvival.omv"
+      ]
+    },
+    {
+      "path": "datetimeconverter_example.omv",
+      "sha256": "6fb34505ba152a2208db0c7232bc7e6e1df2ef5f0a989c95803bd9c88b1914c0",
+      "bytes": 16131,
+      "archive_members": [
+        "jsurvival/data/datetimeconverter_example.omv",
+        "jsurvival/R/jsurvival/data/datetimeconverter_example.omv"
+      ]
+    },
+    {
+      "path": "lassocox_example.omv",
+      "sha256": "2ddc31021e32868d63fecf87cc06cc8988e5ea225cddf654011b319c311ac04a",
+      "bytes": 350100,
+      "archive_members": [
+        "jsurvival/data/lassocox_example.omv",
+        "jsurvival/R/jsurvival/data/lassocox_example.omv"
+      ]
+    },
+    {
+      "path": "multisurvival_example.omv",
+      "sha256": "3350904460bb76c1541cbd45a37693f332fe5feb818114c7c48f21078f818dc6",
+      "bytes": 271311,
+      "archive_members": [
+        "jsurvival/data/multisurvival_example.omv",
+        "jsurvival/R/jsurvival/data/multisurvival_example.omv"
+      ]
+    },
+    {
+      "path": "oddsratio_example.omv",
+      "sha256": "e5b10fdc4c78d6bff1029b31394c73bd880b5d9dd939bd61b504f7d962652746",
+      "bytes": 47050,
+      "archive_members": [
+        "jsurvival/data/oddsratio_example.omv",
+        "jsurvival/R/jsurvival/data/oddsratio_example.omv"
+      ]
+    },
+    {
+      "path": "outcomeorganizer_example.omv",
+      "sha256": "b1ef0777c6330791a9e15c0c5b32603fefe02567f5d0c87153bead52e017ca1d",
+      "bytes": 57595,
+      "archive_members": [
+        "jsurvival/data/outcomeorganizer_example.omv",
+        "jsurvival/R/jsurvival/data/outcomeorganizer_example.omv"
+      ]
+    },
+    {
+      "path": "singlearm_example.omv",
+      "sha256": "0988b36c17f09af3b9bf2b22b591b4f3405d0e4091768af972fcfa412541d7b5",
+      "bytes": 60888,
+      "archive_members": [
+        "jsurvival/data/singlearm_example.omv",
+        "jsurvival/R/jsurvival/data/singlearm_example.omv"
+      ]
+    },
+    {
+      "path": "survival_example.omv",
+      "sha256": "8170020b173a8a137c4644b9394a3b27936e1c4e84b70e7535731b5574053714",
+      "bytes": 203873,
+      "archive_members": [
+        "jsurvival/data/survival_example.omv",
+        "jsurvival/R/jsurvival/data/survival_example.omv"
+      ]
+    },
+    {
+      "path": "survivalcont_example.omv",
+      "sha256": "5efcc371895fcec212399701bc191411b6a7330dc6c7cc5e286c906873f61311",
+      "bytes": 129193,
+      "archive_members": [
+        "jsurvival/data/survivalcont_example.omv",
+        "jsurvival/R/jsurvival/data/survivalcont_example.omv"
+      ]
+    },
+    {
+      "path": "timeinterval_example.omv",
+      "sha256": "e755ba51f9a28413bf2c0620971d3619bf459f056f9888f476ec3c047cda853c",
+      "bytes": 25532,
+      "archive_members": [
+        "jsurvival/data/timeinterval_example.omv",
+        "jsurvival/R/jsurvival/data/timeinterval_example.omv"
+      ]
+    },
+    {
+      "path": "oddsratio_binary_example.omv",
+      "sha256": "16b5754cab52021553b213661e61914d3b12708d2d3e5dc7556b491fa689a91d",
+      "bytes": 63928,
+      "archive_members": [
+        "jsurvival/data/oddsratio_binary_example.omv",
+        "jsurvival/R/jsurvival/data/oddsratio_binary_example.omv"
+      ]
+    }
+  ],
+  "preserved_prior_candidate": {
+    "path": "jsurvival_1.1.4.jmo",
+    "sha256": "9bd3c55d94d43acb3dd84bab4e3b691d12fd199a9ce6a869f68a1555ae8e719e"
+  },
+  "installed": false,
+  "submitted": false
+}

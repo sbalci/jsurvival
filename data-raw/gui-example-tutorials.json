@@ -1,0 +1,122 @@
+[
+  {
+    "file": "singlearm_example.omv",
+    "function": "singlearm",
+    "heading": "Single-cohort survival: follow-up, censoring and person-time",
+    "paragraphs": [
+      "Teaching example — entirely synthetic data. Imagine a cohort of 150 patients followed after cancer surgery. Each row represents one independent patient. The time column is follow-up in months; event = 1 means an observed endpoint and event = 0 means right-censored follow-up. Censoring means the endpoint was not observed before the last contact; it does not mean that the patient can never experience it.",
+      "Inspect the saved setup: time is the elapsed-time variable and 1 is the event level of event. The analysis displays a Kaplan–Meier curve with confidence intervals, censor marks and a risk table, together with survival summaries and person-time output. Check the time unit before interpreting either a time-specific survival estimate or an event rate.",
+      "Read the results: the Kaplan–Meier vertical axis gives estimated event-free survival, whereas the risk table counts people still under observation and at risk just before each displayed time. The median is the time at which estimated survival first reaches 50%; an unreached median is not an infinitely long survival time. Person-time rates describe events per accumulated follow-up and are not the same quantity as a survival probability.",
+      "Try next: select the saved analysis to reveal its controls; change the displayed time horizon or plot settings, then compare the survival curve, risk table and confidence intervals. Use the grouped Survival Analysis example when your question concerns differences between patient groups.",
+      "Interpretation: confidence intervals describe sampling uncertainty under the model assumptions. Sparse late follow-up gives less reliable tail estimates. These invented records demonstrate the interface and assume independent, non-informative censoring; they do not establish outcomes for a real cancer population."
+    ]
+  },
+  {
+    "file": "survival_example.omv",
+    "function": "survival",
+    "heading": "Comparing survival groups and adjusting for age",
+    "paragraphs": [
+      "Teaching example — entirely synthetic data. This simulated oncology cohort has 150 independent patients. time is follow-up in months; event = 1 is an observed endpoint and 0 is right-censored. group contains the illustrative labels Control and Treatment; age is measured in years. stage is categorical and marker is a simulated continuous laboratory score.",
+      "Inspect the saved setup: time and event define the survival endpoint; group defines the comparison. The saved example requests Kaplan–Meier confidence intervals, risk table and censor marks, age adjustment using age, adjusted curves, proportional-hazards diagnostics and restricted mean survival time (RMST). The RMST horizon is explicitly 24 months. Explanations, summaries and REMARK reporting guidance are enabled to help connect the estimates to their assumptions and reporting needs.",
+      "Read the results: group Kaplan–Meier curves describe unadjusted survival. A Cox hazard ratio compares instantaneous event rates under proportional hazards; it is not a risk ratio or a difference in median survival. Age-adjusted estimates answer a model-based question that differs from the raw curve comparison. RMST describes average event-free time accumulated up to its stated horizon, using months here.",
+      "Try next: compare age adjustment enabled and disabled, inspect the proportional-hazards diagnostics, and compare the saved 24-month RMST horizon with another prespecified horizon supported by follow-up in both groups. Compare confidence intervals as well as point estimates; do not choose the horizon solely because it produces a smaller p-value.",
+      "Interpretation: the Control and Treatment labels were assigned to invented records and do not establish a treatment effect. The log-rank test and Cox model rely on their own assumptions; a non-significant diagnostic test does not prove proportional hazards. Review the risk table before interpreting a late difference between curves."
+    ]
+  },
+  {
+    "file": "survivalcont_example.omv",
+    "function": "survivalcont",
+    "heading": "Continuous-marker survival and an exploratory cut-off",
+    "paragraphs": [
+      "Teaching example — entirely synthetic data. There are 150 independent patients. time is follow-up in months, event = 1 is the observed endpoint and event = 0 is right-censored. marker is a simulated continuous laboratory score in arbitrary units; negative values are possible because this is a standardized score. age is measured in years.",
+      "Inspect the saved setup: time and event define the endpoint and marker is the continuous explanatory variable. The saved analysis fits a continuous-marker Cox association and requests an exploratory optimal cut-off, grouped Kaplan–Meier curves with confidence intervals and a risk table, and an output column identifying the cut-off groups. Explanations and summaries are enabled to help interpret the continuous association and the exploratory grouping.",
+      "Read the results: the continuous Cox hazard ratio refers to a one-unit increase in marker, subject to the model's functional-form and proportional-hazards assumptions. The cut-off divides this same development sample into groups chosen with knowledge of its outcomes. Its resulting curves and test statistics therefore have an exploratory interpretation.",
+      "Try next: inspect the exported group column beside the original marker values, compare the continuous estimate with the grouped display, and examine a prespecified alternative threshold through the cut-off controls. Keep the event level and time unit unchanged while making that comparison.",
+      "Interpretation: a data-derived threshold is not a clinical decision boundary. Selecting and assessing a cut-off in the same patients can exaggerate separation and apparent significance; independent validation is needed. Dichotomization also discards information from the original continuous measurement."
+    ]
+  },
+  {
+    "file": "multisurvival_example.omv",
+    "function": "multisurvival",
+    "heading": "Multivariable Cox regression with clinical predictors",
+    "paragraphs": [
+      "Teaching example — entirely synthetic data. This simulated postoperative cohort contains 150 independent patients. time is follow-up in months and event uses 1 for an observed endpoint and 0 for right-censoring. group and stage are categorical predictors, with stage levels I, II and III. age is in years and marker is a continuous score in arbitrary units.",
+      "Inspect the saved setup: the Cox model includes group and stage as categorical explanatory variables and age and marker as continuous covariates. The saved example requests a hazard-ratio forest plot and proportional-hazards diagnostics. Read the reference categories shown in the fitted table before interpreting any categorical comparison.",
+      "Read the results: each adjusted hazard ratio describes an association conditional on the other model terms. The age estimate is per year and the marker estimate per score unit. A confidence interval crossing 1 indicates that the compatible hazard ratios include no association; it does not prove equivalence. The forest plot provides a visual comparison of estimates and uncertainty.",
+      "Try next: compare the model with and without stage, inspect the proportional-hazards output, and explore the available forest styles. An interaction changes the scientific question and the interpretation of its component terms; if adding one, inspect the actual fitted terms rather than assuming that selecting predictors fits an interaction automatically.",
+      "Interpretation: this example demonstrates associations, not a validated individual prognostic tool or causal treatment effects. Review event counts, model complexity, continuous-variable functional forms and proportional-hazards assumptions. Do not select predictors solely by their p-values."
+    ]
+  },
+  {
+    "file": "lassocox_example.omv",
+    "function": "lassocox",
+    "heading": "LASSO Cox: penalty selection and apparent risk groups",
+    "paragraphs": [
+      "Teaching example — entirely synthetic data. There are 150 independent patients with follow-up time in months. event = 1 identifies the observed endpoint and 0 identifies censoring. Candidate predictors are categorical group and stage, age in years, and a continuous marker score in arbitrary units.",
+      "Inspect the saved setup: two saved LASSO Cox analyses compare the minimum cross-validation-error rule (lambda.min) with the one-standard-error rule (lambda.1se). Both use five cross-validation folds, random seed 123456 and internal predictor standardization. The teaching outputs include predictor-encoding and reproducibility details, reproducible R code, cross-validation curves, coefficient paths and development-sample risk-group survival plots. Exported risk scores allow the fitted linear predictors to be inspected beside the source records. Confirm the event and censor levels before running either model.",
+      "Read the results: the penalty shrinks coefficients and may set some to zero. A coefficient's exponential is its hazard-ratio representation within the penalized model; selection is not a declaration of biological importance. The cross-validation plot shows how the fitting criterion changes with the penalty. Risk groups and performance displayed on the fitting cohort are apparent results.",
+      "Try next: compare the two saved analyses' selected penalties, retained coefficients, coefficient paths and risk groups. The common seed and fold count make the penalty-rule comparison reproducible. Check the encoding details to see how categorical levels enter the model, then vary the seed separately to observe how fold allocation can affect selection. The exported score is a model linear predictor, not an absolute probability of survival.",
+      "Interpretation: cross-validation for tuning does not, by itself, externally validate the final model. Assess prediction in new data or a suitable validation procedure, including calibration and discrimination, before clinical use. The risk-group plot uses the same invented development cohort and is not evidence of prospective clinical performance."
+    ]
+  },
+  {
+    "file": "oddsratio_example.omv",
+    "function": "oddsratio",
+    "heading": "Binary-outcome odds ratios and the Firth safeguard",
+    "paragraphs": [
+      "Teaching example — entirely synthetic data. There are 150 independent records. event = 1 means that the endpoint was recorded and 0 means it was not recorded. group is categorical, age is in years, marker is a continuous score in arbitrary units, and stage contains I, II and III. These records reuse the survival demonstration cohort, whose follow-up differs between patients; this binary model deliberately ignores follow-up time.",
+      "Inspect the saved setup: the logistic model relates event to group, age and marker, with Firth penalization and explanatory output. The example also requests prediction/diagnostic output to show the safeguards. A Firth nomogram is unavailable in this implementation, and diagnostic metrics require an explicitly selected predictor with its positive and negative levels. Read the displayed notices before interpreting optional output.",
+      "Read the results: an odds ratio compares the odds of the recorded binary outcome, conditional on the fitted model terms. For a continuous predictor it corresponds to a one-unit increase, such as one year of age. Read the categorical reference level, confidence intervals and method labels alongside the forest plot.",
+      "Try next: compare ordinary logistic regression with the saved Firth fit, then restore Firth to see the nomogram safeguard again. For diagnostic demonstrations, explicitly select the relevant binary predictor and its two levels; fitting a multivariable logistic model does not automatically define those diagnostic-test codes.",
+      "Interpretation: odds ratios are not risk ratios. Because these records have differing follow-up, this demonstration does not estimate a fixed-horizon survival risk or a censoring-aware treatment effect. Use the survival examples for time-to-event questions and a separately designed, fixed-endpoint dataset for a clinical prediction application."
+    ]
+  },
+  {
+    "file": "oddsratio_binary_example.omv",
+    "function": "oddsratio",
+    "heading": "Pathology at surgery: binary associations and diagnostic-test coding",
+    "paragraphs": [
+      "Teaching example — entirely synthetic data. This postoperative pathology cohort has 240 independent patients, each with an invented SYN identifier. nodal_status is the surgical reference outcome: Positive means nodal involvement and Negative means no nodal involvement. diagnostic_test is an invented preoperative test with the same explicit Positive and Negative labels. age is in years, tumor_size is in millimetres and grade has levels I, II and III. There are no missing baseline values in this starting example.",
+      "Inspect the saved setup: nodal_status defines the binary outcome, with Positive as the event and Negative as its reference. The ordinary logistic model contains categorical grade plus continuous age and tumor_size. diagnostic_test is selected separately as the diagnostic predictor, with Positive and Negative as its two test levels; it is not a term in the saved regression model. The diagnostic summaries describe this test's unadjusted two-by-two comparison with nodal_status.",
+      "Read the results: odds ratios compare the odds of nodal involvement at surgery. Check the model terms and reference levels before reading each estimate. Sensitivity describes the proportion of node-positive patients whose diagnostic_test is Positive; specificity describes the proportion of node-negative patients whose test is Negative. Predictive values also depend on the proportion of node-positive patients in this sample. Read confidence intervals and the underlying counts together.",
+      "Try next: inspect the two-by-two table and verify its counts directly in the data grid. Remove and restore grade or tumour size to see how the clinical regression model changes while the separately selected test's two-by-two counts remain the same. Compare the ordinary fit with Firth penalization using the separate safeguard example; optional outputs may depend on the fitted method.",
+      "Interpretation: this endpoint is recorded at surgery rather than over varying follow-up, so it is a binary pathology question. Odds ratios are not risk ratios, and a model's apparent performance in its fitting sample does not establish clinical prediction accuracy. The test's simulation targets were sensitivity 0.82 and specificity 0.85; these are generating parameters, not the observed sample estimates or validated performance claims."
+    ]
+  },
+  {
+    "file": "datetimeconverter_example.omv",
+    "function": "datetimeconverter",
+    "heading": "Preparing dates: format, timezone and missing values",
+    "paragraphs": [
+      "Teaching example — entirely synthetic data. Eight rows illustrate dates that might have been copied from a clinical spreadsheet. iso_date contains year-month-day text, including a leap-day date and an originally missing value. mixed_date includes deliberately malformed text, and excel_date contains numeric Excel serial dates. These are parallel demonstrations of date representation, not patient identifiers or real clinical dates.",
+      "Inspect the saved setup: iso_date is converted using the explicit YMD format and UTC timezone. The saved analysis previews ten rows, extracts year, month and day, and exports the year into a data column. Quality checks, summaries, notes and the glossary are enabled to explain the conversion and common date pitfalls. With only eight records, the preview naturally contains fewer rows than its limit.",
+      "Read the results: distinguish originally missing input from a non-missing value that failed to parse. Seven iso_date values are parseable and one is originally missing. Check the extracted components against the source text, including the leap day, and inspect the exported year column in the data grid.",
+      "Try next: select mixed_date to see how malformed text affects the quality counts, then return to iso_date. Explore excel_date with the appropriate Excel input format; do not apply YMD text parsing to serial numbers. For timestamps, explicitly choose the intended timezone before comparing dates or calculating intervals.",
+      "Interpretation: parsing a value successfully does not prove that it is the correct clinical date. Day-month ambiguity, spreadsheet date origins and timezone boundaries can change meaning. Some native missing-component preview cells may display NaN; use the quality counts and exported column to distinguish missing values from real dates."
+    ]
+  },
+  {
+    "file": "outcomeorganizer_example.omv",
+    "function": "outcomeorganizer",
+    "heading": "Defining survival endpoints from explicit vital-status codes",
+    "paragraphs": [
+      "Teaching example — entirely synthetic data. There are 150 independent patients identified by invented SIM identifiers. followup is measured in months. status uses AWOD = alive without disease, AWD = alive with disease, DOD = death of disease and DOOC = death of other causes. Each row contains one known recorded status; no unknown status is silently treated as alive.",
+      "Inspect the saved setup: status is explicitly mapped to all four categories, followup supplies elapsed time and patient_id supplies the invented identifier. Two saved analyses compare overall-survival and competing-risks coding. Each enables the exported outcome, results table, diagnostics, distribution display, natural-language summary and glossary. Both DOD and DOOC count as deaths for overall survival; AWOD and AWD are censored for that endpoint.",
+      "Read the results: inspect the original status beside Recoded Outcome (overall survival) and Recoded Outcome (competing risks). Overall survival combines 82 disease deaths and 24 other-cause deaths into 106 events. Competing-risks coding retains those two causes separately, with 44 censored observations. The summary counts help verify mapping before downstream analysis; these recoding analyses do not fit a survival or competing-risks model.",
+      "Try next: compare the two saved analyses and exported columns to see how changing the endpoint changes the event codes while preserving the original status. Inspect the coding table and glossary before assigning either output to another analysis. Keep the endpoint definition written down whenever moving these columns to another analysis.",
+      "Interpretation: other-cause deaths are competing events when estimating disease-death cumulative incidence and must retain their distinct code. Outcome recoding does not infer the time of a composite endpoint's first event or fit a multistate model. A real application needs complete status definitions and valid endpoint-specific times."
+    ]
+  },
+  {
+    "file": "timeinterval_example.omv",
+    "function": "timeinterval",
+    "heading": "From clinical dates to standardized and calendar-aware months",
+    "paragraphs": [
+      "Teaching example — entirely synthetic data. There are 150 paired records of a clinical start date and a later end date, stored as ISO year-month-day text in start_date and end_date. Each row represents one interval. The invented dates have no missing, reversed or negative intervals, making this a starting example for understanding the units.",
+      "Inspect the saved setup: both saved analyses use start_date and end_date. The first calculates standardized months and exports Calculated Time (months); the second uses calendar-aware months and exports Calculated Time (months) (2). Both enable quality metrics, summaries, a glossary and the exported duration. Standardized months are elapsed days divided by 30.4375, whereas calendar-aware months use actual month lengths. The time basis is part of the definition, not merely a display label.",
+      "Read the results: compare both exported durations with their two source dates. The elapsed-day difference is end_date minus start_date. Dividing by 30.4375 gives the standardized result; calendar-aware results can differ because the same number of days occupies a different fraction of months with different lengths. Date rounding means neither result must equal an originally simulated continuous survival time exactly. Quality counts help identify missing or reversed dates before downstream modeling.",
+      "Try next: compare the two saved analyses and their exported month columns, then switch an analysis to days and verify the subtraction directly. These examples reuse the original simulated cohort dates; they are not a dedicated leap-day or month-end boundary test. Explicitly select the intended basis and unit before assigning either generated column as a survival-time variable.",
+      "Interpretation: a valid arithmetic interval does not establish the correct clinical origin, last-contact date or endpoint time. For censored observations, choose the appropriate last verified follow-up date. Review zero and negative intervals in real data rather than treating them as ordinary positive event times."
+    ]
+  }
+]
