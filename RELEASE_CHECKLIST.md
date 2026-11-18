@@ -10,12 +10,14 @@ evidence are recorded in `docs/audit/REMAINING_FIXES_20261108.md`.
 Retain all reports with the submission records. Complete the remaining
 desktop and website acceptance coverage before submission.
 
-Nine GUI-configured examples are now in `data/` and registered in the
-maintained datasets section of `jamovi/0000.yaml`. See `GUI_EXAMPLES.md`
-for saved arguments, 90 archive/arithmetic checks, tested options and
-the remaining DateTime component preview issue. Rebuild the candidate to
-bundle these new files and catalog entries. The example pass does not
-close the full desktop acceptance matrix below.
+Ten teaching workbooks with thirteen GUI-configured analyses are in
+`data/` and registered in the maintained datasets section of
+`jamovi/0000.yaml`. All ten were reopened and saved in jamovi on
+2026-11-18. See `GUI_EXAMPLES.md` for the 252 archive/numerical checks,
+saved variants and remaining DateTime component preview issue. The
+separately built examples candidate is described in that guide; verify
+its bytes against the current source before distribution. The example
+pass does not close the full desktop acceptance matrix below.
 
 ## Before submission
 

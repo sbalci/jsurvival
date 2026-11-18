@@ -143,16 +143,20 @@ names, and a saved analysis: Time Elapsed = OverallTime (months),
 Outcome = Outcome, Event Level = 1. From R, `histopathology`, `melanoma`
 and six `lassocox_*` datasets are available.
 
-Nine additional `.omv` examples, one for every analysis, are saved in
-[`data/`](https://www.serdarbalci.com/jsurvival/data) and registered in
-`jamovi/0000.yaml`. Each contains synthetic data and an analysis
-configured and saved in the jamovi GUI. The [example
-guide](https://www.serdarbalci.com/jsurvival/GUI_EXAMPLES.md) lists the
-files, saved arguments, checks and known display limitation. Open a file
-directly, or select its descriptive title in the module’s Data Library
-after rebuilding/installing the updated module. The odds-ratio example
-deliberately demonstrates the Firth nomogram safeguard; it is not a
-survival-risk analysis.
+Ten teaching `.omv` workbooks in
+[`data/`](https://www.serdarbalci.com/jsurvival/data) contain thirteen
+GUI-configured analyses covering every function. Each opens with
+instructions explaining its synthetic study, variables, coding, selected
+settings and results. Paired examples compare LASSO penalty rules,
+overall-survival versus competing-risk coding, and standardized versus
+calendar-aware months. A separate pathology cohort demonstrates ordinary
+logistic regression, a prediction nomogram and explicit diagnostic-test
+coding; the original odds-ratio file retains the Firth nomogram
+safeguard. See the [example
+guide](https://www.serdarbalci.com/jsurvival/GUI_EXAMPLES.md) for direct
+file links and verified features. Open the files directly, or use Open →
+Data Library → jsurvival after installing a module bundle built from
+this source.
 
 ------------------------------------------------------------------------
 
