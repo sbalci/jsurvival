@@ -11,13 +11,13 @@ Source:
 [`DESCRIPTION`](https://github.com/sbalci/ClinicoPathJamoviModule/blob/master/DESCRIPTION)
 
 Balci S (2026). *jsurvival: Survival Module of 'ClinicoPath' for
-'jamovi'*. R package version 1.1.4,
+'jamovi'*. R package version 1.1.5,
 <https://github.com/sbalci/ClinicoPathJamoviModule/>.
 
     @Manual{,
       title = {jsurvival: Survival Module of 'ClinicoPath' for 'jamovi'},
       author = {Serdar Balci},
       year = {2026},
-      note = {R package version 1.1.4},
+      note = {R package version 1.1.5},
       url = {https://github.com/sbalci/ClinicoPathJamoviModule/},
     }

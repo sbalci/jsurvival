@@ -230,7 +230,7 @@ example:
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # \dontrun{
 lassocox(
     data = lassocox_breast_cancer,
     elapsedtime = "survival_months",
@@ -240,108 +240,5 @@ lassocox(
     explanatory = c("age", "tumor_size_cm", "grade", "stage",
                     "lymph_nodes_positive", "ki67_percent", "er_status"),
     lambda = "lambda.min")
-#> 
-#>  LASSO-COX REGRESSION
-#> 
-#>  <div class='alert alert-warning'>
-#> 
-#>  Analysis Notes
-#> 
-#>  Excluded 5 row(s) with missing values in time/outcome/predictors
-#>  (complete-case analysis).Categorical predictors are represented by
-#>  indicator columns and LASSO selects those columns individually rather
-#>  than selecting each factor as a group. Factor(s): grade, stage,
-#>  er_status.
-#> 
-#>  Suitability Checks                                                                                                                                                                                                                                                                                                                                                                                                   
-#>  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
-#>    Status               Check                   Value                                                        Detail                                                                                                                                                                                                                                                                                                   
-#>  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
-#>    Caution              Events-Per-Variable     9.4 (nEvents=85, p=9)                                        Limited event information per encoded candidate column. Penalization enables fitting but does not make selection or performance reliable.                                                                                                                                                                
-#>    No issue detected    Regularization Need     p=9, n=245                                                   Penalized regression is a reasonable candidate approach for this data dimension; this check does not establish sample-size adequacy.                                                                                                                                                                     
-#>    Not determined       Sample Size             n=245, events=85, p=9                                        Sample-size adequacy cannot be determined from total n or a universal EPV cutoff. Use a prediction-model sample-size calculation based on outcome frequency, candidate parameters, anticipated model fit, and target optimism.                                                                           
-#>    No issue detected    Event Rate              34.7% (85/245)                                               Event and censoring observations are both represented; adequacy still depends on absolute counts and model complexity.                                                                                                                                                                                   
-#>    Caution              Multicollinearity       Max |r| = 0.75                                               Moderate collinearity. LASSO may select one of several correlated columns, and that choice can be unstable. Consider Elastic Net if retaining correlated predictors is important. Top correlated encoded-column pairs: gradeGrade 3 & ki67_percent (r=0.75); stageIII & lymph_nodes_positive (r=0.71).   
-#>    Caution              Data Quality            5 rows excluded; 0 constant predictors or columns removed    Complete-case analysis excluded 5 rows (2.0%). Even a small excluded fraction can bias results when missingness is informative.                                                                                                                                                                          
-#>    No issue detected    Proportional Hazards    Selected-refit test p = 0.172                                No evidence of non-proportional hazards in an exploratory unpenalized refit of the selected encoded columns. Limited power and post-selection use mean that this does not prove the assumption.                                                                                                          
-#>  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
-#> 
-#> 
-#>  <div style='background-color: rgba(255, 202, 33, 0.23); color:
-#>  inherit; border: 1px solid #ffeeba; padding: 12px;'>Overall: Data is
-#>  usable but review the flagged items.<div style='margin-top: 12px;
-#>  padding: 10px; background-color: rgba(138, 155, 172, 0.06);
-#>  border-radius: 4px; color: inherit;'>Recommendations:<ul
-#>  style='margin: 6px 0;'>Consider an analysis that supports grouped or
-#>  elastic-net penalties when correlated predictors should be retained
-#>  together; ordinary LASSO may select only one member of a correlated
-#>  set.If using multiple imputation, repeat imputation and all
-#>  preprocessing inside each resampling training split; imputing once
-#>  before validation leaks information.<div style='margin-top: 10px;
-#>  font-size: 12px; color: inherit; opacity: 0.8;'>*This assessment is
-#>  advisory and cannot establish model adequacy. The analysis proceeds
-#>  regardless of the verdict. Green = no issue detected by this limited
-#>  check, Gray = adequacy not determined by this diagnostic, Yellow =
-#>  proceed with caution, Red = results may be highly unstable or
-#>  misspecified.*
-#> 
-#>  Model Summary                                   
-#>  ─────────────────────────────────────────────── 
-#>    Statistic                        Value        
-#>  ─────────────────────────────────────────────── 
-#>    Encoded Predictor Columns        9            
-#>    Selected Predictor Columns       1            
-#>    Column Selection Proportion      11.1%        
-#>    Optimal Lambda                   5.58e-02     
-#>    Penalty Selected By              lambda.min   
-#>    Stratified CV Folds Used         10           
-#>    Sample Size                      245          
-#>    Number of Events                 85           
-#>    Censoring Rate                   65.3%        
-#>    Event Level Used                 Dead         
-#>    Rows Excluded (Missing Data)     5            
-#>    Original Candidate Predictors    7            
-#>    Selected Original Predictors     1            
-#>    Censored Level Used              Alive        
-#>  ─────────────────────────────────────────────── 
-#>    Note. Random seed: 123456
-#> 
-#> 
-#>  Penalized Coefficients at Selected Lambda                                                                   
-#>  ─────────────────────────────────────────────────────────────────────────────────────────────────────────── 
-#>    Variable        Penalized Coefficient    Penalized Hazard Ratio    Scale-Adjusted Magnitude |beta| x SD   
-#>  ─────────────────────────────────────────────────────────────────────────────────────────────────────────── 
-#>    ki67_percent                   0.0119                    1.0119                                  0.1799   
-#>  ─────────────────────────────────────────────────────────────────────────────────────────────────────────── 
-#>    Note. The selected columns depend on the cross-validation split, so a different seed or row order can
-#>    select a different set.
-#>    Note. Coefficient and Hazard Ratio are from the penalized LASSO Cox fit at the selected lambda.
-#>    Conventional p-values and confidence intervals are intentionally not reported because same-data
-#>    post-selection inference would not account for variable and penalty selection.
-#>    Note. Scale-adjusted magnitude is |coefficient| multiplied by the complete-case SD of that encoded
-#>    design column. It describes a one-SD change in the fitted linear predictor, not causal importance or
-#>    selection stability; for a factor indicator it is not the category-versus-reference hazard ratio.
-#>    Note. Predictors were standardized internally within glmnet fitting for the penalty calculation.
-#>    glmnet back-transforms the displayed coefficients to the original design-column scale;
-#>    indicator-column hazard ratios therefore compare that category with its reference category.
-#>    Indicators are still penalized and selected separately rather than as a grouped factor.
-#> 
-#> 
-#>  Apparent Development Performance                                               
-#>  ────────────────────────────────────────────────────────────────────────────── 
-#>    Metric              Value    Interpretation                                  
-#>  ────────────────────────────────────────────────────────────────────────────── 
-#>    Apparent C-index    0.62     Development data only; optimism not corrected   
-#>  ────────────────────────────────────────────────────────────────────────────── 
-#>    Note. This C-index is apparent (training) performance from the same
-#>    patients used for preprocessing, penalty selection, and model fitting.
-#>    Its uncertainty does not include the modeling process. Use bootstrap
-#>    optimism correction or nested cross-validation that repeats all
-#>    preprocessing and tuning, followed by external validation before
-#>    clinical use.
-#> 
-
-
-
-# }
+} # }
 ```
