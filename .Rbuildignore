@@ -44,3 +44,7 @@ i18n-plans
 ^TODO.*\.md$
 ^sonograph_log\.md$
 ^development-LLM
+GUI_EXAMPLES.md
+README.Rmd
+RELEASE_CHECKLIST.md
+data-raw/

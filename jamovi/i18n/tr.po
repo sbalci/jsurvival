@@ -579,7 +579,7 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid "{outcome}: OR (95% CI, p-value)"
-msgstr "{outcome}: OR (%95 GA, p değeri)"
+msgstr ""
 
 #: R/timeinterval.b.R
 msgid ""
@@ -731,10 +731,6 @@ msgid ""
 "{or} (95% CI {lower} to {upper}). To show this in the table, rescale the "
 "variable."
 msgstr ""
-"{variable}: bir birim başına odds oranı, ölçüm ölçeği nedeniyle iki ondalık "
-"basamakta okunamıyor. 1 SS ({unit} birim) başına odds oranı {or} (%95 GA "
-"{lower} ila {upper}). Bunu tabloda göstermek için değişkeni yeniden "
-"ölçekleyin."
 
 #: R/multisurvival.b.R
 msgid ""
@@ -1337,54 +1333,6 @@ msgid ""
 "specificity, and likelihood ratios. The prediction nomogram can still be "
 "generated from the regression variables. </div> </div>"
 msgstr ""
-"<div><h4>Tahmin ve tanısal çıktıları anlama</h4><p><strong>Tahmin "
-"nomogramı:</strong> Çizilen nomogram, maksimum olabilirlik lojistik "
-"regresyon modelindeki tüm açıklayıcı değişkenlere puan verir ve toplam puanı "
-"tahmini sonuç olasılığına dönüştürür. Bu bir Fagan nomogramı değildir; test "
-"öncesi olasılıktan test sonrası olasılığa dönüşümü göstermez.</p><h5>Tahmin "
-"nomogramının bileşenleri:</h5><ul><li><strong>Puanlar:</strong> Her "
-"yordayıcı değerine atanan katkı</li><li><strong>Toplam puan:</strong> "
-"Yordayıcı katkılarının toplamı</li><li><strong>Tahmini olasılık:</strong> "
-"Toplam puana karşılık gelen, modele dayalı "
-"olasılık</li></ul><p><strong>Önemli:</strong> Grafik, kurulan modelin görsel "
-"sunumudur; kalibrasyon, ayırt etme, başka popülasyonlara aktarılabilirlik "
-"veya klinik yarar kanıtı değildir. Klinik kullanımdan önce iç ve dış "
-"doğrulama gerekir. Farklı tahmin yöntemlerini karıştıracağı için Firth "
-"regresyonu seçildiğinde oluşturulmaz. Tahmini olasılıklar, gerçek olay "
-"oranını yansıtan bir kohort örneklemi gerektirir: olgu-kontrol örnekleminde "
-"odds oranları geçerliliğini korusa da tahmini olasılıklar "
-"korumaz.</p><h5>Tanısal yordayıcı nedir?</h5><p><strong>Tanısal yordayıcı, "
-"tanı testi olarak değerlendirmek istediğiniz tek bir ikili "
-"değişkendir.</strong></p><p><strong>Örnek:</strong> Tanısal yordayıcı olarak "
-"LVI (Lenfovasküler İnvazyon: Yok/Var) seçerseniz, tanısal tablo şu soruyu "
-"yanıtlar: LVI tek başına seçilen sonuç durumlarını ne kadar iyi ayırt "
-"ediyor?</p><p><strong>Gereklilikler:</strong></p><ul><li>Açıkça seçilen iki "
-"düzeyi karşılaştırır (Yordayıcı Pozitif Düzeyi ve Yordayıcı Negatif Düzeyi): "
-"örneğin Evet/Hayır, Var/Yok, Pozitif/Negatif</li><li>Örnekler: LVI "
-"(Yok/Var), immün boyama (Negatif/Pozitif), frozen kesit değerlendirmesi "
-"(Benign/Malign)</li><li>Yaş veya tümör boyutu gibi sürekli değişkenler "
-"kullanılamaz (olası değerler sınırsızdır)</li><li>Çok kategorili "
-"değişkenlerde (örneğin Derece 1/2/3) yalnızca seçilen pozitif ve negatif "
-"düzeylere ait gözlemler 2×2 tanısal tabloya alınır; seçilmeyen düzeyler bir "
-"uyarıyla dışlanır</li></ul><p><strong>Neden iki seçili "
-"düzey?</strong></p><p>Tanısal test performansı ölçütleri (duyarlılık, "
-"özgüllük, olabilirlik oranları) 2×2 çapraz tablodan "
-"hesaplanır:</p><table><tr><th></th><th>Sonuç +</th><th>Sonuç "
-"-</th></tr><tr><td>Test +</td><td>Gerçek Pozitif</td><td>Yanlış "
-"Pozitif</td></tr><tr><td>Test -</td><td>Yanlış Negatif</td><td>Gerçek "
-"Negatif</td></tr></table><p>Duyarlılık = GP/(GP+YN), Özgüllük = GN/(GN+YP), "
-"LR+ = Duyarlılık/(1-Özgüllük)</p><p><strong>Seçim "
-"rehberi:</strong></p><ul><li><strong>Belirtilmemişse:</strong> İlk "
-"açıklayıcı değişken otomatik kullanılır (jamovi arayüzünde Yordayıcı Pozitif "
-"Düzeyi ve Yordayıcı Negatif Düzeyi menülerini etkinleştirmek için Tanısal "
-"Yordayıcı kutusunda değişkeni seçin)</li><li><strong>Regresyon "
-"modelinizdeyse:</strong> Tanısal ölçütler yine düzeltilmemiştir ve yalnızca "
-"ilgili 2×2 tabloyu kullanır</li><li><strong>Modelinizde değilse:</strong> "
-"Sonuç ve testin birlikte kaydedildiği tam gözlemlerle bağımsız "
-"değerlendirilir</li></ul><p><strong>Klinik ipucu:</strong> İlk değişkeniniz "
-"sürekli ise (örneğin Yaş), duyarlılık, özgüllük ve olabilirlik oranlarını "
-"elde etmek için ikili bir tanısal yordayıcıyı elle seçmelisiniz. Tahmin "
-"nomogramı yine regresyon değişkenlerinden oluşturulabilir.</p></div>"
 
 #: R/survivalcont.b.R
 msgid ""
@@ -2230,9 +2178,6 @@ msgid ""
 "retain exactly two observed levels including the selected positive level "
 "'{level}'."
 msgstr ""
-"Seçilen model için eksik olgular çıkarıldıktan sonra, sonuç değişkeni "
-"seçilen pozitif düzey '{level}' dahil olmak üzere tam olarak iki gözlemlenen "
-"düzeyi korumalıdır."
 
 #: survival/ui[4][1][0]/age_interaction.label
 msgid "Age × group interaction"
@@ -2932,9 +2877,6 @@ msgid ""
 "the regression model above uses {nmodel} rows. The two sets need not be the "
 "same patients."
 msgstr ""
-"Hem sonuç hem de bu belirtecin kaydedildiği {n} gözleme dayanmaktadır; "
-"yukarıdaki regresyon modeli {nmodel} satır kullanır. İki kümenin aynı "
-"hastalar olması gerekmez."
 
 #: R/survival.b.R
 msgid "Based on {n} successful bootstrap resamples."
@@ -3014,7 +2956,7 @@ msgstr "BIC"
 
 #: oddsratio/options/outcome.title
 msgid "Binary Outcome"
-msgstr "İkili Sonuç"
+msgstr ""
 
 #: R/outcomeorganizer.b.R
 msgid "Binary Outcome Coding"
@@ -3082,8 +3024,6 @@ msgid ""
 "Borderline events-per-variable (EPV ≈ {epv}). Interpret odds ratios with "
 "caution."
 msgstr ""
-"Sınırda değişken başına olay sayısı (EPV ≈ {epv}). Odds oranlarını dikkatle "
-"yorumlayın."
 
 #: multisurvival/options/medianline/hv.title
 #: singlearm/options/medianline/hv.title
@@ -3552,8 +3492,6 @@ msgid ""
 "Check that the positive and negative outcome and predictor levels are "
 "correct for your study"
 msgstr ""
-"Pozitif ve negatif sonuç ve belirteç düzeylerinin çalışmanız için doğru "
-"olduğunu kontrol edin"
 
 #: R/multisurvival.b.R
 msgid "Check that the variable name is correct in your dataset"
@@ -3611,11 +3549,6 @@ msgid ""
 "'Predictor Negative Level' selectors below can list its levels; in R, if "
 "left empty, the first explanatory variable is used."
 msgstr ""
-"Ayrı, düzeltilmemiş duyarlılık, özgüllük ve olabilirlik oranı "
-"hesaplamalarında hangi kategorik belirtecin kullanılacağını seçin. jamovi "
-"arayüzünde, aşağıdaki 'Belirteç Pozitif Düzeyi' ve 'Belirteç Negatif Düzeyi' "
-"seçicilerinin düzeylerini listeleyebilmesi için bu değişkeni burada seçin; "
-"R'de boş bırakılırsa ilk açıklayıcı değişken kullanılır."
 
 #: oddsratio/options/predictorNegativeLevel.description.main
 msgid ""
@@ -3627,13 +3560,6 @@ msgid ""
 "list the observed levels, and the logistic model, odds ratios, forest plot "
 "and nomogram still run."
 msgstr ""
-"Tanısal belirtecin hangi düzeyinin negatif test sonucu olduğunu seçin (ör. "
-"\"Absent\", \"Test-\", \"No\"). Tanısal metrikler için hem Belirteç Pozitif "
-"Düzeyi hem de Belirteç Negatif Düzeyi seçilmelidir; bunlar hiçbir zaman "
-"düzey adlarından veya sıralarından çıkarılmaz ve diğer tüm düzeyler hariç "
-"tutulur. Bunlardan biri boş olduğu sürece tanısal metrikler bu seçimi bekler "
-"ve gözlenen düzeyleri listeler; lojistik model, odds oranları, orman grafiği "
-"ve nomogram çalışmaya devam eder."
 
 #: oddsratio/options/predictorLevel.description.main
 msgid ""
@@ -3645,13 +3571,6 @@ msgid ""
 "list the observed levels, and the logistic model, odds ratios, forest plot "
 "and nomogram still run."
 msgstr ""
-"Tanısal belirtecin hangi düzeyinin pozitif test sonucu olduğunu seçin (ör. "
-"\"Present\", \"Test+\", \"Yes\"). Tanısal metrikler için hem Belirteç "
-"Pozitif Düzeyi hem de Belirteç Negatif Düzeyi seçilmelidir; bunlar hiçbir "
-"zaman düzey adlarından veya sıralarından çıkarılmaz ve diğer tüm düzeyler "
-"hariç tutulur. Bunlardan biri boş olduğu sürece tanısal metrikler bu seçimi "
-"bekler ve gözlenen düzeyleri listeler; lojistik model, odds oranları, orman "
-"grafiği ve nomogram çalışmaya devam eder."
 
 #: R/survival.b.R
 msgid ""
@@ -4138,23 +4057,19 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Confidence intervals: profile likelihood. P-values: Wald test."
-msgstr "Güven aralıkları: profil olabilirlik. P değerleri: Wald testi."
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid ""
 "Confidence intervals: profile penalized likelihood. P-values: penalized "
 "likelihood-ratio test."
 msgstr ""
-"Güven aralıkları: profil cezalı olabilirlik. P değerleri: cezalı olabilirlik "
-"oranı testi."
 
 #: R/oddsratio.b.R
 msgid ""
 "Confidence intervals: Wald (profile-likelihood intervals could not be "
 "computed for this model). P-values: Wald test."
 msgstr ""
-"Güven aralıkları: Wald (bu model için profil olabilirlik aralıkları "
-"hesaplanamadı). P değerleri: Wald testi."
 
 #: timeinterval/options/confidence_level.title
 msgid "Confidence level (%)"
@@ -4203,7 +4118,7 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Contingency Table:"
-msgstr "Kontenjans Tablosu:"
+msgstr ""
 
 #: multisurvival/options/contexpl.title
 #: multisurvival/ui[0][3].label
@@ -4425,8 +4340,6 @@ msgstr "Sonlanım değişkeni bulunamadı."
 #: R/oddsratio.b.R
 msgid "Could not map some explanatory variables after cleaning: {variables}."
 msgstr ""
-"Temizleme sonrasında bazı açıklayıcı değişkenler eşleştirilemedi: "
-"{variables}."
 
 #: R/datetimeconverter.b.R
 msgid ""
@@ -4671,10 +4584,6 @@ msgid ""
 "negative outcome levels are selected, explanatory variables have sufficient "
 "variation, and consider removing rows with missing data."
 msgstr ""
-"Kritik doğrulama hataları saptandı: {errors}. Birbirinden farklı pozitif ve "
-"negatif sonuç düzeylerinin seçildiğinden ve açıklayıcı değişkenlerin yeterli "
-"değişkenlik gösterdiğinden emin olun; eksik veri içeren satırları çıkarmayı "
-"değerlendirin."
 
 #: R/timeinterval.b.R
 msgid ""
@@ -5454,7 +5363,7 @@ msgstr "Tanı/başlangıç tarihi ve takip/bitiş tarihi farklı değişkenler o
 
 #: oddsratio/results/diagnosticContingency.title
 msgid "Diagnostic Contingency Table"
-msgstr "Tanısal çapraz tablo"
+msgstr ""
 
 #: outcomeorganizer/results/diagnosticsTable.title
 msgid "Diagnostic Information"
@@ -5471,11 +5380,6 @@ msgid ""
 "positive and negative test results. Observed levels: {levels}. The logistic "
 "model, odds ratios, forest plot and nomogram are not affected."
 msgstr ""
-"Tanısal metrikler Belirteç Pozitif Düzeyi ve Belirteç Negatif Düzeyi "
-"seçimlerini bekliyor. '{variable}' değişkeninin hangi düzeylerinin pozitif "
-"ve negatif test sonuçlarını temsil ettiğini seçin. Gözlenen düzeyler: "
-"{levels}. Lojistik model, odds oranları, orman grafiği ve nomogram bundan "
-"etkilenmez."
 
 #: R/oddsratio.b.R
 msgid ""
@@ -5483,9 +5387,6 @@ msgid ""
 "present among the selected positive and negative predictor levels. The "
 "prediction nomogram is unaffected."
 msgstr ""
-"'{variable}' için tanısal metrikler, seçilen pozitif ve negatif belirteç "
-"düzeyleri arasında her iki sonuç düzeyinin de bulunmasını gerektirir. Tahmin "
-"nomogramı bundan etkilenmez."
 
 #: R/oddsratio.b.R
 msgid ""
@@ -5493,27 +5394,22 @@ msgid ""
 "with at least two observed categorical predictor levels and two observed "
 "outcome levels. The prediction nomogram is unaffected."
 msgstr ""
-"'{variable}' için tanısal metrikler, en az iki gözlenen kategorik belirteç "
-"düzeyi ve iki gözlenen sonuç düzeyi içeren eşleştirilmiş eksiksiz gözlemler "
-"gerektirir. Tahmin nomogramı bundan etkilenmez."
 
 #: R/oddsratio.b.R
 msgid ""
 "Diagnostic metrics were not calculated because a valid paired 2×2 table "
 "could not be formed."
 msgstr ""
-"Geçerli bir eşleştirilmiş 2×2 tablo oluşturulamadığı için tanısal metrikler "
-"hesaplanmadı."
 
 #: R/oddsratio.b.R
 msgid ""
 "Diagnostic metrics were not calculated because no diagnostic predictor was "
 "available."
-msgstr "Tanısal belirteç mevcut olmadığı için tanısal metrikler hesaplanmadı."
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Diagnostic Metrics:"
-msgstr "Tanısal Metrikler:"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid ""
@@ -5522,36 +5418,30 @@ msgid ""
 "({excluded}) from the 2x2 diagnostic table so only '{pos}' (+) vs '{neg}' "
 "(-) are compared."
 msgstr ""
-"Tanısal belirteç '{variable}' {n} gözlenen düzeye sahip ({allLevels}). "
-"Yalnızca '{pos}' (+) ile '{neg}' (-) karşılaştırılsın diye, seçilmemiş "
-"belirteç düzeyine ({excluded}) sahip {nExcl} gözlem 2x2 tanısal tablodan "
-"hariç tutuldu."
 
 #: oddsratio/ui[0][2].label
 msgid "Diagnostic Predictor (binary)"
-msgstr "Tanısal Belirteç (ikili)"
+msgstr ""
 
 #: oddsratio/options/diagnosticPredictor.title
 msgid "Diagnostic Predictor (for LRs)"
-msgstr "Tanısal Belirteç (OO'lar için)"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Diagnostic predictor label matches multiple variables; using '{variable}'."
 msgstr ""
-"Tanısal belirteç etiketi birden fazla değişkenle eşleşiyor; '{variable}' "
-"kullanılıyor."
 
 #: oddsratio/results/diagnosticMetrics.title
 msgid "Diagnostic Test Performance"
-msgstr "Tanı Testi Performansı"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Diagnostic test performance metrics"
-msgstr "Tanı testi performans metrikleri"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Different languages/coding may require manual specification"
-msgstr "Farklı diller/kodlamalar manuel belirleme gerektirebilir"
+msgstr ""
 
 #: survival/options/age_standardization_method/direct.title
 msgid "Direct"
@@ -5915,7 +5805,7 @@ msgstr "Eğitici İçerik"
 
 #: oddsratio/options/showExplanations.title
 msgid "Educational explanations"
-msgstr "Eğitici açıklamalar"
+msgstr ""
 
 #: R/lassocox.b.R
 msgid "Effect"
@@ -6250,11 +6140,6 @@ msgid ""
 "instead, change the variable's measure type to Nominal or Ordinal in the "
 "data setup."
 msgstr ""
-"Sürekli olarak girildi: {variables}. Her biri bir birimlik artış başına bir "
-"odds oranı olarak modellenir; bu da ardışık değerler arasında log odds'ta "
-"sabit bir adım varsayar. Bunun yerine her düzey için ayrı bir odds oranı "
-"tahmin etmek için, veri kurulumunda değişkenin ölçüm türünü Nominal veya "
-"Sıralı olarak değiştirin."
 
 #: R/multisurvival.b.R
 msgid "EPV (Events Per Variable)"
@@ -6299,7 +6184,7 @@ msgstr "Artıklar grafiği oluşturulurken hata: {message}"
 
 #: R/oddsratio.b.R
 msgid "Error fitting Firth model: {message}"
-msgstr "Firth modeli uydurulurken hata oluştu: {message}"
+msgstr ""
 
 #: R/multisurvival.b.R
 msgid "Error generating Cox regression table:"
@@ -6333,7 +6218,7 @@ msgstr "Hata: Veriler analiz için temizlenemedi."
 
 #: R/oddsratio.b.R
 msgid "Error: Non-binary variables detected"
-msgstr "Hata: İki düzeyli (ikili) olmayan değişkenler saptandı"
+msgstr ""
 
 #: singlearm/results/errors.title
 msgid "Errors"
@@ -6790,35 +6675,29 @@ msgstr "Açıklayıcı Değişken"
 
 #: R/oddsratio.b.R
 msgid "Explanatory variable '{variable}' contains infinite values."
-msgstr "'{variable}' açıklayıcı değişkeni sonsuz değerler içeriyor."
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Explanatory variable '{variable}' contains no non-missing values."
-msgstr "'{variable}' açıklayıcı değişkeni eksik olmayan hiçbir değer içermiyor."
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid ""
 "Explanatory variable '{variable}' has {n} categories with fewer than 5 "
 "observations. Consider combining categories."
 msgstr ""
-"'{variable}' açıklayıcı değişkeninde 5'ten az gözleme sahip {n} kategori "
-"var. Kategorileri birleştirmeyi düşünün."
 
 #: R/oddsratio.b.R
 msgid ""
 "Explanatory variable '{variable}' has {n} levels. Consider grouping "
 "categories or using as continuous if ordinal."
 msgstr ""
-"'{variable}' açıklayıcı değişkeni {n} düzeye sahip. Kategorileri "
-"gruplandırmayı veya sıralı ise sürekli olarak kullanmayı düşünün."
 
 #: R/oddsratio.b.R
 msgid ""
 "Explanatory variable '{variable}' has no variation (all values are the "
 "same). It will not contribute to the model."
 msgstr ""
-"'{variable}' açıklayıcı değişkeninde varyasyon yok (tüm değerler aynı). "
-"Modele katkı sağlamayacaktır."
 
 #: R/oddsratio.b.R
 msgid ""
@@ -6826,17 +6705,12 @@ msgid ""
 "value(s) carried by fewer than 5 observations; those rows have high leverage "
 "on the fitted trend."
 msgstr ""
-"'{variable}' açıklayıcı değişkeni sürekli olarak girilmiştir ve 5'ten az "
-"gözlem tarafından taşınan {n} değere sahiptir; bu satırlar uyarlanan eğilim "
-"üzerinde yüksek kaldıraca (leverage) sahiptir."
 
 #: R/oddsratio.b.R
 msgid ""
 "Explanatory variable '{variable}' may contain extreme outliers ({n} "
 "potential outliers)."
 msgstr ""
-"'{variable}' açıklayıcı değişkeni aşırı uç değerler içerebilir ({n} olası uç "
-"değer)."
 
 #: R/survival.b.R
 msgid ""
@@ -7095,25 +6969,23 @@ msgid ""
 "Firth penalized likelihood logistic regression used to reduce bias and "
 "handle potential separation."
 msgstr ""
-"Yanlılığı azaltmak ve olası ayrılmayı (separation) ele almak için Firth "
-"cezalı olabilirlik lojistik regresyonu kullanıldı."
 
 #: R/oddsratio.b.R
 msgid "Firth penalized likelihood; profile-likelihood confidence intervals."
-msgstr "Firth cezalandırılmış olabilirlik; profil-olabilirlik güven aralıkları."
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Firth penalized log-likelihood: {val}"
-msgstr "Firth cezalandırılmış log-olabilirlik: {val}"
+msgstr ""
 
 #: oddsratio/options/usePenalized.title
 #: oddsratio/ui[1]/usePenalized.label
 msgid "Firth penalized logistic regression"
-msgstr "Firth cezalı lojistik regresyon"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Fisher's exact test / Firth regression"
-msgstr "Fisher kesin testi / Firth regresyonu"
+msgstr ""
 
 #: survival/ui[10][0][0]/use_parametric.label
 msgid "Fit a parametric survival model"
@@ -7462,10 +7334,9 @@ msgstr ""
 "insidansını, bir aralık içindeki zamana bağlı hızları veya hastalar arası "
 "heterojenliği ele almaz."
 
-#: package/analyses/oddsratio.menuSubgroup
 #: oddsratio/options.menuSubgroup
 msgid "General Statistics"
-msgstr "Genel İstatistikler"
+msgstr ""
 
 #: survival/options/parametric_distribution/gengamma.title
 msgid "Generalized Gamma"
@@ -7951,9 +7822,6 @@ msgid ""
 "Positive Level', and 'Predictor Negative Level' dropdowns to specify the "
 "correct levels"
 msgstr ""
-"Yanlışsa doğru düzeyleri belirtmek için 'Pozitif Düzey', 'Negatif Düzey', "
-"'Belirteç Pozitif Düzeyi' ve 'Belirteç Negatif Düzeyi' açılır menülerini "
-"kullanın"
 
 #: R/outcomeorganizer.b.R
 msgid "If multiple events occur, priority is given to type {type}."
@@ -8051,7 +7919,7 @@ msgstr "Önemli Notlar:"
 
 #: R/oddsratio.b.R
 msgid "Important: Please Verify These Interpretations"
-msgstr "Önemli: Lütfen Bu Yorumları Doğrulayın"
+msgstr ""
 
 #: R/survival.b.R
 msgid ""
@@ -8186,11 +8054,11 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid "infinite (no false positives)"
-msgstr "sonsuz (yanlış pozitif yok)"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "infinite (no true negatives)"
-msgstr "sonsuz (gerçek negatif yok)"
+msgstr ""
 
 #: R/timeinterval.b.R
 msgid "Info"
@@ -8819,8 +8687,6 @@ msgid ""
 "Large amount of missing data: {percent}% of rows will be removed ({removed} "
 "out of {total} rows)."
 msgstr ""
-"Büyük miktarda kayıp veri: satırların %{percent}'si çıkarılacak ({total} "
-"satırdan {removed} tanesi)."
 
 #: R/outcomeorganizer.b.R
 msgid ""
@@ -8901,7 +8767,7 @@ msgstr "Olabilirlik oranı testi = {stat}, sd = {df}, p = {p}"
 
 #: R/oddsratio.b.R
 msgid "Likelihood ratios"
-msgstr "Olabilirlik oranları"
+msgstr ""
 
 #: R/multisurvival.b.R
 msgid ""
@@ -9008,18 +8874,12 @@ msgid ""
 "status taken from censored or unequal follow-up, use the survival analyses "
 "instead."
 msgstr ""
-"Lojistik regresyon her hasta için aynı sonuç penceresini gerektirir. "
-"Sansürlü veya eşit olmayan takipten alınan bir durum için bunun yerine "
-"sağkalım analizlerini kullanın."
 
-#: package/analyses/oddsratio.description
 #: oddsratio/options.description.main
 msgid ""
 "Logistic regression odds-ratio table, forest plot, prediction nomogram, and "
 "optional binary diagnostic metrics."
 msgstr ""
-"Lojistik regresyon odds oranı tablosu, orman grafiği, tahmin nomogramı ve "
-"isteğe bağlı ikili tanısal metrikler."
 
 #: R/timeinterval.b.R
 msgid ""
@@ -9076,8 +8936,6 @@ msgid ""
 "Low events-per-variable (EPV ≈ {epv}). Odds ratios may be unstable; consider "
 "penalized/Firth logistic regression."
 msgstr ""
-"Düşük değişken başına olay sayısı (EPV ≈ {epv}). Odds oranları kararsız "
-"olabilir; cezalı/Firth lojistik regresyonu düşünün."
 
 #: R/datetimeconverter.b.R
 msgid "Low Parsing Success Rate"
@@ -9210,10 +9068,6 @@ msgid ""
 "{variables}. Enable Firth penalized regression or combine sparse categories "
 "before interpreting model-based predictions."
 msgstr ""
-"Şu değişkenler için ayrılma (separation) nedeniyle maksimum olabilirlik odds "
-"oranları tahmin edilemedi: {variables}. Modele dayalı tahminleri "
-"yorumlamadan önce Firth cezalı regresyonu etkinleştirin veya seyrek "
-"kategorileri birleştirin."
 
 #: singlearm/options/timetypedata/mdy.title
 #: survival/options/timetypedata/mdy.title
@@ -9536,8 +9390,6 @@ msgid ""
 "Missing data: {percent}% of rows will be removed ({removed} out of {total} "
 "rows)."
 msgstr ""
-"Kayıp veri: satırların %{percent}'si çıkarılacak ({total} satırdan {removed} "
-"tanesi)."
 
 #: R/lassocox.b.R
 msgid "Missing Dependencies"
@@ -9551,11 +9403,6 @@ msgid ""
 "observations for diagnostic metrics). Variable names with spaces or special "
 "characters are handled automatically and restored in the output."
 msgstr ""
-"Eksik gözlemler yalnızca her analiz yolunda kullanılan değişkenler için "
-"çıkarılır (regresyon tablosu için seçilen sonuç ve açıklayıcı değişkenlerde "
-"tam olgular; tanısal metrikler için eşleştirilmiş eksiksiz sonuç ve tanısal "
-"belirteç gözlemleri). Boşluk veya özel karakter içeren değişken adları "
-"otomatik olarak işlenir ve çıktıda geri yüklenir."
 
 #: R/outcomeorganizer.b.R
 msgid "Missing outcome data: {pct}% ({missing} out of {total} rows)."
@@ -9589,7 +9436,7 @@ msgstr "Açıklayıcı Değişkende Eksik Değerler"
 
 #: R/oddsratio.b.R
 msgid "Missing: {n}"
-msgstr "Eksik: {n}"
+msgstr ""
 
 #: R/multisurvival.b.R
 msgid "Mixing cause-specific and subdistribution hazards in competing risks"
@@ -10036,19 +9883,19 @@ msgstr "Negatif aralıklar"
 #: oddsratio/options/outcomeNegativeLevel.title
 #: oddsratio/ui[0][1]/outcomeNegativeLevel.label
 msgid "Negative Level"
-msgstr "Negatif Düzey"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Negative LR: {value}"
-msgstr "Negatif OO: {value}"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Negative outcome level:"
-msgstr "Negatif sonuç düzeyi:"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Negative predictor level:"
-msgstr "Negatif belirteç düzeyi:"
+msgstr ""
 
 #: R/survivalcont.b.R
 msgid "Negative survival time"
@@ -10108,7 +9955,7 @@ msgstr ""
 msgid ""
 "No complete observations remain for the selected outcome and explanatory "
 "variables."
-msgstr "Seçilen sonuç ve açıklayıcı değişkenler için eksiksiz gözlem kalmadı."
+msgstr ""
 
 #: R/survivalcont.b.R
 msgid "No complete records"
@@ -10188,9 +10035,6 @@ msgid ""
 "have been filtered out. Check your data import, verify variable selections, "
 "and review missing-value patterns."
 msgstr ""
-"Analiz için veri bulunamadı. Veri setinde hiç satır yok veya tüm gözlemler "
-"filtrelendi. Veri içe aktarmanızı kontrol edin, değişken seçimlerini "
-"doğrulayın ve kayıp değer desenlerini inceleyin."
 
 #: R/multisurvival.b.R
 msgid "No detected improvement in fit (p >= 0.05)"
@@ -10201,8 +10045,6 @@ msgid ""
 "No diagnostic predictor is available. Diagnostic metrics were skipped; the "
 "prediction nomogram can still be generated from the regression model."
 msgstr ""
-"Tanısal belirteç mevcut değil. Tanısal metrikler atlandı; tahmin nomogramı "
-"regresyon modelinden yine de üretilebilir."
 
 #: R/survivalcont.b.R
 msgid ""
@@ -10732,8 +10574,6 @@ msgstr ""
 #: R/oddsratio.b.R
 msgid "Not estimable: the data separate the outcome, so no finite odds ratio exists."
 msgstr ""
-"Tahmin edilemez: veri sonucu ayırıyor, bu nedenle sonlu bir odds oranı "
-"yoktur."
 
 #: R/multisurvival.b.R
 msgid ""
@@ -10794,11 +10634,11 @@ msgstr "ayarlanmadı"
 
 #: R/oddsratio.b.R
 msgid "Not shown (odds ratio not estimable): {terms}"
-msgstr "Gösterilmedi (odds oranı tahmin edilemez): {terms}"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Not shown (odds ratio too extreme to print): {terms}"
-msgstr "Gösterilmedi (odds oranı yazdırılamayacak kadar uç): {terms}"
+msgstr ""
 
 #: R/survival.b.R
 msgid "Not shown here: {missing}."
@@ -11091,7 +10931,7 @@ msgstr "Gözlemler belirli bir idari tarihte sansürlenir."
 
 #: R/oddsratio.b.R
 msgid "Observations: {n}"
-msgstr "Gözlem sayısı: {n}"
+msgstr ""
 
 #: survival/results/calibrationGroupTable.columns.title
 msgid "Observed (KM)"
@@ -11128,7 +10968,7 @@ msgstr "Gözlenen Olaylar"
 
 #: R/oddsratio.b.R
 msgid "Observed outcome levels:"
-msgstr "Gözlenen sonuç düzeyleri:"
+msgstr ""
 
 #: multisurvival/results/adjustedMedianTable.columns.title
 msgid "Observed Records"
@@ -11150,35 +10990,36 @@ msgstr "Olaylar gerçekleştiğinde oluşur"
 
 #: R/oddsratio.b.R
 msgid "Odds ratio analysis completed successfully."
-msgstr "Odds oranı analizi başarıyla tamamlandı."
+msgstr ""
 
-#: package/analyses/oddsratio.menuSubtitle
 #: oddsratio/options.menuSubtitle
 msgid "Odds Ratio for Binary Outcomes"
-msgstr "İkili Sonuçlar İçin Odds Oranı"
+msgstr ""
 
 #: oddsratio/results/text.title
 msgid "Odds Ratio Table"
-msgstr "Odds Oranı Tablosu"
+msgstr ""
 
-#: package/analyses/oddsratio.title
-#: package/analyses/oddsratio.menuTitle
 #: oddsratio/options.title
 #: oddsratio/ui.title
 #: oddsratio/results.title
 msgid "Odds Ratio Table and Plot"
-msgstr "Odds Oranı Tablosu ve Grafiği"
+msgstr ""
 
 #: oddsratio/results/fittedTable.title
 msgid "Odds Ratios"
-msgstr "Odds oranları"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Odds ratios interpretation (Positive vs Negative)"
-msgstr "Odds oranlarının yorumu (Pozitif - Negatif karşılaştırması)"
+msgstr ""
 
 #: package/datasets/OddsRatios:Firthfitandnomogramsafeguard.name
 msgid "Odds Ratios: Firth fit and nomogram safeguard"
+msgstr ""
+
+#: package/datasets/OddsRatios:postoperativepathologyanddiagnosticcoding.name
+msgid "Odds Ratios: postoperative pathology and diagnostic coding"
 msgstr ""
 
 #: survival/options/spline_scale/odds.title
@@ -11436,19 +11277,17 @@ msgstr "İyimserlik Düzeltmeli Ayırt Etme (Harrell C-indeksi)"
 
 #: R/oddsratio.b.R
 msgid "OR (95% CI, p-value)"
-msgstr "OR (%95 GA, p değeri)"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "OR, 95% CI (Firth penalized)"
-msgstr "OR, %95 GA (Firth cezalandırılmış)"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid ""
 "Ordered factor '{variable}' will be treated as nominal (unordered) for "
 "modeling and output."
 msgstr ""
-"Sıralı faktör '{variable}', modelleme ve çıktı için nominal (sırasız) olarak "
-"değerlendirilecektir."
 
 #: R/lassocox.b.R
 msgid "Ordered factor: treatment indicators"
@@ -11546,8 +11385,6 @@ msgid ""
 "Outcome label matches multiple variables after cleaning; using '{variable}'. "
 "Please verify selection."
 msgstr ""
-"Sonuç etiketi temizleme sonrasında birden fazla değişkenle eşleşiyor; "
-"'{variable}' kullanılıyor. Lütfen seçimi doğrulayın."
 
 #: R/outcomeorganizer.b.R
 msgid "outcome level {levels}"
@@ -11562,8 +11399,6 @@ msgid ""
 "Outcome level modeled as the event: '{level}' (negative/reference level: "
 "'{neg}')."
 msgstr ""
-"Olay olarak modellenen sonuç düzeyi: '{level}' (negatif/referans düzey: "
-"'{neg}')."
 
 #: R/outcomeorganizer.b.R
 msgid "Outcome level(s) {levels} without recurrence/progression: coded as 0"
@@ -11590,8 +11425,8 @@ msgstr ""
 msgid "Outcome Organizer for Survival Analysis"
 msgstr "Sağkalım Analizi İçin Sonuç Düzenleyici"
 
-#: package/datasets/OutcomeOrganizer:explicitvital-statusmapping.name
-msgid "Outcome Organizer: explicit vital-status mapping"
+#: package/datasets/OutcomeOrganizer:overallsurvivalandcompeting-riskcoding.name
+msgid "Outcome Organizer: overall survival and competing-risk coding"
 msgstr ""
 
 #: R/oddsratio.b.R
@@ -11599,16 +11434,12 @@ msgid ""
 "Outcome positive and negative levels must be different (both set to "
 "'{level}')."
 msgstr ""
-"Sonuç pozitif ve negatif düzeyleri farklı olmalıdır (ikisi de '{level}' "
-"olarak ayarlı)."
 
 #: R/oddsratio.b.R
 msgid ""
 "Outcome positive and negative levels must be different. Please select "
 "distinct positive and negative outcome levels."
 msgstr ""
-"Sonuç pozitif ve negatif düzeyleri farklı olmalıdır. Lütfen birbirinden "
-"farklı pozitif ve negatif sonuç düzeyleri seçin."
 
 #: multisurvival/results/eventRecodeInfo.title
 #: outcomeorganizer/results/eventRecodeInfo.title
@@ -11692,17 +11523,12 @@ msgid ""
 "observation(s) with unselected outcome level(s) ({excluded}) so only '{pos}' "
 "(positive) vs '{neg}' (negative) are analyzed."
 msgstr ""
-"Sonuç değişkeni {n} gözlenen düzeye sahip ({allLevels}). Yalnızca '{pos}' "
-"(pozitif) ile '{neg}' (negatif) analiz edilsin diye, seçilmemiş sonuç "
-"düzeyine ({excluded}) sahip {nExcl} gözlem hariç tutuldu."
 
 #: R/oddsratio.b.R
 msgid ""
 "Outcome variable has very few observations in one category ({minCount} out "
 "of {totalCount}). Results may be unreliable."
 msgstr ""
-"Sonuç değişkeninin bir kategorisinde çok az gözlem var ({totalCount} "
-"gözlemden {minCount} tanesi). Sonuçlar güvenilmez olabilir."
 
 #: R/outcomeorganizer.b.R
 msgid ""
@@ -11725,16 +11551,12 @@ msgid ""
 "Outcome variable is severely imbalanced ({percent} in minority class). "
 "Consider using specialized methods for imbalanced data."
 msgstr ""
-"Sonuç değişkeni ciddi şekilde dengesiz (azınlık sınıfında %{percent}). "
-"Dengesiz veriler için özel yöntemler kullanmayı düşünün."
 
 #: R/oddsratio.b.R
 msgid ""
 "Outcome variable must have at least 2 different values for logistic "
 "regression."
 msgstr ""
-"Sonuç değişkeni lojistik regresyon için en az 2 farklı değere sahip "
-"olmalıdır."
 
 #: R/outcomeorganizer.b.R
 msgid "Outcome variable must have at least 2 different values."
@@ -11758,7 +11580,7 @@ msgstr "Sonuç değişkeni sorunu"
 
 #: R/oddsratio.b.R
 msgid "Outcome variable summary: {counts}"
-msgstr "Sonuç değişkeni özeti: {counts}"
+msgstr ""
 
 #: R/multisurvival.b.R
 msgid ""
@@ -12083,7 +11905,7 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Penalized AIC: {aic} (-2 x penalized log-likelihood + 2 x {nPar} parameters)."
-msgstr "Cezalı AIC: {aic} (-2 x cezalı log-olabilirlik + 2 x {nPar} parametre)."
+msgstr ""
 
 #: R/lassocox.b.R
 msgid "Penalized coefficient"
@@ -12127,8 +11949,6 @@ msgid ""
 "Penalized likelihood-ratio test vs null model: chi-square = {stat} on {df} "
 "df, {p}."
 msgstr ""
-"Sıfır modele karşı cezalandırılmış olabilirlik oranı testi: ki-kare = "
-"{stat}, sd = {df}, {p}."
 
 #: R/lassocox.b.R
 msgid ""
@@ -12161,9 +11981,6 @@ msgid ""
 "explanatory variables, so its odds ratio cannot be estimated. Remove it, or "
 "the variable it duplicates."
 msgstr ""
-"Tam çoklu bağlantı: {variables} diğer açıklayıcı değişkenler tarafından "
-"tamamen belirleniyor, bu nedenle odds oranı tahmin edilemez. Bu değişkeni "
-"veya yinelediği değişkeni çıkarın."
 
 #: survival/options/stratified_cox.description
 msgid ""
@@ -12520,17 +12337,12 @@ msgid ""
 "'Yes') and the 'Negative Level' (reference/non-event, e.g., 'Alive', 'No "
 "Event', 'No') of your outcome variable."
 msgstr ""
-"Lütfen sonuç değişkeninizin hem 'Pozitif Düzey' (olay, ör. 'Dead', 'Event', "
-"'Yes') hem de 'Negatif Düzey' (referans/olay dışı, ör. 'Alive', 'No Event', "
-"'No') seçimini yapın."
 
 #: R/oddsratio.b.R
 msgid ""
 "Please select both the positive and negative outcome levels from the "
 "dropdown menus below the outcome variable."
 msgstr ""
-"Lütfen sonuç değişkeninin altındaki açılır menülerden hem pozitif hem de "
-"negatif sonuç düzeyini seçin."
 
 #: R/multisurvival.b.R
 msgid ""
@@ -12542,7 +12354,7 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Please select the positive outcome level. Available levels: {levels}"
-msgstr "Lütfen pozitif sonuç düzeyini seçin. Mevcut düzeyler: {levels}"
+msgstr ""
 
 #: survival/ui[5][1].label
 msgid "Plot Appearance"
@@ -12653,20 +12465,20 @@ msgstr "Zayıf"
 
 #: R/oddsratio.b.R
 msgid "Positive and Negative Outcome Levels Required"
-msgstr "Pozitif ve Negatif Sonuç Düzeyleri Gerekli"
+msgstr ""
 
 #: oddsratio/options/outcomeLevel.title
 #: oddsratio/ui[0][1]/outcomeLevel.label
 msgid "Positive Level"
-msgstr "Pozitif Düzey"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Positive LR: {value}"
-msgstr "Pozitif OO: {value}"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Positive outcome level:"
-msgstr "Pozitif sonuç düzeyi:"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid ""
@@ -12678,25 +12490,16 @@ msgid ""
 "True Positives: {tp}, False Positives: {fp}, False Negatives: {fn}, True "
 "Negatives: {tn}"
 msgstr ""
-"Pozitif sonuç düzeyi: '{posOutcome}' ({outcomeMethod})\n"
-"Pozitif belirteç düzeyi: '{posPred}' ({predMethod})\n"
-"Kontenjans tablosu:\n"
-"  {pred1} → {out1}: {c11} | {out2}: {c12}\n"
-"  {pred2} → {out1}: {c21} | {out2}: {c22}\n"
-"Gerçek Pozitifler: {tp}, Yanlış Pozitifler: {fp}, Yanlış Negatifler: {fn}, "
-"Gerçek Negatifler: {tn}"
 
 #: R/oddsratio.b.R
 msgid "Positive predictor level:"
-msgstr "Pozitif belirteç düzeyi:"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid ""
 "Possible separation detected for '{variable}' (zero cells in 2x2 table). "
 "Consider penalized/Firth logistic regression."
 msgstr ""
-"'{variable}' için olası ayrılma (separation) tespit edildi (2x2 tabloda "
-"sıfır hücreler). Cezalı/Firth lojistik regresyonu düşünün."
 
 #: R/multisurvival.b.R
 msgid "Possible solutions:"
@@ -12736,16 +12539,16 @@ msgstr "Öngörülen Sağkalım"
 
 #: oddsratio/ui[2].label
 msgid "Prediction and Diagnostic Options"
-msgstr "Tahmin ve Tanı Seçenekleri"
+msgstr ""
 
 #: oddsratio/results/plot_nomogram.title
 msgid "Prediction Nomogram"
-msgstr "Tahmin Nomogramı"
+msgstr ""
 
 #: oddsratio/options/showNomogram.title
 #: oddsratio/ui[2]/showNomogram.label
 msgid "Prediction nomogram and diagnostic metrics"
-msgstr "Tahmin nomogramı ve tanısal metrikler"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid ""
@@ -12754,26 +12557,20 @@ msgid ""
 "successfully, and the nomogram is an unvalidated visualization whose failure "
 "does not alter the fitted odds-ratio table."
 msgstr ""
-"Model uyumu sorunları nedeniyle tahmin nomogramı üretilemedi; ayrıntılar "
-"için Nomogram paneline bakın. Odds oranı analizi başarıyla tamamlandı ve "
-"nomogram, başarısızlığı uyarlanan odds oranı tablosunu değiştirmeyen "
-"doğrulanmamış bir görselleştirmedir."
 
 #: oddsratio/results/nomogram.title
 msgid "Prediction Nomogram Details"
-msgstr "Tahmin Nomogramı Ayrıntıları"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Prediction nomogram not generated."
-msgstr "Tahmin nomogramı üretilmedi."
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid ""
 "Prediction nomogram was not generated because maximum-likelihood estimates "
 "could not be identified for separated predictor(s): {variables}."
 msgstr ""
-"Ayrılmış belirteç(ler) için maksimum olabilirlik tahminleri "
-"belirlenemediğinden tahmin nomogramı üretilmedi: {variables}."
 
 #: lassocox/options/showEncoding.title
 msgid "Predictor encoding"
@@ -12785,37 +12582,33 @@ msgstr "Yordayıcı kodlaması"
 
 #: R/oddsratio.b.R
 msgid "Predictor level"
-msgstr "Yordayıcı düzeyi"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Predictor Level Modeling:"
-msgstr "Belirteç Düzeyi Modellemesi:"
+msgstr ""
 
 #: oddsratio/options/predictorNegativeLevel.title
 #: oddsratio/ui[0][2]/predictorNegativeLevel.label
 msgid "Predictor Negative Level"
-msgstr "Belirteç Negatif Düzeyi"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid ""
 "Predictor positive and negative levels for '{variable}' must be different "
 "(both set to '{level}')."
 msgstr ""
-"'{variable}' için belirteç pozitif ve negatif düzeyleri farklı olmalıdır "
-"(ikisi de '{level}' olarak ayarlı)."
 
 #: R/oddsratio.b.R
 msgid ""
 "Predictor positive and negative levels must be different (both set to "
 "'{level}')."
 msgstr ""
-"Belirteç pozitif ve negatif düzeyleri farklı olmalıdır (ikisi de '{level}' "
-"olarak ayarlı)."
 
 #: oddsratio/options/predictorLevel.title
 #: oddsratio/ui[0][2]/predictorLevel.label
 msgid "Predictor Positive Level"
-msgstr "Belirteç Pozitif Düzeyi"
+msgstr ""
 
 #: R/lassocox.b.R
 msgid ""
@@ -13026,8 +12819,6 @@ msgstr "Orantılı Tehlikeler: Schoenfeld Artık Grafikleri"
 #: R/oddsratio.b.R
 msgid "Provides exact 2x2 p-values and finite penalized odds ratios in small samples"
 msgstr ""
-"Küçük örneklemlerde kesin 2x2 p değerleri ve sonlu cezalı odds oranları "
-"sağlar"
 
 #: datetimeconverter/results/qualityMetrics.title
 msgid "Quality Assessment"
@@ -13889,8 +13680,6 @@ msgid ""
 "Sample size is small relative to number of explanatory variables. Risk of "
 "overfitting or convergence issues."
 msgstr ""
-"Örneklem büyüklüğü açıklayıcı değişken sayısına göre küçüktür. Aşırı uyum "
-"(overfitting) veya yakınsama sorunları riski."
 
 #: R/lassocox.b.R
 msgid ""
@@ -14086,10 +13875,6 @@ msgid ""
 "explanatory variables. The analysis reports logistic-regression odds ratios "
 "with confidence intervals and a matching forest plot."
 msgstr ""
-"Bir sonuç değişkeni seçin, pozitif (olay) ve negatif (referans) düzeylerini "
-"belirleyin ve bir veya daha fazla kategorik veya sürekli açıklayıcı değişken "
-"ekleyin. Analiz, güven aralıklarıyla lojistik regresyon odds oranlarını ve "
-"eşleşen bir orman grafiğini bildirir."
 
 #: R/lassocox.b.R
 msgid ""
@@ -14256,7 +14041,7 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Selected variable(s) not found in the data: {variables}."
-msgstr "Seçilen değişken(ler) verilerde bulunamadı: {variables}."
+msgstr ""
 
 #: R/lassocox.b.R
 msgid "Selected Variables and Coefficients"
@@ -14280,7 +14065,7 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid "Sensitivity and specificity"
-msgstr "Duyarlılık ve özgüllük"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid ""
@@ -14288,13 +14073,10 @@ msgid ""
 "intervals; for 2x2 association testing or sparse-cell odds ratios, use exact "
 "or penalized methods"
 msgstr ""
-"Yukarıdaki duyarlılık ve özgüllük zaten kesin Clopper-Pearson aralıklarını "
-"kullanıyor; 2x2 ilişki testi veya seyrek hücreli odds oranları için kesin "
-"veya cezalı yöntemleri kullanın"
 
 #: R/oddsratio.b.R
 msgid "Sensitivity: {value}"
-msgstr "Duyarlılık: {value}"
+msgstr ""
 
 #: R/datetimeconverter.b.R
 msgid ""
@@ -14440,8 +14222,6 @@ msgid ""
 "Small expected cell counts detected (minimum = {min}). Asymptotic 2x2 "
 "approximations and log-method likelihood-ratio intervals may be imprecise."
 msgstr ""
-"Küçük beklenen hücre sayıları saptandı (minimum = {min}). Asimptotik 2x2 "
-"yaklaşımları ve log yöntemi olabilirlik oranı aralıkları kesin olmayabilir."
 
 #: R/survivalcont.b.R
 msgid "Small Group After Cut-off"
@@ -14484,8 +14264,6 @@ msgid ""
 "Small sample size after removing missing data: {n} observations. Results may "
 "be unreliable."
 msgstr ""
-"Kayıp veriler çıkarıldıktan sonra küçük örneklem büyüklüğü: {n} gözlem. "
-"Sonuçlar güvenilmez olabilir."
 
 #: R/outcomeorganizer.b.R
 msgid ""
@@ -14632,23 +14410,19 @@ msgstr "Tabakalı Cox modelinde seyrek tabakalar"
 
 #: R/oddsratio.b.R
 msgid "Specificity: {value}"
-msgstr "Özgüllük: {value}"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid ""
 "Specified negative outcome level '{level}' not found in outcome variable. "
 "Available levels: {levels}"
 msgstr ""
-"Belirtilen negatif sonuç düzeyi '{level}' sonuç değişkeninde bulunamadı. "
-"Mevcut düzeyler: {levels}"
 
 #: R/oddsratio.b.R
 msgid ""
 "Specified positive outcome level '{level}' not found in outcome variable. "
 "Available levels: {levels}"
 msgstr ""
-"Belirtilen pozitif sonuç düzeyi '{level}' sonuç değişkeninde bulunamadı. "
-"Mevcut düzeyler: {levels}"
 
 #: R/survival.b.R
 msgid ""
@@ -14815,9 +14589,6 @@ msgid ""
 "\"Alive\", \"No Event\", \"No\"). Both Positive and Negative outcome levels "
 "must be selected; any other outcome levels are excluded."
 msgstr ""
-"Hangi sonuç düzeyinin negatif/referans durumu temsil ettiğini belirtin (ör. "
-"\"Alive\", \"No Event\", \"No\"). Hem Pozitif hem de Negatif sonuç düzeyi "
-"seçilmelidir; diğer tüm sonuç düzeyleri hariç tutulur."
 
 #: oddsratio/options/outcomeLevel.description.main
 msgid ""
@@ -14825,9 +14596,6 @@ msgid ""
 "\"Event\", \"Yes\"). Both Positive and Negative outcome levels must be "
 "selected; any other outcome levels are excluded."
 msgstr ""
-"Hangi sonuç düzeyinin pozitif durumu temsil ettiğini belirtin (ör. \"Dead\", "
-"\"Event\", \"Yes\"). Hem Pozitif hem de Negatif sonuç düzeyi seçilmelidir; "
-"diğer tüm sonuç düzeyleri hariç tutulur."
 
 #: R/survival.b.R
 msgid "Specimen characteristics"
@@ -14873,9 +14641,6 @@ msgid ""
 "coding, predictor variation, sparse categories, and separation; consider "
 "Firth penalized regression when appropriate."
 msgstr ""
-"Standart lojistik regresyon uydurulamadı: {message}. Sonuç kodlamasını, "
-"belirteç varyasyonunu, seyrek kategorileri ve ayrılmayı inceleyin; uygun "
-"olduğunda Firth cezalı regresyonu düşünün."
 
 #: survival/options/age_standardization_method.title
 msgid "Standardization Method"
@@ -15131,13 +14896,13 @@ msgstr ""
 "tabakalandırın. Doğrusal bir yaş etkisi varsaymadan her yaş grubu için "
 "farklı başlangıç hazardlarına izin verir."
 
-#: R/oddsratio.b.R
-msgid "Strong warning"
-msgstr "Güçlü uyarı"
-
 #: R/timeinterval.b.R
 msgid "Strong Warning"
 msgstr "Güçlü Uyarı"
+
+#: R/oddsratio.b.R
+msgid "Strong warning"
+msgstr ""
 
 #: multisurvival/results/strongWarnings.title
 #: oddsratio/results/strongWarnings.title
@@ -15267,7 +15032,6 @@ msgstr ""
 #: package/analyses/survival.menuGroup
 #: package/analyses/survivalcont.menuGroup
 #: package/analyses/multisurvival.menuGroup
-#: package/analyses/oddsratio.menuGroup
 #: package/analyses/datetimeconverter.menuGroup
 #: package/analyses/outcomeorganizer.menuGroup
 #: package/analyses/lassocox.menuGroup
@@ -15624,21 +15388,24 @@ msgstr ""
 #: package/datasets/LASSOCox:reproduciblepenaltyselection.description
 msgid ""
 "Synthetic cohort of 150 patients with group, stage, age and marker as "
-"candidate predictors. Saved LASSO Cox analysis uses five-fold "
-"cross-validation, lambda.min, seed 123456 and internal standardization, with "
-"coefficient, CV and development-sample risk-group plots. time is in months; "
-"event 1 = event, 0 = censored. Displayed performance is apparent, not "
-"externally validated."
+"candidate predictors. Two saved LASSO Cox analyses compare lambda.min and "
+"lambda.1se using five-fold cross-validation, seed 123456 and internal "
+"standardization. Teaching outputs include encoding and reproducibility "
+"details, R code, coefficient paths, CV and development-sample risk-group "
+"plots, with exported risk scores. time is in months; event 1 = event, 0 = "
+"censored. Displayed performance is apparent, not externally validated."
 msgstr ""
 
-#: package/datasets/OutcomeOrganizer:explicitvital-statusmapping.description
+#: package/datasets/OutcomeOrganizer:overallsurvivalandcompeting-riskcoding.description
 msgid ""
 "Synthetic cohort of 150 patients. AWOD = alive without disease, AWD = alive "
 "with disease, DOD = death of disease, DOOC = death of other causes. Saved "
-"overall-survival mapping counts both death categories as events and exports "
-"the recoded outcome, with diagnostics and visualization. followup is in "
-"months; patient_id contains invented identifiers. Competing-risk mapping can "
-"be explored by changing analysis type without discarding other-cause deaths."
+"analyses compare overall-survival coding with competing-risk coding and "
+"export both recoded outcomes. Overall survival combines 82 disease deaths "
+"and 24 other-cause deaths; competing-risk coding preserves both causes, "
+"alongside 44 censored observations. Both analyses include tables, "
+"diagnostics, distributions, natural-language summaries and a glossary. "
+"followup is in months; patient_id contains invented identifiers."
 msgstr ""
 
 #: package/datasets/ContinuousMarkerSurvival:exploratorycut-off.description
@@ -15663,16 +15430,30 @@ msgstr ""
 msgid ""
 "Synthetic cohort of 150 patients. Saved group comparison with Kaplan-Meier "
 "curves, confidence intervals, risk table, proportional-hazards diagnostics, "
-"age adjustment, adjusted curves and RMST with an automatic horizon. time is "
-"in months; event 1 = observed event, 0 = right-censored. Group labels are "
+"age adjustment, adjusted curves and RMST with a fixed 24-month horizon. time "
+"is in months; event 1 = observed event, 0 = right-censored. Group labels are "
 "illustrative and do not establish treatment effects."
 msgstr ""
 
-#: package/datasets/TimeIntervals:standardizedmonths.description
+#: package/datasets/OddsRatios:postoperativepathologyanddiagnosticcoding.description
 msgid ""
-"Synthetic start/end ISO dates for 150 patients. Saved analysis calculates "
-"standardized months (elapsed days / 30.4375), exports calculated time, and "
-"displays quality metrics and summary. There are no missing or negative "
+"Synthetic postoperative pathology cohort of 240 independent patients. "
+"nodal_status Positive/Negative is the surgical reference outcome; "
+"diagnostic_test Positive/Negative is an invented preoperative test. Saved "
+"ordinary logistic model includes grade, age in years and tumor_size in "
+"millimetres; diagnostic_test is selected separately for its unadjusted "
+"two-by-two diagnostic summaries with explicit positive/negative coding. This "
+"is a fixed binary endpoint, not a time-to-event analysis. Simulation "
+"parameters and sample associations are illustrative, not validated clinical "
+"effects or test performance."
+msgstr ""
+
+#: package/datasets/TimeIntervals:standardizedandcalendar-awaremonths.description
+msgid ""
+"Synthetic start/end ISO dates for 150 patients. Two saved analyses compare "
+"standardized months (elapsed days / 30.4375) with calendar-aware months "
+"using actual month lengths. Both export calculated time and display quality "
+"metrics, summaries and a glossary. There are no missing or negative "
 "intervals. Calendar and standardized durations have different meanings; "
 "select the time basis explicitly before using the output in survival "
 "analysis."
@@ -15743,8 +15524,6 @@ msgid ""
 "The 'logistf' package is required for Firth penalized regression but is not "
 "installed. Falling back to standard logistic regression."
 msgstr ""
-"Firth cezalı regresyon için 'logistf' paketi gereklidir ancak yüklü "
-"değildir. Standart lojistik regresyona geri dönülüyor."
 
 #: R/multisurvival.b.R
 msgid "The 'rms' package is required for nomogram generation but is not available."
@@ -16226,7 +16005,7 @@ msgstr ""
 
 #: oddsratio/options/explanatory.description.main
 msgid "The explanatory variables to be used in the analysis."
-msgstr "Analizde kullanılacak açıklayıcı değişkenler."
+msgstr ""
 
 #: R/lassocox.b.R
 msgid ""
@@ -16286,16 +16065,12 @@ msgid ""
 "The following explanatory variable(s) have no variation after complete-case "
 "filtering: {variables}."
 msgstr ""
-"Aşağıdaki açıklayıcı değişken(ler) eksiksiz olgu filtrelemesinden sonra "
-"hiçbir varyasyona sahip değildir: {variables}."
 
 #: R/oddsratio.b.R
 msgid ""
 "The following numeric explanatory variable(s) contain infinite values: "
 "{variables}. Replace infinite values before fitting the model."
 msgstr ""
-"Aşağıdaki sayısal açıklayıcı değişken(ler) sonsuz değerler içeriyor: "
-"{variables}. Modeli uydurmadan önce sonsuz değerleri değiştirin."
 
 #: R/multisurvival.b.R
 msgid ""
@@ -16396,8 +16171,6 @@ msgid ""
 "The level '{level}' is treated as a positive test result as specified "
 "(negative test result: '{neg}')."
 msgstr ""
-"'{level}' düzeyi belirtildiği gibi pozitif test sonucu olarak ele alınıyor "
-"(negatif test sonucu: '{neg}')."
 
 #: survivalcont/options/outcomeLevel.description
 msgid ""
@@ -16673,14 +16446,6 @@ msgid ""
 "obtain a finite estimate, or combine sparse categories. Terms whose "
 "multivariable odds ratio is not estimable are omitted from the forest plot."
 msgstr ""
-"Şunlar için odds oranı tahmin edilemedi: {variables}. Veri bu terimlerde, "
-"tek başına veya birlikte, sonucu ayırıyor; bu nedenle maksimum olabilirlik "
-"tahmini mevcut değildir ve uydurma yalnızca rastgele bir değerde durur. "
-"Hücre 'tahmin edilemez' olarak gösterilir: bu ne büyük bir odds oranıdır ne "
-"de ilişki olmadığının kanıtıdır. Sonlu bir tahmin elde etmek için Firth "
-"cezalı lojistik regresyonunu etkinleştirin veya seyrek kategorileri "
-"birleştirin. Çok değişkenli odds oranı tahmin edilemeyen terimler orman "
-"grafiğinde gösterilmez."
 
 #: R/oddsratio.b.R
 msgid ""
@@ -16689,18 +16454,12 @@ msgid ""
 "computed. This is not separation. Rescale the variable to read it in the "
 "table."
 msgstr ""
-"{variables} için odds oranı mevcuttur ancak yazdırılamaz: değeri veya bir "
-"güven sınırı çok uçtur ya da bir güven sınırı hesaplanamamıştır. Bu bir "
-"ayrılma (separation) değildir. Tabloda okumak için değişkeni yeniden "
-"ölçekleyin."
 
 #: R/oddsratio.b.R
 msgid ""
 "The odds-ratio model uses Firth penalized likelihood, whereas the available "
 "nomogram implementation uses ordinary maximum-likelihood logistic regression."
 msgstr ""
-"Odds oranı modeli Firth cezalı olabilirliğini kullanırken, mevcut nomogram "
-"uygulaması sıradan maksimum olabilirlik lojistik regresyonunu kullanır."
 
 #: R/singlearm.b.R
 msgid ""
@@ -16803,9 +16562,6 @@ msgid ""
 "shows unpenalized maximum-likelihood odds ratios. These will not match the "
 "penalized estimates in the table above."
 msgstr ""
-"Cezalandırılmış (Firth) orman grafiği üretilemedi; bu nedenle orman grafiği "
-"cezalandırılmamış en çok olabilirlik odds oranlarını göstermektedir. Bunlar "
-"yukarıdaki tablodaki cezalandırılmış tahminlerle eşleşmeyecektir."
 
 #: R/lassocox.b.R
 msgid ""
@@ -16842,8 +16598,6 @@ msgid ""
 "is selected. Diagnostic metrics, when available, remain unadjusted 2x2 "
 "estimates."
 msgstr ""
-"Firth cezalı regresyon seçildiği için tahmin nomogramı üretilmedi. Tanısal "
-"metrikler, mevcut olduğunda, düzeltilmemiş 2x2 tahminleri olarak kalır."
 
 #: R/outcomeorganizer.b.R
 msgid ""
@@ -17037,28 +16791,22 @@ msgid ""
 "The selected negative outcome level '{level}' is not present among paired "
 "complete observations. Available levels: {levels}."
 msgstr ""
-"Seçilen negatif sonuç düzeyi '{level}', eşleştirilmiş eksiksiz gözlemler "
-"arasında mevcut değildir. Mevcut düzeyler: {levels}."
 
 #: R/oddsratio.b.R
 msgid ""
 "The selected negative predictor level '{level}' is not present among paired "
 "complete observations. Available levels: {levels}."
 msgstr ""
-"Seçilen negatif belirteç düzeyi '{level}', eşleştirilmiş eksiksiz gözlemler "
-"arasında mevcut değildir. Mevcut düzeyler: {levels}."
 
 #: R/oddsratio.b.R
 msgid "The selected outcome could not be mapped after variable-name normalization."
-msgstr "Seçilen sonuç, değişken adı normalleştirmesinden sonra eşleştirilemedi."
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid ""
 "The selected positive predictor level '{level}' is not present among paired "
 "complete observations. Available levels: {levels}."
 msgstr ""
-"Seçilen pozitif belirteç düzeyi '{level}', eşleştirilmiş eksiksiz gözlemler "
-"arasında mevcut değildir. Mevcut düzeyler: {levels}."
 
 #: R/lassocox.b.R
 msgid ""
@@ -17379,9 +17127,6 @@ msgid ""
 "These explanatory variables produce the same model term name, so their odds "
 "ratios cannot be told apart: {variables}. Rename one of them."
 msgstr ""
-"Bu açıklayıcı değişkenler aynı model terim adını üretiyor, bu nedenle odds "
-"oranları birbirinden ayırt edilemiyor: {variables}. Bunlardan birini yeniden "
-"adlandırın."
 
 #: R/multisurvival.b.R
 msgid ""
@@ -17428,7 +17173,7 @@ msgstr ""
 msgid ""
 "These unadjusted diagnostic metrics depend on these interpretations being "
 "correct"
-msgstr "Bu düzeltilmemiş tanısal metrikler, bu yorumların doğru olmasına bağlıdır"
+msgstr ""
 
 #: R/datetimeconverter.b.R
 msgid ""
@@ -17641,11 +17386,6 @@ msgid ""
 "AIC. For nested models, use a documented common-penalty likelihood-ratio "
 "comparison instead."
 msgstr ""
-"Bu, belirteç birimlerine ve parametrelendirmeye bağlı, modele özgü bir "
-"cezalı olabilirlik niceliğidir. Ayrı kurulmuş Firth modellerini "
-"karşılaştırmak veya maksimum olabilirlik AIC ile karşılaştırmak için uygun "
-"değildir. İç içe modeller için bunun yerine belgelenmiş ortak cezalı "
-"olabilirlik oranı karşılaştırması kullanın."
 
 #: R/outcomeorganizer.b.R
 msgid ""
@@ -17673,7 +17413,7 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid "This is required for correct calculation of:"
-msgstr "Şunların doğru hesaplanması için bu gereklidir:"
+msgstr ""
 
 #: R/outcomeorganizer.b.R
 msgid "This is standard coding for Cox regression and Kaplan-Meier analysis."
@@ -17993,8 +17733,8 @@ msgstr ""
 "takibe eşit veya bunun ötesindeki sınırlar da atlanır çünkü kişi-zamanı "
 "gözlem başlamadan önce veya sonuncusundan sonra birikemez."
 
-#: package/datasets/TimeIntervals:standardizedmonths.name
-msgid "Time Intervals: standardized months"
+#: package/datasets/TimeIntervals:standardizedandcalendar-awaremonths.name
+msgid "Time Intervals: standardized and calendar-aware months"
 msgstr ""
 
 #: survival/ui[4][2][0]/calibration_timepoint.label
@@ -18248,8 +17988,6 @@ msgstr ""
 #: R/oddsratio.b.R
 msgid "To choose a level, first put '{variable}' in the Diagnostic Predictor box."
 msgstr ""
-"Bir düzey seçmek için önce '{variable}' değişkenini Tanısal Belirteç "
-"kutusuna yerleştirin."
 
 #: lassocox/results/todo.title
 #: multisurvival/results/todo.title
@@ -18289,7 +18027,7 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid "too extreme to print"
-msgstr "yazdırılamayacak kadar uç"
+msgstr ""
 
 #: R/lassocox.b.R
 msgid ""
@@ -18350,7 +18088,7 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid "TP: {tp}, FP: {fp}, FN: {fn}, TN: {tn}"
-msgstr "DP: {tp}, YP: {fp}, YN: {fn}, DN: {tn}"
+msgstr ""
 
 #: R/outcomeorganizer.b.R
 msgid ""
@@ -18498,22 +18236,18 @@ msgid ""
 "and specificity; log method (Simel et al. 1991) for the likelihood ratios. "
 "Computed as in epiR::epi.tests() with its default settings."
 msgstr ""
-"Düzeltilmemiş 2×2 tahminleri. Duyarlılık ve özgüllük için Clopper-Pearson "
-"kesin aralıkları; olabilirlik oranları için log yöntemi (Simel ve ark. "
-"1991). Varsayılan ayarlarıyla epiR::epi.tests() ile aynı şekilde "
-"hesaplanmıştır."
 
 #: R/oddsratio.b.R
 msgid "undefined (no informative cells)"
-msgstr "tanımsız (bilgilendirici hücre yok)"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "undefined (no negative cases)"
-msgstr "tanımsız (negatif olgu yok)"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid "undefined (no positive cases)"
-msgstr "tanımsız (pozitif olgu yok)"
+msgstr ""
 
 #: R/singlearm.b.R
 msgid "Understanding {median}"
@@ -18570,7 +18304,7 @@ msgstr "Kesim Noktası Analizini Anlama"
 
 #: oddsratio/results/diagnosticTestExplanation.title
 msgid "Understanding Diagnostic Test Performance"
-msgstr "Tanı Testi Performansını Anlama"
+msgstr ""
 
 #: lassocox/results/lassoExplanation.title
 msgid "Understanding LASSO Cox Regression"
@@ -18604,7 +18338,7 @@ msgstr "Nomogramları Anlamak"
 
 #: oddsratio/results/oddsRatioExplanation.title
 msgid "Understanding Odds Ratio Analysis"
-msgstr "Odds Oranı Analizini Anlama"
+msgstr ""
 
 #: survival/results/parametricModelsExplanation.title
 msgid "Understanding Parametric Survival Models"
@@ -18629,7 +18363,7 @@ msgstr "Kısıtlı Ortalama Sağkalım Süresini (RMST) Anlama"
 
 #: oddsratio/results/riskMeasuresExplanation.title
 msgid "Understanding Risk Measures"
-msgstr "Risk Ölçümlerini Anlama"
+msgstr ""
 
 #: R/multisurvival.b.R
 #: multisurvival/results/riskScoreExplanation.title
@@ -18686,7 +18420,7 @@ msgstr "İlgilenilen Olaya Kadar Geçen Medyan Süreyi Anlama"
 
 #: R/oddsratio.b.R
 msgid "Univariable and multivariable columns use the same {n} complete cases."
-msgstr "Tek değişkenli ve çok değişkenli sütunlar aynı {n} tam olguyu kullanır."
+msgstr ""
 
 #: package/analyses/survival.menuSubtitle
 #: survival/options.menuSubtitle
@@ -18816,9 +18550,6 @@ msgid ""
 "outcome variable to make your selections. Any other levels in a multi-level "
 "outcome variable will be excluded."
 msgstr ""
-"Seçimlerinizi yapmak için sonuç değişkeninin altındaki 'Pozitif Düzey' ve "
-"'Negatif Düzey' açılır menülerini kullanın. Çok düzeyli bir sonuç "
-"değişkenindeki diğer tüm düzeyler hariç tutulur."
 
 #: R/multisurvival.b.R
 msgid ""
@@ -18856,32 +18587,25 @@ msgstr ""
 
 #: R/oddsratio.b.R
 msgid "User-specified"
-msgstr "Kullanıcı tarafından belirtilen"
+msgstr ""
 
 #: R/oddsratio.b.R
 msgid ""
 "Using '{variable}' (first explanatory variable) for diagnostic metrics. To "
 "use a different variable, specify it in the 'Diagnostic Predictor' box."
 msgstr ""
-"Tanısal metrikler için '{variable}' (ilk açıklayıcı değişken) kullanılıyor. "
-"Farklı bir değişken kullanmak için bunu 'Tanısal Belirteç' kutusunda "
-"belirtin."
 
 #: R/oddsratio.b.R
 msgid ""
 "Using '{variable}' (from model) for diagnostic metrics (sensitivity, "
 "specificity, likelihood ratios)."
 msgstr ""
-"Tanısal metrikler (duyarlılık, özgüllük, olabilirlik oranları) için "
-"'{variable}' (modelden) kullanılıyor."
 
 #: R/oddsratio.b.R
 msgid ""
 "Using '{variable}' for diagnostic metrics (sensitivity, specificity, "
 "likelihood ratios)."
 msgstr ""
-"Tanısal metrikler (duyarlılık, özgüllük, olabilirlik oranları) için "
-"'{variable}' kullanılıyor."
 
 #: R/oddsratio.b.R
 msgid ""
@@ -18889,9 +18613,6 @@ msgid ""
 "logistic regression model. Diagnostic metrics are calculated independently "
 "of the odds ratio model."
 msgstr ""
-"Tanısal metrikler için '{variable}' kullanılıyor. Not: Bu değişken lojistik "
-"regresyon modelinde YER ALMAZ. Tanısal metrikler odds oranı modelinden "
-"bağımsız olarak hesaplanır."
 
 #: R/survivalcont.b.R
 msgid ""
@@ -19118,8 +18839,6 @@ msgid ""
 "Very small sample size (n = {n}). Results should be interpreted with extreme "
 "caution."
 msgstr ""
-"Çok küçük örneklem büyüklüğü (n = {n}). Sonuçlar son derece dikkatli "
-"yorumlanmalıdır."
 
 #: R/outcomeorganizer.b.R
 msgid ""
@@ -19548,9 +19267,6 @@ msgid ""
 "exactly 0 or 1, a likelihood ratio may be undefined, and confidence "
 "intervals are less reliable."
 msgstr ""
-"2x2 tabloda sıfır hücreler saptandı. Duyarlılık veya özgüllük tam olarak 0 "
-"veya 1 olabilir, bir olabilirlik oranı tanımsız olabilir ve güven aralıkları "
-"daha az güvenilirdir."
 
 #: R/timeinterval.b.R
 msgid "Zero Intervals"

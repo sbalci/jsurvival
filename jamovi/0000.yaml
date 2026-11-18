@@ -6,7 +6,7 @@ jms: '1.0'
 authors:
   - Serdar Balci
 maintainer: Serdar Balci <serdarbalci@serdarbalci.com>
-date: '2026-11-08'
+date: '2026-11-18'
 type: R
 description: >-
   Time-to-event analysis for clinicopathological research in 'jamovi':
@@ -86,18 +86,6 @@ analyses:
     menuSubtitle: Multivariable Cox-regression, Adjusted Survival
     ribbon: analyses
     category: analyses
-  - title: Odds Ratio Table and Plot
-    name: oddsratio
-    ns: jsurvival
-    menuGroup: Survival
-    menuSubgroup: General Statistics
-    menuTitle: Odds Ratio Table and Plot
-    description: >-
-      Logistic regression odds-ratio table, forest plot, prediction nomogram,
-      and optional binary diagnostic metrics.
-    menuSubtitle: Odds Ratio for Binary Outcomes
-    ribbon: analyses
-    category: analyses
   - title: DateTime Converter
     name: datetimeconverter
     ns: jsurvival
@@ -151,6 +139,17 @@ analyses:
       and robust statistical summaries. Time intervals form the  foundation of
       person-time follow-up calculations, capturing both participant counts and 
       observation duration for accurate incidence rate calculations.
+  - title: Odds Ratio Table and Plot
+    name: oddsratio
+    ns: jsurvival
+    category: analyses
+    menuGroup: Survival
+    menuSubgroup: General Statistics
+    menuTitle: Odds Ratio Table and Plot
+    menuSubtitle: Odds Ratio for Binary Outcomes
+    description: >-
+      Logistic regression odds-ratio table, forest plot, prediction nomogram,
+      and optional binary diagnostic metrics.
 datasets:
   - name: histopathology including analysis
     path: histopathologySurvival.omv
@@ -176,18 +175,19 @@ datasets:
       - Missing values
   - name: 'LASSO Cox: reproducible penalty selection'
     path: lassocox_example.omv
-    description: Synthetic cohort of 150 patients with group, stage, age and marker
-      as candidate predictors. Two saved LASSO Cox analyses compare lambda.min and lambda.1se
-      using five-fold cross-validation, seed 123456 and internal standardization. Teaching
-      outputs include encoding and reproducibility details, R code, coefficient paths,
-      CV and development-sample risk-group plots, with exported risk scores. time is
-      in months; event 1 = event, 0 = censored. Displayed performance is apparent, not
-      externally validated.
+    description: >-
+      Synthetic cohort of 150 patients with group, stage, age and marker as
+      candidate predictors. Two saved LASSO Cox analyses compare lambda.min and
+      lambda.1se using five-fold cross-validation, seed 123456 and internal
+      standardization. Teaching outputs include encoding and reproducibility
+      details, R code, coefficient paths, CV and development-sample risk-group
+      plots, with exported risk scores. time is in months; event 1 = event, 0 =
+      censored. Displayed performance is apparent, not externally validated.
     tags:
-    - Survival
-    - LASSO
-    - Cox regression
-    - Cross-validation
+      - Survival
+      - LASSO
+      - Cox regression
+      - Cross-validation
   - name: 'Multivariable Survival: categorical and continuous predictors'
     path: multisurvival_example.omv
     description: >-
@@ -218,18 +218,20 @@ datasets:
       - Model safeguards
   - name: 'Outcome Organizer: overall survival and competing-risk coding'
     path: outcomeorganizer_example.omv
-    description: Synthetic cohort of 150 patients. AWOD = alive without disease, AWD
-      = alive with disease, DOD = death of disease, DOOC = death of other causes. Saved
-      analyses compare overall-survival coding with competing-risk coding and export
-      both recoded outcomes. Overall survival combines 82 disease deaths and 24 other-cause
-      deaths; competing-risk coding preserves both causes, alongside 44 censored observations.
-      Both analyses include tables, diagnostics, distributions, natural-language summaries
-      and a glossary. followup is in months; patient_id contains invented identifiers.
+    description: >-
+      Synthetic cohort of 150 patients. AWOD = alive without disease, AWD =
+      alive with disease, DOD = death of disease, DOOC = death of other causes.
+      Saved analyses compare overall-survival coding with competing-risk coding
+      and export both recoded outcomes. Overall survival combines 82 disease
+      deaths and 24 other-cause deaths; competing-risk coding preserves both
+      causes, alongside 44 censored observations. Both analyses include tables,
+      diagnostics, distributions, natural-language summaries and a glossary.
+      followup is in months; patient_id contains invented identifiers.
     tags:
-    - Data preparation
-    - Outcomes
-    - Overall survival
-    - Competing risks
+      - Data preparation
+      - Outcomes
+      - Overall survival
+      - Competing risks
   - name: 'Single Arm Survival: Kaplan-Meier and person-time'
     path: singlearm_example.omv
     description: >-
@@ -243,16 +245,18 @@ datasets:
       - Person-time
   - name: 'Survival Analysis: groups and age adjustment'
     path: survival_example.omv
-    description: Synthetic cohort of 150 patients. Saved group comparison with Kaplan-Meier
-      curves, confidence intervals, risk table, proportional-hazards diagnostics, age
-      adjustment, adjusted curves and RMST with a fixed 24-month horizon. time is in
-      months; event 1 = observed event, 0 = right-censored. Group labels are illustrative
-      and do not establish treatment effects.
+    description: >-
+      Synthetic cohort of 150 patients. Saved group comparison with Kaplan-Meier
+      curves, confidence intervals, risk table, proportional-hazards
+      diagnostics, age adjustment, adjusted curves and RMST with a fixed
+      24-month horizon. time is in months; event 1 = observed event, 0 =
+      right-censored. Group labels are illustrative and do not establish
+      treatment effects.
     tags:
-    - Survival
-    - Kaplan-Meier
-    - Cox regression
-    - RMST
+      - Survival
+      - Kaplan-Meier
+      - Cox regression
+      - RMST
   - name: 'Continuous Marker Survival: exploratory cut-off'
     path: survivalcont_example.omv
     description: >-
@@ -268,32 +272,36 @@ datasets:
       - Cox regression
   - name: 'Time Intervals: standardized and calendar-aware months'
     path: timeinterval_example.omv
-    description: Synthetic start/end ISO dates for 150 patients. Two saved analyses
-      compare standardized months (elapsed days / 30.4375) with calendar-aware months
-      using actual month lengths. Both export calculated time and display quality metrics,
-      summaries and a glossary. There are no missing or negative intervals. Calendar
-      and standardized durations have different meanings; select the time basis explicitly
-      before using the output in survival analysis.
+    description: >-
+      Synthetic start/end ISO dates for 150 patients. Two saved analyses compare
+      standardized months (elapsed days / 30.4375) with calendar-aware months
+      using actual month lengths. Both export calculated time and display
+      quality metrics, summaries and a glossary. There are no missing or
+      negative intervals. Calendar and standardized durations have different
+      meanings; select the time basis explicitly before using the output in
+      survival analysis.
     tags:
-    - Data preparation
-    - Dates
-    - Time intervals
-    - Person-time
+      - Data preparation
+      - Dates
+      - Time intervals
+      - Person-time
   - name: 'Odds Ratios: postoperative pathology and diagnostic coding'
     path: oddsratio_binary_example.omv
-    description: Synthetic postoperative pathology cohort of 240 independent patients.
-      nodal_status Positive/Negative is the surgical reference outcome; diagnostic_test
-      Positive/Negative is an invented preoperative test. Saved ordinary logistic model
-      includes grade, age in years and tumor_size in millimetres; diagnostic_test is
-      selected separately for its unadjusted two-by-two diagnostic summaries with explicit
-      positive/negative coding. This is a fixed binary endpoint, not a time-to-event
-      analysis. Simulation parameters and sample associations are illustrative, not
-      validated clinical effects or test performance.
+    description: >-
+      Synthetic postoperative pathology cohort of 240 independent patients.
+      nodal_status Positive/Negative is the surgical reference outcome;
+      diagnostic_test Positive/Negative is an invented preoperative test. Saved
+      ordinary logistic model includes grade, age in years and tumor_size in
+      millimetres; diagnostic_test is selected separately for its unadjusted
+      two-by-two diagnostic summaries with explicit positive/negative coding.
+      This is a fixed binary endpoint, not a time-to-event analysis. Simulation
+      parameters and sample associations are illustrative, not validated
+      clinical effects or test performance.
     tags:
-    - Logistic regression
-    - Odds ratio
-    - Diagnostic coding
-    - Synthetic pathology
+      - Logistic regression
+      - Odds ratio
+      - Diagnostic coding
+      - Synthetic pathology
 usesNative: true
 minApp: 2.7.27
 

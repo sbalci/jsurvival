@@ -6154,7 +6154,6 @@ msgid ""
 "between-patient heterogeneity."
 msgstr ""
 
-#: package/analyses/oddsratio.menuSubgroup
 #: oddsratio/options.menuSubgroup
 msgid "General Statistics"
 msgstr ""
@@ -7465,7 +7464,6 @@ msgid ""
 "instead."
 msgstr ""
 
-#: package/analyses/oddsratio.description
 #: oddsratio/options.description.main
 msgid ""
 "Logistic regression odds-ratio table, forest plot, prediction nomogram, and "
@@ -9317,7 +9315,6 @@ msgstr ""
 msgid "Odds ratio analysis completed successfully."
 msgstr ""
 
-#: package/analyses/oddsratio.menuSubtitle
 #: oddsratio/options.menuSubtitle
 msgid "Odds Ratio for Binary Outcomes"
 msgstr ""
@@ -9326,8 +9323,6 @@ msgstr ""
 msgid "Odds Ratio Table"
 msgstr ""
 
-#: package/analyses/oddsratio.title
-#: package/analyses/oddsratio.menuTitle
 #: oddsratio/options.title
 #: oddsratio/ui.title
 #: oddsratio/results.title
@@ -9344,6 +9339,10 @@ msgstr ""
 
 #: package/datasets/OddsRatios:Firthfitandnomogramsafeguard.name
 msgid "Odds Ratios: Firth fit and nomogram safeguard"
+msgstr ""
+
+#: package/datasets/OddsRatios:postoperativepathologyanddiagnosticcoding.name
+msgid "Odds Ratios: postoperative pathology and diagnostic coding"
 msgstr ""
 
 #: survival/options/spline_scale/odds.title
@@ -9678,8 +9677,8 @@ msgstr ""
 msgid "Outcome Organizer for Survival Analysis"
 msgstr ""
 
-#: package/datasets/OutcomeOrganizer:explicitvital-statusmapping.name
-msgid "Outcome Organizer: explicit vital-status mapping"
+#: package/datasets/OutcomeOrganizer:overallsurvivalandcompeting-riskcoding.name
+msgid "Outcome Organizer: overall survival and competing-risk coding"
 msgstr ""
 
 #: R/oddsratio.b.R
@@ -12639,12 +12638,12 @@ msgid ""
 "linear age effect."
 msgstr ""
 
-#: R/oddsratio.b.R
-msgid "Strong warning"
-msgstr ""
-
 #: R/timeinterval.b.R
 msgid "Strong Warning"
+msgstr ""
+
+#: R/oddsratio.b.R
+msgid "Strong warning"
 msgstr ""
 
 #: multisurvival/results/strongWarnings.title
@@ -12757,7 +12756,6 @@ msgstr ""
 #: package/analyses/survival.menuGroup
 #: package/analyses/survivalcont.menuGroup
 #: package/analyses/multisurvival.menuGroup
-#: package/analyses/oddsratio.menuGroup
 #: package/analyses/datetimeconverter.menuGroup
 #: package/analyses/outcomeorganizer.menuGroup
 #: package/analyses/lassocox.menuGroup
@@ -13072,21 +13070,24 @@ msgstr ""
 #: package/datasets/LASSOCox:reproduciblepenaltyselection.description
 msgid ""
 "Synthetic cohort of 150 patients with group, stage, age and marker as "
-"candidate predictors. Saved LASSO Cox analysis uses five-fold "
-"cross-validation, lambda.min, seed 123456 and internal standardization, with "
-"coefficient, CV and development-sample risk-group plots. time is in months; "
-"event 1 = event, 0 = censored. Displayed performance is apparent, not "
-"externally validated."
+"candidate predictors. Two saved LASSO Cox analyses compare lambda.min and "
+"lambda.1se using five-fold cross-validation, seed 123456 and internal "
+"standardization. Teaching outputs include encoding and reproducibility "
+"details, R code, coefficient paths, CV and development-sample risk-group "
+"plots, with exported risk scores. time is in months; event 1 = event, 0 = "
+"censored. Displayed performance is apparent, not externally validated."
 msgstr ""
 
-#: package/datasets/OutcomeOrganizer:explicitvital-statusmapping.description
+#: package/datasets/OutcomeOrganizer:overallsurvivalandcompeting-riskcoding.description
 msgid ""
 "Synthetic cohort of 150 patients. AWOD = alive without disease, AWD = alive "
 "with disease, DOD = death of disease, DOOC = death of other causes. Saved "
-"overall-survival mapping counts both death categories as events and exports "
-"the recoded outcome, with diagnostics and visualization. followup is in "
-"months; patient_id contains invented identifiers. Competing-risk mapping can "
-"be explored by changing analysis type without discarding other-cause deaths."
+"analyses compare overall-survival coding with competing-risk coding and "
+"export both recoded outcomes. Overall survival combines 82 disease deaths "
+"and 24 other-cause deaths; competing-risk coding preserves both causes, "
+"alongside 44 censored observations. Both analyses include tables, "
+"diagnostics, distributions, natural-language summaries and a glossary. "
+"followup is in months; patient_id contains invented identifiers."
 msgstr ""
 
 #: package/datasets/ContinuousMarkerSurvival:exploratorycut-off.description
@@ -13111,16 +13112,30 @@ msgstr ""
 msgid ""
 "Synthetic cohort of 150 patients. Saved group comparison with Kaplan-Meier "
 "curves, confidence intervals, risk table, proportional-hazards diagnostics, "
-"age adjustment, adjusted curves and RMST with an automatic horizon. time is "
-"in months; event 1 = observed event, 0 = right-censored. Group labels are "
+"age adjustment, adjusted curves and RMST with a fixed 24-month horizon. time "
+"is in months; event 1 = observed event, 0 = right-censored. Group labels are "
 "illustrative and do not establish treatment effects."
 msgstr ""
 
-#: package/datasets/TimeIntervals:standardizedmonths.description
+#: package/datasets/OddsRatios:postoperativepathologyanddiagnosticcoding.description
 msgid ""
-"Synthetic start/end ISO dates for 150 patients. Saved analysis calculates "
-"standardized months (elapsed days / 30.4375), exports calculated time, and "
-"displays quality metrics and summary. There are no missing or negative "
+"Synthetic postoperative pathology cohort of 240 independent patients. "
+"nodal_status Positive/Negative is the surgical reference outcome; "
+"diagnostic_test Positive/Negative is an invented preoperative test. Saved "
+"ordinary logistic model includes grade, age in years and tumor_size in "
+"millimetres; diagnostic_test is selected separately for its unadjusted "
+"two-by-two diagnostic summaries with explicit positive/negative coding. This "
+"is a fixed binary endpoint, not a time-to-event analysis. Simulation "
+"parameters and sample associations are illustrative, not validated clinical "
+"effects or test performance."
+msgstr ""
+
+#: package/datasets/TimeIntervals:standardizedandcalendar-awaremonths.description
+msgid ""
+"Synthetic start/end ISO dates for 150 patients. Two saved analyses compare "
+"standardized months (elapsed days / 30.4375) with calendar-aware months "
+"using actual month lengths. Both export calculated time and display quality "
+"metrics, summaries and a glossary. There are no missing or negative "
 "intervals. Calendar and standardized durations have different meanings; "
 "select the time basis explicitly before using the output in survival "
 "analysis."
@@ -14829,8 +14844,8 @@ msgid ""
 "accrue before the start of observation or after the last one."
 msgstr ""
 
-#: package/datasets/TimeIntervals:standardizedmonths.name
-msgid "Time Intervals: standardized months"
+#: package/datasets/TimeIntervals:standardizedandcalendar-awaremonths.name
+msgid "Time Intervals: standardized and calendar-aware months"
 msgstr ""
 
 #: survival/ui[4][2][0]/calibration_timepoint.label
