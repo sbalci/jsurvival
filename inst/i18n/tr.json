@@ -242,7 +242,7 @@
                 "{ninputs} tarihin {nfailed} tanesi okunamadı; bu nedenle ilgili hastalar hariç tutuldu. Tarih biçimini kontrol edin."
             ],
             "{outcome}: OR (95% CI, p-value)": [
-                "{outcome}: OR (%95 GA, p değeri)"
+                ""
             ],
             "{pct}% of intervals are zero-length (start and end date on the same day). These contribute nothing to total person-time, so the denominator here is smaller than the number of participants suggests. Check whether unfilled follow-up dates were defaulted to the start date.": [
                 "Aralıkların %{pct} kadarı sıfır uzunlukta (başlangıç ve bitiş tarihi aynı gün). Bunlar toplam kişi-zamana hiçbir katkı sağlamaz; bu nedenle buradaki payda, katılımcı sayısının düşündürdüğünden küçüktür. Doldurulmamış takip tarihlerinin varsayılan olarak başlangıç tarihine eşitlenip eşitlenmediğini kontrol edin."
@@ -305,7 +305,7 @@
                 "{variable}: {level} ({reference} ile karşılaştırıldığında)"
             ],
             "{variable}: the odds ratio per one unit is unreadable at two decimals because of the measurement scale. The odds ratio per 1 SD ({unit} units) is {or} (95% CI {lower} to {upper}). To show this in the table, rescale the variable.": [
-                "{variable}: bir birim başına odds oranı, ölçüm ölçeği nedeniyle iki ondalık basamakta okunamıyor. 1 SS ({unit} birim) başına odds oranı {or} (%95 GA {lower} ila {upper}). Bunu tabloda göstermek için değişkeni yeniden ölçekleyin."
+                ""
             ],
             "* Model did not converge for: {fits} (likely small-sample separation); interpret these HRs with extreme caution.": [
                 "* Model şu alt gruplarda yakınsamadı: {fits} (olası neden küçük örneklemde ayrışma); bu TO değerlerini son derece dikkatli yorumlayın."
@@ -521,7 +521,7 @@
                 "<br><b>%s %s zamanında kerteriz (landmark) analizi.</b>"
             ],
             "<div style=\"margin-bottom: 20px; padding: 15px; background-color: rgba(216, 33, 50, 0.18); border-left: 4px solid #dc3545; color: inherit;\"> <h4 style=\"margin-top: 0; color: inherit;\">Understanding Prediction and Diagnostic Outputs</h4> <p><strong>Prediction nomogram:</strong> The plotted nomogram assigns points to all explanatory variables in the maximum-likelihood logistic regression model and maps total points to predicted outcome probability. It is not a Fagan nomogram and does not display pre-test-to-post-test probability conversion.</p> <h5 style=\"color: inherit;\">Prediction Nomogram Components:</h5> <ul> <li><strong>Points:</strong> Contribution assigned to each predictor value</li> <li><strong>Total Points:</strong> Sum of predictor contributions</li> <li><strong>Predicted Probability:</strong> Model-based probability corresponding to total points</li> </ul> <p><strong>Important:</strong> The plot is a visual representation of the fitted model, not evidence of calibration, discrimination, transportability, or clinical utility. Internal and external validation are required before clinical use. It is not generated when Firth regression is selected because that would mix different estimation methods. Predicted probabilities need a cohort sample with the real event rate: in a case-control sample the odds ratios hold but the predicted probabilities do not.</p> <hr style=\"margin: 15px 0; border: none; border-top: 1px solid #f5c6cb;\"> <h5 style=\"color: inherit; margin-top: 15px;\">What is a Diagnostic Predictor?</h5> <p><strong>The diagnostic predictor is the single binary variable you want to evaluate as a diagnostic test.</strong></p> <div style=\"background-color: rgba(255, 202, 33, 0.23); padding: 10px; border-radius: 5px; margin: 10px 0; color: inherit;\"> <strong>Example:</strong> If you select \"LVI\" (Lymphovascular Invasion: Absent/Present) as the diagnostic predictor, the diagnostic table answers: <em>\"How well does LVI alone distinguish the selected outcome states?\"</em> </div> <p><strong>Requirements:</strong></p> <ul> <li> Compares two explicitly selected levels (<strong>Predictor Positive Level</strong> vs <strong>Predictor Negative Level</strong>): e.g., Yes/No, Present/Absent, Positive/Negative</li> <li> Examples: LVI (Absent/Present), an immunostain (Negative/Positive), a frozen-section call (Benign/Malignant)</li> <li> Cannot use continuous variables: Age, Tumor Size (infinite possible values)</li> <li> Multi-category variables (e.g., Grade 1/2/3): Only observations with the selected positive and negative levels are included in the 2×2 diagnostic table; unselected levels are excluded with a warning</li> </ul> <p><strong>Why Two Selected Levels?</strong></p> <p>Diagnostic test performance metrics (sensitivity, specificity, likelihood ratios) are calculated from a 2×2 contingency table:</p> <table style=\"border-collapse: collapse; margin: 10px 0; font-size: 0.9em;\"> <tr><th style=\"border: 1px solid #ddd; padding: 5px;\"></th> <th style=\"border: 1px solid #ddd; padding: 5px;\">Outcome +</th> <th style=\"border: 1px solid #ddd; padding: 5px;\">Outcome -</th></tr> <tr><td style=\"border: 1px solid #ddd; padding: 5px;\">Test +</td> <td style=\"border: 1px solid #ddd; padding: 5px;\">True Positive</td> <td style=\"border: 1px solid #ddd; padding: 5px;\">False Positive</td></tr> <tr><td style=\"border: 1px solid #ddd; padding: 5px;\">Test -</td> <td style=\"border: 1px solid #ddd; padding: 5px;\">False Negative</td> <td style=\"border: 1px solid #ddd; padding: 5px;\">True Negative</td></tr> </table> <p><small><em>Sensitivity = TP/(TP+FN), Specificity = TN/(TN+FP), LR+ = Sensitivity/(1-Specificity)</em></small></p> <p><strong>Selection Guidelines:</strong></p> <ul> <li><strong>Not specified:</strong> Uses the first explanatory variable automatically (in the jamovi GUI, select the variable in the Diagnostic Predictor box to enable the Predictor Positive Level and Predictor Negative Level dropdowns)</li> <li><strong>In your regression model:</strong> Diagnostic metrics are still unadjusted and use only its paired 2×2 table</li> <li><strong>Not in your model:</strong> Evaluates it independently using paired complete outcome/test observations</li> </ul> <div style=\"background-color: rgba(33, 163, 188, 0.21); padding: 10px; border-radius: 5px; margin: 10px 0; color: inherit;\"> <strong> Clinical Tip:</strong> If your first variable is continuous (e.g., Age), you must manually select a binary diagnostic predictor to obtain sensitivity, specificity, and likelihood ratios. The prediction nomogram can still be generated from the regression variables. </div> </div>": [
-                "<div><h4>Tahmin ve tanısal çıktıları anlama</h4><p><strong>Tahmin nomogramı:</strong> Çizilen nomogram, maksimum olabilirlik lojistik regresyon modelindeki tüm açıklayıcı değişkenlere puan verir ve toplam puanı tahmini sonuç olasılığına dönüştürür. Bu bir Fagan nomogramı değildir; test öncesi olasılıktan test sonrası olasılığa dönüşümü göstermez.</p><h5>Tahmin nomogramının bileşenleri:</h5><ul><li><strong>Puanlar:</strong> Her yordayıcı değerine atanan katkı</li><li><strong>Toplam puan:</strong> Yordayıcı katkılarının toplamı</li><li><strong>Tahmini olasılık:</strong> Toplam puana karşılık gelen, modele dayalı olasılık</li></ul><p><strong>Önemli:</strong> Grafik, kurulan modelin görsel sunumudur; kalibrasyon, ayırt etme, başka popülasyonlara aktarılabilirlik veya klinik yarar kanıtı değildir. Klinik kullanımdan önce iç ve dış doğrulama gerekir. Farklı tahmin yöntemlerini karıştıracağı için Firth regresyonu seçildiğinde oluşturulmaz. Tahmini olasılıklar, gerçek olay oranını yansıtan bir kohort örneklemi gerektirir: olgu-kontrol örnekleminde odds oranları geçerliliğini korusa da tahmini olasılıklar korumaz.</p><h5>Tanısal yordayıcı nedir?</h5><p><strong>Tanısal yordayıcı, tanı testi olarak değerlendirmek istediğiniz tek bir ikili değişkendir.</strong></p><p><strong>Örnek:</strong> Tanısal yordayıcı olarak LVI (Lenfovasküler İnvazyon: Yok/Var) seçerseniz, tanısal tablo şu soruyu yanıtlar: LVI tek başına seçilen sonuç durumlarını ne kadar iyi ayırt ediyor?</p><p><strong>Gereklilikler:</strong></p><ul><li>Açıkça seçilen iki düzeyi karşılaştırır (Yordayıcı Pozitif Düzeyi ve Yordayıcı Negatif Düzeyi): örneğin Evet/Hayır, Var/Yok, Pozitif/Negatif</li><li>Örnekler: LVI (Yok/Var), immün boyama (Negatif/Pozitif), frozen kesit değerlendirmesi (Benign/Malign)</li><li>Yaş veya tümör boyutu gibi sürekli değişkenler kullanılamaz (olası değerler sınırsızdır)</li><li>Çok kategorili değişkenlerde (örneğin Derece 1/2/3) yalnızca seçilen pozitif ve negatif düzeylere ait gözlemler 2×2 tanısal tabloya alınır; seçilmeyen düzeyler bir uyarıyla dışlanır</li></ul><p><strong>Neden iki seçili düzey?</strong></p><p>Tanısal test performansı ölçütleri (duyarlılık, özgüllük, olabilirlik oranları) 2×2 çapraz tablodan hesaplanır:</p><table><tr><th></th><th>Sonuç +</th><th>Sonuç -</th></tr><tr><td>Test +</td><td>Gerçek Pozitif</td><td>Yanlış Pozitif</td></tr><tr><td>Test -</td><td>Yanlış Negatif</td><td>Gerçek Negatif</td></tr></table><p>Duyarlılık = GP/(GP+YN), Özgüllük = GN/(GN+YP), LR+ = Duyarlılık/(1-Özgüllük)</p><p><strong>Seçim rehberi:</strong></p><ul><li><strong>Belirtilmemişse:</strong> İlk açıklayıcı değişken otomatik kullanılır (jamovi arayüzünde Yordayıcı Pozitif Düzeyi ve Yordayıcı Negatif Düzeyi menülerini etkinleştirmek için Tanısal Yordayıcı kutusunda değişkeni seçin)</li><li><strong>Regresyon modelinizdeyse:</strong> Tanısal ölçütler yine düzeltilmemiştir ve yalnızca ilgili 2×2 tabloyu kullanır</li><li><strong>Modelinizde değilse:</strong> Sonuç ve testin birlikte kaydedildiği tam gözlemlerle bağımsız değerlendirilir</li></ul><p><strong>Klinik ipucu:</strong> İlk değişkeniniz sürekli ise (örneğin Yaş), duyarlılık, özgüllük ve olabilirlik oranlarını elde etmek için ikili bir tanısal yordayıcıyı elle seçmelisiniz. Tahmin nomogramı yine regresyon değişkenlerinden oluşturulabilir.</p></div>"
+                ""
             ],
             "<h4>Person-Time Analysis Summary</h4>\n                    <p>Total follow-up time: <b>{total_time_val} {units}</b></p>\n                    <p>Number of events: <b>{events}</b></p>\n                    <p>Overall incidence rate: <b>{rate}</b> per {multiplier} {units} {ci_str}</p>\n                    <p>{scope}</p>\n                    <p>This represents the rate at which events occurred in your study population. The incidence rate is calculated as the number of events divided by the total person-time at risk, accounting for varying follow-up durations across patients.</p>": [
                 "<h4>Kişi-zaman analizi özeti</h4>\n                    <p>Toplam izlem süresi: <b>{total_time_val} {units}</b></p>\n                    <p>Olay sayısı: <b>{events}</b></p>\n                    <p>Genel insidans hızı: <b>{rate}</b> / {multiplier} {units} {ci_str}</p>\n                    <p>{scope}</p>\n                    <p>Bu değer, çalışma popülasyonunuzda olayların gerçekleşme hızını gösterir. İnsidans hızı, hastalar arasındaki farklı izlem süreleri dikkate alınarak olay sayısının risk altındaki toplam kişi-zamana bölünmesiyle hesaplanır.</p>"
@@ -902,7 +902,7 @@
                 "{parts} dışlandıktan sonra (yer işareti analizi)"
             ],
             "After removing incomplete cases for the selected model, the outcome must retain exactly two observed levels including the selected positive level '{level}'.": [
-                "Seçilen model için eksik olgular çıkarıldıktan sonra, sonuç değişkeni seçilen pozitif düzey '{level}' dahil olmak üzere tam olarak iki gözlemlenen düzeyi korumalıdır."
+                ""
             ],
             "Age × group interaction": [
                 "Yaş × grup etkileşimi"
@@ -1250,7 +1250,7 @@
                 "Çubuk renkleri daha yüksek veya düşük tahmini hazardı gösterir. Sıralama |katsayı| ile sütunun standart sapımının çarpımına dayanır; çubuk uzunlukları özgün birimleri kullanır."
             ],
             "Based on {n} observations with both the outcome and this predictor recorded; the regression model above uses {nmodel} rows. The two sets need not be the same patients.": [
-                "Hem sonuç hem de bu belirtecin kaydedildiği {n} gözleme dayanmaktadır; yukarıdaki regresyon modeli {nmodel} satır kullanır. İki kümenin aynı hastalar olması gerekmez."
+                ""
             ],
             "Based on {n} successful bootstrap resamples.": [
                 "{n} başarılı bootstrap yeniden örneklemesine dayanmaktadır."
@@ -1289,7 +1289,7 @@
                 "BIC"
             ],
             "Binary Outcome": [
-                "İkili Sonuç"
+                ""
             ],
             "Binary Outcome Coding": [
                 "İkili Sonuç Kodlaması"
@@ -1337,7 +1337,7 @@
                 "Bootstrap doğrulaması kullanılamıyor"
             ],
             "Borderline events-per-variable (EPV ≈ {epv}). Interpret odds ratios with caution.": [
-                "Sınırda değişken başına olay sayısı (EPV ≈ {epv}). Odds oranlarını dikkatle yorumlayın."
+                ""
             ],
             "both": [
                 "her ikisi"
@@ -1583,7 +1583,7 @@
                 "Verinin doğru içe aktarıldığını kontrol edin"
             ],
             "Check that the positive and negative outcome and predictor levels are correct for your study": [
-                "Pozitif ve negatif sonuç ve belirteç düzeylerinin çalışmanız için doğru olduğunu kontrol edin"
+                ""
             ],
             "Check that the variable name is correct in your dataset": [
                 "Değişken adının veri setinizde doğru olduğunu kontrol edin"
@@ -1610,13 +1610,13 @@
                 "Olay Düzeyini seçin: olayın gerçekleştiğini gösteren sonuç değeri. Bulunan değerler: {levels}. Analiz düzey sırasından bir değer seçmez, çünkü sıra hangi değerin olay olduğunu söylemez."
             ],
             "Choose which categorical predictor to use for the separate, unadjusted sensitivity, specificity, and likelihood-ratio calculations. In the jamovi interface, select this variable here so the 'Predictor Positive Level' and 'Predictor Negative Level' selectors below can list its levels; in R, if left empty, the first explanatory variable is used.": [
-                "Ayrı, düzeltilmemiş duyarlılık, özgüllük ve olabilirlik oranı hesaplamalarında hangi kategorik belirtecin kullanılacağını seçin. jamovi arayüzünde, aşağıdaki 'Belirteç Pozitif Düzeyi' ve 'Belirteç Negatif Düzeyi' seçicilerinin düzeylerini listeleyebilmesi için bu değişkeni burada seçin; R'de boş bırakılırsa ilk açıklayıcı değişken kullanılır."
+                ""
             ],
             "Choose which level of the diagnostic predictor is the negative test result (e.g., \"Absent\", \"Test-\", \"No\"). Both Predictor Positive Level and Predictor Negative Level must be selected for diagnostic metrics; they are never taken from the level names or their order, and any other levels are excluded. While either is empty the diagnostic metrics wait for them and list the observed levels, and the logistic model, odds ratios, forest plot and nomogram still run.": [
-                "Tanısal belirtecin hangi düzeyinin negatif test sonucu olduğunu seçin (ör. \"Absent\", \"Test-\", \"No\"). Tanısal metrikler için hem Belirteç Pozitif Düzeyi hem de Belirteç Negatif Düzeyi seçilmelidir; bunlar hiçbir zaman düzey adlarından veya sıralarından çıkarılmaz ve diğer tüm düzeyler hariç tutulur. Bunlardan biri boş olduğu sürece tanısal metrikler bu seçimi bekler ve gözlenen düzeyleri listeler; lojistik model, odds oranları, orman grafiği ve nomogram çalışmaya devam eder."
+                ""
             ],
             "Choose which level of the diagnostic predictor is the positive test result (e.g., \"Present\", \"Test+\", \"Yes\"). Both Predictor Positive Level and Predictor Negative Level must be selected for diagnostic metrics; they are never taken from the level names or their order, and any other levels are excluded. While either is empty the diagnostic metrics wait for them and list the observed levels, and the logistic model, odds ratios, forest plot and nomogram still run.": [
-                "Tanısal belirtecin hangi düzeyinin pozitif test sonucu olduğunu seçin (ör. \"Present\", \"Test+\", \"Yes\"). Tanısal metrikler için hem Belirteç Pozitif Düzeyi hem de Belirteç Negatif Düzeyi seçilmelidir; bunlar hiçbir zaman düzey adlarından veya sıralarından çıkarılmaz ve diğer tüm düzeyler hariç tutulur. Bunlardan biri boş olduğu sürece tanısal metrikler bu seçimi bekler ve gözlenen düzeyleri listeler; lojistik model, odds oranları, orman grafiği ve nomogram çalışmaya devam eder."
+                ""
             ],
             "Clarify how marker values were handled in the analyses; if relevant, describe methods used for cutpoint determination.": [
                 "Belirteç değerlerinin analizlerde nasıl ele alındığını açıklayın; uygunsa kesim noktası belirlemede kullanılan yöntemleri tanımlayın."
@@ -1856,13 +1856,13 @@
                 "Güven aralıkları log dönüşümünü (conf.type='log') kullanır; medyan GA, bu noktasal bandın Brookmeyer-Crowley ters çevrimidir."
             ],
             "Confidence intervals: profile likelihood. P-values: Wald test.": [
-                "Güven aralıkları: profil olabilirlik. P değerleri: Wald testi."
+                ""
             ],
             "Confidence intervals: profile penalized likelihood. P-values: penalized likelihood-ratio test.": [
-                "Güven aralıkları: profil cezalı olabilirlik. P değerleri: cezalı olabilirlik oranı testi."
+                ""
             ],
             "Confidence intervals: Wald (profile-likelihood intervals could not be computed for this model). P-values: Wald test.": [
-                "Güven aralıkları: Wald (bu model için profil olabilirlik aralıkları hesaplanamadı). P değerleri: Wald testi."
+                ""
             ],
             "Confidence level (%)": [
                 "Güven düzeyi (%)"
@@ -1883,7 +1883,7 @@
                 "Bir değişken orantılı tehlikeler testinden geçemediğinde, tehlike oranını tahmin etmeden bir değişkeni kontrol etmeniz gerektiğinde veya temel risk gruplar arasında doğal olarak farklılaştığında tabakalandırmayı değerlendirin."
             ],
             "Contingency Table:": [
-                "Kontenjans Tablosu:"
+                ""
             ],
             "Continuous Explanatory Variable": [
                 "Sürekli Açıklayıcı Değişken"
@@ -2003,7 +2003,7 @@
                 "Sonlanım değişkeni bulunamadı."
             ],
             "Could not map some explanatory variables after cleaning: {variables}.": [
-                "Temizleme sonrasında bazı açıklayıcı değişkenler eşleştirilemedi: {variables}."
+                ""
             ],
             "Could not reliably detect the datetime format. • The closest match was {fmt}, which read only {pct}% of the sampled values - below the 80% needed to proceed. • No dates were converted. Choose the format explicitly (for example DD-MM-YYYY or MM-DD-YYYY), or check the column for mixed formats.": [
                 "Tarih-saat biçimi güvenilir şekilde algılanamadı. • En yakın eşleşme, örneklenen değerlerin yalnızca %{pct}'sini okuyan {fmt} oldu; bu da devam etmek için gereken %80'in altındadır. • Hiçbir tarih dönüştürülmedi. Biçimi açıkça seçin (örneğin GG-AA-YYYY veya AA-GG-YYYY) veya sütunu karışık biçimler açısından kontrol edin."
@@ -2120,7 +2120,7 @@
                 "Kritik Hatalar"
             ],
             "Critical validation errors detected: {errors}. Ensure distinct positive and negative outcome levels are selected, explanatory variables have sufficient variation, and consider removing rows with missing data.": [
-                "Kritik doğrulama hataları saptandı: {errors}. Birbirinden farklı pozitif ve negatif sonuç düzeylerinin seçildiğinden ve açıklayıcı değişkenlerin yeterli değişkenlik gösterdiğinden emin olun; eksik veri içeren satırları çıkarmayı değerlendirin."
+                ""
             ],
             "Critically small sample (n={n}). Statistical summaries are unreliable with fewer than 10 observations. Results should be considered exploratory only. Minimum n=20 recommended for basic descriptive analysis.": [
                 "Kritik düzeyde küçük örneklem (n={n}). 10'dan az gözlemle istatistiksel özetler güvenilir değildir. Sonuçlar yalnızca keşifsel kabul edilmelidir. Temel tanımlayıcı analiz için en az n=20 önerilir."
@@ -2543,7 +2543,7 @@
                 "Tanı/başlangıç tarihi ve takip/bitiş tarihi farklı değişkenler olmalıdır."
             ],
             "Diagnostic Contingency Table": [
-                "Tanısal çapraz tablo"
+                ""
             ],
             "Diagnostic Information": [
                 "Tanısal Bilgiler"
@@ -2552,43 +2552,43 @@
                 "Tanısal / hata ayıklama bilgisi"
             ],
             "Diagnostic metrics are waiting for the Predictor Positive Level and Predictor Negative Level. Choose which levels of '{variable}' represent the positive and negative test results. Observed levels: {levels}. The logistic model, odds ratios, forest plot and nomogram are not affected.": [
-                "Tanısal metrikler Belirteç Pozitif Düzeyi ve Belirteç Negatif Düzeyi seçimlerini bekliyor. '{variable}' değişkeninin hangi düzeylerinin pozitif ve negatif test sonuçlarını temsil ettiğini seçin. Gözlenen düzeyler: {levels}. Lojistik model, odds oranları, orman grafiği ve nomogram bundan etkilenmez."
+                ""
             ],
             "Diagnostic metrics for '{variable}' require both outcome levels to be present among the selected positive and negative predictor levels. The prediction nomogram is unaffected.": [
-                "'{variable}' için tanısal metrikler, seçilen pozitif ve negatif belirteç düzeyleri arasında her iki sonuç düzeyinin de bulunmasını gerektirir. Tahmin nomogramı bundan etkilenmez."
+                ""
             ],
             "Diagnostic metrics for '{variable}' require paired complete observations with at least two observed categorical predictor levels and two observed outcome levels. The prediction nomogram is unaffected.": [
-                "'{variable}' için tanısal metrikler, en az iki gözlenen kategorik belirteç düzeyi ve iki gözlenen sonuç düzeyi içeren eşleştirilmiş eksiksiz gözlemler gerektirir. Tahmin nomogramı bundan etkilenmez."
+                ""
             ],
             "Diagnostic metrics were not calculated because a valid paired 2×2 table could not be formed.": [
-                "Geçerli bir eşleştirilmiş 2×2 tablo oluşturulamadığı için tanısal metrikler hesaplanmadı."
+                ""
             ],
             "Diagnostic metrics were not calculated because no diagnostic predictor was available.": [
-                "Tanısal belirteç mevcut olmadığı için tanısal metrikler hesaplanmadı."
+                ""
             ],
             "Diagnostic Metrics:": [
-                "Tanısal Metrikler:"
+                ""
             ],
             "Diagnostic predictor '{variable}' has {n} observed levels ({allLevels}). Excluded {nExcl} observation(s) with unselected predictor level(s) ({excluded}) from the 2x2 diagnostic table so only '{pos}' (+) vs '{neg}' (-) are compared.": [
-                "Tanısal belirteç '{variable}' {n} gözlenen düzeye sahip ({allLevels}). Yalnızca '{pos}' (+) ile '{neg}' (-) karşılaştırılsın diye, seçilmemiş belirteç düzeyine ({excluded}) sahip {nExcl} gözlem 2x2 tanısal tablodan hariç tutuldu."
+                ""
             ],
             "Diagnostic Predictor (binary)": [
-                "Tanısal Belirteç (ikili)"
+                ""
             ],
             "Diagnostic Predictor (for LRs)": [
-                "Tanısal Belirteç (OO'lar için)"
+                ""
             ],
             "Diagnostic predictor label matches multiple variables; using '{variable}'.": [
-                "Tanısal belirteç etiketi birden fazla değişkenle eşleşiyor; '{variable}' kullanılıyor."
+                ""
             ],
             "Diagnostic Test Performance": [
-                "Tanı Testi Performansı"
+                ""
             ],
             "Diagnostic test performance metrics": [
-                "Tanı testi performans metrikleri"
+                ""
             ],
             "Different languages/coding may require manual specification": [
-                "Farklı diller/kodlamalar manuel belirleme gerektirebilir"
+                ""
             ],
             "Direct": [
                 "Doğrudan"
@@ -2732,7 +2732,7 @@
                 "Eğitici İçerik"
             ],
             "Educational explanations": [
-                "Eğitici açıklamalar"
+                ""
             ],
             "Effect": [
                 "Etki"
@@ -2870,7 +2870,7 @@
                 "Sürekli olarak girildi: {variables}."
             ],
             "Entered as continuous: {variables}. Each is modeled as one odds ratio per one-unit increase, which assumes a constant step in log odds between consecutive values. To estimate a separate odds ratio for each level instead, change the variable's measure type to Nominal or Ordinal in the data setup.": [
-                "Sürekli olarak girildi: {variables}. Her biri bir birimlik artış başına bir odds oranı olarak modellenir; bu da ardışık değerler arasında log odds'ta sabit bir adım varsayar. Bunun yerine her düzey için ayrı bir odds oranı tahmin etmek için, veri kurulumunda değişkenin ölçüm türünü Nominal veya Sıralı olarak değiştirin."
+                ""
             ],
             "EPV (Events Per Variable)": [
                 "EPV (Değişken Başına Olay)"
@@ -2897,7 +2897,7 @@
                 "Artıklar grafiği oluşturulurken hata: {message}"
             ],
             "Error fitting Firth model: {message}": [
-                "Firth modeli uydurulurken hata oluştu: {message}"
+                ""
             ],
             "Error generating Cox regression table:": [
                 "Cox regresyon tablosu oluşturulurken hata:"
@@ -2918,7 +2918,7 @@
                 "Hata: Veriler analiz için temizlenemedi."
             ],
             "Error: Non-binary variables detected": [
-                "Hata: İki düzeyli (ikili) olmayan değişkenler saptandı"
+                ""
             ],
             "Errors": [
                 "Hatalar"
@@ -3125,25 +3125,25 @@
                 "Açıklayıcı Değişken"
             ],
             "Explanatory variable '{variable}' contains infinite values.": [
-                "'{variable}' açıklayıcı değişkeni sonsuz değerler içeriyor."
+                ""
             ],
             "Explanatory variable '{variable}' contains no non-missing values.": [
-                "'{variable}' açıklayıcı değişkeni eksik olmayan hiçbir değer içermiyor."
+                ""
             ],
             "Explanatory variable '{variable}' has {n} categories with fewer than 5 observations. Consider combining categories.": [
-                "'{variable}' açıklayıcı değişkeninde 5'ten az gözleme sahip {n} kategori var. Kategorileri birleştirmeyi düşünün."
+                ""
             ],
             "Explanatory variable '{variable}' has {n} levels. Consider grouping categories or using as continuous if ordinal.": [
-                "'{variable}' açıklayıcı değişkeni {n} düzeye sahip. Kategorileri gruplandırmayı veya sıralı ise sürekli olarak kullanmayı düşünün."
+                ""
             ],
             "Explanatory variable '{variable}' has no variation (all values are the same). It will not contribute to the model.": [
-                "'{variable}' açıklayıcı değişkeninde varyasyon yok (tüm değerler aynı). Modele katkı sağlamayacaktır."
+                ""
             ],
             "Explanatory variable '{variable}' is entered as continuous and has {n} value(s) carried by fewer than 5 observations; those rows have high leverage on the fitted trend.": [
-                "'{variable}' açıklayıcı değişkeni sürekli olarak girilmiştir ve 5'ten az gözlem tarafından taşınan {n} değere sahiptir; bu satırlar uyarlanan eğilim üzerinde yüksek kaldıraca (leverage) sahiptir."
+                ""
             ],
             "Explanatory variable '{variable}' may contain extreme outliers ({n} potential outliers).": [
-                "'{variable}' açıklayıcı değişkeni aşırı uç değerler içerebilir ({n} olası uç değer)."
+                ""
             ],
             "Explanatory variable is required. Please select a categorical variable to compare survival between groups.": [
                 "Açıklayıcı değişken gereklidir. Gruplar arasında sağkalımı karşılaştırmak için lütfen kategorik bir değişken seçin."
@@ -3287,19 +3287,19 @@
                 "Fine-Gray alt dağılım modeli"
             ],
             "Firth penalized likelihood logistic regression used to reduce bias and handle potential separation.": [
-                "Yanlılığı azaltmak ve olası ayrılmayı (separation) ele almak için Firth cezalı olabilirlik lojistik regresyonu kullanıldı."
+                ""
             ],
             "Firth penalized likelihood; profile-likelihood confidence intervals.": [
-                "Firth cezalandırılmış olabilirlik; profil-olabilirlik güven aralıkları."
+                ""
             ],
             "Firth penalized log-likelihood: {val}": [
-                "Firth cezalandırılmış log-olabilirlik: {val}"
+                ""
             ],
             "Firth penalized logistic regression": [
-                "Firth cezalı lojistik regresyon"
+                ""
             ],
             "Fisher's exact test / Firth regression": [
-                "Fisher kesin testi / Firth regresyonu"
+                ""
             ],
             "Fit a parametric survival model": [
                 "Parametrik bir sağkalım modeli kurun"
@@ -3455,7 +3455,7 @@
                 "Gözlemlenen kişi-zamanına ve bir Poisson sayım modeline bağlı olarak Garwood Poisson %95 GA. 0 olaylı satırlar tek taraflı %97.5 üst sınır verir; çok az birikmiş kişi-zamanına sahip aralıklar buna karşılık gelen geniş sınırlar verir. Güven aralığı bilgilendirici sansürlemeyi, yarışan risk mutlak insidansını, bir aralık içindeki zamana bağlı hızları veya hastalar arası heterojenliği ele almaz."
             ],
             "General Statistics": [
-                "Genel İstatistikler"
+                ""
             ],
             "Generalized Gamma": [
                 "Genelleştirilmiş Gama"
@@ -3689,7 +3689,7 @@
                 "Atama yöntemleri veya eşik değerleri geliştiriliyorsa bunları yalnızca geliştirme eğitim bölümlerinde öğreniniz ve sabitlenmiş tanımları doğrulama hastalarına uygulayınız."
             ],
             "If incorrect, use the 'Positive Level', 'Negative Level', 'Predictor Positive Level', and 'Predictor Negative Level' dropdowns to specify the correct levels": [
-                "Yanlışsa doğru düzeyleri belirtmek için 'Pozitif Düzey', 'Negatif Düzey', 'Belirteç Pozitif Düzeyi' ve 'Belirteç Negatif Düzeyi' açılır menülerini kullanın"
+                ""
             ],
             "If multiple events occur, priority is given to type {type}.": [
                 "Birden fazla olay meydana gelirse, öncelik {type} türüne verilir."
@@ -3725,7 +3725,7 @@
                 "Önemli Notlar:"
             ],
             "Important: Please Verify These Interpretations": [
-                "Önemli: Lütfen Bu Yorumları Doğrulayın"
+                ""
             ],
             "In the {group} group the cumulative incidence of the event of interest did not reach 50% during the observed follow-up.": [
                 "{group} grubunda ilgilenilen olayın kümülatif insidansı gözlenen takip süresi içinde %50'ye ulaşmadı."
@@ -3794,10 +3794,10 @@
                 "Dolaylı standardizasyon SMR'yi (gözlemlenen/beklenen) hesaplar. Doğrudan standardizasyon yaşa özgü hızları standart bir popülasyona uygular."
             ],
             "infinite (no false positives)": [
-                "sonsuz (yanlış pozitif yok)"
+                ""
             ],
             "infinite (no true negatives)": [
-                "sonsuz (gerçek negatif yok)"
+                ""
             ],
             "Info": [
                 "Bilgi"
@@ -4112,7 +4112,7 @@
                 "Landmark zaman noktası"
             ],
             "Large amount of missing data: {percent}% of rows will be removed ({removed} out of {total} rows).": [
-                "Büyük miktarda kayıp veri: satırların %{percent}'si çıkarılacak ({total} satırdan {removed} tanesi)."
+                ""
             ],
             "Large amount of missing outcome data: {pct}% ({missing} out of {total} rows). Complete-case analysis drops missing rows (general rule of thumb > 10% missing).": [
                 "Büyük miktarda eksik sonuç verisi: %{pct} ({total} satırın {missing} tanesi). Tam olgu analizi eksik satırları çıkarır (genel kural olarak > %10 eksik)."
@@ -4151,7 +4151,7 @@
                 "Olabilirlik oranı testi = {stat}, sd = {df}, p = {p}"
             ],
             "Likelihood ratios": [
-                "Olabilirlik oranları"
+                ""
             ],
             "Likelihood-ratio and ordinary score tests are omitted because Fine-Gray expansion creates correlated pseudo-rows.": [
                 "Fine-Gray genişletmesi ilişkili sözde satırlar oluşturduğundan olabilirlik oranı ve sıradan skor testleri verilmemiştir."
@@ -4214,10 +4214,10 @@
                 "Log-Rank (standart, rho=0)"
             ],
             "Logistic regression needs the same outcome window for every patient. For a status taken from censored or unequal follow-up, use the survival analyses instead.": [
-                "Lojistik regresyon her hasta için aynı sonuç penceresini gerektirir. Sansürlü veya eşit olmayan takipten alınan bir durum için bunun yerine sağkalım analizlerini kullanın."
+                ""
             ],
             "Logistic regression odds-ratio table, forest plot, prediction nomogram, and optional binary diagnostic metrics.": [
-                "Lojistik regresyon odds oranı tablosu, orman grafiği, tahmin nomogramı ve isteğe bağlı ikili tanısal metrikler."
+                ""
             ],
             "Longest interval in the data is {years} years ({value} {unit}, before any landmark or filter). Intervals beyond 50 years exceed the follow-up of essentially every clinical cohort, and usually mean the dates were parsed with the wrong format rather than observed. Check the Date Format setting and the raw date columns before reporting this person-time. If the intervals are genuinely this long (a lifetime cohort, or an age computed from date of birth), this message can be ignored.": [
                 "Verideki en uzun aralık {years} yıl ({value} {unit}; herhangi bir landmark veya filtre uygulanmadan önce). 50 yılı aşan aralıklar neredeyse tüm klinik kohortların takip süresini aşar ve genellikle gerçekten gözlenmiş olmaktan çok tarihlerin yanlış biçimle ayrıştırıldığını gösterir. Bu kişi-zamanı raporlamadan önce Tarih biçimi ayarını ve ham tarih sütunlarını kontrol edin. Aralıklar gerçekten bu kadar uzunsa (ömür boyu izlenen bir kohort veya doğum tarihinden hesaplanan yaş) bu ileti göz ardı edilebilir."
@@ -4235,7 +4235,7 @@
                 "Değişken başına düşük olay sayısı"
             ],
             "Low events-per-variable (EPV ≈ {epv}). Odds ratios may be unstable; consider penalized/Firth logistic regression.": [
-                "Düşük değişken başına olay sayısı (EPV ≈ {epv}). Odds oranları kararsız olabilir; cezalı/Firth lojistik regresyonu düşünün."
+                ""
             ],
             "Low Parsing Success Rate": [
                 "Düşük Ayrıştırma Başarı Oranı"
@@ -4298,7 +4298,7 @@
                 "En geç tarih ve saat:"
             ],
             "Maximum-likelihood odds ratios could not be estimated due to separation for: {variables}. Enable Firth penalized regression or combine sparse categories before interpreting model-based predictions.": [
-                "Şu değişkenler için ayrılma (separation) nedeniyle maksimum olabilirlik odds oranları tahmin edilemedi: {variables}. Modele dayalı tahminleri yorumlamadan önce Firth cezalı regresyonu etkinleştirin veya seyrek kategorileri birleştirin."
+                ""
             ],
             "mdy": [
                 "ayg"
@@ -4478,13 +4478,13 @@
                 "Dakika (0-59)"
             ],
             "Missing data: {percent}% of rows will be removed ({removed} out of {total} rows).": [
-                "Kayıp veri: satırların %{percent}'si çıkarılacak ({total} satırdan {removed} tanesi)."
+                ""
             ],
             "Missing Dependencies": [
                 "Eksik bağımlılıklar"
             ],
             "Missing observations are removed only for variables used by each analysis path (complete cases across the selected outcome and explanatory variables for the regression table; paired complete outcome and diagnostic-predictor observations for diagnostic metrics). Variable names with spaces or special characters are handled automatically and restored in the output.": [
-                "Eksik gözlemler yalnızca her analiz yolunda kullanılan değişkenler için çıkarılır (regresyon tablosu için seçilen sonuç ve açıklayıcı değişkenlerde tam olgular; tanısal metrikler için eşleştirilmiş eksiksiz sonuç ve tanısal belirteç gözlemleri). Boşluk veya özel karakter içeren değişken adları otomatik olarak işlenir ve çıktıda geri yüklenir."
+                ""
             ],
             "Missing outcome data: {pct}% ({missing} out of {total} rows).": [
                 "Eksik sonuç verisi: %{pct} ({total} satırdan {missing} tanesi)."
@@ -4508,7 +4508,7 @@
                 "Açıklayıcı Değişkende Eksik Değerler"
             ],
             "Missing: {n}": [
-                "Eksik: {n}"
+                ""
             ],
             "Mixing cause-specific and subdistribution hazards in competing risks": [
                 "Yarışan risklerde nedene özgü ve alt dağılım tehlikelerini karıştırmak"
@@ -4772,16 +4772,16 @@
                 "Negatif aralıklar"
             ],
             "Negative Level": [
-                "Negatif Düzey"
+                ""
             ],
             "Negative LR: {value}": [
-                "Negatif OO: {value}"
+                ""
             ],
             "Negative outcome level:": [
-                "Negatif sonuç düzeyi:"
+                ""
             ],
             "Negative predictor level:": [
-                "Negatif belirteç düzeyi:"
+                ""
             ],
             "Negative survival time": [
                 "Negatif sağkalım süresi"
@@ -4811,7 +4811,7 @@
                 "Analiz için eksiksiz olgu bulunamadı. Tüm gözlemler kayıp zaman veya sonuç değerlerine sahip."
             ],
             "No complete observations remain for the selected outcome and explanatory variables.": [
-                "Seçilen sonuç ve açıklayıcı değişkenler için eksiksiz gözlem kalmadı."
+                ""
             ],
             "No complete records": [
                 "Eksiksiz kayıt yok"
@@ -4844,13 +4844,13 @@
                 "Analiz için veri bulunamadı. Lütfen veri kümenizi kontrol edin."
             ],
             "No data available for analysis. The dataset has no rows or all observations have been filtered out. Check your data import, verify variable selections, and review missing-value patterns.": [
-                "Analiz için veri bulunamadı. Veri setinde hiç satır yok veya tüm gözlemler filtrelendi. Veri içe aktarmanızı kontrol edin, değişken seçimlerini doğrulayın ve kayıp değer desenlerini inceleyin."
+                ""
             ],
             "No detected improvement in fit (p >= 0.05)": [
                 "Uyumda saptanabilir iyileşme yok (p >= 0.05)"
             ],
             "No diagnostic predictor is available. Diagnostic metrics were skipped; the prediction nomogram can still be generated from the regression model.": [
-                "Tanısal belirteç mevcut değil. Tanısal metrikler atlandı; tahmin nomogramı regresyon modelinden yine de üretilebilir."
+                ""
             ],
             "No evaluated combination both satisfied the minimum group-size requirement and produced a finite log-rank statistic. Quantile-based cut-points are shown instead.": [
                 "Değerlendirilen hiçbir kombinasyon hem en küçük grup büyüklüğü koşulunu sağlamadı hem de sonlu bir log-rank istatistiği üretmedi. Bunun yerine kantil tabanlı kesim noktaları gösteriliyor."
@@ -5111,7 +5111,7 @@
                 "Tahmin edilemez: bu terimin çıkarılması tahmin edilebilir hiçbir katsayıyı kaldırmıyor (terim eşdoğrusal)."
             ],
             "Not estimable: the data separate the outcome, so no finite odds ratio exists.": [
-                "Tahmin edilemez: veri sonucu ayırıyor, bu nedenle sonlu bir odds oranı yoktur."
+                ""
             ],
             "Not estimable: this interaction coefficient is aliased (a combination of levels with no observations, or redundant with other terms).": [
                 "Tahmin edilemez: bu etkileşim katsayısı eşdoğrusal (gözlem içermeyen bir düzey kombinasyonu veya diğer terimlerle gereksiz)."
@@ -5141,10 +5141,10 @@
                 "ayarlanmadı"
             ],
             "Not shown (odds ratio not estimable): {terms}": [
-                "Gösterilmedi (odds oranı tahmin edilemez): {terms}"
+                ""
             ],
             "Not shown (odds ratio too extreme to print): {terms}": [
-                "Gösterilmedi (odds oranı yazdırılamayacak kadar uç): {terms}"
+                ""
             ],
             "Not shown here: {missing}.": [
                 "Burada gösterilmeyen: {missing}."
@@ -5279,7 +5279,7 @@
                 "Gözlemler belirli bir idari tarihte sansürlenir."
             ],
             "Observations: {n}": [
-                "Gözlem sayısı: {n}"
+                ""
             ],
             "Observed (KM)": [
                 "Gözlemlenen (KM)"
@@ -5303,7 +5303,7 @@
                 "Gözlenen Olaylar"
             ],
             "Observed outcome levels:": [
-                "Gözlenen sonuç düzeyleri:"
+                ""
             ],
             "Observed Records": [
                 "Gözlenen Kayıtlar"
@@ -5318,24 +5318,27 @@
                 "Olaylar gerçekleştiğinde oluşur"
             ],
             "Odds ratio analysis completed successfully.": [
-                "Odds oranı analizi başarıyla tamamlandı."
+                ""
             ],
             "Odds Ratio for Binary Outcomes": [
-                "İkili Sonuçlar İçin Odds Oranı"
+                ""
             ],
             "Odds Ratio Table": [
-                "Odds Oranı Tablosu"
+                ""
             ],
             "Odds Ratio Table and Plot": [
-                "Odds Oranı Tablosu ve Grafiği"
+                ""
             ],
             "Odds Ratios": [
-                "Odds oranları"
+                ""
             ],
             "Odds ratios interpretation (Positive vs Negative)": [
-                "Odds oranlarının yorumu (Pozitif - Negatif karşılaştırması)"
+                ""
             ],
             "Odds Ratios: Firth fit and nomogram safeguard": [
+                ""
+            ],
+            "Odds Ratios: postoperative pathology and diagnostic coding": [
                 ""
             ],
             "Odds Scale": [
@@ -5444,13 +5447,13 @@
                 "İyimserlik Düzeltmeli Ayırt Etme (Harrell C-indeksi)"
             ],
             "OR (95% CI, p-value)": [
-                "OR (%95 GA, p değeri)"
+                ""
             ],
             "OR, 95% CI (Firth penalized)": [
-                "OR, %95 GA (Firth cezalandırılmış)"
+                ""
             ],
             "Ordered factor '{variable}' will be treated as nominal (unordered) for modeling and output.": [
-                "Sıralı faktör '{variable}', modelleme ve çıktı için nominal (sırasız) olarak değerlendirilecektir."
+                ""
             ],
             "Ordered factor: treatment indicators": [
                 "Sıralı faktör: referans kategori göstergeleri"
@@ -5501,7 +5504,7 @@
                 "Tam olgu süzmesinden sonra sonlanım ikili değildir. Olay düzeyini ve eksik veri örüntüsünü kontrol ediniz."
             ],
             "Outcome label matches multiple variables after cleaning; using '{variable}'. Please verify selection.": [
-                "Sonuç etiketi temizleme sonrasında birden fazla değişkenle eşleşiyor; '{variable}' kullanılıyor. Lütfen seçimi doğrulayın."
+                ""
             ],
             "outcome level {levels}": [
                 "sonuç düzeyi {levels}"
@@ -5510,7 +5513,7 @@
                 "Sonuç düzeyi {levels}: 1 olarak kodlandı"
             ],
             "Outcome level modeled as the event: '{level}' (negative/reference level: '{neg}').": [
-                "Olay olarak modellenen sonuç düzeyi: '{level}' (negatif/referans düzey: '{neg}')."
+                ""
             ],
             "Outcome level(s) {levels} without recurrence/progression: coded as 0": [
                 "Nüks/progresyon olmadan sonuç düzey(ler)i {levels}: 0 olarak kodlandı"
@@ -5524,14 +5527,14 @@
             "Outcome Organizer for Survival Analysis": [
                 "Sağkalım Analizi İçin Sonuç Düzenleyici"
             ],
-            "Outcome Organizer: explicit vital-status mapping": [
+            "Outcome Organizer: overall survival and competing-risk coding": [
                 ""
             ],
             "Outcome positive and negative levels must be different (both set to '{level}').": [
-                "Sonuç pozitif ve negatif düzeyleri farklı olmalıdır (ikisi de '{level}' olarak ayarlı)."
+                ""
             ],
             "Outcome positive and negative levels must be different. Please select distinct positive and negative outcome levels.": [
-                "Sonuç pozitif ve negatif düzeyleri farklı olmalıdır. Lütfen birbirinden farklı pozitif ve negatif sonuç düzeyleri seçin."
+                ""
             ],
             "Outcome Recode": [
                 "Sonlanım Yeniden Kodlaması"
@@ -5567,10 +5570,10 @@
                 "Sonuç değişkeni {count} benzersiz değere sahip: {values}{more}"
             ],
             "Outcome variable has {n} observed levels ({allLevels}). Excluded {nExcl} observation(s) with unselected outcome level(s) ({excluded}) so only '{pos}' (positive) vs '{neg}' (negative) are analyzed.": [
-                "Sonuç değişkeni {n} gözlenen düzeye sahip ({allLevels}). Yalnızca '{pos}' (pozitif) ile '{neg}' (negatif) analiz edilsin diye, seçilmemiş sonuç düzeyine ({excluded}) sahip {nExcl} gözlem hariç tutuldu."
+                ""
             ],
             "Outcome variable has very few observations in one category ({minCount} out of {totalCount}). Results may be unreliable.": [
-                "Sonuç değişkeninin bir kategorisinde çok az gözlem var ({totalCount} gözlemden {minCount} tanesi). Sonuçlar güvenilmez olabilir."
+                ""
             ],
             "Outcome variable is an ordered factor. It will be treated as nominal (unordered) for analysis to avoid contrast issues.": [
                 "Sonuç değişkeni sıralı bir faktördür. Kontrast sorunlarını önlemek için analizde nominal (sırasız) olarak ele alınacaktır."
@@ -5579,10 +5582,10 @@
                 "Sonuç değişkeni gereklidir. Lütfen bir olayın meydana gelip gelmediğini belirten bir değişken seçin (örn. ölüm, nüks)."
             ],
             "Outcome variable is severely imbalanced ({percent} in minority class). Consider using specialized methods for imbalanced data.": [
-                "Sonuç değişkeni ciddi şekilde dengesiz (azınlık sınıfında %{percent}). Dengesiz veriler için özel yöntemler kullanmayı düşünün."
+                ""
             ],
             "Outcome variable must have at least 2 different values for logistic regression.": [
-                "Sonuç değişkeni lojistik regresyon için en az 2 farklı değere sahip olmalıdır."
+                ""
             ],
             "Outcome variable must have at least 2 different values.": [
                 "Sonuç değişkeni en az 2 farklı değere sahip olmalıdır."
@@ -5594,7 +5597,7 @@
                 "Sonuç değişkeni sorunu"
             ],
             "Outcome variable summary: {counts}": [
-                "Sonuç değişkeni özeti: {counts}"
+                ""
             ],
             "Outcome Variable Type Not Supported: the outcome variable has type '{type}', which cannot be used for survival analysis.": [
                 "Sonuç Değişkeni Türü Desteklenmiyor: sonuç değişkeninin türü '{type}' olup sağkalım analizinde kullanılamaz."
@@ -5786,7 +5789,7 @@
                 "sonuç düzey(ler)i {levels} ve nüks/progresyon düzey(ler)i {others} olan hastalar"
             ],
             "Penalized AIC: {aic} (-2 x penalized log-likelihood + 2 x {nPar} parameters).": [
-                "Cezalı AIC: {aic} (-2 x cezalı log-olabilirlik + 2 x {nPar} parametre)."
+                ""
             ],
             "Penalized coefficient": [
                 "Cezalı katsayı"
@@ -5810,7 +5813,7 @@
                 "Cezalı hazard oranları, olay olasılıklarını veya nedensel etkileri değil tahmini göreli hazardları tanımlar. Seçim sonrası olağan p-değerleri ve güven aralıkları raporlanmaz."
             ],
             "Penalized likelihood-ratio test vs null model: chi-square = {stat} on {df} df, {p}.": [
-                "Sıfır modele karşı cezalandırılmış olabilirlik oranı testi: ki-kare = {stat}, sd = {df}, {p}."
+                ""
             ],
             "Penalized regression is a reasonable candidate approach for this data dimension; this check does not establish sample-size adequacy.": [
                 "Bu veri boyutu için cezalı regresyon makul bir aday yaklaşımdır; bu kontrol örneklem büyüklüğünün yeterliliğini kanıtlamaz."
@@ -5828,7 +5831,7 @@
                 "Tüm gözlemlerin yüzdesi"
             ],
             "Perfect collinearity: {variables} is fully determined by the other explanatory variables, so its odds ratio cannot be estimated. Remove it, or the variable it duplicates.": [
-                "Tam çoklu bağlantı: {variables} diğer açıklayıcı değişkenler tarafından tamamen belirleniyor, bu nedenle odds oranı tahmin edilemez. Bu değişkeni veya yinelediği değişkeni çıkarın."
+                ""
             ],
             "Perform stratified Cox regression to account for non-proportional hazards or unmeasured confounders that affect baseline hazard.": [
                 "Orantılı olmayan hazardları veya başlangıç hazardını etkileyen ölçülmemiş karıştırıcıları hesaba katmak için tabakalandırılmış Cox regresyonu gerçekleştirin."
@@ -5975,16 +5978,16 @@
                 "Düzeltilmiş eğriler için bir değişken seçin."
             ],
             "Please select both the 'Positive Level' (event, e.g., 'Dead', 'Event', 'Yes') and the 'Negative Level' (reference/non-event, e.g., 'Alive', 'No Event', 'No') of your outcome variable.": [
-                "Lütfen sonuç değişkeninizin hem 'Pozitif Düzey' (olay, ör. 'Dead', 'Event', 'Yes') hem de 'Negatif Düzey' (referans/olay dışı, ör. 'Alive', 'No Event', 'No') seçimini yapın."
+                ""
             ],
             "Please select both the positive and negative outcome levels from the dropdown menus below the outcome variable.": [
-                "Lütfen sonuç değişkeninin altındaki açılır menülerden hem pozitif hem de negatif sonuç düzeyini seçin."
+                ""
             ],
             "Please select one or two categorical explanatory variables to create the Kaplan-Meier plot.": [
                 "Kaplan-Meier grafiği oluşturmak için lütfen bir veya iki kategorik açıklayıcı değişken seçin."
             ],
             "Please select the positive outcome level. Available levels: {levels}": [
-                "Lütfen pozitif sonuç düzeyini seçin. Mevcut düzeyler: {levels}"
+                ""
             ],
             "Plot Appearance": [
                 "Grafik Görünümü"
@@ -6038,25 +6041,25 @@
                 "Zayıf"
             ],
             "Positive and Negative Outcome Levels Required": [
-                "Pozitif ve Negatif Sonuç Düzeyleri Gerekli"
+                ""
             ],
             "Positive Level": [
-                "Pozitif Düzey"
+                ""
             ],
             "Positive LR: {value}": [
-                "Pozitif OO: {value}"
+                ""
             ],
             "Positive outcome level:": [
-                "Pozitif sonuç düzeyi:"
+                ""
             ],
             "Positive outcome level: '{posOutcome}' ({outcomeMethod})\nPositive predictor level: '{posPred}' ({predMethod})\nContingency table:\n  {pred1} → {out1}: {c11} | {out2}: {c12}\n  {pred2} → {out1}: {c21} | {out2}: {c22}\nTrue Positives: {tp}, False Positives: {fp}, False Negatives: {fn}, True Negatives: {tn}": [
-                "Pozitif sonuç düzeyi: '{posOutcome}' ({outcomeMethod})\nPozitif belirteç düzeyi: '{posPred}' ({predMethod})\nKontenjans tablosu:\n  {pred1} → {out1}: {c11} | {out2}: {c12}\n  {pred2} → {out1}: {c21} | {out2}: {c22}\nGerçek Pozitifler: {tp}, Yanlış Pozitifler: {fp}, Yanlış Negatifler: {fn}, Gerçek Negatifler: {tn}"
+                ""
             ],
             "Positive predictor level:": [
-                "Pozitif belirteç düzeyi:"
+                ""
             ],
             "Possible separation detected for '{variable}' (zero cells in 2x2 table). Consider penalized/Firth logistic regression.": [
-                "'{variable}' için olası ayrılma (separation) tespit edildi (2x2 tabloda sıfır hücreler). Cezalı/Firth lojistik regresyonu düşünün."
+                ""
             ],
             "Possible solutions:": [
                 "Olası çözümler:"
@@ -6077,25 +6080,25 @@
                 "Öngörülen Sağkalım"
             ],
             "Prediction and Diagnostic Options": [
-                "Tahmin ve Tanı Seçenekleri"
+                ""
             ],
             "Prediction Nomogram": [
-                "Tahmin Nomogramı"
+                ""
             ],
             "Prediction nomogram and diagnostic metrics": [
-                "Tahmin nomogramı ve tanısal metrikler"
+                ""
             ],
             "Prediction nomogram could not be generated due to model fitting issues; see the Nomogram panel for details. The odds ratio analysis completed successfully, and the nomogram is an unvalidated visualization whose failure does not alter the fitted odds-ratio table.": [
-                "Model uyumu sorunları nedeniyle tahmin nomogramı üretilemedi; ayrıntılar için Nomogram paneline bakın. Odds oranı analizi başarıyla tamamlandı ve nomogram, başarısızlığı uyarlanan odds oranı tablosunu değiştirmeyen doğrulanmamış bir görselleştirmedir."
+                ""
             ],
             "Prediction Nomogram Details": [
-                "Tahmin Nomogramı Ayrıntıları"
+                ""
             ],
             "Prediction nomogram not generated.": [
-                "Tahmin nomogramı üretilmedi."
+                ""
             ],
             "Prediction nomogram was not generated because maximum-likelihood estimates could not be identified for separated predictor(s): {variables}.": [
-                "Ayrılmış belirteç(ler) için maksimum olabilirlik tahminleri belirlenemediğinden tahmin nomogramı üretilmedi: {variables}."
+                ""
             ],
             "Predictor encoding": [
                 "Yordayıcı kodlaması"
@@ -6104,22 +6107,22 @@
                 "Yordayıcı kodlaması"
             ],
             "Predictor level": [
-                "Yordayıcı düzeyi"
+                ""
             ],
             "Predictor Level Modeling:": [
-                "Belirteç Düzeyi Modellemesi:"
+                ""
             ],
             "Predictor Negative Level": [
-                "Belirteç Negatif Düzeyi"
+                ""
             ],
             "Predictor positive and negative levels for '{variable}' must be different (both set to '{level}').": [
-                "'{variable}' için belirteç pozitif ve negatif düzeyleri farklı olmalıdır (ikisi de '{level}' olarak ayarlı)."
+                ""
             ],
             "Predictor positive and negative levels must be different (both set to '{level}').": [
-                "Belirteç pozitif ve negatif düzeyleri farklı olmalıdır (ikisi de '{level}' olarak ayarlı)."
+                ""
             ],
             "Predictor Positive Level": [
-                "Belirteç Pozitif Düzeyi"
+                ""
             ],
             "Predictor variance cannot be represented numerically. Rescale extreme numeric values before fitting.": [
                 "Yordayıcı varyansı sayısal olarak temsil edilemiyor. Modeli kurmadan önce aşırı büyük sayısal değerleri yeniden ölçeklendiriniz."
@@ -6230,7 +6233,7 @@
                 "Orantılı Tehlikeler: Schoenfeld Artık Grafikleri"
             ],
             "Provides exact 2x2 p-values and finite penalized odds ratios in small samples": [
-                "Küçük örneklemlerde kesin 2x2 p değerleri ve sonlu cezalı odds oranları sağlar"
+                ""
             ],
             "Quality Assessment": [
                 "Kalite Değerlendirmesi"
@@ -6680,7 +6683,7 @@
                 "Örneklem büyüklüğü (n=%d) sağkalım analizi için çok küçüktür. İstatistiksel çıkarım oldukça güvenilmezdir. Sonuçlar yalnızca keşif amaçlı değerlendirilmelidir. Sonuç çıkarmadan önce daha fazla veri toplayın."
             ],
             "Sample size is small relative to number of explanatory variables. Risk of overfitting or convergence issues.": [
-                "Örneklem büyüklüğü açıklayıcı değişken sayısına göre küçüktür. Aşırı uyum (overfitting) veya yakınsama sorunları riski."
+                ""
             ],
             "Sample-size adequacy cannot be determined from total n or a universal EPV cutoff. Use a prediction-model sample-size calculation based on outcome frequency, candidate parameters, anticipated model fit, and target optimism.": [
                 "Örneklem yeterliliği yalnızca toplam n veya evrensel bir değişken başına olay eşiğiyle belirlenemez. Sonlanım sıklığına, aday parametrelere, beklenen model uyumuna ve hedef iyimserliğe dayalı bir tahmin modeli örneklem büyüklüğü hesabı kullanınız."
@@ -6764,7 +6767,7 @@
                 "Tabakalı bir Cox modeli kurmak için bir tabakalama değişkeni seçin."
             ],
             "Select one outcome variable, identify its positive (event) and negative (reference) levels, and add one or more categorical or continuous explanatory variables. The analysis reports logistic-regression odds ratios with confidence intervals and a matching forest plot.": [
-                "Bir sonuç değişkeni seçin, pozitif (olay) ve negatif (referans) düzeylerini belirleyin ve bir veya daha fazla kategorik veya sürekli açıklayıcı değişken ekleyin. Analiz, güven aralıklarıyla lojistik regresyon odds oranlarını ve eşleşen bir orman grafiğini bildirir."
+                ""
             ],
             "Select strictly positive follow-up time, a binary outcome with event and censored levels, and predictors that yield at least two usable encoded columns.": [
                 "Kesin olarak pozitif izlem süresini, olay ve sansürlü düzeyleri bulunan ikili bir sonucu ve en az iki kullanılabilir kodlanmış sütun üreten öngördürücüleri seçin."
@@ -6827,7 +6830,7 @@
                 "Seçilen değişken ad(lar)ı verilerde yineleniyor: %s. Her analiz rolünün tam olarak bir değişkeni tanımlaması için yinelenen sütunları yeniden adlandırın."
             ],
             "Selected variable(s) not found in the data: {variables}.": [
-                "Seçilen değişken(ler) verilerde bulunamadı: {variables}."
+                ""
             ],
             "Selected Variables and Coefficients": [
                 "Seçilen değişkenler ve katsayılar"
@@ -6842,13 +6845,13 @@
                 "Seçim, her yordayıcının birimlerine bağlıdır; bir birimi değiştirmek hangi yordayıcıların seçildiğini değiştirebilir."
             ],
             "Sensitivity and specificity": [
-                "Duyarlılık ve özgüllük"
+                ""
             ],
             "Sensitivity and specificity above already use exact Clopper-Pearson intervals; for 2x2 association testing or sparse-cell odds ratios, use exact or penalized methods": [
-                "Yukarıdaki duyarlılık ve özgüllük zaten kesin Clopper-Pearson aralıklarını kullanıyor; 2x2 ilişki testi veya seyrek hücreli odds oranları için kesin veya cezalı yöntemleri kullanın"
+                ""
             ],
             "Sensitivity: {value}": [
-                "Duyarlılık: {value}"
+                ""
             ],
             "Set {count} infinite value(s) (Inf/-Inf) to missing before numeric date conversion.": [
                 "Sayısal tarih dönüştürmesinden önce {count} sonsuz değer (Inf/-Inf) eksik olarak ayarlandı."
@@ -6911,7 +6914,7 @@
                 "Tekli Kesim Noktası Tespiti"
             ],
             "Small expected cell counts detected (minimum = {min}). Asymptotic 2x2 approximations and log-method likelihood-ratio intervals may be imprecise.": [
-                "Küçük beklenen hücre sayıları saptandı (minimum = {min}). Asimptotik 2x2 yaklaşımları ve log yöntemi olabilirlik oranı aralıkları kesin olmayabilir."
+                ""
             ],
             "Small Group After Cut-off": [
                 "Kesme Noktasından Sonra Küçük Grup"
@@ -6929,7 +6932,7 @@
                 "Küçük örneklem büyüklüğü (n={n}). 20'den az gözlemle güven aralıkları çok geniş ve güvenilmez olabilir. Daha fazla veri toplamayı veya sonuçları dikkatle yorumlamayı düşünün."
             ],
             "Small sample size after removing missing data: {n} observations. Results may be unreliable.": [
-                "Kayıp veriler çıkarıldıktan sonra küçük örneklem büyüklüğü: {n} gözlem. Sonuçlar güvenilmez olabilir."
+                ""
             ],
             "Small sample size: {n} observations. As a general rule of thumb (< 30 observations), consider a larger sample for more reliable estimates.": [
                 "Küçük örneklem büyüklüğü: {n} gözlem. Genel bir kural olarak (< 30 gözlem), daha güvenilir tahminler için daha büyük bir örneklem düşünün."
@@ -6989,13 +6992,13 @@
                 "Tabakalı Cox modelinde seyrek tabakalar"
             ],
             "Specificity: {value}": [
-                "Özgüllük: {value}"
+                ""
             ],
             "Specified negative outcome level '{level}' not found in outcome variable. Available levels: {levels}": [
-                "Belirtilen negatif sonuç düzeyi '{level}' sonuç değişkeninde bulunamadı. Mevcut düzeyler: {levels}"
+                ""
             ],
             "Specified positive outcome level '{level}' not found in outcome variable. Available levels: {levels}": [
-                "Belirtilen pozitif sonuç düzeyi '{level}' sonuç değişkeninde bulunamadı. Mevcut düzeyler: {levels}"
+                ""
             ],
             "Specify all statistical methods, including details of any variable selection procedures and other model-building issues, how model assumptions were verified, and how missing data were handled.": [
                 "Değişken seçim prosedürleri ve diğer model kurma konularının ayrıntıları, model varsayımlarının nasıl doğrulandığı ve eksik verilerin nasıl ele alındığı dahil tüm istatistiksel yöntemleri belirtin."
@@ -7040,10 +7043,10 @@
                 "Sağkalım olasılığı tahminleri için zaman noktalarını belirtin. Geçmiş fabrika değeri \"12, 36, 60\" ve \"varsayılan\" sözcüğü birime duyarlı 1, 3 ve 5 yıllık noktaları seçer (örneğin günler için 365, 1095 ve 1825 veya yıllar için 1, 3 ve 5). Seçilen çıktı zaman ölçeğinde özel noktalar istemek için virgülle veya boşlukla ayrılmış başka pozitif değerler girin."
             ],
             "Specify which outcome level represents the negative/reference case (e.g., \"Alive\", \"No Event\", \"No\"). Both Positive and Negative outcome levels must be selected; any other outcome levels are excluded.": [
-                "Hangi sonuç düzeyinin negatif/referans durumu temsil ettiğini belirtin (ör. \"Alive\", \"No Event\", \"No\"). Hem Pozitif hem de Negatif sonuç düzeyi seçilmelidir; diğer tüm sonuç düzeyleri hariç tutulur."
+                ""
             ],
             "Specify which outcome level represents the positive case (e.g., \"Dead\", \"Event\", \"Yes\"). Both Positive and Negative outcome levels must be selected; any other outcome levels are excluded.": [
-                "Hangi sonuç düzeyinin pozitif durumu temsil ettiğini belirtin (ör. \"Dead\", \"Event\", \"Yes\"). Hem Pozitif hem de Negatif sonuç düzeyi seçilmelidir; diğer tüm sonuç düzeyleri hariç tutulur."
+                ""
             ],
             "Specimen characteristics": [
                 "Örnek özellikleri"
@@ -7070,7 +7073,7 @@
                 "Standart hata tahmin edilemediği için güven aralığı gösterilmiyor."
             ],
             "Standard logistic regression could not be fitted: {message}. Review outcome coding, predictor variation, sparse categories, and separation; consider Firth penalized regression when appropriate.": [
-                "Standart lojistik regresyon uydurulamadı: {message}. Sonuç kodlamasını, belirteç varyasyonunu, seyrek kategorileri ve ayrılmayı inceleyin; uygun olduğunda Firth cezalı regresyonu düşünün."
+                ""
             ],
             "Standardization Method": [
                 "Standardizasyon Yöntemi"
@@ -7207,11 +7210,11 @@
             "Stratify the Cox model by age groups instead of adjusting as a covariate. Allows different baseline hazards for each age group without assuming a linear age effect.": [
                 "Cox modelini bir ortak değişken olarak düzeltmek yerine yaş gruplarına göre tabakalandırın. Doğrusal bir yaş etkisi varsaymadan her yaş grubu için farklı başlangıç hazardlarına izin verir."
             ],
-            "Strong warning": [
-                "Güçlü uyarı"
-            ],
             "Strong Warning": [
                 "Güçlü Uyarı"
+            ],
+            "Strong warning": [
+                ""
             ],
             "Strong Warnings": [
                 "Güçlü Uyarılar"
@@ -7447,10 +7450,10 @@
             "Synthetic cohort of 150 independent patients, with a saved single-cohort Kaplan-Meier analysis, confidence intervals, risk table, censor marks and person-time rates. time is in months; event 1 = observed event, 0 = right-censored (106 events, 44 censored). Demonstration only.": [
                 ""
             ],
-            "Synthetic cohort of 150 patients with group, stage, age and marker as candidate predictors. Saved LASSO Cox analysis uses five-fold cross-validation, lambda.min, seed 123456 and internal standardization, with coefficient, CV and development-sample risk-group plots. time is in months; event 1 = event, 0 = censored. Displayed performance is apparent, not externally validated.": [
+            "Synthetic cohort of 150 patients with group, stage, age and marker as candidate predictors. Two saved LASSO Cox analyses compare lambda.min and lambda.1se using five-fold cross-validation, seed 123456 and internal standardization. Teaching outputs include encoding and reproducibility details, R code, coefficient paths, CV and development-sample risk-group plots, with exported risk scores. time is in months; event 1 = event, 0 = censored. Displayed performance is apparent, not externally validated.": [
                 ""
             ],
-            "Synthetic cohort of 150 patients. AWOD = alive without disease, AWD = alive with disease, DOD = death of disease, DOOC = death of other causes. Saved overall-survival mapping counts both death categories as events and exports the recoded outcome, with diagnostics and visualization. followup is in months; patient_id contains invented identifiers. Competing-risk mapping can be explored by changing analysis type without discarding other-cause deaths.": [
+            "Synthetic cohort of 150 patients. AWOD = alive without disease, AWD = alive with disease, DOD = death of disease, DOOC = death of other causes. Saved analyses compare overall-survival coding with competing-risk coding and export both recoded outcomes. Overall survival combines 82 disease deaths and 24 other-cause deaths; competing-risk coding preserves both causes, alongside 44 censored observations. Both analyses include tables, diagnostics, distributions, natural-language summaries and a glossary. followup is in months; patient_id contains invented identifiers.": [
                 ""
             ],
             "Synthetic cohort of 150 patients. Saved continuous-marker Cox analysis, exploratory optimal cut-off, grouped Kaplan-Meier plot, confidence intervals, risk table and exported cut-off groups. time is in months; event 1 = observed event, 0 = right-censored. The data-derived cut-off requires independent validation and is not a clinical threshold.": [
@@ -7459,10 +7462,13 @@
             "Synthetic cohort of 150 patients. Saved Cox model includes group, stage, age and marker, with a hazard-ratio forest plot and proportional-hazards diagnostics. time is in months; event 1 = observed event, 0 = right-censored. No interaction terms are fitted in this example. Associations are illustrative.": [
                 ""
             ],
-            "Synthetic cohort of 150 patients. Saved group comparison with Kaplan-Meier curves, confidence intervals, risk table, proportional-hazards diagnostics, age adjustment, adjusted curves and RMST with an automatic horizon. time is in months; event 1 = observed event, 0 = right-censored. Group labels are illustrative and do not establish treatment effects.": [
+            "Synthetic cohort of 150 patients. Saved group comparison with Kaplan-Meier curves, confidence intervals, risk table, proportional-hazards diagnostics, age adjustment, adjusted curves and RMST with a fixed 24-month horizon. time is in months; event 1 = observed event, 0 = right-censored. Group labels are illustrative and do not establish treatment effects.": [
                 ""
             ],
-            "Synthetic start/end ISO dates for 150 patients. Saved analysis calculates standardized months (elapsed days / 30.4375), exports calculated time, and displays quality metrics and summary. There are no missing or negative intervals. Calendar and standardized durations have different meanings; select the time basis explicitly before using the output in survival analysis.": [
+            "Synthetic postoperative pathology cohort of 240 independent patients. nodal_status Positive/Negative is the surgical reference outcome; diagnostic_test Positive/Negative is an invented preoperative test. Saved ordinary logistic model includes grade, age in years and tumor_size in millimetres; diagnostic_test is selected separately for its unadjusted two-by-two diagnostic summaries with explicit positive/negative coding. This is a fixed binary endpoint, not a time-to-event analysis. Simulation parameters and sample associations are illustrative, not validated clinical effects or test performance.": [
+                ""
+            ],
+            "Synthetic start/end ISO dates for 150 patients. Two saved analyses compare standardized months (elapsed days / 30.4375) with calendar-aware months using actual month lengths. Both export calculated time and display quality metrics, summaries and a glossary. There are no missing or negative intervals. Calendar and standardized durations have different meanings; select the time basis explicitly before using the output in survival analysis.": [
                 ""
             ],
             "system": [
@@ -7505,7 +7511,7 @@
                 "'%s' yöntemi sonlu bir kesim noktası değeri döndürmedi"
             ],
             "The 'logistf' package is required for Firth penalized regression but is not installed. Falling back to standard logistic regression.": [
-                "Firth cezalı regresyon için 'logistf' paketi gereklidir ancak yüklü değildir. Standart lojistik regresyona geri dönülüyor."
+                ""
             ],
             "The 'rms' package is required for nomogram generation but is not available.": [
                 "Nomogram oluşturmak için 'rms' paketi gerekli ancak kullanılamıyor."
@@ -7661,7 +7667,7 @@
                 "Açıklayıcı değişken yalnızca iki düzeye sahiptir, bu nedenle tek bir {test} karşılaştırması vardır ve çoklu karşılaştırma düzeltmesi uygulanmaz."
             ],
             "The explanatory variables to be used in the analysis.": [
-                "Analizde kullanılacak açıklayıcı değişkenler."
+                ""
             ],
             "The exploratory selected-variable refit shows evidence of non-proportional hazards. The Cox effect estimates and selection may be misspecified; investigate time-varying effects or a prespecified alternative model.": [
                 "Seçilen değişkenlerle yapılan keşifsel yeniden kurulumda orantılı hazard ihlali bulguları vardır. Cox etki tahminleri ve seçim yanlış belirlenmiş olabilir; zamana bağlı etkileri veya önceden belirlenmiş alternatif bir modeli araştırınız."
@@ -7682,10 +7688,10 @@
                 "Odak değişken ikinci bir etkileşimde yer alıyor; bu nedenle bir değerde etiketlenen satır yalnızca o değerde ({values}) geçerlidir. Bu değişkenin diğer değerlerinde tehlike oranı farklıdır."
             ],
             "The following explanatory variable(s) have no variation after complete-case filtering: {variables}.": [
-                "Aşağıdaki açıklayıcı değişken(ler) eksiksiz olgu filtrelemesinden sonra hiçbir varyasyona sahip değildir: {variables}."
+                ""
             ],
             "The following numeric explanatory variable(s) contain infinite values: {variables}. Replace infinite values before fitting the model.": [
-                "Aşağıdaki sayısal açıklayıcı değişken(ler) sonsuz değerler içeriyor: {variables}. Modeli uydurmadan önce sonsuz değerleri değiştirin."
+                ""
             ],
             "The hazard ratio is the effect per one-unit increase, assuming a constant step in log hazard between consecutive values. If the categories are not equally spaced, move the variable to Explanatory Variables to estimate a separate hazard ratio for each level.": [
                 "Tehlike oranı, ardışık değerler arasında log tehlikede sabit bir adım varsayılarak bir birimlik artış başına etkidir. Kategoriler eşit aralıklı değilse her düzey için ayrı bir tehlike oranı tahmin etmek üzere değişkeni Açıklayıcı Değişkenler'e taşıyın."
@@ -7718,7 +7724,7 @@
                 "Seçilen Zaman Biriminde yer işareti zaman noktası. Sıfır veya pozitif olmalı ve gözlemlenen takip aralığı içine düşmelidir. Takibi yer işaretinde veya öncesinde sona eren denekler hariç tutulur ve zaman daha sonra yer işaretinden itibaren ölçülür, bu nedenle tüm tahminler o zamana kadar hayatta kalmaya bağlıdır."
             ],
             "The level '{level}' is treated as a positive test result as specified (negative test result: '{neg}').": [
-                "'{level}' düzeyi belirtildiği gibi pozitif test sonucu olarak ele alınıyor (negatif test sonucu: '{neg}')."
+                ""
             ],
             "The level of the outcome variable that represents the event of interest. Required for a factor outcome, and never taken from the order of the levels: without it the analysis stops and lists the levels. A numeric 0/1 outcome is read as 1 = event.": [
                 "Sonuç değişkeninin ilgilenilen olayı temsil eden düzeyi. Faktör türünde bir sonuç için zorunludur ve asla düzeylerin sırasından alınmaz: seçilmezse analiz durur ve düzeyleri listeler. Sayısal 0/1 bir sonuç 1 = olay olarak okunur."
@@ -7799,13 +7805,13 @@
                 "Bu model için nomogram grafiği oluşturulamadı; yukarıdaki özet yine de uydurulan modeli tanımlar."
             ],
             "The odds ratio could not be estimated for: {variables}. The data separate the outcome on these terms, alone or jointly, so the maximum-likelihood estimate does not exist and the fit only stops at an arbitrary value. The cell is shown as 'not estimable': this is neither a large odds ratio nor evidence of no association. Enable Firth penalized logistic regression to obtain a finite estimate, or combine sparse categories. Terms whose multivariable odds ratio is not estimable are omitted from the forest plot.": [
-                "Şunlar için odds oranı tahmin edilemedi: {variables}. Veri bu terimlerde, tek başına veya birlikte, sonucu ayırıyor; bu nedenle maksimum olabilirlik tahmini mevcut değildir ve uydurma yalnızca rastgele bir değerde durur. Hücre 'tahmin edilemez' olarak gösterilir: bu ne büyük bir odds oranıdır ne de ilişki olmadığının kanıtıdır. Sonlu bir tahmin elde etmek için Firth cezalı lojistik regresyonunu etkinleştirin veya seyrek kategorileri birleştirin. Çok değişkenli odds oranı tahmin edilemeyen terimler orman grafiğinde gösterilmez."
+                ""
             ],
             "The odds ratio for {variables} exists but cannot be printed: its value or a confidence limit is too extreme, or a confidence limit could not be computed. This is not separation. Rescale the variable to read it in the table.": [
-                "{variables} için odds oranı mevcuttur ancak yazdırılamaz: değeri veya bir güven sınırı çok uçtur ya da bir güven sınırı hesaplanamamıştır. Bu bir ayrılma (separation) değildir. Tabloda okumak için değişkeni yeniden ölçekleyin."
+                ""
             ],
             "The odds-ratio model uses Firth penalized likelihood, whereas the available nomogram implementation uses ordinary maximum-likelihood logistic regression.": [
-                "Odds oranı modeli Firth cezalı olabilirliğini kullanırken, mevcut nomogram uygulaması sıradan maksimum olabilirlik lojistik regresyonunu kullanır."
+                ""
             ],
             "The optional descriptive cohort summary could not be generated. The numerical tables above remain the authoritative results.": [
                 "İsteğe bağlı tanımlayıcı kohort özeti oluşturulamadı. Yukarıdaki sayısal tablolar yetkili sonuçlar olmaya devam eder."
@@ -7847,7 +7853,7 @@
                 "Yol göstergesi sıkıştırılmış bir düzen kullanır ve uzun adları kısaltır. Yordayıcı kodlaması tablosu tasarım sütunlarının tam adlarını listeler."
             ],
             "The penalized (Firth) forest plot could not be produced, so the forest plot shows unpenalized maximum-likelihood odds ratios. These will not match the penalized estimates in the table above.": [
-                "Cezalandırılmış (Firth) orman grafiği üretilemedi; bu nedenle orman grafiği cezalandırılmamış en çok olabilirlik odds oranlarını göstermektedir. Bunlar yukarıdaki tablodaki cezalandırılmış tahminlerle eşleşmeyecektir."
+                ""
             ],
             "The penalty search stopped after {kept} of {searched} lambda values. Smaller penalties gave a patient a linear predictor above 30 (relative hazard above 1e13), where glmnet cannot compute the cross-validation curve correctly, so they were not used.": [
                 "Ceza araması {searched} lambda değerinden {kept} tanesinden sonra durdu. Daha küçük cezalar bir hastaya 30'un üzerinde doğrusal öngörücü (1e13'ün üzerinde göreli tehlike) verdi; bu noktada glmnet çapraz doğrulama eğrisini doğru hesaplayamaz, bu nedenle bu cezalar kullanılmadı."
@@ -7862,7 +7868,7 @@
                 "Öngörülen risk tüm değişkenlerin toplam puanına dayanır"
             ],
             "The prediction nomogram was not generated because Firth penalized regression is selected. Diagnostic metrics, when available, remain unadjusted 2x2 estimates.": [
-                "Firth cezalı regresyon seçildiği için tahmin nomogramı üretilmedi. Tanısal metrikler, mevcut olduğunda, düzeltilmemiş 2x2 tahminleri olarak kalır."
+                ""
             ],
             "The priority event code %s does not occur in the recoded outcome (the codes produced here are %s), so the event hierarchy changed nothing. Set Priority Event Type to one of those codes.": [
                 "Öncelikli olay kodu %s yeniden kodlanan sonuçta yer almıyor (burada üretilen kodlar %s), dolayısıyla olay hiyerarşisi hiçbir şeyi değiştirmedi. Öncelikli Olay Türünü bu kodlardan birine ayarlayın."
@@ -7940,16 +7946,16 @@
                 "Seçilen lambda hiçbir yordayıcı sütununu korumadı; dolayısıyla Schoenfeld artıkları tanılaması için tahmin edilmiş bir yordayıcı etkisi yoktur."
             ],
             "The selected negative outcome level '{level}' is not present among paired complete observations. Available levels: {levels}.": [
-                "Seçilen negatif sonuç düzeyi '{level}', eşleştirilmiş eksiksiz gözlemler arasında mevcut değildir. Mevcut düzeyler: {levels}."
+                ""
             ],
             "The selected negative predictor level '{level}' is not present among paired complete observations. Available levels: {levels}.": [
-                "Seçilen negatif belirteç düzeyi '{level}', eşleştirilmiş eksiksiz gözlemler arasında mevcut değildir. Mevcut düzeyler: {levels}."
+                ""
             ],
             "The selected outcome could not be mapped after variable-name normalization.": [
-                "Seçilen sonuç, değişken adı normalleştirmesinden sonra eşleştirilemedi."
+                ""
             ],
             "The selected positive predictor level '{level}' is not present among paired complete observations. Available levels: {levels}.": [
-                "Seçilen pozitif belirteç düzeyi '{level}', eşleştirilmiş eksiksiz gözlemler arasında mevcut değildir. Mevcut düzeyler: {levels}."
+                ""
             ],
             "The selected rule retained no predictor columns, so there are no coefficients to plot.": [
                 "Seçilen kural hiçbir yordayıcı sütunu korumadı; bu nedenle çizilecek katsayı yok."
@@ -8054,7 +8060,7 @@
                 "Bunlar ayrı temel tehlikeler tanımlar ve puan ölçekleri yoktur; bu nedenle nomogram bir tabaka içinde geçerlidir."
             ],
             "These explanatory variables produce the same model term name, so their odds ratios cannot be told apart: {variables}. Rename one of them.": [
-                "Bu açıklayıcı değişkenler aynı model terim adını üretiyor, bu nedenle odds oranları birbirinden ayırt edilemiyor: {variables}. Bunlardan birini yeniden adlandırın."
+                ""
             ],
             "These metrics require a standard Cox model with sufficient events and follow-up.": [
                 "Bu ölçütler yeterli olay ve izlem içeren standart bir Cox modeli gerektirir."
@@ -8075,7 +8081,7 @@
                 "Bu satırlar analiz edilemez: negatif bir aralık toplam kişi-zamandan düşer ve bu paydadan hesaplanan her insidans hızını bozar."
             ],
             "These unadjusted diagnostic metrics depend on these interpretations being correct": [
-                "Bu düzeltilmemiş tanısal metrikler, bu yorumların doğru olmasına bağlıdır"
+                ""
             ],
             "These values give a month and a year but no day, for example \"{example}\". • Each was set to the 1st of its month, so the day in the converted column is not data. • Anything computed from these dates is accurate to about a month at best.": [
                 "Bu değerler ay ve yıl içeriyor ancak gün içermiyor, örneğin \"{example}\". • Her biri ilgili ayın 1. gününe ayarlandı; bu nedenle dönüştürülen sütundaki gün gerçek veri değildir. • Bu tarihlerden hesaplanan her şey en iyi ihtimalle yaklaşık bir ay duyarlıdır."
@@ -8132,7 +8138,7 @@
                 "Bu tehlike grafiği"
             ],
             "This is a model-specific penalized-likelihood quantity that depends on predictor units and parameterisation. It is not suitable for comparing separately fitted Firth models or for comparison with maximum-likelihood AIC. For nested models, use a documented common-penalty likelihood-ratio comparison instead.": [
-                "Bu, belirteç birimlerine ve parametrelendirmeye bağlı, modele özgü bir cezalı olabilirlik niceliğidir. Ayrı kurulmuş Firth modellerini karşılaştırmak veya maksimum olabilirlik AIC ile karşılaştırmak için uygun değildir. İç içe modeller için bunun yerine belgelenmiş ortak cezalı olabilirlik oranı karşılaştırması kullanın."
+                ""
             ],
             "This is NOT a two-level survival indicator. Kaplan-Meier and Cox treat any non-zero status as the same event, so use a competing-risks method (cumulative incidence, Fine-Gray) instead.": [
                 "Bu iki düzeyli bir sağkalım göstergesi DEĞİLDİR. Kaplan-Meier ve Cox sıfır olmayan her durumu aynı olay olarak ele alır; bu nedenle bunun yerine bir yarışan risk yöntemi (kümülatif insidans, Fine-Gray) kullanın."
@@ -8141,7 +8147,7 @@
                 "Bu medyan sağkalım değildir. Yarışan riskler hesaba katıldığında, ilgilenilen olayın tahmini kümülatif insidansının %50 veya daha fazlasına ulaştığı ilk zamandır. Eğri adımlarla değiştiğinden, o sırada tam olarak %50'ye eşit olması gerekmez; tahmin, kohortun en az yarısının o zamana kadar ilgilenilen olayı yaşadığını gösterir."
             ],
             "This is required for correct calculation of:": [
-                "Şunların doğru hesaplanması için bu gereklidir:"
+                ""
             ],
             "This is standard coding for Cox regression and Kaplan-Meier analysis.": [
                 "Bu, Cox regresyonu ve Kaplan-Meier analizi için standart kodlamadır."
@@ -8269,7 +8275,7 @@
             "Time intervals for stratified person-time analysis, as a comma-separated list in the selected Time Unit. For example \"12, 36, 60\" creates the intervals 0-12, 12-36, 36-60 and 60+. Values are always interpreted in the selected Time Unit; the built-in text is 12, 36 and 60 of that unit and is not silently rescaled. A zero boundary is silently treated as the origin because the analysis already starts at zero. Negative, non-finite, or non-numeric boundaries are ignored with a warning. Boundaries at or beyond the longest observed follow-up are also omitted because person-time cannot accrue before the start of observation or after the last one.": [
                 "Seçilen Zaman Biriminde virgülle ayrılmış bir liste olarak tabakalı kişi-zamanı analizi için zaman aralıkları. Örneğin \"12, 36, 60\" 0-12, 12-36, 36-60 ve 60+ aralıklarını oluşturur. Değerler her zaman seçilen Zaman Biriminde yorumlanır; yerleşik metin o birimin 12, 36 ve 60'ıdır ve sessizce yeniden ölçeklendirilmez. Sıfır sınırı sessizce başlangıç noktası olarak değerlendirilir çünkü analiz zaten sıfırdan başlar. Negatif, sonlu olmayan veya sayısal olmayan sınırlar bir uyarıyla yok sayılır. Gözlemlenen en uzun takibe eşit veya bunun ötesindeki sınırlar da atlanır çünkü kişi-zamanı gözlem başlamadan önce veya sonuncusundan sonra birikemez."
             ],
-            "Time Intervals: standardized months": [
+            "Time Intervals: standardized and calendar-aware months": [
                 ""
             ],
             "Time Point (0 = median)": [
@@ -8387,7 +8393,7 @@
                 "{requested} saat dilimi tanınan bir Olson saat dilimi değildir. Sistem varsayılanına ({fallback}) geri dönülüyor."
             ],
             "To choose a level, first put '{variable}' in the Diagnostic Predictor box.": [
-                "Bir düzey seçmek için önce '{variable}' değişkenini Tanısal Belirteç kutusuna yerleştirin."
+                ""
             ],
             "To Do": [
                 "Yapılacaklar"
@@ -8402,7 +8408,7 @@
                 "Düzeltmek için: Olay Düzeyi seçeneğiyle olayı temsil eden düzeyi seçin veya sonucu sayısal (0 = sansürlü, 1 = olay) ya da mantıksal (FALSE/TRUE) olarak yeniden kodlayın. Yarışan riskler için 'Censored', 'Event' ve 'Competing' düzeylerine sahip bir faktör kullanın."
             ],
             "too extreme to print": [
-                "yazdırılamayacak kadar uç"
+                ""
             ],
             "Too few complete cases for analysis ({n}). Need at least 10 complete observations.": [
                 "Analiz için çok az tam olgu var ({n}). En az 10 tam gözlem gerekir."
@@ -8438,7 +8444,7 @@
                 "Toplam örneklem büyüklüğü n=%d sağkalım analizi için küçüktür. Güven aralıkları ve hipotez testleri için asimptotik varsayımlar geçerli olmayabilir. Sonuçlar öncül kabul edilmeli ve daha büyük veri kümelerinde doğrulanmalıdır."
             ],
             "TP: {tp}, FP: {fp}, FN: {fn}, TN: {tn}": [
-                "DP: {tp}, YP: {fp}, YN: {fn}, DN: {tn}"
+                ""
             ],
             "transition to the disease state (1); this is a multistate coding with four states, not a single event indicator - the per-state breakdown below is the meaningful summary": [
                 "hastalık durumuna geçiş (1); bu, tek bir olay göstergesi değil, dört durumlu çok durumlu bir kodlamadır - aşağıdaki durum başına döküm anlamlı özettir"
@@ -8510,16 +8516,16 @@
                 "Sağkalım analizi yapılamıyor. Lütfen şunları kontrol edin: (1) yeterli olay, (2) geçerli zaman değerleri, (3) uygun şekilde kodlanmış sonuç değişkeni."
             ],
             "Unadjusted 2×2 estimates. Clopper-Pearson exact intervals for sensitivity and specificity; log method (Simel et al. 1991) for the likelihood ratios. Computed as in epiR::epi.tests() with its default settings.": [
-                "Düzeltilmemiş 2×2 tahminleri. Duyarlılık ve özgüllük için Clopper-Pearson kesin aralıkları; olabilirlik oranları için log yöntemi (Simel ve ark. 1991). Varsayılan ayarlarıyla epiR::epi.tests() ile aynı şekilde hesaplanmıştır."
+                ""
             ],
             "undefined (no informative cells)": [
-                "tanımsız (bilgilendirici hücre yok)"
+                ""
             ],
             "undefined (no negative cases)": [
-                "tanımsız (negatif olgu yok)"
+                ""
             ],
             "undefined (no positive cases)": [
-                "tanımsız (pozitif olgu yok)"
+                ""
             ],
             "Understanding {median}": [
                 "{median} Değerini Anlama"
@@ -8561,7 +8567,7 @@
                 "Kesim Noktası Analizini Anlama"
             ],
             "Understanding Diagnostic Test Performance": [
-                "Tanı Testi Performansını Anlama"
+                ""
             ],
             "Understanding LASSO Cox Regression": [
                 "LASSO Cox regresyonunu anlama"
@@ -8585,7 +8591,7 @@
                 "Nomogramları Anlamak"
             ],
             "Understanding Odds Ratio Analysis": [
-                "Odds Oranı Analizini Anlama"
+                ""
             ],
             "Understanding Parametric Survival Models": [
                 "Parametrik Sağkalım Modellerini Anlama"
@@ -8600,7 +8606,7 @@
                 "Kısıtlı Ortalama Sağkalım Süresini (RMST) Anlama"
             ],
             "Understanding Risk Measures": [
-                "Risk Ölçümlerini Anlama"
+                ""
             ],
             "Understanding Risk Score Analysis": [
                 "Risk Skoru Analizini Anlamak"
@@ -8639,7 +8645,7 @@
                 "İlgilenilen Olaya Kadar Geçen Medyan Süreyi Anlama"
             ],
             "Univariable and multivariable columns use the same {n} complete cases.": [
-                "Tek değişkenli ve çok değişkenli sütunlar aynı {n} tam olguyu kullanır."
+                ""
             ],
             "Univariate Survival Analysis, Cox, Kaplan-Meier, 1,3,5-yr": [
                 "Tek Değişkenli Sağkalım Analizi, Cox, Kaplan-Meier, 1,3,5-yıl"
@@ -8699,7 +8705,7 @@
                 "Landmark zamanı kullan"
             ],
             "Use the 'Positive Level' and 'Negative Level' dropdown menus below the outcome variable to make your selections. Any other levels in a multi-level outcome variable will be excluded.": [
-                "Seçimlerinizi yapmak için sonuç değişkeninin altındaki 'Pozitif Düzey' ve 'Negatif Düzey' açılır menülerini kullanın. Çok düzeyli bir sonuç değişkenindeki diğer tüm düzeyler hariç tutulur."
+                ""
             ],
             "Use the adjusted cumulative-incidence or risk-group cumulative-incidence plot; those account for competing events.": [
                 "Düzeltilmiş kümülatif insidans veya risk grubu kümülatif insidans grafiğini kullanın; bunlar yarışan olayları hesaba katar."
@@ -8717,19 +8723,19 @@
                 "Modele dahil edilen ölçülmüş kovaryatlara koşullu, modele dayalı karşılaştırmalar için yararlıdır"
             ],
             "User-specified": [
-                "Kullanıcı tarafından belirtilen"
+                ""
             ],
             "Using '{variable}' (first explanatory variable) for diagnostic metrics. To use a different variable, specify it in the 'Diagnostic Predictor' box.": [
-                "Tanısal metrikler için '{variable}' (ilk açıklayıcı değişken) kullanılıyor. Farklı bir değişken kullanmak için bunu 'Tanısal Belirteç' kutusunda belirtin."
+                ""
             ],
             "Using '{variable}' (from model) for diagnostic metrics (sensitivity, specificity, likelihood ratios).": [
-                "Tanısal metrikler (duyarlılık, özgüllük, olabilirlik oranları) için '{variable}' (modelden) kullanılıyor."
+                ""
             ],
             "Using '{variable}' for diagnostic metrics (sensitivity, specificity, likelihood ratios).": [
-                "Tanısal metrikler (duyarlılık, özgüllük, olabilirlik oranları) için '{variable}' kullanılıyor."
+                ""
             ],
             "Using '{variable}' for diagnostic metrics. Note: This variable is NOT in the logistic regression model. Diagnostic metrics are calculated independently of the odds ratio model.": [
-                "Tanısal metrikler için '{variable}' kullanılıyor. Not: Bu değişken lojistik regresyon modelinde YER ALMAZ. Tanısal metrikler odds oranı modelinden bağımsız olarak hesaplanır."
+                ""
             ],
             "Using both optimal cut-off and multiple cut-offs may lead to overfitting. Consider validation in independent dataset or cross-validation.": [
                 "Hem en uygun kesim noktasının hem de çoklu kesim noktalarının kullanılması aşırı uyuma yol açabilir. Bağımsız bir veri kümesinde doğrulamayı veya çapraz doğrulamayı değerlendirin."
@@ -8837,7 +8843,7 @@
                 "Örneklem çok küçük (n = {n}). Sonuçlar güvenilir olmayabilir. Kararlı kesim noktası analizi için n ≥ 50 önerilir."
             ],
             "Very small sample size (n = {n}). Results should be interpreted with extreme caution.": [
-                "Çok küçük örneklem büyüklüğü (n = {n}). Sonuçlar son derece dikkatli yorumlanmalıdır."
+                ""
             ],
             "Very small sample size: {n} observations. As a general rule of thumb (< 10 observations), results may be unreliable.": [
                 "Çok küçük örneklem büyüklüğü: {n} gözlem. Genel bir kural olarak (< 10 gözlem), sonuçlar güvenilir olmayabilir."
@@ -9065,7 +9071,7 @@
                 "YYYY-AA-GG SS:DD:SS"
             ],
             "Zero cells detected in the 2x2 table. Sensitivity or specificity may be exactly 0 or 1, a likelihood ratio may be undefined, and confidence intervals are less reliable.": [
-                "2x2 tabloda sıfır hücreler saptandı. Duyarlılık veya özgüllük tam olarak 0 veya 1 olabilir, bir olabilirlik oranı tanımsız olabilir ve güven aralıkları daha az güvenilirdir."
+                ""
             ],
             "Zero Intervals": [
                 "Sıfır aralıklar"

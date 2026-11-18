@@ -6154,6 +6154,7 @@ msgid ""
 "between-patient heterogeneity."
 msgstr ""
 
+#: package/analyses/oddsratio.menuSubgroup
 #: oddsratio/options.menuSubgroup
 msgid "General Statistics"
 msgstr ""
@@ -7464,6 +7465,7 @@ msgid ""
 "instead."
 msgstr ""
 
+#: package/analyses/oddsratio.description
 #: oddsratio/options.description.main
 msgid ""
 "Logistic regression odds-ratio table, forest plot, prediction nomogram, and "
@@ -9315,6 +9317,7 @@ msgstr ""
 msgid "Odds ratio analysis completed successfully."
 msgstr ""
 
+#: package/analyses/oddsratio.menuSubtitle
 #: oddsratio/options.menuSubtitle
 msgid "Odds Ratio for Binary Outcomes"
 msgstr ""
@@ -9323,6 +9326,8 @@ msgstr ""
 msgid "Odds Ratio Table"
 msgstr ""
 
+#: package/analyses/oddsratio.title
+#: package/analyses/oddsratio.menuTitle
 #: oddsratio/options.title
 #: oddsratio/ui.title
 #: oddsratio/results.title
@@ -12760,6 +12765,7 @@ msgstr ""
 #: package/analyses/outcomeorganizer.menuGroup
 #: package/analyses/lassocox.menuGroup
 #: package/analyses/timeinterval.menuGroup
+#: package/analyses/oddsratio.menuGroup
 #: datetimeconverter/options.menuGroup
 #: lassocox/options.menuGroup
 #: multisurvival/options.menuGroup
