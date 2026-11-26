@@ -86,6 +86,21 @@ analyses:
     menuSubtitle: Multivariable Cox-regression, Adjusted Survival
     ribbon: analyses
     category: analyses
+  - title: Delayed-Entry Cox Regression
+    name: delayedentrycox
+    ns: jsurvival
+    menuGroup: Survival
+    menuSubgroup: ClinicoPath Survival
+    menuTitle: Delayed-Entry Cox Regression
+    menuSubtitle: Cox regression with explicit entry and exit times
+    description: >-
+      Fits Cox regression with left truncation (delayed entry) for one
+      independent participant per row. Enter start and stop times from the
+      same origin in the same units. Stop is the event or censoring time,
+      not duration since entry. Only baseline covariates and one binary
+      endpoint are supported.
+    ribbon: analyses
+    category: analyses
   - title: DateTime Converter
     name: datetimeconverter
     ns: jsurvival
